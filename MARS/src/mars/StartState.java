@@ -1,0 +1,222 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mars;
+
+import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
+import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
+import mars.Helper.SoundHelper;
+
+/**
+ *
+ * @author Thomas Tosik
+ */
+public class StartState extends AbstractAppState{
+
+    private Node rootNode = new Node("Root Node");
+    private AssetManager assetManager;
+    private MARS_Main simauv;
+    
+    private Box boxshape1 = new Box(new Vector3f(0f,0f,0f), 2f,1f,2f);
+    private Geometry cube = new Geometry("My Textured Box", boxshape1);
+    private Box boxshape2 = new Box(new Vector3f(0f,0f,0f), 10f,8f,1f);
+    private Geometry cube2 = new Geometry("My Textured Box", boxshape2);
+    private Node mars_node = new Node("Mars_Node");
+    private Node hanse_node = new Node("Hanse_Node");
+
+    public StartState(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+
+    public Node getRootNode(){
+        return rootNode;
+    }
+    
+    @Override
+    public void cleanup() {
+        rootNode.detachAllChildren();
+        super.cleanup();
+    }
+
+    @Override
+    public void initialize(AppStateManager stateManager, Application app) {
+        if(!super.isInitialized()){
+            if(app instanceof MARS_Main){
+                simauv = (MARS_Main)app;
+                assetManager = simauv.getAssetManager();
+            }else{
+                throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
+            }
+            simauv.getFlyByCamera().setEnabled(false);
+            setupLight();
+            simauv.getRenderManager().getMainView("Default").setBackgroundColor( ColorRGBA.Black );
+            //mars_node.setLocalTranslation(17.4f,10f,-7f);
+            mars_node.setLocalTranslation(0f,0f,0f);
+            mars_node.attachChild(hanse_node);
+            
+            assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
+            Material mat_stl = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            Texture tex_ml = assetManager.loadTexture("mars_logo_12f_white.png");
+            mat_stl.setTexture("ColorMap", tex_ml);
+            cube.setMaterial(mat_stl);
+            mars_node.attachChild(cube);
+            
+            assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
+            Material mat_stl2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            Texture tex_ml2 = assetManager.loadTexture("japanese-airplane-doubilet.jpg");
+            mat_stl2.setTexture("ColorMap", tex_ml2);
+            cube2.setMaterial(mat_stl2);
+            cube2.setLocalTranslation(0f, 0f, -8f);
+            mars_node.attachChild(cube2);
+            
+            hanse_node.setLocalTranslation(new Vector3f(0f,0f,0f));
+                    
+            loadModel(0.2f,"hanse_very_high.obj",new Vector3f(4f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse_high.obj",new Vector3f(6f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse_low.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse_very_low.obj",new Vector3f(8f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            
+            loadModel(0.6f,"/Monsun2/monsun2_very_high.obj",new Vector3f(10f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_high.obj",new Vector3f(12f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_normal.obj",new Vector3f(12f,1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_low.obj",new Vector3f(12f,-1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_very_low.obj",new Vector3f(14f,1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_very_very_low.obj",new Vector3f(14f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
+            loadModel(0.6f,"/Monsun2/monsun2_very_extrem_low.obj",new Vector3f(14f,-1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
+
+            rootNode.attachChild(mars_node);
+            /*
+            System.out.println("SOUNDSPEED  ChenMillero " + SoundHelper.getUnderWaterSoundSpeedChenMillero(10f, 35f, 10f));
+            System.out.println("SOUNDSPEED  DelGrosso " + SoundHelper.getUnderWaterSoundSpeedDelGrosso(10f, 35f, 10.19716f));
+            System.out.println("SOUNDSPEED  Mackenzie " + SoundHelper.getUnderWaterSoundSpeedMackenzie(10f, 35f, 10f));
+            System.out.println("SOUNDSPEED  Coppens " + SoundHelper.getUnderWaterSoundSpeedCoppens(10f, 35f, 0.01f));
+            System.out.println("SOUNDSPEED  Marczak " + SoundHelper.getUnderWaterSoundSpeedMarczak(10f));
+            System.out.println("SOUNDSPEED  LumA " + SoundHelper.getUnderWaterSoundSpeedLubberGraaffA(10f));
+            System.out.println("SOUNDSPEED  LumB " + SoundHelper.getUnderWaterSoundSpeedLubberGraaffB(10f));*/
+        
+        }
+        super.initialize(stateManager, app);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return super.isEnabled();
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized();
+    }
+
+    @Override
+    public void postRender() {
+        if (!super.isEnabled()) {
+            return;
+        }
+        super.postRender();
+    }
+
+    @Override
+    public void render(RenderManager rm) {
+        if (!super.isEnabled()) {
+            return;
+        }
+        super.render(rm);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if(!enabled){
+            rootNode.setCullHint(Spatial.CullHint.Always);
+        }else{
+            rootNode.setCullHint(Spatial.CullHint.Never);
+        }
+    }
+
+    @Override
+    public void stateAttached(AppStateManager stateManager) {
+        super.stateAttached(stateManager);
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        super.stateDetached(stateManager);
+    }
+
+    @Override
+    public void update(float tpf) {
+        if (!super.isEnabled()) {
+            return;
+        }
+        super.update(tpf);
+        
+        Quaternion quat = new Quaternion().fromAngleAxis(tpf*(FastMath.PI/4), new Vector3f(0f,1f,0f));
+        cube.rotate(quat);
+        
+        if(hanse_node.getLocalTranslation().x <= -20f){
+            /*Vector3f out = Vector3f.ZERO;
+            hanse_node.worldToLocal(new Vector3f(0f,0f,-5f), out);
+            hanse_node.setLocalTranslation(out);*/
+            hanse_node.setLocalTranslation(0f, 0f, 0f);
+        }
+        hanse_node.move(tpf*-0.4f, 0f, 0);
+        
+        rootNode.updateLogicalState(tpf);
+        rootNode.updateGeometricState();
+    }
+    
+    private void setupLight(){
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(new ColorRGBA(1f, 1f, 1f, 0f));
+        sun.setDirection(new Vector3f(0f,-1f,0f));
+        rootNode.addLight(sun);
+    }
+    
+    /*
+     *
+     */
+    private void loadModel(float scale, String model, Vector3f pos, Vector3f rot){
+        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+
+        Spatial auv_spatial = assetManager.loadModel(model);
+        auv_spatial.setLocalScale(scale);//0.5f
+        //auv_spatial.rotate(-(float)Math.PI/4 , (float)Math.PI/4 , 0f);
+        //Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat_white.setColor("Color", ColorRGBA.White);
+        //auv_spatial.setMaterial(mat_white);
+        /*Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
+        mat_white.setColor("Color", ColorRGBA.Blue);
+        auv_spatial.setMaterial(mat_white);*/
+        auv_spatial.setLocalTranslation(pos);
+        Quaternion quat4 = new Quaternion().fromAngles(rot.x,rot.y,rot.z);
+        /*Quaternion quat2 = new Quaternion().fromAngleAxis((-FastMath.PI/2), new Vector3f(0f,1f,0f));
+        Quaternion quat3 = new Quaternion().fromAngleAxis((-FastMath.PI/4), new Vector3f(0f,0f,1f));*/
+        //auv_spatial.setLocalRotation(quat2.mult(quat3));
+        auv_spatial.setLocalRotation(quat4);
+        auv_spatial.updateGeometricState();
+        //BoundingBox bounds = new BoundingBox();
+        //auv_spatial.setModelBound(bounds);
+        auv_spatial.updateModelBound();
+        auv_spatial.setName("HANSE");
+        hanse_node.attachChild(auv_spatial);
+        //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
+        //System.out.println("vol bv " + auv_spatial.getWorldBound());
+    }
+}

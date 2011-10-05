@@ -1,0 +1,3369 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+This is the main config/settings file for SIMAUV. 
+You can alter existing auv's here or add new ones.
+All fields are required.
+-->
+<simauv>
+	<Settings><!-- only one settings allowed-->
+		<Graphics>
+			<Resolution>
+				<width>
+					640
+				</width>
+				<height>
+					480
+				</height>
+			</Resolution>
+			<FrameLimit><!-- 0 means no frame limit -->
+				60
+			</FrameLimit>
+			<FPS><!-- show fps-->
+				true
+			</FPS>
+			<Axis>
+				<enabled>
+					false
+				</enabled>
+			</Axis>
+			<Fog>
+				<enabled>
+					false
+				</enabled>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>15.0</x>
+						<y>121.0</y>
+						<z>240.0</z>
+					</vector>
+				</color>
+				<Distance><!-- 90.0 -->
+					90.0
+				</Distance>
+				<FogDensity><!-- 4.0 -->
+					4.0
+				</FogDensity>
+			</Fog>
+			<DepthOfField>
+				<enabled>
+					false
+				</enabled>
+				<BlurScale>
+					2.5
+				</BlurScale>
+				<FocusDistance>
+					5.0
+				</FocusDistance>
+				<FocusRange>
+					5.0
+				</FocusRange>
+			</DepthOfField>
+			<WavesWater><!-- activate only one water type-->
+				<enabled>
+					false
+				</enabled>
+			</WavesWater>
+			<Water>
+				<enabled>
+					false
+				</enabled>
+			</Water>
+			<PlaneWater>
+				<enabled>
+					true
+				</enabled>
+				<filepath>
+					water_2.png
+				</filepath>
+			</PlaneWater>
+			<SkyBox>
+				<enabled>
+					true
+				</enabled>
+				<filepath>
+					skytest.dds
+				</filepath>
+			</SkyBox>
+			<SimpleSkyBox>
+				<enabled>
+					false
+				</enabled>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>116.0</x>
+						<y>204.0</y>
+						<z>254.0</z>
+					</vector>
+				</color>
+			</SimpleSkyBox>
+			<Terrain>
+				<enabled>
+					true
+				</enabled>
+				<filepath_heightmap><!-- wellenboden_hm.jpg wakenitz_2_hm.jpg becken_gross_hm.jpg image7.jpg-->
+					wakenitz_2_hm.jpg
+				</filepath_heightmap>
+				<filepath_colormap><!-- wellenboden_c.jpg wakenitz_2_cm.jpg becken_gross_c.jpg image8.jpg-->
+					wakenitz_2_cm.jpg
+				</filepath_colormap>
+				<position unit="m">
+					<vector>
+						<x>-30.0</x><!-- -30.0 -60 -->
+						<y>-2.0</y><!-- -2 -3 -7.0 --><!-- -15 -->
+						<z>-15.0</z><!-- -15 -30 -->
+					</vector>
+				</position>
+				<tileLength><!-- 1px = 0.4WU -->
+					0.15625
+				</tileLength>
+				<tileHeigth><!-- 85 12.0 -->
+					85.0
+				</tileHeigth>
+			</Terrain>
+			<Light>
+				<enabled><!-- no effect -->
+					true
+				</enabled>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>255.0</y>
+						<z>255.0</z>
+					</vector>
+				</color>
+				<direction>
+					<vector>
+						<x>0.0</x>
+						<y>-1.0</y>
+						<z>0.0</z>
+					</vector>
+				</direction>
+			</Light>
+			<WireFrame>
+				<enabled>
+					false
+				</enabled>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</color>
+			</WireFrame>
+			<CrossHairs>
+				<enabled>
+					false
+				</enabled>
+			</CrossHairs>
+		</Graphics>
+		<Server>
+			<RAW>
+				<enabled>
+					false
+				</enabled>
+				<port>
+					8080
+				</port>
+				<backlog><!-- length of the waiting queue -->
+					10
+				</backlog>
+				<OutputStreamSize><!-- important when sending bigger images from cameras-->
+					1228100
+				</OutputStreamSize>
+			</RAW>
+			<ROS>
+				<enabled>
+					true
+				</enabled>
+				<masterip><!-- 141.83.88.145 -->
+					141.83.88.157
+				</masterip>
+				<masterport>
+					11311
+				</masterport>
+			</ROS>
+		</Server>
+		<Misc>
+			<setupCam>
+				<flyCam>
+					<MoveSpeed>
+						10
+					</MoveSpeed>
+				</flyCam>
+				<chaseCam>
+				</chaseCam>
+			</setupCam>
+		</Misc>
+		<Physics>
+			<framerate><!-- dont mess around with this value (60 default)-->
+				60
+			</framerate>
+			<debug><!-- show some collisionboxes-->
+				false
+			</debug>
+		</Physics>
+		<PhysicalEnvironment>
+			<fluid_density unit="kg/m³">
+				998.2071
+			</fluid_density>
+			<air_density unit="kg/m³">
+				1.2041
+			</air_density>
+			<fluid_temp unit="C°">
+				20.0
+			</fluid_temp>
+			<air_temp unit="C°">
+				20.0
+			</air_temp>
+			<fluid_viscosity unit="mPa*s">
+				1.002
+			</fluid_viscosity>
+			<fluid_salinity unit="%">
+				3.74
+			</fluid_salinity>
+			<water_height unit="m">
+				0.0
+			</water_height>
+			<pressure_water_height unit="mbar">
+				1013.25
+			</pressure_water_height>
+			<gravitational_acceleration_vector unit="m/s²">
+				<vector>
+					<x>0.0</x>
+					<y>-9.80665</y>
+					<z>0.0</z>
+				</vector>
+			</gravitational_acceleration_vector>
+			<magnetic_north unit="m">
+				<vector>
+					<x>1.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</magnetic_north>
+			<magnetic_east unit="m²">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>1.0</z>
+				</vector>
+			</magnetic_east>
+			<magnetic_z unit="m²">
+				<vector>
+					<x>0.0</x>
+					<y>1.0</y>
+					<z>0.0</z>
+				</vector>
+			</magnetic_z>
+			<water_current unit="kgm/s²">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</water_current>
+		</PhysicalEnvironment>
+	</Settings>
+	<AUV name="hanse"><!-- name must be unique for all auv's. will be used also for server/client communication-->
+		<AUVParameters>
+			<enabled><!-- is this auv enabled?-->
+				false
+			</enabled>
+			<class><!-- The auv class that should be used-->
+				Hanse
+			</class>
+			<centroid_center_distance unit="m">
+				<vector>
+					<x>-0.027</x><!-- -0.028 -0.04 -->
+					<y>0.175</y>
+					<z>-0.035</z>
+				</vector>
+			</centroid_center_distance>
+			<position unit="m">
+				<vector>
+					<x>-22.0</x><!-- -22 -3 0 -->
+					<y>-0.25</y><!-- -1.20 -0.25/-1.15/-1.22 -->
+					<z>18.0</z><!-- 18 10 0 -8.0 -->
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<mass_auv unit="kg">
+				21.8
+			</mass_auv>
+			<drag_coefficient_linear unit="">
+				1.45
+			</drag_coefficient_linear>
+			<drag_coefficient_angular unit=""><!-- 0.1 0.012 -->
+				0.3
+			</drag_coefficient_angular>
+			<damping_linear unit="">
+				0.2
+			</damping_linear>
+			<damping_angular unit="">
+				0.1
+			</damping_angular>
+			<angular_factor><!-- scales the torque -->
+				1.0
+			</angular_factor>
+			<linear_factor><!-- not yet available in current jbullet version, so no effect-->
+				<vector>
+					<x>1.0</x>
+					<y>1.0</y>
+					<z>1.0</z>
+				</vector>
+			</linear_factor>
+			<offCamera_width unit="pixel"><!--no effect-->
+				320
+			</offCamera_width>
+			<offCamera_height unit="pixel"><!--no effect-->
+				240
+			</offCamera_height>
+			<buoyancy_updaterate><!-- how often should the buoyancy be updated in comparison to the 60fps of the physics? Zero means simple buoyancy-->
+				0
+			</buoyancy_updaterate>
+			<buoyancy_distance><!-- only takes effect when buoyancy_updaterate=0, lets you set in which height the simple buoyancy is in effectin distance to the center of the auv-->
+				0.0
+			</buoyancy_distance>
+			<buoyancy_scale><!-- only takes effect when buoyancy_updaterate=0, scales the buoyancy so we "fall" down a little when reaching the surface-->
+				0.8
+			</buoyancy_scale>
+			<drag_updaterate><!-- how often should the drag be updated in comparison to the 60fps of the physics?-->
+				5
+			</drag_updaterate>
+			<physicalvalues_updaterate unit="sec"><!-- 0.0f for no update -->
+				0.0
+			</physicalvalues_updaterate>
+			<Collision>
+				<type><!-- 0-box 1-sphere 2-cone 3-cylinder -->
+					1
+				</type>
+				<dimensions>
+					<vector>
+						<x>0.35</x>
+						<y>0.5</y>
+						<z>0.5</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+			</Collision>
+			<Waypoints><!-- let us see where the auv was-->
+				<enabled>
+					false
+				</enabled>
+				<visiblity><!--no effect-->
+					true
+				</visiblity>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>255.0</y>
+						<z>255.0</z>
+					</vector>
+				</color>
+				<updaterate unit="sec">
+					1.0
+				</updaterate>
+				<maxWaypoints><!-- 0 for unlimited -->
+					20
+				</maxWaypoints>
+			</Waypoints>
+			<Model><!-- we want to use a pre-designed model(i.e. from blender) of the auv, is used for buoyancy-->
+				<filepath>
+					hanse_low.obj
+				</filepath>
+				<scale>
+					0.1
+				</scale>
+				<name><!-- Must be unique for all auv's-->
+					HANSE_MODEL
+				</name>
+			</Model>
+			<Debug><!-- some debug stuff -->
+				<drag><!-- shows you in a seperate view the projected area used for drag of the auv-->
+					false
+				</drag>
+				<buoyancy><!-- shows... -->
+					false
+				</buoyancy>
+				<physical_exchanger><!-- show the position and direction of sensors/actuators-->
+					true
+				</physical_exchanger>
+				<centers><!-- show the buy and mass center-->
+					false
+				</centers>
+				<collision><!-- let us see the collisonboxes that are used-->
+					false
+				</collision>
+			</Debug>
+		</AUVParameters>
+		<Sensors>
+			<PressureSensor>
+				<name><!-- Must be unique in the auv-->
+					press
+				</name>
+				<position>
+					<vector>
+						<x>-0.12</x>
+						<y>0.19</y>
+						<z>-0.31</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PressureSensor>
+			<TemperatureSensor>
+				<name><!-- Must be unique in the auv-->
+					temp
+				</name>
+				<position>
+					<vector>
+						<x>-0.12</x>
+						<y>0.19</y>
+						<z>-0.31</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- -No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</TemperatureSensor>
+			<Accelerometer>
+				<name><!-- Must be unique in the auv-->
+					accelerometer
+				</name>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Accelerometer>
+			<Gyroscope>
+				<name><!-- Must be unique in the auv-->
+					gyroscope
+				</name>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Gyroscope>
+			<Compass>
+				<name><!-- Must be unique in the auv-->
+					compass
+				</name>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CompassYawAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassYawAxisVector>
+				<CompassPitchAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassPitchAxisVector>
+				<CompassRollAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CompassRollAxisVector>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Compass>
+			<ImagenexSonar360>
+				<name><!-- Must be unique in the auv-->
+					sonar_360
+				</name>
+				<position>
+					<vector>
+						<x>0.0125</x>
+						<y>-0.03</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m">
+					50.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.5
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						3
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						22.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						4
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						4
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain><!-- -->
+					10
+				</ScanningGain>
+				<Scanning>
+					true
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						true
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 2-Own noise function -->
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonar360>
+			<ImagenexSonarEcho>
+				<name><!-- Must be unique in the auv-->
+					sonar_ground
+				</name>
+				<position>
+					<vector>
+						<x>0.2</x>
+						<y>0.05</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>0.0</x>
+						<y>-1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m">
+					50.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.0
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						0
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						22.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain>
+					50
+				</ScanningGain>
+				<Scanning>
+					false
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 1-Uniform distribution 2-Own noise function -->
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonarEcho>
+			<ImagenexSonarEcho>
+				<name><!-- Must be unique in the auv-->
+					sonar_side
+				</name>
+				<position>
+					<vector>
+						<x>-0.2</x>
+						<y>0.05</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m"><!-- 50.0 -->
+					5.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.0
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						1
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						10.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain><!-- 500-->
+					50
+				</ScanningGain>
+				<Scanning>
+					false
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 1-Uniform distribution 2-Own noise function -->
+						0
+					</type>
+					<value>
+						0.5
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonarEcho>
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					bottom_cam
+				</name>
+				<position>
+					<vector>
+						<x>0.09</x><!-- -0.09 -->
+						<y>0.05</y><!-- 0.1 -->
+						<z>0.16</z><!-- 0.3 -->
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>0.0</x>
+						<y>-1.0</y>
+						<z>0.0</z><!-- 1 -->
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y><!-- 1 -->
+						<z>1.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					front_cam
+				</name>
+				<position>
+					<vector>
+						<x>-0.05</x>
+						<y>0.15</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+			<PingDetector>
+				<name><!-- Must be unique in the auv-->
+					ping
+				</name>
+				<position>
+					<vector>
+						<x>-0.09</x>
+						<y>0.1</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<PingerDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</PingerDirection>
+				<detection_range>
+					50.0
+				</detection_range>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PingDetector>
+		</Sensors>
+		<Actuators>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterRight
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.2775</x>
+						<y>0.12</y>
+						<z>-0.09</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterLeft
+				</name>
+				<position unit="m">
+					<vector>
+						<x>-0.2775</x>
+						<y>0.12</y>
+						<z>-0.09</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterDownFront
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.015</x>
+						<y>-0.02</y>
+						<z>-0.26</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterDown
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.015</x>
+						<y>-0.02</y>
+						<z>0.215</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+		</Actuators>
+	</AUV>
+	<AUV name="hanse2"><!-- name must be unique for all auv's. will be used also for server/client communication-->
+		<AUVParameters>
+			<enabled><!-- is this auv enabled?-->
+				false
+			</enabled>
+			<class><!-- The auv class that should be used-->
+				Hanse
+			</class>
+			<centroid_center_distance unit="m">
+				<vector>
+					<x>-0.027</x><!-- -0.028 -0.04 -->
+					<y>0.175</y>
+					<z>-0.035</z>
+				</vector>
+			</centroid_center_distance>
+			<position unit="m">
+				<vector>
+					<x>0.0</x><!-- -22 -3 0 -->
+					<y>-0.25</y><!-- -1.20 -0.25/-1.15/-1.22 -->
+					<z>0.0</z><!-- 18 10 0 -8.0 -->
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<mass_auv unit="kg">
+				21.8
+			</mass_auv>
+			<drag_coefficient_linear unit="">
+				1.45
+			</drag_coefficient_linear>
+			<drag_coefficient_angular unit=""><!-- 0.1 0.012 -->
+				0.3
+			</drag_coefficient_angular>
+			<damping_linear unit="">
+				0.2
+			</damping_linear>
+			<damping_angular unit="">
+				0.1
+			</damping_angular>
+			<angular_factor><!-- scales the torque -->
+				1.0
+			</angular_factor>
+			<linear_factor><!-- not yet available in current jbullet version, so no effect-->
+				<vector>
+					<x>1.0</x>
+					<y>1.0</y>
+					<z>1.0</z>
+				</vector>
+			</linear_factor>
+			<offCamera_width unit="pixel"><!--no effect-->
+				320
+			</offCamera_width>
+			<offCamera_height unit="pixel"><!--no effect-->
+				240
+			</offCamera_height>
+			<buoyancy_updaterate><!-- how often should the buoyancy be updated in comparison to the 60fps of the physics? Zero means simple buoyancy-->
+				0
+			</buoyancy_updaterate>
+			<buoyancy_distance><!-- only takes effect when buoyancy_updaterate=0, lets you set in which height the simple buoyancy is in effectin distance to the center of the auv-->
+				0.0
+			</buoyancy_distance>
+			<buoyancy_scale><!-- only takes effect when buoyancy_updaterate=0, scales the buoyancy so we "fall" down a little when reaching the surface-->
+				0.8
+			</buoyancy_scale>
+			<drag_updaterate><!-- how often should the drag be updated in comparison to the 60fps of the physics?-->
+				5
+			</drag_updaterate>
+			<physicalvalues_updaterate unit="sec"><!-- 0.0f for no update -->
+				0.0
+			</physicalvalues_updaterate>
+			<Collision>
+				<type><!-- 0-box 1-sphere 2-cone 3-cylinder -->
+					1
+				</type>
+				<dimensions>
+					<vector>
+						<x>0.35</x>
+						<y>0.5</y>
+						<z>0.5</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+			</Collision>
+			<Waypoints><!-- let us see where the auv was-->
+				<enabled>
+					false
+				</enabled>
+				<visiblity><!--no effect-->
+					true
+				</visiblity>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>255.0</y>
+						<z>255.0</z>
+					</vector>
+				</color>
+				<updaterate unit="sec">
+					1.0
+				</updaterate>
+				<maxWaypoints><!-- 0 for unlimited -->
+					20
+				</maxWaypoints>
+			</Waypoints>
+			<Model><!-- we want to use a pre-designed model(i.e. from blender) of the auv, is used for buoyancy-->
+				<filepath>
+					hanse_low.obj
+				</filepath>
+				<scale>
+					0.1
+				</scale>
+				<name><!-- Must be unique for all auv's-->
+					HANSE_MODEL
+				</name>
+			</Model>
+			<Debug><!-- some debug stuff -->
+				<drag><!-- shows you in a seperate view the projected area used for drag of the auv-->
+					true
+				</drag>
+				<buoyancy><!-- shows... -->
+					false
+				</buoyancy>
+				<physical_exchanger><!-- show the position and direction of sensors/actuators-->
+					true
+				</physical_exchanger>
+				<centers><!-- show the buy and mass center-->
+					false
+				</centers>
+				<collision><!-- let us see the collisonboxes that are used-->
+					false
+				</collision>
+			</Debug>
+		</AUVParameters>
+		<Sensors>
+			<PressureSensor>
+				<name><!-- Must be unique in the auv-->
+					press
+				</name>
+				<position>
+					<vector>
+						<x>-0.12</x>
+						<y>0.19</y>
+						<z>-0.31</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PressureSensor>
+			<TemperatureSensor>
+				<name><!-- Must be unique in the auv-->
+					temp
+				</name>
+				<position>
+					<vector>
+						<x>-0.12</x>
+						<y>0.19</y>
+						<z>-0.31</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- -No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</TemperatureSensor>
+			<Accelerometer>
+				<name><!-- Must be unique in the auv-->
+					accelerometer
+				</name>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Accelerometer>
+			<Gyroscope>
+				<name><!-- Must be unique in the auv-->
+					gyroscope
+				</name>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Gyroscope>
+			<Compass>
+				<name><!-- Must be unique in the auv-->
+					compass
+				</name>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CompassYawAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassYawAxisVector>
+				<CompassPitchAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassPitchAxisVector>
+				<CompassRollAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CompassRollAxisVector>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Compass>
+			<ImagenexSonar360>
+				<name><!-- Must be unique in the auv-->
+					sonar_360
+				</name>
+				<position>
+					<vector>
+						<x>0.0125</x>
+						<y>-0.03</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m">
+					50.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.5
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						3
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						22.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						4
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						4
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain><!-- -->
+					10
+				</ScanningGain>
+				<Scanning>
+					true
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						true
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 2-Own noise function -->
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonar360>
+			<ImagenexSonarEcho>
+				<name><!-- Must be unique in the auv-->
+					sonar_ground
+				</name>
+				<position>
+					<vector>
+						<x>0.2</x>
+						<y>0.05</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>0.0</x>
+						<y>-1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m">
+					50.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.0
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						0
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						22.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain>
+					50
+				</ScanningGain>
+				<Scanning>
+					false
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 1-Uniform distribution 2-Own noise function -->
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonarEcho>
+			<ImagenexSonarEcho>
+				<name><!-- Must be unique in the auv-->
+					sonar_side
+				</name>
+				<position>
+					<vector>
+						<x>-0.2</x>
+						<y>0.05</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<SonarDirection>
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarDirection>
+				<SonarUpDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</SonarUpDirection>
+				<SonarMaxRange unit="m"><!-- 50.0 -->
+					5.0
+				</SonarMaxRange>
+				<SonarMinRange unit="m">
+					0.0
+				</SonarMinRange>
+				<SonarCone>
+					<SonarConeType><!-- 0-OneRay 1-MultiRayCircle 3-MultiRayRectangle-->
+						1
+					</SonarConeType>
+					<beam_height unit="deg"><!-- radius when conetype 1 -->
+						10.0
+					</beam_height>
+					<beam_width unit="deg">
+						2.5
+					</beam_width>
+					<beam_ray_height_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_height_resolution>
+					<beam_ray_width_resolution><!-- how much ray do we want? -->
+						3
+					</beam_ray_width_resolution>
+				</SonarCone>
+				<ScanningGain><!-- 500-->
+					50
+				</ScanningGain>
+				<Scanning>
+					false
+				</Scanning>
+				<Scanning_resolution unit="deg">
+					3.0
+				</Scanning_resolution>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+				</length_damping>
+				<noise>
+					<type><!-- 0-No Noise 1-Uniform distribution 2-Own noise function -->
+						0
+					</type>
+					<value>
+						0.5
+					</value>
+				</noise>
+				<Debug>
+					false
+				</Debug>
+			</ImagenexSonarEcho>
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					bottom_cam
+				</name>
+				<position>
+					<vector>
+						<x>0.09</x><!-- -0.09 -->
+						<y>0.05</y><!-- 0.1 -->
+						<z>0.16</z><!-- 0.3 -->
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>0.0</x>
+						<y>-1.0</y>
+						<z>0.0</z><!-- 1 -->
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y><!-- 1 -->
+						<z>1.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					front_cam
+				</name>
+				<position>
+					<vector>
+						<x>-0.05</x>
+						<y>0.15</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+			<PingDetector>
+				<name><!-- Must be unique in the auv-->
+					ping
+				</name>
+				<position>
+					<vector>
+						<x>-0.09</x>
+						<y>0.1</y>
+						<z>0.3</z>
+					</vector>
+				</position>
+				<PingerDirection>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</PingerDirection>
+				<detection_range>
+					50.0
+				</detection_range>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PingDetector>
+		</Sensors>
+		<Actuators>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterRight
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.2775</x>
+						<y>0.12</y>
+						<z>-0.09</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterLeft
+				</name>
+				<position unit="m">
+					<vector>
+						<x>-0.2775</x>
+						<y>0.12</y>
+						<z>-0.09</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterDownFront
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.015</x>
+						<y>-0.02</y>
+						<z>-0.26</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+			<SeaBotixThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterDown
+				</name>
+				<position unit="m">
+					<vector>
+						<x>0.015</x>
+						<y>-0.02</y>
+						<z>0.215</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</SeaBotixThruster>
+		</Actuators>
+	</AUV>
+	<AUV name="monsun"><!-- name must be unique for all auv's. will be used also for server/client communication-->
+		<AUVParameters>
+			<enabled><!-- is this auv enabled?-->
+				true
+			</enabled>
+			<class><!-- The auv class that should be used-->
+				Monsun2
+			</class>
+			<centroid_center_distance unit="m">
+				<vector>
+					<x>-0.0445</x><!-- -0.027 -0.04 -->
+					<y>0.05</y>
+					<z>-0.065</z>
+				</vector>
+			</centroid_center_distance>
+			<position unit="m">
+				<vector>
+					<x>0.0</x><!-- -22 -3 0 -->
+					<y>-0.35</y><!-- -1.20 -0.25/-1.15/-1.22 -->
+					<z>0.325</z><!-- 18 10 0 -8.0 -->
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>1.57</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<mass_auv unit="kg">
+				4.75
+			</mass_auv>
+			<drag_coefficient_linear unit=""><!-- 1.05/1.45   0.82/1.00 -->
+				1.00
+			</drag_coefficient_linear>
+			<drag_coefficient_angular unit=""><!-- 0.1 0.012 -->
+				0.3
+			</drag_coefficient_angular>
+			<damping_linear unit="">
+				0.2
+			</damping_linear>
+			<damping_angular unit="">
+				0.1
+			</damping_angular>
+			<angular_factor><!-- scales the torque -->
+				1.0
+			</angular_factor>
+			<linear_factor><!-- not yet available in current jbullet version, so no effect-->
+				<vector>
+					<x>1.0</x>
+					<y>1.0</y>
+					<z>1.0</z>
+				</vector>
+			</linear_factor>
+			<offCamera_width unit="pixel"><!--no effect-->
+				320
+			</offCamera_width>
+			<offCamera_height unit="pixel"><!--no effect-->
+				240
+			</offCamera_height>
+			<buoyancy_updaterate><!-- how often should the buoyancy be updated in comparison to the 60fps of the physics? Zero means simple buoyancy-->
+				0
+			</buoyancy_updaterate>
+			<buoyancy_distance><!-- only takes effect when buoyancy_updaterate=0, lets you set in which height the simple buoyancy is in effectin distance to the center of the auv-->
+				0.05
+			</buoyancy_distance>
+			<buoyancy_scale><!-- only takes effect when buoyancy_updaterate=0, scales the buoyancy so we "fall" down a little when reaching the surface-->
+				0.8
+			</buoyancy_scale>
+			<drag_updaterate><!-- how often should the drag be updated in comparison to the 60fps of the physics?-->
+				5
+			</drag_updaterate>
+			<physicalvalues_updaterate unit="sec"><!-- 0.0f for no update -->
+				0.0
+			</physicalvalues_updaterate>
+			<Collision>
+				<type><!-- 0-box 1-sphere 2-cone 3-cylinder -->
+					3
+				</type>
+				<dimensions>
+					<vector>
+						<x>0.305</x>
+						<y>0.1</y>
+						<z>0.1</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.05</x>
+						<y>0.05</y>
+						<z>0.055</z>
+					</vector>
+				</position>
+			</Collision>
+			<Waypoints><!-- let us see where the auv was-->
+				<enabled>
+					false
+				</enabled>
+				<visiblity><!--no effect-->
+					true
+				</visiblity>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>255.0</y>
+						<z>255.0</z>
+					</vector>
+				</color>
+				<updaterate unit="sec">
+					1.0
+				</updaterate>
+				<maxWaypoints><!-- 0 for unlimited -->
+					20
+				</maxWaypoints>
+			</Waypoints>
+			<Model><!-- we want to use a pre-designed model(i.e. from blender) of the auv, is used for buoyancy-->
+				<filepath>
+					Monsun2/monsun2_very_low.obj
+				</filepath>
+				<scale>
+					0.25
+				</scale>
+				<name><!-- Must be unique for all auv's-->
+					MONSUN2_MODEL
+				</name>
+			</Model>
+			<Debug><!-- some debug stuff -->
+				<drag><!-- shows you in a seperate view the projected area used for drag of the auv-->
+					false
+				</drag>
+				<buoyancy><!-- shows... -->
+					false
+				</buoyancy>
+				<physical_exchanger><!-- show the position and direction of sensors/actuators-->
+					true
+				</physical_exchanger>
+				<centers><!-- show the buy and mass center-->
+					false
+				</centers>
+				<collision><!-- let us see the collisonboxes that are used-->
+					false
+				</collision>
+			</Debug>
+		</AUVParameters>
+		<Sensors>
+			<PressureSensor>
+				<name><!-- Must be unique in the auv-->
+					press
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.1</x>
+						<y>0.02</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PressureSensor>
+			<TemperatureSensor>
+				<name><!-- Must be unique in the auv-->
+					temp
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.1</x>
+						<y>0.02</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- -No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</TemperatureSensor>
+			<UnderwaterModem>
+				<name><!-- Must be unique in the auv-->
+					modem
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					0
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</UnderwaterModem>
+			<InfraRedSensor>
+				<name><!-- Must be unique in the auv-->
+					infraLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.04</x>
+						<y>0.07</y>
+						<z>0.15</z>
+					</vector>
+				</position>
+				<direction>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</direction>
+				<MaxRange unit="m">
+					1.0
+				</MaxRange>
+				<MinRange unit="m">
+					0.0
+				</MinRange>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type>
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+			</InfraRedSensor>
+			<InfraRedSensor>
+				<name><!-- Must be unique in the auv-->
+					infraRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.04</x>
+						<y>0.07</y>
+						<z>-0.15</z>
+					</vector>
+				</position>
+				<direction>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>-1.0</z>
+					</vector>
+				</direction>
+				<MaxRange unit="m">
+					1.0
+				</MaxRange>
+				<MinRange unit="m">
+					0.0
+				</MinRange>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type>
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+			</InfraRedSensor>
+			<Accelerometer>
+				<name><!-- Must be unique in the auv-->
+					accelerometer
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Accelerometer>
+			<Gyroscope>
+				<name><!-- Must be unique in the auv-->
+					gyroscope
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Gyroscope>
+			<Compass>
+				<name><!-- Must be unique in the auv-->
+					compass
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CompassYawAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassYawAxisVector>
+				<CompassPitchAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassPitchAxisVector>
+				<CompassRollAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CompassRollAxisVector>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Compass>			
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					front_cam
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.27</x>
+						<y>0.07</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+		</Sensors>
+		<Actuators>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.07</y>
+						<z>0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.07</y>
+						<z>-0.10</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterFrontLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>-0.07</x>
+						<y>0.07</y>
+						<z>0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterFrontRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>-0.07</x>
+						<y>0.07</y>
+						<z>-0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterBackRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.23</x>
+						<y>0.07</y>
+						<z>-0.07</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterBackLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.23</x>
+						<y>0.07</y>
+						<z>0.07</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+		</Actuators>
+	</AUV>
+	<AUV name="monsun2"><!-- name must be unique for all auv's. will be used also for server/client communication-->
+		<AUVParameters>
+			<enabled><!-- is this auv enabled?-->
+				true
+			</enabled>
+			<class><!-- The auv class that should be used-->
+				Monsun2
+			</class>
+			<centroid_center_distance unit="m">
+				<vector>
+					<x>-0.0445</x><!-- -0.027 -0.04 -->
+					<y>0.05</y>
+					<z>-0.065</z>
+				</vector>
+			</centroid_center_distance>
+			<position unit="m">
+				<vector>
+					<x>1.0</x><!-- -22 -3 0 -->
+					<y>-0.35</y><!-- -1.20 -0.25/-1.15/-1.22 -->
+					<z>1.325</z><!-- 18 10 0 -8.0 -->
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>1.57</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<mass_auv unit="kg">
+				4.75
+			</mass_auv>
+			<drag_coefficient_linear unit=""><!-- 1.05/1.45   0.82/1.00 -->
+				1.00
+			</drag_coefficient_linear>
+			<drag_coefficient_angular unit=""><!-- 0.1 0.012 -->
+				0.3
+			</drag_coefficient_angular>
+			<damping_linear unit="">
+				0.2
+			</damping_linear>
+			<damping_angular unit="">
+				0.1
+			</damping_angular>
+			<angular_factor><!-- scales the torque -->
+				1.0
+			</angular_factor>
+			<linear_factor><!-- not yet available in current jbullet version, so no effect-->
+				<vector>
+					<x>1.0</x>
+					<y>1.0</y>
+					<z>1.0</z>
+				</vector>
+			</linear_factor>
+			<offCamera_width unit="pixel"><!--no effect-->
+				320
+			</offCamera_width>
+			<offCamera_height unit="pixel"><!--no effect-->
+				240
+			</offCamera_height>
+			<buoyancy_updaterate><!-- how often should the buoyancy be updated in comparison to the 60fps of the physics? Zero means simple buoyancy-->
+				0
+			</buoyancy_updaterate>
+			<buoyancy_distance><!-- only takes effect when buoyancy_updaterate=0, lets you set in which height the simple buoyancy is in effectin distance to the center of the auv-->
+				0.05
+			</buoyancy_distance>
+			<buoyancy_scale><!-- only takes effect when buoyancy_updaterate=0, scales the buoyancy so we "fall" down a little when reaching the surface-->
+				0.8
+			</buoyancy_scale>
+			<drag_updaterate><!-- how often should the drag be updated in comparison to the 60fps of the physics?-->
+				5
+			</drag_updaterate>
+			<physicalvalues_updaterate unit="sec"><!-- 0.0f for no update -->
+				0.0
+			</physicalvalues_updaterate>
+			<Collision>
+				<type><!-- 0-box 1-sphere 2-cone 3-cylinder -->
+					3
+				</type>
+				<dimensions>
+					<vector>
+						<x>0.305</x>
+						<y>0.1</y>
+						<z>0.1</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.05</x>
+						<y>0.05</y>
+						<z>0.055</z>
+					</vector>
+				</position>
+			</Collision>
+			<Waypoints><!-- let us see where the auv was-->
+				<enabled>
+					false
+				</enabled>
+				<visiblity><!--no effect-->
+					true
+				</visiblity>
+				<color unit="rgb">
+					<vector unit="0-255f">
+						<x>255.0</x>
+						<y>255.0</y>
+						<z>255.0</z>
+					</vector>
+				</color>
+				<updaterate unit="sec">
+					1.0
+				</updaterate>
+				<maxWaypoints><!-- 0 for unlimited -->
+					20
+				</maxWaypoints>
+			</Waypoints>
+			<Model><!-- we want to use a pre-designed model(i.e. from blender) of the auv, is used for buoyancy-->
+				<filepath>
+					Monsun2/monsun2_very_low.obj
+				</filepath>
+				<scale>
+					0.25
+				</scale>
+				<name><!-- Must be unique for all auv's-->
+					MONSUN2_MODEL
+				</name>
+			</Model>
+			<Debug><!-- some debug stuff -->
+				<drag><!-- shows you in a seperate view the projected area used for drag of the auv-->
+					false
+				</drag>
+				<buoyancy><!-- shows... -->
+					false
+				</buoyancy>
+				<physical_exchanger><!-- show the position and direction of sensors/actuators-->
+					false
+				</physical_exchanger>
+				<centers><!-- show the buy and mass center-->
+					false
+				</centers>
+				<collision><!-- let us see the collisonboxes that are used-->
+					false
+				</collision>
+			</Debug>
+		</AUVParameters>
+		<Sensors>
+			<PressureSensor>
+				<name><!-- Must be unique in the auv-->
+					press
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.1</x>
+						<y>0.02</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</PressureSensor>
+			<TemperatureSensor>
+				<name><!-- Must be unique in the auv-->
+					temp
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.1</x>
+						<y>0.02</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<noise>
+					<type><!-- -No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						1
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</TemperatureSensor>
+			<UnderwaterModem>
+				<name><!-- Must be unique in the auv-->
+					modem
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					0
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</UnderwaterModem>
+			<InfraRedSensor>
+				<name><!-- Must be unique in the auv-->
+					infraLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.04</x>
+						<y>0.07</y>
+						<z>0.15</z>
+					</vector>
+				</position>
+				<direction>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</direction>
+				<MaxRange unit="m">
+					1.0
+				</MaxRange>
+				<MinRange unit="m">
+					0.0
+				</MinRange>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type>
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+			</InfraRedSensor>
+			<InfraRedSensor>
+				<name><!-- Must be unique in the auv-->
+					infraRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.04</x>
+						<y>0.07</y>
+						<z>-0.15</z>
+					</vector>
+				</position>
+				<direction>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>-1.0</z>
+					</vector>
+				</direction>
+				<MaxRange unit="m">
+					1.0
+				</MaxRange>
+				<MinRange unit="m">
+					0.0
+				</MinRange>
+				<angular_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</angular_damping>
+				<length_damping>
+					<enabled>
+						false
+					</enabled>
+					<factor>
+						1.0
+					</factor>
+				</length_damping>
+				<noise>
+					<type>
+						0
+					</type>
+					<value>
+						1.0
+					</value>
+				</noise>
+			</InfraRedSensor>
+			<Accelerometer>
+				<name><!-- Must be unique in the auv-->
+					accelerometer
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Accelerometer>
+			<Gyroscope>
+				<name><!-- Must be unique in the auv-->
+					gyroscope
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Gyroscope>
+			<Compass>
+				<name><!-- Must be unique in the auv-->
+					compass
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CompassYawAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassYawAxisVector>
+				<CompassPitchAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CompassPitchAxisVector>
+				<CompassRollAxisVector>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</vector>
+				</CompassRollAxisVector>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						0
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</Compass>			
+			<VideoCamera>
+				<name><!-- Must be unique in the auv-->
+					front_cam
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<ros_publish_rate unit="ms">
+					2000
+				</ros_publish_rate>
+				<position>
+					<vector>
+						<x>-0.27</x>
+						<y>0.07</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<CameraDirection>
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraDirection>
+				<CameraTopDirection>
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</CameraTopDirection>
+				<CameraHeight unit="pixel">
+					480
+				</CameraHeight>
+				<CameraWidth unit="pixel">
+					640
+				</CameraWidth>
+				<CameraAngle unit="degree">
+					45.0
+				</CameraAngle>
+				<Debug>
+					false
+				</Debug>
+			</VideoCamera>
+		</Sensors>
+		<Actuators>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.07</y>
+						<z>0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>0.07</y>
+						<z>-0.10</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>-1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterFrontLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>-0.07</x>
+						<y>0.07</y>
+						<z>0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterFrontRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>-0.07</x>
+						<y>0.07</y>
+						<z>-0.105</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterBackRight
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.23</x>
+						<y>0.07</y>
+						<z>-0.07</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+			<BrushlessThruster>
+				<name><!-- Must be unique in the auv-->
+					thrusterBackLeft
+				</name>
+				<enabled>
+					true
+				</enabled>	
+				<position unit="m">
+					<vector>
+						<x>0.23</x>
+						<y>0.07</y>
+						<z>0.07</z>
+					</vector>
+				</position>
+				<MotorDirection unit="m">
+					<vector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</vector>
+				</MotorDirection>
+				<noise>
+					<type><!-- 0-No Noise 1-UniformDistribution 3-GaussianDistribution -->
+						3
+					</type>
+					<value>
+						1
+					</value>
+				</noise>
+			</BrushlessThruster>
+		</Actuators>
+	</AUV>
+	<Object name="testpipe"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				pipe/pipe_s_5m.obj
+			</filepath>
+			<enabled>
+				false
+			</enabled>
+			<sonar_detectable>
+				false
+			</sonar_detectable>
+			<pinger>
+				false
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>20.0</x>
+					<y>-3.0</y>
+					<z>45.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>1.57</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.3
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>255.0</x>
+					<y>255.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					false
+				</collidable>
+				<type>
+					0
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+	<Object name="testgate"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				pipe/pipe__gate_5meter.obj
+			</filepath>
+			<enabled>
+				false
+			</enabled>
+			<sonar_detectable>
+				true
+			</sonar_detectable>
+			<pinger>
+				false
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>0.0</x>
+					<y>-2.0</y>
+					<z>15.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>1.5707963267948966192313216916398</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.1
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>0.0</x>
+					<y>255.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					false
+				</collidable>
+				<type>
+					0
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+	<Object name="testgate2"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				pipe/pipe__gate_5meter.obj
+			</filepath>
+			<enabled>
+				false
+			</enabled>
+			<sonar_detectable>
+				true
+			</sonar_detectable>
+			<pinger>
+				false
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>0.0</x>
+					<y>-2.0</y>
+					<z>25.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>1.5707963267948966192313216916398</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.1
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>0.0</x>
+					<y>255.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					false
+				</collidable>
+				<type>
+					0
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+	<Object name="pingpong"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				pipe/pipe_1.obj
+			</filepath>
+			<enabled>
+				false
+			</enabled>
+			<sonar_detectable>
+				true
+			</sonar_detectable>
+			<pinger>
+				true
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>5.0</x>
+					<y>-2.0</y>
+					<z>10.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>1.5707963267948966192313216916398</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.03125
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>255.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					false
+				</collidable>
+				<type>
+					0
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+	<Object name="testgate_boden"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				pipe/pipe__gate_5meter.obj
+			</filepath>
+			<enabled>
+				true
+			</enabled>
+			<sonar_detectable>
+				true
+			</sonar_detectable>
+			<pinger>
+				false
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>2.5</x>
+					<y>-1.35</y>
+					<z>2.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.1
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>255.0</x>
+					<y>255.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					true
+				</collidable>
+				<type>
+					4
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+	<Object name="boje_1"><!-- Must be unique for all object/auv's-->
+			<filepath>
+				boje/boje_3.obj
+			</filepath>
+			<enabled>
+				false
+			</enabled>
+			<sonar_detectable>
+				true
+			</sonar_detectable>
+			<pinger>
+				false
+			</pinger>
+			<light>
+				false
+			</light>
+			<position unit="m">
+				<vector>
+					<x>2.5</x>
+					<y>-1.35</y>
+					<z>2.0</z>
+				</vector>
+			</position>
+			<rotation unit="rad">
+				<vector>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</rotation>
+			<scale>
+				0.1
+			</scale>
+			<color unit="rgb">
+				<vector unit="0-255f">
+					<x>255.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</vector>
+			</color>
+			<Collision>
+				<collidable>
+					false
+				</collidable>
+				<type>
+					0
+				</type>
+				<dimensions>
+					<vector>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</vector>
+				</dimensions>
+				<position>
+					<vector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</vector>
+				</position>
+				<debug_collision>
+					false
+				</debug_collision>
+			</Collision>
+	</Object>
+</simauv>
+<!--ENDOF-->

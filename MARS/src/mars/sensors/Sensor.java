@@ -1,0 +1,113 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package mars.sensors;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.scene.Node;
+import org.ros.node.topic.Publisher;
+import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
+import mars.MARS_Main;
+import mars.ROS_Publisher;
+import mars.SimState;
+
+/**
+ * This is a basic sensors interface. Extend from here to make you
+ * own sensors like an pressure sensor or light sensors.
+ * @author Thomas Tosik
+ */
+public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
+    /*
+     * 
+     */
+    protected SimState simstate;
+    /**
+     *
+     */
+    protected MARS_Main simauv;
+    /**
+     *
+     */
+    protected AssetManager assetManager;
+    /**
+     *
+     */
+    protected Node rootNode;
+    /**
+     * 
+     */
+    protected PhysicalEnvironment pe;
+    /*
+     * 
+     */
+    protected long time = 0;
+    
+    /**
+     * 
+     * @param simauv
+     */
+    protected Sensor(SimState simstate){
+        this.simstate = simstate;
+        this.simauv = simstate.getSimauv();
+        this.assetManager = simauv.getAssetManager();
+        this.rootNode = simstate.getRootNode();
+    }
+
+    /**
+     *
+     * @param simauv
+     * @param pe
+     */
+    protected Sensor(MARS_Main simauv, PhysicalEnvironment pe){
+        this.simauv = simauv;
+        this.pe = pe;
+        this.assetManager = simauv.getAssetManager();
+        this.rootNode = simauv.getRootNode();
+    }
+
+    /**
+     *
+     */
+    public abstract void init(Node auv_node);
+    
+    /**
+     *
+     * @param tpf
+     */
+    public abstract void update(float tpf);
+    /**
+     *
+     * @return
+     */
+    public PhysicalEnvironment getPhysical_environment() {
+        return pe;
+    }
+
+    /**
+     *
+     * @param pe 
+     */
+    public void setPhysical_environment(PhysicalEnvironment pe) {
+        this.pe = pe;
+    }
+    
+    public void publish() {
+    }
+ 
+    public void publishUpdate() {
+        long curtime = System.currentTimeMillis();
+        if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
+            
+        }else{
+            time = curtime;
+            if(ros_node != null){
+                if(ros_node.isRunning()){
+                    publish();
+                }
+            }
+        }
+    }
+}

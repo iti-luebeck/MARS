@@ -1,0 +1,84 @@
+[Box: ::simauv.gui - ::<<Unknown>>::AbstractCellEditor]
+X=10
+Y=380
+
+[Box: ::simauv.gui - ::<<Unknown>>::ActionListener]
+X=17
+Y=160
+
+[Box: ::simauv.gui - ::<<Unknown>>::CellEditor]
+X=235
+Y=231
+
+[Box: ::simauv.gui - ::<<Unknown>>::DefaultTreeCellRenderer]
+X=766
+Y=100
+Visible=0
+
+[Box: ::simauv.gui - ::<<Unknown>>::FrameView]
+X=17
+Y=29
+
+[Box: ::simauv.gui - ::<<Unknown>>::InputVerifier]
+X=18
+Y=310
+
+[Box: ::simauv.gui - ::<<Unknown>>::javax.swing.JDialog]
+X=20
+Y=40
+Visible=0
+
+[Box: ::simauv.gui - ::<<Unknown>>::JTextField]
+X=235
+Y=93
+
+[Box: ::simauv.gui - ::<<Unknown>>::TreeCellEditor]
+X=249
+Y=306
+
+[Box: ::simauv.gui - ::simauv.gui::MyTextField]
+X=236
+Y=29
+
+[Box: ::simauv.gui - ::simauv.gui::MyVerifier]
+X=18
+Y=232
+
+[Box: ::simauv.gui - ::simauv.gui::SimAUVAboutBox]
+X=20
+Y=121
+Visible=0
+
+[Box: ::simauv.gui - ::simauv.gui::SimAUVView]
+X=17
+Y=96
+
+[Box: ::simauv.gui - ::simauv.gui::TextFieldCellEditor]
+X=250
+Y=377
+
+[Box: ::simauv.gui - ::simauv.gui::TextFieldEditor]
+X=235
+Y=161
+
+[Box: ::simauv.gui - ::simauv.gui::TextFieldNode]
+X=20
+Y=376
+Visible=0
+
+[Box: ::simauv.gui - ::simauv.gui::TextFieldTreeCellEditor]
+X=669
+Y=35
+Visible=0
+
+[Box: ::simauv.gui - ::simauv.gui::TextFieldTreeCellRenderer]
+X=808
+Y=175
+Visible=0
+
+[Diagram: ::simauv.gui]
+OffsetX=0
+OffsetY=0
+Visibility=4
+ShowAssoc=0
+
