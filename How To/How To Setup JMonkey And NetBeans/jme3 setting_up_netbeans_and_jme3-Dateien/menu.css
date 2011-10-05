@@ -1,0 +1,91 @@
+/**
+ * css for mmKanso template 
+ *
+ * @author Marcin Mierzejewski <marcin.mierzejewski@zenzire.com>
+ */
+
+
+div.Menu a
+{
+	/*padding-left: 5px;*/
+  text-decoration:none;
+  color: #222222;
+  display: block;
+	height: 16px;
+}
+
+div.Menu#level1 a
+{
+	padding-left: 5px;
+	border-right: 1px solid #999999;
+}
+
+div.Menu#level2 a
+{
+	/*border-left: 1px solid #999999;*/
+}
+
+div.Menu a:hover
+{
+  text-decoration:none;
+	color: #ff0000;
+}
+
+div.Menu strong
+{
+	display: block;
+	font-weight: normal;
+}
+
+div.Menu#level1 strong
+{
+	display: block;
+	font-weight: normal;
+}
+
+div.Menu h1, div.Menu h2, div.Menu h3, div.Menu h4, div.Menu h5
+{
+	color: #000000;
+	font-weight: bold;
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+
+div.Menu em
+{
+	text-decoration: none;
+	color:#777;
+	display: block;
+	font-weight: bold;
+}
+
+div.Menu
+{
+	padding: 0;
+	margin: 0;
+}
+
+
+div.Menu ul
+{ 
+  padding: 0;
+	margin: 0;
+  list-style-image: none;
+	float: left;
+	font-family: Tahoma, Verdana, Arial, Helvetica, Geneva, Swiss, sans-serif;
+	font-size: 10px;
+}
+
+div.Menu#level1 ul
+{
+	padding-right: 10px;
+}
+
+div.Menu li
+{ 
+  display: block;
+	height: 16px;
+	line-height: 16px;
+	width: 115px;
+}
+

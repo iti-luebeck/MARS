@@ -1,0 +1,13 @@
+.tweetstream_checkbox_container{
+   -moz-border-radius:3px 3px 3px 3px;
+    border:1px solid #A1DCFA;
+    background-color:#EBF7FF;
+    color:#1FB3DD;
+    font-size:12px;
+    font-weight:bold;
+    padding:3px 10px;
+    text-decoration:none;
+    vertical-align:bottom;
+    width:100px;
+    float:left;
+}

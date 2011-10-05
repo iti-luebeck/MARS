@@ -1,0 +1,29 @@
+/* 
+    Document   : style
+    Created on : 03.10.2010, 18:38:24
+    Author     : normenhansen
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.bppb_smalltext {
+    font-size: 8pt;
+    color: #777;
+}
+
+/* smiley bar */
+.bppb_headroom {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.smile_head {
+    cursor: pointer;
+}
+
+.insert_body {
+}
+
+.insert_head {
+    cursor: pointer;
+}

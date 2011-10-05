@@ -1,0 +1,129 @@
+#add-members-fields input, #add-members-fields label{
+	width:20%;
+	display:inline;
+}
+
+#add-members-fields input, .add-member-row {
+	margin-bottom:20px;
+}
+
+#add-members-fields input.bpgc-checkbox {
+	width:auto;
+}
+.add-member-row {
+	border-bottom:1px solid #F0F0F0;
+}
+
+#add-members-fields div.row-no {
+	color:#C3BEBE;
+	font-size:30px;
+	float:left;
+}
+
+#add-members-fields div.row-fields {
+	margin-left:40px;
+}
+
+#bpgc-admin-form fieldset {
+	border:1px solid #e9e9e9;	
+	margin:10px 10px 30px;
+	padding:5px;
+}
+
+#bpgc-admin-form fieldset, #bpgc-admin-form p {
+	width:500px;
+}
+
+.bpgc-ajax-loader {
+	background: url( ajax-loader.gif ) center left no-repeat !important;
+	padding: 8px;
+	display: none;
+}
+
+#bpgc-admin-form p {
+	margin-bottom:30px;
+}
+
+#bpgc-admin-form h4 {
+	margin: 0 0 10px 0;
+	font-weight:normal;
+}
+
+.bpgc-form-table th {
+	padding:0 10px 10px;
+}
+
+form.standard-form table.bpgc-form-table input[type="text"] {
+	width:100%;
+}
+
+.shift-right {
+	text-align:right;
+}
+
+.gf-reg-cursor {
+	cursor:default;
+}
+
+.gf-blurred {
+	opacity:.3;
+}
+
+div.delete-dialogue {
+	margin:10px 0 0 66px;
+}
+
+.bpgc-delete {
+	background: url( cross_bullet.gif ) left no-repeat;
+	padding-left:18px;
+}
+
+div.bpgc-cb table{
+	margin-bottom:20px;
+}
+
+.bpgc-cb {
+	text-align:left;
+}
+
+.bpgc-cb th{
+	width:285px;
+}
+
+.bpgc-cb th, .bpgc-cb td {
+	padding:0 8px;
+}
+
+#add-members-fields .bpgc-cb input[type='checkbox']{
+	margin:8px;
+}
+
+#add-members-fields .bpgc-cb label {
+	margin:0;
+}
+
+#add-members-fields .bpgc-cb tr {
+	height:12px;
+}
+
+a.activity-identifying-group {
+	position:absolute;
+	bottom:1em;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:3px;
+	-moz-border-radius-bottomright:3px;
+	-moz-border-radius-topleft:3px;
+	-moz-border-radius-topright:3px;
+	background:#F5F5F5 none repeat scroll 0 0;
+	border:1px solid #EEEEEE;
+	color:#999999;
+	font-size:1em;
+	padding:0 3px;
+	text-decoration:none;
+}
+a.activity-identifying-group:hover {
+	border-color:#CCCCCC;
+	color:#777777;
+}

@@ -1,0 +1,83 @@
+table.gallery 
+{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.gallery td 
+{
+  padding: 10px;
+  text-align: center;
+  vertical-align: top;
+}
+
+table.gallery img.tn 
+{
+  padding: 0;
+  border: 1px solid #444444;
+	margin-bottom: 3px;
+}
+
+div.gallery 
+{
+  clear: left;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.gallery div.item 
+{
+  float: left;
+	background: #dddddd;
+	border: 1px solid #aaaaaa;
+	margin: 10px;
+	padding: 5px;
+  atext-align: center;
+}
+
+div.gallery div.name
+{
+	clear: both;
+}
+
+div.gallery img.tn 
+{
+	margin: 0;
+	padding: 0;
+  vertical-align: bottom;
+  border: 1px solid #000;
+}
+ 
+
+/* for lightbox */
+
+#gallery__lightbox 
+{
+    background-color: #eee;
+    padding: 10px;
+/*    border-bottom: 1px solid #666;
+    border-right: 1px solid #666;*/
+	border: 1px solid #000000;
+}
+
+#gallery__overlay 
+{
+    background-image: url(images/overlay.png);
+}
+
+#gallery__lightboxCaption 
+{
+    color: #333;
+    background-color: #eee;
+    font-size: 10px;
+    line-height: 10px;
+    text-align: center;
+    border-bottom: 1px solid #666;
+    border-right: 1px solid #666;
+}
+
+* html #gallery__overlay 
+{
+    background-image: url(images/overlayie.png);
+}

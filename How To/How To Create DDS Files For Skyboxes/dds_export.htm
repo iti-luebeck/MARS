@@ -1,0 +1,430 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="generator" content="MediaWiki 1.13.1">
+		<meta name="keywords" content="Textures,AFilter,BindTexture,CreateTexture,FreeTexture,LoadTexture,Materials,MaxAFilter,MaxTextureUnits,Other Tools,SetTextureQuality">
+		<link rel="shortcut icon" href="http://www.leadwerks.com/favicon.ico">
+		<link rel="search" type="application/opensearchdescription+xml" href="http://www.leadwerks.com/wiki/opensearch_desc.php" title="Leadwerks Developer Wiki (en)">
+		<link rel="alternate" type="application/rss+xml" title="Leadwerks Developer Wiki RSS Feed" href="http://www.leadwerks.com/wiki/index.php?title=Special:RecentChanges&amp;feed=rss">
+		<link rel="alternate" type="application/atom+xml" title="Leadwerks Developer Wiki Atom Feed" href="http://www.leadwerks.com/wiki/index.php?title=Special:RecentChanges&amp;feed=atom">
+		<title>Textures - Leadwerks Developer Wiki</title>
+		<style type="text/css" media="screen, projection">/*<![CDATA[*/
+			@import "/wiki/skins/common/shared.css?164";
+			@import "/wiki/skins/monobook/main.css?164";
+		/*]]>*/</style>
+		<link rel="stylesheet" type="text/css" media="print" href="dds_export-Dateien/commonPrint.css">
+		<!--[if lt IE 5.5000]><style type="text/css">@import "/wiki/skins/monobook/IE50Fixes.css?164";</style><![endif]-->
+		<!--[if IE 5.5000]><style type="text/css">@import "/wiki/skins/monobook/IE55Fixes.css?164";</style><![endif]-->
+		<!--[if IE 6]><style type="text/css">@import "/wiki/skins/monobook/IE60Fixes.css?164";</style><![endif]-->
+		<!--[if IE 7]><style type="text/css">@import "/wiki/skins/monobook/IE70Fixes.css?164";</style><![endif]-->
+		<!--[if lt IE 7]><script type="text/javascript" src="/wiki/skins/common/IEFixes.js?164"></script>
+		<meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+		
+		<script type="text/javascript">/*<![CDATA[*/
+var skin = "monobook";
+var stylepath = "/wiki/skins";
+var wgArticlePath = "/wiki/index.php?title=$1";
+var wgScriptPath = "/wiki";
+var wgScript = "/wiki/index.php";
+var wgVariantArticlePath = false;
+var wgActionPaths = [];
+var wgServer = "http://www.leadwerks.com";
+var wgCanonicalNamespace = "";
+var wgCanonicalSpecialPageName = false;
+var wgNamespaceNumber = 0;
+var wgPageName = "Textures";
+var wgTitle = "Textures";
+var wgAction = "view";
+var wgArticleId = "61";
+var wgIsArticle = true;
+var wgUserName = null;
+var wgUserGroups = null;
+var wgUserLanguage = "en";
+var wgContentLanguage = "en";
+var wgBreakFrames = false;
+var wgCurRevisionId = "10021";
+var wgVersion = "1.13.1";
+var wgEnableAPI = true;
+var wgEnableWriteAPI = false;
+var wgRestrictionEdit = [];
+var wgRestrictionMove = [];
+/*]]>*/</script>
+                
+		<script type="text/javascript" src="dds_export-Dateien/wikibits.js"><!-- wikibits js --></script>
+		<!-- Head Scripts -->
+		<script type="text/javascript" src="dds_export-Dateien/ajax.js"></script>
+		<script type="text/javascript" src="dds_export-Dateien/index.php"><!-- site js --></script>
+		<style type="text/css">/*<![CDATA[*/
+@import "/wiki/index.php?title=MediaWiki:Common.css&usemsgcache=yes&action=raw&ctype=text/css&smaxage=18000";
+@import "/wiki/index.php?title=MediaWiki:Monobook.css&usemsgcache=yes&action=raw&ctype=text/css&smaxage=18000";
+@import "/wiki/index.php?title=-&action=raw&gen=css&maxage=18000";
+/*]]>*/</style>
+	</head><body class="mediawiki ns-0 ltr page-Textures">
+	<div id="globalWrapper">
+		<div id="column-content">
+	<div id="content">
+		<a name="top" id="top"></a>
+				<h1 class="firstHeading">Textures</h1>
+		<div id="bodyContent">
+			<h3 id="siteSub">From Leadwerks Developer Wiki</h3>
+			<div id="contentSub"></div>
+									<div id="jump-to-nav">Jump to: <a href="#column-one">navigation</a>, <a href="#searchInput">search</a></div>			<!-- start content -->
+			<table id="toc" class="toc" summary="Contents"><tbody><tr><td><div id="toctitle"><h2>Contents</h2> <span class="toctoggle">[<a href="javascript:toggleToc()" class="internal" id="togglelink">hide</a>]</span></div>
+<ul>
+<li class="toclevel-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1"><a href="#Cubemaps"><span class="tocnumber">2</span> <span class="toctext">Cubemaps</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Creating_a_Cubemap_with_NVidia_DDS_Utilities"><span class="tocnumber">2.1</span> <span class="toctext">Creating a Cubemap with NVidia DDS Utilities</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Tutorials"><span class="tocnumber">3</span> <span class="toctext">Tutorials</span></a></li>
+<li class="toclevel-1"><a href="#Texture_Slots"><span class="tocnumber">4</span> <span class="toctext">Texture Slots</span></a></li>
+<li class="toclevel-1"><a href="#Commands"><span class="tocnumber">5</span> <span class="toctext">Commands</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Texture_Commands"><span class="tocnumber">5.1</span> <span class="toctext">Texture Commands</span></a>
+<ul>
+<li class="toclevel-3"><a href="#CreateTexture"><span class="tocnumber">5.1.1</span> <span class="toctext">CreateTexture</span></a></li>
+<li class="toclevel-3"><a href="#LoadTexture"><span class="tocnumber">5.1.2</span> <span class="toctext">LoadTexture</span></a></li>
+<li class="toclevel-3"><a href="#TextureFilter"><span class="tocnumber">5.1.3</span> <span class="toctext">TextureFilter</span></a></li>
+<li class="toclevel-3"><a href="#ClampTexture"><span class="tocnumber">5.1.4</span> <span class="toctext">ClampTexture</span></a></li>
+<li class="toclevel-3"><a href="#TextureWidth"><span class="tocnumber">5.1.5</span> <span class="toctext">TextureWidth</span></a></li>
+<li class="toclevel-3"><a href="#TextureHeight"><span class="tocnumber">5.1.6</span> <span class="toctext">TextureHeight</span></a></li>
+<li class="toclevel-3"><a href="#TextureName"><span class="tocnumber">5.1.7</span> <span class="toctext">TextureName</span></a></li>
+<li class="toclevel-3"><a href="#FreeTexture"><span class="tocnumber">5.1.8</span> <span class="toctext">FreeTexture</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Rendering_Commands"><span class="tocnumber">5.2</span> <span class="toctext">Rendering Commands</span></a>
+<ul>
+<li class="toclevel-3"><a href="#BindTexture"><span class="tocnumber">5.2.1</span> <span class="toctext">BindTexture</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Global_Settings"><span class="tocnumber">5.3</span> <span class="toctext">Global Settings</span></a>
+<ul>
+<li class="toclevel-3"><a href="#TFilter"><span class="tocnumber">5.3.1</span> <span class="toctext">TFilter</span></a></li>
+<li class="toclevel-3"><a href="#AFilter"><span class="tocnumber">5.3.2</span> <span class="toctext">AFilter</span></a></li>
+<li class="toclevel-3"><a href="#MaxAFilter"><span class="tocnumber">5.3.3</span> <span class="toctext">MaxAFilter</span></a></li>
+<li class="toclevel-3"><a href="#MaxTextureUnits"><span class="tocnumber">5.3.4</span> <span class="toctext">MaxTextureUnits</span></a></li>
+<li class="toclevel-3"><a href="#SetTextureQuality"><span class="tocnumber">5.3.5</span> <span class="toctext">SetTextureQuality</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table><script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<a name="Introduction"></a><h2> <span class="mw-headline">Introduction</span></h2>
+<p>Leadwerks Engine uses the .dds file format for textures, and can load
+ uncompressed, DXTC1, DXTC3 and DXTC5 formats.  Mipmaps and cubemaps are
+ also supported.
+</p><p>The materials system is designed to pack as much information into
+ as few textures as possible.  Consequently, you will not have separate 
+textures for alpha masks or specular levels.  Instead, the engine 
+usually stores information in the alpha channel of the base texture and 
+bumpmap.
+</p><p>Several texture tools can be downloaded in the <a href="http://www.leadwerks.com/wiki/index.php?title=Other_Tools" title="Other Tools">Other Tools</a> section.
+</p>
+<a name="Cubemaps"></a><h2> <span class="mw-headline">Cubemaps</span></h2>
+<p>A cubemap is a texture with 6 images corresponding to the faces of a 
+cube surrounding the viewer.  These are used to render skies and 
+reflections.  The DDS texture format can store all six faces of a 
+cubemap in one file.
+</p>
+<a name="Creating_a_Cubemap_with_NVidia_DDS_Utilities"></a><h3> <span class="mw-headline">Creating a Cubemap with NVidia DDS Utilities</span></h3>
+<p>Download <a href="http://developer.nvidia.com/object/dds_utilities_legacy.html" class="external text" title="http://developer.nvidia.com/object/dds_utilities_legacy.html" rel="nofollow">NVidia DDS Utilities</a>
+ and place nvdxt.exe in the same directory as your 6 cube textures.  All
+ 6 textures must be the same dimensions in pixels.  Create a new text 
+file, open it in Windows Notepad, and add this text:
+</p>
+<pre>    day_rt.png
+    day_lf.png
+    day_up.png
+    day_dn.png
+    day_ft.png
+    day_bk.png
+</pre>
+<p>Save the file and rename it "cubefaces.txt".
+</p><p>Now Create a second text file and open it in Notepad.  Add this text:
+</p>
+<pre>    nvdxt.exe -cubeMap -list "cubefaces.txt" -output "day.dds"
+    pause
+</pre>
+<p>Save the file and rename it "cubegen.bat".  Double-click on this file
+ and a console window will appear.  A new DDS texture will be created 
+containing your 6 textures.
+</p>
+<a name="Tutorials"></a><h2> <span class="mw-headline">Tutorials</span></h2>
+<ul><li><a href="http://www.leadwerks.com/files/Tutorials/CPP/Materials_And_Shaders.pdf" class="external text" title="http://www.leadwerks.com/files/Tutorials/CPP/Materials_And_Shaders.pdf" rel="nofollow">Materials and Shaders</a>
+</li></ul>
+<a name="Texture_Slots"></a><h2> <span class="mw-headline">Texture Slots</span></h2>
+<p>The first 10 texture slots are available to use.  Texture slots 10-15
+ should not be used.  Texture slots 16-32 may not be supported on all 
+hardware.
+</p><p>0. User<br>
+1. User<br>
+2. User<br>
+3. User<br>
+4. User<br>
+5. User<br>
+6. User<br>
+7. User<br>
+8. User<br>
+9. User<br>
+10. Instance matrix texture<br>
+11. Reserved<br>
+12. Reserved<br>
+13. Terrain color texture<br>
+14. Terrain normal map<br>
+15. Terrain heightmap<br>
+</p>
+<a name="Commands"></a><h2> <span class="mw-headline"> Commands </span></h2>
+<a name="Texture_Commands"></a><h3> <span class="mw-headline">Texture Commands</span></h3>
+<a name="CreateTexture"></a><h4> <span class="mw-headline">CreateTexture</span></h4>
+<ul><li><b>C:</b> TTexture CreateTexture( int width, int height, int format=TEXTURE_RGBA )
+</li></ul>
+<dl><dd>Creates a new texture.  The following formats can be created:
+</dd></dl>
+<ul><li>TEXTURE_ALPHA,TEXTURE_ALPHA8		- 8-bit Alpha
+</li><li>TEXTURE_LUMINANCE,TEXTURE_LUMINANCE8	- 8-bit Luminance
+</li><li>TEXTURE_RGB, TEXTURE_RGB8		- 24-bit RGB 
+</li><li>TEXTURE_RGBA, TEXTURE_RGBA8		- 32-bit RGBA
+</li><li>TEXTURE_DEPTH, TEXTURE_DEPTH24		- Depth texture
+</li><li>TEXTURE_RGBA16			        - 64-bit RGBA (use for high-quality normal buffer)
+</li><li>TEXTURE_FLOAT				- Float texture (16-32 bit depending on hardware) (can be used for displacement mapping)
+</li><li>TEXTURE_RGBA32		       		- 128-bit RGBA.  It is unlikely this format is needed for any purpose
+</li><li>TEXTURE_RG11B10       		       	- 32-bit RGBA float texture.  
+This allows you to use high-resolution RGB images, though it may not be 
+supported on all hardware
+</li></ul>
+<dl><dd>Only the following formats can be bound to a buffer and rendered to on all hardware:
+</dd></dl>
+<ul><li>TEXTURE_RGB, TEXTURE_RGB8
+</li><li>TEXTURE_RGBA, TEXTURE_RGBA8
+</li><li>TEXTURE_DEPTH, TEXTURE_DEPTH24
+</li><li>TEXTURE_RGBA16
+</li><li>TEXTURE_RGBA32
+</li><li>TEXTURE_FLOAT
+</li></ul>
+<dl><dd>For vertex texture lookups, TEXTURE_FLOAT or TEXTURE_RGBA32 
+should be used.  In addition, NVidia Shader Model 4 graphics cards may 
+use the TEXTURE_RGBA16 format.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=CreateTexture" title="CreateTexture">[Examples]</a></font>
+</dd></dl>
+<a name="LoadTexture"></a><h4> <span class="mw-headline">LoadTexture</span></h4>
+<ul><li><b>C:</b> TTexture LoadTexture( str filepath )
+</li><li><b>C++:</b> <br>
+<ul><li> Texture::Texture( const_str filepath )
+</li><li> void Texture::Load( str filepath )
+</li></ul>
+</li><li><b>BlitzMax:</b> LoadTexture:TTexture( filepath:String )
+</li><li><b>Pascal:</b> function LoadTexture ( filepath:PAnsiChar ): THandle;
+</li></ul>
+<dl><dd>Loads a texture from a texture file.
+</dd><dd>This command increments the texture reference count. To allow 
+memory management to delete the resource, the reference count must be 
+decremented by calling FreeTexture(texture).  Textures can be loaded 
+from .dds and .raw (16-bit) formats. If a texture with the specified 
+filename has already been loaded, it'll return a reference to that to 
+avoid loading assets twice.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=LoadTexture" title="LoadTexture">[Examples]</a></font>
+</dd></dl>
+<a name="TextureFilter"></a><h4> <span class="mw-headline">TextureFilter</span></h4>
+<ul><li><b>C:</b> void TextureFilter( TTexture texture, int filter )
+</li><li><b>C++:</b> void Texture::SetFilter( const TextureFilters&amp; filter ) <i>Where filter is one of Pixel, Smooth or MipMap</i>
+</li><li><b>BlitzMax:</b> TextureFilter( texture:TTexture, filter:Int )
+</li><li><b>Pascal:</b> procedure TextureFilter ( texture:THandle; filter:Integer );
+</li></ul>
+<dl><dd>Sets the texture filter for the specified texture.  Texture filter modes are below.
+<ul><li>TEXFILTER_PIXEL
+</li><li>TEXFILTER_SMOOTH
+</li><li>TEXFILTER_MIPMAP
+</li></ul>
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=TextureFilter" title="TextureFilter">[Examples]</a></font>
+</dd></dl>
+<a name="ClampTexture"></a><h4> <span class="mw-headline">ClampTexture</span></h4>
+<ul><li><b>C:</b> void ClampTexture(TTexture texture, int x=1, int y=1, int z=1)
+</li></ul>
+<dl><dd>Sets clamping for the axis of a texture (this does the same as the material setting "clamp<i>n</i>=x,y,z" but on a per texture, in-code base). See <a href="http://www.leadwerks.com/wiki/index.php?title=Materials#Syntax" title="Materials">Materials-&gt;Syntax-&gt;clamp<i>n</i></a>
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=ClampTexture&amp;action=edit&amp;redlink=1" class="new" title="ClampTexture (not yet written)">[Examples]</a></font>
+</dd></dl>
+<a name="TextureWidth"></a><h4> <span class="mw-headline">TextureWidth</span></h4>
+<ul><li><b>C:</b> int TextureWidth( TTexture texture )
+</li><li><b>C++:</b> int Texture::GetWidth( void ) const
+</li><li><b>BlitzMax:</b> TextureWidth:Int( texture:TTexture )
+</li><li><b>Pascal:</b> function TextureWidth ( texture:THandle ): Integer;
+</li></ul>
+<dl><dd>Returns the width of the specified texture.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=TextureWidth" title="TextureWidth">[Examples]</a></font>
+</dd></dl>
+<a name="TextureHeight"></a><h4> <span class="mw-headline">TextureHeight</span></h4>
+<ul><li><b>C:</b> int TextureHeight( TTexture texture )
+</li><li><b>C++:</b> int Texture::GetHeight( void ) const
+</li><li><b>BlitzMax:</b> TextureHeight:Int( texture:TTexture )
+</li><li><b>Pascal:</b> function TextureHeight ( texture:THandle ): Integer;
+</li></ul>
+<dl><dd>Returns the height of the specified texture.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=TextureHeight" title="TextureHeight">[Examples]</a></font>
+</dd></dl>
+<a name="TextureName"></a><h4> <span class="mw-headline">TextureName</span></h4>
+<ul><li><b>C:</b> str TextureName( TTexture texture )
+</li><li><b>C++:</b> std::string Texture::GetName( void ) const
+</li><li><b>BlitzMax:</b> TextureName:Byte Ptr( texture:TTexture )
+</li><li><b>Pascal:</b> function TextureName ( texture:THandle ): PAnsiChar;
+</li></ul>
+<dl><dd>Returns the name of the specified texture.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=TextureName" title="TextureName">[Examples]</a></font>
+</dd></dl>
+<a name="FreeTexture"></a><h4> <span class="mw-headline">FreeTexture</span></h4>
+<ul><li><b>C:</b> void FreeTexture( TTexture texture )
+</li><li><b>C++:</b> void Texture::Free( void )  <font color="gray"><i>Note: Also called from destructor</i></font>
+</li><li><b>BlitzMax:</b> n/a
+</li><li><b>Pascal:</b> procedure FreeTexture ( texture:THandle );
+</li></ul>
+<dl><dd>Releases the handle of a texture from memory.  The texture will be deleted when it is no longer in use.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=FreeTexture" title="FreeTexture">[Examples]</a></font>
+</dd></dl>
+<a name="Rendering_Commands"></a><h3> <span class="mw-headline">Rendering Commands</span></h3>
+<a name="BindTexture"></a><h4> <span class="mw-headline">BindTexture</span></h4>
+<ul><li><b>C:</b> void BindTexture( TTexture texture, int texunit )
+</li><li><b>C++:</b> void Texture::Bind( int texunit )
+</li><li><b>BlitzMax:</b> BindTexture( texture:TTexture, texunit:Int )
+</li><li><b>Pascal:</b> procedure BindTexture ( texture:THandle; texunit:Integer=0 );
+</li></ul>
+<dl><dd>Binds the specified texture to the specified texunit of the current shader (i.e., texunit 0 is texture0 in a shader).
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=BindTexture" title="BindTexture">[Examples]</a></font>
+</dd></dl>
+<a name="Global_Settings"></a><h3> <span class="mw-headline">Global Settings</span></h3>
+<a name="TFilter"></a><h4> <span class="mw-headline">TFilter</span></h4>
+<ul><li><b>C:</b> void TFilter( int mode=1 )
+</li><li><b>C++:</b> void Engine::SetTFilter( int value = 1 )
+</li><li><b>BlitzMax:</b> TFilter( mode:Int )
+</li><li><b>Pascal:</b> procedure TFilter ( mode:Integer=1 );
+</li></ul>
+<dl><dd>Sets trilinear filtering mode.  1 enables trilinear filtering and 0 disables it.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=TFilter" title="TFilter">[Examples]</a></font>
+</dd></dl>
+<a name="AFilter"></a><h4> <span class="mw-headline">AFilter</span></h4>
+<ul><li><b>C:</b> void AFilter( int mode=4 )
+</li><li><b>C++:</b> void Engine::SetAFilter( int value = 4 )
+</li><li><b>BlitzMax:</b> AFilter( mode:Int )
+</li><li><b>Pascal:</b> procedure AFilter ( mode:Integer=4 );
+</li></ul>
+<dl><dd>Sets the anisotropic filter.  The mode can be from 1 to the value returned by MaxAFilter().
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=AFilter" title="AFilter">[Examples]</a></font>
+</dd></dl>
+<a name="MaxAFilter"></a><h4> <span class="mw-headline">MaxAFilter</span></h4>
+<ul><li><b>C:</b> int MaxAFilter( void )
+</li><li><b>C++:</b> int Engine::GetMaxAFilter( void )
+</li><li><b>BlitzMax:</b> MaxAFilter:Int()
+</li><li><b>Pascal:</b> function MaxAFilter: Integer;
+</li></ul>
+<dl><dd>Returns the maximum supported anisotropic filter on the user's machine.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=MaxAFilter" title="MaxAFilter">[Examples]</a></font>
+</dd></dl>
+<a name="MaxTextureUnits"></a><h4> <span class="mw-headline">MaxTextureUnits</span></h4>
+<ul><li><b>C:</b> int MaxTextureUnits( void )
+</li></ul>
+<dl><dd>Returns the maximum supported texture units on the user's machine.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=MaxTextureUnits" title="MaxTextureUnits">[Examples]</a></font>
+</dd></dl>
+<a name="SetTextureQuality"></a><h4> <span class="mw-headline">SetTextureQuality</span></h4>
+<ul><li><b>C:</b> void SetTextureQuality( int quality )
+</li><li><b>C++:</b> void Engine::SetTextureQuality( int quality )
+</li><li><b>BlitzMax:</b> SetTextureQuality( quality:Int )
+</li></ul>
+<dl><dd>Sets the quality of loaded textures.  If quality is one, 
+textures will be loaded at full resolution.  If quality is two, textures
+ will be loaded at half resolution.  If quality is three, textures will 
+be loaded at one-fourth resolution.  .dds files must contain mipmaps for
+ this setting to have an effect.
+</dd><dd><font size="1" face="Arial"><a href="http://www.leadwerks.com/wiki/index.php?title=SetTextureQuality" title="SetTextureQuality">[Examples]</a></font>
+</dd></dl>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 751/1000000
+Post-expand include size: 9891/2097152 bytes
+Template argument size: 7073/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikiadmin2:pcache:idhash:61-0!1!0!!en!2!edit=0 and timestamp 20100817001639 -->
+<div class="printfooter">
+Retrieved from "<a href="http://www.leadwerks.com/wiki/index.php?title=Textures">http://www.leadwerks.com/wiki/index.php?title=Textures</a>"</div>
+						<!-- end content -->
+			<div class="visualClear"></div>
+		</div>
+	</div>
+		</div>
+		<div id="column-one">
+	<div id="p-cactions" class="portlet">
+		<h5>Views</h5>
+		<div class="pBody">
+			<ul>
+	
+				 <li id="ca-nstab-main" class="selected"><a href="http://www.leadwerks.com/wiki/index.php?title=Textures" title="View the content page [alt-shift-c]" accesskey="c">Page</a></li>
+				 <li id="ca-talk" class="new"><a href="http://www.leadwerks.com/wiki/index.php?title=Talk:Textures&amp;action=edit" title="Discussion about the content page [alt-shift-t]" accesskey="t">Discussion</a></li>
+				 <li id="ca-viewsource"><a href="http://www.leadwerks.com/wiki/index.php?title=Textures&amp;action=edit" title="This page is protected.
+You can view its source. [alt-shift-e]" accesskey="e">View source</a></li>
+				 <li id="ca-history"><a href="http://www.leadwerks.com/wiki/index.php?title=Textures&amp;action=history" title="Past versions of this page. [alt-shift-h]" accesskey="h">History</a></li>			</ul>
+		</div>
+	</div>
+	<div class="portlet" id="p-personal">
+		<h5>Personal tools</h5>
+		<div class="pBody">
+			<ul>
+				<li id="pt-login"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:UserLogin&amp;returnto=Textures" title="You are encouraged to log in, it is not mandatory however. [alt-shift-o]" accesskey="o">Log in / create account</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+	<div class="generated-sidebar portlet" id="p-Navigation">
+		<h5>Navigation</h5>
+		<div class="pBody">
+			<ul>
+				<li id="n-Home"><a href="http://www.leadwerks.com/wiki/index.php?title=Main_Page">Home</a></li>
+				<li id="n-Index"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:AllPages">Index</a></li>
+				<li id="n-recentchanges"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:RecentChanges" title="The list of recent changes in the wiki. [alt-shift-r]" accesskey="r">Recent changes</a></li>
+				<li id="n-randompage"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:Random" title="Load a random page [alt-shift-x]" accesskey="x">Random page</a></li>
+				<li id="n-help"><a href="http://www.leadwerks.com/wiki/index.php?title=Help:Contents" title="The place to find out.">Help</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="p-search" class="portlet">
+		<h5><label for="searchInput">Search</label></h5>
+		<div id="searchBody" class="pBody">
+			<form action="/wiki/index.php?title=Special:Search" id="searchform"><div>
+				<input id="searchInput" name="search" title="Search Leadwerks Developer Wiki [alt-shift-f]" accesskey="f" type="text">
+				<input name="go" class="searchButton" id="searchGoButton" value="Go" title="Go to a page with this exact name if exists" type="submit">&nbsp;
+				<input name="fulltext" class="searchButton" id="mw-searchButton" value="Search" title="Search the pages for this text" type="submit">
+			</div></form>
+		</div>
+	</div>
+	<div class="portlet" id="p-tb">
+		<h5>Toolbox</h5>
+		<div class="pBody">
+			<ul>
+				<li id="t-whatlinkshere"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:WhatLinksHere/Textures" title="List of all wiki pages that link here [alt-shift-j]" accesskey="j">What links here</a></li>
+				<li id="t-recentchangeslinked"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:RecentChangesLinked/Textures" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li>
+<li id="t-upload"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:Upload" title="Upload files [alt-shift-u]" accesskey="u">Upload file</a></li>
+<li id="t-specialpages"><a href="http://www.leadwerks.com/wiki/index.php?title=Special:SpecialPages" title="List of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li>
+				<li id="t-print"><a href="http://www.leadwerks.com/wiki/index.php?title=Textures&amp;printable=yes" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li>				<li id="t-permalink"><a href="http://www.leadwerks.com/wiki/index.php?title=Textures&amp;oldid=10021" title="Permanent link to this version of the page">Permanent link</a></li>			</ul>
+		</div>
+	</div>
+		</div><!-- end of the left (by default at least) column -->
+			<div class="visualClear"></div>
+			<div id="footer">
+				<div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="dds_export-Dateien/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki"></a></div>
+			<ul id="f-list">
+				<li id="lastmod"> This page was last modified on 24 September 2009, at 16:31.</li>
+				<li id="viewcount">This page has been accessed 5,482 times.</li>
+				<li id="privacy"><a href="http://www.leadwerks.com/wiki/index.php?title=Leadwerks_Developer_Wiki:Privacy_policy" title="Leadwerks Developer Wiki:Privacy policy">Privacy policy</a></li>
+				<li id="about"><a href="http://www.leadwerks.com/wiki/index.php?title=Leadwerks_Developer_Wiki:About" title="Leadwerks Developer Wiki:About">About Leadwerks Developer Wiki</a></li>
+				<li id="disclaimer"><a href="http://www.leadwerks.com/wiki/index.php?title=Leadwerks_Developer_Wiki:General_disclaimer" title="Leadwerks Developer Wiki:General disclaimer">Disclaimers</a></li>
+			</ul>
+		</div>
+</div>
+
+		<script type="text/javascript">if (window.runOnloadHook) runOnloadHook();</script>
+<!-- Served in 0.284 secs. --></body></html>

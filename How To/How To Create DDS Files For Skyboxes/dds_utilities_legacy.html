@@ -1,0 +1,759 @@
+<html xmlns:comem3="xalan://com.em3" xmlns:em3="http://www.em3.com/2002/widget"><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Legacy DDS Utilities</title>
+<link type="image/x-icon" href="http://www.nvidia.com/content/images/NVSphere.ico" rel="shortcut icon">
+<link href="http://news.developer.nvidia.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate">
+<style type="text/css">
+body {
+background-image:url('/docs/TEMPLATE/423/developers_1px_bg_alt2.jpg');
+background-repeat: repeat-x;
+margin-left:0px;
+margin-top:0px;
+font-family:Verdana, Geneva, Arial, Helvetica, Sans Serif;
+font-size: 11px;
+}
+
+td, div { 
+font-family:Verdana, Geneva, Arial, Helvetica, Sans Serif;
+font-size: 11px;
+}
+
+#devTable {
+/*position:absolute;
+top:60px;*/
+}
+
+.devGradient {
+background-image:url('/docs/TEMPLATE/422/features_bg.gif');
+background-repeat: no-repeat;
+vertical-align:top;
+padding:10px;
+
+}
+#devSearch {
+background-image:url('/docs/TEMPLATE/430/topnav_search.jpg');
+background-repeat: no-repeat;
+}
+A { 
+text-decoration:none;
+/* color: #008000; */
+/* green color: #76b900; */
+/*font-weight:bold; */
+color: #5B8C00;
+}
+
+A:hover { 
+text-decoration:underline;
+color: #000000;
+}
+
+A:visited { 
+color: #5B8C00;
+}
+
+.bucketText { 
+font-size: 10px;
+}
+A.bucketHeader { 
+font-weight:bold;
+color: #009900;
+text-decoration:none;
+}
+A.bucketHeader:hover { 
+text-decoration:underline;
+}
+A.bucketHeader:visited { 
+color: #005000;
+}
+H1 { 
+font-size:15px;
+color: #000000;
+font-weight:bold;
+}
+H2 { 
+font-size:14px;
+color: #000000;
+font-weight:bold;
+}
+H3 { 
+font-size:14px;
+color: #000080;
+font-weight:bold;
+}
+H4 { 
+font-size:12px;
+color: #000000;
+font-weight:bold;
+}
+H5 { 
+font-size:12px;
+color: #000080;
+font-weight:bold;
+}
+H6 { 
+font-size:10px;
+color: #000000;
+font-weight:bold;
+}
+H6 { 
+font-size:10px;
+color: #000080;
+font-weight:bold;
+}
+
+#headerBG {
+background-image: url("/dev_content/images/top_bg.jpg");
+}
+#barBG {
+background-image: url("/dev_content/images/center_bar_bg.jpg");
+}
+#bucketBG {
+background-image: url("/dev_content/images/bucket_bg.jpg");
+background-repeat: no-repeat;
+}
+
+.search {
+font-size:7pt; 
+color: #FFFFFF;
+} 
+.searchResultsHeader { 
+font-size:10pt;
+font-weight:bold;
+color: #000080;
+}
+.smallText { 
+font-size: 11px;
+}
+.legal{
+font-size:7pt; 
+color: #000000;
+} 
+A.legal{
+text-decoration:none
+color: #000000;
+} 
+A.legal:hover{
+text-decoration:underline
+color: #000000;
+} 
+A.legal:visited{
+color: #000000;
+} 
+
+
+
+#mytable 
+{
+BORDER-COLLAPSE: collapse;
+borderColor: #dfdfe7;
+cellSpacing: 0;
+cellPadding: 6;
+borderColorLight: #e9eaed;
+border: 1;
+}
+
+#mytable td {
+FONT-SIZE: 10px; 
+FONT-FAMILY: Verdana, Geneva, Arial, Helvetica, 'Sans Serif';
+borderColor: #dfdfe7;
+background-color: #F4F4F7;
+border-right: 1px solid #dfdfe7;
+border-bottom: 1px solid #dfdfe7;
+padding: 6px 6px 6px 12px; 
+}
+
+#mytable th {
+padding: 6px 6px 6px 12px; 
+FONT-FAMILY: Verdana, Geneva, Arial, Helvetica, 'Sans Serif';
+FONT-WEIGHT: 400; 
+FONT-SIZE: 10px;
+borderColor: #c0c0c0;
+bgColor: #dfdfe7
+}
+
+/* new masthead */
+div.masthead {
+background-image: url(/docs/TEMPLATE/423/zones_header_bgtile_devzone.gif);
+background-repeat: repeat-x;
+background-color: #76b900;
+width: 100%;
+height: 80px;
+}
+td.globalsearchBG {
+background-image: url(/docs/TEMPLATE/423/header_bg_devzone.jpg);
+background-repeat: no-repeat;
+color: #FFFFFF;
+padding: 0px;
+text-align: left;
+margin: 0px;
+position: relative;
+}
+#globalsites {
+position: relative;
+background-repeat: no-repeat;
+width: 97px;
+height: 18px;
+left: 133px;
+top: 32px;
+}
+div.search {
+position: relative;
+left: 363px;
+top: 7px;
+width:300px;
+}
+input.searchbox {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #666666;
+text-indent: 3px;
+}
+#navbar {
+background-image: url(/docs/TEMPLATE/423/navbar_bg_tile.gif);
+background-repeat: repeat-x;
+height: 22px;
+width: 100%;
+}
+#navshadow {
+background-image: url(/docs/TEMPLATE/423/navbar_shadow_tile.gif);
+background-repeat: repeat-x;
+/* height: 38px; */
+height: 20px;
+width: 100%;
+}
+
+</style>
+</head><body>
+<div class="masthead">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="980">
+<tbody><tr>
+<td width="36">&nbsp;</td><td width="277"><img usemap="#zonemap" alt="SLI Zone" src="dds_utilities_legacy-Dateien/zonelogo_devzone.jpg" border="0" height="80" width="277"></td><td class="globalsearchBG" valign="top" width="667">
+<div style="position: relative; top: 30px; left: 365px;" id="globalsites">
+<form name="search" id="Form1" action="/object/nv_search_us.html">
+<input value="009029091075083507105:9leknaf7r_8" name="cx" type="hidden"><input value="FORID:11;NB:1" name="cof" type="hidden"><input value="UTF-8" name="ie" type="hidden"><input value="en" name="hl" type="hidden"><input value="us" name="gl" type="hidden"><input value="Search Developer Zone" onfocus="javascript:document.search.q.value = '';" maxlength="50" size="25" name="q" type="text">
+</form><script type="text/javascript" src="dds_utilities_legacy-Dateien/brand.htm"></script></div>
+</td>
+</tr>
+</tbody></table>
+</div>
+<div id="navbar"></div>
+<div id="navshadow"></div>
+<map name="zonemap">
+<area onclick='s_objectID="http://www.nvidia.com/page/home.html_1";return this.s_oc?this.s_oc(e):true' href="http://www.nvidia.com/page/home.html" coords="6,3,78,72" alt="NVIDIA.com">
+<area onclick='s_objectID="http://developer.nvidia.com/page/home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/home.html" coords="88,3,276,73" alt="Developer Home">
+</map>
+<table id="devTable" align="center" border="0" cellpadding="0" cellspacing="0" width="900">
+<tbody><tr valign="top">
+<td><img alt="" src="dds_utilities_legacy-Dateien/img10274.gif" border="0" height="0" width="50"></td><td>
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody><tr valign="top">
+<td colspan="3"></td>
+</tr>
+<tr valign="top">
+<td colspan="3"></td>
+</tr>
+<tr valign="top">
+<td>
+<table border="0" cellpadding="0" cellspacing="0" width="211">
+<tbody><tr>
+<td>
+<div style="position: relative; left: 23px; top: 20px; width: 153px;">
+<table border="0" cellpadding="0" cellspacing="0" width="211">
+<tbody><tr>
+<td>
+<div style="position: relative; left: 23px; top: 20px; width: 153px;">
+<strong>Quick Links</strong>
+<ul>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/home.html_2";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/home.html">Home</a>
+</li>
+<li>
+<a onclick='s_objectID="http://news.developer.nvidia.com/_1";return this.s_oc?this.s_oc(e):true' href="http://news.developer.nvidia.com/">News</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/devnews.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/devnews.html">Developer Newsletter</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/newsletter_signup.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/newsletter_signup.html">Newsletter Sign-Up</a>
+</li>
+<li>
+<a onclick='s_objectID="http://www.nvidia.com/object/cuda_signup_alerts.html_1";return this.s_oc?this.s_oc(e):true' href="http://www.nvidia.com/object/cuda_signup_alerts.html">CUDA Newsletter Sign-Up</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/downloading_drivers.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/downloading_drivers.html">Drivers</a>
+</li>
+<li>
+<a onclick='s_objectID="https://nvdeveloper.nvidia.com/_1";return this.s_oc?this.s_oc(e):true' href="https://nvdeveloper.nvidia.com/">Registered Developer Login</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/registered_developer_program.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/registered_developer_program.html"> Become a Registered Developer </a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/event_calendar.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/event_calendar.html">Events Calendar</a>
+</li>
+</ul>
+<strong>Parallel Nsight</strong>
+<ul>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight.html">Overview</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight.html#compute_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight.html#compute">For Compute</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight.html#graphics_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight.html#graphics">For Graphics</a>
+</li>
+<li>
+<a onclick='s_objectID="http://supportcenteronline.com/ics/support/default.asp?deptID=4639_1";return this.s_oc?this.s_oc(e):true' href="http://supportcenteronline.com/ics/support/default.asp?deptID=4639">Beta Signup</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight-pricing.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight-pricing.html">Pricing</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight-videos.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight-videos.html">Videos</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/nsight-webinars.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/nsight-webinars.html">Webinars</a>
+</li>
+</ul>
+<strong>Graphics</strong>
+<ul>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/directx.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/directx.html">DirectX</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/opengl.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/opengl.html">OpenGL</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/3d_stereo_dev.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/3d_stereo_dev.html">
+                  
+                  3D Vision
+                  
+                  ™</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/page/documentation.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/documentation.html">Documentation</a>
+</li>
+</ul>
+<strong><a onclick='s_objectID="http://developer.nvidia.com/object/gpucomputing.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpucomputing.html">GPU Computing</a></strong>
+<ul>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/cuda_download.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/cuda_download.html">Downloads</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpucomputing.html_2";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpucomputing.html">CUDA</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/directcompute_home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/directcompute_home.html">DirectCompute</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/opencl.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/opencl.html">OpenCL</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpu_computing_online.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpu_computing_online.html">Free GPU Computing Seminars</a>
+</li>
+</ul>
+<p>
+<a onclick='s_objectID="http://developer.nvidia.com/tegra_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/tegra"><strong>Tegra</strong></a>
+</p>
+<strong>
+              
+              NVIDIA
+              
+              ®
+              
+               Application Acceleration Tools
+            
+            </strong>
+<ul>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/scenix-home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/scenix-home.html">
+                  
+                  SceniX
+                  
+                  ™</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/complex-home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/complex-home.html">
+                  
+                  CompleX
+                  
+                  ™</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/optix-home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/optix-home.html">
+                  
+                  OptiX
+                  
+                  ™</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/physx.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/physx.html">
+                  
+                  PhysX
+                  
+                  ™</a>
+</li>
+<li>
+<a onclick='s_objectID="http://developer.nvidia.com/object/cg_toolkit.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/cg_toolkit.html">Cg Toolkit</a>
+</li>
+</ul>
+<strong>Forums</strong>
+<br>
+<a onclick='s_objectID="http://developer.nvidia.com/forums_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/forums">- Developer Forums</a>
+<br>
+<a onclick='s_objectID="http://forums.nvidia.com/index.php?showforum=62_1";return this.s_oc?this.s_oc(e):true' href="http://forums.nvidia.com/index.php?showforum=62">- GPU Computing Forums</a>
+<br>&nbsp;<br>
+<div class="smallText">
+              
+              
+NOTE: The 
+              
+              <a onclick='s_objectID="http://developer.nvidia.com/forums_2";return this.s_oc?this.s_oc(e):true' target="_blank" href="http://developer.nvidia.com/forums">NVIDIA Developer Forums</a>
+              
+               and the 
+              
+              <a onclick='s_objectID="http://forums.nvidia.com/index.php?showforum=62_2";return this.s_oc?this.s_oc(e):true' target="_blank" href="http://forums.nvidia.com/index.php?showforum=62">GPU Computing Forums</a>
+              
+               require separate logins. We will fix this in the near 
+future when the two forums are merged. Thank you for your patience!
+
+            
+            </div>
+<br>
+<img alt="" src="dds_utilities_legacy-Dateien/divider.gif" align="" border="0"><br>
+<a onclick='s_objectID="http://developer.nvidia.com/object/contact_us.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/contact_us.html">Contact</a>
+<br>
+<br>
+<a onclick='s_objectID="http://developer.nvidia.com/object/legal_info.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/legal_info.html">Legal Information</a>
+<br>
+<br>
+<img alt="" src="dds_utilities_legacy-Dateien/divider.gif" align="" border="0"><br>
+<br>
+<a onclick='s_objectID="http://surveys.nvidia.com/index.jsp?pi=c1655cd3f4d0fb4bfdee853f141f9a75_1";return this.s_oc?this.s_oc(e):true' href="http://surveys.nvidia.com/index.jsp?pi=c1655cd3f4d0fb4bfdee853f141f9a75">Site Feedback</a>
+</div>
+</td>
+</tr>
+</tbody></table>
+</div>
+</td>
+</tr>
+</tbody></table>
+</td><td width="591">
+<table style="background-color: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204);" border="0" cellpadding="0" cellspacing="0" width="591">
+<tbody><tr>
+<td valign="top">
+<div style="position: relative; left: 13px; top: 8px; padding-bottom: 20px; width: 565px;">
+<img alt="" src="dds_utilities_legacy-Dateien/divider.htm" border="0" height="1" width="153"><br><!-- BEGIN MAIN CONTENT --><div style="color: rgb(204, 204, 204); font-size: 8pt; text-align: right;">
+                                Last Updated: 
+                                12
+                                /
+                                04
+                                /
+                                2007</div>
+<h1>Legacy DDS Utilities</h1><p><strong>Note</strong>: If you are looking for texture compression tools, please take a look at our new <a onclick='s_objectID="http://developer.nvidia.com/object/texture_tools.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/texture_tools.html">GPU-Accelerated Texture Tools</a>, which provide a 10x performance boost if you have a GeForce 8 Series GPU. </p>
+<p>This installer includes four separate utilities: </p>
+<ul>
+<li><strong>nvDXT</strong> - convenient command-line access to nvDXTlib functionality and more 
+</li><li><strong>detach</strong> - extracts MIP levels from a .DDS file 
+</li><li><strong>stitch</strong> - recombines MIP levels into a single .DDS file 
+</li><li><strong>readDXT</strong> - reads compressed images and writes .TGA files</li>
+<li><strong>nvDXTlib</strong> - library for working with .DDS files&nbsp;</li></ul>
+<p>The latest release includes several improvements:</p>
+<ul>
+<li>Support for Visual Studio 2005 and 2003 libraries</li>
+<li>Texture sizes up to 8k by 4K are now supported (previously 2k x 2k was the limit)</li>
+<li>Support for DXT5_NM (compressed normal maps)</li>
+<li>The “Fastest” quality mode has been significantly improved</li>
+<li>Internal calculations are now performed using floating point arithmetic, resulting in higher quality textures.&nbsp; </li></ul>
+<p>If you're working with DDS files, you may also find our <font color="#606420"><a onclick='s_objectID="http://developer.nvidia.com/object/photoshop_dds_plugins.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/photoshop_dds_plugins.html">Adobe Photoshop Plug-ins</a></font>, <a onclick='s_objectID="http://developer.nvidia.com/object/dds_thumbnail_viewer.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/dds_thumbnail_viewer.html">DDS Thumbnail Viewer</a>, and <a onclick='s_objectID="http://developer.nvidia.com/object/windows_texture_viewer.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/windows_texture_viewer.html">Windows Texture Viewer</a> to be useful.</p>
+<p>Our DDS Utilities are part of a larger set of NVIDIA developer tools. Visit our <a onclick='s_objectID="http://developer.nvidia.com/page/tools.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/tools.html">Tools &amp; SDKs</a> homepage.<br></p><br>
+<br>
+<br>
+<br>
+<br>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td id="barBG"><img src="dds_utilities_legacy-Dateien/downloads_middle.jpg" height="30" width="475"><br>
+</td>
+</tr>
+<tr>
+<td>
+<br>
+<a onclick='s_objectID="http://developer.download.nvidia.com/tools/texturetools/DDS_Utilities_8.31.1127.1645.exe_1";return this.s_oc?this.s_oc(e):true' href="http://developer.download.nvidia.com/tools/texturetools/DDS_Utilities_8.31.1127.1645.exe" class="bucketHeader">DDS Utilities Installer (Build 8.31.1127.1645) (10.1 MB)</a>
+<br>
+<br>
+</td>
+</tr>
+</tbody></table>
+<br>
+</div><!-- END MAIN CONTENT --></td>
+</tr>
+</tbody></table>
+</td><td width="154">
+<div style="position: relative; left: 35px;">
+<style>
+a.hd:link { color: black; }
+a.hd:visited { color: #333; }
+a.hd:active { color: #550; }
+a.hd:hover { color: #338; }
+TH.nvhd {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 20px;
+    font-weight: normal;
+    background-color: #eee;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+cite {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-style: italic;
+}
+</style>
+<style>
+h3.rhsidebar_subheading {
+ font-family: Georgia, "Times New Roman", Times, serif;
+ font-size: 10px;
+ font-weight: normal;
+ font-color: #000000;
+ background-color: #eee;
+ margin-bottom: 15px;
+ margin-top: 5px;
+};
+div.rhsidebar_leftdiv {
+  clear: left;
+  float: left;
+  width: 275px;
+  
+}
+div.rhsidebar_rightdiv {
+  float: left;
+  width: 275px;
+}
+div.rhsidebar_content {
+  clear: left;
+ float: left;
+ padding: 5px;
+ margin: 2px;
+ margin-right: 10px;
+ margin-bottom: 10px;
+ background: #eee;
+ border: 1px solid #ccc;
+ width: 150px; 
+}
+div.rhsidebar_content2 {
+ float: left;
+ padding: 5px;
+ margin: 2px; 
+ margin-bottom: 10px;
+ background: #eee;
+ border: 1px solid #ccc;
+ width: 150px; 
+}
+div.rhsidebar_content ul { margin-left: 0em; padding-left: 0em;}
+div.rhsidebar_content2 ul { margin-left: 0em; padding-left: 0em;}
+div.rhsidebar_ToolHeading {
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    font-color: #000000;
+}
+div.rhsidebar_Subheading {
+ font-family: Arial;
+ font-size: 12px;
+ color: #666;
+ /*padding-left: 10px;*/
+margin-bottom:15px;
+}
+div.rhsidebar_content li {
+ padding-top: 5px;
+ padding-bottom: 5px;
+ font-size: 10px;
+ list-style-position: inside;
+ padding-left: 5px;
+}
+div.rhsidebar_content2 li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 10px;
+  list-style-position: inside; 
+  padding-left: 5px;
+}
+li.rhsidebar_Others {
+   font-family: Arial;
+   font-color: #000000;
+}
+div.rhsidebar_legacy {
+ float: left;
+ padding: 5px;
+ 
+ margin: 2px;
+ background: #eee;
+ border: 1px solid #ccc;
+ width: 524px; 
+ 
+ min-height: 250px;
+}
+div.rhsidebar_legacy li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 10px;
+  list-style-position: inside; 
+  padding-left: 5px;
+}
+.imageblock {
+  margin:4px;
+  padding:0;
+  float: left;
+  font-size: 9px;
+  width:50px;
+  height:63px;
+  text-align:center;
+}
+.imageblock img {
+ border:0px;
+ width:50px;
+}
+.nonrightbook {
+ border-right: 1px solid #bbb;
+}
+.leftmost {
+}
+.centeredImage
+{
+    text-align:center;
+    margin-top:0px;
+    margin-bottom:0px;
+    padding:0px;
+}
+ul.formattedUL {margin:5px 0 5px 0; padding:0;}
+ul.formattedUL li {margin:0; padding:0; margin-bottom:8px;}
+ul.eventUL {margin:5px 0 5px 0; padding:0; list-style-type:none;}
+ul.eventUL li {margin:0; padding:0; margin-bottom:4px;}
+</style>
+<div class="rhsidebar_content firstrow">
+<div class="rhsidebar_ToolHeading">nvidiadeveloper Twitterfeed</div>
+<div id="twitter_div">
+<ul id="twitter_update_list" class="formattedUL"><li><span>We have updated our mirror of the Unreal Developer Kit to the August beta release.  Enjoy!  <a onclick='s_objectID="http://bit.ly/2EaPpC_1";return this.s_oc?this.s_oc(e):true' href="http://bit.ly/2EaPpC">http://bit.ly/2EaPpC</a></span> <a onclick='s_objectID="http://twitter.com/nvidiadeveloper/statuses/21321385209_1";return this.s_oc?this.s_oc(e):true' style="font-size: 85%;" href="http://twitter.com/nvidiadeveloper/statuses/21321385209">about 21 hours ago</a></li><li><span>On the lighter side today: Some NVIDIA employees hijack a marketing video for the GTX 460   <a onclick='s_objectID="http://youtu.be/0cN4s17OCds_1";return this.s_oc?this.s_oc(e):true' href="http://youtu.be/0cN4s17OCds">http://youtu.be/0cN4s17OCds</a></span> <a onclick='s_objectID="http://twitter.com/nvidiadeveloper/statuses/21026465181_1";return this.s_oc?this.s_oc(e):true' style="font-size: 85%;" href="http://twitter.com/nvidiadeveloper/statuses/21026465181">4 days ago</a></li><li><span>We are getting "broken link" reports on the SIGGRAPH pages...they should be live in a couple minutes...Intertubez lag.</span> <a onclick='s_objectID="http://twitter.com/nvidiadeveloper/statuses/19844788807_1";return this.s_oc?this.s_oc(e):true' style="font-size: 85%;" href="http://twitter.com/nvidiadeveloper/statuses/19844788807">18 days ago</a></li><li><span>Update: The theater and sponsored sessions from #SIGGRAPH are now available on our Developer Zone page here: <a onclick='s_objectID="http://bit.ly/alIvpq_1";return this.s_oc?this.s_oc(e):true' href="http://bit.ly/alIvpq">http://bit.ly/alIvpq</a></span> <a onclick='s_objectID="http://twitter.com/nvidiadeveloper/statuses/19844028301_1";return this.s_oc?this.s_oc(e):true' style="font-size: 85%;" href="http://twitter.com/nvidiadeveloper/statuses/19844028301">18 days ago</a></li><li><span>Missing out on #SIGGRAPH?  Our Sponsored Session recordings are now available: <a onclick='s_objectID="http://bit.ly/9jW6Yb_1";return this.s_oc?this.s_oc(e):true' href="http://bit.ly/9jW6Yb">http://bit.ly/9jW6Yb</a></span> <a onclick='s_objectID="http://twitter.com/nvidiadeveloper/statuses/19841341437_1";return this.s_oc?this.s_oc(e):true' style="font-size: 85%;" href="http://twitter.com/nvidiadeveloper/statuses/19841341437">18 days ago</a></li></ul>
+<a onclick='s_objectID="http://twitter.com/nvidiadeveloper_1";return this.s_oc?this.s_oc(e):true' style="display: block; text-align: right;" id="twitter-link" href="http://twitter.com/nvidiadeveloper">Follow us on Twitter!</a>
+</div>
+</div>
+<div class="rhsidebar_content">
+<div class="rhsidebar_ToolHeading">Event Calendar</div>
+<div class="eventUL" style="margin-left: 20px;">
+<a onclick='s_objectID="http://www.3d-summit.com/_1";return this.s_oc?this.s_oc(e):true' target="_blank" href="http://www.3d-summit.com/">3D Entertainment Summit</a>
+<br>
+<a onclick='s_objectID="http://www.siggraph.org/s2010_1";return this.s_oc?this.s_oc(e):true' target="_blank" href="http://www.siggraph.org/s2010">SIGGRAPH 2010</a>
+<br>
+<a onclick='s_objectID="http://gdcaustin.com/_1";return this.s_oc?this.s_oc(e):true' target="_blank" href="http://gdcaustin.com/">GDC Austin 2010</a>
+</div>
+</div>
+<div class="rhsidebar_content">
+<div class="rhsidebar_ToolHeading">Popular References</div>
+<div class="rhsidebar_Subheading">
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpu_programming_guide.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpu_programming_guide.html">GPU Programming Guide</a>
+        
+         | 
+          
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/object/device_ids.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/device_ids.html">Device IDs</a>
+        
+         | 
+          
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/object/sdk_home_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/sdk_home">NVIDIA SDK</a>
+        
+         |  
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/page/directx.html_2";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/page/directx.html">DirectX</a>
+        
+         |  
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/object/cg_toolkit.html_2";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/cg_toolkit.html">Cg</a>
+        
+        |  
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/object/physx.html_2";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/physx.html">PhysX</a>
+        
+          |  
+        
+        <a onclick='s_objectID="http://developer.nvidia.com/object/opengl_3_driver.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/opengl_3_driver.html">OpenGL</a>
+</div>
+<div class="rhsidebar_ToolHeading">Recommended Books</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://developer.nvidia.com/object/cuda-by-example.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/cuda-by-example.html"><img alt="CUDA By Example" src="dds_utilities_legacy-Dateien/frontcover_100px.jpg" height="56" width="50"></a>
+</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://www.nvidia.com/object/io_1264656303008.html_1";return this.s_oc?this.s_oc(e):true' href="http://www.nvidia.com/object/io_1264656303008.html"><img alt="Programming Massively Parallel Processors" src="dds_utilities_legacy-Dateien/massively_parallel_75px.png" height="56" width="50"></a>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<a onclick='s_objectID="http://www.nvidia.com/object/cuda_books.html_1";return this.s_oc?this.s_oc(e):true' href="http://www.nvidia.com/object/cuda_books.html">More Recommendations...</a>
+<br>
+<br>
+<div class="rhsidebar_ToolHeading">Free Books Online</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://developer.nvidia.com/object/cg_tutorial_home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/cg_tutorial_home.html"><img src="dds_utilities_legacy-Dateien/Cg_Tutorial_small.jpg" height="63" width="50"></a>
+</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpu_gems_home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpu_gems_home.html"><img src="dds_utilities_legacy-Dateien/GPU_Gems_small.jpg" height="63" width="50"></a>
+</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpu_gems_2_home.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpu_gems_2_home.html"><img src="dds_utilities_legacy-Dateien/GPU_Gems_2_small.jpg" height="63" width="50"></a>
+</div>
+<div class="imageblock">
+<a onclick='s_objectID="http://developer.nvidia.com/object/gpu-gems-3.html_1";return this.s_oc?this.s_oc(e):true' href="http://developer.nvidia.com/object/gpu-gems-3.html"><img src="dds_utilities_legacy-Dateien/GPU_Gems_3_small.jpg" height="63" width="50"></a>
+</div>
+</div><script type="text/javascript" src="dds_utilities_legacy-Dateien/blogger.js"></script><script type="text/javascript" src="dds_utilities_legacy-Dateien/nvidiadeveloper.json"></script></div>
+<br>
+<img alt="" src="dds_utilities_legacy-Dateien/img10274.gif" border="0" height="1" width="154"><img alt="" src="dds_utilities_legacy-Dateien/shim.htm" border="0" height="1" width="154"></td>
+</tr>
+</tbody></table>
+</td><td><img alt="" src="dds_utilities_legacy-Dateien/img10274.gif" border="0" height="1" width="50"></td>
+</tr>
+</tbody></table>
+<!--WEBSIDESTORY CODE HBX1.0 (Universal)-->
+<!--COPYRIGHT 1997-2005 WEBSIDESTORY,INC. ALL RIGHTS RESERVED. U.S.PATENT No. 6,393,479B1. MORE INFO:http://websidestory.com/privacy-->
+<script language="javascript">
+var _hbEC=0,_hbE=new Array;function _hbEvent(a,b){b=_hbE[_hbEC++]=new Object();b._N=a;b._C=0;return b;}
+var hbx=_hbEvent("pv");hbx.vpc="HBX0100u";hbx.gn="a.nvidia.com";
+hbx.acct="DM55061879AA96EN3";//developer
+hbx.pn="PUT+PAGE+NAME+HERE";
+hbx.mlc="CONTENT+CATEGORY";
+hbx.pndef="home.html";
+hbx.ctdef="full";
+hbx.lt="auto";
+hbx.dlf=".run,.8bi,.asx,.bat,.cg,.chm,.cpp,.db,.dds,.dll,.dsp,.dsw,.fp,.fx,.fxcomposer,.fxproj,.h,.hdr,.hpp,.ico,.img,.inf,.ini,.key,.lib,.lst,.msi,.ncb,.opt,.P3D,.plg,.exr,.rc,.res,.sh,.sln,.spc,.str,.tga,.txt,.vcproj,.xml";
+</script><script language="javascript1.1" defer="defer" src="dds_utilities_legacy-Dateien/hbx.js"></script>
+<!--END WEBSIDESTORY CODE-->
+<!-- SiteCatalyst code version: H.17.
+Copyright 1997-2008 Omniture, Inc. More info available at http://www.omniture.com -->
+<script language="JavaScript" type="text/javascript" src="dds_utilities_legacy-Dateien/s_code_us_dev_aut1.js"></script>
+<script language="JavaScript" type="text/javascript">
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//--></script>
+<script language="JavaScript" type="text/javascript"><!--
+if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+//--></script><noscript><a href="http://www.omniture.com" title="Web Analytics"><img
+src="http://omniture.nvidia.com/b/ss/nvidiausdev/1/H.17--NS/0"
+height="1" width="1" border="0" alt="" /></a></noscript><!--/DO NOT REMOVE/-->
+<!-- End SiteCatalyst code version: H.17. -->
+
+<!-- Start of Google Analytics Code -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="dds_utilities_legacy-Dateien/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1273456-46");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<!-- End of Google Analytics Code -->
+
+</body></html>
