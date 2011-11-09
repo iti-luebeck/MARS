@@ -160,7 +160,7 @@ All fields are required.
 		<Server>
 			<RAW>
 				<enabled>
-					false
+					true
 				</enabled>
 				<port>
 					8080
@@ -174,7 +174,7 @@ All fields are required.
 			</RAW>
 			<ROS>
 				<enabled>
-					true
+					false
 				</enabled>
 				<masterip><!-- 141.83.88.145 -->
 					141.83.88.157
