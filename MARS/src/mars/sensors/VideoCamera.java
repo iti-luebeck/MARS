@@ -21,6 +21,9 @@ import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.SimState;
@@ -29,6 +32,8 @@ import mars.SimState;
  * This is a common camera class for auv's.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {BlackfinCamera.class} )
 public class VideoCamera extends Sensor{
 
     private Geometry CameraStart;
@@ -57,6 +62,10 @@ public class VideoCamera extends Sensor{
 
     private ByteBuffer cpuBuf;
 
+    public VideoCamera(){
+        super();
+    }
+    
      /**
      *
       * @param simauv

@@ -12,20 +12,33 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.Moveable;
 import mars.NoiseType;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  * This a basic thruster implementation that you can use for your own thrusters.
  * See SeaBotixThruster for how you can extend this class.
  * @author Thomas Tosik
  */
-public class Thruster extends Actuator{
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {BrushlessThruster.class,SeaBotixThruster.class} )
+public class Thruster extends Actuator implements Moveable{
 
     //motor
     private Geometry MotorStart;
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f MotorStartVector = new Vector3f(0,0,0);
     private Geometry MotorEnd;
+    @XmlElement(name="MotorDirection")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f MotorDirection = Vector3f.UNIT_Z;
     /**
      *
@@ -36,6 +49,10 @@ public class Thruster extends Actuator{
      */
     protected float motor_increment = 10.0f;
 
+    public Thruster(){
+        super();
+    }
+    
     /**
      *
      * @param simauv
@@ -179,5 +196,13 @@ public class Thruster extends Actuator{
 
     public void reset(){
         MotorForce = 0f;
+    }
+    
+    public void updateRotation(Vector3f rotation_axis, float alpha){
+        
+    }
+    
+    public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
+        
     }
 }

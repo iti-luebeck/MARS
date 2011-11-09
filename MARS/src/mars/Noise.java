@@ -6,25 +6,25 @@
 package mars;
 
 import java.util.Random;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * In this class should be several static methods for noise. Nothing done yet.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class Noise {
-    /*
-     *
-     */
     /**
      *
      */
+    @XmlElement
     protected int noise_type = 0;
-    /*
-     *
-     */
     /**
      *
      */
+    @XmlElement
     protected float noise_value = 1.0f;
     /*
      *

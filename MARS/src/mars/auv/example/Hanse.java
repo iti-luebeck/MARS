@@ -6,6 +6,7 @@
 package mars.auv.example;
 
 import com.jme3.math.Vector3f;
+import javax.xml.bind.annotation.XmlRootElement;
 import mars.SimState;
 import mars.auv.BasicAUV;
 
@@ -13,6 +14,7 @@ import mars.auv.BasicAUV;
  * The Hanse class for the Hanse AUV. Because i developed mainly for Hanse it is the same as the BasicAUV class.
  * @author Thomas Tosik
  */
+@XmlRootElement
 public class Hanse extends BasicAUV{
 
     /**

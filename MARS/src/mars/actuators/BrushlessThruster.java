@@ -5,6 +5,8 @@
 package mars.actuators;
 
 import com.jme3.scene.Geometry;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
 import mars.SimState;
 
@@ -12,7 +14,13 @@ import mars.SimState;
  *
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class BrushlessThruster extends Thruster{
+    
+    public BrushlessThruster(){
+        super();
+    }
+    
     /**
      * 
      * @param simauv

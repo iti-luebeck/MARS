@@ -21,6 +21,11 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import mars.Helper.SoundHelper;
 
 /**
@@ -110,6 +115,21 @@ public class StartState extends AbstractAppState{
             System.out.println("SOUNDSPEED  LumA " + SoundHelper.getUnderWaterSoundSpeedLubberGraaffA(10f));
             System.out.println("SOUNDSPEED  LumB " + SoundHelper.getUnderWaterSoundSpeedLubberGraaffB(10f));*/
         
+            /*jaxb jj = new jaxb();
+            jj.setName("aaaaaaaaaa");
+            jaxb jj2 = new jaxb();
+            jj2.setName("aaaaaaaaaa");
+            JAXBContext context;
+            try {
+                context = JAXBContext.newInstance( jaxb.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( jj, System.out );
+                m.marshal( jj2, System.out );
+            } catch (JAXBException ex) {
+                Logger.getLogger(StartState.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+
         }
         super.initialize(stateManager, app);
     }

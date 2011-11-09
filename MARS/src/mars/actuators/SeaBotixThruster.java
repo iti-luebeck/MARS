@@ -6,6 +6,10 @@
 package mars.actuators;
 
 import com.jme3.scene.Geometry;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.ros.message.MessageListener;
 import mars.SimState;
 
@@ -13,8 +17,13 @@ import mars.SimState;
  * This class represents the SeaBotix Thrusters.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class SeaBotixThruster extends Thruster{
 
+    public SeaBotixThruster(){
+        super();
+    }
+    
     /**
      * 
      * @param simauv

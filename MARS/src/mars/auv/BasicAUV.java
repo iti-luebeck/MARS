@@ -51,6 +51,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
@@ -58,14 +64,21 @@ import mars.MARS_Settings;
 import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.SimState;
+import mars.auv.example.Hanse;
+import mars.auv.example.Hanse2;
+import mars.auv.example.Monsun2;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
+import mars.xml.HashMapAdapter;
 
 /**
  * The basic BasicAUV class. When you want to make own auv's or enchance them than extend from this class and make your own implementation.
  * Or implement the AUV interface when you want to do something completly different that i have done with the BasicAUV class.
  * @author Thomas Tosik
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {Hanse.class, Monsun2.class, Hanse2.class} )
 public class BasicAUV implements AUV,SceneProcessor{
 
     private Geometry MassCenterGeom;
@@ -73,15 +86,16 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Geometry VolumeCenterPreciseGeom;
     private Geometry OldCenterGeom;
 
-    private MARS_Main simauv;
+    private MARS_Main mars;
     private AssetManager assetManager;
     private RenderManager renderManager;
     private Renderer renderer;
     private MARSView view;
     private WayPoints WayPoints;
-    private MARS_Settings simauv_settings;
+    private MARS_Settings mars_settings;
     private Initializer initer;
 
+    @XmlElement(name="Parameters")
     private AUV_Parameters auv_param;
 
     private Vector3f volume_center_precise = new Vector3f(0,0,0);
@@ -131,7 +145,11 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Node rootNode;
     
     //PhysicalExchanger HashMaps to store and load sensors and actuators
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="Sensors")
     private HashMap<String,Sensor> sensors = new HashMap<String,Sensor> ();
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="Actuators")
     private HashMap<String,Actuator> actuators = new HashMap<String,Actuator> ();
 
     private PhysicalValues physicalvalues;
@@ -142,7 +160,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     /**
      * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it.
      * Also all the physics stuff happens here.
-     * @param simauv
+     * @param mars
      */
     public BasicAUV(SimState simstate){
         //set the logging
@@ -155,11 +173,11 @@ public class BasicAUV implements AUV,SceneProcessor{
             logger.addHandler(handler);
         } catch (IOException e) { }
 
-        this.simauv = simstate.getSimauv();
+        this.mars = simstate.getSimauv();
         this.assetManager = simstate.getAssetManager();
-        this.renderer = simauv.getRenderer();
-        this.renderManager = simauv.getRenderManager();
-        this.view = simauv.getView();
+        this.renderer = mars.getRenderer();
+        this.renderManager = mars.getRenderManager();
+        this.view = mars.getView();
         this.rootNode = simstate.getRootNode();
         this.physicalvalues = new PhysicalValues();
         this.initer = simstate.getIniter();
@@ -239,15 +257,15 @@ public class BasicAUV implements AUV,SceneProcessor{
      * @return
      */
     public MARS_Settings getSimauv_settings() {
-        return simauv_settings;
+        return mars_settings;
     }
 
     /**
      *
-     * @param simauv_settings
+     * @param mars_settings
      */
     public void setSimauv_settings(MARS_Settings simauv_settings) {
-        this.simauv_settings = simauv_settings;
+        this.mars_settings = simauv_settings;
     }
     
     public Communication_Manager getCommunicationManager() {
@@ -435,8 +453,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         buoyancy_force = physical_environment.getFluid_density() * (physical_environment.getGravitational_acceleration()) * actual_vol;
 
         initPhysicalExchangers();
-        initROS();
-
+        
+        if(mars_settings.isROS_Server_enabled()){
+            initROS();
+        }
         auv_node.rotate(auv_param.getRotation().x, auv_param.getRotation().y, auv_param.getRotation().z);
         rotateAUV();
         auv_node.updateGeometricState();
@@ -464,7 +484,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             if(element.isEnabled()){
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
-                element.setSimauv_settings(simauv_settings);
+                element.setSimauv_settings(mars_settings);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
                 element.init(auv_node);
             }
@@ -542,7 +562,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         drag_direction = drag_direction.normalize();
         //System.out.println("V2_" + drag_direction);
         //drag_force_vec = drag_direction.mult(drag_force);
-        drag_force_vec = drag_direction.mult(drag_force/simauv_settings.getPhysicsFramerate());
+        drag_force_vec = drag_direction.mult(drag_force/mars_settings.getPhysicsFramerate());
         //System.out.println("comp: " + complete_force.length());
         /*System.out.println("===========");
         System.out.println(getAuv_param().getAuv_name());
@@ -593,7 +613,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             }else{//we are deep enough underwater that we use our super precision calculated volume and volumecenter
                 actual_vol = volume;
                 final Vector3f in = VolumeCenterPreciseGeom.getLocalTranslation();
-                Future fut = simauv.enqueue(new Callable() {
+                Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         VolumeCenterGeom.setLocalTranslation(in);
                         return null;
@@ -617,7 +637,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 //                distance_vec = distance_vec.mult(y);
 //                final Vector3f gabe = in.add(distance_vec);
 //
-//                Future fut = simauv.enqueue(new Callable() {
+//                Future fut = mars.enqueue(new Callable() {
 //                    public Void call() throws Exception {
 //                        VolumeCenterGeom.setLocalTranslation(gabe);
 //                        VolumeCenterGeom.updateGeometricState();
@@ -629,7 +649,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             }else{//under the "zone"
                 actual_vol = volume;
                 final Vector3f in = VolumeCenterPreciseGeom.getLocalTranslation();
-                Future fut = simauv.enqueue(new Callable() {
+                Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         VolumeCenterGeom.setLocalTranslation(in);
                         VolumeCenterGeom.updateGeometricState();
@@ -671,7 +691,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 
         //System.out.println("buyo: " + buoyancy_force);
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
-        Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force/simauv_settings.getPhysicsFramerate(),0.0f);
+        Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force/mars_settings.getPhysicsFramerate(),0.0f);
         //addValueToSeries(buoyancy_force,1);
         //physics_control.applyCentralForce(buoyancy_force_vec);
         //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
@@ -904,8 +924,8 @@ public class BasicAUV implements AUV,SceneProcessor{
      */
     private void initWaypoints(){
         if(auv_param.isWaypoints_enabled()){
-            WayPoints = new WayPoints("WayPoints_" + getName(),simauv,auv_param);
-            Future fut = simauv.enqueue(new Callable() {
+            WayPoints = new WayPoints("WayPoints_" + getName(),mars,auv_param);
+            Future fut = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     rootNode.attachChild(WayPoints);
                     return null;
@@ -1051,7 +1071,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         if(renderer != null){
             cpuBuf.clear();
 
-            /*Future fut = simauv.enqueue(new Callable() {
+            /*Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         renderer.readFrameBuffer(drag_offBuffer, cpuBuf);
                         return null;
@@ -1307,7 +1327,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_node.worldToLocal(volume_center, volume_center_local);
         
         final Vector3f in = volume_center_local.clone();
-        Future fut = simauv.enqueue(new Callable() {
+        Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         VolumeCenterGeom.setLocalTranslation(in);
                         VolumeCenterGeom.updateGeometricState();
@@ -1316,7 +1336,7 @@ public class BasicAUV implements AUV,SceneProcessor{
                     });
         
         if( VolumeCenterPreciseGeom.getWorldTranslation().equals(this.volume_center_precise) ){//save the precise only once
-                    Future fut2 = simauv.enqueue(new Callable() {
+                    Future fut2 = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         VolumeCenterPreciseGeom.setLocalTranslation(in);
                         VolumeCenterPreciseGeom.updateGeometricState();
@@ -1404,15 +1424,15 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     /**
      *
-     * @param simauv
+     * @param mars
      */
     @Override
     public void setState(SimState simstate) {
-        this.simauv = simstate.getSimauv();
+        this.mars = simstate.getSimauv();
         this.assetManager = simstate.getAssetManager();
-        this.renderer = simauv.getRenderer();
-        this.renderManager = simauv.getRenderManager();
-        this.view = simauv.getView();
+        this.renderer = mars.getRenderer();
+        this.renderManager = mars.getRenderManager();
+        this.view = mars.getView();
         this.rootNode = simstate.getRootNode();
         this.physicalvalues = new PhysicalValues();
         this.initer = simstate.getIniter();

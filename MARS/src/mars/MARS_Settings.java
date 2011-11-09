@@ -12,7 +12,18 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.xml.HashMapAdapter;
+import mars.xml.MyHashMapEntryTypeHashMap;
+import mars.xml.MyHashMapType;
+import mars.xml.Vector3fAdapter;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
@@ -20,8 +31,11 @@ import mars.xml.XMLConfigReaderWriter;
  * activating the terrain on start or changing the sky color.
  * @author Thomas Tosik
  */
+@XmlRootElement(name="Settings")
+@XmlAccessorType(XmlAccessType.NONE)
 public class MARS_Settings implements CellEditorListener{
 
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> settings;
     private HashMap<String,Object> Graphics;
     private HashMap<String,Object> Server;
@@ -42,7 +56,9 @@ public class MARS_Settings implements CellEditorListener{
     private HashMap<String,Object> WireFrame;
     private HashMap<String,Object> CrossHairs;
 
+    @XmlTransient
     private XMLConfigReaderWriter xmll;
+    @XmlTransient
     private Initializer init;
 
     private boolean setupAxis = true;
@@ -71,9 +87,14 @@ public class MARS_Settings implements CellEditorListener{
     private String planewaterfilepath = "water_2.png";
     private String terrainfilepath_hm = "image7.jpg";
     private String terrainfilepath_cm = "image8.jpg";
+    
+    //@XmlElement(name = "terrain_position")
+    //@XmlAttribute
     private Vector3f terrain_position = new Vector3f(-60.0f, -15.0f, -30.0f);
     private ColorRGBA light_color = ColorRGBA.White;
     private Vector3f light_direction = new Vector3f(0f, -1f, 0f);
+    //@XmlTransient
+    @XmlElement(name = "PhysicalEnvironment")
     private PhysicalEnvironment physical_environment;
     private int framerate = 60;
     private int FrameLimit = 60;
@@ -126,6 +147,10 @@ public class MARS_Settings implements CellEditorListener{
         Server.put("RAW", RAW);
         Server.put("ROS", ROS);
         this.xmll = xmll;
+    }
+    
+    public MARS_Settings(){
+        
     }
 
     public void editingCanceled(ChangeEvent e){
@@ -366,6 +391,7 @@ public class MARS_Settings implements CellEditorListener{
      *
      * @return
      */
+    @XmlTransient
     public PhysicalEnvironment getPhysical_environment() {
         return physical_environment;
     }
@@ -447,7 +473,7 @@ public class MARS_Settings implements CellEditorListener{
      * @return
      */
     public boolean isRAW_Server_enabled() {
-        return (Boolean)RAW.get("raw_enabled");
+        return (Boolean)RAW.get("enabled");
     }
 
     /**
@@ -455,7 +481,7 @@ public class MARS_Settings implements CellEditorListener{
      * @param port
      */
     public void setRAW_Server_enabled(boolean raw_enabled) {
-        RAW.put("raw_enabled", raw_enabled);
+        RAW.put("enabled", raw_enabled);
     }
 
     /**
@@ -495,7 +521,7 @@ public class MARS_Settings implements CellEditorListener{
      * @return
      */
     public int getROS_Server_port() {
-        return (Integer)ROS.get("master_port");
+        return (Integer)ROS.get("masterport");
     }
 
     /**
@@ -503,7 +529,7 @@ public class MARS_Settings implements CellEditorListener{
      * @param port
      */
     public void setROS_Server_port(int master_port) {
-        ROS.put("master_port", master_port);
+        ROS.put("masterport", master_port);
     }
     
     /**
@@ -511,7 +537,7 @@ public class MARS_Settings implements CellEditorListener{
      * @return
      */
     public String getROS_Master_IP() {
-        return (String)ROS.get("master_ip");
+        return (String)ROS.get("masterip");
     }
 
     /**
@@ -519,7 +545,7 @@ public class MARS_Settings implements CellEditorListener{
      * @param filepath_color
      */
     public void setROS_Master_IP(String master_ip) {
-        ROS.put("master_ip", master_ip);
+        ROS.put("masterip", master_ip);
     }
     
     /**
@@ -527,15 +553,15 @@ public class MARS_Settings implements CellEditorListener{
      * @return
      */
     public boolean isROS_Server_enabled() {
-        return (Boolean)ROS.get("ros_enabled");
+        return (Boolean)ROS.get("enabled");
     }
 
     /**
      * 
      * @param port
      */
-    public void setROS_Server_enabled(boolean ros_enabled) {
-        ROS.put("ros_enabled", ros_enabled);
+    public void setROS_Server_enabled(boolean enabled) {
+        ROS.put("enabled", enabled);
     }
 
     /**

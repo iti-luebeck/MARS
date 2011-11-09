@@ -16,15 +16,23 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
  *
  * @author Thomas Tosik
  */
+@XmlRootElement(name="Parameters")
+@XmlAccessorType(XmlAccessType.NONE)
 public class AUV_Parameters implements CellEditorListener{
 
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> params;
     private HashMap<String,Object> waypoints;
     private HashMap<String,Object> model;
@@ -121,7 +129,10 @@ public class AUV_Parameters implements CellEditorListener{
         setEnabled(enabled);
         this.xmll = xmll;
     }
-
+    
+    public AUV_Parameters(){
+        
+    }
     public void editingCanceled(ChangeEvent e){
     }
 

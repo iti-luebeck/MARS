@@ -28,14 +28,21 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.auv.AUV_Parameters;
+import mars.auv.BasicAUV;
 import mars.auv.Communication_Manager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
 import mars.sensors.InfraRedSensor;
+import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
 
@@ -67,7 +74,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private boolean man_init = false;
     
     //main settings file
-    MARS_Settings simauv_settings;
+    MARS_Settings mars_settings;
     PhysicalEnvironment physical_environment;
     Initializer initer;
     ArrayList auvs = new ArrayList();
@@ -113,7 +120,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         rootNode.detachAllChildren();
         mars = null;
         assetManager = null;
-        simauv_settings = null;
+        mars_settings = null;
         super.cleanup();
     }
 
@@ -146,7 +153,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             com_manager.setServer(initer.getRAW_Server());
 
-            if(simauv_settings.isROS_Server_enabled()){
+            if(mars_settings.isROS_Server_enabled()){
                 Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
                 while(!initer.isROS_ServerReady()){
                     
@@ -159,8 +166,36 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 }
             }
             
-            populateAUV_Manager(auvs,physical_environment,simauv_settings,com_manager,initer);
+            populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
             populateSim_Object_Manager(simobs);
+            
+            JAXBContext context;
+            try {
+                context = JAXBContext.newInstance( MARS_Settings.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( mars_settings, System.out );
+                
+                context = JAXBContext.newInstance( SimObject.class );
+                m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                SimObject blo = (SimObject)simobs.get(0);
+                m.marshal( blo, System.out );
+                
+                /*context = JAXBContext.newInstance( AUV_Parameters.class );
+                m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                AUV aa = (AUV)auvs.get(0);
+                m.marshal( aa.getAuv_param(), System.out );*/
+                
+                context = JAXBContext.newInstance( BasicAUV.class );
+                m = context.createMarshaller();
+                AUV aa = (AUV)auvs.get(0);
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( aa, System.out );
+            } catch (JAXBException ex) {
+                Logger.getLogger(StartState.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             //waiting for auvs and sensors/actuators to be ready
             //initer.start_ROS_Server();
@@ -177,7 +212,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private void setupGUI(){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
-        if(!simauv_settings.isFPS()){
+        if(!mars_settings.isFPS()){
             mars.setDisplayFps(false);
             mars.setDisplayStatView(false);
         }
@@ -192,16 +227,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
         bulletAppState.getPhysicsSpace().setMaxSubSteps(4);
-        if(simauv_settings.isPhysicsDebug()){
+        if(mars_settings.isPhysicsDebug()){
             bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         }
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-        bulletAppState.getPhysicsSpace().setAccuracy(1f/simauv_settings.getPhysicsFramerate());
+        bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
     }
 
     private void setupCams(){
-        mars.getFlyByCamera().setMoveSpeed(simauv_settings.getFlyCamMoveSpeed());
+        mars.getFlyByCamera().setMoveSpeed(mars_settings.getFlyCamMoveSpeed());
         mars.getFlyByCamera().setEnabled(true);
         chaseCam = new ChaseCamera(mars.getCamera(),rootNode,inputManager);
         chaseCam.setInvertVerticalAxis(true);
@@ -215,8 +250,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private void loadXML(){
         try {
              xmll = new XMLConfigReaderWriter(this);
-             simauv_settings = xmll.getSimAUVSettings();
-             physical_environment = simauv_settings.getPhysical_environment();
+             mars_settings = xmll.getSimAUVSettings();
+             physical_environment = mars_settings.getPhysical_environment();
              auvs = xmll.getAuvs();
              simobs = xmll.getObjects();
         } catch (Exception ex) {
@@ -380,7 +415,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         auv_manager.setPhysical_environment(pe);
         auv_manager.setSimauv_settings(simauv_settings);
         auv_manager.setCommunicationManager(com_manager);
-        auv_manager.setRos_node(initer.getROS_Server().getNode());
+        if(mars_settings.isROS_Server_enabled()){
+            auv_manager.setRos_node(initer.getROS_Server().getNode());
+        }
         auv_manager.registerAUVs(auvs);
         //auv_hanse = (Hanse)auvs.get(0);
         //auv_monsun2 = (Monsun2)auv_manager.getAUV("monsun");
@@ -393,7 +430,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private void populateAUV_Manager(HashMap auvs,PhysicalEnvironment pe, MARS_Settings simauv_settings){
         /*auv_manager.setBulletAppState(bulletAppState);
         auv_manager.setPhysical_environment(pe);
-        auv_manager.setSimauv_settings(simauv_settings);
+        auv_manager.setSimauv_settings(mars_settings);
         auv_manager.registerAUVs(auvs);
         //auv_hanse = (Hanse)auvs.get(0);
         auv_monsun2 = (Monsun2)auvs.get(2);*/
@@ -456,7 +493,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         super.update(tpf);
         
         //System.out.println("time: " + tpf);
-        /*if(simauv_settings.isSetupWavesWater()){
+        /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
         
@@ -502,7 +539,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @return
      */
     public MARS_Settings getSimauv_settings() {
-        return simauv_settings;
+        return mars_settings;
     }
 
     /**
@@ -554,11 +591,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             man_init = true;
         }
         if(view == null){
-            System.out.println("NUUUUUUUUUUUUULLLLLLLLLLLLLLLLL!!!!!!!!!!!!!!!11111111111");
+            System.out.println("View is NULL");
         }
         if(view != null && !view_init){
-            System.out.println("VVVVVVVVVVVVVVVVVVVVVVV!!!!!!!!!!!!!!!!!!1111111111111");
-            view.initTree(simauv_settings,auvs,simobs);
+            view.initTree(mars_settings,auvs,simobs);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);

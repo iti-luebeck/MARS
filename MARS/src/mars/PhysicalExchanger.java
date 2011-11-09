@@ -5,14 +5,25 @@
 
 package mars;
 
+import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import mars.actuators.Actuator;
+import mars.sensors.Sensor;
 
 /**
  * This is the basic interface for all sensors/actuators
  * @author Thomas Tosik
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {Actuator.class,Sensor.class} )
 public abstract class PhysicalExchanger extends Noise implements ROS{
 
     /**
@@ -32,6 +43,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /**
      *
      */
+    @XmlElement(name="name")
     protected String PhysicalExchangerName = "";
     /**
      *
@@ -40,10 +52,12 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    @XmlElement
     protected  boolean enabled = true;
     /*
      * 
      */
+    @XmlElement
     protected int ros_publish_rate = 1000;
     /*
      * 

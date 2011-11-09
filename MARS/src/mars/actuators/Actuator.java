@@ -8,10 +8,14 @@ package mars.actuators;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.MARS_Main;
-import mars.ROS_Subscriber;
+import mars.ros.ROS_Subscriber;
 import mars.SimState;
 
 /**
@@ -19,6 +23,9 @@ import mars.SimState;
  * You should extend this class if you want to implement something different like a paddle
  * @author Thomas Tosik
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {Thruster.class,Servo.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
     /*
      * 
@@ -48,6 +55,10 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     protected MARS_Settings simauv_settings;
 
+    protected Actuator(){
+        
+    }
+    
     /**
      *
      * @param simauv

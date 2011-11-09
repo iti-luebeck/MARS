@@ -11,15 +11,22 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.xml.HashMapAdapter;
+import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
  * This class contains all physical parameters that are important for the auv like fluid density.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class PhysicalEnvironment implements CellEditorListener{
 
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> environment;
     private XMLConfigReaderWriter xmll;
     //physics
@@ -45,6 +52,10 @@ public class PhysicalEnvironment implements CellEditorListener{
     public PhysicalEnvironment(XMLConfigReaderWriter xmll) {
          environment = new HashMap<String,Object> ();
          this.xmll = xmll;
+    }
+    
+    public PhysicalEnvironment(){
+        
     }
 
     public void editingCanceled(ChangeEvent e){
@@ -123,7 +134,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getWater_height() {
-        return (Float)environment.get("water_height");
+        return (Float)((HashMapEntry)environment.get("water_height")).getValue();
     }
 
     /**
@@ -131,7 +142,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param water_height
      */
     public void setWater_height(float water_height) {
-        environment.put("water_height", water_height);
+        environment.put("water_height", new HashMapEntry("m", water_height));
     }
 
     /**
@@ -139,7 +150,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getAir_density() {
-        return (Float)environment.get("air_density");
+        return (Float)((HashMapEntry)environment.get("air_density")).getValue();
     }
 
     /**
@@ -147,7 +158,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param air_density
      */
     public void setAir_density(float air_density) {
-        environment.put("air_density", air_density);
+        environment.put("air_density", new HashMapEntry("kg/m³", air_density));
     }
 
     /**
@@ -155,7 +166,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getAir_temp() {
-        return (Float)environment.get("air_temp");
+        return (Float)((HashMapEntry)environment.get("air_temp")).getValue();
     }
 
     /**
@@ -163,7 +174,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param air_temp
      */
     public void setAir_temp(float air_temp) {
-        environment.put("air_temp", air_temp);
+        environment.put("air_temp", new HashMapEntry("C°", air_temp));
     }
 
     /**
@@ -171,7 +182,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getFluid_density() {
-        return (Float)environment.get("fluid_density");
+        return (Float)((HashMapEntry)environment.get("fluid_density")).getValue();
     }
 
     /**
@@ -179,7 +190,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param fluid_density
      */
     public void setFluid_density(float fluid_density) {
-        environment.put("fluid_density", fluid_density);
+        environment.put("fluid_density", new HashMapEntry("kg/m³", fluid_density));
     }
 
     /**
@@ -187,7 +198,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getFluid_salinity() {
-        return (Float)environment.get("fluid_salinity");
+        return (Float)((HashMapEntry)environment.get("fluid_salinity")).getValue();
     }
 
     /**
@@ -195,7 +206,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param fluid_salinity
      */
     public void setFluid_salinity(float fluid_salinity) {
-        environment.put("fluid_salinity", fluid_salinity);
+        environment.put("fluid_salinity", new HashMapEntry("", fluid_salinity));
     }
 
     /**
@@ -203,7 +214,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getFluid_temp() {
-        return (Float)environment.get("fluid_temp");
+        return (Float)((HashMapEntry)environment.get("fluid_temp")).getValue();
     }
 
     /**
@@ -211,7 +222,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param fluid_temp
      */
     public void setFluid_temp(float fluid_temp) {
-        environment.put("fluid_temp", fluid_temp);
+        environment.put("fluid_temp", new HashMapEntry("C°", fluid_temp));
     }
 
     /**
@@ -219,7 +230,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getFluid_viscosity() {
-        return (Float)environment.get("fluid_viscosity");
+        return (Float)((HashMapEntry)environment.get("fluid_viscosity")).getValue();
     }
 
     /**
@@ -227,7 +238,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param fluid_viscosity
      */
     public void setFluid_viscosity(float fluid_viscosity) {
-        environment.put("fluid_viscosity", fluid_viscosity);
+        environment.put("fluid_viscosity", new HashMapEntry("mPa*s", fluid_viscosity));
     }
 
     /**
@@ -235,7 +246,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public Vector3f getGravitational_acceleration_vector() {
-        return (Vector3f)environment.get("gravitational_acceleration_vector");
+        return (Vector3f)((HashMapEntry)environment.get("gravitational_acceleration_vector")).getValue();
     }
 
     /**
@@ -243,7 +254,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param gravitational_acceleration_vector
      */
     public void setGravitational_acceleration_vector(Vector3f gravitational_acceleration_vector) {
-        environment.put("gravitational_acceleration_vector", gravitational_acceleration_vector);
+        environment.put("gravitational_acceleration_vector", new HashMapEntry("m/s²", gravitational_acceleration_vector));
     }
 
     /**
@@ -251,7 +262,8 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getGravitational_acceleration() {
-        return (float)((Vector3f)environment.get("gravitational_acceleration_vector")).length();
+        //return (float)((Vector3f)environment.get("gravitational_acceleration_vector")).length();
+        return (Float)((Vector3f)((HashMapEntry)environment.get("gravitational_acceleration_vector")).getValue()).length();
     }
 
     /**
@@ -259,7 +271,8 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param gravitational_acceleration
      */
     public void setGravitational_acceleration(float gravitational_acceleration) {
-        environment.put("gravitational_acceleration_vector", getGravitational_acceleration_vector().normalize().mult(gravitational_acceleration));
+        //environment.put("gravitational_acceleration_vector", getGravitational_acceleration_vector().normalize().mult(gravitational_acceleration));
+        environment.put("gravitational_acceleration_vector", new HashMapEntry("m/s²", getGravitational_acceleration_vector().normalize().mult(gravitational_acceleration)));
     }
 
     /**
@@ -267,7 +280,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public Vector3f getMagnetic_north() {
-        return (Vector3f)environment.get("magnetic_north");
+        return (Vector3f)((HashMapEntry)environment.get("magnetic_north")).getValue();
     }
 
     /**
@@ -275,7 +288,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param magnetic_north
      */
     public void setMagnetic_north(Vector3f magnetic_north) {
-        environment.put("magnetic_north", magnetic_north);
+        environment.put("magnetic_north", new HashMapEntry("m", magnetic_north));
     }
 
     /**
@@ -283,7 +296,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public Vector3f getMagnetic_east() {
-        return (Vector3f)environment.get("magnetic_east");
+        return (Vector3f)((HashMapEntry)environment.get("magnetic_east")).getValue();
     }
 
     /**
@@ -291,7 +304,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param magnetic_east
      */
     public void setMagnetic_east(Vector3f magnetic_east) {
-        environment.put("magnetic_east", magnetic_east);
+        environment.put("magnetic_east", new HashMapEntry("m", magnetic_east));
     }
 
     /**
@@ -299,7 +312,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public Vector3f getMagnetic_z() {
-        return (Vector3f)environment.get("magnetic_z");
+        return (Vector3f)((HashMapEntry)environment.get("magnetic_z")).getValue();
     }
 
     /**
@@ -307,7 +320,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param magnetic_z
      */
     public void setMagnetic_z(Vector3f magnetic_z) {
-        environment.put("magnetic_z", magnetic_z);
+        environment.put("magnetic_z", new HashMapEntry("m", magnetic_z));
     }
 
     /**
@@ -315,7 +328,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public float getPressure_water_height() {
-        return (Float)environment.get("pressure_water_height");
+        return (Float)((HashMapEntry)environment.get("pressure_water_height")).getValue();
     }
 
     /**
@@ -323,7 +336,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param pressure_water_height
      */
     public void setPressure_water_height(float pressure_water_height) {
-        environment.put("pressure_water_height", pressure_water_height);
+        environment.put("pressure_water_height", new HashMapEntry("mbar", pressure_water_height));
     }
 
     /**
@@ -331,7 +344,7 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @return
      */
     public Vector3f getWater_current() {
-        return (Vector3f)environment.get("water_current");
+        return (Vector3f)((HashMapEntry)environment.get("water_current")).getValue();
     }
 
     /**
@@ -339,6 +352,6 @@ public class PhysicalEnvironment implements CellEditorListener{
      * @param water_current
      */
     public void setWater_current(Vector3f water_current) {
-        environment.put("water_current", water_current);
+        environment.put("water_current", new HashMapEntry("kgm/s²", water_current));
     }
 }

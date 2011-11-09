@@ -7,6 +7,8 @@ package mars.sensors;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.SimState;
@@ -15,11 +17,16 @@ import mars.SimState;
  *  This a basis Velocimeter class. It gives you the linear velocity.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class Velocimeter extends Sensor{
 
    ///ROS stuff
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    
+    public Velocimeter(){
+        super();
+    }
     
     /**
      *

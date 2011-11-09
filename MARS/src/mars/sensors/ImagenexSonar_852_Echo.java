@@ -9,6 +9,8 @@ import com.jme3.scene.Node;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.PhysicalEnvironment;
 import mars.SimState;
@@ -19,10 +21,15 @@ import mars.hardware.Imaginex;
  * Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class ImagenexSonar_852_Echo extends Sonar{
 
     private int SonarReturnDataHeaderLength = 12;
 
+    public ImagenexSonar_852_Echo(){
+        super();
+    }
+        
     /**
      *
      * @param simauv

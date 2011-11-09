@@ -15,6 +15,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.SimState;
 import mars.simobjects.SimObject;
@@ -24,6 +26,7 @@ import mars.simobjects.SimObjectManager;
  *
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class PingDetector extends Sensor{
 
     private Geometry PingStart;
@@ -36,6 +39,10 @@ public class PingDetector extends Sensor{
 
     private float detection_range = 50.0f;
 
+    public PingDetector(){
+        super();
+    }
+        
     /**
      *
      * @param simauv

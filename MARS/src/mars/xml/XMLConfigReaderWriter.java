@@ -61,6 +61,7 @@ import mars.sensors.VideoCamera;
  * Like an AUV or Settings.
  * @author Thomas Tosik
  */
+@Deprecated
 public class XMLConfigReaderWriter
 {
 

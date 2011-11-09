@@ -55,8 +55,8 @@ public class MARS_Main extends SimpleApplication{
     /*private void loadXML(){
         try {
              xmll = new XMLConfigReaderWriter(this);
-             simauv_settings = xmll.getSimAUVSettings();
-             physical_environment = simauv_settings.getPhysical_environment();
+             mars_settings = xmll.getSimAUVSettings();
+             physical_environment = mars_settings.getPhysical_environment();
              auvs = xmll.getAuvs();
              simobs = xmll.getObjects();
         } catch (Exception ex) {

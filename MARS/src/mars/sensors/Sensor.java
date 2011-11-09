@@ -7,11 +7,15 @@ package mars.sensors;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import org.ros.node.topic.Publisher;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Main;
-import mars.ROS_Publisher;
+import mars.ros.ROS_Publisher;
 import mars.SimState;
 
 /**
@@ -19,6 +23,9 @@ import mars.SimState;
  * own sensors like an pressure sensor or light sensors.
  * @author Thomas Tosik
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,Sonar.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,Compass.class,TemperatureSensor.class,UnderwaterModem.class,Velocimeter.class,VideoCamera.class} )
 public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /*
      * 
@@ -44,6 +51,10 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     protected long time = 0;
+    
+    protected Sensor(){
+        
+    }
     
     /**
      * 

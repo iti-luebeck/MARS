@@ -11,6 +11,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
@@ -19,6 +21,7 @@ import mars.SimState;
  * This is a basic compass class.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class Compass extends Sensor{
 
     private Geometry CompassStart;
@@ -35,6 +38,10 @@ public class Compass extends Sensor{
     private Vector3f magnetic_east = Vector3f.UNIT_Z;
     private Vector3f magnetic_z = Vector3f.UNIT_Y;
 
+    public Compass() {
+        super();
+    }
+        
      /**
      *
       * @param simauv

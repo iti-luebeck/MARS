@@ -24,16 +24,26 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.MARS_Main;
 import mars.gui.TextFieldEditor;
+import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
  * A basic simauv object that shall be loaded. For example an pipe or another custom made model.
  * @author Thomas Tosik
  */
+@XmlRootElement(name="SimObject")
+@XmlAccessorType(XmlAccessType.NONE)
 public class SimObject implements CellEditorListener{
 
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="")
     private HashMap<String,Object> simob_variables;
     private HashMap<String,Object> collision;
     private XMLConfigReaderWriter xmll;
@@ -82,6 +92,10 @@ public class SimObject implements CellEditorListener{
         setCollisionPosition(collision_position);
         setType(type);
         this.xmll = xmll;
+    }
+    
+    public SimObject(){
+        
     }
 
     public void editingCanceled(ChangeEvent e){

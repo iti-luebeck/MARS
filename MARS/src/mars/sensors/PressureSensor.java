@@ -11,6 +11,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
@@ -20,6 +22,7 @@ import mars.SimState;
  * This class provides a basic pressure sensor. You can get exact depth or exact pressure + noise.
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class PressureSensor extends Sensor{
 
     private Geometry PressureSensorStart;
@@ -30,6 +33,10 @@ public class PressureSensor extends Sensor{
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
     
+    public PressureSensor(){
+        super();
+    }
+        
      /**
      *
       * @param simauv

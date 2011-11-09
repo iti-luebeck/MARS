@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.NoiseType;
@@ -27,6 +29,7 @@ import mars.SimState;
  *
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class InfraRedSensor extends Sensor{
     /**
      *
@@ -55,6 +58,10 @@ public class InfraRedSensor extends Sensor{
     //ROS stuff
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    
+    public InfraRedSensor() {
+        super();
+    }
     
     public InfraRedSensor(SimState simstate, PhysicalEnvironment pe, Node detectable) {
         super(simstate);
