@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
@@ -29,6 +32,8 @@ import mars.SimState;
  * It supports rotating and non-rotating sonars. But you can also use it as a basis for other sonars(Tritech,Imaginex,...).
  * @author Thomas Tosik
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {ImagenexSonar_852_Echo.class,ImagenexSonar_852_Scanning.class} )
 public class Sonar extends Sensor{
     /**
      *
@@ -98,6 +103,10 @@ public class Sonar extends Sensor{
     private int sonar_cone_type = 0;
 
     private int SonarReturnDataLength = 252;
+    
+    public Sonar(){
+        super();
+    }
     
      /**
       * @param simauv
