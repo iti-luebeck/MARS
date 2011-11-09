@@ -21,7 +21,9 @@ import java.util.logging.Logger;
 /**
  *
  * @author Nehon
+ * @deprecated use spatial animation instead.
  */
+@Deprecated
 public class ScaleTrack extends AbstractCinematicEvent {
 
     private static final Logger log = Logger.getLogger(RotationTrack.class.getName());
@@ -78,7 +80,7 @@ public class ScaleTrack extends AbstractCinematicEvent {
         if (playState != playState.Paused) {
             startScale = spatial.getWorldScale().clone();
         }
-        if (duration == 0 && spatial != null) {
+        if (initialDuration == 0 && spatial != null) {
             spatial.setLocalScale(endScale);
             stop();
         }
@@ -87,7 +89,7 @@ public class ScaleTrack extends AbstractCinematicEvent {
     @Override
     public void onUpdate(float tpf) {
         if (spatial != null) {
-            value += Math.min(tpf * speed / duration, 1.0f);
+            value = Math.min(time / initialDuration, 1.0f);
             spatial.setLocalScale(FastMath.interpolateLinear(value, startScale, endScale));
         }
     }

@@ -56,7 +56,7 @@ import java.util.logging.Logger;
  *
  * <p>
  * Given input data such as location, orientation (direction, left, up),
- * and viewport settings, it can compute data neccessary to render objects
+ * and viewport settings, it can compute data necessary to render objects
  * with the graphics library. Two matrices are generated, the view matrix
  * transforms objects from world space into eye space, while the projection
  * matrix transforms objects from eye space into clip space.
@@ -286,6 +286,7 @@ public class Camera implements Savable, Cloneable {
             cam.viewMatrix = viewMatrix.clone();
             cam.projectionMatrix = projectionMatrix.clone();
             cam.viewProjectionMatrix = viewProjectionMatrix.clone();
+            cam.guiBounding = (BoundingBox) guiBounding.clone();
 
             cam.update();
 
@@ -293,6 +294,70 @@ public class Camera implements Savable, Cloneable {
         } catch (CloneNotSupportedException ex) {
             throw new AssertionError();
         }
+    }
+    
+	/**
+	 * This method copise the settings of the given camera.
+	 * 
+	 * @param cam
+	 *            the camera we copy the settings from
+	 */
+    public void copyFrom(Camera cam) {
+    	location.set(cam.location);
+        rotation.set(cam.rotation);
+
+        frustumNear = cam.frustumNear;
+        frustumFar = cam.frustumFar;
+        frustumLeft = cam.frustumLeft;
+        frustumRight = cam.frustumRight;
+        frustumTop = cam.frustumTop;
+        frustumBottom = cam.frustumBottom;
+
+        coeffLeft[0] = cam.coeffLeft[0];
+        coeffLeft[1] = cam.coeffLeft[1];
+        coeffRight[0] = cam.coeffRight[0];
+        coeffRight[1] = cam.coeffRight[1];
+        coeffBottom[0] = cam.coeffBottom[0];
+        coeffBottom[1] = cam.coeffBottom[1];
+        coeffTop[0] = cam.coeffTop[0];
+        coeffTop[1] = cam.coeffTop[1];
+
+        viewPortLeft = cam.viewPortLeft;
+        viewPortRight = cam.viewPortRight;
+        viewPortTop = cam.viewPortTop;
+        viewPortBottom = cam.viewPortBottom;
+
+        this.width = cam.width;
+        this.height = cam.height;
+        
+        this.planeState = cam.planeState;
+        this.viewportChanged = cam.viewportChanged;
+        for (int i = 0; i < MAX_WORLD_PLANES; ++i) {
+            worldPlane[i].setNormal(cam.worldPlane[i].getNormal());
+            worldPlane[i].setConstant(cam.worldPlane[i].getConstant());
+        }
+        
+        this.parallelProjection = cam.parallelProjection;
+        if(cam.projectionMatrixOverride != null) {
+        	if(this.projectionMatrixOverride == null) {
+        		this.projectionMatrixOverride = cam.projectionMatrixOverride.clone();
+        	} else {
+        		this.projectionMatrixOverride.set(cam.projectionMatrixOverride);
+        	}
+        } else {
+        	this.projectionMatrixOverride = null;
+        }
+        this.viewMatrix.set(cam.viewMatrix);
+        this.projectionMatrix.set(cam.projectionMatrix);
+        this.viewProjectionMatrix.set(cam.viewProjectionMatrix);
+        
+        this.guiBounding.setXExtent(cam.guiBounding.getXExtent());
+        this.guiBounding.setYExtent(cam.guiBounding.getYExtent());
+        this.guiBounding.setZExtent(cam.guiBounding.getZExtent());
+        this.guiBounding.setCenter(cam.guiBounding.getCenter());
+        this.guiBounding.setCheckPlane(cam.guiBounding.getCheckPlane());
+        
+        this.name = cam.name;
     }
 
     /**
@@ -316,9 +381,11 @@ public class Camera implements Savable, Cloneable {
      * The cliPlane is used to recompute the projectionMatrix using the plane as the near plane
      * This technique is known as the oblique near-plane clipping method introduced by Eric Lengyel
      * more info here
-     * http://www.terathon.com/code/oblique.html
-     * http://aras-p.info/texts/obliqueortho.html
-     * http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html
+     * <ul>
+     * <li><a href="http://www.terathon.com/code/oblique.html">http://www.terathon.com/code/oblique.html</a>
+     * <li><a href="http://aras-p.info/texts/obliqueortho.html">http://aras-p.info/texts/obliqueortho.html</a>
+     * <li><a href="http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html">http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html</a>
+     * </ul>
      *
      * Note that this will work properly only if it's called on each update, and be aware that it won't work properly with the sky bucket.
      * if you want to handle the sky bucket, look at how it's done in SimpleWaterProcessor.java
@@ -365,9 +432,12 @@ public class Camera implements Savable, Cloneable {
      * The cliPlane is used to recompute the projectionMatrix using the plane as the near plane
      * This technique is known as the oblique near-plane clipping method introduced by Eric Lengyel
      * more info here
-     * http://www.terathon.com/code/oblique.html
-     * http://aras-p.info/texts/obliqueortho.html
-     * http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html
+     * <ul>
+     * <li><a href="http://www.terathon.com/code/oblique.html">http://www.terathon.com/code/oblique.html</a></li>
+     * <li><a href="http://aras-p.info/texts/obliqueortho.html">http://aras-p.info/texts/obliqueortho.html</a></li>
+     * <li><a href="http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html">
+     * http://hacksoflife.blogspot.com/2008/12/every-now-and-then-i-come-across.html</a></li>
+     * </ul>
      *
      * Note that this will work properly only if it's called on each update, and be aware that it won't work properly with the sky bucket.
      * if you want to handle the sky bucket, look at how it's done in SimpleWaterProcessor.java
@@ -1149,9 +1219,11 @@ public class Camera implements Savable, Cloneable {
      * <code>onFrameChange</code> updates the view frame of the camera.
      */
     public void onFrameChange() {
-        Vector3f left = getLeft();
-        Vector3f direction = getDirection();
-        Vector3f up = getUp();
+        TempVars vars = TempVars.get();
+        
+        Vector3f left = getLeft(vars.vect1);
+        Vector3f direction = getDirection(vars.vect2);
+        Vector3f up = getUp(vars.vect3);
 
         float dirDotLocation = direction.dot(location);
 
@@ -1208,6 +1280,9 @@ public class Camera implements Savable, Cloneable {
         worldPlane[NEAR_PLANE].setConstant(dirDotLocation + frustumNear);
 
         viewMatrix.fromFrame(location, direction, up, left);
+        
+        vars.release();
+        
 //        viewMatrix.transposeLocal();
         updateViewProjection();
     }
@@ -1227,6 +1302,7 @@ public class Camera implements Savable, Cloneable {
      */
     public void setParallelProjection(final boolean value) {
         this.parallelProjection = value;
+        onFrustumChange();
     }
 
     /**

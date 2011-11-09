@@ -38,7 +38,7 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.math.FastMath;
-import com.jme3.renderer.GLObject;
+import com.jme3.util.NativeObject;
 import com.jme3.renderer.Renderer;
 import com.jme3.util.BufferUtils;
 import java.io.IOException;
@@ -62,7 +62,7 @@ import java.nio.ShortBuffer;
  * For a 3D vector, a single component is one of the dimensions, X, Y or Z.</li>
  * </ul>
  */
-public class VertexBuffer extends GLObject implements Savable, Cloneable {
+public class VertexBuffer extends NativeObject implements Savable, Cloneable {
   
     /**
      * Type of buffer. Specifies the actual attribute it defines.
@@ -94,7 +94,9 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
         Color,
 
         /**
-         * Tangent vector, normalized (3 floats)
+         * Tangent vector, normalized (4 floats) (x,y,z,w)
+         * the w component is called the binormal parity, is not normalized and is either 1f or -1f
+         * It's used to compuste the direction on the binormal verctor on the GPU at render time.
          */
         Tangent,
 
@@ -138,8 +140,8 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
          * {@link Usage#CpuOnly}, and the buffer should be allocated
          * on the heap.
          */
-        BindPoseNormal,
-
+        BindPoseNormal,      
+         
         /** 
          * Bone weights, used with animation (4 floats).
          * If used with software skinning, the usage should be 
@@ -190,6 +192,15 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
          * Texture coordinate #8
          */
         TexCoord8,
+        
+        /** 
+         * Initial vertex tangents, used with animation.
+         * Should have the same format and size as {@link Type#Tangent}.
+         * If used with software skinning, the usage should be 
+         * {@link Usage#CpuOnly}, and the buffer should be allocated
+         * on the heap.
+         */
+        BindPoseTangent,
     }
 
     /**
@@ -316,7 +327,7 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
      * Must call setupData() to initialize.
      */
     public VertexBuffer(Type type){
-        super(GLObject.Type.VertexBuffer);
+        super(VertexBuffer.class);
         this.bufType = type;
     }
 
@@ -324,11 +335,11 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
      * Serialization only. Do not use.
      */
     public VertexBuffer(){
-        super(GLObject.Type.VertexBuffer);
+        super(VertexBuffer.class);
     }
 
     protected VertexBuffer(int id){
-        super(GLObject.Type.VertexBuffer, id);
+        super(VertexBuffer.class, id);
     }
 
     /**
@@ -853,12 +864,12 @@ public class VertexBuffer extends GLObject implements Savable, Cloneable {
     }
 
     @Override
-    public void deleteObject(Renderer r) {
-        r.deleteBuffer(this);
+    public void deleteObject(Object rendererObject) {
+        ((Renderer)rendererObject).deleteBuffer(this);
     }
 
     @Override
-    public GLObject createDestructableClone(){
+    public NativeObject createDestructableClone(){
         return new VertexBuffer(id);
     }
 

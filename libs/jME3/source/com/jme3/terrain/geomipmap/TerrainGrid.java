@@ -33,7 +33,6 @@ package com.jme3.terrain.geomipmap;
 
 import com.jme3.scene.control.UpdateControl;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.collision.shapes.HeightfieldCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.terrain.heightmap.HeightMap;
 import java.util.HashMap;
@@ -46,8 +45,7 @@ import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.terrain.geomipmap.lodcalc.LodCalculatorFactory;
-import com.jme3.terrain.geomipmap.lodcalc.LodDistanceCalculatorFactory;
+import com.jme3.terrain.geomipmap.lodcalc.LodCalculator;
 import com.jme3.terrain.heightmap.HeightMapGrid;
 import java.util.concurrent.Callable;
 
@@ -67,6 +65,8 @@ public class TerrainGrid extends TerrainQuad {
     protected LRUCache<Vector3f, TerrainQuad> cache = new LRUCache<Vector3f, TerrainQuad>(16);
     protected RigidBodyControl[] quadControls;
     protected PhysicsSpace space;
+    private int cellsLoaded = 0;
+    private int[] gridOffset;
 
     protected class UpdateQuadCache implements Runnable {
 
@@ -86,7 +86,7 @@ public class TerrainGrid extends TerrainQuad {
                     if (q == null) {
                         // create the new Quad since it doesn't exist
                         HeightMap heightMapAt = heightMapGrid.getHeightMapAt(temp);
-                        q = new TerrainQuad(getName() + "Quad" + temp, patchSize, quadSize, totalSize, heightMapAt == null ? null : heightMapAt.getHeightMap(), lodCalculatorFactory);
+                        q = new TerrainQuad(getName() + "Quad" + temp, patchSize, totalSize, quadSize, heightMapAt == null ? null : heightMapAt.getHeightMap());
                         q.setMaterial(material.clone());
                         log.log(Level.FINE, "Loaded TerrainQuad {0}", q.getName());
                     }
@@ -129,7 +129,7 @@ public class TerrainGrid extends TerrainQuad {
     }
 
     public TerrainGrid(String name, int patchSize, int maxVisibleSize, Vector3f scale, HeightMapGrid heightMapGrid,
-            Vector2f offset, float offsetAmount, LodCalculatorFactory lodCalculatorFactory) {
+            Vector2f offset, float offsetAmount) {
         this.name = name;
         this.patchSize = patchSize;
         this.size = maxVisibleSize;
@@ -141,30 +141,26 @@ public class TerrainGrid extends TerrainQuad {
         this.totalSize = maxVisibleSize;
         this.offset = offset;
         this.offsetAmount = offsetAmount;
-        this.lodCalculatorFactory = lodCalculatorFactory;
-        if (lodCalculatorFactory == null) {
-            lodCalculatorFactory = new LodDistanceCalculatorFactory();
-        }
+        //this.lodCalculatorFactory = lodCalculatorFactory;
+        this.gridOffset = new int[]{0,0};
+        //if (lodCalculatorFactory == null) {
+        //    lodCalculatorFactory = new LodDistanceCalculatorFactory();
+        //}
         this.quadIndex = new Vector3f[]{
-            new Vector3f(-1, 0, 2), new Vector3f(0, 0, 2), new Vector3f(1, 0, 2), new Vector3f(2, 0, 2),
-            new Vector3f(-1, 0, 1), new Vector3f(0, 0, 1), new Vector3f(1, 0, 1), new Vector3f(2, 0, 1),
-            new Vector3f(-1, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(2, 0, 0),
-            new Vector3f(-1, 0, -1), new Vector3f(0, 0, -1), new Vector3f(1, 0, -1), new Vector3f(-2, 0, -1)};
+        new Vector3f(-1, 0, 2), new Vector3f(0, 0, 2), new Vector3f(1, 0, 2), new Vector3f(2, 0, 2),
+        new Vector3f(-1, 0, 1), new Vector3f(0, 0, 1), new Vector3f(1, 0, 1), new Vector3f(2, 0, 1),
+        new Vector3f(-1, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(2, 0, 0),
+        new Vector3f(-1, 0, -1), new Vector3f(0, 0, -1), new Vector3f(1, 0, -1), new Vector3f(-2, 0, -1)};
 
         addControl(new UpdateControl());
     }
 
-    public TerrainGrid(String name, int patchSize, int maxVisibleSize, Vector3f scale, HeightMapGrid heightMapGrid,
-            LodCalculatorFactory lodCalculatorFactory) {
-        this(name, patchSize, maxVisibleSize, scale, heightMapGrid, new Vector2f(), 0, lodCalculatorFactory);
-    }
-
-    public TerrainGrid(String name, int patchSize, int maxVisibleSize, HeightMapGrid heightMapGrid, LodCalculatorFactory lodCalculatorFactory) {
-        this(name, patchSize, maxVisibleSize, Vector3f.UNIT_XYZ, heightMapGrid, lodCalculatorFactory);
+    public TerrainGrid(String name, int patchSize, int maxVisibleSize, Vector3f scale, HeightMapGrid heightMapGrid) {
+        this(name, patchSize, maxVisibleSize, scale, heightMapGrid, new Vector2f(), 0);
     }
 
     public TerrainGrid(String name, int patchSize, int maxVisibleSize, HeightMapGrid heightMapGrid) {
-        this(name, patchSize, maxVisibleSize, heightMapGrid, null);
+        this(name, patchSize, maxVisibleSize, Vector3f.UNIT_XYZ, heightMapGrid);
     }
 
     public TerrainGrid() {
@@ -182,25 +178,30 @@ public class TerrainGrid extends TerrainQuad {
     }
 
     @Override
-    public void update(List<Vector3f> locations) {
+    public void update(List<Vector3f> locations, LodCalculator lodCalculator) {
         // for now, only the first camera is handled.
         // to accept more, there are two ways:
         // 1: every camera has an associated grid, then the location is not enough to identify which camera location has changed
         // 2: grids are associated with locations, and no incremental update is done, we load new grids for new locations, and unload those that are not needed anymore
         Vector3f cam = locations.get(0);
         Vector3f camCell = this.getCell(cam);
+        if(cellsLoaded>1){                  // Check if cells are updated before updating gridoffset.
+            gridOffset[0] = Math.round(camCell.x*(size/2));
+            gridOffset[1] = Math.round(camCell.z*(size/2));
+            cellsLoaded=0;
+        }
         if (camCell.x != this.currentCell.x || camCell.z != currentCell.z) {
             this.updateChildrens(camCell);
             for (TerrainGridListener l : this.listeners.values()) {
                 l.gridMoved(camCell);
             }
         }
-
-        super.update(locations);
+        super.update(locations, lodCalculator);
     }
 
     public Vector3f getCell(Vector3f location) {
-        final Vector3f v = location.clone().divideLocal(this.getLocalScale().mult(this.quadSize - 1)).add(0.5f, 0, 0.5f);
+        final Vector3f v = location.add(this.getWorldScale().mult((this.quadSize - 1)/2)).divide(this.getWorldScale().mult(this.quadSize - 1)).add(0.5f, 0, 0.5f);
+        
         return new Vector3f(FastMath.floor(v.x), 0, FastMath.floor(v.z));
     }
 
@@ -213,8 +214,8 @@ public class TerrainGrid extends TerrainQuad {
                 l.tileDetached(getCell(this.getQuad(idx).getWorldTranslation()), this.getQuad(idx));
             }
             this.detachChild(this.getQuad(idx));
+            cellsLoaded++; // For gridoffset calc., maybe the run() method is a better location for this.
         }
-
     }
 
     /**
@@ -312,6 +313,11 @@ public class TerrainGrid extends TerrainQuad {
             vect.y -= currentGridLocation.z;
         }
         super.adjustHeight(xz, height);
+    }
+    
+    @Override
+    protected float getHeightmapHeight(int x, int z) {
+        return super.getHeightmapHeight(x-gridOffset[0], z-gridOffset[1]);
     }
 
     @Override

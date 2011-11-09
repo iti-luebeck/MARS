@@ -38,19 +38,22 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.util.TempVars;
 import java.io.IOException;
+import java.util.BitSet;
 
 /**
  * Contains a list of transforms and times for each keyframe.
  * 
  * @author Kirill Vainer
  */
-public final class BoneTrack implements Savable {
+public final class BoneTrack implements Track {
 
     /**
      * Bone index in the skeleton which this track effects.
      */
     private int targetBoneIndex;
+    
     /**
      * Transforms and times for track.
      */
@@ -58,14 +61,7 @@ public final class BoneTrack implements Savable {
     private CompactQuaternionArray rotations;
     private CompactVector3Array scales;
     private float[] times;
-    // temp vectors for interpolation
-    private transient final Vector3f tempV = new Vector3f();
-    private transient final Quaternion tempQ = new Quaternion();
-    private transient final Vector3f tempS = new Vector3f();
-    private transient final Vector3f tempV2 = new Vector3f();
-    private transient final Quaternion tempQ2 = new Quaternion();
-    private transient final Vector3f tempS2 = new Vector3f();
-
+    
     /**
      * Serialization-only. Do not use.
      */
@@ -106,8 +102,7 @@ public final class BoneTrack implements Savable {
     }
 
     /**
-     * returns the bone index of this bone track
-     * @return 
+     * @return the bone index of this bone track.
      */
     public int getTargetBoneIndex() {
         return targetBoneIndex;
@@ -168,7 +163,7 @@ public final class BoneTrack implements Savable {
     }
 
     /**
-     *  Set the translations, rotations and scales for this bone track
+     * Set the translations, rotations and scales for this bone track
      * @param times a float array with the time of each frame
      * @param translations the translation of the bone for each frame
      * @param rotations the rotation of the bone for each frame
@@ -194,9 +189,21 @@ public final class BoneTrack implements Savable {
      * @param skeleton the skeleton to which the bone belong
      * @param weight the weight of the animation
      */
-    public void setTime(float time, Skeleton skeleton, float weight) {
-        Bone target = skeleton.getBone(targetBoneIndex);
+    public void setTime(float time, float weight, AnimControl control, AnimChannel channel, TempVars vars) {
+        BitSet affectedBones = channel.getAffectedBones();
+        if (affectedBones != null && !affectedBones.get(targetBoneIndex)) {
+            return;
+        }
+        
+        Bone target = control.getSkeleton().getBone(targetBoneIndex);
 
+        Vector3f tempV = vars.vect1;
+        Vector3f tempS = vars.vect2;
+        Quaternion tempQ = vars.quat1;
+        Vector3f tempV2 = vars.vect3;
+        Vector3f tempS2 = vars.vect4;
+        Quaternion tempQ2 = vars.quat2;
+        
         int lastFrame = times.length - 1;
         if (time < 0 || lastFrame == 0) {
             rotations.get(0, tempQ);
@@ -244,7 +251,40 @@ public final class BoneTrack implements Savable {
             target.setAnimTransforms(tempV, tempQ, scales != null ? tempS : null);
         }
     }
+    
+    /**
+     * @return the length of the track
+     */
+    public float getLength() {
+        return times == null ? 0 : times[times.length - 1] - times[0];
+    }
 
+    /**
+     * This method creates a clone of the current object.
+     * @return a clone of the current object
+     */
+    @Override
+    public BoneTrack clone() {
+        int tablesLength = times.length;
+
+        float[] times = this.times.clone();
+        Vector3f[] sourceTranslations = this.getTranslations();
+        Quaternion[] sourceRotations = this.getRotations();
+        Vector3f[] sourceScales = this.getScales();
+
+        Vector3f[] translations = new Vector3f[tablesLength];
+        Quaternion[] rotations = new Quaternion[tablesLength];
+        Vector3f[] scales = new Vector3f[tablesLength];
+        for (int i = 0; i < tablesLength; ++i) {
+            translations[i] = sourceTranslations[i].clone();
+            rotations[i] = sourceRotations[i].clone();
+            scales[i] = sourceScales != null ? sourceScales[i].clone() : new Vector3f(1.0f, 1.0f, 1.0f);
+        }
+        
+        // Need to use the constructor here because of the final fields used in this class
+        return new BoneTrack(targetBoneIndex, times, translations, rotations, scales);
+    }
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
@@ -261,11 +301,9 @@ public final class BoneTrack implements Savable {
         targetBoneIndex = ic.readInt("boneIndex", 0);
 
         translations = (CompactVector3Array) ic.readSavable("translations", null);
-
         rotations = (CompactQuaternionArray) ic.readSavable("rotations", null);
         times = ic.readFloatArray("times", null);
         scales = (CompactVector3Array) ic.readSavable("scales", null);
-
 
         //Backward compatibility for old j3o files generated before revision 6807
         if (im.getFormatVersion() == 0){
@@ -290,5 +328,9 @@ public final class BoneTrack implements Savable {
                 }
             }
         }
+    }
+
+    public void setTime(float time, float weight, AnimControl control, AnimChannel channel) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -323,7 +324,11 @@ public final class OBJLoader implements AssetLoader {
 
         // NOTE: Cut off any relative/absolute paths
         name = new File(name).getName();
-        matList = (MaterialList) assetManager.loadAsset(key.getFolder() + name);
+        try {
+            matList = (MaterialList) assetManager.loadAsset(key.getFolder() + name);
+        } catch (AssetNotFoundException ex){
+            throw new AssetNotFoundException("Cannot load or find material " + name + " for model " + key.getName(), ex);
+        }
 
         if (matList != null){
             // create face lists for every material
@@ -336,8 +341,14 @@ public final class OBJLoader implements AssetLoader {
         }
     }
 
-    protected void nextStatement(){
-        scan.skip(".*\r{0,1}\n");
+    protected boolean nextStatement(){
+        try {
+            scan.skip(".*\r{0,1}\n");
+            return true;
+        } catch (NoSuchElementException ex){
+            // EOF
+            return false;
+        }
     }
 
     protected boolean readLine() throws IOException{
@@ -348,7 +359,7 @@ public final class OBJLoader implements AssetLoader {
         String cmd = scan.next();
         if (cmd.startsWith("#")){
             // skip entire comment until next line
-            nextStatement();
+            return nextStatement();
         }else if (cmd.equals("v")){
             // vertex position
             verts.add(readVector3());
@@ -372,11 +383,11 @@ public final class OBJLoader implements AssetLoader {
             String mtllib = scan.nextLine().trim();
             loadMtlLib(mtllib);
         }else if (cmd.equals("s") || cmd.equals("g")){
-            nextStatement();
+            return nextStatement();
         }else{
             // skip entire command until next line
             logger.log(Level.WARNING, "Unknown statement in OBJ! {0}", cmd);
-            nextStatement();
+            return nextStatement();
         }     
 
         return true;
@@ -408,7 +419,7 @@ public final class OBJLoader implements AssetLoader {
             geom.setQueueBucket(Bucket.Opaque);
         
         if (material.getMaterialDef().getName().contains("Lighting")
-          || mesh.getFloatBuffer(Type.Normal) == null){
+          && mesh.getFloatBuffer(Type.Normal) == null){
             logger.log(Level.WARNING, "OBJ mesh {0} doesn't contain normals! "
                                     + "It might not display correctly", geom.getName());
         }
@@ -534,17 +545,12 @@ public final class OBJLoader implements AssetLoader {
 
     @SuppressWarnings("empty-statement")
     public Object load(AssetInfo info) throws IOException{
+        reset();
+        
         key = (ModelKey) info.getKey();
         assetManager = info.getManager();
-
-        if (!(info.getKey() instanceof ModelKey))
-            throw new IllegalArgumentException("Model assets must be loaded using a ModelKey");
-
-        InputStream in = info.openStream();
-        scan = new Scanner(in);
-        scan.useLocale(Locale.US);
-
         objName    = key.getName();
+        
         String folderName = key.getFolder();
         String ext        = key.getExtension();
         objName = objName.substring(0, objName.length() - ext.length() - 1);
@@ -554,8 +560,23 @@ public final class OBJLoader implements AssetLoader {
 
         objNode = new Node(objName + "-objnode");
 
-        while (readLine());
+        if (!(info.getKey() instanceof ModelKey))
+            throw new IllegalArgumentException("Model assets must be loaded using a ModelKey");
 
+        InputStream in = null; 
+        try {
+            in = info.openStream();
+            
+            scan = new Scanner(in);
+            scan.useLocale(Locale.US);
+
+            while (readLine());
+        } finally {
+            if (in != null){
+                in.close();
+            }
+        }
+        
         if (matFaces.size() > 0){
             for (Entry<String, ArrayList<Face>> entry : matFaces.entrySet()){
                 ArrayList<Face> materialFaces = entry.getValue();
@@ -570,13 +591,6 @@ public final class OBJLoader implements AssetLoader {
             objNode.attachChild(geom);
         }
 
-        reset();
-
-        try{
-            in.close();
-        }catch (IOException ex){
-        }
-        
         if (objNode.getQuantity() == 1)
             // only 1 geometry, so no need to send node
             return objNode.getChild(0); 

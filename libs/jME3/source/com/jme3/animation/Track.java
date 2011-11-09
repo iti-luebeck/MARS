@@ -31,49 +31,33 @@
  */
 package com.jme3.animation;
 
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
 import com.jme3.export.Savable;
-import com.jme3.scene.Mesh;
-import java.io.IOException;
+import com.jme3.util.TempVars;
 
-/**
- * A single track of mesh animation (either morph or pose based).
- * Currently morph animations are not supported (only pose).
- */
-public abstract class Track implements Savable {
-
-    protected int targetMeshIndex;
+public interface Track extends Savable, Cloneable {
 
     /**
-     * build a track for a an index
-     * @param targetMeshIndex 
+     * Sets the time of the animation.
+     * 
+     * Internally, the track will retrieve objects from the control
+     * and modify them according to the properties of the channel and the
+     * given parameters.
+     * 
+     * @param time The time in the animation
+     * @param weight The weight from 0 to 1 on how much to apply the track 
+     * @param control The control which the track should effect
+     * @param channel The channel which the track should effect
      */
-    public Track(int targetMeshIndex) {
-        this.targetMeshIndex = targetMeshIndex;
-    }
+    public void setTime(float time, float weight, AnimControl control, AnimChannel channel, TempVars vars);
 
     /**
-     * return the mesh index
-     * @return 
+     * @return the length of the track
      */
-    public int getTargetMeshIndex() {
-        return targetMeshIndex;
-    }
+    public float getLength();
 
     /**
-     * sets time for this track
-     * @param time
-     * @param targets
-     * @param weight 
+     * This method creates a clone of the current object.
+     * @return a clone of the current object
      */
-    public abstract void setTime(float time, Mesh[] targets, float weight);
-
-    public void write(JmeExporter ex) throws IOException {
-        ex.getCapsule(this).write(targetMeshIndex, "meshIndex", 0);
-    }
-
-    public void read(JmeImporter im) throws IOException {
-        targetMeshIndex = im.getCapsule(this).readInt("meshIndex", 0);
-    }
+    public Track clone();
 }

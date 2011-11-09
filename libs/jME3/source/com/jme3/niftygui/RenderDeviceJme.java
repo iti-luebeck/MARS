@@ -53,12 +53,16 @@ import de.lessvoid.nifty.spi.render.*;
 import de.lessvoid.nifty.tools.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
 
 public class RenderDeviceJme implements RenderDevice {
 
     private NiftyJmeDisplay display;
     private RenderManager rm;
     private Renderer r;
+    
+    private HashMap<String, BitmapText> textCacheLastFrame = new HashMap<String, BitmapText>();
+    private HashMap<String, BitmapText> textCacheCurrentFrame = new HashMap<String, BitmapText>();
 
     private final Quad quad = new Quad(1, -1, true);
     private final Geometry quadGeom = new Geometry("nifty-quad", quad);
@@ -120,6 +124,12 @@ public class RenderDeviceJme implements RenderDevice {
     }
 
     public void endFrame() {
+        HashMap<String, BitmapText> temp = textCacheLastFrame;
+        textCacheLastFrame = textCacheCurrentFrame;
+        textCacheCurrentFrame = temp;
+        textCacheCurrentFrame.clear();
+        
+//        System.exit(1);
     }
 
     public int getWidth() {
@@ -176,8 +186,25 @@ public class RenderDeviceJme implements RenderDevice {
         buf.flip();
         quadColor.updateData(buf);
     }
-
-    public void renderFont(RenderFont font, String str, int x, int y, Color color, float size){
+    
+    /**
+     * 
+     * @param font
+     * @param str
+     * @param x
+     * @param y
+     * @param color
+     * @param size 
+     * @deprecated use renderFont(RenderFont font, String str, int x, int y, Color color, float sizeX, float sizeY) instead
+     */
+    @Deprecated
+    public void renderFont(RenderFont font, String str, int x, int y, Color color, float size){        
+        renderFont(font, str, x, y, color, size, size);
+    }
+ 
+    @Override
+    public void renderFont(RenderFont font, String str, int x, int y, Color color, float sizeX, float sizeY){        
+        //TODO find out what the f1 param is for
         if (str.length() == 0)
             return;
 
@@ -185,30 +212,36 @@ public class RenderDeviceJme implements RenderDevice {
             return;
 
         RenderFontJme jmeFont = (RenderFontJme) font;
-        BitmapText text = jmeFont.getText();
-
-        // WARNING: Not compatible with OpenGL1 implementations..
-        niftyMat.setColor("Color", convertColor(color, tempColor));
         
-        niftyMat.setBoolean("UseTex", true);
-        niftyMat.getAdditionalRenderState().setBlendMode(convertBlend());
-        text.setMaterial(niftyMat);
+        String key = font+str+color.getColorString();
+        BitmapText text = textCacheLastFrame.get(key);
+        if (text == null) {
+            text = jmeFont.createText();
+            text.setText(str);
+            text.updateLogicalState(0);
+        }
+        textCacheCurrentFrame.put(key, text);
 
-        text.setText(str);
-        text.updateLogicalState(0);
+        niftyMat.setColor("Color", convertColor(color, tempColor));
+        niftyMat.setBoolean("UseTex", true);
+        niftyMat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+//        niftyMat.getAdditionalRenderState().setBlendMode(convertBlend());
+        text.setMaterial(niftyMat);
 
         float width = text.getLineWidth();
         float height = text.getLineHeight();
 
-        float x0 = x + 0.5f * width  * (1f - size);
-        float y0 = y + 0.5f * height * (1f - size);
+        float x0 = x + 0.5f * width  * (1f - sizeX);
+        float y0 = y + 0.5f * height * (1f - sizeY);
 
         tempMat.loadIdentity();
         tempMat.setTranslation(x0, getHeight() - y0, 0);
-        tempMat.setScale(size, size, 0);
+        tempMat.setScale(sizeX, sizeY, 0);
 
         rm.setWorldMatrix(tempMat);
         text.render(rm);
+        
+//        System.out.println("renderFont");
     }
 
     public void renderImage(RenderImage image, int x, int y, int w, int h,
@@ -256,6 +289,8 @@ public class RenderDeviceJme implements RenderDevice {
 
         rm.setWorldMatrix(tempMat);
         niftyMat.render(quadGeom, rm);
+//        
+//        System.out.println("renderImage (Sub)");
     }
 
     public void renderImage(RenderImage image, int x, int y, int width, int height,
@@ -281,6 +316,8 @@ public class RenderDeviceJme implements RenderDevice {
 
         rm.setWorldMatrix(tempMat);
         niftyMat.render(quadGeom, rm);
+//        
+//        System.out.println("renderImage");
     }
 
     public void renderQuad(int x, int y, int width, int height, Color color){
@@ -296,6 +333,8 @@ public class RenderDeviceJme implements RenderDevice {
 
         rm.setWorldMatrix(tempMat);
         niftyMat.render(quadGeom, rm);
+        
+//        System.out.println("renderQuad (Solid)");
     }
 
     public void renderQuad(int x, int y, int width, int height,
@@ -324,18 +363,24 @@ public class RenderDeviceJme implements RenderDevice {
 
         rm.setWorldMatrix(tempMat);
         niftyMat.render(quadGeom, rm);
+//        
+//        System.out.println("renderQuad (Grad)");
     }
 
     public void enableClip(int x0, int y0, int x1, int y1){
+//        System.out.println("enableClip");
         clipWasSet = true;
         r.setClipRect(x0, getHeight() - y1, x1 - x0, y1 - y0);
     }
 
     public void disableClip() {
+//        System.out.println("disableClip");
         if (clipWasSet){
             r.clearClipRect();
             clipWasSet = false;
         }
     }
+
+    
 
 }

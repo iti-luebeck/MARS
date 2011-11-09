@@ -32,10 +32,11 @@
 
 package jme3test.audio;
 
+import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.UrlLocator;
 import com.jme3.audio.AudioNode;
 
-public class TestMusicStreaming extends AudioApp {
+public class TestMusicStreaming extends SimpleApplication {
 
     public static void main(String[] args){
         TestMusicStreaming test = new TestMusicStreaming();
@@ -43,13 +44,13 @@ public class TestMusicStreaming extends AudioApp {
     }
 
     @Override
-    public void updateAudioApp(float tpf){
+    public void simpleInitApp(){
+        assetManager.registerLocator("http://www.vorbis.com/music/", UrlLocator.class);
+        AudioNode audioSource = new AudioNode(assetManager, "Lumme-Badloop.ogg", true);
+        audioSource.play();
     }
 
     @Override
-    public void initAudioApp(){
-        assetManager.registerLocator("http://www.vorbis.com/music/", UrlLocator.class);
-        AudioNode src = new AudioNode(assetManager, "Lumme-Badloop.ogg", true);
-        audioRenderer.playSource(src);
-    }
+    public void simpleUpdate(float tpf){}
+
 }

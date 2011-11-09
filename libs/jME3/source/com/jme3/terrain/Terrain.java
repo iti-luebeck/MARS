@@ -34,6 +34,7 @@ package com.jme3.terrain;
 import com.jme3.material.Material;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.terrain.geomipmap.lodcalc.LodCalculator;
 import java.util.List;
 
 /**
@@ -54,6 +55,15 @@ public interface Terrain {
      * @return the height at the given point
      */
     public float getHeight(Vector2f xz);
+    
+    /**
+     * Get the normal vector for the surface of the terrain at the specified
+     * X-Z coordinate. This normal vector can be a close approximation. It does not
+     * take into account any normal maps on the material.
+     * @param xz the X-Z world coordinate
+     * @return the normal vector at the given point
+     */
+    public Vector3f getNormal(Vector2f xz);
 
     /**
      * Get the heightmap height at the specified X-Z coordinate. This does not
@@ -124,7 +134,7 @@ public interface Terrain {
      * @param location: the Camera's location. A list of one camera location is normal 
      *  if you just have one camera in your scene.
      */
-    public void update(List<Vector3f> location);
+    public void update(List<Vector3f> location, LodCalculator lodCalculator);
 
     /**
      * Lock or unlock the meshes of this terrain.

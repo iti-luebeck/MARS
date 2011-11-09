@@ -46,6 +46,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.Terrain;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
+import com.jme3.terrain.geomipmap.lodcalc.LodCalculator;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -65,6 +67,8 @@ public class TerrainLodControl extends AbstractControl {
     private Terrain terrain;
     private List<Camera> cameras;
     private List<Vector3f> cameraLocations = new ArrayList<Vector3f>();
+    private LodCalculator lodCalculator;
+    private boolean hasResetLod = false; // used when enabled is set to false
 
     public TerrainLodControl() {
     }
@@ -74,6 +78,7 @@ public class TerrainLodControl extends AbstractControl {
         cams.add(camera);
         this.terrain = terrain;
         this.cameras = cams;
+        lodCalculator = new DistanceLodCalculator(65, 2.7f); // a default calculator
     }
     
     /**
@@ -91,9 +96,25 @@ public class TerrainLodControl extends AbstractControl {
     }
 
     @Override
+    public void update(float tpf) {
+        controlUpdate(tpf);
+    }
+    
+    @Override
     protected void controlUpdate(float tpf) {
         //list of cameras for when terrain supports multiple cameras (ie split screen)
 
+        if (lodCalculator == null)
+            return;
+        
+        if (!enabled) {
+            if (!hasResetLod) {
+                // this will get run once
+                hasResetLod = true;
+                lodCalculator.turnOffLod();
+            }
+        }
+        
         if (cameras != null) {
             if (cameraLocations.isEmpty() && !cameras.isEmpty()) {
                 for (Camera c : cameras) // populate them
@@ -101,7 +122,7 @@ public class TerrainLodControl extends AbstractControl {
                     cameraLocations.add(c.getLocation());
                 }
             }
-            terrain.update(cameraLocations);
+            terrain.update(cameraLocations, lodCalculator);
         }
     }
 
@@ -113,7 +134,9 @@ public class TerrainLodControl extends AbstractControl {
                     cameraClone.add(c);
                 }
             }
-            return new TerrainLodControl((Terrain) spatial, cameraClone);
+            TerrainLodControl cloned = new TerrainLodControl((Terrain) spatial, cameraClone);
+            cloned.setLodCalculator(lodCalculator.clone());
+            return cloned;
         }
         return null;
     }
@@ -144,11 +167,32 @@ public class TerrainLodControl extends AbstractControl {
         this.terrain = terrain;
     }
 
+    public LodCalculator getLodCalculator() {
+        return lodCalculator;
+    }
+
+    public void setLodCalculator(LodCalculator lodCalculator) {
+        this.lodCalculator = lodCalculator;
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (!enabled) {
+            // reset the lod levels to max detail for the terrain
+            hasResetLod = false;
+        } else {
+            hasResetLod = true;
+            lodCalculator.turnOnLod();
+        }
+    }
+
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write((Node)terrain, "terrain", null);
+        oc.write(lodCalculator, "lodCalculator", null);
     }
 
     @Override
@@ -156,5 +200,7 @@ public class TerrainLodControl extends AbstractControl {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         terrain = (Terrain) ic.readSavable("terrain", null);
+        lodCalculator = (LodCalculator) ic.readSavable("lodCalculator", new DistanceLodCalculator());
     }
+
 }

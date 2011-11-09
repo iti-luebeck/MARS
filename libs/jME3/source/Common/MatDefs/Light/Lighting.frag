@@ -93,9 +93,8 @@ float lightComputeDiffuse(in vec3 norm, in vec3 lightdir, in vec3 viewdir){
 }
 
 float lightComputeSpecular(in vec3 norm, in vec3 viewdir, in vec3 lightdir, in float shiny){
-    if (shiny <= 1.0){
-        return 0.0;
-    }
+    // NOTE: check for shiny <= 1 removed since shininess is now 
+    // 1.0 by default (uses matdefs default vals)
     #ifdef LOW_QUALITY
        // Blinn-Phong
        // Note: preferably, H should be computed in the vertex shader
@@ -175,16 +174,21 @@ void main(){
 
     #ifndef VERTEX_LIGHTING
         float spotFallOff = 1.0;
-        if(g_LightDirection.w != 0.0){
-              vec3 L       = normalize(lightVec.xyz);
-              vec3 spotdir = normalize(g_LightDirection.xyz);
-              float curAngleCos = dot(-L, spotdir);             
-              float innerAngleCos = floor(g_LightDirection.w) * 0.001;
-              float outerAngleCos = fract(g_LightDirection.w);
-              float innerMinusOuter = innerAngleCos - outerAngleCos;
 
-              spotFallOff = (curAngleCos - outerAngleCos) / innerMinusOuter;
+        #if __VERSION__ >= 110
+          // allow use of control flow
+          if(g_LightDirection.w != 0.0){
+        #endif
 
+          vec3 L       = normalize(lightVec.xyz);
+          vec3 spotdir = normalize(g_LightDirection.xyz);
+          float curAngleCos = dot(-L, spotdir);             
+          float innerAngleCos = floor(g_LightDirection.w) * 0.001;
+          float outerAngleCos = fract(g_LightDirection.w);
+          float innerMinusOuter = innerAngleCos - outerAngleCos;
+          spotFallOff = (curAngleCos - outerAngleCos) / innerMinusOuter;
+
+          #if __VERSION__ >= 110
               if(spotFallOff <= 0.0){
                   gl_FragColor.rgb = AmbientSum * diffuseColor.rgb;
                   gl_FragColor.a   = alpha;
@@ -192,7 +196,10 @@ void main(){
               }else{
                   spotFallOff = clamp(spotFallOff, 0.0, 1.0);
               }
-        }
+             }
+          #else
+             spotFallOff = clamp(spotFallOff, step(g_LightDirection.w, 0.001), 1.0);
+          #endif
      #endif
  
     // ***********************
@@ -230,14 +237,15 @@ void main(){
     #endif
 
     #ifdef VERTEX_LIGHTING
+       vec2 light = vertexLightValues.xy;
        #ifdef COLORRAMP
-           light.x = texture2D(m_ColorRamp, vec2(vertexLightValues.x, 0.0)).r;
-           light.y = texture2D(m_ColorRamp, vec2(vertexLightValues.y, 0.0)).r;
+           light.x = texture2D(m_ColorRamp, vec2(light.x, 0.0)).r;
+           light.y = texture2D(m_ColorRamp, vec2(light.y, 0.0)).r;
        #endif
 
        gl_FragColor.rgb =  AmbientSum     * diffuseColor.rgb + 
-                           DiffuseSum.rgb * diffuseColor.rgb  * vec3(vertexLightValues.x) +
-                           SpecularSum    * specularColor.rgb * vec3(vertexLightValues.y);
+                           DiffuseSum.rgb * diffuseColor.rgb  * vec3(light.x) +
+                           SpecularSum    * specularColor.rgb * vec3(light.y);
     #else
        vec4 lightDir = vLightDir;
        lightDir.xyz = normalize(lightDir.xyz);

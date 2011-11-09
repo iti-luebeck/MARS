@@ -46,8 +46,6 @@ import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture2D;
 import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -61,16 +59,16 @@ import java.util.List;
  * This class is abstract, any Filter must extend it.<br>
  * Any filter holds a frameBuffer and a texture<br>
  * The getMaterial must return a Material that use a GLSL shader immplementing the desired effect<br>
- * 
+ *
  * @author Rémy Bouquet aka Nehon
  */
 public abstract class Filter implements Savable {
 
-   
+
     private String name;
     protected Pass defaultPass;
     protected List<Pass> postRenderPasses;
-    protected Material material;   
+    protected Material material;
     protected boolean enabled = true;
     protected FilterPostProcessor processor;
 
@@ -81,7 +79,7 @@ public abstract class Filter implements Savable {
     /**
      * Inner class Pass
      * Pass are like filters in filters.
-     * Some filters will need multiple passes before the final render 
+     * Some filters will need multiple passes before the final render
      */
     public class Pass {
 
@@ -95,22 +93,32 @@ public abstract class Filter implements Savable {
          * @param renderer
          * @param width
          * @param height
-         * @param textureFormat 
+         * @param textureFormat
          * @param depthBufferFormat
-         * @param numSamples 
+         * @param numSamples
          */
-        public void init(Renderer renderer, int width, int height, Format textureFormat, Format depthBufferFormat, int numSamples) {
+        public void init(Renderer renderer, int width, int height, Format textureFormat, Format depthBufferFormat, int numSamples, boolean renderDepth) {
             Collection<Caps> caps = renderer.getCaps();
             if (numSamples > 1 && caps.contains(Caps.FrameBufferMultisample) && caps.contains(Caps.OpenGL31)) {
                 renderFrameBuffer = new FrameBuffer(width, height, numSamples);
                 renderedTexture = new Texture2D(width, height, numSamples, textureFormat);
+                renderFrameBuffer.setDepthBuffer(depthBufferFormat);
+                if (renderDepth) {
+                    depthTexture = new Texture2D(width, height, numSamples, depthBufferFormat);
+                    renderFrameBuffer.setDepthTexture(depthTexture);
+                }
             } else {
                 renderFrameBuffer = new FrameBuffer(width, height, 1);
                 renderedTexture = new Texture2D(width, height, textureFormat);
+                renderFrameBuffer.setDepthBuffer(depthBufferFormat);
+                if (renderDepth) {
+                    depthTexture = new Texture2D(width, height, depthBufferFormat);
+                    renderFrameBuffer.setDepthTexture(depthTexture);
+                }
             }
 
             renderFrameBuffer.setColorTexture(renderedTexture);
-            renderFrameBuffer.setDepthBuffer(depthBufferFormat);
+
 
         }
 
@@ -120,10 +128,14 @@ public abstract class Filter implements Savable {
          * @param width
          * @param height
          * @param textureFormat
-         * @param depthBufferFormat 
+         * @param depthBufferFormat
          */
         public void init(Renderer renderer, int width, int height, Format textureFormat, Format depthBufferFormat) {
             init(renderer, width, height, textureFormat, depthBufferFormat, 1);
+        }
+
+        public void init(Renderer renderer, int width, int height, Format textureFormat, Format depthBufferFormat, int numSamples) {
+            init(renderer, width, height, textureFormat, depthBufferFormat, numSamples, false);
         }
 
         /**
@@ -134,7 +146,7 @@ public abstract class Filter implements Savable {
          * @param textureFormat
          * @param depthBufferFormat
          * @param numSample
-         * @param material 
+         * @param material
          */
         public void init(Renderer renderer, int width, int height, Format textureFormat, Format depthBufferFormat, int numSample, Material material) {
             init(renderer, width, height, textureFormat, depthBufferFormat, numSample);
@@ -186,7 +198,7 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the default pass texture format
-     * @return 
+     * @return
      */
     protected Format getDefaultPassTextureFormat() {
         return Format.RGBA8;
@@ -194,21 +206,21 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the default pass depth format
-     * @return 
+     * @return
      */
     protected Format getDefaultPassDepthFormat() {
         return Format.Depth;
     }
 
     /**
-     * contruct a Filter 
+     * contruct a Filter
      */
     protected Filter() {
         this("filter");
     }
 
     /**
-     * 
+     *
      * initialize this filter
      * use InitFilter for overriding filter initialization
      * @param manager the assetManager
@@ -226,7 +238,7 @@ public abstract class Filter implements Savable {
 
     /**
      * cleanup this filter
-     * @param r 
+     * @param r
      */
     protected final void cleanup(Renderer r) {
         processor = null;
@@ -266,7 +278,7 @@ public abstract class Filter implements Savable {
     /**
      * Must return the material used for this filter.
      * this method is called every frame.
-     * 
+     *
      * @return the material used for this filter.
      */
     protected abstract Material getMaterial();
@@ -292,6 +304,8 @@ public abstract class Filter implements Savable {
      * Override this method if you want to make a pass just after the frame has been rendered and just before the filter rendering
      * @param renderManager
      * @param viewPort
+     * @param prevFilterBuffer
+     * @param sceneBuffer
      */
     protected void postFrame(RenderManager renderManager, ViewPort viewPort, FrameBuffer prevFilterBuffer, FrameBuffer sceneBuffer) {
     }
@@ -309,7 +323,7 @@ public abstract class Filter implements Savable {
     }
 
     /**
-     * Override this method if you want to load extra properties when the filter 
+     * Override this method if you want to load extra properties when the filter
      * is loaded else only basic properties of the filter will be loaded
      * This method should always begin by super.read(im);
      */
@@ -321,7 +335,7 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the name of the filter
-     * @return 
+     * @return
      */
     public String getName() {
         return name;
@@ -329,7 +343,7 @@ public abstract class Filter implements Savable {
 
     /**
      * Sets the name of the filter
-     * @param name 
+     * @param name
      */
     public void setName(String name) {
         this.name = name;
@@ -337,7 +351,7 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the default pass frame buffer
-     * @return 
+     * @return
      */
     protected FrameBuffer getRenderFrameBuffer() {
         return defaultPass.renderFrameBuffer;
@@ -345,7 +359,7 @@ public abstract class Filter implements Savable {
 
     /**
      * sets the default pas frame buffer
-     * @param renderFrameBuffer 
+     * @param renderFrameBuffer
      */
     protected void setRenderFrameBuffer(FrameBuffer renderFrameBuffer) {
         this.defaultPass.renderFrameBuffer = renderFrameBuffer;
@@ -353,7 +367,7 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the rendered texture of this filter
-     * @return 
+     * @return
      */
     protected Texture2D getRenderedTexture() {
         return defaultPass.renderedTexture;
@@ -361,7 +375,7 @@ public abstract class Filter implements Savable {
 
     /**
      * sets the rendered texture of this filter
-     * @param renderedTexture 
+     * @param renderedTexture
      */
     protected void setRenderedTexture(Texture2D renderedTexture) {
         this.defaultPass.renderedTexture = renderedTexture;
@@ -369,7 +383,7 @@ public abstract class Filter implements Savable {
 
     /**
      * Override this method and return true if your Filter needs the depth texture
-     * 
+     *
      * @return true if your Filter need the depth texture
      */
     protected boolean isRequiresDepthTexture() {
@@ -378,7 +392,7 @@ public abstract class Filter implements Savable {
 
     /**
      * Override this method and return false if your Filter does not need the scene texture
-     * 
+     *
      * @return false if your Filter does not need the scene texture
      */
     protected boolean isRequiresSceneTexture() {
@@ -387,7 +401,7 @@ public abstract class Filter implements Savable {
 
     /**
      * returns the list of the postRender passes
-     * @return 
+     * @return
      */
     protected List<Pass> getPostRenderPasses() {
         return postRenderPasses;
@@ -415,7 +429,7 @@ public abstract class Filter implements Savable {
 
     /**
      * sets a reference to the FilterPostProcessor ti which this filter is attached
-     * @param proc 
+     * @param proc
      */
     protected void setProcessor(FilterPostProcessor proc) {
         processor = proc;

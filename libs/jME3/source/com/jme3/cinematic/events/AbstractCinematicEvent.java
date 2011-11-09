@@ -39,13 +39,17 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
+import com.jme3.system.NanoTimer;
+import com.jme3.system.Timer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This calls contains basic behavior of a cinematic event
+ * every cinematic event must extend this class
+ * 
+ * A cinematic event must be given an inital duration in seconds (duration of the event at speed = 1) (default is 10)
  * @author Nehon
  */
 public abstract class AbstractCinematicEvent implements CinematicEvent {
@@ -53,32 +57,63 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
     protected PlayState playState = PlayState.Stopped;
     protected float speed = 1;
     protected float initialDuration = 10;
-    protected float duration = initialDuration / speed;
     protected LoopMode loopMode = LoopMode.DontLoop;
     protected float time = 0;
+    protected Timer timer;
+    protected float start = 0;
+    /**
+     * the last time the event was paused
+     */
+    protected float elapsedTimePause = 0;
+    /**
+     * the list of listeners
+     */
     protected List<CinematicEventListener> listeners;
 
+    /**
+     * contruct a cinematic event
+     */
     public AbstractCinematicEvent() {
     }
 
+    /**
+     * contruct a cinematic event wwith the given initial duration
+     * @param initialDuration 
+     */
     public AbstractCinematicEvent(float initialDuration) {
         this.initialDuration = initialDuration;
-        duration = initialDuration / speed;
     }
 
+    /**
+     * contruct a cinematic event with the given loopMode
+     * @param loopMode 
+     */
     public AbstractCinematicEvent(LoopMode loopMode) {
         this.loopMode = loopMode;
     }
 
+    /**
+     * contruct a cinematic event with the given loopMode and the given initialDuration
+     * @param initialDuration the duration of the event at speed = 1
+     * @param loopMode the loop mode of the event
+     */
     public AbstractCinematicEvent(float initialDuration, LoopMode loopMode) {
         this.initialDuration = initialDuration;
         this.loopMode = loopMode;
-        duration = initialDuration / speed;
     }
 
+    /**
+     * Play this event
+     */
     public void play() {
         onPlay();
         playState = PlayState.Playing;
+        if (timer == null) {
+            //only when used as a control
+            timer = new NanoTimer();
+        }
+        start = timer.getTimeInSeconds();
+        //timer.reset();
         if (listeners != null) {
             for (int i = 0; i < listeners.size(); i++) {
                 CinematicEventListener cel = listeners.get(i);
@@ -87,21 +122,32 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         }
     }
 
-    public abstract void onPlay();
+    /**
+     * Place here the code you want to execute when the event is started
+     */
+    protected abstract void onPlay();
 
+    /**
+     * should be used internally only
+     * @param tpf time per frame
+     */
     public void internalUpdate(float tpf) {
         if (playState == PlayState.Playing) {
-            time += tpf * speed;
+            time = (elapsedTimePause + timer.getTimeInSeconds() - start) * speed;
 
             onUpdate(tpf);
-            if (time >= duration && loopMode == loopMode.DontLoop) {
+            if (time >= initialDuration && loopMode == loopMode.DontLoop) {
                 stop();
             }
         }
 
     }
 
-    public abstract void onUpdate(float tpf);
+    /**
+     * Place here the code you want to execute on update (only called when the event is playing)
+     * @param tpf time per frame
+     */
+    protected abstract void onUpdate(float tpf);
 
     /**
      * stops the animation, next time play() is called the animation will start from the begining.
@@ -110,6 +156,7 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         onStop();
         time = 0;
         playState = PlayState.Stopped;
+        elapsedTimePause = 0;
         if (listeners != null) {
             for (int i = 0; i < listeners.size(); i++) {
                 CinematicEventListener cel = listeners.get(i);
@@ -118,11 +165,18 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         }
     }
 
-    public abstract void onStop();
+    /**
+     * Place here the code you want to execute when the event is stoped.
+     */
+    protected abstract void onStop();
 
+    /**
+     * pause this event
+     */
     public void pause() {
         onPause();
         playState = PlayState.Paused;
+        elapsedTimePause = time;
         if (listeners != null) {
             for (int i = 0; i < listeners.size(); i++) {
                 CinematicEventListener cel = listeners.get(i);
@@ -131,6 +185,9 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         }
     }
 
+    /**
+     * place here the code you want to execute when the event is paused
+     */
     public abstract void onPause();
 
     /**
@@ -138,7 +195,7 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
      * @return
      */
     public float getDuration() {
-        return duration;
+        return initialDuration / speed;
     }
 
     /**
@@ -149,7 +206,6 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
      */
     public void setSpeed(float speed) {
         this.speed = speed;
-        duration = initialDuration / speed;
     }
 
     /**
@@ -182,7 +238,6 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
      */
     public void setInitialDuration(float initialDuration) {
         this.initialDuration = initialDuration;
-        duration = initialDuration / speed;
     }
 
     /**
@@ -203,15 +258,11 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         this.loopMode = loopMode;
     }
 
-    public void setInitalDuration(float initalDuration) {
-        this.initialDuration = initalDuration;
-        duration = initalDuration / speed;
-    }
-
-    public float getInitalDuration() {
-        return initialDuration;
-    }
-
+    /**
+     * for serialization only
+     * @param ex exporter
+     * @throws IOException 
+     */
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(playState, "playState", PlayState.Stopped);
@@ -220,18 +271,33 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         oc.write(loopMode, "loopMode", LoopMode.DontLoop);
     }
 
+    /**
+     * for serialization only
+     * @param im importer
+     * @throws IOException 
+     */
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
         playState = ic.readEnum("playState", PlayState.class, PlayState.Stopped);
         speed = ic.readFloat("speed", 1);
         initialDuration = ic.readFloat("initalDuration", 10);
-        duration = initialDuration / speed;
         loopMode = ic.readEnum("loopMode", LoopMode.class, LoopMode.DontLoop);
     }
 
+    /**
+     * initialize this event (should be called internally only)
+     * @param app
+     * @param cinematic 
+     */
     public void initEvent(Application app, Cinematic cinematic) {
+        timer = app.getContext().getTimer();
+        //timer = new NanoTimer();
     }
 
+    /**
+     * return a list of CinematicEventListener added on this event
+     * @return 
+     */
     private List<CinematicEventListener> getListeners() {
         if (listeners == null) {
             listeners = new ArrayList<CinematicEventListener>();
@@ -239,10 +305,18 @@ public abstract class AbstractCinematicEvent implements CinematicEvent {
         return listeners;
     }
 
+    /**
+     * Add a CinematicEventListener to this event
+     * @param listener CinematicEventListener
+     */
     public void addListener(CinematicEventListener listener) {
         getListeners().add(listener);
     }
 
+    /**
+     * remove a CinematicEventListener from this event
+     * @param listener CinematicEventListener
+     */
     public void removeListener(CinematicEventListener listener) {
         getListeners().remove(listener);
     }

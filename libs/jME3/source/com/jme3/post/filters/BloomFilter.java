@@ -50,7 +50,7 @@ import java.util.ArrayList;
  * There are 2 mode : Scene and Objects.<br>
  * Scene mode extracts the bright parts of the scene to make them glow<br>
  * Object mode make objects glow according to their material's glowMap or their GlowColor<br>
- * see {@link http://jmonkeyengine.org/wiki/doku.php/jme3:advanced:bloom_and_glow} for more details
+ * @see <a href="http://jmonkeyengine.org/wiki/doku.php/jme3:advanced:bloom_and_glow">advanced:bloom_and_glow</a> for more details
  * 
  * @author Rémy Bouquet aka Nehon
  */
@@ -90,8 +90,7 @@ public class BloomFilter extends Filter {
     private Material vBlurMat;
     private Material hBlurMat;
     private int screenWidth;
-    private int screenHeight;
-    private ColorRGBA backupColor;
+    private int screenHeight;    
 
     /**
      * Creates a Bloom filter
@@ -111,8 +110,8 @@ public class BloomFilter extends Filter {
 
     @Override
     protected void initFilter(AssetManager manager, RenderManager renderManager, ViewPort vp, int w, int h) {
-        screenWidth = (int) (w / downSamplingFactor);
-        screenHeight = (int) (h / downSamplingFactor);
+        screenWidth = (int) Math.max(1, (w / downSamplingFactor));
+        screenHeight = (int) Math.max(1, (h / downSamplingFactor));
         //    System.out.println(screenWidth + " " + screenHeight);
         if (glowMode != GlowMode.Scene) {
             preGlowPass = new Pass();
@@ -188,14 +187,12 @@ public class BloomFilter extends Filter {
 
     @Override
     protected void postQueue(RenderManager renderManager, ViewPort viewPort) {
-        if (glowMode != GlowMode.Scene) {
-            backupColor = viewPort.getBackgroundColor();
-            viewPort.setBackgroundColor(ColorRGBA.Black);
+        if (glowMode != GlowMode.Scene) {           
+            renderManager.getRenderer().setBackgroundColor(ColorRGBA.BlackNoAlpha);            
             renderManager.getRenderer().setFrameBuffer(preGlowPass.getRenderFrameBuffer());
             renderManager.getRenderer().clearBuffers(true, true, true);
             renderManager.setForcedTechnique("Glow");
-            renderManager.renderViewPortQueues(viewPort, false);
-            viewPort.setBackgroundColor(backupColor);
+            renderManager.renderViewPortQueues(viewPort, false);         
             renderManager.setForcedTechnique(null);
             renderManager.getRenderer().setFrameBuffer(viewPort.getOutputFrameBuffer());
         }

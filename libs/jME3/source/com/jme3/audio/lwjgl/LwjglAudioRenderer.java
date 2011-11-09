@@ -46,6 +46,7 @@ import com.jme3.audio.Listener;
 import com.jme3.audio.LowPassFilter;
 import com.jme3.math.Vector3f;
 import com.jme3.util.BufferUtils;
+import com.jme3.util.NativeObjectManager;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -68,6 +69,8 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
 
     private static final Logger logger = Logger.getLogger(LwjglAudioRenderer.class.getName());
 
+    private final NativeObjectManager objManager = new NativeObjectManager();
+    
     // When multiplied by STREAMING_BUFFER_COUNT, will equal 44100 * 2 * 2
     // which is exactly 1 second of audio.
     private static final int BUFFER_SIZE = 35280;
@@ -167,6 +170,10 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             logger.log(Level.SEVERE, "Failed to load audio library", ex);
             audioDisabled = true;
             return;
+        } catch (UnsatisfiedLinkError ex){
+            logger.log(Level.SEVERE, "Failed to load audio library", ex);
+            audioDisabled = true;
+            return;
         }
 
         ALCdevice device = AL.getDevice();
@@ -199,8 +206,6 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
         logger.log(Level.INFO, "AudioRenderer supports {0} channels", channels.length);
 
         supportEfx = ALC10.alcIsExtensionPresent(device, "ALC_EXT_EFX");
-        logger.log(Level.FINER, "Audio EFX support: {0}", supportEfx);
-
         if (supportEfx){
             ib.position(0).limit(1);
             ALC10.alcGetInteger(device, EFX10.ALC_EFX_MAJOR_VERSION, ib);
@@ -226,7 +231,9 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             EFX10.alEffecti(reverbFx, EFX10.AL_EFFECT_TYPE, EFX10.AL_EFFECT_REVERB);
 
             // attach reverb effect to effect slot
-//            EFX10.alAuxiliaryEffectSloti(reverbFxSlot, EFX10.AL_EFFECTSLOT_EFFECT, reverbFx);
+            EFX10.alAuxiliaryEffectSloti(reverbFxSlot, EFX10.AL_EFFECTSLOT_EFFECT, reverbFx);
+        }else{
+            logger.log(Level.WARNING, "OpenAL EFX not available! Audio effects won't work.");
         }
     }
 
@@ -248,19 +255,22 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
         ib.put(channels);
         ib.flip();
         alDeleteSources(ib);
+        
+        // delete audio buffers and filters
+        objManager.deleteAllObjects(this);
 
         if (supportEfx){
             ib.position(0).limit(1);
             ib.put(0, reverbFx);
             EFX10.alDeleteEffects(ib);
 
+            // If this is not allocated, why is it deleted?
+            // Commented out to fix native crash in OpenAL.
             ib.position(0).limit(1);
             ib.put(0, reverbFxSlot);
             EFX10.alDeleteAuxiliaryEffectSlots(ib);
         }
 
-        // TODO: Cleanup buffers allocated for audio buffers and streams
-        
         AL.destroy();
     }
 
@@ -278,6 +288,8 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             EFX10.alGenFilters(ib);
             id = ib.get(0);
             f.setId(id);
+            
+            objManager.registerForCleanup(f);
         }
 
         if (f instanceof LowPassFilter){
@@ -292,7 +304,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
 
         f.clearUpdateNeeded();
     }
-
+    
     public void updateSourceParam(AudioNode src, AudioParam param){
         checkDead();
         synchronized (threadLock){
@@ -348,7 +360,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                     alSourcef(id, AL_REFERENCE_DISTANCE, src.getRefDistance());
                     break;
                 case ReverbFilter:
-                    if (!src.isPositional() || !src.isReverbEnabled())
+                    if (!supportEfx || !src.isPositional() || !src.isReverbEnabled())
                         return;
 
                     int filter = EFX10.AL_FILTER_NULL;
@@ -362,7 +374,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                     AL11.alSource3i(id, EFX10.AL_AUXILIARY_SEND_FILTER, reverbFxSlot, 0, filter);
                     break;
                 case ReverbEnabled:
-                    if (!src.isPositional())
+                    if (!supportEfx || !src.isPositional())
                         return;
 
                     if (src.isReverbEnabled()){
@@ -418,6 +430,9 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                     }
                     break;
                 case DryFilter:
+                    if (!supportEfx)
+                        return;
+                    
                     if (src.getDryFilter() != null){
                         Filter f = src.getDryFilter();
                         if (f.isUpdateNeeded()){
@@ -459,7 +474,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             alSourcef(id, AL_REFERENCE_DISTANCE, src.getRefDistance());
             alSourcei(id, AL_SOURCE_RELATIVE, AL_FALSE);
 
-            if (src.isReverbEnabled()){
+            if (src.isReverbEnabled() && supportEfx){
                 int filter = EFX10.AL_FILTER_NULL;
                 if (src.getReverbFilter() != null){
                     Filter f = src.getReverbFilter();
@@ -477,7 +492,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             alSource3f(id, AL_VELOCITY, 0,0,0);
         }
 
-        if (src.getDryFilter() != null){
+        if (src.getDryFilter() != null && supportEfx){
             Filter f = src.getDryFilter();
             if (f.isUpdateNeeded()){
                 updateFilter(f);
@@ -589,7 +604,7 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                 } catch (InterruptedException ex) {
                 }
             }
-            if (audioDisabled)
+            if (audioDisabled || !supportEfx)
                 return;
             
             EFX10.alEffectf(reverbFx, EFX10.AL_REVERB_DENSITY,             env.getDensity());
@@ -706,13 +721,13 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                 alSourcei(sourceId, AL_BUFFER, 0);
             }
 
-            if (src.getDryFilter() != null){
+            if (src.getDryFilter() != null && supportEfx){
                 // detach filter
                 alSourcei(sourceId, EFX10.AL_DIRECT_FILTER, EFX10.AL_FILTER_NULL);
             }
             if (src.isPositional()){
                 AudioNode pas = (AudioNode) src;
-                if (pas.isReverbEnabled()) {
+                if (pas.isReverbEnabled() && supportEfx) {
                     AL11.alSource3i(sourceId, EFX10.AL_AUXILIARY_SEND_FILTER, 0, 0, EFX10.AL_FILTER_NULL);
                 }
             }
@@ -785,6 +800,9 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
                 }
             }
         }
+        
+        // Delete any unused objects.
+        objManager.deleteUnused(this);
     }
 
     public void setListener(Listener listener) {
@@ -976,6 +994,8 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             alGenBuffers(ib);
             id = ib.get(0);
             ab.setId(id);
+            
+            objManager.registerForCleanup(ab);
         }
 
         ab.getData().clear();
@@ -994,6 +1014,10 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
         ib.position(0).limit(STREAMING_BUFFER_COUNT);        
         ib.get(ids);
         
+        // Not registered with object manager.
+        // AudioStreams can be handled without object manager
+        // since their lifecycle is known to the audio renderer.
+        
         as.setIds(ids);
         as.clearUpdateNeeded();
     }
@@ -1003,6 +1027,13 @@ public class LwjglAudioRenderer implements AudioRenderer, Runnable {
             updateAudioBuffer((AudioBuffer) ad);
         }else if (ad instanceof AudioStream){
             updateAudioStream((AudioStream) ad);
+        }
+    }
+    
+    public void deleteFilter(Filter filter) {
+        int id = filter.getId();
+        if (id != -1){
+            EFX10.alDeleteFilters(id);
         }
     }
 

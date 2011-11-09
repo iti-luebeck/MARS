@@ -4,7 +4,6 @@ com.jme3.app
 com.jme3.app.state
 com.jme3.asset
 com.jme3.audio
-com.jme3.audio.plugins
 com.jme3.bounding
 com.jme3.bullet
 com.jme3.bullet.collision
@@ -36,25 +35,18 @@ com.jme3.material
 com.jme3.math
 com.jme3.network
 com.jme3.network.base
-com.jme3.network.connection
-com.jme3.network.events
 com.jme3.network.kernel
 com.jme3.network.kernel.tcp
 com.jme3.network.kernel.udp
 com.jme3.network.message
-com.jme3.network.queue
 com.jme3.network.rmi
 com.jme3.network.serializing
 com.jme3.network.serializing.serializers
-com.jme3.network.service
-com.jme3.network.streaming
-com.jme3.network.sync
 com.jme3.niftygui
 com.jme3.post
 com.jme3.post.filters
 com.jme3.post.ssao
 com.jme3.renderer
-com.jme3.renderer.layer
 com.jme3.renderer.queue
 com.jme3.scene
 com.jme3.scene.control
@@ -62,7 +54,6 @@ com.jme3.scene.debug
 com.jme3.scene.mesh
 com.jme3.scene.shape
 com.jme3.shader
-com.jme3.shader.plugins
 com.jme3.shadow
 com.jme3.system
 com.jme3.terrain
@@ -83,3 +74,4 @@ jme3tools.converters.model.strip
 jme3tools.navigation
 jme3tools.nvtex
 jme3tools.optimize
+jme3tools.savegame

@@ -52,11 +52,11 @@ import com.jme3.scene.Spatial;
 
 /**
  * Example 9 - How to make walls and floors solid.
- * This version uses Physics and a custom Action Listener.
+ * This collision code uses Physics and a custom Action Listener.
  * @author normen, with edits by Zathras
  */
 public class HelloCollision extends SimpleApplication
-  implements ActionListener {
+        implements ActionListener {
 
   private Spatial sceneModel;
   private BulletAppState bulletAppState;
@@ -74,9 +74,10 @@ public class HelloCollision extends SimpleApplication
     /** Set up Physics */
     bulletAppState = new BulletAppState();
     stateManager.attach(bulletAppState);
+    //bulletAppState.getPhysicsSpace().enableDebug(assetManager);
 
     // We re-use the flyby camera for rotation, while positioning is handled by physics
-    viewPort.setBackgroundColor(new ColorRGBA(0.7f,0.8f,1f,1f));
+    viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
     flyCam.setMoveSpeed(100);
     setUpKeys();
     setUpLight();
@@ -87,15 +88,15 @@ public class HelloCollision extends SimpleApplication
     sceneModel.setLocalScale(2f);
 
     // We set up collision detection for the scene by creating a
-    // compound collision shape and a static physics node with mass zero.
+    // compound collision shape and a static RigidBodyControl with mass zero.
     CollisionShape sceneShape =
-      CollisionShapeFactory.createMeshShape((Node) sceneModel);
+            CollisionShapeFactory.createMeshShape((Node) sceneModel);
     landscape = new RigidBodyControl(sceneShape, 0);
     sceneModel.addControl(landscape);
-    
+
     // We set up collision detection for the player by creating
-    // a capsule collision shape and a physics character node.
-    // The physics character node offers extra settings for
+    // a capsule collision shape and a CharacterControl.
+    // The CharacterControl offers extra settings for
     // size, stepheight, jumping, falling, and gravity.
     // We also put the player in its starting position.
     CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
@@ -112,45 +113,45 @@ public class HelloCollision extends SimpleApplication
     bulletAppState.getPhysicsSpace().add(player);
   }
 
-    private void setUpLight() {
-        // We add light so we see the scene
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
+  private void setUpLight() {
+    // We add light so we see the scene
+    AmbientLight al = new AmbientLight();
+    al.setColor(ColorRGBA.White.mult(1.3f));
+    rootNode.addLight(al);
 
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White); 
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
-    }
+    DirectionalLight dl = new DirectionalLight();
+    dl.setColor(ColorRGBA.White);
+    dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
+    rootNode.addLight(dl);
+  }
 
   /** We over-write some navigational key mappings here, so we can
    * add physics-controlled walking and jumping: */
   private void setUpKeys() {
-    inputManager.addMapping("Lefts",  new KeyTrigger(KeyInput.KEY_A));
-    inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_D));
-    inputManager.addMapping("Ups",    new KeyTrigger(KeyInput.KEY_W));
-    inputManager.addMapping("Downs",  new KeyTrigger(KeyInput.KEY_S));
-    inputManager.addMapping("Jumps",  new KeyTrigger(KeyInput.KEY_SPACE));
-    inputManager.addListener(this, "Lefts");
-    inputManager.addListener(this, "Rights");
-    inputManager.addListener(this, "Ups");
-    inputManager.addListener(this, "Downs");
-    inputManager.addListener(this, "Jumps");
+    inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+    inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+    inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+    inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+    inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+    inputManager.addListener(this, "Left");
+    inputManager.addListener(this, "Right");
+    inputManager.addListener(this, "Up");
+    inputManager.addListener(this, "Down");
+    inputManager.addListener(this, "Jump");
   }
 
   /** These are our custom actions triggered by key presses.
    * We do not walk yet, we just keep track of the direction the user pressed. */
   public void onAction(String binding, boolean value, float tpf) {
-    if (binding.equals("Lefts")) {
-      if (value) { left = true; }  else { left = false; }
-    } else if (binding.equals("Rights")) {
+    if (binding.equals("Left")) {
+      if (value) { left = true; } else { left = false; }
+    } else if (binding.equals("Right")) {
       if (value) { right = true; } else { right = false; }
-    } else if (binding.equals("Ups")) {
-      if (value) { up = true; }    else { up = false; }
-    } else if (binding.equals("Downs")) {
-      if (value) { down = true; }  else { down = false; }
-    } else if (binding.equals("Jumps")) {
+    } else if (binding.equals("Up")) {
+      if (value) { up = true; } else { up = false; }
+    } else if (binding.equals("Down")) {
+      if (value) { down = true; } else { down = false; }
+    } else if (binding.equals("Jump")) {
       player.jump();
     }
   }

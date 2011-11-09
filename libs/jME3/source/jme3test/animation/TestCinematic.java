@@ -53,6 +53,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FadeFilter;
@@ -63,6 +64,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.shadow.PssmShadowRenderer;
+import com.jme3.system.NanoTimer;
+import com.jme3.system.lwjgl.LwjglTimer;
 
 public class TestCinematic extends SimpleApplication {
 
@@ -78,6 +81,8 @@ public class TestCinematic extends SimpleApplication {
     public static void main(String[] args) {
         TestCinematic app = new TestCinematic();
         app.start();
+      
+        
 
     }
 
@@ -105,6 +110,7 @@ public class TestCinematic extends SimpleApplication {
 
             @Override
             public void onPlay() {
+                fade.setDuration(1f/cinematic.getSpeed());
                 fade.setValue(0);
                 fade.fadeIn();
             }
@@ -123,13 +129,14 @@ public class TestCinematic extends SimpleApplication {
         });
         cinematic.addCinematicEvent(0, new PositionTrack(teapot, new Vector3f(10, 0, 10), 0));
         cinematic.addCinematicEvent(0, new ScaleTrack(teapot, new Vector3f(1, 1, 1), 0));
-        float[] rotation = {0, 0, 0};
-        cinematic.addCinematicEvent(0, new RotationTrack(teapot, rotation, 0));
+        Quaternion q = new Quaternion();
+        q.loadIdentity();
+        cinematic.addCinematicEvent(0, new RotationTrack(teapot, q, 0));
 
         cinematic.addCinematicEvent(0, new PositionTrack(teapot, new Vector3f(10, 0, -10), 20));
         cinematic.addCinematicEvent(0, new ScaleTrack(teapot, new Vector3f(4, 4, 4), 10));
         cinematic.addCinematicEvent(10, new ScaleTrack(teapot, new Vector3f(1, 1, 1), 10));
-        float[] rotation2 = {0, FastMath.TWO_PI, 0};
+        Quaternion rotation2 = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
         cinematic.addCinematicEvent(0, new RotationTrack(teapot, rotation2, 20));
 
         cinematic.activateCamera(0, "aroundCam");
@@ -146,6 +153,7 @@ public class TestCinematic extends SimpleApplication {
 
             @Override
             public void onPlay() {
+                fade.setDuration(1f/cinematic.getSpeed());
                 fade.fadeOut();
             }
 
@@ -162,10 +170,13 @@ public class TestCinematic extends SimpleApplication {
             }
         });
 
+      final NanoTimer myTimer = new NanoTimer();
         cinematic.addListener(new CinematicEventListener() {
 
             public void onPlay(CinematicEvent cinematic) {
                 chaseCam.setEnabled(false);
+                myTimer.reset();
+                
                 System.out.println("play");
             }
 
@@ -178,9 +189,13 @@ public class TestCinematic extends SimpleApplication {
                 chaseCam.setEnabled(true);
                 fade.setValue(1);
                 System.out.println("stop");
+                System.out.println((float)myTimer.getTime()/(float)myTimer.getResolution());            
+ 
             }
+            
         });
 
+        cinematic.setSpeed(2);
         flyCam.setEnabled(false);
         chaseCam = new ChaseCamera(cam, model, inputManager);
         initInputs();
@@ -268,4 +283,9 @@ public class TestCinematic extends SimpleApplication {
         };
         inputManager.addListener(acl, "togglePause");
     }
+
+    
+    
+    
+    
 }

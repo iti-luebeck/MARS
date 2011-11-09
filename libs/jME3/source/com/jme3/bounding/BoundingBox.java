@@ -777,7 +777,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * C code ported from http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt
+     * C code ported from <a href="http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt">
+     * http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt</a>
      *
      * @param v1 The first point in the triangle
      * @param v2 The second point in the triangle
@@ -805,7 +806,10 @@ public class BoundingBox extends BoundingVolume {
 
     public float distanceToEdge(Vector3f point) {
         // compute coordinates of point in box coordinate system
-        Vector3f closest = point.subtract(center);
+        TempVars vars= TempVars.get();
+        Vector3f closest = vars.vect1;
+        
+        point.subtract(center,closest);
 
         // project test point onto box
         float sqrDistance = 0.0f;
@@ -840,7 +844,8 @@ public class BoundingBox extends BoundingVolume {
             sqrDistance += delta * delta;
             closest.z = zExtent;
         }
-
+        
+        vars.release();
         return FastMath.sqrt(sqrDistance);
     }
 

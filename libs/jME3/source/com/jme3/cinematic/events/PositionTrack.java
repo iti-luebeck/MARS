@@ -21,7 +21,9 @@ import java.util.logging.Logger;
 /**
  *
  * @author Nehon
+ * @deprecated use spatial animation instead.
  */
+@Deprecated
 public class PositionTrack extends AbstractCinematicEvent {
 
     private static final Logger log = Logger.getLogger(PositionTrack.class.getName());
@@ -78,7 +80,7 @@ public class PositionTrack extends AbstractCinematicEvent {
         if (playState != playState.Paused) {
             startPosition = spatial.getWorldTranslation().clone();
         }
-        if (duration == 0 && spatial != null) {
+        if (initialDuration == 0 && spatial != null) {
 
             spatial.setLocalTranslation(endPosition);
         }
@@ -87,7 +89,7 @@ public class PositionTrack extends AbstractCinematicEvent {
     @Override
     public void onUpdate(float tpf) {
         if (spatial != null) {
-            value += Math.min(tpf * speed / duration, 1.0f);
+            value = Math.min(time / initialDuration, 1.0f);
             Vector3f pos = FastMath.interpolateLinear(value, startPosition, endPosition);
             spatial.setLocalTranslation(pos);
         }

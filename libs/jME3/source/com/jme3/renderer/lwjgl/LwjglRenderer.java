@@ -43,7 +43,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.renderer.Caps;
-import com.jme3.renderer.GLObjectManager;
+import com.jme3.util.NativeObjectManager;
 import com.jme3.renderer.IDList;
 import com.jme3.renderer.Renderer;
 import com.jme3.scene.Mesh;
@@ -90,6 +90,7 @@ import jme3tools.converters.MipMapGenerator;
 import org.lwjgl.opengl.ARBDrawBuffers;
 //import org.lwjgl.opengl.ARBDrawInstanced;
 import org.lwjgl.opengl.ARBDrawInstanced;
+import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.ARBMultisample;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.EXTTextureArray;
@@ -123,7 +124,7 @@ public class LwjglRenderer implements Renderer {
     private final IntBuffer intBuf1 = BufferUtils.createIntBuffer(1);
     private final IntBuffer intBuf16 = BufferUtils.createIntBuffer(16);
     private final RenderContext context = new RenderContext();
-    private final GLObjectManager objManager = new GLObjectManager();
+    private final NativeObjectManager objManager = new NativeObjectManager();
     private final EnumSet<Caps> caps = EnumSet.noneOf(Caps.class);
     // current state
     private Shader boundShader;
@@ -146,6 +147,7 @@ public class LwjglRenderer implements Renderer {
     private int maxDepthTexSamples;
     private boolean tdc;
     private FrameBuffer lastFb = null;
+    private FrameBuffer mainFbOverride = null;
     private final Statistics statistics = new Statistics();
     private int vpX, vpY, vpW, vpH;
     private int clipX, clipY, clipW, clipH;
@@ -427,14 +429,17 @@ public class LwjglRenderer implements Renderer {
     }
 
     public void resetGLObjects() {
+        logger.log(Level.INFO, "Reseting objects and invalidating state");
         objManager.resetObjects();
         statistics.clearMemory();
         invalidateState();
     }
 
     public void cleanup() {
+        logger.log(Level.INFO, "Deleting objects and invalidating state");
         objManager.deleteAllObjects(this);
         statistics.clearMemory();
+        invalidateState();
     }
 
     private void checkCap(Caps cap) {
@@ -453,14 +458,19 @@ public class LwjglRenderer implements Renderer {
     public void clearBuffers(boolean color, boolean depth, boolean stencil) {
         int bits = 0;
         if (color) {
+            //See explanations of the depth below, we must enable color write to be able to clear the color buffer
+            if (context.colorWriteEnabled == false) {
+                glColorMask(true, true, true, true);
+                context.colorWriteEnabled = true;
+            }
             bits = GL_COLOR_BUFFER_BIT;
         }
         if (depth) {
-            
+
             //glClear(GL_DEPTH_BUFFER_BIT) seems to not work when glDepthMask is false
             //here s some link on openl board
             //http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=257223
-            //if depth clear is requested, we enable the depthMask            
+            //if depth clear is requested, we enable the depthMask
             if (context.depthWriteEnabled == false) {
                 glDepthMask(true);
                 context.depthWriteEnabled = true;
@@ -478,7 +488,7 @@ public class LwjglRenderer implements Renderer {
     public void setBackgroundColor(ColorRGBA color) {
         glClearColor(color.r, color.g, color.b, color.a);
     }
-    
+
     public void setAlphaToCoverage(boolean value) {
         if (value) {
             glEnable(ARBMultisample.GL_SAMPLE_ALPHA_TO_COVERAGE_ARB);
@@ -531,7 +541,7 @@ public class LwjglRenderer implements Renderer {
         }
 
         if (state.isPointSprite() && !context.pointSprite) {
-            // Only enable/disable sprite 
+            // Only enable/disable sprite
             if (context.boundTextures[0] != null){
                 if (context.boundTextureUnit != 0){
                     glActiveTexture(GL_TEXTURE0);
@@ -792,7 +802,7 @@ public class LwjglRenderer implements Renderer {
         if (loc < 0) {
             uniform.setLocation(-1);
             // uniform is not declared in shader
-            logger.log(Level.INFO, "Uniform {0} is not declared in shader.", uniform.getName());
+            logger.log(Level.INFO, "Uniform {0} is not declared in shader {1}.", new Object[]{uniform.getName(), shader.getSources()});
         } else {
             uniform.setLocation(loc);
         }
@@ -1193,14 +1203,14 @@ public class LwjglRenderer implements Renderer {
             logger.warning("Shader is not uploaded to GPU, cannot delete.");
             return;
         }
-        
+
         for (ShaderSource source : shader.getSources()) {
             if (source.getId() != -1) {
                 glDetachShader(shader.getId(), source.getId());
                 deleteShaderSource(source);
             }
         }
-        
+
         // kill all references so sources can be collected
         // if needed.
         shader.resetSources();
@@ -1272,7 +1282,86 @@ public class LwjglRenderer implements Renderer {
             // TODO: support non-blit copies?
         }
     }
+    
+    private String getTargetBufferName(int buffer){
+        switch (buffer){
+            case GL_NONE: return "NONE";
+            case GL_FRONT: return "GL_FRONT";
+            case GL_BACK: return "GL_BACK";
+            default:
+                if ( buffer >= GL_COLOR_ATTACHMENT0_EXT
+                  && buffer <= GL_COLOR_ATTACHMENT15_EXT){
+                    return "GL_COLOR_ATTACHMENT" + 
+                                (buffer - GL_COLOR_ATTACHMENT0_EXT);
+                }else{
+                    return "UNKNOWN? " + buffer;
+                }
+        }
+    }
 
+    private void printRealRenderBufferInfo(FrameBuffer fb, RenderBuffer rb, String name){
+        System.out.println("== Renderbuffer " + name + " ==");
+        System.out.println("RB ID: " + rb.getId());
+        System.out.println("Is proper? " + glIsRenderbufferEXT(rb.getId()));
+        
+        int attachment = convertAttachmentSlot(rb.getSlot());
+        
+        int type = glGetFramebufferAttachmentParameterEXT(GL_DRAW_FRAMEBUFFER_EXT,
+                                                          attachment,
+                                                          GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE_EXT);
+        
+        int rbName = glGetFramebufferAttachmentParameterEXT(GL_DRAW_FRAMEBUFFER_EXT,
+                                                            attachment,
+                                                            GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME_EXT);
+        
+        switch (type){
+            case GL_NONE:
+                System.out.println("Type: None");
+                return; // note: return from method as other queries will be invalid
+            case GL_TEXTURE:
+                System.out.println("Type: Texture");
+                break;
+            case GL_RENDERBUFFER_EXT:
+                System.out.println("Type: Buffer");
+                System.out.println("RB ID: " + rbName);
+                break;
+        }
+        
+        
+        
+    }
+    
+    private void printRealFrameBufferInfo(FrameBuffer fb) {
+        boolean doubleBuffer = glGetBoolean(GL_DOUBLEBUFFER);
+        String drawBuf = getTargetBufferName(glGetInteger(GL_DRAW_BUFFER));
+        String readBuf = getTargetBufferName(glGetInteger(GL_READ_BUFFER));
+        
+        int fbId = fb.getId();
+        int curDrawBinding = glGetInteger(ARBFramebufferObject.GL_DRAW_FRAMEBUFFER_BINDING);
+        int curReadBinding = glGetInteger(ARBFramebufferObject.GL_READ_FRAMEBUFFER_BINDING);
+    
+        System.out.println("=== OpenGL FBO State ===");
+        System.out.println("Context doublebuffered? " + doubleBuffer);
+        System.out.println("FBO ID: " + fbId);
+        System.out.println("Is proper? " + glIsFramebufferEXT(fbId));
+        System.out.println("Is bound to draw? " + (fbId == curDrawBinding));
+        System.out.println("Is bound to read? " + (fbId == curReadBinding));
+        System.out.println("Draw buffer: " + drawBuf);
+        System.out.println("Read buffer: " + readBuf);
+        
+        if (context.boundFBO != fbId){
+            glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, fbId);
+            context.boundFBO = fbId;
+        }
+        
+        if (fb.getDepthBuffer() != null){
+            printRealRenderBufferInfo(fb, fb.getDepthBuffer(), "Depth");
+        }
+        for (int i = 0; i < fb.getNumColorBuffers(); i++){
+            printRealRenderBufferInfo(fb, fb.getColorBuffer(i), "Color" + i);
+        }
+    }
+    
     private void checkFrameBufferError() {
         int status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
         switch (status) {
@@ -1285,7 +1374,7 @@ public class LwjglRenderer implements Renderer {
             case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
                 throw new IllegalStateException("Framebuffer has erronous attachment.");
             case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-                throw new IllegalStateException("Framebuffer is missing required attachment.");
+                throw new IllegalStateException("Framebuffer doesn't have any renderbuffers attached.");
             case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
                 throw new IllegalStateException("Framebuffer attachments must have same dimensions.");
             case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
@@ -1439,10 +1528,20 @@ public class LwjglRenderer implements Renderer {
         }
         return samplePositions;
     }
+    
+    public void setMainFrameBufferOverride(FrameBuffer fb){
+        mainFbOverride = fb;
+    }
 
     public void setFrameBuffer(FrameBuffer fb) {
+        if (fb == null && mainFbOverride != null){
+            fb = mainFbOverride;
+        }
+        
         if (lastFb == fb) {
-            return;
+            if (fb == null || !fb.isUpdateNeeded()){
+                return;
+            }
         }
 
         // generate mipmaps for last FB if needed
@@ -1453,7 +1552,7 @@ public class LwjglRenderer implements Renderer {
                 if (tex != null
                         && tex.getMinFilter().usesMipMapLevels()) {
                     setTexture(0, rb.getTexture());
-                    
+
                     int textureType = convertTextureType(tex.getType(), tex.getImage().getMultiSamples());
                     glEnable(textureType);
                     glGenerateMipmapEXT(textureType);
@@ -1461,7 +1560,6 @@ public class LwjglRenderer implements Renderer {
                 }
             }
         }
-
 
         if (fb == null) {
             // unbind any fbos
@@ -1483,6 +1581,11 @@ public class LwjglRenderer implements Renderer {
 
             lastFb = null;
         } else {
+            if (fb.getNumColorBuffers() == 0 && fb.getDepthBuffer() == null){
+                throw new IllegalArgumentException("The framebuffer: " + fb + 
+                                                   "\nDoesn't have any color/depth buffers");
+            }
+            
             if (fb.isUpdateNeeded()) {
                 updateFrameBuffer(fb);
             }
@@ -1539,14 +1642,16 @@ public class LwjglRenderer implements Renderer {
 
             assert fb.getId() >= 0;
             assert context.boundFBO == fb.getId();
+            
             lastFb = fb;
-        }
-
-        try {
-            checkFrameBufferError();
-        } catch (IllegalStateException ex) {
-            logger.log(Level.SEVERE, "Problem FBO:\n{0}", fb);
-            throw ex;
+            
+            try {
+                checkFrameBufferError();
+            } catch (IllegalStateException ex) {
+                logger.log(Level.SEVERE, "=== jMonkeyEngine FBO State ===\n{0}", fb);
+                printRealFrameBufferInfo(fb);
+                throw ex;
+            }
         }
     }
 
@@ -1775,8 +1880,7 @@ public class LwjglRenderer implements Renderer {
 
             if (img.getWidth() != 0 && img.getHeight() != 0) {
                 if (!FastMath.isPowerOfTwo(img.getWidth())
-                        || !FastMath.isPowerOfTwo(img.getHeight())
-                        || img.getWidth() != img.getHeight()) {
+                        || !FastMath.isPowerOfTwo(img.getHeight())) {
 //                    logger.log(Level.WARNING, "Encountered NPOT texture {0}, "
 //                                            + "it might not display correctly.", img);
 
@@ -1947,6 +2051,8 @@ public class LwjglRenderer implements Renderer {
             vb.setId(bufId);
             objManager.registerForCleanup(vb);
 
+            //statistics.onNewVertexBuffer();
+            
             created = true;
         }
 
@@ -1957,12 +2063,18 @@ public class LwjglRenderer implements Renderer {
             if (context.boundElementArrayVBO != bufId) {
                 glBindBuffer(target, bufId);
                 context.boundElementArrayVBO = bufId;
+                //statistics.onVertexBufferUse(vb, true);
+            }else{
+                //statistics.onVertexBufferUse(vb, false);
             }
         } else {
             target = GL_ARRAY_BUFFER;
             if (context.boundArrayVBO != bufId) {
                 glBindBuffer(target, bufId);
                 context.boundArrayVBO = bufId;
+                //statistics.onVertexBufferUse(vb, true);
+            }else{
+                //statistics.onVertexBufferUse(vb, false);
             }
         }
 
@@ -2070,6 +2182,8 @@ public class LwjglRenderer implements Renderer {
             intBuf1.position(0).limit(1);
             glDeleteBuffers(intBuf1);
             vb.resetObject();
+            
+            //statistics.onDeleteVertexBuffer();
         }
     }
 
@@ -2127,6 +2241,9 @@ public class LwjglRenderer implements Renderer {
                 if (context.boundArrayVBO != bufId) {
                     glBindBuffer(GL_ARRAY_BUFFER, bufId);
                     context.boundArrayVBO = bufId;
+                    //statistics.onVertexBufferUse(vb, true);
+                }else{
+                    //statistics.onVertexBufferUse(vb, false);
                 }
 
                 glVertexAttribPointer(loc,
@@ -2171,6 +2288,9 @@ public class LwjglRenderer implements Renderer {
         if (context.boundElementArrayVBO != bufId) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufId);
             context.boundElementArrayVBO = bufId;
+            //statistics.onVertexBufferUse(indexBuf, true);
+        }else{
+            //statistics.onVertexBufferUse(indexBuf, true);
         }
 
         int vertCount = mesh.getVertexCount();
@@ -2331,7 +2451,7 @@ public class LwjglRenderer implements Renderer {
 
         //IntMap<VertexBuffer> buffers = mesh.getBuffers();
         ArrayList<VertexBuffer> buffersList = mesh.getBufferList();
-        
+
         if (mesh.getNumLodLevels() > 0) {
             indices = mesh.getLodLevel(lod);
         } else {
@@ -2341,7 +2461,7 @@ public class LwjglRenderer implements Renderer {
         //     VertexBuffer vb = entry.getValue();
         for (int i = 0; i < buffersList.size(); i++){
             VertexBuffer vb = buffersList.get(i);
-            
+
             if (vb.getBufferType() == Type.InterleavedData
                     || vb.getUsage() == Usage.CpuOnly // ignore cpu-only buffers
                     || vb.getBufferType() == Type.Index) {
@@ -2356,7 +2476,7 @@ public class LwjglRenderer implements Renderer {
                 setVertexAttrib(vb, interleavedData);
             }
         }
-        
+
         if (indices != null) {
             drawTriangleList(indices, mesh, count);
         } else {
@@ -2370,7 +2490,7 @@ public class LwjglRenderer implements Renderer {
         if (mesh.getVertexCount() == 0) {
             return;
         }
-        
+
         if (context.pointSprite && mesh.getMode() != Mode.Points){
             // XXX: Hack, disable point sprite mode if mesh not in point mode
             if (context.boundTextures[0] != null){
@@ -2383,7 +2503,7 @@ public class LwjglRenderer implements Renderer {
                 context.pointSprite = false;
             }
         }
-        
+
         if (context.pointSize != mesh.getPointSize()) {
             glPointSize(mesh.getPointSize());
             context.pointSize = mesh.getPointSize();

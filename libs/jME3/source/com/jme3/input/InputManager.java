@@ -337,12 +337,16 @@ public class InputManager implements RawInputListener {
 
         } else if (value < 0) {
             int hash = JoyAxisTrigger.joyAxisHash(joyId, axis, true);
+            int otherHash = JoyAxisTrigger.joyAxisHash(joyId, axis, false);
             invokeAnalogsAndActions(hash, -value, true);
             axisValues.put(hash, -value);
+            axisValues.remove(otherHash);
         } else {
             int hash = JoyAxisTrigger.joyAxisHash(joyId, axis, false);
+            int otherHash = JoyAxisTrigger.joyAxisHash(joyId, axis, true);
             invokeAnalogsAndActions(hash, value, true);
             axisValues.put(hash, value);
+            axisValues.remove(otherHash);
         }
     }
 
@@ -422,7 +426,8 @@ public class InputManager implements RawInputListener {
         if (!eventsPermitted) {
             throw new UnsupportedOperationException("MouseInput has raised an event at an illegal time.");
         }
-
+        //updating cursor pos on click, so that non android touch events can properly update cursor position.
+        cursorPos.set(evt.getX(), evt.getY());
         inputQueue.add(evt);
     }
 

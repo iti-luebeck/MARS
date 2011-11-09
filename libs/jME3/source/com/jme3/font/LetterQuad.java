@@ -291,8 +291,29 @@ class LetterQuad {
 
             if (previous.isHead() || previous.eol) {
                 x0 = bound.x;
+                
+                // The first letter quad will be drawn right at the first
+                // position... but it does not offset by the characters offset
+                // amount.  This means that we've potentially accumulated extra
+                // pixels and the next letter won't get drawn far enough unless
+                // we add this offset back into xAdvance.. by subtracting it.
+                // This is the same thing that's done below because we've
+                // technically baked the offset in just like below.  It doesn't
+                // look like it at first glance so I'm keeping it separate with
+                // this comment.
+                xAdvance -= xOffset * incrScale; 
+                
             } else {
                 x0 = previous.getNextX() + xOffset * incrScale;
+                
+                // Since x0 will have offset baked into it then we
+                // need to counteract that in xAdvance.  This is better
+                // than removing it in getNextX() because we also need
+                // to take kerning into account below... which will also
+                // get baked in.
+                // Without this, getNextX() will return values too far to
+                // the left, for example.
+                xAdvance -= xOffset * incrScale; 
             }
             y0 = lineY + LINE_DIR*yOffset;
 
@@ -301,6 +322,12 @@ class LetterQuad {
             if (lastChar != null && block.isKerning()) {
                 kernAmount = lastChar.getKerning(c) * sizeScale;
                 x0 += kernAmount * incrScale;
+                
+                // Need to unbake the kerning from xAdvance since it
+                // is baked into x0... see above.
+                //xAdvance -= kernAmount * incrScale;
+                // No, kerning is an inter-character spacing and _does_ affect
+                // all subsequent cursor positions. 
             }
         }
         if (isEndOfLine()) {

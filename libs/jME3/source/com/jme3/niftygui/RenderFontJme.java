@@ -34,8 +34,6 @@ package com.jme3.niftygui;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.texture.Texture;
-import com.jme3.texture.Texture2D;
 import de.lessvoid.nifty.spi.render.RenderFont;
 
 public class RenderFontJme implements RenderFont {
@@ -58,6 +56,10 @@ public class RenderFontJme implements RenderFont {
         text = new BitmapText(font);
         actualSize = font.getPreferredSize();
         text.setSize(actualSize);
+    }
+
+    public BitmapText createText() {
+      return new BitmapText(font);
     }
 
     public BitmapText getText(){
@@ -102,8 +104,8 @@ public class RenderFontJme implements RenderFont {
      * @param size font size
      * @return width of the character or null when no information for the character is available
      */
-    public Integer getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
-        return Integer.valueOf( Math.round(font.getCharacterAdvance(currentCharacter, nextCharacter, size)) );
+    public int getCharacterAdvance(final char currentCharacter, final char nextCharacter, final float size) {
+        return Math.round(font.getCharacterAdvance(currentCharacter, nextCharacter, size));
     }
 
     public void dispose() {

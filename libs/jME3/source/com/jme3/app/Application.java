@@ -59,6 +59,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.system.JmeContext.Type;
 import com.jme3.system.JmeSystem;
+import com.jme3.system.NanoTimer;
 import com.jme3.system.SystemListener;
 import com.jme3.system.Timer;
 
@@ -87,7 +88,7 @@ public class Application implements SystemListener {
 
     protected JmeContext context;
     protected AppSettings settings;
-    protected Timer timer;
+    protected Timer timer = new NanoTimer();
     protected Camera cam;
     protected Listener listener;
 
@@ -175,9 +176,12 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Set the display settings to define the display created. Examples of
-     * display parameters include display pixel width and height,
+     * Set the display settings to define the display created.
+     * <p>
+     * Examples of display parameters include display pixel width and height,
      * color bit depth, z-buffer bits, anti-aliasing samples, and update frequency.
+     * If this method is called while the application is already running, then
+     * {@link #restart() } must be called to apply the settings to the display.
      *
      * @param settings The settings to set.
      */
@@ -197,17 +201,38 @@ public class Application implements SystemListener {
         }
     }
 
+    /**
+     * Sets the Timer implementation that will be used for calculating
+     * frame times.  By default, Application will use the Timer as returned
+     * by the current JmeContext implementation.
+     */
+    public void setTimer(Timer timer){
+        this.timer = timer;
+        
+        if (timer != null) {
+            timer.reset();
+        }
+        
+        if (renderManager != null) {
+            renderManager.setTimer(timer);
+        }
+    } 
+
     private void initDisplay(){
         // aquire important objects
         // from the context
         settings = context.getSettings();
-        timer = context.getTimer();
+ 
+        // Only reset the timer if a user has not already provided one       
+        if (timer == null) {
+            timer = context.getTimer();
+        }
        
         renderer = context.getRenderer();
     }
 
     private void initAudio(){
-        if (settings.getAudioRenderer() != null){
+        if (settings.getAudioRenderer() != null && context.getType() != Type.Headless){
             audioRenderer = JmeSystem.newAudioRenderer(settings);
             audioRenderer.initialize();
             AudioContext.setAudioRenderer(audioRenderer);
@@ -439,7 +464,6 @@ public class Application implements SystemListener {
     }
 
     /**
-     * 
      * Requests the context to close, shutting down the main loop
      * and making necessary cleanup operations.
      * 
@@ -505,11 +529,12 @@ public class Application implements SystemListener {
      * Internal use only.
      */
     public void gainFocus(){
-        if (pauseOnFocus){
+        if (pauseOnFocus) {
             paused = false;
             context.setAutoFlushFrames(true);
-            if (inputManager != null)
+            if (inputManager != null) {
                 inputManager.reset();
+            }
         }
     }
 
@@ -532,7 +557,11 @@ public class Application implements SystemListener {
 
     /**
      * Enqueues a task/callable object to execute in the jME3
-     * rendering thread.
+     * rendering thread. 
+     * <p>
+     * Callables are executed right at the beginning of the main loop.
+     * They are executed even if the application is currently paused
+     * or out of focus.
      */
     public <V> Future<V> enqueue(Callable<V> callable) {
         AppTask<V> task = new AppTask<V>(callable);
@@ -604,6 +633,10 @@ public class Application implements SystemListener {
         timer.reset();
     }
 
+    /**
+     * @return The GUI viewport. Which is used for the on screen
+     * statistics and FPS.
+     */
     public ViewPort getGuiViewPort() {
         return guiViewPort;
     }

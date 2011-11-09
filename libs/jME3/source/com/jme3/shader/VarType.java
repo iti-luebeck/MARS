@@ -77,5 +77,5 @@ public enum VarType {
     public boolean usesMultiData() {
         return usesMultiData;
     }
-    
+
 }
