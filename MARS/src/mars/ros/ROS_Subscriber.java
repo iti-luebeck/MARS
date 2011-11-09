@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.ros;
 
 /**
  *
  * @author Thomas Tosik
  */
-public interface ROS_Publisher{   
-    public void publishUpdate();
-    public void publish();
+public interface ROS_Subscriber{
+
 }
