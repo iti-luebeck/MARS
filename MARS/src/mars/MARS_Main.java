@@ -25,9 +25,6 @@ public class MARS_Main extends SimpleApplication{
     private boolean view_init = false;
 
     StartState startstate;
-    
-    //main settings file
-    XMLConfigReaderWriter xmll;
 
     ChaseCamera chaseCam;
 
@@ -49,32 +46,14 @@ public class MARS_Main extends SimpleApplication{
         app.start();
     }
 
-    /*
-     *
-     */
-    /*private void loadXML(){
-        try {
-             xmll = new XMLConfigReaderWriter(this);
-             mars_settings = xmll.getSimAUVSettings();
-             physical_environment = mars_settings.getPhysical_environment();
-             auvs = xmll.getAuvs();
-             simobs = xmll.getObjects();
-        } catch (Exception ex) {
-            Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
-
     /**
      *
      */
     @Override
     public void simpleInitApp() {
-        
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
-        
-        //loadXML();
     }
 
     /**
@@ -98,6 +77,9 @@ public class MARS_Main extends SimpleApplication{
     public void simpleRender(RenderManager rm) {
     }
     
+    /**
+     * 
+     */
     public void startSimulation(){
         endStart();
         SimState simstate = new SimState(view);
@@ -143,6 +125,10 @@ public class MARS_Main extends SimpleApplication{
         return stateManager.getState(SimState.class).getChaseCam();
     }
     
+    /**
+     * 
+     * @param guiFont
+     */
     public void setGuiFont(BitmapFont guiFont) {
         this.guiFont = guiFont;
     }

@@ -30,7 +30,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
     /*
      * 
      */
-    protected  SimState simstate;
+    protected  SimState simState;
     /**
      *
      */
@@ -65,18 +65,26 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      * @param MassCenterGeom
      */
     protected Actuator(SimState simstate,Geometry MassCenterGeom){
-        this.assetManager = simstate.getAssetManager();
+        setSimState(simState);
+        //this.assetManager = simstate.getAssetManager();
         this.MassCenterGeom = MassCenterGeom;
-        this.rootNode = simauv.getRootNode();
+        //this.rootNode = simauv.getRootNode();
     }
 
     /**
      *
      * @param simauv
      */
-    protected Actuator(SimState simstate){
-        this.assetManager = simstate.getAssetManager();
-        this.rootNode = simstate.getRootNode();
+    protected Actuator(SimState simState){
+        setSimState(simState);
+    }
+    
+    @Override
+    public void setSimState(SimState simState) {
+        this.simState = simState;
+        this.simauv = this.simState.getSimauv();
+        this.assetManager = this.simauv.getAssetManager();
+        this.rootNode = this.simState.getRootNode();
     }
 
     /**

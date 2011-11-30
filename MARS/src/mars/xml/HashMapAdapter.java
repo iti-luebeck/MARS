@@ -26,7 +26,7 @@ public class HashMapAdapter extends XmlAdapter<MyHashMapType, HashMap<String,Obj
     public HashMap<String,Object> unmarshal(MyHashMapType v) throws Exception {
         HashMap<String,Object> map = new HashMap<String,Object>();
         for ( MyHashMapEntryType e : v.getList() ){
-            if(e.getUnit().equals("")){
+            if(e.getUnit() == null || e.getUnit().equals("")){
                 if(e.getObject() instanceof Vector3f){
                     map.put(e.getKey(), (Vector3f)e.getObject());
                 }else if(e.getObject() instanceof ColorRGBA){

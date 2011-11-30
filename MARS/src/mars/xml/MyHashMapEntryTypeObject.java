@@ -18,18 +18,34 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"unit", "key", "value"})
 public class MyHashMapEntryTypeObject extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
+    /**
+     * 
+     */
     @XmlAttribute
     public String unit; 
     
+    /**
+     * 
+     */
     @XmlElement
     public Object value;
    
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeObject() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeObject(Map.Entry<String,Object> e) {
        key = e.getKey();
        if(e.getValue() instanceof HashMapEntry){
@@ -40,18 +56,34 @@ public class MyHashMapEntryTypeObject extends MyHashMapEntryType{
        }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getUnit() {
         return unit;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Object getValue() {
         return value;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Object getObject() {
         return value;
     }   

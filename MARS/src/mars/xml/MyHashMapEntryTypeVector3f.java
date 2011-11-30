@@ -20,18 +20,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"unit", "key", "value"})
 public class MyHashMapEntryTypeVector3f extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
+    /**
+     * 
+     */
     @XmlAttribute
     public String unit; 
     
+    /**
+     * 
+     */
     @XmlElement
     @XmlJavaTypeAdapter(Vector3fAdapter.class)
     public Vector3f value;
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeVector3f() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeVector3f(Map.Entry<String,Object> e) {
        key = e.getKey();
 
@@ -47,18 +63,34 @@ public class MyHashMapEntryTypeVector3f extends MyHashMapEntryType{
        }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getUnit() {
         return unit;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Vector3f getValue() {
         return value;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Object getObject() {
         return value;
     }

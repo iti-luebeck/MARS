@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import mars.xml.XMLConfigReaderWriter;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 /**
  * The main class of the application.
@@ -61,10 +62,15 @@ public class MARSApp extends SingleFrameApplication {
      */
     public static void createCanvas(String appClass){
         try {
-             XMLConfigReaderWriter xmll = new XMLConfigReaderWriter();
+            MARS_Settings mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
+            mars_settings.init();
+             /*XMLConfigReaderWriter xmll = new XMLConfigReaderWriter();
              resolution_height = xmll.getResolutionHeight();
              resolution_width = xmll.getResolutionWidth();
-             framelimit = xmll.getFrameLimit();
+             framelimit = xmll.getFrameLimit();*/
+            resolution_height = mars_settings.getResolution_Height();
+            resolution_width = mars_settings.getResolution_Width();
+            framelimit = mars_settings.getFrameLimit();
         } catch (Exception ex) {
             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
         }

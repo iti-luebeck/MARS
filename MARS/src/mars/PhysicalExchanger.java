@@ -68,6 +68,15 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     protected org.ros.node.Node ros_node = null;
     
+    /*
+     * 
+     */
+    protected  SimState simState = null;
+    
+    public void setSimState(SimState simState) {
+        this.simState = simState;
+    }
+    
     /**
      * 
      * @return

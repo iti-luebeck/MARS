@@ -15,33 +15,61 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JAXBVector3f {
+    /**
+     * 
+     */
     @XmlElement
     public float x;
     
+    /**
+     * 
+     */
     @XmlElement
     public float y;
     
+    /**
+     * 
+     */
     @XmlElement
     public float z;
     
+    /**
+     * 
+     */
     public JAXBVector3f(){
         
     }
     
+    /**
+     * 
+     * @param vec
+     */
     public JAXBVector3f(Vector3f vec){
         x = vec.x;
         y = vec.y;
         z = vec.z;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getZ() {
         return z;
     }

@@ -23,10 +23,13 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  * This is a common camera class for auv's.
@@ -40,18 +43,28 @@ public class VideoCamera extends Sensor{
     private Geometry CameraEnd;
     private Geometry CameraTop;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraStartVector = new Vector3f(0,0,0);
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraDirection = new Vector3f(0,0,0);
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraTopDirection = new Vector3f(0,0,0);
 
+    @XmlElement
     private boolean debug = true;
 
     private Renderer renderer;
     private RenderManager renderManager;
     private Initializer initer;
 
+    @XmlElement
     private int CameraWidth = 640;
+    @XmlElement
     private int CameraHeight = 480;
+    @XmlElement
     private float CameraAngle = 45f;
 
     private Camera offCamera;
@@ -72,9 +85,17 @@ public class VideoCamera extends Sensor{
      */
     public VideoCamera(SimState simstate){
         super(simstate);
-        this.renderer = simstate.getSimauv().getRenderer();
+        /*this.renderer = simstate.getSimauv().getRenderer();
         this.renderManager = simstate.getSimauv().getRenderManager();
-        this.initer = simstate.getIniter();
+        this.initer = simstate.getIniter();*/
+    }
+    
+    @Override
+    public void setSimState(SimState simState){
+        super.setSimState(simState);
+        this.renderer = simState.getSimauv().getRenderer();
+        this.renderManager = simState.getSimauv().getRenderManager();
+        this.initer = simState.getIniter();
     }
 
     /**

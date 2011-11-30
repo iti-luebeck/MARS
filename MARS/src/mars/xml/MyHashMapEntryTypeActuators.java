@@ -20,18 +20,34 @@ import mars.actuators.Actuator;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"unit", "key", "value"})
 public class MyHashMapEntryTypeActuators extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
+    /**
+     * 
+     */
     @XmlAttribute
     public String unit; 
     
+    /**
+     * 
+     */
     @XmlElement
     //@XmlJavaTypeAdapter(ActuatorAdapter.class)
     public Actuator value;
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeActuators() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeActuators(Map.Entry<String,Object> e) {
        key = e.getKey();
 
@@ -47,18 +63,34 @@ public class MyHashMapEntryTypeActuators extends MyHashMapEntryType{
        }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getUnit() {
         return unit;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Actuator getValue() {
         return value;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Object getObject() {
         return value;
     }

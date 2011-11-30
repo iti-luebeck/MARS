@@ -19,11 +19,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  *
@@ -40,19 +43,28 @@ public class InfraRedSensor extends Sensor{
      */
     protected Geometry End;
 
-
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f StartVector = new Vector3f(0,0,0);
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f Direction = new Vector3f(0,0,0);
 
     private Node detectable;
 
     //Maximum sonar range
+    @XmlElement
     private float MaxRange = 50f;
+    @XmlElement
     private float MinRange = 0.1f;
 
+    @XmlElement
     private boolean angular_damping = false;
+    @XmlElement
     private float angular_factor = 1.0f;
+    @XmlElement
     private boolean length_damping = false;
+    @XmlElement
     private float length_factor = 1.0f;
     
     //ROS stuff
@@ -63,6 +75,7 @@ public class InfraRedSensor extends Sensor{
         super();
     }
     
+    @Deprecated
     public InfraRedSensor(SimState simstate, PhysicalEnvironment pe, Node detectable) {
         super(simstate);
         //set the logging

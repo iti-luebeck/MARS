@@ -22,10 +22,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  * This is the main sonar class.
@@ -48,8 +51,14 @@ public class Sonar extends Sensor{
      */
     protected Geometry SonarUp;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SonarStartVector = new Vector3f(0,0,0);
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SonarDirection = new Vector3f(0,0,0);
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SonarUpDirection = new Vector3f(0,0,0);
 
     private Node detectable;
@@ -75,31 +84,46 @@ public class Sonar extends Sensor{
     protected  Node debug_node = new Node("Sonar_Arrow_Debug_Node");
 
     //Maximum sonar range
+    @XmlElement
     private float SonarMaxRange = 50f;
+    @XmlElement
     private float SonarMinRange = 0.1f;
 
     private float SonarScanSection = (float)Math.PI*2f;
 
+    @XmlElement
     private float beam_width = (float)(2.5f*(Math.PI/180f));//the beam width in radiant
+    @XmlElement
     private float beam_height = (float)(22f*(Math.PI/180f));//(float)Math.PI/4f;//the beam height in radiant
+    @XmlElement
     private int beam_ray_height_resolution = 3;//the beam resolution
+    @XmlElement
     private int beam_ray_width_resolution = 3;
 
+    @XmlElement(name="Scanning")
     private boolean scanning = false;
 
+    @XmlElement
     private float scanning_resolution = (float)(3f*(Math.PI/180f));//(float)Math.PI/4f;// when it's a scanning sonar this value defines the scanning resolution (in radiant)
     private int scanning_iterations = 0;
     private float last_head_position = 0f;
 
+    @XmlElement(name="ScanningGain")
     private int scanning_gain = 50;
 
+    @XmlElement(name="Debug")
     private boolean debug = false;
 
+    @XmlElement
     private boolean angular_damping = false;
+    @XmlElement
     private float angular_factor = 1.0f;
+    @XmlElement
     private boolean length_damping = false;
+    @XmlElement
     private float length_factor = 1.0f;
 
+    @XmlElement(name="SonarConeType")
     private int sonar_cone_type = 0;
 
     private int SonarReturnDataLength = 252;

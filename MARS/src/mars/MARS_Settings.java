@@ -55,6 +55,9 @@ public class MARS_Settings implements CellEditorListener{
     private HashMap<String,Object> Light;
     private HashMap<String,Object> WireFrame;
     private HashMap<String,Object> CrossHairs;
+    private HashMap<String,Object> Misc;
+    private HashMap<String,Object> Camera;
+    //private HashMap<String,Object> FPS;
 
     @XmlTransient
     private XMLConfigReaderWriter xmll;
@@ -94,7 +97,7 @@ public class MARS_Settings implements CellEditorListener{
     private ColorRGBA light_color = ColorRGBA.White;
     private Vector3f light_direction = new Vector3f(0f, -1f, 0f);
     //@XmlTransient
-    @XmlElement(name = "PhysicalEnvironment")
+    //@XmlElement(name = "PhysicalEnvironment")
     private PhysicalEnvironment physical_environment;
     private int framerate = 60;
     private int FrameLimit = 60;
@@ -126,6 +129,9 @@ public class MARS_Settings implements CellEditorListener{
         Light = new HashMap<String,Object> ();
         WireFrame = new HashMap<String,Object> ();
         CrossHairs = new HashMap<String,Object> ();
+        Misc = new HashMap<String,Object> ();
+        Camera = new HashMap<String,Object> ();
+        //FPS = new HashMap<String,Object> ();
         settings.put("Graphics", Graphics);
         Graphics.put("Resolution", Resolution);
         Graphics.put("FrameLimit", FrameLimit);
@@ -144,13 +150,44 @@ public class MARS_Settings implements CellEditorListener{
         Graphics.put("CrossHairs", CrossHairs);
         settings.put("Server", Server);
         settings.put("Physics", Physics);
+        settings.put("Misc", Misc);
+        Misc.put("Camera", Camera);
         Server.put("RAW", RAW);
         Server.put("ROS", ROS);
         this.xmll = xmll;
     }
     
+    /**
+     * 
+     */
     public MARS_Settings(){
         
+    }
+    
+    /**
+     * You have to initialize first when you read the data in trough jaxb.
+     */
+    public void init(){
+        Physics = (HashMap<String,Object>)settings.get("Physics");
+        Server = (HashMap<String,Object>)settings.get("Server");
+        Graphics = (HashMap<String,Object>)settings.get("Graphics");
+        Misc = (HashMap<String,Object>)settings.get("Misc");
+        RAW = (HashMap<String,Object>)Server.get("RAW");
+        ROS = (HashMap<String,Object>)Server.get("ROS");
+        Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
+        Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        Fog = (HashMap<String,Object>)Graphics.get("Fog");
+        DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
+        WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
+        Water = (HashMap<String,Object>)Graphics.get("Water");
+        PlaneWater = (HashMap<String,Object>)Graphics.get("PlaneWater");
+        SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
+        SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
+        Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
+        Light = (HashMap<String,Object>)Graphics.get("Light");
+        WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
+        CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
+        Camera = (HashMap<String,Object>)Misc.get("Camera");
     }
 
     public void editingCanceled(ChangeEvent e){
@@ -344,7 +381,7 @@ public class MARS_Settings implements CellEditorListener{
      * @return
      */
     public int getFlyCamMoveSpeed() {
-        return FlyCamMoveSpeed;
+        return (Integer)Camera.get("FlyCamMoveSpeed");
     }
 
     /**
@@ -352,7 +389,7 @@ public class MARS_Settings implements CellEditorListener{
      * @param FlyCamMoveSpeed
      */
     public void setFlyCamMoveSpeed(int FlyCamMoveSpeed) {
-        this.FlyCamMoveSpeed = FlyCamMoveSpeed;
+        Camera.put("FlyCamMoveSpeed", FlyCamMoveSpeed);
     }
 
     /**
@@ -478,7 +515,7 @@ public class MARS_Settings implements CellEditorListener{
 
     /**
      * 
-     * @param port
+     * @param raw_enabled 
      */
     public void setRAW_Server_enabled(boolean raw_enabled) {
         RAW.put("enabled", raw_enabled);
@@ -526,7 +563,7 @@ public class MARS_Settings implements CellEditorListener{
 
     /**
      * 
-     * @param port
+     * @param master_port 
      */
     public void setROS_Server_port(int master_port) {
         ROS.put("masterport", master_port);
@@ -542,7 +579,7 @@ public class MARS_Settings implements CellEditorListener{
 
     /**
      *
-     * @param filepath_color
+     * @param master_ip 
      */
     public void setROS_Master_IP(String master_ip) {
         ROS.put("masterip", master_ip);
@@ -558,7 +595,7 @@ public class MARS_Settings implements CellEditorListener{
 
     /**
      * 
-     * @param port
+     * @param enabled 
      */
     public void setROS_Server_enabled(boolean enabled) {
         ROS.put("enabled", enabled);

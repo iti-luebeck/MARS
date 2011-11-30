@@ -79,6 +79,7 @@ import mars.auv.PhysicalValues;
 import mars.sensors.Sensor;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
+import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
@@ -507,7 +508,8 @@ public class MARSView extends FrameView {
         while (it.hasNext()) {
             String elem = it.next();
             DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-            DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(envs.get(elem));
+            mars.xml.HashMapEntry hme = (mars.xml.HashMapEntry)envs.get(elem);
+            DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(hme.getValue());
             param_treenode1.add(param_treenode2);
             treenode.add(param_treenode1);
         }

@@ -67,6 +67,8 @@ import mars.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;
+import mars.sensors.InfraRedSensor;
+import mars.sensors.Sonar;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.xml.HashMapAdapter;
@@ -87,6 +89,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Geometry OldCenterGeom;
 
     private MARS_Main mars;
+    private SimState simstate;
     private AssetManager assetManager;
     private RenderManager renderManager;
     private Renderer renderer;
@@ -173,6 +176,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             logger.addHandler(handler);
         } catch (IOException e) { }
 
+        this.simstate = simstate;
         this.mars = simstate.getSimauv();
         this.assetManager = simstate.getAssetManager();
         this.renderer = mars.getRenderer();
@@ -466,6 +470,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
             if(element.isEnabled()){
+                element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
@@ -475,6 +480,12 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(element instanceof UnderwaterModem){
                     ((UnderwaterModem)element).setCommunicationManager(com_manager);//is needed for filters
                 }
+                if(element instanceof InfraRedSensor){
+                    ((InfraRedSensor)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
+                }  
+                if(element instanceof Sonar){
+                    ((Sonar)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
+                } 
                 element.init(auv_node);
             }
         }
@@ -482,6 +493,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
+                element.setSimState(simstate);
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
                 element.setSimauv_settings(mars_settings);
@@ -1428,6 +1440,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      */
     @Override
     public void setState(SimState simstate) {
+        this.simstate = simstate;
         this.mars = simstate.getSimauv();
         this.assetManager = simstate.getAssetManager();
         this.renderer = mars.getRenderer();

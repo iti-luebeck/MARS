@@ -13,10 +13,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  * This class provides a basic pressure sensor. You can get exact depth or exact pressure + noise.
@@ -27,6 +30,8 @@ public class PressureSensor extends Sensor{
 
     private Geometry PressureSensorStart;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PressureSensorStartVector;
 
     ///ROS stuff

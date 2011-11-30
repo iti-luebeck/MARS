@@ -12,10 +12,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  *
@@ -26,6 +29,8 @@ public class SalinitySensor extends Sensor{
     
     private Geometry SalinitySensorStart;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SalinitySensorStartVector;
 
     ///ROS stuff

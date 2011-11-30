@@ -8,8 +8,6 @@ package mars.actuators;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import org.ros.message.MessageListener;
 import mars.SimState;
 
@@ -22,6 +20,7 @@ public class SeaBotixThruster extends Thruster{
 
     public SeaBotixThruster(){
         super();
+        motor_increment = 5f;
     }
     
     /**

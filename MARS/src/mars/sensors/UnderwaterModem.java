@@ -13,10 +13,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.SimState;
 import mars.auv.Communication_Manager;
+import mars.xml.Vector3fAdapter;
 
 /**
  * A underwater modem class for communication between the auv's. Nothing implemented yet.
@@ -27,7 +30,11 @@ public class UnderwaterModem extends Sensor{
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f UnderwaterModemStartVector = new Vector3f(0,0,0);
+    @XmlElement(name="Direction")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f UnderwaterModemDirection = new Vector3f(0,0,0);
     
     private Communication_Manager com_manager;

@@ -36,7 +36,7 @@ public class StartState extends AbstractAppState{
 
     private Node rootNode = new Node("Root Node");
     private AssetManager assetManager;
-    private MARS_Main simauv;
+    private MARS_Main mars;
     
     private Box boxshape1 = new Box(new Vector3f(0f,0f,0f), 2f,1f,2f);
     private Geometry cube = new Geometry("My Textured Box", boxshape1);
@@ -63,14 +63,14 @@ public class StartState extends AbstractAppState{
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
             if(app instanceof MARS_Main){
-                simauv = (MARS_Main)app;
-                assetManager = simauv.getAssetManager();
+                mars = (MARS_Main)app;
+                assetManager = mars.getAssetManager();
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
-            simauv.getFlyByCamera().setEnabled(false);
+            mars.getFlyByCamera().setEnabled(false);
             setupLight();
-            simauv.getRenderManager().getMainView("Default").setBackgroundColor( ColorRGBA.Black );
+            mars.getRenderManager().getMainView("Default").setBackgroundColor( ColorRGBA.Black );
             //mars_node.setLocalTranslation(17.4f,10f,-7f);
             mars_node.setLocalTranslation(0f,0f,0f);
             mars_node.attachChild(hanse_node);

@@ -19,6 +19,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MyHashMapEntryTypeHashMap extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
@@ -26,12 +29,22 @@ public class MyHashMapEntryTypeHashMap extends MyHashMapEntryType{
     @XmlJavaTypeAdapter(Vector3fAdapter.class)
     public Object value = null;*/
     
+    /**
+     * 
+     */
     @XmlElement(name="value")
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     public HashMap<String,Object> hasher =  null;
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeHashMap() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeHashMap(Map.Entry<String,Object> e) {
        key = e.getKey();
        if(e.getValue() instanceof HashMap){
@@ -41,22 +54,42 @@ public class MyHashMapEntryTypeHashMap extends MyHashMapEntryType{
        }*/
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getUnit() {
         return "";
     }
 
+    /**
+     * 
+     * @return
+     */
     public Object getValue() {
         return hasher;
     }
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,Object> getHasher() {
         return hasher;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Object getObject() {
         return hasher;
     }

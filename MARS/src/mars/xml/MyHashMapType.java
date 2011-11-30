@@ -18,8 +18,15 @@ import mars.sensors.Sensor;
  * @author Thomas Tosik
  */
 public class MyHashMapType {
+    /**
+     * 
+     */
     public List<MyHashMapEntryType> entry = new ArrayList<MyHashMapEntryType>();
     
+    /**
+     * 
+     * @param map
+     */
     public MyHashMapType(HashMap<String,Object> map) {
         for( Map.Entry<String,Object> e : map.entrySet() ){
             
@@ -36,9 +43,9 @@ public class MyHashMapType {
                 HashMapEntry hme = (HashMapEntry)e.getValue();
                 if(hme.getValue() instanceof Vector3f){
                     entry.add(new MyHashMapEntryTypeVector3f(e));
-                }/*else if(hme.getValue() instanceof ColorRGBA){
+                }else if(hme.getValue() instanceof ColorRGBA){
                     entry.add(new MyHashMapEntryTypeColorRGBA(e));
-                }else if(hme.getValue() instanceof HashMap){
+                }/*else if(hme.getValue() instanceof HashMap){
                     entry.add(new MyHashMapEntryTypeHashMap(e));
                 }*/else{
                     entry.add(new MyHashMapEntryTypeObject(e));
@@ -59,8 +66,15 @@ public class MyHashMapType {
         }
     }
     
+    /**
+     * 
+     */
     public MyHashMapType() {}
     
+    /**
+     * 
+     * @return
+     */
     public List<MyHashMapEntryType> getList() {
         return this.entry;
     }

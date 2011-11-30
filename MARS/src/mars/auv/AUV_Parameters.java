@@ -133,6 +133,17 @@ public class AUV_Parameters implements CellEditorListener{
     public AUV_Parameters(){
         
     }
+    
+    /**
+     * You have to initialize first when you read the data in trough jaxb.
+     */
+    public void init(){
+        waypoints = (HashMap<String,Object>)params.get("Waypoints");
+        model = (HashMap<String,Object>)params.get("Model");
+        debug = (HashMap<String,Object>)params.get("Debug");
+        collision = (HashMap<String,Object>)params.get("Collision");
+    }
+    
     public void editingCanceled(ChangeEvent e){
     }
 

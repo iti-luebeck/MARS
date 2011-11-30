@@ -19,6 +19,7 @@ public class BrushlessThruster extends Thruster{
     
     public BrushlessThruster(){
         super();
+        motor_increment = 0.6f;
     }
     
     /**

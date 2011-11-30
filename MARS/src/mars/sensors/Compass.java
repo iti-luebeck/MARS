@@ -13,9 +13,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.xml.Vector3fAdapter;
 
 /**
  * This is a basic compass class.
@@ -29,9 +32,17 @@ public class Compass extends Sensor{
     private Geometry CompassPitchAxis;
     private Geometry CompassRollAxis;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassStartVector;
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassYawAxisVector;
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassPitchAxisVector;
+    @XmlElement
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassRollAxisVector;
 
     private Vector3f magnetic_north = Vector3f.UNIT_X;

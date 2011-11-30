@@ -16,7 +16,19 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {MyHashMapEntryTypeHashMap.class, MyHashMapEntryTypeObject.class, MyHashMapEntryTypeVector3f.class, MyHashMapEntryTypeColorRGBA.class, MyHashMapEntryTypeActuators.class, MyHashMapEntryTypeSensors.class} )
 public abstract class MyHashMapEntryType {
+    /**
+     * 
+     * @return
+     */
     public abstract Object getObject();
+    /**
+     * 
+     * @return
+     */
     public abstract String getKey();
+    /**
+     * 
+     * @return
+     */
     public abstract String getUnit();
 }

@@ -60,18 +60,19 @@ import mars.sensors.VideoCamera;
  * With this class we read and parse the congfig xml file. We can extract Objects that SimAUV needs.
  * Like an AUV or Settings.
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public class XMLConfigReaderWriter
 {
 
     private SimState simstate;
-    private MARS_Main simauv;
+    private MARS_Main mars;
     private Document document;
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @throws Exception
      */
     public XMLConfigReaderWriter(SimState simstate) throws Exception{
@@ -88,7 +89,7 @@ public class XMLConfigReaderWriter
         Logger.getLogger(XMLConfigReaderWriter.class.getName()).log(Level.INFO, "Creating XMLConfigReader...", "");
 
         this.simstate = simstate;
-        this.simauv = simstate.getSimauv();
+        this.mars = simstate.getSimauv();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         document = builder.parse( new File("auv_config.xml") );
@@ -661,7 +662,7 @@ public class XMLConfigReaderWriter
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
             if(node.getNodeName().equals("Object") && node.getAttributes().item(0).getTextContent().equals(object_name)){
-                simobject = parseObjects(node,simauv);
+                simobject = parseObjects(node,mars);
                 break;
             }
         }
@@ -682,7 +683,7 @@ public class XMLConfigReaderWriter
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
             if(node.getNodeName().equals("Object")){
-                simobjects.add(parseObjects(node,simauv));
+                simobjects.add(parseObjects(node,mars));
             }
         }
         return simobjects;
@@ -1399,7 +1400,7 @@ public class XMLConfigReaderWriter
     }
 
     private InfraRedSensor getInfraRedSensor(Node node){
-        InfraRedSensor infra = new InfraRedSensor(simstate,(com.jme3.scene.Node)simauv.getRootNode().getChild("terrain"));
+        InfraRedSensor infra = new InfraRedSensor(simstate,(com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));
         NodeList nodelist = node.getChildNodes();
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node sensor_node = nodelist.item(i);
@@ -1429,7 +1430,7 @@ public class XMLConfigReaderWriter
     }
         
     private ImagenexSonar_852_Scanning getImaginexSonarScanning(Node node){
-        ImagenexSonar_852_Scanning son = new ImagenexSonar_852_Scanning(simstate,(com.jme3.scene.Node)simauv.getRootNode().getChild("terrain"));
+        ImagenexSonar_852_Scanning son = new ImagenexSonar_852_Scanning(simstate,(com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));
         NodeList nodelist = node.getChildNodes();
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node sensor_node = nodelist.item(i);
@@ -1471,7 +1472,7 @@ public class XMLConfigReaderWriter
     }
 
     private ImagenexSonar_852_Echo getImaginexSonarEcho(Node node){
-        ImagenexSonar_852_Echo son = new ImagenexSonar_852_Echo(simstate,(com.jme3.scene.Node)simauv.getRootNode().getChild("terrain"));
+        ImagenexSonar_852_Echo son = new ImagenexSonar_852_Echo(simstate,(com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));
         NodeList nodelist = node.getChildNodes();
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node sensor_node = nodelist.item(i);

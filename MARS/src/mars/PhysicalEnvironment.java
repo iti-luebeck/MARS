@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
@@ -23,6 +24,7 @@ import mars.xml.XMLConfigReaderWriter;
  * This class contains all physical parameters that are important for the auv like fluid density.
  * @author Thomas Tosik
  */
+@XmlRootElement(name="PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
 public class PhysicalEnvironment implements CellEditorListener{
 
@@ -56,6 +58,12 @@ public class PhysicalEnvironment implements CellEditorListener{
     
     public PhysicalEnvironment(){
         
+    }
+    
+     /**
+     * You have to initialize first when you read the data in trough jaxb.
+     */
+    public void init(){
     }
 
     public void editingCanceled(ChangeEvent e){

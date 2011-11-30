@@ -13,6 +13,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.SimState;
@@ -23,6 +27,9 @@ import mars.sensors.Sensor;
  * An basic interface for auv's like "Hanse".
  * @author Thomas Tosik
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {BasicAUV.class} )
 public interface AUV{
 
     /**

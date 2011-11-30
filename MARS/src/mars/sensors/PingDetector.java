@@ -17,10 +17,13 @@ import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.SimState;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
+import mars.xml.Vector3fAdapter;
 
 /**
  *
@@ -32,11 +35,16 @@ public class PingDetector extends Sensor{
     private Geometry PingStart;
     private Geometry PingDirection;
 
+    @XmlElement(name="Position")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PingStartVector;
+    @XmlElement(name="PingDirection")
+    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PingDirectionVector;
 
     private SimObjectManager simob_manager;
 
+    @XmlElement
     private float detection_range = 50.0f;
 
     public PingDetector(){

@@ -15,22 +15,41 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JAXBColorRGBA {
+    /**
+     * 
+     */
     @XmlElement
     public float a;
     
+    /**
+     * 
+     */
     @XmlElement
     public float b;
     
+    /**
+     * 
+     */
     @XmlElement
     public float g;
     
+    /**
+     * 
+     */
     @XmlElement
     public float r;
     
+    /**
+     * 
+     */
     public JAXBColorRGBA(){
         
     }
     
+    /**
+     * 
+     * @param color
+     */
     public JAXBColorRGBA(ColorRGBA color){
         a = color.a;
         b = color.b;
@@ -38,18 +57,34 @@ public class JAXBColorRGBA {
         r = color.r;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getA() {
         return a;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getB() {
         return b;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getG() {
         return g;
     }
     
+    /**
+     * 
+     * @return
+     */
     public float getR() {
         return r;
     }

@@ -18,15 +18,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MyHashMapEntryTypeColorRGBA extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
+    /**
+     * 
+     */
     @XmlElement
     @XmlJavaTypeAdapter(ColorRGBAAdapter.class)
     public ColorRGBA value;
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeColorRGBA() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeColorRGBA(Map.Entry<String,Object> e) {
        key = e.getKey();
        if(e.getValue() instanceof ColorRGBA){
@@ -34,18 +47,34 @@ public class MyHashMapEntryTypeColorRGBA extends MyHashMapEntryType{
        }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getKey() {
         return key;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getUnit() {
         return "";
     }
 
+    /**
+     * 
+     * @return
+     */
     public ColorRGBA getValue() {
         return value;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Object getObject() {
         return value;
     }

@@ -284,7 +284,7 @@ public class SimObject implements CellEditorListener{
      * @return
      */
     public Vector3f getDimensions() {
-        return (Vector3f)collision.get("dimensions");
+        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("dimensions");
     }
 
     /**
@@ -292,7 +292,7 @@ public class SimObject implements CellEditorListener{
      * @param dimensions 
      */
     public void setDimensions(Vector3f dimensions) {
-        collision.put("dimensions", dimensions);
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("dimensions", dimensions);
     }
         
     /**
@@ -300,7 +300,7 @@ public class SimObject implements CellEditorListener{
      * @return
      */
     public Vector3f getCollisionPosition() {
-        return (Vector3f)collision.get("collision_position");
+        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("collision_position");
     }
 
     /**
@@ -308,7 +308,7 @@ public class SimObject implements CellEditorListener{
      * @param dimensions
      */
     public void setCollisionPosition(Vector3f collision_position) {
-        collision.put("collision_position", collision_position);
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("collision_position", collision_position);
     }
 
     /**
@@ -316,7 +316,7 @@ public class SimObject implements CellEditorListener{
      * @return
      */
     public int getType() {
-        return (Integer)collision.get("type");
+        return (Integer)((HashMap<String,Object>)simob_variables.get("Collision")).get("type");
     }
 
     /**
@@ -324,7 +324,7 @@ public class SimObject implements CellEditorListener{
      * @param type
      */
     public void setType(int type) {
-        collision.put("type", type);
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("type", type);
     }
 
     /**
@@ -332,7 +332,7 @@ public class SimObject implements CellEditorListener{
      * @return
      */
     public boolean isCollidable() {
-        return (Boolean)collision.get("collidable");
+        return (Boolean)((HashMap<String,Object>)simob_variables.get("Collision")).get("collidable");
     }
 
     /**
@@ -340,7 +340,7 @@ public class SimObject implements CellEditorListener{
      * @param collidable
      */
     public void setCollidable(boolean collidable) {
-        collision.put("collidable", collidable);
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("collidable", collidable);
     }
 
     /**
@@ -524,7 +524,7 @@ public class SimObject implements CellEditorListener{
      * @return
      */
     public boolean isDebugCollision() {
-         return (Boolean)collision.get("debug_collision");
+         return (Boolean)((HashMap<String,Object>)simob_variables.get("Collision")).get("debug_collision");
     }
 
     /**
@@ -532,7 +532,7 @@ public class SimObject implements CellEditorListener{
      * @param debug_collision
      */
     public void setDebugCollision(boolean debug_collision) {
-        collision.put("debug_collision", debug_collision);
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("debug_collision", debug_collision);
     }
 
     /**
