@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.actuators.Actuator;
+import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
 
 /**
@@ -66,7 +67,13 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    @Deprecated
     protected org.ros.node.Node ros_node = null;
+    
+    /*
+     * 
+     */
+    protected MARSNodeMain mars_node = null;
     
     /*
      * 
@@ -151,17 +158,31 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
         setROS_Node(ros_node);
     }
+    
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        setROS_Node(ros_node);
+    }
 
     public void setROS_MSG_Type(String ros_msg_type) {
         this.ros_msg_type = ros_msg_type;
     }
 
+    @Deprecated
     public org.ros.node.Node getROS_Node() {
         return ros_node;
     }
 
+    @Deprecated
     public void setROS_Node(org.ros.node.Node ros_node) {
         this.ros_node = ros_node;
+    }
+    
+    public MARSNodeMain getMARS_Node() {
+        return mars_node;
+    }
+    
+    public void setROS_Node(MARSNodeMain ros_node) {
+        this.mars_node = ros_node;
     }
     
     public int getRos_publish_rate() {

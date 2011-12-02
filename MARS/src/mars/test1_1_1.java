@@ -8,7 +8,6 @@ package mars;
 import org.ros.*;
 import java.net.InetAddress;
 import org.ros.address.InetAddressFactory;
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.NodeConfiguration;
 //import org.ros.tutorials.pubsub.Talker;
 
@@ -23,8 +22,8 @@ public class test1_1_1{
        NodeConfiguration nodeConf = NodeConfiguration.newPublic("141.83.88.166", muri);
        //DefaultNodeFactory factory= new DefaultNodeFactory();
        //org.ros.node.Node node = factory.newNode("AAAAAAAAAA", nodeConf);
-       Listener ros_listener = new Listener();
-       ros_listener.main(nodeConf);
+       /*Listener ros_listener = new Listener();
+       ros_listener.main(nodeConf);*/
     }
 
 }

@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 
 /**
  *
@@ -52,7 +53,22 @@ public class BrushlessThruster extends Thruster{
     }
     
     @Override
+    @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        final BrushlessThruster self = this;
+        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Int16",
+          new MessageListener<org.ros.message.std_msgs.Int16>() {
+            @Override
+            public void onNewMessage(org.ros.message.std_msgs.Int16 message) {
+              System.out.println("I heard: \"" + message.data + "\"");
+              self.set_thruster_speed((int)message.data);
+            }
+          });
+    }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final BrushlessThruster self = this;
         ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Int16",

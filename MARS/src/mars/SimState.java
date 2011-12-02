@@ -176,10 +176,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 while(!initer.isROS_ServerReady()){
                     
                 }
-                while(initer.getROS_Server().getNode() == null){
+                while(initer.getROS_Server().getMarsNode() == null){
                     
                 }
-                while(!initer.getROS_Server().getNode().isRunning()){
+                while(!initer.getROS_Server().getMarsNode().isExisting()){
+                //while(initer.getROS_Server().getNode() == null){
+                    
+                }
+                while(!initer.getROS_Server().getMarsNode().isRunning()){
                     
                 }
             }
@@ -476,7 +480,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         auv_manager.setSimauv_settings(simauv_settings);
         auv_manager.setCommunicationManager(com_manager);
         if(mars_settings.isROS_Server_enabled()){
-            auv_manager.setRos_node(initer.getROS_Server().getNode());
+            //auv_manager.setRos_node(initer.getROS_Server().getNode());
+            auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
         }
         auv_manager.registerAUVs(auvs);
         //auv_hanse = (Hanse)auvs.get(1);

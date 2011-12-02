@@ -16,12 +16,9 @@
 
 package mars;
 
-import com.google.common.base.Preconditions;
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
-import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
 
@@ -33,20 +30,15 @@ import org.ros.node.topic.Subscriber;
  */
 public class Listener implements NodeMain {
 
-  private Node node;
-
   @Override
-  public void main(NodeConfiguration configuration) {
-      Preconditions.checkState(node == null);
-    Preconditions.checkNotNull(configuration);
+  public void onStart(Node node) {
     try {
-      node = new DefaultNodeFactory().newNode("listener", configuration);
       final Log log = node.getLog();
-      node.newSubscriber("monsun/thrusterRight", "std_msgs/String",
-          new MessageListener<org.ros.message.std_msgs.String>() {
+      node.newSubscriber("monsun/press", "iti_msgs/pressure",
+          new MessageListener<org.ros.message.iti_msgs.pressure>() {
             @Override
-            public void onNewMessage(org.ros.message.std_msgs.String message) {
-              log.info("!!!!!!!I heard: \"" + message.data + "\"");
+            public void onNewMessage(org.ros.message.iti_msgs.pressure message) {
+              log.info("I heard: \"" + message.data + "\"" + message.header.seq + ":" + message.header.stamp);
             }
           });
     } catch (Exception e) {
@@ -59,8 +51,6 @@ public class Listener implements NodeMain {
   }
 
   @Override
-  public void shutdown() {
-    node.shutdown();
+  public void onShutdown(Node node) {
   }
-
 }

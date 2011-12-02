@@ -19,7 +19,9 @@ import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.Time;
 
 /**
  * This class provides a basic pressure sensor. You can get exact depth or exact pressure + noise.
@@ -35,8 +37,11 @@ public class PressureSensor extends Sensor{
     private Vector3f PressureSensorStartVector;
 
     ///ROS stuff
-    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
+    //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    private Publisher<org.ros.message.iti_msgs.pressure> publisher = null;
+    private org.ros.message.iti_msgs.pressure fl = new org.ros.message.iti_msgs.pressure(); 
+    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     public PressureSensor(){
         super();
@@ -183,14 +188,25 @@ public class PressureSensor extends Sensor{
     }
 
     @Override
+    @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "iti_msgs/pressure");  
+    }
 
     @Override
     public void publish() {
-        fl.data = getDepth();
+        //header.seq = 0;
+        header.frame_id = "pressure";
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        fl.header = header;
+        fl.data = (int)getPressureMbar();
         this.publisher.publish(fl);
     }
 }

@@ -14,12 +14,16 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ros.node.DefaultNodeFactory;
+import org.ros.internal.node.DefaultNodeFactory;
+//import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.auv.AUV_Manager;
+import mars.ros.MARSNodeMain;
+import org.ros.node.DefaultNodeRunner;
+import org.ros.node.NodeRunner;
 
 /**
  *
@@ -38,6 +42,7 @@ public class ROS_Node implements Runnable {
     
     //rosjava stuff
     private Node node;
+    private MARSNodeMain marsnode;
     
     public ROS_Node(MARS_Main mars, AUV_Manager auv_manager) {
         //set the logging
@@ -80,8 +85,13 @@ public class ROS_Node implements Runnable {
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
     }
     
+    @Deprecated
     public Node getNode() {
         return node;
+    }
+    
+    public MARSNodeMain getMarsNode() {
+        return marsnode;
     }
     
     public void shutdown() {
@@ -103,10 +113,15 @@ public class ROS_Node implements Runnable {
         System.out.println("ROS Master IP: " + getMaster_uri());
         java.net.URI muri = java.net.URI.create(getMaster_uri());
         NodeConfiguration nodeConf = NodeConfiguration.newPublic(ownIP.getHostAddress(), muri);
+        nodeConf.setNodeName("MARS");
         
-        Preconditions.checkState(node == null);
+        Preconditions.checkState(marsnode == null);
         Preconditions.checkNotNull(nodeConf);
-        node = new DefaultNodeFactory().newNode("MARS", nodeConf);
+        //node = new DefaultNodeFactory().newNode("MARS", nodeConf);
+        marsnode = new MARSNodeMain();
+        NodeRunner runner = DefaultNodeRunner.newDefault();
+        runner.run(marsnode, nodeConf);        
+        
         //auv_manager.setRos_node(node);
         //auv_manager.initROSofAUVs();
     }

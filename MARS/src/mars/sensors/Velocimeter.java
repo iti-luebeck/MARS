@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 
 /**
  *  This a basis Velocimeter class. It gives you the linear velocity.
@@ -107,7 +108,14 @@ public class Velocimeter extends Sensor{
     }
     
     @Override
+    @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+    }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }

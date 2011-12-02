@@ -67,6 +67,7 @@ import mars.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;
+import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Sonar;
 import mars.sensors.UnderwaterModem;
@@ -158,7 +159,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     private PhysicalValues physicalvalues;
     
     private Communication_Manager com_manager;
+    @Deprecated
     private org.ros.node.Node ros_node;  
+    private MARSNodeMain mars_node;
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it.
@@ -282,6 +285,10 @@ public class BasicAUV implements AUV,SceneProcessor{
     
     public void setROS_Node(org.ros.node.Node ros_node){
         this.ros_node = ros_node;
+    }
+    
+    public void setROS_Node(MARSNodeMain mars_node){
+        this.mars_node = mars_node;
     }
 
     /**
@@ -511,13 +518,15 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
             if(element.isEnabled()){
-                element.initROS(ros_node,auv_param.getAuv_name());
+                //element.initROS(ros_node,auv_param.getAuv_name());
+                element.initROS(mars_node,auv_param.getAuv_name());
             }
         }
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
-                element.initROS(ros_node,auv_param.getAuv_name());
+                //element.initROS(ros_node,auv_param.getAuv_name());
+                element.initROS(mars_node,auv_param.getAuv_name());
             }
         }
     }

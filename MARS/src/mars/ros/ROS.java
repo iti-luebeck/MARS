@@ -11,7 +11,9 @@ package mars.ros;
 public interface ROS {
     
     public String ros_msg_type = "";
+    @Deprecated
     public org.ros.node.Node ros_node = null;
+    public MARSNodeMain mars_node = null;
     /*
      * 
      */
@@ -19,7 +21,12 @@ public interface ROS {
     /*
      * 
      */
+    @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name);
+    /*
+     * 
+     */
+    public void initROS(MARSNodeMain ros_node, String auv_name);
     /*
      * 
      */
@@ -31,9 +38,19 @@ public interface ROS {
     /*
      * 
      */
+    @Deprecated
     public void setROS_Node(org.ros.node.Node ros_node);
     /*
      * 
      */
+    public void setROS_Node(MARSNodeMain ros_node);
+    /*
+     * 
+     */
+    @Deprecated
     public org.ros.node.Node getROS_Node();
+    /*
+     * 
+     */
+    public MARSNodeMain getMARS_Node();
 }

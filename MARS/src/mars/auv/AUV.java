@@ -21,6 +21,7 @@ import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.SimState;
 import mars.actuators.Actuator;
+import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
 
 /**
@@ -254,5 +255,10 @@ public interface AUV{
     /*
      * 
      */
+    @Deprecated
     public void setROS_Node(org.ros.node.Node ros_node);   
+    /*
+     * 
+     */
+    public void setROS_Node(MARSNodeMain mars_node);
 }

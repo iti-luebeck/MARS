@@ -20,6 +20,7 @@ import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Sonar;
 
@@ -40,7 +41,9 @@ public class AUV_Manager {
     private Node rootNode;
     private SimState simstate;
     private Communication_Manager com_manager;
+    @Deprecated
     private org.ros.node.Node ros_node;
+    private MARSNodeMain mars_node;
 
     /**
      *
@@ -140,12 +143,22 @@ public class AUV_Manager {
         this.bulletAppState = bulletAppState;
     }
     
+    @Deprecated
     public org.ros.node.Node getRos_node() {
         return ros_node;
     }
 
+    @Deprecated
     public void setRos_node(org.ros.node.Node ros_node) {
         this.ros_node = ros_node;
+    }
+    
+    public MARSNodeMain getMARSNode() {
+        return mars_node;
+    }
+
+    public void setMARSNode(MARSNodeMain mars_node) {
+        this.mars_node = mars_node;
     }
     
     /**
@@ -378,7 +391,8 @@ public class AUV_Manager {
             auv.setSimauv_settings(simauv_settings);
             auv.setPhysical_environment(physical_environment);
             auv.setCommunicationManager(com_manager);
-            auv.setROS_Node(ros_node);
+            //auv.setROS_Node(ros_node);
+            auv.setROS_Node(mars_node);
             initAUV(auv);
             addAUVToNode(auv,sceneReflectionNode);
             addAUVToBulletAppState(auv,bulletAppState);

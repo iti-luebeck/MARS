@@ -26,6 +26,7 @@ import mars.MARS_Main;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
 
 /**
@@ -352,7 +353,14 @@ public class InfraRedSensor extends Sensor{
     }
     
     @Override
+    @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+    }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
