@@ -25,6 +25,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
+import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.ros.internal.transport.ConnectionHeader;
@@ -42,12 +43,12 @@ class SubscriberHandshakeHandler<MessageType> extends SimpleChannelHandler {
   private static final Log log = LogFactory.getLog(SubscriberHandshakeHandler.class);
 
   private final ImmutableMap<String, String> header;
-  private final IncomingMessageQueue<MessageType> in;
+  private final IncomingMessageQueue<MessageType> incomingMessageQueue;
 
   public SubscriberHandshakeHandler(ImmutableMap<String, String> header,
-      IncomingMessageQueue<MessageType> in) {
+      IncomingMessageQueue<MessageType> incomingMessageQueue) {
     this.header = header;
-    this.in = in;
+    this.incomingMessageQueue = incomingMessageQueue;
   }
 
   private void handshake(ChannelBuffer buffer) {
@@ -63,13 +64,19 @@ class SubscriberHandshakeHandler<MessageType> extends SimpleChannelHandler {
   }
 
   @Override
+  public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+    e.getChannel().write(ConnectionHeader.encode(header));
+    super.channelConnected(ctx, e);
+  }
+
+  @Override
   public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
     ChannelBuffer incomingBuffer = (ChannelBuffer) e.getMessage();
     handshake(incomingBuffer);
     Channel channel = e.getChannel();
     ChannelPipeline pipeline = channel.getPipeline();
     pipeline.remove(this);
-    pipeline.addLast("MessageHandler", in.createChannelHandler());
+    pipeline.addLast("MessageHandler", incomingMessageQueue.createChannelHandler());
+    super.messageReceived(ctx, e);
   }
-
 }

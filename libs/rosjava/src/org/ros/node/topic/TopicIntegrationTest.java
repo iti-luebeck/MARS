@@ -20,21 +20,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.ros.address.AdvertiseAddress;
 import org.ros.address.BindAddress;
+import org.ros.internal.node.DefaultNodeFactory;
+import org.ros.internal.node.NodeFactory;
 import org.ros.internal.node.server.MasterServer;
 import org.ros.internal.node.topic.PublisherIdentifier;
 import org.ros.internal.node.topic.RepeatingPublisher;
 import org.ros.message.MessageListener;
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeFactory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,41 +49,50 @@ public class TopicIntegrationTest {
   private MasterServer masterServer;
   private NodeFactory nodeFactory;
   private NodeConfiguration nodeConfiguration;
+  private ExecutorService executorService;
 
   @Before
   public void setUp() {
+    executorService = Executors.newCachedThreadPool();
     masterServer = new MasterServer(BindAddress.newPublic(), AdvertiseAddress.newPublic());
     masterServer.start();
-    nodeConfiguration = NodeConfiguration.newPrivate(masterServer.getUri());
+    nodeConfiguration =
+        NodeConfiguration.newPrivate(masterServer.getUri()).setExecutorService(executorService);
     nodeFactory = new DefaultNodeFactory();
   }
 
   @Test
   public void testOnePublisherToOneSubscriber() throws InterruptedException {
-    Node publisherNode = nodeFactory.newNode("publisher", nodeConfiguration);
+    nodeConfiguration.setNodeName("publisher");
+    Node publisherNode = nodeFactory.newNode(nodeConfiguration);
+
+    CountDownPublisherListener publisherListener = new CountDownPublisherListener();
     Publisher<org.ros.message.std_msgs.String> publisher =
-        publisherNode.newPublisher("foo", "std_msgs/String");
+        publisherNode.newPublisher("foo", "std_msgs/String", Lists.newArrayList(publisherListener));
 
     final org.ros.message.std_msgs.String helloMessage = new org.ros.message.std_msgs.String();
     helloMessage.data = "Hello, ROS!";
 
     final CountDownLatch messageReceived = new CountDownLatch(1);
-    Node subscriberNode = nodeFactory.newNode("subscriber", nodeConfiguration);
-    Subscriber<org.ros.message.std_msgs.String> subscriber =
-        subscriberNode.newSubscriber("foo", "std_msgs/String",
-            new MessageListener<org.ros.message.std_msgs.String>() {
-              @Override
-              public void onNewMessage(org.ros.message.std_msgs.String message) {
-                assertEquals(helloMessage, message);
-                messageReceived.countDown();
-              }
-            });
+    nodeConfiguration.setNodeName("subscriber");
+    Node subscriberNode = nodeFactory.newNode(nodeConfiguration);
 
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.SECONDS));
-    assertTrue(subscriber.awaitRegistration(1, TimeUnit.SECONDS));
+    CountDownSubscriberListener subscriberListener = new CountDownSubscriberListener();
+    subscriberNode.newSubscriber("foo", "std_msgs/String",
+        new MessageListener<org.ros.message.std_msgs.String>() {
+          @Override
+          public void onNewMessage(org.ros.message.std_msgs.String message) {
+            assertEquals(helloMessage, message);
+            messageReceived.countDown();
+          }
+        }, Lists.newArrayList(subscriberListener));
+
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
+    assertTrue(subscriberListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
 
     RepeatingPublisher<org.ros.message.std_msgs.String> repeatingPublisher =
-        new RepeatingPublisher<org.ros.message.std_msgs.String>(publisher, helloMessage, 1000);
+        new RepeatingPublisher<org.ros.message.std_msgs.String>(publisher, helloMessage, 1000,
+            executorService);
     repeatingPublisher.start();
 
     assertTrue(messageReceived.await(1, TimeUnit.SECONDS));
@@ -90,7 +103,8 @@ public class TopicIntegrationTest {
 
   @Test
   public void testAddDisconnectedPublisher() {
-    Node subscriberNode = nodeFactory.newNode("subscriber", nodeConfiguration);
+    nodeConfiguration.setNodeName("subscriber");
+    Node subscriberNode = nodeFactory.newNode(nodeConfiguration);
     org.ros.internal.node.topic.DefaultSubscriber<org.ros.message.std_msgs.String> subscriber =
         (org.ros.internal.node.topic.DefaultSubscriber<org.ros.message.std_msgs.String>) subscriberNode
             .<org.ros.message.std_msgs.String>newSubscriber("foo", "std_msgs/String", null);
@@ -128,17 +142,22 @@ public class TopicIntegrationTest {
 
   @Test
   public void testHeader() throws InterruptedException {
-    final Node publisherNode = nodeFactory.newNode("publisher", nodeConfiguration);
+    nodeConfiguration.setNodeName("publisher");
+    final Node publisherNode = nodeFactory.newNode(nodeConfiguration);
+    CountDownPublisherListener publisherListener = new CountDownPublisherListener();
     final Publisher<org.ros.message.test_ros.TestHeader> publisher =
-        publisherNode.newPublisher("foo", "test_ros/TestHeader");
+        publisherNode.newPublisher("foo", "test_ros/TestHeader",
+            Lists.newArrayList(publisherListener));
 
-    Node subscriberNode = nodeFactory.newNode("subscriber", nodeConfiguration);
+    nodeConfiguration.setNodeName("subscriber");
+    Node subscriberNode = nodeFactory.newNode(nodeConfiguration);
     Listener listener = new Listener();
-    Subscriber<org.ros.message.test_ros.TestHeader> subscriber =
-        subscriberNode.newSubscriber("foo", "test_ros/TestHeader", listener);
+    CountDownSubscriberListener subscriberListener = new CountDownSubscriberListener();
+    subscriberNode.newSubscriber("foo", "test_ros/TestHeader", listener,
+        Lists.newArrayList(subscriberListener));
 
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.DAYS));
-    assertTrue(subscriber.awaitRegistration(1, TimeUnit.DAYS));
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.DAYS));
+    assertTrue(subscriberListener.awaitMasterRegistrationSuccess(1, TimeUnit.DAYS));
 
     Thread thread = new Thread() {
       @Override

@@ -16,21 +16,12 @@
 
 package org.ros.internal.node.client;
 
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ros.concurrent.CancellableLoop;
 import org.ros.internal.node.response.Response;
 import org.ros.internal.node.server.MasterServer;
 import org.ros.internal.node.server.SlaveIdentifier;
@@ -42,11 +33,22 @@ import org.ros.internal.node.topic.DefaultSubscriber;
 import org.ros.internal.node.topic.PublisherIdentifier;
 import org.ros.internal.node.topic.TopicListener;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Manages topic and service registrations of a {@link SlaveServer} with the
+ * Manages topic, and service registrations of a {@link SlaveServer} with the
  * {@link MasterServer}.
  * 
  * @author kwc@willowgarage.com (Ken Conley)
@@ -61,58 +63,55 @@ public class Registrar implements TopicListener, ServiceListener {
   private static final TimeUnit DEFAULT_RETRY_TIME_UNIT = TimeUnit.SECONDS;
 
   private final MasterClient masterClient;
-  private final MasterRegistrationThread registrationThread;
+  private final RetryLoop retryLoop;
   private final CompletionService<Response<?>> completionService;
   private final Map<Future<Response<?>>, Callable<Response<?>>> futures;
   private final ScheduledExecutorService retryExecutor;
+  private final ExecutorService executorService;
 
   private long retryDelay;
   private TimeUnit retryTimeUnit;
   private SlaveIdentifier slaveIdentifier;
 
-  // TODO(damonkohler): This flag isn't useful if the connection to the master
-  // is flaky. We need a better indicator.
-  private boolean registrationOk;
-
-  class MasterRegistrationThread extends Thread {
+  class RetryLoop extends CancellableLoop {
     @Override
-    public void run() {
+    public void loop() throws InterruptedException {
+      Future<Response<?>> response = completionService.take();
       try {
-        while (!Thread.currentThread().isInterrupted()) {
-          Future<Response<?>> response = completionService.take();
-          try {
-            if (response.get().isSuccess()) {
-              registrationOk = true;
-              futures.remove(response);
-            }
-          } catch (ExecutionException e) {
-            registrationOk = false;
-            log.warn("Master registration failed and will be retried.", e);
-            // Retry the registration task.
-            final Callable<Response<?>> task = futures.get(response);
-            futures.remove(response);
-            retryExecutor.schedule(new Runnable() {
-              @Override
-              public void run() {
-                submitCallable(task);
-              }
-            }, retryDelay, retryTimeUnit);
-          }
+        if (response.get().isSuccess()) {
+          futures.remove(response);
         }
-      } catch (InterruptedException e) {
-        // Cancelable
+      } catch (ExecutionException e) {
+        log.warn("Master registration failed and will be retried.", e);
+        // Retry the registration task.
+        final Callable<Response<?>> task = futures.get(response);
+        futures.remove(response);
+        retryExecutor.schedule(new Runnable() {
+          @Override
+          public void run() {
+            submitCallable(task);
+          }
+        }, retryDelay, retryTimeUnit);
       }
     }
   }
 
-  public Registrar(MasterClient masterClient) {
+  /**
+   * @param masterClient
+   *          a {@link MasterClient} for communicating with the ROS master
+   * @param executorService
+   *          an {@link ExecutorService} to be used for all asynchronous
+   *          operations
+   */
+  public Registrar(MasterClient masterClient, ExecutorService executorService) {
     this.masterClient = masterClient;
-    setRetryDelay(DEFAULT_RETRY_DELAY, DEFAULT_RETRY_TIME_UNIT);
-    completionService = new ExecutorCompletionService<Response<?>>(Executors.newCachedThreadPool());
+    this.executorService = executorService;
+    retryLoop = new RetryLoop();
+    completionService = new ExecutorCompletionService<Response<?>>(executorService);
     futures = Maps.newConcurrentMap();
+    retryDelay = DEFAULT_RETRY_DELAY;
+    retryTimeUnit = DEFAULT_RETRY_TIME_UNIT;
     retryExecutor = Executors.newSingleThreadScheduledExecutor();
-    registrationOk = false;
-    registrationThread = new MasterRegistrationThread();
     if (DEBUG) {
       log.info("Remote URI: " + masterClient.getRemoteUri());
     }
@@ -123,14 +122,21 @@ public class Registrar implements TopicListener, ServiceListener {
     retryTimeUnit = unit;
   }
 
+  /**
+   * Get the number of pending asynchronous registration requests to the master.
+   * 
+   * @return the number of pending asynchronous registration requests to the
+   *         master
+   */
   public int getPendingSize() {
     return futures.size();
   }
 
-  public boolean isMasterRegistrationOk() {
-    return registrationOk;
-  }
-
+  /**
+   * Submit a task to the completion service.
+   * 
+   * @param task
+   */
   private void submitCallable(Callable<Response<?>> task) {
     Future<Response<?>> future = completionService.submit(task);
     futures.put(future, task);
@@ -144,7 +150,7 @@ public class Registrar implements TopicListener, ServiceListener {
         Preconditions.checkNotNull(slaveIdentifier, "Registrar not started.");
         Response<List<URI>> response =
             masterClient.registerPublisher(publisher.toPublisherIdentifier(slaveIdentifier));
-        publisher.signalRegistrationDone();
+        publisher.signalOnMasterRegistrationSuccess();
         return response;
       }
     });
@@ -161,7 +167,7 @@ public class Registrar implements TopicListener, ServiceListener {
             PublisherIdentifier.newCollectionFromUris(response.getResult(),
                 subscriber.getTopicDefinition());
         subscriber.updatePublishers(publishers);
-        subscriber.signalRegistrationDone();
+        subscriber.signalOnMasterRegistrationSuccess();
         return response;
       }
     });
@@ -184,11 +190,11 @@ public class Registrar implements TopicListener, ServiceListener {
     Preconditions.checkNotNull(slaveIdentifier);
     Preconditions.checkState(this.slaveIdentifier == null, "Registrar already started.");
     this.slaveIdentifier = slaveIdentifier;
-    registrationThread.start();
+    executorService.execute(retryLoop);
   }
 
   public void shutdown() {
-    registrationThread.interrupt();
+    retryLoop.cancel();
     synchronized (futures) {
       for (Future<Response<?>> future : futures.keySet()) {
         future.cancel(true);

@@ -24,8 +24,14 @@ import org.ros.internal.node.server.SlaveServer;
 import org.ros.message.MessageDeserializer;
 import org.ros.message.MessageSerializer;
 import org.ros.namespace.GraphName;
+import org.ros.node.service.ServiceServerListener;
+
+import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 
 /**
+ * A factory for ROS service objects.
+ * 
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class ServiceFactory {
@@ -33,29 +39,38 @@ public class ServiceFactory {
   private final GraphName nodeName;
   private final SlaveServer slaveServer;
   private final ServiceManager serviceManager;
+  private final ExecutorService executorService;
 
-  public ServiceFactory(GraphName nodeName, SlaveServer slaveServer, ServiceManager serviceManager) {
+  public ServiceFactory(GraphName nodeName, SlaveServer slaveServer, ServiceManager serviceManager,
+      ExecutorService executorService) {
     this.nodeName = nodeName;
     this.slaveServer = slaveServer;
     this.serviceManager = serviceManager;
+    this.executorService = executorService;
   }
 
   /**
-   * Gets or creates a {@link DefaultServiceServer} instance. {@link DefaultServiceServer}s
-   * are cached and reused per service. When a new {@link DefaultServiceServer} is
-   * generated, it is registered with the {@link MasterServer}.
+   * Gets or creates a {@link DefaultServiceServer} instance.
+   * {@link DefaultServiceServer}s are cached and reused per service. When a new
+   * {@link DefaultServiceServer} is generated, it is registered with the
+   * {@link MasterServer}.
    * 
    * @param serviceDefinition
    *          the {@link ServiceMessageDefinition} that is being served
    * @param responseBuilder
    *          the {@link ServiceResponseBuilder} that is used to build responses
+   * @param serverListeners
+   *          a collection of {@link ServiceServerListener} instances to be
+   *          added to the server (can be {@code null}
+   * 
    * @return a {@link DefaultServiceServer} instance
    */
   @SuppressWarnings("unchecked")
   public <RequestType, ResponseType> DefaultServiceServer<RequestType, ResponseType> createServer(
       ServiceDefinition serviceDefinition, MessageDeserializer<RequestType> deserializer,
       MessageSerializer<ResponseType> serializer,
-      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder) {
+      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder,
+      Collection<? extends ServiceServerListener> serverListeners) {
     DefaultServiceServer<RequestType, ResponseType> serviceServer;
     String name = serviceDefinition.getName().toString();
     boolean createdNewService = false;
@@ -67,7 +82,8 @@ public class ServiceFactory {
       } else {
         serviceServer =
             new DefaultServiceServer<RequestType, ResponseType>(serviceDefinition, deserializer,
-                serializer, responseBuilder, slaveServer.getTcpRosAdvertiseAddress());
+                serializer, responseBuilder, slaveServer.getTcpRosAdvertiseAddress(),
+                executorService);
         createdNewService = true;
       }
     }
@@ -75,13 +91,21 @@ public class ServiceFactory {
     if (createdNewService) {
       slaveServer.addService(serviceServer);
     }
+
+    if (serverListeners != null) {
+      for (ServiceServerListener listener : serverListeners) {
+        serviceServer.addServiceServerListener(listener);
+      }
+    }
+
     return serviceServer;
   }
 
   /**
-   * Gets or creates a {@link DefaultServiceClient} instance. {@link DefaultServiceClient}s
-   * are cached and reused per service. When a new {@link DefaultServiceClient} is
-   * created, it is connected to the {@link DefaultServiceServer}.
+   * Gets or creates a {@link DefaultServiceClient} instance.
+   * {@link DefaultServiceClient}s are cached and reused per service. When a new
+   * {@link DefaultServiceClient} is created, it is connected to the
+   * {@link DefaultServiceServer}.
    * 
    * @param <ResponseType>
    * @param serviceDefinition
@@ -102,7 +126,9 @@ public class ServiceFactory {
         serviceClient =
             (DefaultServiceClient<RequestType, ResponseType>) serviceManager.getClient(name);
       } else {
-        serviceClient = DefaultServiceClient.create(nodeName, serviceDefinition, serializer, deserializer);
+        serviceClient =
+            DefaultServiceClient.create(nodeName, serviceDefinition, serializer, deserializer,
+                executorService);
         createdNewService = true;
       }
     }

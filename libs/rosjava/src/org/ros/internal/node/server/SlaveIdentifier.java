@@ -62,6 +62,9 @@ public class SlaveIdentifier {
    */
   public SlaveIdentifier(GraphName name, URI uri) {
     Preconditions.checkArgument(name != null || uri != null);
+    if (name != null) {
+      Preconditions.checkArgument(name.isGlobal());
+    }
     this.name = name;
     this.uri = uri;
   }

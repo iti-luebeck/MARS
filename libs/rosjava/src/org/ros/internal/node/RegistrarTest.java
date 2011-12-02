@@ -4,6 +4,8 @@ package org.ros.internal.node;
 
 import static org.junit.Assert.assertTrue;
 
+import org.ros.node.topic.CountDownPublisherListener;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +24,13 @@ import org.ros.internal.node.topic.TopicManager;
 import org.ros.message.MessageDefinition;
 import org.ros.namespace.GraphName;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Tests for the {@link Registrar} class.
+ * 
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class RegistrarTest {
@@ -40,6 +46,8 @@ public class RegistrarTest {
   private ParameterManager parameterManager;
   private SlaveServer slaveServer;
   private DefaultPublisher<org.ros.message.std_msgs.String> publisher;
+  private ExecutorService executorService;
+  private CountDownPublisherListener publisherListener;
 
   public RegistrarTest() {
     topicDefinition =
@@ -52,33 +60,39 @@ public class RegistrarTest {
 
   @Before
   public void setup() {
+    executorService = Executors.newCachedThreadPool();
     masterServer = new MasterServer(BindAddress.newPrivate(), AdvertiseAddress.newPrivate());
     masterServer.start();
     masterClient = new MasterClient(masterServer.getUri());
-    registrar = new Registrar(masterClient);
+    registrar = new Registrar(masterClient, executorService);
     topicManager = new TopicManager();
     serviceManager = new ServiceManager();
     parameterManager = new ParameterManager();
     slaveServer =
         new SlaveServer(new GraphName("/node"), BindAddress.newPrivate(),
             AdvertiseAddress.newPrivate(), BindAddress.newPrivate(), AdvertiseAddress.newPrivate(),
-            masterClient, topicManager, serviceManager, parameterManager);
+            masterClient, topicManager, serviceManager, parameterManager, executorService);
     slaveServer.start();
     registrar.start(slaveServer.toSlaveIdentifier());
-    publisher =
-        new DefaultPublisher<org.ros.message.std_msgs.String>(topicDefinition, messageSerializer);
-  }
 
+    publisherListener = new CountDownPublisherListener();    
+    publisher =
+            new DefaultPublisher<org.ros.message.std_msgs.String>(topicDefinition, messageSerializer,
+                executorService);
+    publisher.addPublisherListener(publisherListener);
+  }
+  
   @After
   public void tearDown() {
     registrar.shutdown();
     masterServer.shutdown();
+    executorService.shutdown();
   }
 
   @Test
   public void testRegisterPublisher() throws InterruptedException {
     registrar.publisherAdded(publisher);
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.SECONDS));
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
   }
 
   @Test
@@ -91,7 +105,7 @@ public class RegistrarTest {
         new MasterServer(BindAddress.newPrivate(masterServer.getAdvertiseAddress().getPort()),
             AdvertiseAddress.newPrivate());
     masterServer.start();
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.SECONDS));
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
   }
 
 }

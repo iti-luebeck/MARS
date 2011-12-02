@@ -18,9 +18,13 @@ package org.ros.internal.node.topic;
 
 import com.google.common.base.Preconditions;
 
+import org.ros.concurrent.CancellableLoop;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ros.node.topic.Publisher;
+
+import java.util.concurrent.Executor;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
@@ -33,26 +37,21 @@ public class RepeatingPublisher<MessageType> {
   private final Publisher<MessageType> publisher;
   private final MessageType message;
   private final int frequency;
-  private final RepeatingPublisherThread thread;
+  private final RepeatingPublisherLoop runnable;
+  
+  /**
+   * Executor used to run the {@link RepeatingPublisherLoop}.
+   */
+  private final Executor executor;
 
-  private final class RepeatingPublisherThread extends Thread {
+  private final class RepeatingPublisherLoop extends CancellableLoop {
     @Override
-    public void run() {
-      try {
-        while (!Thread.currentThread().isInterrupted()) {
-          publisher.publish(message);
-          if (DEBUG) {
-            log.info("Published message: " + message);
-          }
-          Thread.sleep((long) (1000 * (60f / frequency)));
-        }
-      } catch (InterruptedException e) {
-        // Cancelable
+    public void loop() throws InterruptedException {
+      publisher.publish(message);
+      if (DEBUG) {
+        log.info("Published message: " + message);
       }
-    }
-
-    public void cancel() {
-      interrupt();
+      Thread.sleep((long) (1000f / frequency));
     }
   }
 
@@ -62,21 +61,23 @@ public class RepeatingPublisher<MessageType> {
    * @param frequency
    *          the frequency of publication in Hz
    */
-  public RepeatingPublisher(Publisher<MessageType> publisher, MessageType message, int frequency) {
+  public RepeatingPublisher(Publisher<MessageType> publisher, MessageType message, int frequency,
+	  Executor executor) {
     this.publisher = publisher;
     this.message = message;
     this.frequency = frequency;
-    thread = new RepeatingPublisherThread();
+    this.executor = executor;
+    runnable = new RepeatingPublisherLoop();
   }
 
   public void start() {
-    Preconditions.checkState(!thread.isAlive());
-    thread.start();
+    Preconditions.checkState(!runnable.isRunning());
+    executor.execute(runnable);
   }
 
   public void cancel() {
-    Preconditions.checkState(thread.isAlive());
-    thread.cancel();
+    Preconditions.checkState(runnable.isRunning());
+    runnable.cancel();
   }
 
 }

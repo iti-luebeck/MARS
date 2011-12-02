@@ -24,9 +24,7 @@ import org.ros.message.test_ros.Composite;
 import org.ros.message.test_ros.TestArrays;
 import org.ros.namespace.GraphName;
 import org.ros.namespace.NameResolver;
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
-import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.parameter.ParameterTree;
 import org.ros.node.topic.Publisher;
@@ -42,13 +40,9 @@ import java.util.Map;
  */
 public class ParameterServerTestNode implements NodeMain {
 
-  private Node node;
-
   @SuppressWarnings("rawtypes")
   @Override
-  public void main(NodeConfiguration nodeConfiguration) {
-    node = new DefaultNodeFactory().newNode("param_client", nodeConfiguration);
-
+  public void onStart(Node node) {
     Publisher<org.ros.message.std_msgs.String> pub_tilde =
         node.newPublisher("tilde", "std_msgs/String");
     Publisher<org.ros.message.std_msgs.String> pub_string =
@@ -113,7 +107,7 @@ public class ParameterServerTestNode implements NodeMain {
     param.set(setResolver.resolve("composite"), composite_map);
     param.set(setResolver.resolve("list"), Arrays.asList(list));
 
-    while (true) {
+    while (node.isRunning()) {
       pub_tilde.publish(tilde_m);
       pub_string.publish(string_m);
       pub_int.publish(int_m);
@@ -129,8 +123,6 @@ public class ParameterServerTestNode implements NodeMain {
   }
 
   @Override
-  public void shutdown() {
-    node.shutdown();
+  public void onShutdown(Node node) {
   }
-
 }

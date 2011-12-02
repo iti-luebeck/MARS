@@ -16,14 +16,12 @@
 
 package org.ros.internal.node.server;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ros.address.AdvertiseAddress;
 import org.ros.address.BindAddress;
 import org.ros.internal.node.client.SlaveClient;
@@ -33,14 +31,21 @@ import org.ros.internal.node.topic.SubscriberIdentifier;
 import org.ros.internal.node.xmlrpc.MasterImpl;
 import org.ros.namespace.GraphName;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class MasterServer extends NodeServer {
+
+  private static final boolean DEBUG = false;
+  private static final Log log = LogFactory.getLog(MasterServer.class);
 
   private final Map<GraphName, SlaveIdentifier> slaves;
   private final Map<GraphName, ServiceIdentifier> services;
@@ -69,14 +74,11 @@ public class MasterServer extends NodeServer {
 
   public int unregisterService(ServiceIdentifier serviceIdentifier) {
     GraphName serviceName = serviceIdentifier.getName();
-    if (services.containsKey(serviceName)) {
-      services.remove(serviceName);
-      return 1;
-    }
-    return 0;
+    return services.remove(serviceName) != null ? 1 : 0;
   }
 
   private void addSlave(SlaveIdentifier slaveIdentifier) {
+    Preconditions.checkNotNull(slaveIdentifier);
     GraphName slaveName = slaveIdentifier.getName();
     Preconditions.checkState(
         slaves.get(slaveName) == null || slaves.get(slaveName).equals(slaveIdentifier),
@@ -107,6 +109,9 @@ public class MasterServer extends NodeServer {
    *         publishing the specified topic.
    */
   public List<PublisherIdentifier> registerSubscriber(SubscriberIdentifier subscriberIdentifier) {
+    if (DEBUG) {
+      log.info("Registering subscriber: " + subscriberIdentifier);
+    }
     subscribers.put(subscriberIdentifier.getTopicName(), subscriberIdentifier);
     addSlave(subscriberIdentifier.getSlaveIdentifier());
     synchronized (publishers) {
@@ -115,12 +120,10 @@ public class MasterServer extends NodeServer {
   }
 
   public int unregisterSubscriber(SubscriberIdentifier subscriberIdentifier) {
-    GraphName topicName = subscriberIdentifier.getTopicName();
-    if (subscribers.containsKey(topicName)) {
-      subscribers.remove(topicName, subscriberIdentifier);
-      return 1;
+    if (DEBUG) {
+      log.info("Unregistering subscriber: " + subscriberIdentifier);
     }
-    return 0;
+    return subscribers.remove(subscriberIdentifier.getTopicName(), subscriberIdentifier) ? 1 : 0;
   }
 
   /**
@@ -128,22 +131,23 @@ public class MasterServer extends NodeServer {
    * 
    * @return List of current subscribers of topic in the form of XML-RPC URIs.
    */
-  public List<SubscriberIdentifier> registerPublisher(PublisherIdentifier publisher) {
-    publishers.put(publisher.getTopicName(), publisher);
-    addSlave(publisher.getSlaveIdentifier());
-    publisherUpdate(publisher.getTopicName());
+  public List<SubscriberIdentifier> registerPublisher(PublisherIdentifier publisherIdentifier) {
+    if (DEBUG) {
+      log.info("Registering publisher: " + publisherIdentifier);
+    }
+    publishers.put(publisherIdentifier.getTopicName(), publisherIdentifier);
+    addSlave(publisherIdentifier.getSlaveIdentifier());
+    publisherUpdate(publisherIdentifier.getTopicName());
     synchronized (subscribers) {
-      return ImmutableList.copyOf(subscribers.get(publisher.getTopicName()));
+      return ImmutableList.copyOf(subscribers.get(publisherIdentifier.getTopicName()));
     }
   }
 
   public int unregisterPublisher(PublisherIdentifier publisherIdentifier) {
-    GraphName topicName = publisherIdentifier.getTopicName();
-    if (publishers.containsKey(topicName)) {
-      publishers.remove(topicName, publisherIdentifier);
-      return 1;
+    if (DEBUG) {
+      log.info("Unregistering publisher: " + publisherIdentifier);
     }
-    return 0;
+    return publishers.remove(publisherIdentifier.getTopicName(), publisherIdentifier) ? 1 : 0;
   }
 
   /**

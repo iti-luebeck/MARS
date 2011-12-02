@@ -16,13 +16,13 @@
 
 package org.ros.namespace;
 
-import com.google.common.base.Preconditions;
-
-import org.ros.exception.RosRuntimeException;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.ros.exception.RosRuntimeException;
+
+import com.google.common.base.Preconditions;
 
 /**
  * @author ethan.rublee@gmail.com (Ethan Rublee)
@@ -71,7 +71,7 @@ public class NameResolver {
    * 
    * @param namespace
    * @param name
-   * @return the fully resolved name relative to the given namespace.
+   * @return the fully resolved name relative to the given namespace
    */
   public GraphName resolve(GraphName namespace, GraphName name) {
     GraphName remappedNamespace = lookUpRemapping(namespace);
@@ -148,11 +148,11 @@ public class NameResolver {
   }
 
   protected GraphName lookUpRemapping(GraphName name) {
-    GraphName rmname = name;
+    GraphName remappedName = name;
     if (remappings.containsKey(name)) {
-      rmname = remappings.get(name);
+      remappedName = remappings.get(name);
     }
-    return rmname;
+    return remappedName;
   }
 
 }

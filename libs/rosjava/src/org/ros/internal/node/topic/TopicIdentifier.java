@@ -18,6 +18,8 @@ package org.ros.internal.node.topic;
 
 import org.ros.namespace.GraphName;
 
+import com.google.common.base.Preconditions;
+
 /**
  * @author damonkohler@google.com (Damon Kohler)
  */
@@ -30,6 +32,8 @@ public class TopicIdentifier {
   }
 
   public TopicIdentifier(GraphName name) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(name.isGlobal());
     this.name = name;
   }
 

@@ -38,7 +38,7 @@ class ServiceResponseHandler<ResponseType> extends SimpleChannelHandler {
   private final Queue<ServiceResponseListener<ResponseType>> responseListeners;
   private final MessageDeserializer<ResponseType> deserializer;
 
-  ServiceResponseHandler(
+  public ServiceResponseHandler(
       Queue<ServiceResponseListener<ResponseType>> messageListeners,
       MessageDeserializer<ResponseType> deserializer) {
     this.responseListeners = messageListeners;
@@ -57,6 +57,6 @@ class ServiceResponseHandler<ResponseType> extends SimpleChannelHandler {
       String message = Charset.forName("US-ASCII").decode(buffer).toString();
       listener.onFailure(new RemoteException(StatusCode.ERROR, message));
     }
+    super.messageReceived(ctx, e);
   }
-
 }

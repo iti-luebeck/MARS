@@ -20,7 +20,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ros.exception.RemoteException;
 import org.ros.exception.ServiceNotFoundException;
 import org.ros.internal.message.new_style.ServiceMessageDefinition;
@@ -43,8 +42,6 @@ import org.ros.internal.node.topic.SubscriberFactory;
 import org.ros.internal.node.topic.TopicDefinition;
 import org.ros.internal.node.topic.TopicManager;
 import org.ros.internal.node.xmlrpc.XmlRpcTimeoutException;
-import org.ros.internal.time.TimeProvider;
-import org.ros.internal.time.WallclockProvider;
 import org.ros.message.MessageDefinition;
 import org.ros.message.MessageFactory;
 import org.ros.message.MessageListener;
@@ -53,17 +50,23 @@ import org.ros.message.Time;
 import org.ros.namespace.GraphName;
 import org.ros.namespace.NameResolver;
 import org.ros.namespace.NodeNameResolver;
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
+import org.ros.node.NodeListener;
 import org.ros.node.parameter.ParameterTree;
 import org.ros.node.service.ServiceClient;
 import org.ros.node.service.ServiceServer;
+import org.ros.node.service.ServiceServerListener;
 import org.ros.node.topic.Publisher;
+import org.ros.node.topic.PublisherListener;
 import org.ros.node.topic.Subscriber;
+import org.ros.node.topic.SubscriberListener;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
 
 /**
  * The default implementation of a {@link Node}.
@@ -74,11 +77,12 @@ import java.net.URI;
  */
 public class DefaultNode implements Node {
 
+  private static final boolean DEBUG = false;
+
   private final GraphName nodeName;
   private final NodeConfiguration nodeConfiguration;
   private final NodeNameResolver resolver;
   private final RosoutLogger log;
-  private final TimeProvider timeProvider;
   private final MasterClient masterClient;
   private final SlaveServer slaveServer;
   private final TopicManager topicManager;
@@ -91,7 +95,17 @@ public class DefaultNode implements Node {
   private final URI masterUri;
 
   /**
-   * True if the node is in a running state, false otherwise.
+   * Use for all thread creation.
+   */
+  private final ExecutorService executorService;
+
+  /**
+   * All {@link NodeListener} instances registered with the node.
+   */
+  private final Collection<NodeListener> nodeListeners;
+
+  /**
+   * {@code true} if the node is in a running state, {@code false} otherwise.
    */
   private boolean running;
 
@@ -102,17 +116,23 @@ public class DefaultNode implements Node {
    * @param nodeConfiguration
    *          the {@link NodeConfiguration} for this {@link Node}
    */
-  public DefaultNode(NodeConfiguration nodeConfiguration) {
+  public DefaultNode(NodeConfiguration nodeConfiguration, Collection<NodeListener> nodeListeners) {
     this.nodeConfiguration = NodeConfiguration.copyOf(nodeConfiguration);
-    running = false;
-    masterClient = new MasterClient(nodeConfiguration.getMasterUri());
+    this.nodeListeners = new CopyOnWriteArrayList<NodeListener>();
+    if (nodeListeners != null) {
+      this.nodeListeners.addAll(nodeListeners);
+    }
+    executorService = nodeConfiguration.getExecutorService();
+    masterUri = nodeConfiguration.getMasterUri();
+    masterClient = new MasterClient(masterUri);
     topicManager = new TopicManager();
     serviceManager = new ServiceManager();
     parameterManager = new ParameterManager();
-    registrar = new Registrar(masterClient);
+    registrar = new Registrar(masterClient, executorService);
     topicManager.setListener(registrar);
     serviceManager.setListener(registrar);
-    publisherFactory = new PublisherFactory(topicManager);
+
+    publisherFactory = new PublisherFactory(topicManager, executorService);
 
     GraphName basename = nodeConfiguration.getNodeName();
     NameResolver parentResolver = nodeConfiguration.getParentResolver();
@@ -123,33 +143,19 @@ public class DefaultNode implements Node {
             nodeConfiguration.getTcpRosAdvertiseAddress(),
             nodeConfiguration.getXmlRpcBindAddress(),
             nodeConfiguration.getXmlRpcAdvertiseAddress(), masterClient, topicManager,
-            serviceManager, parameterManager);
-    subscriberFactory = new SubscriberFactory(slaveServer, topicManager);
-    serviceFactory = new ServiceFactory(nodeName, slaveServer, serviceManager);
+            serviceManager, parameterManager, executorService);
+    subscriberFactory = new SubscriberFactory(slaveServer, topicManager, executorService);
+    serviceFactory = new ServiceFactory(nodeName, slaveServer, serviceManager, executorService);
 
-    // TODO(kwc): Implement simulated time.
-    timeProvider = new WallclockProvider();
-
-    masterUri = nodeConfiguration.getMasterUri();
-    start();
-
-    // NOTE(damonkohler): This must be created after start() is called so that
-    // the Registrar can be initialized with the SlaveServer's SlaveIdentifier
-    // before trying to register the /rosout Publisher.
-    Publisher<org.ros.message.rosgraph_msgs.Log> rosoutPublisher =
-        newPublisher("/rosout", "rosgraph_msgs/Log");
-    log = new RosoutLogger(LogFactory.getLog(nodeName.toString()), rosoutPublisher, timeProvider);
-  }
-
-  /**
-   * Start the node and initiate master registration.
-   */
-  @VisibleForTesting
-  void start() {
-    Preconditions.checkState(!running);
-    running = true;
     slaveServer.start();
     registrar.start(slaveServer.toSlaveIdentifier());
+
+    // NOTE(damonkohler): This must be created after the Registrar has been
+    // initialized with the SlaveServer's SlaveIdentifier so that it can
+    // register the /rosout Publisher.
+    log = new RosoutLogger(this);
+    running = true;
+    signalOnStart();
   }
 
   @VisibleForTesting
@@ -198,45 +204,74 @@ public class DefaultNode implements Node {
 
   @Override
   public <MessageType> Publisher<MessageType> newPublisher(GraphName topicName, String messageType) {
+    return newPublisher(topicName, messageType, null);
+  }
+
+  @Override
+  public <MessageType> Publisher<MessageType> newPublisher(GraphName topicName, String messageType,
+      Collection<? extends PublisherListener> listeners) {
     GraphName resolvedTopicName = resolveName(topicName);
     MessageDefinition messageDefinition =
         nodeConfiguration.getMessageDefinitionFactory().newFromString(messageType);
     TopicDefinition topicDefinition = TopicDefinition.create(resolvedTopicName, messageDefinition);
     org.ros.message.MessageSerializer<MessageType> serializer = newMessageSerializer(messageType);
-    return publisherFactory.create(topicDefinition, serializer);
+    return publisherFactory.create(topicDefinition, serializer, listeners);
+  }
+
+  @Override
+  public <MessageType> Publisher<MessageType> newPublisher(String topicName, String messageType,
+      Collection<? extends PublisherListener> listeners) {
+    return newPublisher(new GraphName(topicName), messageType, listeners);
   }
 
   @Override
   public <MessageType> Publisher<MessageType> newPublisher(String topicName, String messageType) {
-    return newPublisher(new GraphName(topicName), messageType);
+    return newPublisher(topicName, messageType, null);
   }
 
   @Override
   public <MessageType> Subscriber<MessageType> newSubscriber(GraphName topicName,
-      String messageType, final MessageListener<MessageType> listener) {
+      String messageType, final MessageListener<MessageType> messageListener,
+      Collection<? extends SubscriberListener> listeners) {
     GraphName resolvedTopicName = resolveName(topicName);
     MessageDefinition messageDefinition =
         nodeConfiguration.getMessageDefinitionFactory().newFromString(messageType);
     TopicDefinition topicDefinition = TopicDefinition.create(resolvedTopicName, messageDefinition);
     MessageDeserializer<MessageType> deserializer = newMessageDeserializer(messageType);
-    Subscriber<MessageType> subscriber = subscriberFactory.create(topicDefinition, deserializer);
-    subscriber.addMessageListener(listener);
+    Subscriber<MessageType> subscriber =
+        subscriberFactory.create(topicDefinition, deserializer, listeners);
+    subscriber.addMessageListener(messageListener);
     return subscriber;
   }
 
   @Override
+  public <MessageType> Subscriber<MessageType> newSubscriber(GraphName topicName,
+      String messageType, final MessageListener<MessageType> messageListener) {
+    return newSubscriber(topicName, messageType, messageListener, null);
+  }
+
+  @Override
   public <MessageType> Subscriber<MessageType> newSubscriber(String topicName, String messageType,
-      final MessageListener<MessageType> listener) {
-    return newSubscriber(new GraphName(topicName), messageType, listener);
+      final MessageListener<MessageType> messageListener,
+      Collection<? extends SubscriberListener> listeners) {
+    return newSubscriber(new GraphName(topicName), messageType, messageListener, listeners);
+  }
+
+  @Override
+  public <MessageType> Subscriber<MessageType> newSubscriber(String topicName, String messageType,
+      final MessageListener<MessageType> messageListener) {
+    return newSubscriber(topicName, messageType, messageListener, null);
   }
 
   @Override
   public <RequestType, ResponseType> ServiceServer<RequestType, ResponseType> newServiceServer(
       GraphName serviceName, String serviceType,
-      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder) {
+      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder,
+      Collection<? extends ServiceServerListener> serverListeners) {
+    GraphName resolvedServiceName = resolveName(serviceName);
     // TODO(damonkohler): It's rather non-obvious that the URI will be created
     // later on the fly.
-    ServiceIdentifier identifier = new ServiceIdentifier(serviceName, null);
+    ServiceIdentifier identifier = new ServiceIdentifier(resolvedServiceName, null);
     ServiceMessageDefinition messageDefinition =
         ServiceMessageDefinitionFactory.createFromString(serviceType);
     ServiceDefinition definition = new ServiceDefinition(identifier, messageDefinition);
@@ -244,27 +279,43 @@ public class DefaultNode implements Node {
         newServiceRequestDeserializer(serviceType);
     MessageSerializer<ResponseType> responseSerializer = newServiceResponseSerializer(serviceType);
     return serviceFactory.createServer(definition, requestDeserializer, responseSerializer,
-        responseBuilder);
+        responseBuilder, serverListeners);
+  }
+
+  @Override
+  public <RequestType, ResponseType> ServiceServer<RequestType, ResponseType> newServiceServer(
+      GraphName serviceName, String serviceType,
+      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder) {
+    return newServiceServer(serviceName, serviceType, responseBuilder, null);
+  }
+
+  @Override
+  public <RequestType, ResponseType> ServiceServer<RequestType, ResponseType> newServiceServer(
+      String serviceName, String serviceType,
+      ServiceResponseBuilder<RequestType, ResponseType> responseBuilder,
+      Collection<? extends ServiceServerListener> serverListeners) {
+    return newServiceServer(new GraphName(serviceName), serviceType, responseBuilder,
+        serverListeners);
   }
 
   @Override
   public <RequestType, ResponseType> ServiceServer<RequestType, ResponseType> newServiceServer(
       String serviceName, String serviceType,
       ServiceResponseBuilder<RequestType, ResponseType> responseBuilder) {
-    return newServiceServer(new GraphName(serviceName), serviceType, responseBuilder);
+    return newServiceServer(serviceName, serviceType, responseBuilder, null);
   }
 
   @Override
   public <RequestType, ResponseType> ServiceClient<RequestType, ResponseType> newServiceClient(
       GraphName serviceName, String serviceType) throws ServiceNotFoundException {
-    URI uri = lookupService(serviceName);
+    GraphName resolvedServiceName = resolveName(serviceName);
+    URI uri = lookupService(resolvedServiceName);
     if (uri == null) {
-      throw new ServiceNotFoundException("No such service " + serviceName + " of type "
+      throw new ServiceNotFoundException("No such service " + resolvedServiceName + " of type "
           + serviceType);
     }
     ServiceMessageDefinition messageDefinition =
         ServiceMessageDefinitionFactory.createFromString(serviceType);
-    GraphName resolvedServiceName = resolveName(serviceName);
     ServiceIdentifier serviceIdentifier = new ServiceIdentifier(resolvedServiceName, uri);
     ServiceDefinition definition = new ServiceDefinition(serviceIdentifier, messageDefinition);
     MessageSerializer<RequestType> requestSerializer = newServiceRequestSerializer(serviceType);
@@ -298,7 +349,7 @@ public class DefaultNode implements Node {
 
   @Override
   public Time getCurrentTime() {
-    return timeProvider.getCurrentTime();
+    return nodeConfiguration.getTimeProvider().getCurrentTime();
   }
 
   @Override
@@ -327,12 +378,8 @@ public class DefaultNode implements Node {
   }
 
   @Override
-  public boolean isOk() {
-    return isRunning() && isRegistered();
-  }
-
-  @Override
   public void shutdown() {
+    Preconditions.checkState(running == true, "Not running.");
     // NOTE(damonkohler): We don't want to raise potentially spurious
     // exceptions during shutdown that would interrupt the process. This is
     // simply best effort cleanup.
@@ -342,7 +389,13 @@ public class DefaultNode implements Node {
     for (Publisher<?> publisher : topicManager.getPublishers()) {
       publisher.shutdown();
       try {
-        masterClient.unregisterPublisher(slaveServer.toSlaveIdentifier(), publisher);
+        Response<Integer> response =
+            masterClient.unregisterPublisher(slaveServer.toSlaveIdentifier(), publisher);
+        if (DEBUG) {
+          if (response.getResult() == 0) {
+            System.err.println("Failed to unregister publisher: " + publisher.getTopicName());
+          }
+        }
       } catch (XmlRpcTimeoutException e) {
         log.error(e);
       } catch (RemoteException e) {
@@ -352,7 +405,13 @@ public class DefaultNode implements Node {
     for (Subscriber<?> subscriber : topicManager.getSubscribers()) {
       subscriber.shutdown();
       try {
-        masterClient.unregisterSubscriber(slaveServer.toSlaveIdentifier(), subscriber);
+        Response<Integer> response =
+            masterClient.unregisterSubscriber(slaveServer.toSlaveIdentifier(), subscriber);
+        if (DEBUG) {
+          if (response.getResult() == 0) {
+            System.err.println("Failed to unregister subscriber: " + subscriber.getTopicName());
+          }
+        }
       } catch (XmlRpcTimeoutException e) {
         log.error(e);
       } catch (RemoteException e) {
@@ -361,7 +420,13 @@ public class DefaultNode implements Node {
     }
     for (ServiceServer<?, ?> serviceServer : serviceManager.getServers()) {
       try {
-        masterClient.unregisterService(slaveServer.toSlaveIdentifier(), serviceServer);
+        Response<Integer> response =
+            masterClient.unregisterService(slaveServer.toSlaveIdentifier(), serviceServer);
+        if (DEBUG) {
+          if (response.getResult() == 0) {
+            System.err.println("Failed to unregister service: " + serviceServer.getName());
+          }
+        }
       } catch (XmlRpcTimeoutException e) {
         log.error(e);
       } catch (RemoteException e) {
@@ -371,6 +436,7 @@ public class DefaultNode implements Node {
     for (ServiceClient<?, ?> serviceClient : serviceManager.getClients()) {
       serviceClient.shutdown();
     }
+    signalOnShutdown();
   }
 
   @Override
@@ -395,16 +461,6 @@ public class DefaultNode implements Node {
   }
 
   @Override
-  public boolean isRegistered() {
-    return registrar.getPendingSize() == 0;
-  }
-
-  @Override
-  public boolean isRegistrationOk() {
-    return registrar.isMasterRegistrationOk();
-  }
-
-  @Override
   public MessageSerializationFactory getMessageSerializationFactory() {
     return nodeConfiguration.getMessageSerializationFactory();
   }
@@ -412,6 +468,52 @@ public class DefaultNode implements Node {
   @Override
   public MessageFactory getMessageFactory() {
     return nodeConfiguration.getMessageFactory();
+  }
+
+  @Override
+  public void addListener(NodeListener listener) {
+    nodeListeners.add(listener);
+  }
+
+  @Override
+  public void removeListener(NodeListener listener) {
+    nodeListeners.remove(listener);
+  }
+
+  /**
+   * Signal all {@link NodeListener}s that the {@link Node} has started.
+   * 
+   * <p>
+   * Each listener is called in a separate thread.
+   */
+  private void signalOnStart() {
+    final Node node = this;
+    for (final NodeListener listener : nodeListeners) {
+      executorService.execute(new Runnable() {
+        @Override
+        public void run() {
+          listener.onStart(node);
+        }
+      });
+    }
+  }
+
+  /**
+   * Signal all {@link NodeListener}s that the {@link Node} has shut down.
+   * 
+   * <p>
+   * Each listener is called in a separate thread.
+   */
+  private void signalOnShutdown() {
+    final Node node = this;
+    for (final NodeListener listener : nodeListeners) {
+      executorService.execute(new Runnable() {
+        @Override
+        public void run() {
+          listener.onShutdown(node);
+        }
+      });
+    }
   }
 
   @VisibleForTesting

@@ -23,44 +23,43 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
-import org.ros.exception.RosRuntimeException;
 
 /**
+ * Adds new {@link Channels} to the provided {@link ChannelGroup}.
+ * 
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class ConnectionTrackingHandler extends SimpleChannelHandler {
 
   private static final boolean DEBUG = false;
   private static final Log log = LogFactory.getLog(ConnectionTrackingHandler.class);
-  
+
+  /**
+   * The channel group the connection is to be part of.
+   */
   private final ChannelGroup channelGroup;
-  
+
   public ConnectionTrackingHandler(ChannelGroup channelGroup) {
     this.channelGroup = channelGroup;
   }
-  
+
   @Override
-  public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) {
+  public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
     if (DEBUG) {
       log.info("Channel opened: " + e.getChannel().toString());
     }
     channelGroup.add(e.getChannel());
-  }
-  
-  @Override
-  public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-    if (DEBUG) {
-      log.info("Channel closed: " + e.getChannel().toString());
-    }
+    super.channelOpen(ctx, e);
   }
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+    ctx.getChannel().close();
     if (DEBUG) {
-      log.info("Channel exception: " + e.getChannel().toString());
+      log.error("Channel exception: " + ctx.getChannel(), e.getCause());
     }
-    e.getChannel().close();
-    throw new RosRuntimeException(e.getCause());
+    // NOTE(damonkohler): We ignore exceptions here because they are common
+    // (e.g. network failure, connection reset by peer, etc.) and should not be
+    // fatal. However, in all cases the channel should be closed.
   }
-  
 }

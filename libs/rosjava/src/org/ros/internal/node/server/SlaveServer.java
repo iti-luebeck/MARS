@@ -16,10 +16,7 @@
 
 package org.ros.internal.node.server;
 
-import java.lang.management.ManagementFactory;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
+import com.google.common.collect.Lists;
 
 import org.ros.address.AdvertiseAddress;
 import org.ros.address.BindAddress;
@@ -39,7 +36,11 @@ import org.ros.internal.transport.tcp.TcpRosProtocolDescription;
 import org.ros.internal.transport.tcp.TcpRosServer;
 import org.ros.namespace.GraphName;
 
-import com.google.common.collect.Lists;
+import java.lang.management.ManagementFactory;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
@@ -56,7 +57,8 @@ public class SlaveServer extends NodeServer {
   public SlaveServer(GraphName nodeName, BindAddress tcpRosBindAddress,
       AdvertiseAddress tcpRosAdvertiseAddress, BindAddress xmlRpcBindAddress,
       AdvertiseAddress xmlRpcAdvertiseAddress, MasterClient master, TopicManager topicManager,
-      ServiceManager serviceManager, ParameterManager parameterManager) {
+      ServiceManager serviceManager, ParameterManager parameterManager,
+      ExecutorService executorService) {
     super(xmlRpcBindAddress, xmlRpcAdvertiseAddress);
     this.nodeName = nodeName;
     this.masterClient = master;
@@ -64,7 +66,8 @@ public class SlaveServer extends NodeServer {
     this.serviceManager = serviceManager;
     this.parameterManager = parameterManager;
     this.tcpRosServer =
-        new TcpRosServer(tcpRosBindAddress, tcpRosAdvertiseAddress, topicManager, serviceManager);
+        new TcpRosServer(tcpRosBindAddress, tcpRosAdvertiseAddress, topicManager, serviceManager,
+            executorService);
   }
 
   public AdvertiseAddress getTcpRosAdvertiseAddress() {

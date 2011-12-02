@@ -4,8 +4,6 @@ package org.ros.internal.node;
 
 import static org.junit.Assert.assertTrue;
 
-import org.ros.internal.node.client.Registrar;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +11,7 @@ import org.ros.address.AdvertiseAddress;
 import org.ros.address.BindAddress;
 import org.ros.internal.message.old_style.MessageSerializer;
 import org.ros.internal.node.client.MasterClient;
+import org.ros.internal.node.client.Registrar;
 import org.ros.internal.node.parameter.ParameterManager;
 import org.ros.internal.node.server.MasterServer;
 import org.ros.internal.node.server.SlaveServer;
@@ -22,7 +21,10 @@ import org.ros.internal.node.topic.TopicDefinition;
 import org.ros.internal.node.topic.TopicManager;
 import org.ros.message.MessageDefinition;
 import org.ros.namespace.GraphName;
+import org.ros.node.topic.CountDownPublisherListener;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,6 +43,8 @@ public class MasterRegistrationTest {
   private ParameterManager parameterManager;
   private SlaveServer slaveServer;
   private DefaultPublisher<org.ros.message.std_msgs.String> publisher;
+  private ExecutorService executorService;
+  private CountDownPublisherListener publisherListener;
 
   public MasterRegistrationTest() {
     topicDefinition =
@@ -53,10 +57,11 @@ public class MasterRegistrationTest {
 
   @Before
   public void setup() {
+	executorService = Executors.newCachedThreadPool();
     masterServer = new MasterServer(BindAddress.newPrivate(), AdvertiseAddress.newPrivate());
     masterServer.start();
     masterClient = new MasterClient(masterServer.getUri());
-    masterRegistration = new Registrar(masterClient);
+    masterRegistration = new Registrar(masterClient, executorService);
     topicManager = new TopicManager();
     serviceManager = new ServiceManager();
     parameterManager = new ParameterManager();
@@ -64,22 +69,27 @@ public class MasterRegistrationTest {
         new SlaveServer(new GraphName("/node"), BindAddress.newPrivate(),
             AdvertiseAddress.newPrivate(), BindAddress.newPrivate(),
             AdvertiseAddress.newPrivate(), masterClient, topicManager, serviceManager,
-            parameterManager);
+            parameterManager, executorService);
     slaveServer.start();
     masterRegistration.start(slaveServer.toSlaveIdentifier());
-    publisher = new DefaultPublisher<org.ros.message.std_msgs.String>(topicDefinition, messageSerializer);
+
+    publisherListener = new CountDownPublisherListener();
+    
+    publisher = new DefaultPublisher<org.ros.message.std_msgs.String>(topicDefinition, messageSerializer, executorService);
+    publisher.addPublisherListener(publisherListener);
   }
 
   @After
   public void tearDown() {
     masterRegistration.shutdown();
     masterServer.shutdown();
+    executorService.shutdown();
   }
 
   @Test
   public void testRegisterPublisher() throws InterruptedException {
     masterRegistration.publisherAdded(publisher);
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.SECONDS));
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
   }
 
   @Test
@@ -92,7 +102,7 @@ public class MasterRegistrationTest {
         new MasterServer(BindAddress.newPrivate(masterServer.getAdvertiseAddress().getPort()),
             AdvertiseAddress.newPrivate());
     masterServer.start();
-    assertTrue(publisher.awaitRegistration(1, TimeUnit.SECONDS));
+    assertTrue(publisherListener.awaitMasterRegistrationSuccess(1, TimeUnit.SECONDS));
   }
 
 }

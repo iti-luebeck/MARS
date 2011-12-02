@@ -19,37 +19,47 @@ package org.ros.internal.node.topic;
 import org.ros.internal.node.server.MasterServer;
 import org.ros.internal.node.server.SlaveServer;
 import org.ros.message.MessageDeserializer;
+import org.ros.node.topic.Subscriber;
+import org.ros.node.topic.SubscriberListener;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 
 /**
+ * A factory for {@link Subscriber} instances.
+ * 
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class SubscriberFactory {
-  
+
   private final SlaveServer slaveServer;
   private final TopicManager topicManager;
-  private final Executor executor;
-  
-  public SubscriberFactory(SlaveServer slaveServer, TopicManager topicManager) {
+  private final ExecutorService executorService;
+
+  public SubscriberFactory(SlaveServer slaveServer, TopicManager topicManager,
+      ExecutorService executorService) {
     this.slaveServer = slaveServer;
     this.topicManager = topicManager;
-    this.executor = Executors.newCachedThreadPool();
+    this.executorService = executorService;
   }
-  
+
   /**
-   * Gets or creates a {@link DefaultSubscriber} instance. {@link DefaultSubscriber}s are
-   * cached and reused per topic. When a new {@link DefaultSubscriber} is generated, it
-   * is registered with the {@link MasterServer}.
+   * Gets or creates a {@link DefaultSubscriber} instance.
+   * {@link DefaultSubscriber}s are cached and reused per topic. When a new
+   * {@link DefaultSubscriber} is generated, it is registered with the
+   * {@link MasterServer}.
    * 
    * @param <MessageType>
-   * @param topicDefinition {@link TopicDefinition} that is subscribed to
+   * @param topicDefinition
+   *          {@link TopicDefinition} that is subscribed to
+   * @param deserializer
+   * @param listeners
+   *          lifecycle listeners for the {@link Subscriber} instance (can be {@code null})
    * @return a {@link DefaultSubscriber} instance
    */
   @SuppressWarnings("unchecked")
-  public <MessageType> DefaultSubscriber<MessageType> create(TopicDefinition topicDefinition,
-      MessageDeserializer<MessageType> deserializer) {
+  public <MessageType> Subscriber<MessageType> create(TopicDefinition topicDefinition,
+      MessageDeserializer<MessageType> deserializer, Collection<? extends SubscriberListener> listeners) {
     String topicName = topicDefinition.getName().toString();
     DefaultSubscriber<MessageType> subscriber;
     boolean createdNewSubscriber = false;
@@ -59,8 +69,8 @@ public class SubscriberFactory {
         subscriber = (DefaultSubscriber<MessageType>) topicManager.getSubscriber(topicName);
       } else {
         subscriber =
-            DefaultSubscriber.create(slaveServer.toSlaveIdentifier(), topicDefinition, executor,
-                deserializer);
+            DefaultSubscriber.create(slaveServer.toSlaveIdentifier(), topicDefinition,
+                executorService, deserializer);
         createdNewSubscriber = true;
       }
     }
@@ -68,6 +78,13 @@ public class SubscriberFactory {
     if (createdNewSubscriber) {
       topicManager.putSubscriber(subscriber);
     }
+    
+    if (listeners != null) {
+      for (SubscriberListener listener : listeners) {
+        subscriber.addSubscriberListener(listener);
+      }
+    }
+
     return subscriber;
   }
 

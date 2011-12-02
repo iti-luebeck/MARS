@@ -18,9 +18,7 @@ package org.ros.tutorials.pubsub;
 
 import com.google.common.base.Preconditions;
 
-import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
-import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
 
@@ -36,18 +34,19 @@ public class Talker implements NodeMain {
   private Node node;
 
   @Override
-  public void main(NodeConfiguration configuration) {
-    Preconditions.checkState(node == null);
-    Preconditions.checkNotNull(configuration);
+  public void onStart(Node node) {
+    Preconditions.checkState(this.node == null);
+    this.node = node;
     try {
-      node = new DefaultNodeFactory().newNode("talker", configuration);
       Publisher<org.ros.message.std_msgs.String> publisher =
           node.newPublisher("chatter", "std_msgs/String");
       int seq = 0;
       while (true) {
         org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
-        str.data = "Hello world! " + seq++;
+        str.data = "Hello world! " + seq;
         publisher.publish(str);
+        node.getLog().info("Hello, world! " + seq);
+        seq++;
         Thread.sleep(1000);
       }
     } catch (Exception e) {
@@ -60,9 +59,6 @@ public class Talker implements NodeMain {
   }
 
   @Override
-  public void shutdown() {
-    node.shutdown();
-    node = null;
+  public void onShutdown(Node node) {
   }
-
 }

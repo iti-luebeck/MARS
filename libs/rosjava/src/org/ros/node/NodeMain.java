@@ -16,25 +16,18 @@
 
 package org.ros.node;
 
+import org.ros.node.topic.Publisher;
+import org.ros.node.topic.Subscriber;
+
 /**
- * Defines a {@link Node} entry point and shutdown routine.
+ * The one required {@link NodeListener} for node creation.
+ * 
+ * <p>
+ * {@link NodeListener#onStart(Node)} should be used to set up your program's
+ * {@link Publisher}s, {@link Subscriber}s, and services.
  * 
  * @author ethan.rublee@gmail.com (Ethan Rublee)
  * @author damonkohler@google.com (Damon Kohler)
  */
-public interface NodeMain {
-
-  /**
-   * {@link Node} entry point.
-   * 
-   * @param nodeConfiguration the {@link NodeConfiguration} that will be passed to the
-   *        {@link Node}
-   */
-  void main(NodeConfiguration nodeConfiguration) throws Exception;
-  
-  /**
-   * {@link Node} shutdown routine.
-   */
-  void shutdown();
-  
+public interface NodeMain extends NodeListener {
 }

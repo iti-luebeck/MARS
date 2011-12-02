@@ -16,19 +16,17 @@
 
 package org.ros;
 
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
+
 import org.ros.address.AdvertiseAddress;
 import org.ros.address.BindAddress;
-import org.ros.exception.RosRuntimeException;
 import org.ros.internal.node.server.MasterServer;
-import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeMain;
-
-import java.net.URI;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
  */
-public class RosCore implements NodeMain {
+public class RosCore {
 
   private final MasterServer masterServer;
   
@@ -56,8 +54,7 @@ public class RosCore implements NodeMain {
     masterServer = new MasterServer(bindAddress, advertiseAddress);
   }
 
-  @Override
-  public void main(NodeConfiguration nodeConfiguration) throws Exception {
+  public void start() {
     masterServer.start();
   }
 
@@ -65,15 +62,14 @@ public class RosCore implements NodeMain {
     return masterServer.getUri();
   }
 
-  public void awaitStart() {
-    try {
-      masterServer.awaitStart();
-    } catch (InterruptedException e) {
-      throw new RosRuntimeException(e);
-    }
+  public void awaitStart() throws InterruptedException {
+    masterServer.awaitStart();
+  }
+  
+  public boolean awaitStart(long timeout, TimeUnit unit) throws InterruptedException {
+    return masterServer.awaitStart(timeout, unit);
   }
 
-  @Override
   public void shutdown() {
     masterServer.shutdown();
   }

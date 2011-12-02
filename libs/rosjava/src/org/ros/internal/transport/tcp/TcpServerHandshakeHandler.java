@@ -16,7 +16,7 @@
 
 package org.ros.internal.transport.tcp;
 
-import com.google.common.base.Preconditions;
+import java.util.Map;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
@@ -27,15 +27,15 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.ros.exception.RosRuntimeException;
+import org.ros.internal.node.service.DefaultServiceServer;
 import org.ros.internal.node.service.ServiceManager;
 import org.ros.internal.node.service.ServiceResponseEncoder;
-import org.ros.internal.node.service.DefaultServiceServer;
 import org.ros.internal.node.topic.DefaultPublisher;
 import org.ros.internal.node.topic.TopicManager;
 import org.ros.internal.transport.ConnectionHeader;
 import org.ros.internal.transport.ConnectionHeaderFields;
 
-import java.util.Map;
+import com.google.common.base.Preconditions;
 
 /**
  * A {@link ChannelHandler} which will process the TCP server handshake.
@@ -89,13 +89,13 @@ public class TcpServerHandshakeHandler extends SimpleChannelHandler {
       if (!future.isSuccess()) {
         throw new RosRuntimeException(future.getCause());
       }
-      publisher.addChannel(channel);
+      publisher.addSubscriberChannel(channel);
 
       // Once the handshake is complete, there will be nothing incoming on the
       // channel. Replace the handshake handler with a handler which will
       // drop everything.
       pipeline.replace(this, "DiscardHandler", new SimpleChannelHandler());
+      super.messageReceived(ctx, e);
     }
   }
-
 }

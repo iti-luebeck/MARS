@@ -16,9 +16,11 @@
 
 package org.ros.internal.node.service;
 
+import java.net.URI;
+
 import org.ros.namespace.GraphName;
 
-import java.net.URI;
+import com.google.common.base.Preconditions;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
@@ -29,6 +31,8 @@ public class ServiceIdentifier {
   private final URI uri;
 
   public ServiceIdentifier(GraphName name, URI uri) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(name.isGlobal());
     this.name = name;
     this.uri = uri;
   }

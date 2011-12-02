@@ -16,6 +16,8 @@
 
 package org.ros.internal.node.service;
 
+import java.nio.ByteBuffer;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -23,8 +25,6 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.ros.message.MessageDeserializer;
 import org.ros.message.MessageSerializer;
-
-import java.nio.ByteBuffer;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
@@ -50,7 +50,7 @@ class ServiceRequestHandler<RequestType, ResponseType> extends SimpleChannelHand
   }
 
   @Override
-  public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+  public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
     ChannelBuffer requestBuffer = (ChannelBuffer) e.getMessage();
     ServiceServerResponse response = new ServiceServerResponse();
     ChannelBuffer responseBuffer;
@@ -68,6 +68,7 @@ class ServiceRequestHandler<RequestType, ResponseType> extends SimpleChannelHand
     response.setMessageLength(responseBuffer.readableBytes());
     response.setMessage(responseBuffer);
     ctx.getChannel().write(response);
+    super.messageReceived(ctx, e);
   }
 
 }

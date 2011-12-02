@@ -16,10 +16,12 @@
 
 package org.ros.internal.node.topic;
 
+import java.net.URI;
+
 import org.ros.internal.node.server.SlaveIdentifier;
 import org.ros.namespace.GraphName;
 
-import java.net.URI;
+import com.google.common.base.Preconditions;
 
 /**
  * @author damonkohler@google.com (Damon Kohler)
@@ -35,6 +37,8 @@ public class SubscriberIdentifier {
   }
 
   public SubscriberIdentifier(SlaveIdentifier slaveIdentifier, TopicIdentifier topicIdentifier) {
+    Preconditions.checkNotNull(slaveIdentifier);
+    Preconditions.checkNotNull(topicIdentifier);
     this.slaveIdentifier = slaveIdentifier;
     this.topicIdentifier = topicIdentifier;
   }
