@@ -32,28 +32,15 @@
 
 package com.jme3.export.binary;
 
-import com.jme3.export.SavableClassUtil;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetManager;
-import com.jme3.export.FormatVersion;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.ReadListener;
-import com.jme3.export.Savable;
+import com.jme3.export.*;
 import com.jme3.math.FastMath;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,8 +75,6 @@ public final class BinaryImporter implements JmeImporter {
 
     private static final boolean fastRead = ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN;
     
-    private List<ClassLoader> loaders;
-
     public BinaryImporter() {
     }
     
@@ -99,12 +84,6 @@ public final class BinaryImporter implements JmeImporter {
     
     public static boolean canUseFastBuffers(){
         return fastRead;
-    }
-
-    public void addClassLoader(ClassLoader loader){
-        if(loaders == null)
-            loaders = new ArrayList<ClassLoader>();
-        loaders.add(loader);
     }
 
     public static BinaryImporter getInstance() {
@@ -346,7 +325,7 @@ public final class BinaryImporter implements JmeImporter {
             int dataLength = ByteUtils.convertIntFromBytes(dataArray, loc);
             loc+=4;
 
-            Savable out = SavableClassUtil.fromName(bco.className, loaders);
+            Savable out = SavableClassUtil.fromName(bco.className, assetManager.getClassLoaders());
             
             BinaryInputCapsule cap = new BinaryInputCapsule(this, out, bco);
             cap.setContent(dataArray, loc, loc+dataLength);

@@ -32,11 +32,7 @@
 
 package com.jme3.audio.plugins;
 
-import de.jarnbjo.ogg.LogicalOggStream;
-import de.jarnbjo.ogg.LogicalOggStreamImpl;
-import de.jarnbjo.ogg.OggFormatException;
-import de.jarnbjo.ogg.OggPage;
-import de.jarnbjo.ogg.PhysicalOggStream;
+import de.jarnbjo.ogg.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -119,7 +115,7 @@ public class UncachedOggStream implements PhysicalOggStream {
     }
 
     private LogicalOggStream getLogicalStream(int serialNumber) {
-        return logicalStreams.get(new Integer(serialNumber));
+        return logicalStreams.get(Integer.valueOf(serialNumber));
     }
 
     public Collection<LogicalOggStream> getLogicalStreams() {

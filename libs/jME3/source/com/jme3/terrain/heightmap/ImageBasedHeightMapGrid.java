@@ -26,6 +26,10 @@ import javax.imageio.ImageIO;
  * 
  * @author Anthyon, Brent Owens
  */
+@Deprecated
+/**
+ * @Deprecated in favor of ImageTileLoader
+ */
 public class ImageBasedHeightMapGrid implements HeightMapGrid {
 
     private static final Logger logger = Logger.getLogger(ImageBasedHeightMapGrid.class.getName());

@@ -31,12 +31,7 @@
  */
 package com.jme3.system;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -47,7 +42,7 @@ import java.util.logging.Logger;
  * Helper class for extracting the natives (dll, so) from the jars.
  * This class should only be used internally.
  */
-public class Natives {
+public final class Natives {
 
     private static final Logger logger = Logger.getLogger(Natives.class.getName());
     private static final byte[] buf = new byte[1024];
@@ -114,15 +109,15 @@ public class Natives {
         }
     }
 
-    protected static void extractNativeLib(String sysName, String name) throws IOException {
+    public static void extractNativeLib(String sysName, String name) throws IOException {
         extractNativeLib(sysName, name, false, true);
     }
 
-    protected static void extractNativeLib(String sysName, String name, boolean load) throws IOException {
+    public static void extractNativeLib(String sysName, String name, boolean load) throws IOException {
         extractNativeLib(sysName, name, load, true);
     }
 
-    protected static void extractNativeLib(String sysName, String name, boolean load, boolean warning) throws IOException {
+    public static void extractNativeLib(String sysName, String name, boolean load, boolean warning) throws IOException {
         String fullname = System.mapLibraryName(name);
 
         String path = "native/" + sysName + "/" + fullname;
@@ -139,7 +134,7 @@ public class Natives {
         URLConnection conn = url.openConnection();
         InputStream in = conn.getInputStream();
         File targetFile = new File(getExtractionDir(), fullname);
-
+        OutputStream out = null;
         try {
             if (targetFile.exists()) {
                 // OK, compare last modified date of this file to 
@@ -154,13 +149,15 @@ public class Natives {
                 }
             }
 
-            OutputStream out = new FileOutputStream(targetFile);
+            out = new FileOutputStream(targetFile);
             int len;
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }
             in.close();
+            in = null;
             out.close();
+            out = null;
 
             // NOTE: On OSes that support "Date Created" property, 
             // this will cause the last modified date to be lower than
@@ -176,6 +173,12 @@ public class Natives {
             if (load) {
                 System.load(targetFile.getAbsolutePath());
             }
+            if(in != null){
+                in.close();
+            }
+            if(out != null){
+                out.close();
+            }
         }
         logger.log(Level.FINE, "Copied {0} to {1}", new Object[]{fullname, targetFile});
     }
@@ -189,7 +192,7 @@ public class Natives {
         }
     }
 
-    protected static void extractNativeLibs(Platform platform, AppSettings settings) throws IOException {
+    public static void extractNativeLibs(Platform platform, AppSettings settings) throws IOException {
         String renderer = settings.getRenderer();
         String audioRenderer = settings.getAudioRenderer();
         boolean needLWJGL = false;

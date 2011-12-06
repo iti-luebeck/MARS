@@ -31,16 +31,8 @@
  */
 package com.jme3.animation;
 
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Transform;
-import com.jme3.math.Vector3f;
+import com.jme3.export.*;
+import com.jme3.math.*;
 import com.jme3.scene.Node;
 import com.jme3.util.TempVars;
 import java.io.IOException;
@@ -469,6 +461,12 @@ public final class Bone implements Savable {
         // TODO: add scale here ???
         worldPos.set(translation);
         worldRot.set(rotation);
+        
+        //if there is an attached Node we need to set it's local transforms too.
+        if(attachNode != null){
+            attachNode.setLocalTranslation(translation);
+            attachNode.setLocalRotation(rotation);
+        }
     }
 
     /**

@@ -32,12 +32,13 @@
 
 package com.jme3.network.kernel.tcp;
 
+import com.jme3.network.kernel.Endpoint;
+import com.jme3.network.kernel.Kernel;
+import com.jme3.network.kernel.KernelException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import com.jme3.network.kernel.*;
 
 
 /**
@@ -45,7 +46,7 @@ import com.jme3.network.kernel.*;
  *  channel IO based connection information and keeps
  *  track of the outbound data queue for the channel.
  *
- *  @version   $Revision: 7049 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class NioEndpoint implements Endpoint

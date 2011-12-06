@@ -35,26 +35,14 @@ import com.jme3.light.LightList;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.StencilOperation;
 import com.jme3.material.RenderState.TestFunction;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
-import com.jme3.renderer.Caps;
-import com.jme3.util.NativeObjectManager;
-import com.jme3.renderer.IDList;
-import com.jme3.renderer.Renderer;
+import com.jme3.math.*;
+import com.jme3.renderer.*;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Mesh.Mode;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.VertexBuffer.Format;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.VertexBuffer.Usage;
-import com.jme3.renderer.RenderContext;
-import com.jme3.renderer.RendererException;
-import com.jme3.renderer.Statistics;
-import com.jme3.scene.Mesh.Mode;
 import com.jme3.shader.Attribute;
 import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
@@ -69,50 +57,25 @@ import com.jme3.util.BufferUtils;
 import com.jme3.util.IntMap;
 import com.jme3.util.IntMap.Entry;
 import com.jme3.util.ListMap;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import java.util.ArrayList;
+import com.jme3.util.NativeObjectManager;
+import com.jme3.util.SafeArrayList;
+import java.nio.*;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-//import org.lwjgl.opengl.ARBGeometryShader4;
-//import org.lwjgl.opengl.ARBHalfFloatVertex;
-//import org.lwjgl.opengl.ARBVertexArrayObject;
-//import org.lwjgl.opengl.ARBHalfFloatVertex;
-//import org.lwjgl.opengl.ARBVertexArrayObject;
-//import jme3tools.converters.MipMapGenerator;
 import jme3tools.converters.MipMapGenerator;
-import org.lwjgl.opengl.ARBDrawBuffers;
-//import org.lwjgl.opengl.ARBDrawInstanced;
-import org.lwjgl.opengl.ARBDrawInstanced;
-import org.lwjgl.opengl.ARBFramebufferObject;
-import org.lwjgl.opengl.ARBMultisample;
-import org.lwjgl.opengl.ContextCapabilities;
-import org.lwjgl.opengl.EXTTextureArray;
-import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.opengl.NVHalfFloat;
-
+import static org.lwjgl.opengl.ARBTextureMultisample.*;
+import static org.lwjgl.opengl.EXTFramebufferBlit.*;
+import static org.lwjgl.opengl.EXTFramebufferMultisample.*;
+import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
-import static org.lwjgl.opengl.EXTFramebufferMultisample.*;
-import static org.lwjgl.opengl.ARBTextureMultisample.*;
-import static org.lwjgl.opengl.EXTFramebufferBlit.*;
-import org.lwjgl.opengl.ARBShaderObjects.*;
-import org.lwjgl.opengl.ARBTextureMultisample;
-import org.lwjgl.opengl.ARBVertexArrayObject;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 //import static org.lwjgl.opengl.ARBDrawInstanced.*;
 
 public class LwjglRenderer implements Renderer {
@@ -1874,17 +1837,14 @@ public class LwjglRenderer implements Renderer {
 
         // Yes, some OpenGL2 cards (GeForce 5) still dont support NPOT.
         if (!GLContext.getCapabilities().GL_ARB_texture_non_power_of_two) {
-            if (img.getData(0) == null) {
-                throw new RendererException("non-power-of-2 framebuffer textures are not supported by the video hardware");
-            }
-
             if (img.getWidth() != 0 && img.getHeight() != 0) {
                 if (!FastMath.isPowerOfTwo(img.getWidth())
                         || !FastMath.isPowerOfTwo(img.getHeight())) {
-//                    logger.log(Level.WARNING, "Encountered NPOT texture {0}, "
-//                                            + "it might not display correctly.", img);
-
-                    MipMapGenerator.resizeToPowerOf2(img);
+                    if (img.getData(0) == null) {
+                        throw new RendererException("non-power-of-2 framebuffer textures are not supported by the video hardware");
+                    } else {
+                        MipMapGenerator.resizeToPowerOf2(img);
+                    }
                 }
             }
         }
@@ -2450,7 +2410,7 @@ public class LwjglRenderer implements Renderer {
         }
 
         //IntMap<VertexBuffer> buffers = mesh.getBuffers();
-        ArrayList<VertexBuffer> buffersList = mesh.getBufferList();
+        SafeArrayList<VertexBuffer> buffersList = mesh.getBufferList();
 
         if (mesh.getNumLodLevels() > 0) {
             indices = mesh.getLodLevel(lod);
@@ -2459,8 +2419,7 @@ public class LwjglRenderer implements Renderer {
         }
         //for (Entry<VertexBuffer> entry : buffers) {
         //     VertexBuffer vb = entry.getValue();
-        for (int i = 0; i < buffersList.size(); i++){
-            VertexBuffer vb = buffersList.get(i);
+        for (VertexBuffer vb : mesh.getBufferList().getArray()){               
 
             if (vb.getBufferType() == Type.InterleavedData
                     || vb.getUsage() == Usage.CpuOnly // ignore cpu-only buffers

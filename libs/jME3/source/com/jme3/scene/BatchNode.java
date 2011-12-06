@@ -31,11 +31,7 @@
  */
 package com.jme3.scene;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
+import com.jme3.export.*;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Transform;
@@ -359,7 +355,7 @@ public class BatchNode extends Node implements Savable {
         int maxVertCount = 0;
 
         Mesh.Mode mode = null;
-        for (Geometry geom : geometries) {           
+        for (Geometry geom : geometries) {
             totalVerts += geom.getVertexCount();
             totalTris += geom.getTriangleCount();
             totalLodLevels = Math.min(totalLodLevels, geom.getMesh().getNumLodLevels());

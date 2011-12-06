@@ -31,24 +31,22 @@
  */
 package jme3test.network;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.Component;
-import java.io.IOException;
-import javax.swing.*;
-
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
-
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import javax.swing.*;
 import jme3test.network.TestChatServer.ChatMessage;
 
 /**
  *  A simple test chat server.  When SM implements a set
  *  of standard chat classes this can become a lot simpler.
  *
- *  @version   $Revision: 7593 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class TestChatClient extends JFrame {

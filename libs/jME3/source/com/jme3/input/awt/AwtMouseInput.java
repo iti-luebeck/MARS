@@ -32,27 +32,17 @@
 
 package com.jme3.input.awt;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
-
 import com.jme3.input.MouseInput;
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  * <code>AwtMouseInput</code>
@@ -64,7 +54,7 @@ import com.jme3.input.event.MouseMotionEvent;
  */
 public class AwtMouseInput implements MouseInput, MouseListener, MouseWheelListener, MouseMotionListener {
 
-    //public static int WHEEL_AMP = 40;   // arbitrary...  Java's mouse wheel seems to report something a lot lower than lwjgl's
+    public static int WHEEL_AMP = 40;   // arbitrary...  Java's mouse wheel seems to report something a lot lower than lwjgl's
 
     private static final Logger logger = Logger.getLogger(AwtMouseInput.class.getName());
 
@@ -257,7 +247,7 @@ public class AwtMouseInput implements MouseInput, MouseListener, MouseWheelListe
 
     public void mouseWheelMoved(MouseWheelEvent arg0) {
         int dwheel = arg0.getUnitsToScroll();
-        wheelPos -= dwheel;
+        wheelPos += dwheel * WHEEL_AMP;
         cursorMoved = true;
     }
 

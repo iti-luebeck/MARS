@@ -32,7 +32,6 @@
 
 package com.jme3.network.kernel;
 
-import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
@@ -46,7 +45,7 @@ import java.util.logging.Logger;
  *  and queuing any results for the caller to retrieve on their own
  *  thread.
  *
- *  @version   $Revision: 7009 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public abstract class AbstractKernel implements Kernel

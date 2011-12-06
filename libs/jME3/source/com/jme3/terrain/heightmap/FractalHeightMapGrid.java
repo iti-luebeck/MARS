@@ -31,18 +31,19 @@
  */
 package com.jme3.terrain.heightmap;
 
+import com.jme3.math.Vector3f;
+import com.jme3.terrain.MapUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-
 import javax.imageio.ImageIO;
-
 import org.novyon.noise.Basis;
 
-import com.jme3.math.Vector3f;
-import com.jme3.terrain.MapUtils;
-
+@Deprecated
+/**
+ * @Deprecated in favor of FractalTileLoader
+ */
 public class FractalHeightMapGrid implements HeightMapGrid {
 
 	public class FloatBufferHeightMap extends AbstractHeightMap {

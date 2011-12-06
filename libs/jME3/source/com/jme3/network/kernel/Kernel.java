@@ -32,16 +32,14 @@
 
 package com.jme3.network.kernel;
 
-import java.nio.ByteBuffer;
-import java.util.Collection;
-
 import com.jme3.network.Filter;
+import java.nio.ByteBuffer;
 
 /**
  *  Defines the basic byte[] passing messaging
  *  kernel.
  *
- *  @version   $Revision: 7123 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public interface Kernel

@@ -32,12 +32,14 @@
 
 package com.jme3.network;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  *  Static utility methods pertaining to Filter instances.
  *
- *  @version   $Revision: 8257 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class Filters 

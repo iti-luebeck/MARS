@@ -32,15 +32,9 @@
 
 package com.jme3.asset;
 
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
+import com.jme3.export.*;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <code>AssetKey</code> is a key that is used to
@@ -52,7 +46,7 @@ public class AssetKey<T> implements Savable {
     protected String name;
     protected transient String folder;
     protected transient String extension;
-
+    
     public AssetKey(String name){
         this.name = reducePath(name);
         this.extension = getExtension(this.name);

@@ -32,38 +32,27 @@
 
 package com.jme3.scene;
 
-import com.jme3.scene.mesh.IndexShortBuffer;
-import com.jme3.scene.mesh.IndexIntBuffer;
-import com.jme3.scene.mesh.IndexBuffer;
-import com.jme3.scene.mesh.IndexByteBuffer;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResults;
 import com.jme3.collision.bih.BIHTree;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
+import com.jme3.export.*;
 import com.jme3.material.RenderState;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.VertexBuffer.*;
-import com.jme3.scene.mesh.VirtualIndexBuffer;
-import com.jme3.scene.mesh.WrappedIndexBuffer;
+import com.jme3.scene.VertexBuffer.Format;
+import com.jme3.scene.VertexBuffer.Type;
+import com.jme3.scene.VertexBuffer.Usage;
+import com.jme3.scene.mesh.*;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.IntMap;
 import com.jme3.util.IntMap.Entry;
+import com.jme3.util.SafeArrayList;
 import java.io.IOException;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 import java.util.ArrayList;
 
 /**
@@ -176,7 +165,7 @@ public class Mesh implements Savable, Cloneable {
 
     private CollisionData collisionTree = null;
 
-    private ArrayList<VertexBuffer> buffersList = new ArrayList<VertexBuffer>(5);
+    private SafeArrayList<VertexBuffer> buffersList = new SafeArrayList<VertexBuffer>(VertexBuffer.class);
     private IntMap<VertexBuffer> buffers = new IntMap<VertexBuffer>();
     private VertexBuffer[] lodLevels;
     private float pointSize = 1;
@@ -213,7 +202,7 @@ public class Mesh implements Savable, Cloneable {
             clone.meshBound = meshBound.clone();
             clone.collisionTree = collisionTree != null ? collisionTree : null;
             clone.buffers = buffers.clone();
-            clone.buffersList = new ArrayList<VertexBuffer>(buffersList);
+            clone.buffersList = new SafeArrayList<VertexBuffer>(VertexBuffer.class,buffersList);
             clone.vertexArrayID = -1;
             if (elementLengths != null) {
                 clone.elementLengths = elementLengths.clone();
@@ -244,7 +233,7 @@ public class Mesh implements Savable, Cloneable {
             clone.collisionTree = null; // it will get re-generated in any case
 
             clone.buffers = new IntMap<VertexBuffer>();
-            clone.buffersList = new ArrayList<VertexBuffer>();
+            clone.buffersList = new SafeArrayList<VertexBuffer>(VertexBuffer.class);
             for (Entry<VertexBuffer> ent : buffers){
                 VertexBuffer bufClone = ent.getValue().clone();
                 clone.buffers.put(ent.getKey(), bufClone);
@@ -1141,7 +1130,7 @@ public class Mesh implements Savable, Cloneable {
         return buffers;
     }
     
-    public ArrayList<VertexBuffer> getBufferList(){
+    public SafeArrayList<VertexBuffer> getBufferList(){
         return buffersList;
     }
 

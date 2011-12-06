@@ -35,9 +35,9 @@ import com.jme3.asset.AssetNotFoundException;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.Collidable;
 import com.jme3.collision.CollisionResults;
+import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
-import com.jme3.export.InputCapsule;
 import com.jme3.export.OutputCapsule;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
@@ -541,8 +541,7 @@ public class Geometry extends Spatial {
                 material = im.getAssetManager().loadMaterial(matName);
             } catch (AssetNotFoundException ex) {
                 // Cannot find J3M file.
-                logger.log(Level.FINE, "Could not load J3M file {0} for Geometry.",
-                        matName);
+                logger.log(Level.FINE, "Cannot locate {0} for geometry {1}", new Object[]{matName, key});
             }
         }
         // If material is NULL, try to load it from the geometry

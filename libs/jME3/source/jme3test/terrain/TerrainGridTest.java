@@ -19,8 +19,8 @@ import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainGridListener;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
-import com.jme3.terrain.heightmap.ImageBasedHeightMapGrid;
 import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
@@ -44,11 +44,11 @@ public class TerrainGridTest extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        File file = new File("mountains.zip");
+        File file = new File("TerrainGridTestData.zip");
         if (!file.exists()) {
-            assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/mountains.zip", HttpZipLocator.class);
+            assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/TerrainGridTestData.zip", HttpZipLocator.class);
         } else {
-            assetManager.registerLocator("mountains.zip", ZipLocator.class);
+            assetManager.registerLocator("TerrainGridTestData.zip", ZipLocator.class);
         }
 
         this.flyCam.setMoveSpeed(100f);
@@ -94,7 +94,7 @@ public class TerrainGridTest extends SimpleApplication {
 
         this.mat_terrain.setFloat("terrainSize", 129);
 
-        this.terrain = new TerrainGrid("terrain", 65, 257, new ImageBasedHeightMapGrid(assetManager, new Namer() {
+        this.terrain = new TerrainGrid("terrain", 65, 257, new ImageTileLoader(assetManager, new Namer() {
 
             public String getName(int x, int y) {
                 return "Scenes/TerrainMountains/terrain_" + x + "_" + y + ".png";
@@ -128,7 +128,7 @@ public class TerrainGridTest extends SimpleApplication {
 
             bulletAppState.getPhysicsSpace().add(player3);
 
-            terrain.addListener("physicsStartListener", new TerrainGridListener() {
+            terrain.addListener(new TerrainGridListener() {
 
                 public void gridMoved(Vector3f newCenter) {
                 }
@@ -138,6 +138,15 @@ public class TerrainGridTest extends SimpleApplication {
                 }
 
                 public void tileAttached(Vector3f cell, TerrainQuad quad) {
+                    while(quad.getControl(RigidBodyControl.class)!=null){
+                        quad.removeControl(RigidBodyControl.class);
+                    }
+//                    try {
+//                        BinaryExporter.getInstance().save(quad, new File("/Users/normenhansen/Documents/Code/jme3/engine/src/test-data/TerrainGrid/"
+//                                + "testgrid_" + Math.round(cell.x) + "_" + Math.round(cell.y) + "_" + Math.round(cell.z) + ".j3o"));
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(TerrainFractalGridTest.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
                     quad.addControl(new RigidBodyControl(new HeightfieldCollisionShape(quad.getHeightMap(), terrain.getLocalScale()), 0));
                     bulletAppState.getPhysicsSpace().add(quad);
                 }
@@ -149,7 +158,7 @@ public class TerrainGridTest extends SimpleApplication {
 
             });
         }
-        this.terrain.initialize(cam.getLocation());
+        
         this.initKeys();
     }
 

@@ -32,13 +32,14 @@
 
 package com.jme3.asset.plugins;
 
-import com.jme3.asset.*;
+import com.jme3.asset.AssetInfo;
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.AssetLocator;
+import com.jme3.asset.AssetManager;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,21 +54,6 @@ public class UrlLocator implements AssetLocator {
     private static final Logger logger = Logger.getLogger(UrlLocator.class.getName());
     private URL root;
 
-    private static class UrlAssetInfo extends AssetInfo {
-
-        private InputStream in;
-
-        public UrlAssetInfo(AssetManager manager, AssetKey key, InputStream in){
-            super(manager, key);
-            this.in = in;
-        }
-
-        @Override
-        public InputStream openStream() {
-            return in;
-        }
-    }
-
     public void setRootPath(String rootPath) {
         try {
             this.root = new URL(rootPath);
@@ -78,22 +64,16 @@ public class UrlLocator implements AssetLocator {
 
     public AssetInfo locate(AssetManager manager, AssetKey key) {
         String name = key.getName();
-        
         try{
-            URL url = new URL(root, name);
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
-            conn.setDoOutput(false);
-            InputStream in;
-            try {
-                in = conn.getInputStream();
-                if (in == null)
-                    return null;
-            } catch (FileNotFoundException ex){
-                return null;
+            //TODO: remove workaround for SDK
+//            URL url = new URL(root, name);
+            if(name.startsWith("/")){
+                name = name.substring(1);
             }
-            
-            return new UrlAssetInfo(manager, key, in);
+            URL url = new URL(root.toExternalForm() + name);
+            return UrlAssetInfo.create(manager, key, url);
+        }catch (FileNotFoundException e){
+            return null;
         }catch (IOException ex){
             logger.log(Level.WARNING, "Error while locating " + name, ex);
             return null;

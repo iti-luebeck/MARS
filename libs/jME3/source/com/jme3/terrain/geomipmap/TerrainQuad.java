@@ -32,13 +32,6 @@
 
 package com.jme3.terrain.geomipmap;
 
-import com.jme3.material.Material;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.Collidable;
@@ -47,6 +40,7 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -57,17 +51,19 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.terrain.ProgressMonitor;
 import com.jme3.terrain.Terrain;
-import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.geomipmap.lodcalc.LodCalculator;
-import com.jme3.terrain.geomipmap.lodcalc.SimpleLodThreshold;
 import com.jme3.terrain.geomipmap.picking.BresenhamTerrainPicker;
 import com.jme3.terrain.geomipmap.picking.TerrainPickData;
 import com.jme3.terrain.geomipmap.picking.TerrainPicker;
-import com.jme3.util.BufferUtils;
 import com.jme3.util.TangentBinormalGenerator;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,8 +76,7 @@ import java.util.logging.Logger;
  *
  * 
  * Heightmap coordinates start from the bottom left of the world and work towards the
- * top right. This will seem upside down, but the texture coordinates compensate; and
- * it allows you to easily get the heightmap values at real world X,Z coordinates.
+ * top right.
  * 
  *  +x
  *  ^
@@ -108,7 +103,7 @@ public class TerrainQuad extends Node implements Terrain {
 
     protected float offsetAmount;
 
-    protected int quadrant = 1; // 1=upper left, 2=lower left, 3=upper right, 4=lower right
+    protected int quadrant = 0; // 1=upper left, 2=lower left, 3=upper right, 4=lower right
 
     //protected LodCalculatorFactory lodCalculatorFactory;
     //protected LodCalculator lodCalculator;
@@ -380,12 +375,16 @@ public class TerrainQuad extends Node implements Terrain {
     }
 
     public Material getMaterial() {
+        return getMaterial(null);
+    }
+    
+    public Material getMaterial(Vector3f worldLocation) {
         // get the material from one of the children. They all share the same material
         if (children != null) {
             for (int i = children.size(); --i >= 0;) {
                 Spatial child = children.get(i);
                 if (child instanceof TerrainQuad) {
-                    return ((TerrainQuad)child).getMaterial();
+                    return ((TerrainQuad)child).getMaterial(worldLocation);
                 } else if (child instanceof TerrainPatch) {
                     return ((TerrainPatch)child).getMaterial();
                 }
@@ -394,8 +393,11 @@ public class TerrainQuad extends Node implements Terrain {
         return null;
     }
 
-    public float getTextureCoordinateScale() {
-        return 1f/(float)totalSize;
+    //public float getTextureCoordinateScale() {
+    //    return 1f/(float)totalSize;
+    //}
+    public int getNumMajorSubdivisions() {
+        return 1;
     }
 
     /**
@@ -547,6 +549,24 @@ public class TerrainQuad extends Node implements Terrain {
     }
 
     /**
+     * TerrainQuad caches neighbours for faster LOD checks.
+     * Sometimes you might want to reset this cache (for instance in TerrainGrid)
+     */
+    protected void resetCachedNeighbours() {
+        if (children != null) {
+            for (int x = children.size(); --x >= 0;) {
+                Spatial child = children.get(x);
+                if (child instanceof TerrainQuad) {
+                    ((TerrainQuad) child).resetCachedNeighbours();
+                } else if (child instanceof TerrainPatch) {
+                    TerrainPatch patch = (TerrainPatch) child;
+                    patch.searchedForNeighboursAlready = false;
+                }
+            }
+        }
+    }
+    
+    /**
      * Find any neighbours that should have their edges seamed because another neighbour
      * changed its LOD to a greater value (less detailed)
      */
@@ -560,7 +580,7 @@ public class TerrainQuad extends Node implements Terrain {
                     TerrainPatch patch = (TerrainPatch) child;
                     UpdatedTerrainPatch utp = updated.get(patch.getName());
 
-                    if(utp.lodChanged()) {
+                    if(utp != null && utp.lodChanged()) {
                         if (!patch.searchedForNeighboursAlready) {
                             // set the references to the neighbours
                             patch.rightNeighbour = findRightPatch(patch);
@@ -646,13 +666,14 @@ public class TerrainQuad extends Node implements Terrain {
 
     /**
      * Quadrants, world coordinates, and heightmap coordinates (Y-up):
-     *         x
-     *         | u
-     *        2|4 v
-     *  -z ----+---- z
-     *     -v 1|3
-     *      -u |
-     *        -x
+     * 
+     *         -z
+     *      -u | 
+     *    -v  1|3 
+     *  -x ----+---- x
+     *        2|4 u
+     *         | v
+     *         z
      * <code>createQuad</code> generates four new quads from this quad.
      * The heightmap's top left (0,0) coordinate is at the bottom, -x,-z
      * coordinate of the terrain, so it grows in the positive x.z direction.
@@ -669,7 +690,7 @@ public class TerrainQuad extends Node implements Terrain {
         //if (lodCalculator == null)
         //    lodCalculator = createDefaultLodCalculator(); // set a default one
 
-        // 1 upper left of heightmap, lower left quad
+        // 1 upper left of heightmap, upper left quad
         float[] heightBlock1 = createHeightSubBlock(heightMap, 0, 0, split);
 
         Vector3f origin1 = new Vector3f(-quarterSize * stepScale.x, 0,
@@ -687,7 +708,7 @@ public class TerrainQuad extends Node implements Terrain {
         quad1.quadrant = 1;
         this.attachChild(quad1);
 
-        // 2 lower left of heightmap, upper left quad
+        // 2 lower left of heightmap, lower left quad
         float[] heightBlock2 = createHeightSubBlock(heightMap, 0, split - 1,
                         split);
 
@@ -707,7 +728,7 @@ public class TerrainQuad extends Node implements Terrain {
         quad2.quadrant = 2;
         this.attachChild(quad2);
 
-        // 3 upper right of heightmap, lower right quad
+        // 3 upper right of heightmap, upper right quad
         float[] heightBlock3 = createHeightSubBlock(heightMap, split - 1, 0,
                         split);
 
@@ -727,7 +748,7 @@ public class TerrainQuad extends Node implements Terrain {
         quad3.quadrant = 3;
         this.attachChild(quad3);
         
-        // 4 lower right of heightmap, upper right quad
+        // 4 lower right of heightmap, lower right quad
         float[] heightBlock4 = createHeightSubBlock(heightMap, split - 1,
                         split - 1, split);
 
@@ -779,7 +800,7 @@ public class TerrainQuad extends Node implements Terrain {
 
         offsetAmount += quarterSize;
 
-        // 1 upper left
+        // 1 lower left
         float[] heightBlock1 = createHeightSubBlock(heightMap, 0, 0, split);
 
         Vector3f origin1 = new Vector3f(-halfSize * stepScale.x, 0, -halfSize
@@ -801,7 +822,7 @@ public class TerrainQuad extends Node implements Terrain {
         //patch1.setLodCalculator(lodCalculator);
         //TangentBinormalGenerator.generate(patch1);
 
-        // 2 lower left
+        // 2 upper left
         float[] heightBlock2 = createHeightSubBlock(heightMap, 0, split - 1,
                         split);
 
@@ -823,7 +844,7 @@ public class TerrainQuad extends Node implements Terrain {
         //patch2.setLodCalculator(lodCalculator);
         //TangentBinormalGenerator.generate(patch2);
 
-        // 3 upper right
+        // 3 lower right
         float[] heightBlock3 = createHeightSubBlock(heightMap, split - 1, 0,
                         split);
 
@@ -845,7 +866,7 @@ public class TerrainQuad extends Node implements Terrain {
         //patch3.setLodCalculator(lodCalculator);
         //TangentBinormalGenerator.generate(patch3);
 
-        // 4 lower right
+        // 4 upper right
         float[] heightBlock4 = createHeightSubBlock(heightMap, split - 1,
                         split - 1, split);
 
@@ -949,6 +970,13 @@ public class TerrainQuad extends Node implements Terrain {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * This will cause all normals for this terrain quad to be recalculated
+     */
+    protected void setNeedToRecalculateNormals() {
+        affectedAreaBBox = new BoundingBox(new Vector3f(0,0,0), size*2, Float.MAX_VALUE, size*2);
     }
 
     public float getHeightmapHeight(Vector2f xz) {
@@ -1719,8 +1747,12 @@ public class TerrainQuad extends Node implements Terrain {
         quadClone.name = name.toString();
         quadClone.size = size;
         quadClone.totalSize = totalSize;
-        quadClone.stepScale = stepScale.clone();
-        quadClone.offset = offset.clone();
+        if (stepScale != null) {
+            quadClone.stepScale = stepScale.clone();
+        }
+        if (offset != null) {
+            quadClone.offset = offset.clone();
+        }
         quadClone.offsetAmount = offsetAmount;
         quadClone.quadrant = quadrant;
         //quadClone.lodCalculatorFactory = lodCalculatorFactory.clone();
@@ -1767,13 +1799,13 @@ public class TerrainQuad extends Node implements Terrain {
             if (getChild(0) instanceof TerrainPatch) {
                 for (Spatial s : getChildren()) {
                     if ( ((TerrainPatch)s).getQuadrant() == 1)
-                        ul = BufferUtils.getFloatArray(((TerrainPatch)s).getHeightmap());
+                        ul = ((TerrainPatch)s).getHeightMap();
                     else if(((TerrainPatch) s).getQuadrant() == 2)
-                        bl = BufferUtils.getFloatArray(((TerrainPatch)s).getHeightmap());
+                        bl = ((TerrainPatch)s).getHeightMap();
                     else if(((TerrainPatch) s).getQuadrant() == 3)
-                        ur = BufferUtils.getFloatArray(((TerrainPatch)s).getHeightmap());
+                        ur = ((TerrainPatch)s).getHeightMap();
                     else if(((TerrainPatch) s).getQuadrant() == 4)
-                        br = BufferUtils.getFloatArray(((TerrainPatch)s).getHeightmap());
+                        br = ((TerrainPatch)s).getHeightMap();
                 }
             }
             else {

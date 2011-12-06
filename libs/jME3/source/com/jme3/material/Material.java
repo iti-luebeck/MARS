@@ -31,28 +31,14 @@ package com.jme3.material;
 
 import com.jme3.asset.Asset;
 import com.jme3.asset.AssetKey;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Vector2f;
 import com.jme3.asset.AssetManager;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.light.LightList;
-import com.jme3.light.PointLight;
-import com.jme3.light.SpotLight;
+import com.jme3.export.*;
+import com.jme3.light.*;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.material.TechniqueDef.LightMode;
 import com.jme3.material.TechniqueDef.ShadowMode;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
+import com.jme3.math.*;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
@@ -65,11 +51,7 @@ import com.jme3.texture.Texture;
 import com.jme3.util.ListMap;
 import com.jme3.util.TempVars;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -202,6 +184,14 @@ public class Material implements Asset, Cloneable, Savable, Comparable<Material>
         return m.getSortId() - getSortId();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Material){
+            return ((Material)obj).compareTo(this) == 0;
+        }
+        return super.equals(obj);
+    }
+    
     /**
      * Clones this material. The result is returned.
      */
@@ -331,10 +321,7 @@ public class Material implements Asset, Cloneable, Savable, Comparable<Material>
      */
     public MatParam getParam(String name) {
         MatParam param = paramValues.get(name);
-        if (param instanceof MatParam) {
-            return (MatParam) param;
-        }
-        return null;
+        return param;
     }
 
     /**
@@ -942,7 +929,8 @@ public class Material implements Asset, Cloneable, Savable, Comparable<Material>
 
     private void clearUniformsSetByCurrent(Shader shader) {
         ListMap<String, Uniform> uniforms = shader.getUniformMap();
-        for (int i = 0; i < uniforms.size(); i++) {
+        int size = uniforms.size();
+        for (int i = 0; i < size; i++) {
             Uniform u = uniforms.getValue(i);
             u.clearSetByCurrentMaterial();
         }
@@ -950,7 +938,8 @@ public class Material implements Asset, Cloneable, Savable, Comparable<Material>
 
     private void resetUniformsNotSetByCurrent(Shader shader) {
         ListMap<String, Uniform> uniforms = shader.getUniformMap();
-        for (int i = 0; i < uniforms.size(); i++) {
+        int size = uniforms.size();
+        for (int i = 0; i < size; i++) {
             Uniform u = uniforms.getValue(i);
             if (!u.isSetByCurrentMaterial()) {
                 u.clearValue();

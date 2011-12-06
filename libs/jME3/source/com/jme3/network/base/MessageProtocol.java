@@ -32,12 +32,11 @@
 
 package com.jme3.network.base;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.*;
-
 import com.jme3.network.Message;
 import com.jme3.network.serializing.Serializer;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.LinkedList;
 
 /**
  *  Consolidates the conversion of messages to/from byte buffers
@@ -50,7 +49,7 @@ import com.jme3.network.serializing.Serializer;
  *  where two bytes represent the (short) length of the data
  *  and the rest is the raw data for the Serializers class.</p>
  *
- *  @version   $Revision: 7976 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class MessageProtocol

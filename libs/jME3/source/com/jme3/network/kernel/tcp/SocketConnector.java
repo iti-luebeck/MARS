@@ -32,12 +32,16 @@
 
 package com.jme3.network.kernel.tcp;
 
-import java.io.*;
-import java.net.*;
+import com.jme3.network.kernel.Connector;
+import com.jme3.network.kernel.ConnectorException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.jme3.network.kernel.*;
 
 
 /**
@@ -45,7 +49,7 @@ import com.jme3.network.kernel.*;
  *  does not use any separate threading.  It relies completely on
  *  the buffering in the OS network layer.
  *
- *  @version   $Revision: 7033 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class SocketConnector implements Connector

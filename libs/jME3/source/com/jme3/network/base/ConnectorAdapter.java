@@ -32,16 +32,15 @@
 
 package com.jme3.network.base;
 
-import java.nio.ByteBuffer;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.jme3.network.ErrorListener;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.kernel.Connector;
 import com.jme3.network.kernel.ConnectorException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *  Wraps a single Connector and forwards new messages
@@ -56,7 +55,7 @@ import java.util.concurrent.BlockingQueue;
  *  objects to 32676 bytes... even though, for example,
  *  datagram packets can hold twice that. :P</p>  
  *
- *  @version   $Revision: 7977 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class ConnectorAdapter extends Thread

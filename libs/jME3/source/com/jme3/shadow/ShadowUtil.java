@@ -39,12 +39,11 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.GeometryList;
-
 import com.jme3.scene.Geometry;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.*;
 
 /**
  * Includes various useful shadow mapping functions.
@@ -177,7 +176,7 @@ public class ShadowUtil {
             BoundingVolume vol = list.get(i).getWorldBound();
             BoundingVolume newVol = vol.transform(transform);
             //Nehon : prevent NaN and infinity values to screw the final bounding box
-            if (newVol.getCenter().x != Float.NaN && newVol.getCenter().x != Float.POSITIVE_INFINITY && newVol.getCenter().x != Float.NEGATIVE_INFINITY) {
+            if (!Float.isNaN(newVol.getCenter().x) && !Float.isInfinite(newVol.getCenter().x)) {
                 bbox.mergeLocal(newVol);
             }
         }
@@ -197,7 +196,7 @@ public class ShadowUtil {
             BoundingVolume vol = list.get(i).getWorldBound();
             store = vol.clone().transform(mat, null);
             //Nehon : prevent NaN and infinity values to screw the final bounding box
-            if (store.getCenter().x != Float.NaN && store.getCenter().x != Float.POSITIVE_INFINITY && store.getCenter().x != Float.NEGATIVE_INFINITY) {
+            if (!Float.isNaN(store.getCenter().x) && !Float.isInfinite(store.getCenter().x)) {
                 bbox.mergeLocal(store);
             }
         }

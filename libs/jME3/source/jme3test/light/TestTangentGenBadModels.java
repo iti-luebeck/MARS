@@ -1,19 +1,20 @@
 package jme3test.light;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.plugins.UrlLocator;
-import com.jme3.light.AmbientLight;
+import com.jme3.font.BitmapText;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.jme3.material.Material;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.*;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.light.DirectionalLight;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.util.TangentBinormalGenerator;
 
 /**
@@ -33,15 +34,15 @@ public class TestTangentGenBadModels extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("http://jme-glsl-shaders.googlecode.com/hg/assets/Models/LightBlow/", UrlLocator.class);
-        assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/", UrlLocator.class);
+//        assetManager.registerLocator("http://jme-glsl-shaders.googlecode.com/hg/assets/Models/LightBlow/", UrlLocator.class);
+//        assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/", UrlLocator.class);
         
-        Geometry badModel = (Geometry) assetManager.loadModel("jme_lightblow.obj");
-        badModel.setLocalScale(2f);
+        final Spatial badModel = assetManager.loadModel("Models/TangentBugs/test.blend");
+//        badModel.setLocalScale(1f);
         
-//        Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-//        mat.setTexture("NormalMap", assetManager.loadTexture("jme_lightblow_nor.png"));
-        Material mat = assetManager.loadMaterial("Textures/BumpMapTest/Tangent.j3m");
+        Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        mat.setTexture("NormalMap", assetManager.loadTexture("Models/TangentBugs/test_normal.png"));
+//        Material mat = assetManager.loadMaterial("Textures/BumpMapTest/Tangent.j3m");
         badModel.setMaterial(mat);
         rootNode.attachChild(badModel);
         
@@ -49,8 +50,14 @@ public class TestTangentGenBadModels extends SimpleApplication {
         // need to check it
 //        Spatial model = assetManager.loadModel("test.blend");
 //        rootNode.attachChild(model);
+        
+        final Node debugTangents = new Node("debug tangents");
+        debugTangents.setCullHint(CullHint.Always);
+        rootNode.attachChild(debugTangents);
 
-        rootNode.depthFirstTraversal(new SceneGraphVisitorAdapter(){
+        final Material debugMat = assetManager.loadMaterial("Common/Materials/VertexColor.j3m");
+        
+        badModel.depthFirstTraversal(new SceneGraphVisitorAdapter(){
             @Override
             public void visit(Geometry g){
                 Mesh m = g.getMesh();
@@ -60,21 +67,18 @@ public class TestTangentGenBadModels extends SimpleApplication {
 //                    mat.setTexture("DiffuseMap", null);
 //                }
                 TangentBinormalGenerator.generate(m);
+                
+                Geometry debug = new Geometry(
+                    "debug tangents geom",
+                    TangentBinormalGenerator.genTbnLines(g.getMesh(), 0.2f)
+                );
+                debug.getMesh().setLineWidth(1);
+                debug.setMaterial(debugMat);
+                debug.setCullHint(Spatial.CullHint.Never);
+                debug.setLocalTransform(g.getWorldTransform());
+                debugTangents.attachChild(debug);
             }
         });
-
-        Geometry debug = new Geometry(
-                "Debug Teapot",
-                TangentBinormalGenerator.genTbnLines(((Geometry) badModel).getMesh(), 0.03f)
-        );
-        debug.getMesh().setLineWidth(3);
-        
-        Material debugMat = assetManager.loadMaterial("Common/Materials/VertexColor.j3m");
-        debug.setMaterial(debugMat);
-        debug.setCullHint(Spatial.CullHint.Never);
-        debug.getLocalTranslation().set(badModel.getLocalTranslation());
-        debug.getLocalScale().set(badModel.getLocalScale());
-        rootNode.attachChild(debug);
 
         DirectionalLight dl = new DirectionalLight();
         dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
@@ -89,6 +93,34 @@ public class TestTangentGenBadModels extends SimpleApplication {
         pl = new PointLight();
         pl.setColor(ColorRGBA.White);
 //        rootNode.addLight(pl);
+        
+        
+        BitmapText info = new BitmapText(guiFont);
+        info.setText("Press SPACE to switch between lighting and tangent display");
+        info.setQueueBucket(Bucket.Gui);
+        info.move(0, settings.getHeight() - info.getLineHeight(), 0);
+        rootNode.attachChild(info);
+        
+        inputManager.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addListener(new ActionListener() {
+            
+            private boolean isLit = true;
+            
+            public void onAction(String name, boolean isPressed, float tpf) {
+                if (isPressed) return;
+                Material mat;
+                if (isLit){
+                    mat = assetManager.loadMaterial("Textures/BumpMapTest/Tangent.j3m");
+                    debugTangents.setCullHint(CullHint.Inherit);
+                }else{
+                    mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+                    mat.setTexture("NormalMap", assetManager.loadTexture("Models/TangentBugs/test_normal.png"));
+                    debugTangents.setCullHint(CullHint.Always);
+                }
+                isLit = !isLit;
+                badModel.setMaterial(mat);
+            }
+        }, "space");
     }
 
     @Override

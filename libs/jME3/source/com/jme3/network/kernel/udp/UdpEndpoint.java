@@ -32,11 +32,14 @@
 
 package com.jme3.network.kernel.udp;
 
+import com.jme3.network.kernel.Endpoint;
+import com.jme3.network.kernel.Kernel;
+import com.jme3.network.kernel.KernelException;
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-
-import com.jme3.network.kernel.*;
 
 
 /**
@@ -44,7 +47,7 @@ import com.jme3.network.kernel.*;
  *  UDP connection information for return messaging,
  *  identification of envelope sources, etc.
  *
- *  @version   $Revision: 7256 $
+ *  @version   $Revision: 8843 $
  *  @author    Paul Speed
  */
 public class UdpEndpoint implements Endpoint
