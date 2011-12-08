@@ -39,8 +39,8 @@ public class PressureSensor extends Sensor{
     ///ROS stuff
     //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
-    private Publisher<org.ros.message.iti_msgs.pressure> publisher = null;
-    private org.ros.message.iti_msgs.pressure fl = new org.ros.message.iti_msgs.pressure(); 
+    private Publisher<org.ros.message.hanse_msgs.pressure> publisher = null;
+    private org.ros.message.hanse_msgs.pressure fl = new org.ros.message.hanse_msgs.pressure(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     public PressureSensor(){
@@ -197,7 +197,7 @@ public class PressureSensor extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "iti_msgs/pressure");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/pressure");  
     }
 
     @Override

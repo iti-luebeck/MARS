@@ -46,6 +46,7 @@ import mars.auv.Communication_Manager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
+import mars.sensors.IMU;
 import mars.sensors.InfraRedSensor;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -176,16 +177,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 while(!initer.isROS_ServerReady()){
                     
                 }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server ready.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be created...", "");
                 while(initer.getROS_Server().getMarsNode() == null){
                     
                 }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node created.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
                 while(!initer.getROS_Server().getMarsNode().isExisting()){
-                //while(initer.getROS_Server().getNode() == null){
                     
                 }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node exists.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
                 while(!initer.getROS_Server().getMarsNode().isRunning()){
                     
                 }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node running.", "");
             }
             
             populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
@@ -242,11 +249,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 Hanse han = (Hanse)XML_JAXB_ConfigReaderWriter.loadAUV("hanse2"); */
                 
                 /*context = JAXBContext.newInstance( BasicAUV.class );
-                m = context.createMarshaller();
-                AUV aa = (AUV)auvs.get(0);
+                Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-                m.marshal( aa, System.out );*/
-            /*} catch (JAXBException ex) {
+
+                m.marshal( auv_hanse, System.out );*/
+           /* } catch (JAXBException ex) {
                 Logger.getLogger(StartState.class.getName()).log(Level.SEVERE, null, ex);
             }*/
             
@@ -302,14 +309,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     private void loadXML(){
         try {
-             xmll = new XMLConfigReaderWriter(this);
              mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();//xmll.getSimAUVSettings();
              mars_settings.init();
              physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();//mars_settings.getPhysical_environment();
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
-             //auvs = xmll.getAuvs();
              auvs = XML_JAXB_ConfigReaderWriter.loadAUVs();//xmll.getAuvs();
+                /*IMU im = new IMU();
+                im.setEnabled(true);
+                im.setNodeVisibility(false);
+                im.setPhysicalExchangerName("imu");
+                Hanse hans = (Hanse)auvs.get(1);
+                hans.registerPhysicalExchanger(im);*/
              Iterator iter = auvs.iterator();
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
@@ -375,50 +386,50 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 initial_ready = false;
                 System.out.println("Simulation stopped...");
             }else if(name.equals("thruster_left_forward") && !keyPressed) {
-                //mot1left.thruster_forward();
-                motb1_push.thruster_forward();
+                mot1left.thruster_forward();
+                //motb1_push.thruster_forward();
             }else if(name.equals("thruster_left_back") && !keyPressed) {
-                //mot1left.thruster_back();
-                motb1_push.thruster_back();
+                mot1left.thruster_back();
+                //motb1_push.thruster_back();
             }else if(name.equals("thruster_right_forward") && !keyPressed) {
-                //mot1right.thruster_forward();
-                motb2_push.thruster_forward();
+                mot1right.thruster_forward();
+                //motb2_push.thruster_forward();
             }else if(name.equals("thruster_right_back") && !keyPressed) {
-                //mot1right.thruster_back();
-                motb2_push.thruster_back();
+                mot1right.thruster_back();
+                //motb2_push.thruster_back();
             }else if(name.equals("thruster_both_forward") && !keyPressed) {
-                /*mot1left.thruster_forward();
-                mot1right.thruster_forward();*/
+                mot1left.thruster_forward();
+                mot1right.thruster_forward();
                 //mot1left.set_thruster_speed(100);
                 //mot1right.set_thruster_speed(100);
-                motb1_push.thruster_forward();
-                motb2_push.thruster_forward();
+                /*motb1_push.thruster_forward();
+                motb2_push.thruster_forward();*/
             }else if(name.equals("thruster_both_turn") && !keyPressed) {
                 mot1left.set_thruster_speed(40);
                 mot1right.set_thruster_speed(-40);
                 //mot1left.set_thruster_speed(100);
                 //mot1right.set_thruster_speed(100);
             }else if(name.equals("thruster_both_back") && !keyPressed) {
-                /*mot1left.thruster_back();
-                mot1right.thruster_back();*/
+                mot1left.thruster_back();
+                mot1right.thruster_back();
                 //mot1left.set_thruster_speed(-100);
                 //mot1right.set_thruster_speed(-100);
-                motb1_push.thruster_back();
-                motb2_push.thruster_back();
+                /*motb1_push.thruster_back();
+                motb2_push.thruster_back();*/
             }else if(name.equals("thruster_both_up") && !keyPressed) {
-                /*mot2left.thruster_forward();
-                mot2right.thruster_forward();*/
-                mot_leftback.thruster_forward();
+                mot2left.thruster_forward();
+                mot2right.thruster_forward();
+                /*mot_leftback.thruster_forward();
                 mot_leftfront.thruster_forward();
                 mot_rightback.thruster_forward();
-                mot_rightfront.thruster_forward();
+                mot_rightfront.thruster_forward();*/
             }else if(name.equals("thruster_both_down") && !keyPressed) {
-                /*mot2left.thruster_back();
-                mot2right.thruster_back();*/
-                mot_leftback.thruster_back();
+                mot2left.thruster_back();
+                mot2right.thruster_back();
+                /*mot_leftback.thruster_back();
                 mot_leftfront.thruster_back();
                 mot_rightback.thruster_back();
-                mot_rightfront.thruster_back();
+                mot_rightfront.thruster_back();*/
             }else  if (name.equals("Shoott") && !keyPressed) {
                 /*final InfraRedSensor infra = (InfraRedSensor)auv_monsun2.getSensor("infraLeft");
                 Future fut = mars.enqueue(new Callable() {
@@ -484,9 +495,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
         }
         auv_manager.registerAUVs(auvs);
-        //auv_hanse = (Hanse)auvs.get(1);
+        auv_hanse = (Hanse)auvs.get(1);
         //auv_monsun2 = (Monsun2)auv_manager.getAUV("monsun");
-        auv_monsun2 = (Monsun2)auvs.get(2);
+        //auv_monsun2 = (Monsun2)auvs.get(2);
     }
     
          /*
@@ -650,18 +661,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
     public void prePhysicsTick(PhysicsSpace ps, float tpf) {
         if(auv_manager.isEmpty() == false && AUVPhysicsControl == null && !man_init){
-            /*AUVPhysicsControl = auv_hanse.getPhysicsControl();
+            AUVPhysicsControl = auv_hanse.getPhysicsControl();
             mot1left = (SeaBotixThruster)auv_hanse.getActuator("thrusterLeft");
             mot1right = (SeaBotixThruster)auv_hanse.getActuator("thrusterRight");
             mot2left = (SeaBotixThruster)auv_hanse.getActuator("thrusterDownFront");
-            mot2right = (SeaBotixThruster)auv_hanse.getActuator("thrusterDown");*/
-            AUVPhysicsControl = auv_monsun2.getPhysicsControl();
+            mot2right = (SeaBotixThruster)auv_hanse.getActuator("thrusterDown");
+            /*AUVPhysicsControl = auv_monsun2.getPhysicsControl();
             motb1_push = (BrushlessThruster)auv_monsun2.getActuator("thrusterLeft");
             motb2_push = (BrushlessThruster)auv_monsun2.getActuator("thrusterRight");
             mot_leftfront = (BrushlessThruster)auv_monsun2.getActuator("thrusterFrontLeft");
             mot_rightfront = (BrushlessThruster)auv_monsun2.getActuator("thrusterFrontRight");
             mot_rightback = (BrushlessThruster)auv_monsun2.getActuator("thrusterBackRight");
-            mot_leftback = (BrushlessThruster)auv_monsun2.getActuator("thrusterBackLeft");
+            mot_leftback = (BrushlessThruster)auv_monsun2.getActuator("thrusterBackLeft");*/
             man_init = true;
         }
         if(view == null){
@@ -672,8 +683,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
-            //auv_hanse.setView(view);
-            auv_monsun2.setView(view);
+            auv_hanse.setView(view);
+            //auv_monsun2.setView(view);
             view_init = true;
         }
         if(/*AUVPhysicsControl != null*/true){

@@ -21,6 +21,7 @@ import mars.PhysicalEnvironment;
 import mars.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.Time;
 
 /**
  *
@@ -36,8 +37,9 @@ public class TemperatureSensor extends Sensor{
     private Vector3f TemperatureSensorStartVector;
 
     ///ROS stuff
-    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    private Publisher<org.ros.message.hanse_msgs.temperature> publisher = null;
+    private org.ros.message.hanse_msgs.temperature fl = new org.ros.message.hanse_msgs.temperature(); 
+    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     public TemperatureSensor(){
         super();
@@ -156,12 +158,15 @@ public class TemperatureSensor extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/temperature");  
     }
         
     @Override
     public void publish() {
-        fl.data = getTemperature();
+        header.frame_id = "temperature";
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        fl.header = header;
+        fl.data = (int)(getTemperature()*10);
         this.publisher.publish(fl);
     }
 }

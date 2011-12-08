@@ -819,7 +819,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void updateSensors(float tpf){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
-            element.update(tpf);
+            if(element.isEnabled()){
+                element.update(tpf);
+            }
         }
     }
 

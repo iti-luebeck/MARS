@@ -71,10 +71,10 @@ public class BrushlessThruster extends Thruster{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final BrushlessThruster self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Int16",
-          new MessageListener<org.ros.message.std_msgs.Int16>() {
+        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "hanse_msgs/sollSpeed",
+          new MessageListener<org.ros.message.hanse_msgs.sollSpeed>() {
             @Override
-            public void onNewMessage(org.ros.message.std_msgs.Int16 message) {
+            public void onNewMessage(org.ros.message.hanse_msgs.sollSpeed message) {
               System.out.println("I heard: \"" + message.data + "\"");
               self.set_thruster_speed((int)message.data);
             }

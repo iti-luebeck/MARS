@@ -28,7 +28,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
+import mars.server.Converter;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * This is the main sonar class.
@@ -127,6 +131,13 @@ public class Sonar extends Sensor{
     private int sonar_cone_type = 0;
 
     private int SonarReturnDataLength = 252;
+    
+    ///ROS stuff
+    //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
+    //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    protected Publisher<org.ros.message.hanse_msgs.ScanningSonar> publisher = null;
+    protected org.ros.message.hanse_msgs.ScanningSonar fl = new org.ros.message.hanse_msgs.ScanningSonar(); 
+    protected org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     public Sonar(){
         super();
@@ -611,6 +622,10 @@ public class Sonar extends Sensor{
             return getOneRaySonarData();
         }
     }
+    
+    public byte[] getRawSonarData(){
+        return getSonarData();
+    }
 
     /**
      *
@@ -910,5 +925,24 @@ public class Sonar extends Sensor{
     public void reset(){
         debug_node.detachAllChildren();
         scanning_iterations = 0;
+    }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/ScanningSonar");  
+    }
+    
+    @Override
+    public void publish() {
+        //header.seq = 0;
+        header.frame_id = "sonar";
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        fl.header = header;
+        fl.echoData = getRawSonarData();
+        fl.headPosition = getLastHeadPosition();
+        fl.startGain = (byte)getScanning_gain();
+        fl.range = (byte)getSonarMaxRange();
+        this.publisher.publish(fl);
     }
 }

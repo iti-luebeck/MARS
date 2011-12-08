@@ -112,6 +112,11 @@ public class ImagenexSonar_852_Echo extends Sonar{
     public byte[] getSonarData(){
         return encapsulateWithHeaderTail(super.getSonarData());
     }
+    
+    @Override
+    public byte[] getRawSonarData(){
+        return super.getSonarData();
+    }
 
     @Override
     protected float calculateAverageNoiseFunction(float x){

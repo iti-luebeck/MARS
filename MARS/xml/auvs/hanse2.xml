@@ -16,7 +16,7 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="offCamera_width">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">320</value>
@@ -73,10 +73,10 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Debug">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="physical_exchanger">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="drag">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="centers">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
@@ -255,11 +255,34 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>gyroscope</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="temp">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
+            <value xsi:type="imu">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>imu</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Accelerometer>
+                    <noise_type>0</noise_type>
+                    <noise_value>1.0</noise_value>
+                    <name>imu_accelerometer</name>
+                    <enabled>true</enabled>
+                    <ros_publish_rate>1000</ros_publish_rate>
+                </Accelerometer>
+                <Gyroscope>
+                    <noise_type>0</noise_type>
+                    <noise_value>1.0</noise_value>
+                    <name>imu_gyroscope</name>
+                    <enabled>true</enabled>
+                    <ros_publish_rate>1000</ros_publish_rate>
+                </Gyroscope>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="temp">
             <value xsi:type="temperatureSensor">
                 <noise_type>1</noise_type>
                 <noise_value>1.0</noise_value>
@@ -422,7 +445,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>accelerometer</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>

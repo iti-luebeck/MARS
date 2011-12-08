@@ -255,11 +255,11 @@ public class Initializer {
         }
     }
     
-    public ROS_Node getROS_Server(){
+    public synchronized ROS_Node getROS_Server(){
         return ros_server;
     }
         
-    public MARS_Server getRAW_Server(){
+    public synchronized MARS_Server getRAW_Server(){
         return raw_server;
     }
     
