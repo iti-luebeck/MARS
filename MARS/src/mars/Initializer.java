@@ -99,9 +99,9 @@ public class Initializer {
      * @param auv_manager 
      */
     @Deprecated
-    public Initializer(MARS_Main mars, MARS_Settings SimAUV_settings, AUV_Manager auv_manager, Communication_Manager com_manager){
+    public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, Communication_Manager com_manager){
         this.mars = mars;
-        this.MARS_settings = SimAUV_settings;
+        this.MARS_settings = MARS_settings;
         this.guiNode = mars.getGuiNode();
         this.settings = mars.getSettings();
         this.rootNode = mars.getRootNode();
@@ -110,7 +110,7 @@ public class Initializer {
         //this.sceneReflectionNode = mars.getSceneReflectionNode();
         //this.SonarDetectableNode = mars.getSonarDetectableNode();
         this.viewPort = mars.getViewPort();
-        this.water_height = SimAUV_settings.getPhysical_environment().getWater_height();
+        this.water_height = MARS_settings.getPhysical_environment().getWater_height();
         this.auv_manager = auv_manager;
         this.com_manager = com_manager;
         this.renderManager = mars.getRenderManager();
@@ -193,8 +193,12 @@ public class Initializer {
      */
     public void addFiltersToViewport(ViewPort NewViewPort){
         FilterPostProcessor fppp = new FilterPostProcessor(assetManager);
-        fppp.addFilter(createFog());
-        fppp.addFilter(createDepthOfField());
+        if(MARS_settings.isSetupFog()){
+            fppp.addFilter(createFog());
+        }
+        if(MARS_settings.isSetupDepthOfField()){
+            fppp.addFilter(createDepthOfField());
+        }
         NewViewPort.addProcessor(fppp);
     }
 

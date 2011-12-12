@@ -21,6 +21,8 @@ import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -29,7 +31,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.SimState;
+import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * This is a common camera class for auv's.
@@ -74,6 +79,11 @@ public class VideoCamera extends Sensor{
     private float frustumSize = 3.5f;//1
 
     private ByteBuffer cpuBuf;
+    
+    ///ROS stuff
+    private Publisher<org.ros.message.sensor_msgs.Image> publisher = null;
+    private org.ros.message.sensor_msgs.Image fl = new org.ros.message.sensor_msgs.Image(); 
+    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
 
     public VideoCamera(){
         super();
@@ -308,7 +318,8 @@ public class VideoCamera extends Sensor{
         //setup framebuffer to use renderbuffer
         // this is faster for gpu -> cpu copies
         offBuffer.setDepthBuffer(Format.Depth);
-        offBuffer.setColorBuffer(Format.RGBA8);
+        //offBuffer.setColorBuffer(Format.RGBA8);
+        offBuffer.setColorBuffer(Format.BGR8);
         //offBuffer.setColorTexture(offTex);
 
         //set viewport to render to offscreen framebuffer
@@ -389,5 +400,50 @@ public class VideoCamera extends Sensor{
      */
     public void reset(){
 
+    }
+    
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/Image");  
+    }
+
+    @Override
+    public void publish() {
+        //header.seq = 0;
+        header.frame_id = "camera";
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        fl.header = header;
+        fl.height = getCameraHeight();
+        fl.width = getCameraWidth();
+        fl.encoding = "bgra8";
+        fl.is_bigendian = 1;
+        fl.step = getCameraWidth()*4;
+        /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
+        for (int i = 0; i < 100000; i++) {
+            if(i%4!=0){
+                bb[i] = (byte)255;
+            }else{
+                bb[i] = (byte)(-1);
+            }
+        }
+        fl.data = bb;*/
+        /*private final VideoCamera self = this;
+        Future fut = mars.enqueue(new Callable() {
+                    public void call() throws Exception {
+                        return self.getImage();
+                    }
+        });*/
+        
+       /* byte[] ros_image = new byte[CameraHeight*CameraWidth*4]; 
+        ros_image = this.getImage();
+        for (int i = 0; i < CameraHeight*CameraWidth*4; i++) {
+            if(i%4==0 && i!=0){
+                ros_image[i-1] = (byte)(0);
+            }
+        }
+        fl.data = ros_image;*/
+        fl.data = this.getImage();
+        this.publisher.publish(fl);
     }
 }
