@@ -377,6 +377,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         inputManager.addListener(actionListener, "thruster_both_up");
         inputManager.addMapping("thruster_both_down", new KeyTrigger(KeyInput.KEY_NUMPAD7));
         inputManager.addListener(actionListener, "thruster_both_down");
+        
+        
+        inputManager.addMapping("thruster_both_forward", new KeyTrigger(KeyInput.KEY_HOME));
+        inputManager.addMapping("thruster_both_back", new KeyTrigger(KeyInput.KEY_END));
+
+        inputManager.addMapping("thruster_both_up", new KeyTrigger(KeyInput.KEY_PGUP));
+        inputManager.addMapping("thruster_both_down", new KeyTrigger(KeyInput.KEY_PGDN));
 
         inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(actionListener, "reset");
