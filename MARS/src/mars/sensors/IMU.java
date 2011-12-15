@@ -33,13 +33,16 @@ public class IMU extends Sensor{
     private org.ros.message.sensor_msgs.Imu fl = new org.ros.message.sensor_msgs.Imu(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
+    /**
+     * 
+     */
     public IMU(){
         super();
     }
         
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @param pe
      */
     public IMU(SimState simstate,PhysicalEnvironment pe){
@@ -53,7 +56,7 @@ public class IMU extends Sensor{
 
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     public IMU(SimState simstate){
         super(simstate);
@@ -94,6 +97,10 @@ public class IMU extends Sensor{
         gyro.setPhysical_environment(pe);
     }
     
+    /**
+     * 
+     * @param simState
+     */
     @Override
     public void setSimState(SimState simState) {
         super.setSimState(simState);
@@ -130,6 +137,10 @@ public class IMU extends Sensor{
         gyro.setPhysicalExchangerName(name + "_gyroscope");
     }
     
+    /**
+     * 
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -137,12 +148,20 @@ public class IMU extends Sensor{
         gyro.setEnabled(enabled);
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/Imu");  
     }
 
+    /**
+     * 
+     */
     @Override
     public void publish() {
         //header.seq = 0;

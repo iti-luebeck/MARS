@@ -53,9 +53,15 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    /**
+     * 
+     */
     @XmlElement
     protected  boolean enabled = true;
     /*
+     * 
+     */
+    /**
      * 
      */
     @XmlElement
@@ -63,9 +69,16 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    /**
+     * 
+     */
     protected String ros_msg_type = "";
     /*
      * 
+     */
+    /**
+     * 
+     * @deprecated
      */
     @Deprecated
     protected org.ros.node.Node ros_node = null;
@@ -73,13 +86,23 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    /**
+     * 
+     */
     protected MARSNodeMain mars_node = null;
     
     /*
      * 
      */
+    /**
+     * 
+     */
     protected  SimState simState = null;
     
+    /**
+     * 
+     * @param simState
+     */
     public void setSimState(SimState simState) {
         this.simState = simState;
     }
@@ -134,10 +157,18 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public abstract void reset();
     
+    /**
+     * 
+     * @return
+     */
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * 
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -147,49 +178,102 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         return getPhysicalExchangerName();
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getROS_MSG_Type() {
         return ros_msg_type;
     }
 
+    /**
+     * 
+     */
     public void initROS() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
         setROS_Node(ros_node);
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         setROS_Node(ros_node);
     }
 
+    /**
+     * 
+     * @param ros_msg_type
+     */
     public void setROS_MSG_Type(String ros_msg_type) {
         this.ros_msg_type = ros_msg_type;
     }
 
+    /**
+     * 
+     * @return
+     * @deprecated
+     */
     @Deprecated
     public org.ros.node.Node getROS_Node() {
         return ros_node;
     }
 
+    /**
+     * 
+     * @param ros_node
+     * @deprecated
+     */
     @Deprecated
     public void setROS_Node(org.ros.node.Node ros_node) {
         this.ros_node = ros_node;
     }
     
+    /**
+     * 
+     * @return
+     */
     public MARSNodeMain getMARS_Node() {
         return mars_node;
     }
     
+    /**
+     * 
+     * @param ros_node
+     */
     public void setROS_Node(MARSNodeMain ros_node) {
         this.mars_node = ros_node;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getRos_publish_rate() {
         return ros_publish_rate;
     }
 
+    /**
+     * 
+     * @param ros_publish_rate
+     */
     public void setRos_publish_rate(int ros_publish_rate) {
         this.ros_publish_rate = ros_publish_rate;
     }
+    
+    /**
+     *
+     * @param tpf
+     */
+    public abstract void update(float tpf);
 }

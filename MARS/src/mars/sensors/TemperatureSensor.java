@@ -41,13 +41,16 @@ public class TemperatureSensor extends Sensor{
     private org.ros.message.hanse_msgs.temperature fl = new org.ros.message.hanse_msgs.temperature(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
+    /**
+     * 
+     */
     public TemperatureSensor(){
         super();
     }
     
      /**
      *
-      * @param simauv 
+     * @param simstate 
       * @param pe
      */
     public TemperatureSensor(SimState simstate, PhysicalEnvironment pe){
@@ -57,7 +60,7 @@ public class TemperatureSensor extends Sensor{
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public TemperatureSensor(SimState simstate){
         super(simstate);
@@ -148,6 +151,12 @@ public class TemperatureSensor extends Sensor{
     }
     
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -155,12 +164,20 @@ public class TemperatureSensor extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
 
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/temperature");  
     }
         
+    /**
+     * 
+     */
     @Override
     public void publish() {
         header.frame_id = "temperature";

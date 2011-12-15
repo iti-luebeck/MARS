@@ -67,8 +67,9 @@ public class Connection extends Thread {
     /**
      * 
      * @param sockConnected
-     * @param mars
+     * @param simauv 
      * @param auv_manager
+     * @param com_manager  
      */
     public Connection(Socket sockConnected,MARS_Main simauv, AUV_Manager auv_manager, Communication_Manager com_manager) {
         //set the logging
@@ -117,11 +118,18 @@ public class Connection extends Thread {
         }
     }
     
+    /**
+     * 
+     */
     public synchronized void testlock(){
         System.out.println("LOCK" + getName() + "!!!!!!!!!!!!!!!!!");
         sendString(cmd_temp,"test","000");
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean hasUnderwaterCommunication(){
         if(auv != null){
             return auv.hasSensorsOfClass(UnderwaterModem.class.getName());
@@ -130,6 +138,12 @@ public class Connection extends Thread {
         }
     }
 
+    /**
+     * 
+     * @param cmd
+     * @param physicalexchanger_name
+     * @param data
+     */
     public void sendString(String cmd, String physicalexchanger_name, String data){
         synchronized(out){
             try {

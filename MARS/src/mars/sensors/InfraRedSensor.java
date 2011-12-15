@@ -72,10 +72,20 @@ public class InfraRedSensor extends Sensor{
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
     
+    /**
+     * 
+     */
     public InfraRedSensor() {
         super();
     }
     
+    /**
+     * 
+     * @param simstate
+     * @param pe
+     * @param detectable
+     * @deprecated
+     */
     @Deprecated
     public InfraRedSensor(SimState simstate, PhysicalEnvironment pe, Node detectable) {
         super(simstate);
@@ -93,6 +103,11 @@ public class InfraRedSensor extends Sensor{
         this.pe = pe;
     }
 
+    /**
+     * 
+     * @param simstate
+     * @param detectable
+     */
     public InfraRedSensor(SimState simstate, Node detectable) {
         super(simstate);
         //set the logging
@@ -229,7 +244,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      *
-     * @param SonarStartVector
+     * @param StartVector 
      */
     public void setPosition(Vector3f StartVector){
         this.StartVector = StartVector;
@@ -237,7 +252,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      * 
-     * @param SonarDirection
+     * @param Direction 
      */
     public void setDirection(Vector3f Direction){
         this.Direction = Direction;
@@ -253,7 +268,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      *
-     * @param SonarMaxRange
+     * @param MaxRange 
      */
     public void setMaxRange(float MaxRange) {
         this.MaxRange = MaxRange;
@@ -269,7 +284,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      *
-     * @param SonarMinRange
+     * @param MinRange 
      */
     public void setMinRange(float MinRange) {
         this.MinRange = MinRange;
@@ -352,19 +367,33 @@ public class InfraRedSensor extends Sensor{
         return arr_ret;
     }
     
-    @Override
+     /**
+      * 
+      * @param ros_node
+      * @param auv_name
+      * @deprecated
+      */
+     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
 
+    /**
+     * 
+     */
     @Override
     public void publish() {
         fl.data = getDistance();

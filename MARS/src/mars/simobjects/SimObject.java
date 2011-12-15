@@ -94,6 +94,9 @@ public class SimObject implements CellEditorListener{
         this.xmll = xmll;
     }
     
+    /**
+     * 
+     */
     public SimObject(){
         
     }
@@ -305,7 +308,7 @@ public class SimObject implements CellEditorListener{
 
     /**
      *
-     * @param dimensions
+     * @param collision_position 
      */
     public void setCollisionPosition(Vector3f collision_position) {
         ((HashMap<String,Object>)simob_variables.get("Collision")).put("collision_position", collision_position);

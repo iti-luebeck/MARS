@@ -27,14 +27,29 @@ public class Communication_Manager {
     private MARS_Server raw_server;
     private AUV_Manager auv_manager;
     
+    /**
+     * 
+     * @param auv_manager
+     * @param simstate
+     * @param detectable
+     * @param pe
+     */
     public Communication_Manager(AUV_Manager auv_manager,SimState simstate, Node detectable,PhysicalEnvironment pe) {
         this.auv_manager = auv_manager;
     }
     
+    /**
+     * 
+     * @param raw_server
+     */
     public void setServer(MARS_Server raw_server){
         this.raw_server = raw_server;
     }
     
+    /**
+     * 
+     * @param tpf
+     */
     public void update(float tpf){
         //System.out.println("Time for Communicatin update!");
         /*String s = linkQueue.poll();
@@ -75,6 +90,11 @@ public class Communication_Manager {
         }
     }
     
+    /**
+     * 
+     * @param auv_name
+     * @param msg
+     */
     public synchronized void putMsg(String auv_name,String msg){
         //System.out.println("Added msg to bag: " + msg);
         hashQueue.put(auv_name, msg);

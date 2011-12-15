@@ -36,7 +36,7 @@ public class SimObjectManager {
     private Node rootNode;
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public SimObjectManager(SimState simstate) {
        //set the logging
@@ -241,7 +241,6 @@ public class SimObjectManager {
     /**
      * We must add the auv to a BulletAppState so the physics can be applied.
      * @param simob 
-     * @param bulletAppState
      */
     public void addSimObjectToBulletAppState(SimObject simob){
         if(simob.isCollidable() && simob.isEnabled()){

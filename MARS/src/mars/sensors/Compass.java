@@ -49,13 +49,16 @@ public class Compass extends Sensor{
     private Vector3f magnetic_east = Vector3f.UNIT_Z;
     private Vector3f magnetic_z = Vector3f.UNIT_Y;
 
+    /**
+     * 
+     */
     public Compass() {
         super();
     }
         
      /**
      *
-      * @param simauv
+     * @param simstate 
       * @param pe
      */
     public Compass(SimState simstate, PhysicalEnvironment pe) {
@@ -65,7 +68,7 @@ public class Compass extends Sensor{
 
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     public Compass(SimState simstate) {
         super(simstate);

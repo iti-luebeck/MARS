@@ -130,6 +130,9 @@ public class AUV_Parameters implements CellEditorListener{
         this.xmll = xmll;
     }
     
+    /**
+     * 
+     */
     public AUV_Parameters(){
         
     }
@@ -682,7 +685,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param dimensions
+     * @param collision_position 
      */
     public void setCollisionPosition(Vector3f collision_position) {
         collision.put("collision_position", collision_position);
@@ -842,7 +845,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param collision
+     * @param enabled 
      */
     public void setEnabled(boolean enabled) {
         params.put("enabled", enabled);

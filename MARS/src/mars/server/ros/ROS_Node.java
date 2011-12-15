@@ -44,6 +44,11 @@ public class ROS_Node implements Runnable {
     private Node node;
     private MARSNodeMain marsnode;
     
+    /**
+     * 
+     * @param mars
+     * @param auv_manager
+     */
     public ROS_Node(MARS_Main mars, AUV_Manager auv_manager) {
         //set the logging
         try {
@@ -59,15 +64,27 @@ public class ROS_Node implements Runnable {
         this.auv_manager = auv_manager;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getMaster_ip() {
         return master_ip;
     }
 
+    /**
+     * 
+     * @param master_ip
+     */
     public void setMaster_ip(String master_ip) {
         this.master_ip = master_ip;
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getMaster_uri() {
         return master_uri;
     }
@@ -76,24 +93,44 @@ public class ROS_Node implements Runnable {
         this.master_uri = master_uri;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getMaster_port() {
         return master_port;
     }
 
+    /**
+     * 
+     * @param master_port
+     */
     public void setMaster_port(int master_port) {
         this.master_port = master_port;
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
     }
     
+    /**
+     * 
+     * @return
+     * @deprecated
+     */
     @Deprecated
     public Node getNode() {
         return node;
     }
     
+    /**
+     * 
+     * @return
+     */
     public MARSNodeMain getMarsNode() {
         return marsnode;
     }
     
+    /**
+     * 
+     */
     public void shutdown() {
         node.shutdown();
         node = null;

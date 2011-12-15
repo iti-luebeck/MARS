@@ -38,6 +38,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
+import mars.actuators.servos.Servo;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
@@ -108,6 +109,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private BrushlessThruster mot_leftfront;
     private BrushlessThruster mot_rightback;
     private BrushlessThruster mot_leftback;
+    
+    private Servo serv;
 
     
     /**
@@ -321,6 +324,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 im.setPhysicalExchangerName("imu");
                 Hanse hans = (Hanse)auvs.get(1);
                 hans.registerPhysicalExchanger(im);*/
+             
+                /*serv = new Servo();
+                serv.setEnabled(true);
+                serv.setNodeVisibility(true);
+                serv.setPhysicalExchangerName("servot");
+                serv.setServoStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
+                serv.setServoDirection(new Vector3f(0f, 0f, -1f));
+                Hanse hans = (Hanse)auvs.get(1);
+                hans.registerPhysicalExchanger(serv);*/
+             
              Iterator iter = auvs.iterator();
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
@@ -405,8 +418,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 /*motb1_push.thruster_forward();
                 motb2_push.thruster_forward();*/
             }else if(name.equals("thruster_both_turn") && !keyPressed) {
-                mot1left.set_thruster_speed(40);
-                mot1right.set_thruster_speed(-40);
+                //mot1left.set_thruster_speed(40);
+                //mot1right.set_thruster_speed(-40);
+                serv.setSlave(mot2right);
+                serv.setDesiredAnglePosition(180);
                 //mot1left.set_thruster_speed(100);
                 //mot1right.set_thruster_speed(100);
             }else if(name.equals("thruster_both_back") && !keyPressed) {
@@ -495,7 +510,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
         }
         auv_manager.registerAUVs(auvs);
-        auv_hanse = (Hanse)auvs.get(1);
+        
+        Iterator iter = auvs.iterator();
+        while(iter.hasNext() ) {
+            AUV aaa = (AUV)iter.next();
+            if(            aaa.getAuv_param().getAuv_name().equals("hanse2") ){
+                auv_hanse = (Hanse)aaa;
+            }
+        }
         //auv_monsun2 = (Monsun2)auv_manager.getAUV("monsun");
         //auv_monsun2 = (Monsun2)auvs.get(2);
     }

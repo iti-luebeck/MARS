@@ -19,6 +19,9 @@ import mars.ros.MARSNodeMain;
 @XmlAccessorType(XmlAccessType.NONE)
 public class SeaBotixThruster extends Thruster{
 
+    /**
+     * 
+     */
     public SeaBotixThruster(){
         super();
         motor_increment = 5f;
@@ -26,7 +29,7 @@ public class SeaBotixThruster extends Thruster{
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      * @param MassCenterGeom
      */
     public SeaBotixThruster(SimState simstate,Geometry MassCenterGeom){
@@ -36,7 +39,7 @@ public class SeaBotixThruster extends Thruster{
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public SeaBotixThruster(SimState simstate){
         super(simstate);
@@ -54,6 +57,12 @@ public class SeaBotixThruster extends Thruster{
         return (Math.signum(speed))*(0.00046655f * (float)Math.pow((float)Math.abs(speed), 2.02039525f) );
     }
 
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -69,6 +78,11 @@ public class SeaBotixThruster extends Thruster{
           });
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);

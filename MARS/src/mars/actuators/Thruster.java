@@ -7,6 +7,8 @@ package mars.actuators;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -49,13 +51,16 @@ public class Thruster extends Actuator implements Moveable{
      */
     protected float motor_increment = 10.0f;
 
+    /**
+     * 
+     */
     public Thruster(){
         super();
     }
     
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @param MassCenterGeom
      */
     public Thruster(SimState simstate,Geometry MassCenterGeom) {
@@ -64,7 +69,7 @@ public class Thruster extends Actuator implements Moveable{
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public Thruster(SimState simstate) {
         super(simstate);
@@ -153,6 +158,15 @@ public class Thruster extends Actuator implements Moveable{
         //physics_control.applyImpulse(Vector3f.UNIT_Z.mult(0.00001f), this.getMassCenterGeom().getWorldTranslation());
     }
 
+   /**
+     *
+     * @param tpf
+     */
+    @Override
+    public void update(float tpf){
+        
+    }
+    
     /**
      * This is the function that represents thruster force.
      * @param speed 
@@ -198,10 +212,23 @@ public class Thruster extends Actuator implements Moveable{
         MotorForce = 0f;
     }
     
+    /**
+     * 
+     * @param rotation_axis
+     * @param alpha
+     */
     public void updateRotation(Vector3f rotation_axis, float alpha){
-        
+        Quaternion quat = new Quaternion();
+        quat.fromAngleNormalAxis(alpha, rotation_axis);
+        MotorStart.setLocalRotation(quat);
+        MotorEnd.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param translation_axis
+     * @param new_realative_position
+     */
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
         
     }

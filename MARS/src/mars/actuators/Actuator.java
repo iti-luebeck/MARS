@@ -5,6 +5,7 @@
 
 package mars.actuators;
 
+import mars.actuators.servos.Servo;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -28,6 +29,9 @@ import mars.SimState;
 @XmlSeeAlso( {Thruster.class,Servo.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
     /*
+     * 
+     */
+    /**
      * 
      */
     protected  SimState simState;
@@ -55,13 +59,16 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     protected MARS_Settings simauv_settings;
 
+    /**
+     * 
+     */
     protected Actuator(){
         
     }
     
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @param MassCenterGeom
      */
     protected Actuator(SimState simstate,Geometry MassCenterGeom){
@@ -73,12 +80,16 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
 
     /**
      *
-     * @param simauv
+     * @param simState 
      */
     protected Actuator(SimState simState){
         setSimState(simState);
     }
     
+    /**
+     * 
+     * @param simState
+     */
     @Override
     public void setSimState(SimState simState) {
         this.simState = simState;

@@ -18,6 +18,9 @@ import mars.ros.MARSNodeMain;
 @XmlAccessorType(XmlAccessType.NONE)
 public class BrushlessThruster extends Thruster{
     
+    /**
+     * 
+     */
     public BrushlessThruster(){
         super();
         motor_increment = 0.6f;
@@ -25,7 +28,7 @@ public class BrushlessThruster extends Thruster{
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      * @param MassCenterGeom
      */
     public BrushlessThruster(SimState simstate,Geometry MassCenterGeom){
@@ -35,7 +38,7 @@ public class BrushlessThruster extends Thruster{
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public BrushlessThruster(SimState simstate){
         super(simstate);
@@ -52,6 +55,12 @@ public class BrushlessThruster extends Thruster{
         return (Math.signum(speed))*(0.00046655f * (float)Math.pow((float)Math.abs(speed), 2.02039525f) );
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -67,6 +76,11 @@ public class BrushlessThruster extends Thruster{
           });
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);

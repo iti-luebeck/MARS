@@ -25,13 +25,16 @@ public class Gyroscope extends Sensor{
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
     
+    /**
+     * 
+     */
     public Gyroscope(){
         super();
     }
         
     /**
      *
-     * @param simauv 
+     * @param simstate 
      */
     public Gyroscope(SimState simstate){
         super(simstate);
@@ -107,6 +110,12 @@ public class Gyroscope extends Sensor{
 
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -114,12 +123,20 @@ public class Gyroscope extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
 
+    /**
+     * 
+     */
     @Override
     public void publish() {
         fl.data = getAngularVelocity().length();

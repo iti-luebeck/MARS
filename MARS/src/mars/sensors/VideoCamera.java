@@ -85,13 +85,16 @@ public class VideoCamera extends Sensor{
     private org.ros.message.sensor_msgs.Image fl = new org.ros.message.sensor_msgs.Image(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
 
+    /**
+     * 
+     */
     public VideoCamera(){
         super();
     }
     
      /**
      *
-      * @param simauv
+     * @param simstate 
      */
     public VideoCamera(SimState simstate){
         super(simstate);
@@ -100,6 +103,10 @@ public class VideoCamera extends Sensor{
         this.initer = simstate.getIniter();*/
     }
     
+    /**
+     * 
+     * @param simState
+     */
     @Override
     public void setSimState(SimState simState){
         super.setSimState(simState);
@@ -402,12 +409,20 @@ public class VideoCamera extends Sensor{
 
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/Image");  
     }
 
+    /**
+     * 
+     */
     @Override
     public void publish() {
         //header.seq = 0;

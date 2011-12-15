@@ -18,7 +18,7 @@ public class Hanse2 extends BasicAUV{
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     public Hanse2(SimState simstate){
         super(simstate);

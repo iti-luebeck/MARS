@@ -30,6 +30,9 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /*
      * 
      */
+    /**
+     * 
+     */
     protected SimState simState;
     /**
      *
@@ -50,15 +53,21 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /*
      * 
      */
+    /**
+     * 
+     */
     protected long time = 0;
     
+    /**
+     * 
+     */
     protected Sensor(){
         
     }
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     protected Sensor(SimState simstate){
         setSimState(simstate);
@@ -76,6 +85,10 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         this.rootNode = simauv.getRootNode();
     }
     
+    /**
+     * 
+     * @param simState
+     */
     @Override
     public void setSimState(SimState simState) {
         this.simState = simState;
@@ -89,11 +102,6 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      */
     public abstract void init(Node auv_node);
     
-    /**
-     *
-     * @param tpf
-     */
-    public abstract void update(float tpf);
     /**
      *
      * @return
@@ -110,6 +118,9 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         this.pe = pe;
     }
     
+    /**
+     * 
+     */
     public void publish() {
     }
  
@@ -127,6 +138,9 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         }
     }*/
     
+    /**
+     * 
+     */
     public void publishUpdate() {
         long curtime = System.currentTimeMillis();
         if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){

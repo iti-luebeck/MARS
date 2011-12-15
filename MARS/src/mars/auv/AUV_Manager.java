@@ -47,7 +47,7 @@ public class AUV_Manager {
 
     /**
      *
-     * @param mars
+     * @param simstate 
      */
     public AUV_Manager(SimState simstate) {
        //set the logging
@@ -110,10 +110,18 @@ public class AUV_Manager {
         this.physical_environment = physical_environment;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Communication_Manager getCommunicationManager() {
         return com_manager;
     }
 
+    /**
+     * 
+     * @param com_manager
+     */
     public void setCommunicationManager(Communication_Manager com_manager) {
         this.com_manager = com_manager;
     }
@@ -143,20 +151,38 @@ public class AUV_Manager {
         this.bulletAppState = bulletAppState;
     }
     
+    /**
+     * 
+     * @return
+     * @deprecated
+     */
     @Deprecated
     public org.ros.node.Node getRos_node() {
         return ros_node;
     }
 
+    /**
+     * 
+     * @param ros_node
+     * @deprecated
+     */
     @Deprecated
     public void setRos_node(org.ros.node.Node ros_node) {
         this.ros_node = ros_node;
     }
     
+    /**
+     * 
+     * @return
+     */
     public MARSNodeMain getMARSNode() {
         return mars_node;
     }
 
+    /**
+     * 
+     * @param mars_node
+     */
     public void setMARSNode(MARSNodeMain mars_node) {
         this.mars_node = mars_node;
     }
@@ -167,6 +193,7 @@ public class AUV_Manager {
      */
     public void updateAllAUVs(float tpf){
         updateForcesOfAUVs(tpf);
+        updateActuatorsOfAUVs(tpf);
         updateSensorsOfAUVs(tpf);
         updateCommunicationOfAUVs(tpf);
         updateWaypointsOfAUVs(tpf);
@@ -175,7 +202,6 @@ public class AUV_Manager {
     
     /**
      *
-     * @param tpf
      */
     public void publishSensorsOfAUVs(){
         for ( String elem : auvs.keySet() ){
@@ -221,6 +247,18 @@ public class AUV_Manager {
             AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
                 auv.updateSensors(tpf);
+            }
+        }
+    }
+    
+    /*
+     * 
+     */
+    private void updateActuatorsOfAUVs(float tpf){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled()){
+                auv.updateActuators(tpf);
             }
         }
     }
@@ -492,6 +530,10 @@ public class AUV_Manager {
         auv.init();
     }
     
+    /**
+     * 
+     * @deprecated
+     */
     @Deprecated
     public void initROSofAUVs(){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Initialising AUV's...", "");
@@ -512,6 +554,11 @@ public class AUV_Manager {
         }
     }
 
+    /**
+     * 
+     * @param auv
+     * @deprecated
+     */
     @Deprecated
     public void initROSofAUV(AUV auv){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Initialising AUV " + auv.getName() + "...", "");

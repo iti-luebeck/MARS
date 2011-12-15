@@ -44,22 +44,33 @@ public class UnderwaterModem extends Sensor{
     private Publisher<org.ros.message.std_msgs.String> publisher = null;
     private org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String(); 
     
+    /**
+     * 
+     */
     public UnderwaterModem(){
         super();
     }
     
      /**
      *
-      * @param simauv 
+     * @param simstate 
      */
     public UnderwaterModem(SimState simstate){
         super(simstate);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Communication_Manager getCommunicationManager() {
         return com_manager;
     }
 
+    /**
+     * 
+     * @param com_manager
+     */
     public void setCommunicationManager(Communication_Manager com_manager) {
         this.com_manager = com_manager;
     }
@@ -97,6 +108,12 @@ public class UnderwaterModem extends Sensor{
 
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -114,6 +131,11 @@ public class UnderwaterModem extends Sensor{
           });
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
@@ -130,16 +152,27 @@ public class UnderwaterModem extends Sensor{
           });
     }
     
+    /**
+     * 
+     */
     @Override
     public void publish(){
         
     }
     
+    /**
+     * 
+     * @param msg
+     */
     public void publish(String msg){
         str.data = msg;
         this.publisher.publish(str);
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getMessage(){
         return "This is a Message";
     }

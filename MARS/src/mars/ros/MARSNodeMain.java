@@ -46,18 +46,38 @@ public class MARSNodeMain implements NodeMain {
     public void onShutdown(Node node) {
     }
     
+    /**
+     * 
+     * @param topic
+     * @param msg_type
+     * @return
+     */
     public Publisher newPublisher(String topic, String msg_type){
         return node.newPublisher(topic, msg_type); 
     }
     
+    /**
+     * 
+     * @param topic
+     * @param msg_type
+     * @param msg_listener
+     */
     public void newSubscriber(String topic, String msg_type, MessageListener msg_listener){
         node.newSubscriber(topic, msg_type, msg_listener);
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean isRunning(){
         return node.isRunning();
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean isExisting(){
         if(node != null){
             return true;

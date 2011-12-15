@@ -66,6 +66,10 @@ public class TestSimplePhysics extends SimpleApplication implements PhysicsTickL
         bullet = new Sphere(32, 32, 1f, true, false);
     }
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args){
         TestSimplePhysics app = new TestSimplePhysics();
         app.start();
@@ -94,6 +98,9 @@ public class TestSimplePhysics extends SimpleApplication implements PhysicsTickL
         }
     };
 
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
         initKeys();

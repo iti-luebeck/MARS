@@ -166,7 +166,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     /**
      * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it.
      * Also all the physics stuff happens here.
-     * @param mars
+     * @param simstate 
      */
     public BasicAUV(SimState simstate){
         //set the logging
@@ -269,24 +269,39 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     /**
      *
-     * @param mars_settings
      */
     public void setSimauv_settings(MARS_Settings simauv_settings) {
         this.mars_settings = simauv_settings;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Communication_Manager getCommunicationManager() {
         return com_manager;
     }
 
+    /**
+     * 
+     * @param com_manager
+     */
     public void setCommunicationManager(Communication_Manager com_manager) {
         this.com_manager = com_manager;
     }
     
+    /**
+     * 
+     * @param ros_node
+     */
     public void setROS_Node(org.ros.node.Node ros_node){
         this.ros_node = ros_node;
     }
     
+    /**
+     * 
+     * @param mars_node
+     */
     public void setROS_Node(MARSNodeMain mars_node){
         this.mars_node = mars_node;
     }
@@ -511,6 +526,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
     
     /*
+     * 
+     */
+    /**
      * 
      */
     @Override
@@ -819,6 +837,19 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void updateSensors(float tpf){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
+            if(element.isEnabled()){
+                element.update(tpf);
+            }
+        }
+    }
+    
+    /**
+     *
+     * @param tpf time per frame
+     */
+    public void updateActuators(float tpf){
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
                 element.update(tpf);
             }
@@ -1410,6 +1441,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     /*
      * 
      */
+    /**
+     * 
+     */
     @Override
     public void publishSensorsOfAUV(){
         for ( String elem : sensors.keySet() ){
@@ -1447,7 +1481,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     /**
      *
-     * @param mars
+     * @param simstate 
      */
     @Override
     public void setState(SimState simstate) {

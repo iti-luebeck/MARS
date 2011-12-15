@@ -35,8 +35,9 @@ public class MARS_Server implements Runnable {
 
     /**
      *
-     * @param mars The main JME3 class.
+     * @param simauv 
      * @param auv_manager
+     * @param com_manager  
      */
     public MARS_Server(MARS_Main simauv, AUV_Manager auv_manager, Communication_Manager com_manager) {
         //set the logging
@@ -70,6 +71,10 @@ public class MARS_Server implements Runnable {
         this.port = port;
     }
     
+    /**
+     * 
+     * @param msg
+     */
     public synchronized void sendStringToAllConnections(String msg){
         Iterator<Connection> itr = connections.iterator();
         int i = 0;
@@ -82,6 +87,10 @@ public class MARS_Server implements Runnable {
         }
     }
     
+    /**
+     * 
+     * @param msg
+     */
     public synchronized void sendStringToAllConnectionsWithUnderwaterCommunication(String msg){
         Iterator<Connection> itr = connections.iterator();
         int i = 0;

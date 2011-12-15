@@ -10,26 +10,56 @@ package mars.Helper;
  */
 public class SoundHelper {
     
+    /**
+     * 
+     * @return
+     */
     public static float getUnderWaterSoundSpeedBilaniukWong(){
         throw new UnsupportedOperationException();
     }
     
+    /**
+     * 
+     * @return
+     */
     public static float getUnderWaterSoundSpeedBelogolskiiSekoyan(){
         throw new UnsupportedOperationException();
     }
     
+    /**
+     * 
+     * @param temperature
+     * @return
+     */
     public static float getUnderWaterSoundSpeedLubberGraaffA(float temperature){
         return 1404.3f + 4.7f*temperature - 0.04f*(float)(Math.pow(temperature,2));
     }
     
+    /**
+     * 
+     * @param temperature
+     * @return
+     */
     public static float getUnderWaterSoundSpeedLubberGraaffB(float temperature){
         return 1405.03f + 4.624f*temperature - 3.83E-2f*(float)(Math.pow(temperature,2));
     }
     
+    /**
+     * 
+     * @param temperature
+     * @return
+     */
     public static float getUnderWaterSoundSpeedMarczak(float temperature){
         return 1.402385E3f + 5.038813f*temperature - 5.799136E-2f*(float)(Math.pow(temperature,2)) + 3.287156E-4f*(float)(Math.pow(temperature,3)) - 1.398845E-6f*(float)(Math.pow(temperature,4)) + 2.787860E-9f*(float)(Math.pow(temperature,5));
     }
     
+    /**
+     * 
+     * @param temperature_deg
+     * @param salinity
+     * @param depth
+     * @return
+     */
     public static float getUnderWaterSoundSpeedCoppens(float temperature_deg,float salinity, float depth){
         float temperature = temperature_deg/10f;
         return CoppensC(temperature_deg, salinity) + (16.23f + 0.253f*temperature)*depth + (0.213f-0.1f*temperature)*(float)(Math.pow(depth,2)) + (0.016f + 0.0002f*(salinity-35f))*(salinity - 35f)*temperature*depth;
@@ -40,10 +70,24 @@ public class SoundHelper {
         return 1449.05f + 45.7f*temperature - 5.21f*(float)(Math.pow(temperature,2)) + 0.23f*(float)(Math.pow(temperature,3)) + (1.333f - 0.126f*temperature + 0.009f*(float)(Math.pow(temperature,2)))*(salinity - 35f); 
     }
 
+    /**
+     * 
+     * @param temperature
+     * @param salinity
+     * @param depth
+     * @return
+     */
     public static float getUnderWaterSoundSpeedMackenzie(float temperature,float salinity, float depth){
         return 1448.96f + 4.591f*temperature - 5.304E-2f*(float)(Math.pow(temperature,2)) + 2.374E-4f*(float)(Math.pow(temperature,3)) + 1.340f*(salinity-35f) + 1.630E-2f*depth + 1.675E-7f*(float)(Math.pow(depth,2)) - 1.025E2f*temperature*(salinity - 35f) - 7.139E-13f*temperature*(float)(Math.pow(depth,3));
     }
     
+    /**
+     * 
+     * @param temperature
+     * @param salinity
+     * @param pressure
+     * @return
+     */
     public static float getUnderWaterSoundSpeedDelGrosso(float temperature,float salinity, float pressure){
         float C000 = 1402.392f;
         return C000 + DelGrossoCT(temperature) + DelGrossoCS(salinity) + DelGrossoCP(pressure) + DelGrossoCSTP(temperature, salinity, pressure);
@@ -83,6 +127,13 @@ public class SoundHelper {
         return CTP*temperature*pressure + CT3P*(float)(Math.pow(temperature,3))*pressure + CTP2*(float)(Math.pow(temperature,2))*pressure + CT2P2*(float)(Math.pow(temperature,2))*(float)(Math.pow(pressure,2)) + CTP3*(float)(Math.pow(pressure,3))*temperature + CST*salinity*temperature + CST2*(float)(Math.pow(temperature,2))*salinity + CSTP*salinity*temperature*pressure + CS2TP*(float)(Math.pow(salinity,2))*pressure*temperature + CS2P2*(float)(Math.pow(salinity,2))*(float)(Math.pow(pressure,2));
     }
     
+    /**
+     * 
+     * @param temperature
+     * @param salinity
+     * @param pressure
+     * @return
+     */
     public static float getUnderWaterSoundSpeedChenMillero(float temperature,float salinity, float pressure){
         //define constants
         float C00 = 1402.388f;

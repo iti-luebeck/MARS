@@ -38,11 +38,18 @@ public interface AUV{
      * @param tpf
      */
     public void updateForces(float tpf);
+    
     /**
      * 
      * @param tpf
      */
     public void updateSensors(float tpf);
+    
+    /**
+     * 
+     * @param tpf
+     */
+    public void updateActuators(float tpf);
     
     /**
      *
@@ -58,6 +65,9 @@ public interface AUV{
      */
     public void updateValues(float tpf);
     /*
+     * 
+     */
+    /**
      * 
      */
     public void publishSensorsOfAUV();
@@ -112,6 +122,9 @@ public interface AUV{
     /*
      *
      */
+    /**
+     * 
+     */
     public void initROS();
     /**
      *
@@ -165,7 +178,7 @@ public interface AUV{
     public boolean hasSensorsOfClass(String classNameString);
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public void setState(SimState simstate);
     /*
@@ -247,18 +260,35 @@ public interface AUV{
     /*
      * 
      */
+    /**
+     * 
+     * @return
+     */
     public Communication_Manager getCommunicationManager();
     /*
     * 
     */
+    /**
+     * 
+     * @param com_manager
+     */
     public void setCommunicationManager(Communication_Manager com_manager);
     /*
      * 
+     */
+    /**
+     * 
+     * @param ros_node
+     * @deprecated
      */
     @Deprecated
     public void setROS_Node(org.ros.node.Node ros_node);   
     /*
      * 
+     */
+    /**
+     * 
+     * @param mars_node
      */
     public void setROS_Node(MARSNodeMain mars_node);
 }

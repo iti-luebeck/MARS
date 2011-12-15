@@ -7,6 +7,7 @@ package mars.auv;
 /**
  *
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public class AuvType {

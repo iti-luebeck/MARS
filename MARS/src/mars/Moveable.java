@@ -11,6 +11,16 @@ import com.jme3.math.Vector3f;
  * @author Thomas Tosik
  */
 public interface Moveable {
+    /**
+     * 
+     * @param rotation_axis
+     * @param alpha
+     */
     public void updateRotation(Vector3f rotation_axis, float alpha);
+    /**
+     * 
+     * @param translation_axis
+     * @param new_realative_position
+     */
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position);
 }

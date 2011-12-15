@@ -26,6 +26,9 @@ public class FishEyeFilter extends Filter {
     private float xScale;
     private float yScale;
 
+    /**
+     * 
+     */
     public FishEyeFilter() {
         super("FishEyeFilter");
     }
@@ -62,6 +65,7 @@ public class FishEyeFilter extends Filter {
 
     /**
      *  Sets the distance at which objects are purely in focus.
+     * @param f 
      */
     public void setFocusDistance(float f) {
 
@@ -72,6 +76,10 @@ public class FishEyeFilter extends Filter {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getFocusDistance() {
         return focusDistance;
     }
@@ -80,6 +88,7 @@ public class FishEyeFilter extends Filter {
      *  Sets the range to either side of focusDistance where the
      *  objects go gradually out of focus.  Less than focusDistance - focusRange
      *  and greater than focusDistance + focusRange, objects are maximally "blurred".
+     * @param f 
      */
     public void setFocusRange(float f) {
         this.focusRange = f;
@@ -89,6 +98,10 @@ public class FishEyeFilter extends Filter {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getFocusRange() {
         return focusRange;
     }
@@ -104,6 +117,7 @@ public class FishEyeFilter extends Filter {
      *%MINIFYHTMLc3d0cd9fab65de6875a381fd3f83e1b338%*
      *  Where 'x' is the texel being modified.  Setting blur scale higher
      *  than 1 spaces the samples out.
+     * @param f 
      */
     public void setBlurScale(float f) {
         this.blurScale = f;
@@ -113,6 +127,10 @@ public class FishEyeFilter extends Filter {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getBlurScale() {
         return blurScale;
     }

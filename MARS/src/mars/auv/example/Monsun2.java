@@ -18,7 +18,7 @@ public class Monsun2 extends BasicAUV{
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     public Monsun2(SimState simstate){
         super(simstate);

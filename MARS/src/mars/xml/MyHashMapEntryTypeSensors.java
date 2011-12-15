@@ -19,18 +19,34 @@ import mars.sensors.Sensor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"unit", "key", "value"})
 public class MyHashMapEntryTypeSensors extends MyHashMapEntryType{
+    /**
+     * 
+     */
     @XmlAttribute
     public String key; 
     
+    /**
+     * 
+     */
     @XmlAttribute
     public String unit; 
     
+    /**
+     * 
+     */
     @XmlElement
     //@XmlJavaTypeAdapter(ActuatorAdapter.class)
     public Sensor value;
     
+    /**
+     * 
+     */
     public MyHashMapEntryTypeSensors() {}
     
+    /**
+     * 
+     * @param e
+     */
     public MyHashMapEntryTypeSensors(Map.Entry<String,Object> e) {
        key = e.getKey();
 
@@ -54,6 +70,10 @@ public class MyHashMapEntryTypeSensors extends MyHashMapEntryType{
         return unit;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Sensor getValue() {
         return value;
     }

@@ -56,6 +56,9 @@ public class PhysicalEnvironment implements CellEditorListener{
          this.xmll = xmll;
     }
     
+    /**
+     * 
+     */
     public PhysicalEnvironment(){
         
     }

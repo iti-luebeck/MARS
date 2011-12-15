@@ -97,6 +97,8 @@ public class Initializer {
      * @param mars
      * @param MARS_settings
      * @param auv_manager 
+     * @param com_manager 
+     * @deprecated 
      */
     @Deprecated
     public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, Communication_Manager com_manager){
@@ -119,6 +121,13 @@ public class Initializer {
         fpp = new FilterPostProcessor(assetManager);
     }
     
+    /**
+     * 
+     * @param mars
+     * @param simstate
+     * @param auv_manager
+     * @param com_manager
+     */
     public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager){
         this.mars = mars;
         this.MARS_settings = simstate.getSimauv_settings();
@@ -235,6 +244,9 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     */
     public void setupROS_Server(){
         if(MARS_settings.isROS_Server_enabled()){
             ros_server = new ROS_Node( mars, auv_manager );
@@ -245,12 +257,19 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     */
     public synchronized void start_ROS_Server(){
         if(ros_server_thread != null){
             ros_server_thread.start();
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public synchronized boolean isROS_ServerReady(){
         if(ros_server_thread != null){
             return ros_server_thread.isAlive();
@@ -259,14 +278,25 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public synchronized ROS_Node getROS_Server(){
         return ros_server;
     }
         
+    /**
+     * 
+     * @return
+     */
     public synchronized MARS_Server getRAW_Server(){
         return raw_server;
     }
     
+    /**
+     * 
+     */
     public synchronized void testraw(){
         if(raw_server_thread != null){
             raw_server.sendStringToAllConnections("test");

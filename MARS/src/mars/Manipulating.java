@@ -9,6 +9,14 @@ package mars;
  * @author Tosik
  */
 public interface Manipulating {
-    public PhysicalExchanger getSlave();
+    /**
+     * 
+     * @return
+     */
+    public Moveable getSlave();
+    /**
+     * 
+     * @param slave
+     */
     public void setSlave(PhysicalExchanger slave);
 }

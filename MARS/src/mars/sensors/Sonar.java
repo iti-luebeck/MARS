@@ -135,16 +135,36 @@ public class Sonar extends Sensor{
     ///ROS stuff
     //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    /**
+     * 
+     */
     protected Publisher<org.ros.message.hanse_msgs.ScanningSonar> publisher = null;
+    /**
+     * 
+     */
     protected org.ros.message.hanse_msgs.ScanningSonar fl = new org.ros.message.hanse_msgs.ScanningSonar(); 
+    /**
+     * 
+     */
     protected org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
+    /**
+     * 
+     */
     public Sonar(){
         super();
+        try {
+            // Create an appending file handler
+            boolean append = true;
+            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+            // Add to the desired logger
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.addHandler(handler);
+        } catch (IOException e) { }
     }
     
      /**
-      * @param simauv
+     * @param simstate 
       * @param pe
       * @param detectable object for sonar
       */
@@ -166,7 +186,7 @@ public class Sonar extends Sensor{
     }
 
     /**
-     * @param simauv
+     * @param simstate 
      * @param detectable object for sonar
      */
     public Sonar(SimState simstate, Node detectable) {
@@ -509,18 +529,34 @@ public class Sonar extends Sensor{
         this.beam_ray_width_resolution = beam_ray_width_resolution;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getBeam_height() {
         return beam_height;
     }
 
+    /**
+     * 
+     * @param beam_height
+     */
     public void setBeam_height(float beam_height) {
         this.beam_height = beam_height;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getBeam_width() {
         return beam_width;
     }
 
+    /**
+     * 
+     * @param beam_width
+     */
     public void setBeam_width(float beam_width) {
         this.beam_width = beam_width;
     }
@@ -623,12 +659,18 @@ public class Sonar extends Sensor{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public byte[] getRawSonarData(){
         return getSonarData();
     }
 
     /**
-     *
+     * This methid is used to encapsulate the raw sonar data with header and 
+     * tail information. You have to overwrite it and implement you header 
+     * and tail if you want to use it.
      * @param sondat
      * @return
      */
@@ -927,12 +969,20 @@ public class Sonar extends Sensor{
         scanning_iterations = 0;
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/ScanningSonar");  
     }
     
+    /**
+     * 
+     */
     @Override
     public void publish() {
         //header.seq = 0;

@@ -28,6 +28,12 @@ public class Helper {
         return concat;
     }
 
+    /**
+     * 
+     * @param angle
+     * @param unitvector
+     * @return
+     */
     public static Matrix3f getRotationMatrix(float angle, Vector3f unitvector){
         Matrix3f rotation_matrix = new Matrix3f(FastMath.cos(angle)+FastMath.pow(unitvector.x,2)*(1-FastMath.cos(angle)),
                 unitvector.x*unitvector.y*(1-FastMath.cos(angle))-unitvector.z*FastMath.sin(angle),

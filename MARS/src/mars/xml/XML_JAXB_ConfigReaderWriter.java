@@ -290,7 +290,7 @@ public class XML_JAXB_ConfigReaderWriter {
     
     /**
      * 
-     * @param mars_settings
+     * @param pe 
      */
     public static void savePhysicalEnvironment(PhysicalEnvironment pe){
         try {

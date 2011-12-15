@@ -30,13 +30,16 @@ public class Accelerometer extends Sensor{
     private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
     private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
     
+    /**
+     * 
+     */
     public Accelerometer(){
         super();
     }
         
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @param pe
      */
     public Accelerometer(SimState simstate,PhysicalEnvironment pe){
@@ -46,7 +49,7 @@ public class Accelerometer extends Sensor{
 
     /**
      * 
-     * @param simauv
+     * @param simstate 
      */
     public Accelerometer(SimState simstate){
         super(simstate);
@@ -132,6 +135,12 @@ public class Accelerometer extends Sensor{
         acceleration = new Vector3f(0f,0f,0f);
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     * @deprecated
+     */
     @Override
     @Deprecated
     public void initROS(org.ros.node.Node ros_node, String auv_name) {
@@ -139,12 +148,20 @@ public class Accelerometer extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
     
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
     }
 
+    /**
+     * 
+     */
     @Override
     public void publish() {
         fl.data = getAcceleration().length();

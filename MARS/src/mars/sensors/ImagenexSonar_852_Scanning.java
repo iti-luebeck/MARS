@@ -26,13 +26,16 @@ public class ImagenexSonar_852_Scanning extends Sonar{
 
     private int SonarReturnDataHeaderLength = 12;//265
 
+    /**
+     * 
+     */
     public ImagenexSonar_852_Scanning(){
         super();
     }
     
     /**
      * 
-     * @param simauv
+     * @param simstate 
      * @param detectable
      * @param pe
      */
@@ -51,7 +54,7 @@ public class ImagenexSonar_852_Scanning extends Sonar{
 
     /**
      *
-     * @param simauv
+     * @param simstate 
      * @param detectable
      */
     public ImagenexSonar_852_Scanning(SimState simstate, Node detectable) {
@@ -117,6 +120,10 @@ public class ImagenexSonar_852_Scanning extends Sonar{
         return encapsulateWithHeaderTail(super.getSonarData());
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public byte[] getRawSonarData(){
         return super.getSonarData();

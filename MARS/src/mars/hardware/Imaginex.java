@@ -30,10 +30,16 @@ public class Imaginex {
     /*
      *
      */
+    /**
+     * 
+     */
     public static byte sonar_serial_status = (byte)64;
 
     /*
      *
+     */
+    /**
+     * 
      */
     public static byte echo_serial_status = (byte)65;
 

@@ -15,10 +15,17 @@ import mars.SimState;
 @XmlAccessorType(XmlAccessType.NONE)
 public class BlackfinCamera extends VideoCamera{
 
+    /**
+     * 
+     */
     public BlackfinCamera() {
         super();
     }
         
+    /**
+     * 
+     * @param simstate
+     */
     public BlackfinCamera(SimState simstate) {
         super(simstate);
     }

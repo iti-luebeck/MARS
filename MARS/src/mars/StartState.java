@@ -45,10 +45,18 @@ public class StartState extends AbstractAppState{
     private Node mars_node = new Node("Mars_Node");
     private Node hanse_node = new Node("Hanse_Node");
 
+    /**
+     * 
+     * @param assetManager
+     */
     public StartState(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Node getRootNode(){
         return rootNode;
     }
