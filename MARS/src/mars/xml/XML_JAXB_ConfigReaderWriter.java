@@ -14,6 +14,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.auv.AUV;
@@ -299,6 +300,44 @@ public class XML_JAXB_ConfigReaderWriter {
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File file = new File( "./xml/" + "PhysicalEnvironment" + ".xml" );
             m.marshal( pe, file );
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+        /**
+     * 
+     * @return
+     */
+    public static KeyConfig loadKeyConfig(){
+        try {
+            File file = new File("./xml/" + "KeyConfig" + ".xml");
+            if(file.exists()){
+                JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
+                Unmarshaller u = context.createUnmarshaller();
+                KeyConfig keyconfig = (KeyConfig)u.unmarshal( file );
+                //System.out.println(simob.getName());
+                return keyconfig;
+            }else{
+                return null;
+            }
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /**
+     * 
+     * @param mars_settings
+     */
+    public static void saveKeyConfig(KeyConfig keyconfig){
+        try {
+            JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
+            Marshaller m = context.createMarshaller();
+            m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+            File file = new File( "./xml/" + "KeyConfig" + ".xml" );
+            m.marshal( keyconfig, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }

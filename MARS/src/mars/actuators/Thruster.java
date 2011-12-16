@@ -5,23 +5,29 @@
 
 package mars.actuators;
 
+import com.jme3.input.InputManager;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.KeyConfig;
+import mars.Keys;
 import mars.Moveable;
 import mars.NoiseType;
 import mars.SimState;
+import mars.xml.HashMapAdapter;
 import mars.xml.Vector3fAdapter;
 
 /**
@@ -31,7 +37,7 @@ import mars.xml.Vector3fAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {BrushlessThruster.class,SeaBotixThruster.class} )
-public class Thruster extends Actuator implements Moveable{
+public class Thruster extends Actuator implements Moveable,Keys{
 
     //motor
     private Geometry MotorStart;
@@ -50,6 +56,11 @@ public class Thruster extends Actuator implements Moveable{
      *
      */
     protected float motor_increment = 10.0f;
+    
+    //JAXB KEYS
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="Actions")
+    private HashMap<String,String> action_mapping = new HashMap<String, String>();
 
     /**
      * 
@@ -232,4 +243,39 @@ public class Thruster extends Actuator implements Moveable{
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
         
     }
+    
+    @Override
+    public void addKeys(InputManager inputManager, KeyConfig keyconfig){
+        for ( String elem : action_mapping.keySet() ){
+            String action = (String)action_mapping.get(elem);
+            final String mapping = elem;
+            final Thruster self = this;
+            if(action.equals("thruster_forward")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.thruster_forward();
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
+            }else if(action.equals("thruster_back")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.thruster_back();
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);  
+            }
+        }
+    }
+    
+    public void test(){
+        action_mapping.put("test", "thruster_forward");
+    }
+
 }

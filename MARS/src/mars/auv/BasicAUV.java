@@ -58,6 +58,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
+import mars.Keys;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
@@ -509,6 +510,10 @@ public class BasicAUV implements AUV,SceneProcessor{
                     ((Sonar)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
                 } 
                 element.init(auv_node);
+                if(element instanceof Keys){
+                    Keys elementKeys = (Keys)element;
+                    elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
+                }
             }
         }
 
@@ -521,6 +526,10 @@ public class BasicAUV implements AUV,SceneProcessor{
                 element.setSimauv_settings(mars_settings);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
                 element.init(auv_node);
+                if(element instanceof Keys){
+                    Keys elementKeys = (Keys)element;
+                    elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
+                }
             }
         }
     }

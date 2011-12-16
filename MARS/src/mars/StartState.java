@@ -27,6 +27,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import mars.Helper.SoundHelper;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 /**
  *
@@ -136,8 +137,7 @@ public class StartState extends AbstractAppState{
                 m.marshal( jj2, System.out );
             } catch (JAXBException ex) {
                 Logger.getLogger(StartState.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-
+            }*/                
         }
         super.initialize(stateManager, app);
     }

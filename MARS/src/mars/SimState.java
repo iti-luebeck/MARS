@@ -38,6 +38,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
+import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -83,6 +84,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     //main settings file
     MARS_Settings mars_settings;
+    KeyConfig keyconfig;
     PhysicalEnvironment physical_environment;
     Initializer initer;
     ArrayList auvs = new ArrayList();
@@ -161,7 +163,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.attachChild(sceneReflectionNode);
             
             loadXML();
-            initKeys();// load custom key mappings
+            initPrivateKeys();// load custom key mappings
             setupPhysics();
             setupGUI();
             setupCams();
@@ -200,6 +202,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
             populateSim_Object_Manager(simobs);
+            
+            initPublicKeys();
             
             /*JAXBContext context;
             try {*/
@@ -263,6 +267,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //waiting for auvs and sensors/actuators to be ready
             //initer.start_ROS_Server();
             //initer.setupROS_Server();
+            /*Thruster tt = (Thruster)auv_hanse.getActuator("thrusterDownFront");
+            tt.test();
+            XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);*/
 
             rootNode.updateGeometricState();
         }
@@ -312,9 +319,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     private void loadXML(){
         try {
-             mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();//xmll.getSimAUVSettings();
+             keyconfig = XML_JAXB_ConfigReaderWriter.loadKeyConfig();    
+             mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
              mars_settings.init();
-             physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();//mars_settings.getPhysical_environment();
+             physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
              auvs = XML_JAXB_ConfigReaderWriter.loadAUVs();//xmll.getAuvs();
@@ -341,14 +349,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
              }
-             simobs = XML_JAXB_ConfigReaderWriter.loadSimObjects();//xmll.getObjects();
+             simobs = XML_JAXB_ConfigReaderWriter.loadSimObjects();;
         } catch (Exception ex) {
             Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    private void initPublicKeys() {
+        
+    }
+    
     /** Declaring the "Shoot" action and mapping to its triggers. */
-    private void initKeys() {
+    private void initPrivateKeys() {
         inputManager.addMapping("Shoott",new KeyTrigger(KeyInput.KEY_SPACE));         // trigger 2: left-button click
         inputManager.addListener(actionListener, "Shoott");
 
@@ -356,7 +368,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         inputManager.addListener(actionListener, "start");
         inputManager.addMapping("stop", new KeyTrigger(KeyInput.KEY_Y));
         inputManager.addListener(actionListener, "stop");
-
+/*
         inputManager.addMapping("thruster_left_forward", new KeyTrigger(KeyInput.KEY_RIGHT));
         inputManager.addListener(actionListener, "thruster_left_forward");
         inputManager.addMapping("thruster_both_turn", new KeyTrigger(KeyInput.KEY_NUMPAD5));
@@ -384,7 +396,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
         inputManager.addMapping("thruster_both_up", new KeyTrigger(KeyInput.KEY_PGUP));
         inputManager.addMapping("thruster_both_down", new KeyTrigger(KeyInput.KEY_PGDN));
-
+*/
         inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(actionListener, "reset");
     }
@@ -405,7 +417,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auv_manager.clearForcesOfAUVs();
                 initial_ready = false;
                 System.out.println("Simulation stopped...");
-            }else if(name.equals("thruster_left_forward") && !keyPressed) {
+            }/*else if(name.equals("thruster_left_forward") && !keyPressed) {
                 mot1left.thruster_forward();
                 //motb1_push.thruster_forward();
             }else if(name.equals("thruster_left_back") && !keyPressed) {
@@ -422,8 +434,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mot1right.thruster_forward();
                 //mot1left.set_thruster_speed(100);
                 //mot1right.set_thruster_speed(100);
-                /*motb1_push.thruster_forward();
-                motb2_push.thruster_forward();*/
+                //motb1_push.thruster_forward();
+                //motb2_push.thruster_forward();
             }else if(name.equals("thruster_both_turn") && !keyPressed) {
                 //mot1left.set_thruster_speed(40);
                 //mot1right.set_thruster_speed(-40);
@@ -436,66 +448,24 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mot1right.thruster_back();
                 //mot1left.set_thruster_speed(-100);
                 //mot1right.set_thruster_speed(-100);
-                /*motb1_push.thruster_back();
-                motb2_push.thruster_back();*/
+//                motb1_push.thruster_back();
+//                motb2_push.thruster_back();
             }else if(name.equals("thruster_both_up") && !keyPressed) {
                 mot2left.thruster_forward();
                 mot2right.thruster_forward();
-                /*mot_leftback.thruster_forward();
-                mot_leftfront.thruster_forward();
-                mot_rightback.thruster_forward();
-                mot_rightfront.thruster_forward();*/
+//                mot_leftback.thruster_forward();
+//                mot_leftfront.thruster_forward();
+//                mot_rightback.thruster_forward();
+//                mot_rightfront.thruster_forward();
             }else if(name.equals("thruster_both_down") && !keyPressed) {
                 mot2left.thruster_back();
                 mot2right.thruster_back();
-                /*mot_leftback.thruster_back();
-                mot_leftfront.thruster_back();
-                mot_rightback.thruster_back();
-                mot_rightfront.thruster_back();*/
-            }else  if (name.equals("Shoott") && !keyPressed) {
-                /*final InfraRedSensor infra = (InfraRedSensor)auv_monsun2.getSensor("infraLeft");
-                Future fut = mars.enqueue(new Callable() {
-                    public Float call() throws Exception {
-                        return infra.getDistance();
-                    }
-                });*/
-                /*try {
-                    System.out.println("Dis: " + fut.get());
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
-//                Compass comp = (Compass)auv_hanse.getSensor("compass");
-//                System.out.println(comp.getYawDegree());
-//                //System.out.println(comp.getYawRadiant());
-//                System.out.println(comp.getPitchDegree());
-//                //System.out.println(comp.getPitchRadiant());
-//                System.out.println(comp.getRollDegree());
-//                //System.out.println(comp.getRollRadiant());
-                System.out.println("====================00");
-//                ImagenexSonar_852_Scanning son = (ImagenexSonar_852_Scanning)auv_hanse.getSensor("sonar_360");
-//                byte[] sondat = new byte[son.getSonarReturnDataTotalLength()];
-//                sondat = son.getSonarData();
-//                System.out.println("Sondat:");
-//                for (int i = 12; i < sondat.length; i++) {
-//                    byte b = sondat[i];
-//                    System.out.print(b);
-//                    System.out.print("|");
-//                }
+//                mot_leftback.thruster_back();
+//                mot_leftfront.thruster_back();
+//                mot_rightback.thruster_back();
+//                mot_rightfront.thruster_back();
+            }*/else  if (name.equals("Shoott") && !keyPressed) {
 
-                /*ImagenexSonar_852_Echo son = (ImagenexSonar_852_Echo)auv_hanse.getSensor("sonar_side");
-                byte[] sondat = new byte[son.getSonarReturnDataTotalLength()];
-                sondat = son.getSonarData();
-                System.out.println("Sondat:");
-                for (int i = 12; i < sondat.length; i++) {
-                    byte b = sondat[i];
-                    System.out.print(b);
-                    System.out.print("|");
-                }*/
-                
-                //PingDetector ping = (PingDetector)auv_hanse.getSensor("ping");
-                //System.out.println("ping angel: " + ping.getPingerAngleRadiant("pingpong"));
             }else if(name.equals("reset") && !keyPressed) {
                 System.out.println("RESET!!!");
                 time = 0f;
@@ -670,6 +640,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public MARS_Main getSimauv() {
         return mars;
+    }
+
+    public KeyConfig getKeyconfig() {
+        return keyconfig;
     }
     
     /**
