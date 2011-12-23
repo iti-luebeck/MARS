@@ -581,7 +581,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#76 Numpad 5">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">servo</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#77 Numpad 6">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>

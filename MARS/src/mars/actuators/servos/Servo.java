@@ -4,6 +4,9 @@
  */
 package mars.actuators.servos;
 
+import com.jme3.input.InputManager;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -12,6 +15,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,12 +29,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.KeyConfig;
+import mars.Keys;
 import mars.Manipulating;
 import mars.Moveable;
 import mars.PhysicalExchanger;
 import mars.SimState;
 import mars.actuators.Actuator;
+import mars.ros.MARSNodeMain;
+import mars.xml.HashMapAdapter;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.MessageListener;
 
 /**
  * This is the default servo class. It uses the Dynamixel AX-12 servos as it basis.
@@ -35,7 +49,7 @@ import mars.xml.Vector3fAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {Dynamixel_AX12PLUS.class,Modelcraft_ES07.class} )
-public class Servo extends Actuator implements Manipulating{
+public class Servo extends Actuator implements Manipulating,Keys{
     
     //servo
     private Geometry ServoStart;
@@ -47,7 +61,9 @@ public class Servo extends Actuator implements Manipulating{
     @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f ServoDirection = Vector3f.UNIT_Z;
     
-    private Moveable slave;
+    @XmlElement(name="Slaves")
+    private List<String> slaves_names = new ArrayList<String>();
+    private List<Moveable> slaves = new ArrayList<Moveable>();
     
     @XmlElement
     private float OperatingAngle = 5.235987f;
@@ -67,6 +83,11 @@ public class Servo extends Actuator implements Manipulating{
     private float SpeedPerIteration = 0.0009473f;
     
     private float time = 0;
+    
+    //JAXB KEYS
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="Actions")
+    private HashMap<String,String> action_mapping = new HashMap<String, String>();
     
     /**
      * 
@@ -215,10 +236,34 @@ public class Servo extends Actuator implements Manipulating{
     }
     
     private void updateAnglePosition(float tpf){
+        System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
         if( desired_angle_iteration != current_angle_iteration){//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
             if(possible_iterations > 0){//when we dont have enough time to rotate we wait till the next frame
-                slave.updateRotation(ServoEnd.getWorldTranslation().subtract(ServoStart.getWorldTranslation()), Resolution*possible_iterations);
+                
+                //check the angle boundary
+                if( OperatingAngle < Resolution*(possible_iterations+current_angle_iteration)){//we would turn too much
+                    float diff_angle = (Resolution*(possible_iterations+current_angle_iteration)) - OperatingAngle;
+                    float cur_angle = (Resolution*(current_angle_iteration));
+                    possible_iterations = ;
+                }/*else if(){
+                    
+                }*/
+                
+                Iterator iter = slaves.iterator();
+                while(iter.hasNext() ) {
+                    final Moveable moves = (Moveable)iter.next();
+                    final int fin_possible_iterations = possible_iterations;
+                    Future fut = this.simState.getMARS().enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            moves.updateRotation(ServoEnd.getWorldTranslation().subtract(ServoStart.getWorldTranslation()), Resolution*(fin_possible_iterations+current_angle_iteration));
+                            return null;
+                        }
+                    });
+                }
+                //since we will rotate we have to update our current angle
+                current_angle_iteration += possible_iterations;
+                
             }
         }
     }
@@ -236,7 +281,13 @@ public class Servo extends Actuator implements Manipulating{
     }
     
     public void setDesiredAnglePosition(int desired_angle_iteration){
-        this.desired_angle_iteration = desired_angle_iteration;
+        if(desired_angle_iteration > (int)(OperatingAngle/Resolution)){
+            this.desired_angle_iteration = (int)(OperatingAngle/Resolution);
+        }else if(desired_angle_iteration <= 0){
+            this.desired_angle_iteration = 0;
+        }else{
+            this.desired_angle_iteration = desired_angle_iteration;
+        }
     }
     
     public int getDesiredAnglePosition(){
@@ -252,8 +303,20 @@ public class Servo extends Actuator implements Manipulating{
      * @return
      */
     @Override
-    public Moveable getSlave() {
-        return slave;
+    public Moveable getSlave(String name) {
+        Iterator iter = slaves.iterator();
+        while(iter.hasNext() ) {
+            Moveable moves = (Moveable)iter.next();
+            if(moves.getSlaveName().equals(name)){
+                return moves;
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public ArrayList getSlavesNames(){
+        return (ArrayList)slaves_names;
     }
 
     /**
@@ -261,11 +324,59 @@ public class Servo extends Actuator implements Manipulating{
      * @param slave
      */
     @Override
-    public void setSlave(PhysicalExchanger slave) {
-        if(slave instanceof Moveable){
-            this.slave = (Moveable)slave; 
-        }else{
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "The physical exchanger didn't implemented the Moveable interface!", "");
+    public void addSlave(Moveable slave) {
+        if(slave != null){
+            slaves.add(slave);
+            if(!slaves_names.contains(slave.getSlaveName())){
+                slaves_names.add(slave.getSlaveName());
+            }
+        }
+    }
+    
+    @Override
+    public void addSlaves(ArrayList slaves){
+        Iterator iter = slaves.iterator();
+        while(iter.hasNext() ) {
+            Moveable moves = (Moveable)iter.next();
+            addSlave(moves);    
+        }
+    }
+    
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        final Servo self = this;
+        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "smart_e_msgs/servo",
+          new MessageListener<org.ros.message.smart_e_msgs.servo>() {
+            @Override
+            public void onNewMessage(org.ros.message.smart_e_msgs.servo message) {
+              self.setDesiredAnglePosition((int)message.data);
+            }
+          });
+    }
+    
+    @Override
+    public void addKeys(InputManager inputManager, KeyConfig keyconfig){
+        for ( String elem : action_mapping.keySet() ){
+            String action = (String)action_mapping.get(elem);
+            final String mapping = elem;
+            final Servo self = this;
+            if(action.equals("setDesiredAnglePosition")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(120);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
+            }
         }
     }
 }

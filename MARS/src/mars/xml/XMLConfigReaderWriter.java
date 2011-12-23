@@ -89,7 +89,7 @@ public class XMLConfigReaderWriter
         Logger.getLogger(XMLConfigReaderWriter.class.getName()).log(Level.INFO, "Creating XMLConfigReader...", "");
 
         this.simstate = simstate;
-        this.mars = simstate.getSimauv();
+        this.mars = simstate.getMARS();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         document = builder.parse( new File("auv_config.xml") );

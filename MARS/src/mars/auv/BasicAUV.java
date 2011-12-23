@@ -64,6 +64,8 @@ import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.gui.MARSView;
 import mars.MARS_Main;
+import mars.Manipulating;
+import mars.Moveable;
 import mars.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
@@ -181,7 +183,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         } catch (IOException e) { }
 
         this.simstate = simstate;
-        this.mars = simstate.getSimauv();
+        this.mars = simstate.getMARS();
         this.assetManager = simstate.getAssetManager();
         this.renderer = mars.getRenderer();
         this.renderManager = mars.getRenderManager();
@@ -490,6 +492,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     };
 
     private void initPhysicalExchangers(){
+        //init sensors
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
             if(element.isEnabled()){
@@ -516,7 +519,7 @@ public class BasicAUV implements AUV,SceneProcessor{
                 }
             }
         }
-
+        //init actuators
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
@@ -532,6 +535,35 @@ public class BasicAUV implements AUV,SceneProcessor{
                 }
             }
         }
+        //init special actuators like manipulating ones(servos)
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            if(element instanceof Manipulating){
+                Manipulating mani = (Manipulating)element;
+                ArrayList<String> slaves_names = mani.getSlavesNames();
+                Iterator iter = slaves_names.iterator();
+                while(iter.hasNext() ) {//search for the moveables(slaves) and add them to the master
+                    String slave_name = (String)iter.next();
+                    mani.addSlave(getMoveable(slave_name));
+                }
+            }
+        }
+    }
+    
+    private Moveable getMoveable(String name){
+        for ( String elem : sensors.keySet() ){
+            Sensor element = (Sensor)sensors.get(elem);
+            if(element.getPhysicalExchangerName().equals(name) && element instanceof Moveable){
+                return (Moveable)element;
+            }
+        }
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            if(element.getPhysicalExchangerName().equals(name) && element instanceof Moveable){
+                return (Moveable)element;
+            }
+        }
+        return null;
     }
     
     /*
@@ -1495,7 +1527,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Override
     public void setState(SimState simstate) {
         this.simstate = simstate;
-        this.mars = simstate.getSimauv();
+        this.mars = simstate.getMARS();
         this.assetManager = simstate.getAssetManager();
         this.renderer = mars.getRenderer();
         this.renderManager = mars.getRenderManager();

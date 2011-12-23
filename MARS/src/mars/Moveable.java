@@ -23,4 +23,5 @@ public interface Moveable {
      * @param new_realative_position
      */
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position);
+    public String getSlaveName();
 }

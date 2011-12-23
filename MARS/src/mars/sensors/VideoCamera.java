@@ -98,8 +98,8 @@ public class VideoCamera extends Sensor{
      */
     public VideoCamera(SimState simstate){
         super(simstate);
-        /*this.renderer = simstate.getSimauv().getRenderer();
-        this.renderManager = simstate.getSimauv().getRenderManager();
+        /*this.renderer = simstate.getMARS().getRenderer();
+        this.renderManager = simstate.getMARS().getRenderManager();
         this.initer = simstate.getIniter();*/
     }
     
@@ -110,8 +110,8 @@ public class VideoCamera extends Sensor{
     @Override
     public void setSimState(SimState simState){
         super.setSimState(simState);
-        this.renderer = simState.getSimauv().getRenderer();
-        this.renderManager = simState.getSimauv().getRenderManager();
+        this.renderer = simState.getMARS().getRenderer();
+        this.renderManager = simState.getMARS().getRenderManager();
         this.initer = simState.getIniter();
     }
 

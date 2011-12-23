@@ -228,11 +228,12 @@ public class Thruster extends Actuator implements Moveable,Keys{
      * @param rotation_axis
      * @param alpha
      */
+    @Override
     public void updateRotation(Vector3f rotation_axis, float alpha){
+        System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + rotation_axis );
         Quaternion quat = new Quaternion();
         quat.fromAngleNormalAxis(alpha, rotation_axis);
-        MotorStart.setLocalRotation(quat);
-        MotorEnd.setLocalRotation(quat);
+        PhysicalExchanger_Node.setLocalRotation(quat);
     }
     
     /**
@@ -240,8 +241,14 @@ public class Thruster extends Actuator implements Moveable,Keys{
      * @param translation_axis
      * @param new_realative_position
      */
+    @Override
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
         
+    }
+    
+    @Override
+    public String getSlaveName(){
+        return getPhysicalExchangerName();
     }
     
     @Override
@@ -273,9 +280,4 @@ public class Thruster extends Actuator implements Moveable,Keys{
             }
         }
     }
-    
-    public void test(){
-        action_mapping.put("test", "thruster_forward");
-    }
-
 }

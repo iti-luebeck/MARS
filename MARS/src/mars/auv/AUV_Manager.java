@@ -62,7 +62,7 @@ public class AUV_Manager {
 
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Creating AUV_MANAGER...", "");
         this.simstate = simstate;
-        this.mars = simstate.getSimauv();
+        this.mars = simstate.getMARS();
         this.rootNode = simstate.getRootNode();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();

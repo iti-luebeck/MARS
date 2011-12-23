@@ -51,7 +51,7 @@ public class SimObjectManager {
 
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Creating SIM_OBJECT_MANAGER...", "");
 
-        this.simauv = simstate.getSimauv();
+        this.simauv = simstate.getMARS();
         this.rootNode = simstate.getRootNode();
         this.assetManager = simstate.getAssetManager();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();

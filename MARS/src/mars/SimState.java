@@ -99,21 +99,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
-    //we need the motors here because we want to steer them(actionlistener)
-    private SeaBotixThruster mot1left;
-    private SeaBotixThruster mot2left;
-    private SeaBotixThruster mot1right;
-    private SeaBotixThruster mot2right;
-    
-    private BrushlessThruster motb1_push;
-    private BrushlessThruster motb2_push;
-    private BrushlessThruster mot_rightfront;
-    private BrushlessThruster mot_leftfront;
-    private BrushlessThruster mot_rightback;
-    private BrushlessThruster mot_leftback;
-    
-    private Servo serv;
-
     
     /**
      * 
@@ -268,8 +253,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //initer.start_ROS_Server();
             //initer.setupROS_Server();
             /*Thruster tt = (Thruster)auv_hanse.getActuator("thrusterDownFront");
-            tt.test();
-            XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);*/
+            tt.test();*/
+            //XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);
 
             rootNode.updateGeometricState();
         }
@@ -336,10 +321,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 /*serv = new Servo();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
-                serv.setPhysicalExchangerName("servot");
+                serv.setPhysicalExchangerName("servo");
                 serv.setServoStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
                 serv.setServoDirection(new Vector3f(0f, 0f, -1f));
-                Hanse hans = (Hanse)auvs.get(1);
+                serv.test();
+                Hanse hans = null;
+                Iterator iter2 = auvs.iterator();
+                while(iter2.hasNext() ) {
+                    AUV aaa = (AUV)iter2.next();
+                    if(            aaa.getAuv_param().getAuv_name().equals("hanse2") ){
+                    hans = (Hanse)aaa;
+                    }
+                 }
+
                 hans.registerPhysicalExchanger(serv);*/
              
              Iterator iter = auvs.iterator();
@@ -368,35 +362,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         inputManager.addListener(actionListener, "start");
         inputManager.addMapping("stop", new KeyTrigger(KeyInput.KEY_Y));
         inputManager.addListener(actionListener, "stop");
-/*
-        inputManager.addMapping("thruster_left_forward", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addListener(actionListener, "thruster_left_forward");
-        inputManager.addMapping("thruster_both_turn", new KeyTrigger(KeyInput.KEY_NUMPAD5));
-        inputManager.addListener(actionListener, "thruster_both_turn");
-        inputManager.addMapping("thruster_left_back", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addListener(actionListener, "thruster_left_back");
-        inputManager.addMapping("thruster_right_forward", new KeyTrigger(KeyInput.KEY_UP));
-        inputManager.addListener(actionListener, "thruster_right_forward");
-        inputManager.addMapping("thruster_right_back", new KeyTrigger(KeyInput.KEY_DOWN));
-        inputManager.addListener(actionListener, "thruster_right_back");
 
-        inputManager.addMapping("thruster_both_forward", new KeyTrigger(KeyInput.KEY_NUMPAD8));
-        inputManager.addListener(actionListener, "thruster_both_forward");
-        inputManager.addMapping("thruster_both_back", new KeyTrigger(KeyInput.KEY_NUMPAD2));
-        inputManager.addListener(actionListener, "thruster_both_back");
-
-        inputManager.addMapping("thruster_both_up", new KeyTrigger(KeyInput.KEY_NUMPAD9));
-        inputManager.addListener(actionListener, "thruster_both_up");
-        inputManager.addMapping("thruster_both_down", new KeyTrigger(KeyInput.KEY_NUMPAD7));
-        inputManager.addListener(actionListener, "thruster_both_down");
-        
-        
-        inputManager.addMapping("thruster_both_forward", new KeyTrigger(KeyInput.KEY_HOME));
-        inputManager.addMapping("thruster_both_back", new KeyTrigger(KeyInput.KEY_END));
-
-        inputManager.addMapping("thruster_both_up", new KeyTrigger(KeyInput.KEY_PGUP));
-        inputManager.addMapping("thruster_both_down", new KeyTrigger(KeyInput.KEY_PGDN));
-*/
         inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(actionListener, "reset");
     }
@@ -413,58 +379,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 System.out.println("Simulation started...");
             }else if(name.equals("stop") && !keyPressed) {
                 bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-                //auv_hanse.clearForces();
                 auv_manager.clearForcesOfAUVs();
                 initial_ready = false;
                 System.out.println("Simulation stopped...");
-            }/*else if(name.equals("thruster_left_forward") && !keyPressed) {
-                mot1left.thruster_forward();
-                //motb1_push.thruster_forward();
-            }else if(name.equals("thruster_left_back") && !keyPressed) {
-                mot1left.thruster_back();
-                //motb1_push.thruster_back();
-            }else if(name.equals("thruster_right_forward") && !keyPressed) {
-                mot1right.thruster_forward();
-                //motb2_push.thruster_forward();
-            }else if(name.equals("thruster_right_back") && !keyPressed) {
-                mot1right.thruster_back();
-                //motb2_push.thruster_back();
-            }else if(name.equals("thruster_both_forward") && !keyPressed) {
-                mot1left.thruster_forward();
-                mot1right.thruster_forward();
-                //mot1left.set_thruster_speed(100);
-                //mot1right.set_thruster_speed(100);
-                //motb1_push.thruster_forward();
-                //motb2_push.thruster_forward();
-            }else if(name.equals("thruster_both_turn") && !keyPressed) {
-                //mot1left.set_thruster_speed(40);
-                //mot1right.set_thruster_speed(-40);
-                serv.setSlave(mot2right);
-                serv.setDesiredAnglePosition(180);
-                //mot1left.set_thruster_speed(100);
-                //mot1right.set_thruster_speed(100);
-            }else if(name.equals("thruster_both_back") && !keyPressed) {
-                mot1left.thruster_back();
-                mot1right.thruster_back();
-                //mot1left.set_thruster_speed(-100);
-                //mot1right.set_thruster_speed(-100);
-//                motb1_push.thruster_back();
-//                motb2_push.thruster_back();
-            }else if(name.equals("thruster_both_up") && !keyPressed) {
-                mot2left.thruster_forward();
-                mot2right.thruster_forward();
-//                mot_leftback.thruster_forward();
-//                mot_leftfront.thruster_forward();
-//                mot_rightback.thruster_forward();
-//                mot_rightfront.thruster_forward();
-            }else if(name.equals("thruster_both_down") && !keyPressed) {
-                mot2left.thruster_back();
-                mot2right.thruster_back();
-//                mot_leftback.thruster_back();
-//                mot_leftfront.thruster_back();
-//                mot_rightback.thruster_back();
-//                mot_rightfront.thruster_back();
-            }*/else  if (name.equals("Shoott") && !keyPressed) {
+            }else  if (name.equals("Shoott") && !keyPressed) {
 
             }else if(name.equals("reset") && !keyPressed) {
                 System.out.println("RESET!!!");
@@ -483,7 +401,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         auv_manager.setSimauv_settings(simauv_settings);
         auv_manager.setCommunicationManager(com_manager);
         if(mars_settings.isROS_Server_enabled()){
-            //auv_manager.setRos_node(initer.getROS_Server().getNode());
             auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
         }
         auv_manager.registerAUVs(auvs);
@@ -495,11 +412,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auv_hanse = (Hanse)aaa;
             }
         }
-        //auv_monsun2 = (Monsun2)auv_manager.getAUV("monsun");
-        //auv_monsun2 = (Monsun2)auvs.get(2);
     }
     
-         /*
+    /*
      *
      */
     @Deprecated
@@ -638,7 +553,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      * @return
      */
-    public MARS_Main getSimauv() {
+    public MARS_Main getMARS() {
         return mars;
     }
 
@@ -665,17 +580,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void prePhysicsTick(PhysicsSpace ps, float tpf) {
         if(auv_manager.isEmpty() == false && AUVPhysicsControl == null && !man_init){
             AUVPhysicsControl = auv_hanse.getPhysicsControl();
-            mot1left = (SeaBotixThruster)auv_hanse.getActuator("thrusterLeft");
-            mot1right = (SeaBotixThruster)auv_hanse.getActuator("thrusterRight");
-            mot2left = (SeaBotixThruster)auv_hanse.getActuator("thrusterDownFront");
-            mot2right = (SeaBotixThruster)auv_hanse.getActuator("thrusterDown");
-            /*AUVPhysicsControl = auv_monsun2.getPhysicsControl();
-            motb1_push = (BrushlessThruster)auv_monsun2.getActuator("thrusterLeft");
-            motb2_push = (BrushlessThruster)auv_monsun2.getActuator("thrusterRight");
-            mot_leftfront = (BrushlessThruster)auv_monsun2.getActuator("thrusterFrontLeft");
-            mot_rightfront = (BrushlessThruster)auv_monsun2.getActuator("thrusterFrontRight");
-            mot_rightback = (BrushlessThruster)auv_monsun2.getActuator("thrusterBackRight");
-            mot_leftback = (BrushlessThruster)auv_monsun2.getActuator("thrusterBackLeft");*/
             man_init = true;
         }
         if(view == null){

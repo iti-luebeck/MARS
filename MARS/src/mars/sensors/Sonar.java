@@ -29,7 +29,6 @@ import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.SimState;
 import mars.ros.MARSNodeMain;
-import mars.server.Converter;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -668,7 +667,7 @@ public class Sonar extends Sensor{
     }
 
     /**
-     * This methid is used to encapsulate the raw sonar data with header and 
+     * This method is used to encapsulate the raw sonar data with header and 
      * tail information. You have to overwrite it and implement you header 
      * and tail if you want to use it.
      * @param sondat

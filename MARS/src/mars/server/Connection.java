@@ -71,7 +71,7 @@ public class Connection extends Thread {
      * @param auv_manager
      * @param com_manager  
      */
-    public Connection(Socket sockConnected,MARS_Main simauv, AUV_Manager auv_manager, Communication_Manager com_manager) {
+    public Connection(Socket sockConnected,MARS_Main mars, AUV_Manager auv_manager, Communication_Manager com_manager) {
         //set the logging
         /*
         try {
@@ -83,7 +83,7 @@ public class Connection extends Thread {
             logger.addHandler(handler);
         } catch (IOException e) { }
         */
-        this.mars = simauv;
+        this.mars = mars;
         this.auv_manager = auv_manager;
         this.com_manager = com_manager;
         this.sockConnected = sockConnected;

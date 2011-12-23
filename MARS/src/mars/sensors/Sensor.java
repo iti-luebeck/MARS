@@ -92,7 +92,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     @Override
     public void setSimState(SimState simState) {
         this.simState = simState;
-        this.simauv = this.simState.getSimauv();
+        this.simauv = this.simState.getMARS();
         this.assetManager = this.simauv.getAssetManager();
         this.rootNode = this.simState.getRootNode();
     }
