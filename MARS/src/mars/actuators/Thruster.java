@@ -277,6 +277,16 @@ public class Thruster extends Actuator implements Moveable,Keys{
                         }
                     };
                     inputManager.addListener(actionListener, elem);  
+            }else if(action.equals("set_thruster_speed")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.set_thruster_speed(300);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);  
             }
         }
     }

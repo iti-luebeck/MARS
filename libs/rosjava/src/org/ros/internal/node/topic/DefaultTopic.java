@@ -65,13 +65,22 @@ public abstract class DefaultTopic implements Topic {
   }
 
   /**
-   * Signal that the {@link Topic} successfully registered with the master.
+   * SignalRunnable that the {@link Topic} successfully registered with the master.
    */
   public abstract void signalOnMasterRegistrationSuccess();
 
   /**
-   * Signal that the {@link Topic} failed to register with the master.
+   * SignalRunnable that the {@link Topic} failed to register with the master.
    */
   public abstract void signalOnMasterRegistrationFailure();
 
+  /**
+   * SignalRunnable that the {@link Topic} successfully unregistered with the master.
+   */
+  public abstract void signalOnMasterUnregistrationSuccess();
+
+  /**
+   * SignalRunnable that the {@link Topic} failed to unregister with the master.
+   */
+  public abstract void signalOnMasterUnregistrationFailure();
 }

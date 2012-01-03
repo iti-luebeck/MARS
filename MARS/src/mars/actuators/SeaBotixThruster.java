@@ -54,7 +54,8 @@ public class SeaBotixThruster extends Thruster{
     @Override
     protected float calculateThrusterForce(int speed){
         //return (Math.signum(speed))*(0.16f * (float)Math.pow(1.04f, (float)Math.abs(speed)) );
-        return (Math.signum(speed))*(0.00046655f * (float)Math.pow((float)Math.abs(speed), 2.02039525f) );
+        int limited_speed = (speed <= 127) ? speed : 127;
+        return (Math.signum(limited_speed))*(0.00046655f * (float)Math.pow((float)Math.abs(limited_speed), 2.02039525f) );
     }
 
     /**

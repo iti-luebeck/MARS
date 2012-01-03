@@ -564,6 +564,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="setspeed">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">set_thruster_speed</value>
+                    </entry>
                 </Actions>
             </value>
         </entry>
@@ -596,6 +599,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="setspeed">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">set_thruster_speed</value>
                     </entry>
                 </Actions>
             </value>

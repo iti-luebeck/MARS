@@ -17,9 +17,11 @@
 package org.ros.internal.node;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 
 import org.apache.commons.logging.Log;
+import org.ros.concurrent.CancellableLoop;
+import org.ros.concurrent.ListenerCollection;
+import org.ros.concurrent.ListenerCollection.SignalRunnable;
 import org.ros.exception.RemoteException;
 import org.ros.exception.ServiceNotFoundException;
 import org.ros.internal.message.new_style.ServiceMessageDefinition;
@@ -44,7 +46,6 @@ import org.ros.internal.node.topic.TopicManager;
 import org.ros.internal.node.xmlrpc.XmlRpcTimeoutException;
 import org.ros.message.MessageDefinition;
 import org.ros.message.MessageFactory;
-import org.ros.message.MessageListener;
 import org.ros.message.MessageSerializationFactory;
 import org.ros.message.Time;
 import org.ros.namespace.GraphName;
@@ -58,15 +59,13 @@ import org.ros.node.service.ServiceClient;
 import org.ros.node.service.ServiceServer;
 import org.ros.node.service.ServiceServerListener;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.PublisherListener;
 import org.ros.node.topic.Subscriber;
-import org.ros.node.topic.SubscriberListener;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The default implementation of a {@link Node}.
@@ -78,6 +77,14 @@ import java.util.concurrent.ExecutorService;
 public class DefaultNode implements Node {
 
   private static final boolean DEBUG = false;
+
+  /**
+   * The maximum delay before shutdown will begin even if all
+   * {@link NodeListener}s have not yet returned from their
+   * {@link NodeListener#onShutdown(Node)} callback.
+   */
+  private static final int MAX_SHUTDOWN_DELAY_DURATION = 5;
+  private static final TimeUnit MAX_SHUTDOWN_DELAY_UNITS = TimeUnit.SECONDS;
 
   private final GraphName nodeName;
   private final NodeConfiguration nodeConfiguration;
@@ -95,19 +102,14 @@ public class DefaultNode implements Node {
   private final URI masterUri;
 
   /**
-   * Use for all thread creation.
+   * Used for all thread creation.
    */
   private final ExecutorService executorService;
 
   /**
    * All {@link NodeListener} instances registered with the node.
    */
-  private final Collection<NodeListener> nodeListeners;
-
-  /**
-   * {@code true} if the node is in a running state, {@code false} otherwise.
-   */
-  private boolean running;
+  private final ListenerCollection<NodeListener> nodeListeners;
 
   /**
    * {@link DefaultNode}s should only be constructed using the
@@ -115,14 +117,14 @@ public class DefaultNode implements Node {
    * 
    * @param nodeConfiguration
    *          the {@link NodeConfiguration} for this {@link Node}
+   * @param nodeListeners
+   *          a {@link Collection} of {@link NodeListener}s that will be added
+   *          to this {@link Node} before it starts
    */
   public DefaultNode(NodeConfiguration nodeConfiguration, Collection<NodeListener> nodeListeners) {
     this.nodeConfiguration = NodeConfiguration.copyOf(nodeConfiguration);
-    this.nodeListeners = new CopyOnWriteArrayList<NodeListener>();
-    if (nodeListeners != null) {
-      this.nodeListeners.addAll(nodeListeners);
-    }
     executorService = nodeConfiguration.getExecutorService();
+    this.nodeListeners = new ListenerCollection<NodeListener>(nodeListeners, executorService);
     masterUri = nodeConfiguration.getMasterUri();
     masterClient = new MasterClient(masterUri);
     topicManager = new TopicManager();
@@ -154,7 +156,6 @@ public class DefaultNode implements Node {
     // initialized with the SlaveServer's SlaveIdentifier so that it can
     // register the /rosout Publisher.
     log = new RosoutLogger(this);
-    running = true;
     signalOnStart();
   }
 
@@ -204,63 +205,34 @@ public class DefaultNode implements Node {
 
   @Override
   public <MessageType> Publisher<MessageType> newPublisher(GraphName topicName, String messageType) {
-    return newPublisher(topicName, messageType, null);
-  }
-
-  @Override
-  public <MessageType> Publisher<MessageType> newPublisher(GraphName topicName, String messageType,
-      Collection<? extends PublisherListener> listeners) {
     GraphName resolvedTopicName = resolveName(topicName);
     MessageDefinition messageDefinition =
         nodeConfiguration.getMessageDefinitionFactory().newFromString(messageType);
     TopicDefinition topicDefinition = TopicDefinition.create(resolvedTopicName, messageDefinition);
     org.ros.message.MessageSerializer<MessageType> serializer = newMessageSerializer(messageType);
-    return publisherFactory.create(topicDefinition, serializer, listeners);
-  }
-
-  @Override
-  public <MessageType> Publisher<MessageType> newPublisher(String topicName, String messageType,
-      Collection<? extends PublisherListener> listeners) {
-    return newPublisher(new GraphName(topicName), messageType, listeners);
+    return publisherFactory.create(topicDefinition, serializer);
   }
 
   @Override
   public <MessageType> Publisher<MessageType> newPublisher(String topicName, String messageType) {
-    return newPublisher(topicName, messageType, null);
+    return newPublisher(new GraphName(topicName), messageType);
   }
 
   @Override
-  public <MessageType> Subscriber<MessageType> newSubscriber(GraphName topicName,
-      String messageType, final MessageListener<MessageType> messageListener,
-      Collection<? extends SubscriberListener> listeners) {
+  public <MessageType> Subscriber<MessageType>
+      newSubscriber(GraphName topicName, String messageType) {
     GraphName resolvedTopicName = resolveName(topicName);
     MessageDefinition messageDefinition =
         nodeConfiguration.getMessageDefinitionFactory().newFromString(messageType);
     TopicDefinition topicDefinition = TopicDefinition.create(resolvedTopicName, messageDefinition);
     MessageDeserializer<MessageType> deserializer = newMessageDeserializer(messageType);
-    Subscriber<MessageType> subscriber =
-        subscriberFactory.create(topicDefinition, deserializer, listeners);
-    subscriber.addMessageListener(messageListener);
+    Subscriber<MessageType> subscriber = subscriberFactory.create(topicDefinition, deserializer);
     return subscriber;
   }
 
   @Override
-  public <MessageType> Subscriber<MessageType> newSubscriber(GraphName topicName,
-      String messageType, final MessageListener<MessageType> messageListener) {
-    return newSubscriber(topicName, messageType, messageListener, null);
-  }
-
-  @Override
-  public <MessageType> Subscriber<MessageType> newSubscriber(String topicName, String messageType,
-      final MessageListener<MessageType> messageListener,
-      Collection<? extends SubscriberListener> listeners) {
-    return newSubscriber(new GraphName(topicName), messageType, messageListener, listeners);
-  }
-
-  @Override
-  public <MessageType> Subscriber<MessageType> newSubscriber(String topicName, String messageType,
-      final MessageListener<MessageType> messageListener) {
-    return newSubscriber(topicName, messageType, messageListener, null);
+  public <MessageType> Subscriber<MessageType> newSubscriber(String topicName, String messageType) {
+    return newSubscriber(new GraphName(topicName), messageType);
   }
 
   @Override
@@ -373,50 +345,16 @@ public class DefaultNode implements Node {
   }
 
   @Override
-  public boolean isRunning() {
-    return running;
-  }
-
-  @Override
   public void shutdown() {
-    Preconditions.checkState(running == true, "Not running.");
+    signalOnShutdown();
     // NOTE(damonkohler): We don't want to raise potentially spurious
     // exceptions during shutdown that would interrupt the process. This is
     // simply best effort cleanup.
-    running = false;
-    slaveServer.shutdown();
-    registrar.shutdown();
     for (Publisher<?> publisher : topicManager.getPublishers()) {
       publisher.shutdown();
-      try {
-        Response<Integer> response =
-            masterClient.unregisterPublisher(slaveServer.toSlaveIdentifier(), publisher);
-        if (DEBUG) {
-          if (response.getResult() == 0) {
-            System.err.println("Failed to unregister publisher: " + publisher.getTopicName());
-          }
-        }
-      } catch (XmlRpcTimeoutException e) {
-        log.error(e);
-      } catch (RemoteException e) {
-        log.error(e);
-      }
     }
     for (Subscriber<?> subscriber : topicManager.getSubscribers()) {
       subscriber.shutdown();
-      try {
-        Response<Integer> response =
-            masterClient.unregisterSubscriber(slaveServer.toSlaveIdentifier(), subscriber);
-        if (DEBUG) {
-          if (response.getResult() == 0) {
-            System.err.println("Failed to unregister subscriber: " + subscriber.getTopicName());
-          }
-        }
-      } catch (XmlRpcTimeoutException e) {
-        log.error(e);
-      } catch (RemoteException e) {
-        log.error(e);
-      }
     }
     for (ServiceServer<?, ?> serviceServer : serviceManager.getServers()) {
       try {
@@ -436,7 +374,9 @@ public class DefaultNode implements Node {
     for (ServiceClient<?, ?> serviceClient : serviceManager.getClients()) {
       serviceClient.shutdown();
     }
-    signalOnShutdown();
+    registrar.shutdown();
+    slaveServer.shutdown();
+    signalOnShutdownComplete();
   }
 
   @Override
@@ -481,43 +421,81 @@ public class DefaultNode implements Node {
   }
 
   /**
-   * Signal all {@link NodeListener}s that the {@link Node} has started.
+   * SignalRunnable all {@link NodeListener}s that the {@link Node} has started.
    * 
    * <p>
    * Each listener is called in a separate thread.
    */
   private void signalOnStart() {
     final Node node = this;
-    for (final NodeListener listener : nodeListeners) {
-      executorService.execute(new Runnable() {
-        @Override
-        public void run() {
-          listener.onStart(node);
-        }
-      });
-    }
+    nodeListeners.signal(new SignalRunnable<NodeListener>() {
+      @Override
+      public void run(NodeListener listener) {
+        listener.onStart(node);
+      }
+    });
   }
 
   /**
-   * Signal all {@link NodeListener}s that the {@link Node} has shut down.
+   * SignalRunnable all {@link NodeListener}s that the {@link Node} has started
+   * shutting down.
    * 
    * <p>
    * Each listener is called in a separate thread.
    */
   private void signalOnShutdown() {
     final Node node = this;
-    for (final NodeListener listener : nodeListeners) {
-      executorService.execute(new Runnable() {
+    try {
+      nodeListeners.signal(new SignalRunnable<NodeListener>() {
         @Override
-        public void run() {
+        public void run(NodeListener listener) {
           listener.onShutdown(node);
         }
-      });
+      }, MAX_SHUTDOWN_DELAY_DURATION, MAX_SHUTDOWN_DELAY_UNITS);
+    } catch (InterruptedException e) {
+      // Ignored since we do not guarantee that all listeners will finish before
+      // shutdown begins.
     }
+  }
+
+  /**
+   * SignalRunnable all {@link NodeListener}s that the {@link Node} has shut
+   * down.
+   * 
+   * <p>
+   * Each listener is called in a separate thread.
+   */
+  private void signalOnShutdownComplete() {
+    final Node node = this;
+    nodeListeners.signal(new SignalRunnable<NodeListener>() {
+      @Override
+      public void run(NodeListener listener) {
+        listener.onShutdownComplete(node);
+      }
+    });
   }
 
   @VisibleForTesting
   InetSocketAddress getAddress() {
     return slaveServer.getAddress();
+  }
+
+  @Override
+  public void execute(final CancellableLoop cancellableLoop) {
+    executorService.execute(cancellableLoop);
+    addListener(new NodeListener() {
+      @Override
+      public void onStart(Node node) {
+      }
+
+      @Override
+      public void onShutdown(Node node) {
+        cancellableLoop.cancel();
+      }
+
+      @Override
+      public void onShutdownComplete(Node node) {
+      }
+    });
   }
 }

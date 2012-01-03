@@ -22,7 +22,6 @@ import org.ros.message.MessageDeserializer;
 import org.ros.node.topic.Subscriber;
 import org.ros.node.topic.SubscriberListener;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -54,12 +53,13 @@ public class SubscriberFactory {
    *          {@link TopicDefinition} that is subscribed to
    * @param deserializer
    * @param listeners
-   *          lifecycle listeners for the {@link Subscriber} instance (can be {@code null})
+   *          lifecycle listeners for the {@link Subscriber} instance (can be
+   *          {@code null})
    * @return a {@link DefaultSubscriber} instance
    */
   @SuppressWarnings("unchecked")
   public <MessageType> Subscriber<MessageType> create(TopicDefinition topicDefinition,
-      MessageDeserializer<MessageType> deserializer, Collection<? extends SubscriberListener> listeners) {
+      MessageDeserializer<MessageType> deserializer) {
     String topicName = topicDefinition.getName().toString();
     DefaultSubscriber<MessageType> subscriber;
     boolean createdNewSubscriber = false;
@@ -71,6 +71,32 @@ public class SubscriberFactory {
         subscriber =
             DefaultSubscriber.create(slaveServer.toSlaveIdentifier(), topicDefinition,
                 executorService, deserializer);
+        subscriber.addSubscriberListener(new SubscriberListener() {
+          @Override
+          public void onShutdown(Subscriber<?> subscriber) {
+            topicManager.removeSubscriber((DefaultSubscriber<?>) subscriber);
+          }
+          
+          @Override
+          public void onNewPublisher(Subscriber<?> subscriber) {
+          }
+          
+          @Override
+          public void onMasterRegistrationSuccess(Subscriber<?> subscriber) {
+          }
+          
+          @Override
+          public void onMasterRegistrationFailure(Subscriber<?> subscriber) {
+          }
+
+          @Override
+          public void onMasterUnregistrationSuccess(Subscriber<?> subscriber) {
+          }
+
+          @Override
+          public void onMasterUnregistrationFailure(Subscriber<?> subscriber) {
+          }
+        });
         createdNewSubscriber = true;
       }
     }
@@ -78,14 +104,6 @@ public class SubscriberFactory {
     if (createdNewSubscriber) {
       topicManager.putSubscriber(subscriber);
     }
-    
-    if (listeners != null) {
-      for (SubscriberListener listener : listeners) {
-        subscriber.addSubscriberListener(listener);
-      }
-    }
-
     return subscriber;
   }
-
 }
