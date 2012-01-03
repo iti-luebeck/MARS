@@ -37,7 +37,7 @@ package com.jme3.network;
  *  The source of a received message and the common abstract interface
  *  of client->server and server->client objects. 
  *
- *  @version   $Revision: 7010 $
+ *  @version   $Revision: 8938 $
  *  @author    Paul Speed
  */
 public interface MessageConnection
@@ -46,5 +46,11 @@ public interface MessageConnection
      *  Sends a message to the other end of the connection.
      */   
     public void send( Message message );
+    
+    /**
+     *  Sends a message to the other end of the connection using
+     *  the specified alternate channel.
+     */   
+    public void send( int channel, Message message );
 }    
 

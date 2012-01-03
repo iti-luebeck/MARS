@@ -526,6 +526,7 @@
                 <OperatingAngle>5.235987</OperatingAngle>
                 <Resolution>0.005061</Resolution>
                 <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="servo">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition</value>

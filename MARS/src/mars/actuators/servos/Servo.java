@@ -69,6 +69,9 @@ public class Servo extends Actuator implements Manipulating,Keys{
     private float OperatingAngle = 5.235987f;
     
     @XmlElement
+    private int ServoNeutralPosition = 0;
+    
+    @XmlElement
     private float Resolution = 0.005061f;
     
     @XmlElement
@@ -142,6 +145,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
     private void computeAngleIterations(){
         max_angle_iteration = (int)(Math.round(OperatingAngle/Resolution));
         SpeedPerIteration = (Resolution)*((SpeedPerDegree)/((float)(Math.PI*2)/360f));
+        //current_angle_iteration = ServoNeutralPosition;
     }
 
     public Vector3f getServoDirection() {
@@ -236,19 +240,18 @@ public class Servo extends Actuator implements Manipulating,Keys{
     }
     
     private void updateAnglePosition(float tpf){
-        System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
+        //System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
         if( desired_angle_iteration != current_angle_iteration){//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
             if(possible_iterations > 0){//when we dont have enough time to rotate we wait till the next frame
                 
                 //check the angle boundary
-                if( OperatingAngle < Resolution*(possible_iterations+current_angle_iteration)){//we would turn too much
-                    float diff_angle = (Resolution*(possible_iterations+current_angle_iteration)) - OperatingAngle;
-                    float cur_angle = (Resolution*(current_angle_iteration));
-                    possible_iterations = ;
-                }/*else if(){
-                    
-                }*/
+                int diff_iteration = max_angle_iteration - current_angle_iteration;
+                if( diff_iteration >= possible_iterations){//when is till fit in
+                
+                }else{
+                    possible_iterations = diff_iteration;
+                }
                 
                 Iterator iter = slaves.iterator();
                 while(iter.hasNext() ) {
@@ -256,7 +259,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
                     final int fin_possible_iterations = possible_iterations;
                     Future fut = this.simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {
-                            moves.updateRotation(ServoEnd.getWorldTranslation().subtract(ServoStart.getWorldTranslation()), Resolution*(fin_possible_iterations+current_angle_iteration));
+                            moves.updateRotation(ServoEnd.getWorldTranslation().subtract(ServoStart.getWorldTranslation()), Resolution*(fin_possible_iterations+current_angle_iteration+ServoNeutralPosition));
                             return null;
                         }
                     });
@@ -281,8 +284,8 @@ public class Servo extends Actuator implements Manipulating,Keys{
     }
     
     public void setDesiredAnglePosition(int desired_angle_iteration){
-        if(desired_angle_iteration > (int)(OperatingAngle/Resolution)){
-            this.desired_angle_iteration = (int)(OperatingAngle/Resolution);
+        if(desired_angle_iteration > max_angle_iteration){
+            this.desired_angle_iteration = max_angle_iteration;
         }else if(desired_angle_iteration <= 0){
             this.desired_angle_iteration = 0;
         }else{
@@ -371,7 +374,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(120);
+                                self.setDesiredAnglePosition(0);
                             }
                         }
                     };

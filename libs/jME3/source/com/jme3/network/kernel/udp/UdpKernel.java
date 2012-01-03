@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 /**
  *  A Kernel implementation using UDP packets.
  *
- *  @version   $Revision: 8843 $
+ *  @version   $Revision: 8944 $
  *  @author    Paul Speed
  */
 public class UdpKernel extends AbstractKernel
@@ -126,13 +126,12 @@ public class UdpKernel extends AbstractKernel
         if( reliable )
             throw new UnsupportedOperationException( "Reliable send not supported by this kernel." );
 
-        if( copy )
-            {
+        if( copy ) {
             // Copy the data just once
             byte[] temp = new byte[data.remaining()];
             System.arraycopy(data.array(), data.position(), temp, 0, data.remaining());
             data = ByteBuffer.wrap(temp);
-            }
+        }
 
         // Hand it to all of the endpoints that match our routing
         for( UdpEndpoint p : socketEndpoints.values() ) {
@@ -163,12 +162,24 @@ public class UdpKernel extends AbstractKernel
      */
     protected void closeEndpoint( UdpEndpoint p ) throws IOException
     {
-        log.log( Level.INFO, "Closing endpoint:{0}.", p );
-            
         // Just book-keeping to do here.
-        socketEndpoints.remove( p.getRemoteAddress() );
+        if( socketEndpoints.remove( p.getRemoteAddress() ) == null )
+            return;
+
+        log.log( Level.INFO, "Closing endpoint:{0}.", p );            
+        log.log( Level.FINE, "Socket endpoints size:{0}", socketEndpoints.size() );
 
         addEvent( EndpointEvent.createRemove( this, p ) );
+        
+        // If there are no pending messages then add one so that the
+        // kernel-user knows to wake up if it is only listening for
+        // envelopes.
+        if( !hasEnvelopes() ) {
+            // Note: this is not really a race condition.  At worst, our
+            // event has already been handled by now and it does no harm
+            // to check again.
+            addEnvelope( EVENTS_PENDING );
+        }
     }
 
     protected void newData( DatagramPacket packet )

@@ -32,6 +32,7 @@
 
 package com.jme3.network.base;
 
+import com.jme3.network.Filter;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -59,7 +60,7 @@ import java.util.logging.Logger;
  *  objects to 32676 bytes... even though, for example,
  *  datagram packets can hold twice that. :P</p>  
  *
- *  @version   $Revision: 8843 $
+ *  @version   $Revision: 8944 $
  *  @author    Paul Speed
  */
 public class KernelAdapter extends Thread
@@ -89,6 +90,22 @@ public class KernelAdapter extends Thread
         this.reliable = reliable;
         setDaemon(true);
     }
+
+    public Kernel getKernel()
+    {
+        return kernel;
+    }
+
+    public void initialize()
+    {
+        kernel.initialize();
+    }
+ 
+    public void broadcast( Filter<? super Endpoint> filter, ByteBuffer data, boolean reliable, 
+                           boolean copy )
+    {
+        kernel.broadcast( filter, data, reliable, copy );
+    }                           
  
     public void close() throws InterruptedException
     {
@@ -103,6 +120,9 @@ public class KernelAdapter extends Thread
         // Should really be queued up so the outer thread can
         // retrieve them.  For now we'll just log it.  FIXME
         log.log( Level.SEVERE, "Unhandled error, endpoint:" + p + ", context:" + context, e );
+        
+        // In lieu of other options, at least close the endpoint
+        p.close();
     }                                                      
 
     protected HostedConnection getConnection( Endpoint p )
@@ -115,6 +135,8 @@ public class KernelAdapter extends Thread
         // Remove any message buffer we've been accumulating 
         // on behalf of this endpoing
         messageBuffers.remove(p);
+
+        log.log( Level.FINE, "Buffers size:{0}", messageBuffers.size() );
     
         server.connectionClosed(p);
     }

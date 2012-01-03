@@ -55,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *  objects to 32676 bytes... even though, for example,
  *  datagram packets can hold twice that. :P</p>  
  *
- *  @version   $Revision: 8843 $
+ *  @version   $Revision: 8944 $
  *  @author    Paul Speed
  */
 public class ConnectorAdapter extends Thread
@@ -120,9 +120,12 @@ public class ConnectorAdapter extends Thread
 
         // Kill the writer service
         writer.shutdown();
-        
-        // Kill the connector
-        connector.close();
+ 
+        if( connector.isConnected() )
+            {       
+            // Kill the connector
+            connector.close();
+            }
     }
  
     protected void dispatch( Message m )

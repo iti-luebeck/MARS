@@ -63,6 +63,7 @@ public class AnimationTrack extends AbstractCinematicEvent {
     public AnimationTrack(Spatial model, String animationName) {
         modelName = model.getName();
         this.animationName = animationName;
+        initialDuration = model.getControl(AnimControl.class).getAnimationLength(animationName);
     }
 
     public AnimationTrack(Spatial model, String animationName, float initialDuration) {
@@ -73,6 +74,7 @@ public class AnimationTrack extends AbstractCinematicEvent {
 
     public AnimationTrack(Spatial model, String animationName, LoopMode loopMode) {
         super(loopMode);
+        initialDuration = model.getControl(AnimControl.class).getAnimationLength(animationName);
         modelName = model.getName();
         this.animationName = animationName;
     }
@@ -104,11 +106,32 @@ public class AnimationTrack extends AbstractCinematicEvent {
     }
 
     @Override
+    public void setTime(float time) {
+        super.setTime(time);
+        float t = time;
+        if(loopMode == loopMode.Loop){
+            t = t % channel.getAnimMaxTime();
+        }
+        if(loopMode == loopMode.Cycle){
+            float parity = (float)Math.ceil(time / channel.getAnimMaxTime());
+            if(parity >0 && parity%2 ==0){
+                t = channel.getAnimMaxTime() - t % channel.getAnimMaxTime();
+            }else{
+                t = t % channel.getAnimMaxTime();
+            }
+            
+        }
+        channel.setTime(t);
+    }
+
+    @Override
     public void onPlay() {
         channel.getControl().setEnabled(true);
         if (playState == PlayState.Stopped) {
             channel.setAnim(animationName);
             channel.setSpeed(speed);
+            channel.setLoopMode(loopMode);
+            channel.setTime(time);
         }
     }
 

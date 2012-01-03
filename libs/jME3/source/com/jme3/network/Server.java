@@ -38,7 +38,7 @@ import java.util.Collection;
  *  Represents a host that can send and receive messages to
  *  a set of remote client connections.
  *  
- *  @version   $Revision: 7152 $
+ *  @version   $Revision: 8938 $
  *  @author    Paul Speed
  */
 public interface Server
@@ -77,10 +77,37 @@ public interface Server
     public void broadcast( Filter<? super HostedConnection> filter, Message message );
 
     /**
+     *  Sends the specified message over the specified alternate channel to all connected 
+     *  clients that match the filter.  If no filter is specified then this is the same as
+     *  calling broadcast(message) and the message will be delivered to
+     *  all connections.
+     *  <p>Examples:</p>
+     *  <pre>
+     *    // Broadcast to connections: conn1, conn2, and conn3
+     *    server.broadcast( Filters.in( conn1, conn2, conn3 ), message );
+     *
+     *    // Broadcast to all connections exception source
+     *    server.broadcast( Filters.notEqualTo( source ), message );
+     *  </pre>
+     */ 
+    public void broadcast( int channel, Filter<? super HostedConnection> filter, Message message );
+
+    /**
      *  Start the server so that it will began accepting new connections
      *  and processing messages.
      */
     public void start();
+
+    /**
+     *  Adds an alternate channel to the server, using the specified port.  This is an 
+     *  entirely separate connection where messages are sent and received in parallel 
+     *  to the two primary default channels.  All channels must be added before the connection
+     *  is started.
+     *  Returns the ID of the created channel for use when specifying the channel in send or 
+     *  broadcast calls.  The ID is returned entirely out of convenience since the IDs
+     *  are predictably incremented.  The first channel is 0, second is 1, and so on.
+     */
+    public int addChannel( int port ); 
 
     /**
      *  Returns true if the server has been started.
@@ -103,6 +130,12 @@ public interface Server
      */
     public Collection<HostedConnection> getConnections(); 
  
+    /**
+     *  Returns true if the server has active connections at the time of this
+     *  call.
+     */
+    public boolean hasConnections();
+    
     /**
      *  Adds a listener that will be notified when new hosted connections
      *  arrive.

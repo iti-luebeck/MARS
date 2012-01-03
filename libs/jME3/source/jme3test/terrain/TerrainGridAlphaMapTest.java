@@ -34,14 +34,14 @@ import com.jme3.texture.Texture.WrapMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.novyon.noise.ShaderUtils;
-import org.novyon.noise.basis.FilteredBasis;
-import org.novyon.noise.filter.IterativeFilter;
-import org.novyon.noise.filter.OptimizedErode;
-import org.novyon.noise.filter.PerturbFilter;
-import org.novyon.noise.filter.SmoothFilter;
-import org.novyon.noise.fractal.FractalSum;
-import org.novyon.noise.modulator.NoiseModulator;
+import com.jme3.terrain.noise.ShaderUtils;
+import com.jme3.terrain.noise.basis.FilteredBasis;
+import com.jme3.terrain.noise.filter.IterativeFilter;
+import com.jme3.terrain.noise.filter.OptimizedErode;
+import com.jme3.terrain.noise.filter.PerturbFilter;
+import com.jme3.terrain.noise.filter.SmoothFilter;
+import com.jme3.terrain.noise.fractal.FractalSum;
+import com.jme3.terrain.noise.modulator.NoiseModulator;
 
 public class TerrainGridAlphaMapTest extends SimpleApplication {
 
@@ -151,7 +151,7 @@ public class TerrainGridAlphaMapTest extends SimpleApplication {
 
         ground.addPreFilter(this.iterate);
 
-        this.terrain = new TerrainGrid("terrain", 33, 257, new FractalTileLoader(ground, null, 256));
+        this.terrain = new TerrainGrid("terrain", 33, 257, new FractalTileLoader(ground, 256));
         this.terrain.setMaterial(this.material);
 
         this.terrain.setLocalTranslation(0, 0, 0);
@@ -170,7 +170,7 @@ public class TerrainGridAlphaMapTest extends SimpleApplication {
 
         this.getCamera().setLocation(new Vector3f(0, 256, 0));
 
-        //this.viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        this.viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
 
         if (usePhysics) {
             CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.5f, 1.8f, 1);
@@ -191,11 +191,11 @@ public class TerrainGridAlphaMapTest extends SimpleApplication {
 
             public void tileAttached(Vector3f cell, TerrainQuad quad) {
                 Texture alpha = null;
-                //try {
-                //    alpha = assetManager.loadTexture("TerrainAlphaTest/alpha_" + (int)cell.x+ "_" + (int)cell.z + ".png");
-                //} catch (Exception e) {
+                try {
+                    alpha = assetManager.loadTexture("TerrainAlphaTest/alpha_" + (int)cell.x+ "_" + (int)cell.z + ".png");
+                } catch (Exception e) {
                     alpha = assetManager.loadTexture("TerrainAlphaTest/alpha_default.png");
-                //}
+                }
                 quad.getMaterial().setTexture("AlphaMap", alpha);
                 if (usePhysics) {
                     quad.addControl(new RigidBodyControl(new HeightfieldCollisionShape(quad.getHeightMap(), terrain.getLocalScale()), 0));

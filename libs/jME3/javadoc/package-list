@@ -97,6 +97,11 @@ com.jme3.terrain.geomipmap.lodcalc
 com.jme3.terrain.geomipmap.lodcalc.util
 com.jme3.terrain.geomipmap.picking
 com.jme3.terrain.heightmap
+com.jme3.terrain.noise
+com.jme3.terrain.noise.basis
+com.jme3.terrain.noise.filter
+com.jme3.terrain.noise.fractal
+com.jme3.terrain.noise.modulator
 com.jme3.texture
 com.jme3.texture.plugins
 com.jme3.ui
@@ -147,6 +152,5 @@ jme3tools.converters
 jme3tools.converters.model
 jme3tools.converters.model.strip
 jme3tools.navigation
-jme3tools.nvtex
 jme3tools.optimize
 jme3tools.savegame

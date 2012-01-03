@@ -35,8 +35,10 @@ package com.jme3.network.base;
 import com.jme3.network.*;
 import com.jme3.network.kernel.Endpoint;
 import com.jme3.network.kernel.Kernel;
+import com.jme3.network.message.ChannelInfoMessage;
 import com.jme3.network.message.ClientRegistrationMessage;
 import com.jme3.network.message.DisconnectMessage;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,21 +51,28 @@ import java.util.logging.Logger;
  *  A default implementation of the Server interface that delegates
  *  its network connectivity to kernel.Kernel.
  *
- *  @version   $Revision: 8843 $
+ *  @version   $Revision: 8944 $
  *  @author    Paul Speed
  */
 public class DefaultServer implements Server
 {
     static Logger log = Logger.getLogger(DefaultServer.class.getName());
+
+    // First two channels are reserved for reliable and
+    // unreliable
+    private static final int CH_RELIABLE = 0;
+    private static final int CH_UNRELIABLE = 1;
+    private static final int CH_FIRST = 2;
     
     private boolean isRunning = false;
     private AtomicInteger nextId = new AtomicInteger(0);
     private String gameName;
     private int version;
-    private Kernel reliable;
+    private KernelFactory kernelFactory = KernelFactory.DEFAULT;
     private KernelAdapter reliableAdapter;
-    private Kernel fast;
     private KernelAdapter fastAdapter;
+    private List<KernelAdapter> channels = new ArrayList<KernelAdapter>();
+    private List<Integer> alternatePorts = new ArrayList<Integer>();
     private Redispatch dispatcher = new Redispatch();
     private Map<Integer,HostedConnection> connections = new ConcurrentHashMap<Integer,HostedConnection>();
     private Map<Endpoint,HostedConnection> endpointConnections 
@@ -84,13 +93,14 @@ public class DefaultServer implements Server
             
         this.gameName = gameName;
         this.version = version;
-        this.reliable = reliable;
-        this.fast = fast;
         
         reliableAdapter = new KernelAdapter( this, reliable, dispatcher, true );
         if( fast != null ) {
             fastAdapter = new KernelAdapter( this, fast, dispatcher, false );
         }
+        
+        channels.add( reliableAdapter );
+        channels.add( fastAdapter );
     }   
 
     public String getGameName()
@@ -103,21 +113,55 @@ public class DefaultServer implements Server
         return version;
     }
 
+    public int addChannel( int port )
+    {
+        if( isRunning )
+            throw new IllegalStateException( "Channels cannot be added once server is started." );
+ 
+        // Note: it does bug me that channels aren't 100% universal and
+        // setup externally but it requires a more invasive set of changes
+        // for "connection types" and some kind of registry of kernel and
+        // connector factories.  This really would be the best approach and
+        // would allow all kinds of channel customization maybe... but for
+        // now, we hard-code the standard connections and treat the +2 extras
+        // differently.
+            
+        // Check for consistency with the channels list
+        if( channels.size() - CH_FIRST != alternatePorts.size() )
+            throw new IllegalStateException( "Channel and port lists do not match." ); 
+            
+        try {                                
+            int result = alternatePorts.size(); 
+            alternatePorts.add(port);
+            
+            Kernel kernel = kernelFactory.createKernel(result, port); 
+            channels.add( new KernelAdapter(this, kernel, dispatcher, true) );
+            
+            return result;
+        } catch( IOException e ) {
+            throw new RuntimeException( "Error adding channel for port:" + port, e );
+        } 
+    } 
+
+    protected void checkChannel( int channel )
+    {
+        if( channel < 0 || channel >= alternatePorts.size() )
+            throw new IllegalArgumentException( "Channel is undefined:" + channel );              
+    }
+
     public void start()
     {
         if( isRunning )
             throw new IllegalStateException( "Server is already started." );
             
         // Initialize the kernels
-        reliable.initialize();
-        if( fast != null ) {
-            fast.initialize();
+        for( KernelAdapter ka : channels ) {
+            ka.initialize();
         }
  
         // Start em up
-        reliableAdapter.start();            
-        if( fastAdapter != null ) {
-            fastAdapter.start();
+        for( KernelAdapter ka : channels ) {
+            ka.start();
         }
         
         isRunning = true;             
@@ -135,11 +179,10 @@ public class DefaultServer implements Server
  
         try {
             // Kill the adpaters, they will kill the kernels
-            if( fastAdapter != null ) {
-                fastAdapter.close();
+            for( KernelAdapter ka : channels ) {
+                ka.close();
             }
             
-            reliableAdapter.close();                           
             isRunning = false;            
         } catch( InterruptedException e ) {
             throw new RuntimeException( "Interrupted while closing", e );
@@ -153,24 +196,45 @@ public class DefaultServer implements Server
 
     public void broadcast( Filter<? super HostedConnection> filter, Message message )
     {
+        if( connections.isEmpty() )
+            return;
+            
         ByteBuffer buffer = MessageProtocol.messageToBuffer(message, null);
  
         FilterAdapter adapter = filter == null ? null : new FilterAdapter(filter);
                
-        // Ignore the filter for the moment
-        if( message.isReliable() || fast == null ) {
+        if( message.isReliable() || fastAdapter == null ) {
             // Don't need to copy the data because message protocol is already
             // giving us a fresh buffer
-            reliable.broadcast( adapter, buffer, true, false );
+            reliableAdapter.broadcast( adapter, buffer, true, false );
         } else {
-            fast.broadcast( adapter, buffer, false, false );
+            fastAdapter.broadcast( adapter, buffer, false, false );
         }               
+    }
+
+    public void broadcast( int channel, Filter<? super HostedConnection> filter, Message message )
+    {
+        if( connections.isEmpty() )
+            return;
+
+        checkChannel(channel);
+        
+        ByteBuffer buffer = MessageProtocol.messageToBuffer(message, null);
+ 
+        FilterAdapter adapter = filter == null ? null : new FilterAdapter(filter);
+
+        channels.get(channel+CH_FIRST).broadcast( adapter, buffer, true, false );               
     }
 
     public HostedConnection getConnection( int id )
     {
         return connections.get(id);
     }     
+ 
+    public boolean hasConnections()
+    {
+        return !connections.isEmpty();
+    }
  
     public Collection<HostedConnection> getConnections()
     {
@@ -236,10 +300,14 @@ public class DefaultServer implements Server
         }
     }            
 
+    protected int getChannel( KernelAdapter ka )
+    {
+        return channels.indexOf(ka);
+    }
+
     protected void registerClient( KernelAdapter ka, Endpoint p, ClientRegistrationMessage m )
     {
         Connection addedConnection = null;
-        Connection bootedConnection = null;
 
         // generally this will only be called by one thread but it's        
         // important enough I won't take chances
@@ -251,25 +319,20 @@ public class DefaultServer implements Server
             // See if we already have one
             Connection c = connecting.remove(tempId);
             if( c == null ) {
-                c = new Connection();
+                c = new Connection(channels.size());
                 log.log( Level.FINE, "Registering client for endpoint, pass 1:{0}.", p );
             } else {
                 log.log( Level.FINE, "Refining client registration for endpoint:{0}.", p );
             } 
           
-            // Fill in what we now know       
-            if( ka == fastAdapter ) {
-                c.fast = p;
-                
-                if( c.reliable == null ) {
-                    // Tuck it away for later
-                    connecting.put(tempId, c);
-                }
-                
-            } else {
-                // It must be the reliable one            
-                c.reliable = p;
+            // Fill in what we now know
+            int channel = getChannel(ka); 
+            c.setChannel(channel, p);            
+            log.log( Level.FINE, "Setting up channel:{0}", channel );
  
+            // If it's channel 0 then this is the initial connection
+            // and we will send the connection information
+            if( channel == CH_RELIABLE ) {
                 // Validate the name and version which is only sent
                 // over the reliable connection at this point.
                 if( !getGameName().equals(m.getGameName()) 
@@ -282,28 +345,32 @@ public class DefaultServer implements Server
                     c.close( "Server client mismatch, server:" + getGameName() + " v" + getVersion()
                              + "  client:" + m.getGameName() + " v" + m.getVersion() );
                     return;                        
-                }                                   
+                }
                 
-                if( c.fast == null && fastAdapter != null ) {
-                    // Still waiting for the fast connection to
-                    // register
-                    connecting.put(tempId, c);
+                // Else send the extra channel information to the client
+                if( !alternatePorts.isEmpty() ) {
+                    ChannelInfoMessage cim = new ChannelInfoMessage( m.getId(), alternatePorts );
+                    c.send(cim);
                 }
             }
-    
-            if( !connecting.containsKey(tempId) ) {
-    
+
+            if( c.isComplete() ) {             
                 // Then we are fully connected
                 if( connections.put( c.getId(), c ) == null ) {
                 
-                    if( c.fast != null ) {
-                        endpointConnections.put( c.fast, c );
-                    }
-                    endpointConnections.put( c.reliable, c ); 
+                    for( Endpoint cp : c.channels ) {
+                        if( cp == null )
+                            continue;
+                        endpointConnections.put( cp, c );
+                    } 
  
                     addedConnection = c;               
                 }
-            }
+            } else {
+                // Need to keep getting channels so we'll keep it in
+                // the map
+                connecting.put(tempId, c);
+            } 
         }
  
         // Best to do this outside of the synch block to avoid
@@ -331,14 +398,18 @@ public class DefaultServer implements Server
 
     protected void connectionClosed( Endpoint p )
     {
-        log.log( Level.INFO, "Connection closed:{0}.", p );
+        if( p.isConnected() ) {
+            log.log( Level.INFO, "Connection closed:{0}.", p );
+        } else {
+            log.log( Level.FINE, "Connection closed:{0}.", p );
+        }
         
         // Try to find the endpoint in all ways that it might
-        // exist.  Note: by this point the channel is closed
-        // already.
+        // exist.  Note: by this point the raw network channel is 
+        // closed already.
     
-        // Also note: this method will be called twice per
-        // HostedConnection if it has two endpoints.
+        // Also note: this method will be called multiple times per
+        // HostedConnection if it has multiple endpoints.
  
         Connection removed = null;
         synchronized( this ) {             
@@ -350,11 +421,16 @@ public class DefaultServer implements Server
             if( removed != null ) {
                 connections.remove( removed.getId() );                
             }
+            
+            log.log( Level.FINE, "Connections size:{0}", connections.size() );
+            log.log( Level.FINE, "Endpoint mappings size:{0}", endpointConnections.size() );
         }
         
         // Better not to fire events while we hold a lock
         // so always do this outside the synch block.
-        if( removed != null ) {
+        // Note: checking removed.closed just to avoid spurious log messages
+        //       since in general we are called back for every endpoint closing.
+        if( removed != null && !removed.closed ) {
         
             log.log( Level.INFO, "Client closed:{0}.", removed );
             
@@ -365,15 +441,32 @@ public class DefaultServer implements Server
     protected class Connection implements HostedConnection
     {
         private int id;
-        private Endpoint reliable;
-        private Endpoint fast;
         private boolean closed;
-        
+        private Endpoint[] channels;
+        private int setChannelCount = 0; 
+       
         private Map<String,Object> sessionData = new ConcurrentHashMap<String,Object>();       
         
-        public Connection()
+        public Connection( int channelCount )
         {
             id = nextId.getAndIncrement();
+            channels = new Endpoint[channelCount];
+        }
+ 
+        void setChannel( int channel, Endpoint p )
+        {
+            if( channels[channel] != null && channels[channel] != p ) {
+                throw new RuntimeException( "Channel has already been set:" + channel 
+                                            + " = " + channels[channel] + ", cannot be set to:" + p );
+            }
+            channels[channel] = p;
+            if( p != null )
+                setChannelCount++;
+        }
+        
+        boolean isComplete()
+        {
+            return setChannelCount == channels.length;
         }
  
         public Server getServer()
@@ -388,17 +481,24 @@ public class DefaultServer implements Server
  
         public String getAddress()
         {            
-            return reliable == null ? null : reliable.getAddress();
+            return channels[CH_RELIABLE] == null ? null : channels[CH_RELIABLE].getAddress();
         }
        
         public void send( Message message )
         {
             ByteBuffer buffer = MessageProtocol.messageToBuffer(message, null);
-            if( message.isReliable() || fast == null ) {
-                reliable.send( buffer );
+            if( message.isReliable() || channels[CH_UNRELIABLE] == null ) {
+                channels[CH_RELIABLE].send( buffer );
             } else {
-                fast.send( buffer );
+                channels[CH_UNRELIABLE].send( buffer );
             }
+        }
+
+        public void send( int channel, Message message )
+        {
+            checkChannel(channel);
+            ByteBuffer buffer = MessageProtocol.messageToBuffer(message, null);
+            channels[channel+CH_FIRST].send(buffer);
         }
  
         protected void closeConnection()
@@ -407,14 +507,13 @@ public class DefaultServer implements Server
                 return;
             closed = true;
             
-            // Make sure both endpoints are closed.  Note: reliable
+            // Make sure all endpoints are closed.  Note: reliable
             // should always already be closed through all paths that I
             // can conceive... but it doesn't hurt to be sure. 
-            if( reliable != null && reliable.isConnected() ) {
-                reliable.close();
-            }
-            if( fast != null && fast.isConnected() ) {
-                fast.close();
+            for( Endpoint p : channels ) {
+                if( p == null ) 
+                    continue;
+                p.close();
             }
         
             fireConnectionRemoved( this );
@@ -433,10 +532,10 @@ public class DefaultServer implements Server
             // fast will be cleaned up as a side-effect
             // when closeConnection() is called by the
             // connectionClosed() endpoint callback.
-            if( reliable != null ) {
+            if( channels[CH_RELIABLE] != null ) {
                 // Close with flush so we make sure our
                 // message gets out
-                reliable.close(true);
+                channels[CH_RELIABLE].close(true);
             }
         }
         
@@ -460,7 +559,8 @@ public class DefaultServer implements Server
         
         public String toString()
         {
-            return "Connection[ id=" + id + ", reliable=" + reliable + ", fast=" + fast + " ]"; 
+            return "Connection[ id=" + id + ", reliable=" + channels[CH_RELIABLE] 
+                                     + ", fast=" + channels[CH_UNRELIABLE] + " ]"; 
         }  
     } 
 
