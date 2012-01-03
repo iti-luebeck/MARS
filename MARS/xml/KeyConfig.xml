@@ -173,7 +173,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#207 End">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_down</value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_down_net</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#155 null">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
@@ -284,7 +284,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#199 Home">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_up</value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_up_net</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#194 null">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
@@ -377,7 +377,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#201 Page Up">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_forward</value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_forward_net</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#70 Scroll Lock">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
@@ -452,7 +452,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#209 Page Down">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_back</value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_both_back_net</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#151 Unlabeled">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
