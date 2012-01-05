@@ -4,6 +4,7 @@
  */
 package mars;
 
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 
 /**
@@ -16,7 +17,10 @@ public interface Moveable {
      * @param rotation_axis
      * @param alpha
      */
+    @Deprecated
     public void updateRotation(Vector3f rotation_axis, float alpha);
+    public void updateRotation(float alpha);
+    public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points);
     /**
      * 
      * @param translation_axis

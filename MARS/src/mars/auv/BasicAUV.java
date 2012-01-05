@@ -544,7 +544,9 @@ public class BasicAUV implements AUV,SceneProcessor{
                 Iterator iter = slaves_names.iterator();
                 while(iter.hasNext() ) {//search for the moveables(slaves) and add them to the master
                     String slave_name = (String)iter.next();
-                    mani.addSlave(getMoveable(slave_name));
+                    Moveable moves = getMoveable(slave_name);
+                    moves.setLocalRotationAxisPoints(mani.getWorldRotationAxisPoints());
+                    mani.addSlave(moves);
                 }
             }
         }

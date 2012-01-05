@@ -4,6 +4,7 @@
  */
 package mars;
 
+import com.jme3.math.Matrix3f;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,7 @@ public interface Manipulating {
      */
     public Moveable getSlave(String name);
     public ArrayList getSlavesNames();
+    public Matrix3f getWorldRotationAxisPoints();
     /**
      * 
      * @param slave

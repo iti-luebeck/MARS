@@ -47,14 +47,16 @@ public class SeaBotixThruster extends Thruster{
     }
 
     /**
-     * This is the function that represents the SeaBotix measured thruster force.
+     * This is the function that represents the SeaBotix measured thruster force. It is limited to +/- 127.
      * @param speed 
      * @return
      */
     @Override
     protected float calculateThrusterForce(int speed){
         //return (Math.signum(speed))*(0.16f * (float)Math.pow(1.04f, (float)Math.abs(speed)) );
-        int limited_speed = (speed <= 127) ? speed : 127;
+        // we want to limit the maximum settable value to +/- 127
+        int limited_speed = (Math.abs(speed)<= 127) ? Math.abs(speed) : 127;
+        limited_speed = ((int)Math.signum(speed))*limited_speed;
         return (Math.signum(limited_speed))*(0.00046655f * (float)Math.pow((float)Math.abs(limited_speed), 2.02039525f) );
     }
 

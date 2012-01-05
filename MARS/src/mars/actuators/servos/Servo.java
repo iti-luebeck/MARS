@@ -9,6 +9,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -81,7 +82,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     private int desired_angle_iteration = 0;
     
-    private int max_angle_iteration = 1035;
+    private int max_angle_iteration = 518;
     
     private float SpeedPerIteration = 0.0009473f;
     
@@ -143,9 +144,8 @@ public class Servo extends Actuator implements Manipulating,Keys{
     }
     
     private void computeAngleIterations(){
-        max_angle_iteration = (int)(Math.round(OperatingAngle/Resolution));
+        max_angle_iteration = (int)(Math.round(((OperatingAngle/2)/Resolution)));
         SpeedPerIteration = (Resolution)*((SpeedPerDegree)/((float)(Math.PI*2)/360f));
-        //current_angle_iteration = ServoNeutralPosition;
     }
 
     public Vector3f getServoDirection() {
@@ -243,32 +243,45 @@ public class Servo extends Actuator implements Manipulating,Keys{
         //System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
         if( desired_angle_iteration != current_angle_iteration){//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
+            //System.out.println("possible_iterations: " + possible_iterations);
             if(possible_iterations > 0){//when we dont have enough time to rotate we wait till the next frame
                 
-                //check the angle boundary
-                int diff_iteration = max_angle_iteration - current_angle_iteration;
-                if( diff_iteration >= possible_iterations){//when is till fit in
-                
-                }else{
-                    possible_iterations = diff_iteration;
+                int do_it_iterations = 0;
+                if(Math.abs(desired_angle_iteration-current_angle_iteration) >= possible_iterations){// we have enough space/time to fully make possible_iterations
+                    do_it_iterations = possible_iterations;
+                }else{//we have to make less than possible since we are close to our goal(desired_angle_iteration)
+                    do_it_iterations = Math.abs(desired_angle_iteration-current_angle_iteration);
                 }
+                
+                //dont forget to negate for direction
+                if(desired_angle_iteration < current_angle_iteration){
+                    do_it_iterations = do_it_iterations * (-1);
+                }
+                ///do_it_iterations = possible_iterations;
+                
+                //System.out.println("do_it_iterations: " + do_it_iterations);
                 
                 Iterator iter = slaves.iterator();
                 while(iter.hasNext() ) {
                     final Moveable moves = (Moveable)iter.next();
-                    final int fin_possible_iterations = possible_iterations;
+                    final int fin_do_it_iterations = do_it_iterations;
                     Future fut = this.simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {
-                            moves.updateRotation(ServoEnd.getWorldTranslation().subtract(ServoStart.getWorldTranslation()), Resolution*(fin_possible_iterations+current_angle_iteration+ServoNeutralPosition));
+                            moves.updateRotation(Resolution*(fin_do_it_iterations+current_angle_iteration+ServoNeutralPosition));
                             return null;
                         }
                     });
                 }
                 //since we will rotate we have to update our current angle
-                current_angle_iteration += possible_iterations;
+                current_angle_iteration += do_it_iterations;
                 
             }
         }
+    }
+    
+    @Override
+    public Matrix3f getWorldRotationAxisPoints(){
+        return new Matrix3f().setColumn(0, ServoEnd.getWorldTranslation()).setColumn(1, ServoStart.getWorldTranslation());
     }
     
     private int howMuchIterations(float tpf){
@@ -286,8 +299,8 @@ public class Servo extends Actuator implements Manipulating,Keys{
     public void setDesiredAnglePosition(int desired_angle_iteration){
         if(desired_angle_iteration > max_angle_iteration){
             this.desired_angle_iteration = max_angle_iteration;
-        }else if(desired_angle_iteration <= 0){
-            this.desired_angle_iteration = 0;
+        }else if(desired_angle_iteration < -max_angle_iteration){
+            this.desired_angle_iteration = -max_angle_iteration;
         }else{
             this.desired_angle_iteration = desired_angle_iteration;
         }
@@ -374,7 +387,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(0);
+                                self.setDesiredAnglePosition(200);
                             }
                         }
                     };
