@@ -113,6 +113,9 @@ public class StartState extends AbstractAppState{
             loadModel(0.6f,"/Monsun2/monsun2_very_low.obj",new Vector3f(14f,1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
             loadModel(0.6f,"/Monsun2/monsun2_very_very_low.obj",new Vector3f(14f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
             loadModel(0.6f,"/Monsun2/monsun2_very_extrem_low.obj",new Vector3f(14f,-1f,6f),new Vector3f(FastMath.PI/4,0f,0f));
+            
+            loadModel(0.2f,"/smarte/smarte_very_high.obj",new Vector3f(16f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"/smarte/smarte_high.obj",new Vector3f(18f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
 
             rootNode.attachChild(mars_node);
             /*
