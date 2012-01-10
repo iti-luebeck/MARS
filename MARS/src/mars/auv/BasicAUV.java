@@ -70,6 +70,7 @@ import mars.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;
+import mars.auv.example.SMARTE;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Sonar;
@@ -84,7 +85,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Hanse.class, Monsun2.class, Hanse2.class} )
+@XmlSeeAlso( {Hanse.class, Monsun2.class, Hanse2.class, SMARTE.class} )
 public class BasicAUV implements AUV,SceneProcessor{
 
     private Geometry MassCenterGeom;

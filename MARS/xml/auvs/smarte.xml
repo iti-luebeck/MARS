@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<monsun2>
+<smarte>
     <Parameters>
         <params>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="offCamera_height">
@@ -30,7 +30,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">smarte/smarte_very_high.obj</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">smarte/smarte_low.obj</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">SMARTE_MODEL</value>
@@ -43,7 +43,7 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Waypoints">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="visiblity">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
@@ -131,9 +131,9 @@
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="centroid_center_distance">
                 <value>
-                    <x>-0.0025</x>
+                    <x>0.0</x>
                     <y>0.03</y>
-                    <z>0.001</z>
+                    <z>0.0</z>
                 </value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="drag_coefficient_angular">
@@ -143,7 +143,7 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="mass_auv">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">7.15</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">9.0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.8</value>
@@ -158,23 +158,43 @@
         </params>
     </Parameters>
     <Sensors>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="modem">
-            <value xsi:type="underwaterModem">
+	    <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar_360">
+            <value xsi:type="imagenexSonar852Scanning">
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>modem</name>
+                <name>sonar_360</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>0</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
                     <x>0.0</x>
-                    <y>0.0</y>
+                    <y>-0.10</y>
                     <z>0.0</z>
                 </Position>
-                <Direction>
+                <SonarDirection>
                     <x>0.0</x>
                     <y>0.0</y>
+                    <z>1.0</z>
+                </SonarDirection>
+                <SonarUpDirection>
+                    <x>0.0</x>
+                    <y>1.0</y>
                     <z>0.0</z>
-                </Direction>
+                </SonarUpDirection>
+                <SonarMaxRange>50.0</SonarMaxRange>
+                <SonarMinRange>0.5</SonarMinRange>
+                <beam_width>0.04363323</beam_width>
+                <beam_height>0.38397244</beam_height>
+                <beam_ray_height_resolution>4</beam_ray_height_resolution>
+                <beam_ray_width_resolution>4</beam_ray_width_resolution>
+                <Scanning>true</Scanning>
+                <scanning_resolution>0.05235988</scanning_resolution>
+                <ScanningGain>10</ScanningGain>
+                <Debug>false</Debug>
+                <angular_damping>true</angular_damping>
+                <angular_factor>1.0</angular_factor>
+                <length_damping>false</length_damping>
+                <length_factor>1.0</length_factor>
+                <SonarConeType>3</SonarConeType>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="press">
@@ -189,31 +209,6 @@
                     <y>0.02</y>
                     <z>0.0</z>
                 </Position>
-            </value>
-        </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="infraLeft">
-            <value xsi:type="infraRedSensor">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>infraLeft</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
-                <Position>
-                    <x>-0.04</x>
-                    <y>0.07</y>
-                    <z>0.15</z>
-                </Position>
-                <Direction>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </Direction>
-                <MaxRange>1.0</MaxRange>
-                <MinRange>0.0</MinRange>
-                <angular_damping>false</angular_damping>
-                <angular_factor>1.0</angular_factor>
-                <length_damping>false</length_damping>
-                <length_factor>1.0</length_factor>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="gyroscope">
@@ -237,31 +232,6 @@
                     <y>0.02</y>
                     <z>0.0</z>
                 </Position>
-            </value>
-        </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="infraRight">
-            <value xsi:type="infraRedSensor">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>infraRight</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
-                <Position>
-                    <x>-0.04</x>
-                    <y>0.07</y>
-                    <z>-0.15</z>
-                </Position>
-                <Direction>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>-1.0</z>
-                </Direction>
-                <MaxRange>1.0</MaxRange>
-                <MinRange>0.0</MinRange>
-                <angular_damping>false</angular_damping>
-                <angular_factor>1.0</angular_factor>
-                <length_damping>false</length_damping>
-                <length_factor>1.0</length_factor>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="compass">
@@ -301,8 +271,8 @@
                 <enabled>true</enabled>
                 <ros_publish_rate>2000</ros_publish_rate>
                 <Position>
-                    <x>-0.27</x>
-                    <y>0.07</y>
+                    <x>-0.13</x>
+                    <y>-0.07</y>
                     <z>0.0</z>
                 </Position>
                 <CameraDirection>
@@ -315,7 +285,7 @@
                     <y>1.0</y>
                     <z>0.0</z>
                 </CameraTopDirection>
-                <debug>false</debug>
+                <debug>true</debug>
                 <CameraWidth>640</CameraWidth>
                 <CameraHeight>480</CameraHeight>
                 <CameraAngle>45.0</CameraAngle>
@@ -355,179 +325,229 @@
         </entry>
     </Sensors>
     <Actuators>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontRight">
-            <value xsi:type="brushlessThruster">
-                <noise_type>3</noise_type>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoFrontCam">
+            <value xsi:type="modelcraftES07">
+                <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterFrontRight</name>
+                <name>servoFrontCam</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
-                    <x>-0.07</x>
-                    <y>0.07</y>
-                    <z>-0.105</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
+                    <x>-0.10</x>
+                    <y>-0.07</y>
                     <z>0.0</z>
-                </MotorDirection>
-				<Actions>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                </Position>
+                <ServoDirection>
+                    <x>0.0</x>
+                    <y>0.0</y>
+                    <z>1.0</z>
+                </ServoDirection>
+                <Slaves>front_cam</Slaves>
+                <OperatingAngle>5.235987</OperatingAngle>
+                <Resolution>0.005061</Resolution>
+                <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="servo">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition</value>
                     </entry>
                 </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterBackLeft">
-            <value xsi:type="brushlessThruster">
-                <noise_type>3</noise_type>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoTitan">
+            <value xsi:type="dynamixelAX12PLUS">
+                <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterBackLeft</name>
+                <name>servoTitan</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
-                    <x>0.23</x>
-                    <y>0.07</y>
-                    <z>0.07</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
+                    <x>-0.10</x>
+                    <y>0.03</y>
                     <z>0.0</z>
-                </MotorDirection>
-				<Actions>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-                </Actions>
-            </value>
-        </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontLeft">
-            <value xsi:type="brushlessThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>thrusterFrontLeft</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-                <Position>
-                    <x>-0.07</x>
-                    <y>0.07</y>
-                    <z>0.105</z>
                 </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </MotorDirection>
-				<Actions>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-                </Actions>
-            </value>
-        </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterBackRight">
-            <value xsi:type="brushlessThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>thrusterBackRight</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-                <Position>
-                    <x>0.23</x>
-                    <y>0.07</y>
-                    <z>-0.07</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </MotorDirection>
-				<Actions>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
-                    </entry>
-                </Actions>
-            </value>
-        </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterLeft">
-            <value xsi:type="brushlessThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>thrusterLeft</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-                <Position>
-                    <x>0.0</x>
-                    <y>0.07</y>
-                    <z>0.105</z>
-                </Position>
-                <MotorDirection>
+                <ServoDirection>
                     <x>-1.0</x>
                     <y>0.0</y>
                     <z>0.0</z>
+                </ServoDirection>
+                <Slaves>thrusterTitan</Slaves>
+                <OperatingAngle>5.235987</OperatingAngle>
+                <Resolution>0.005061</Resolution>
+                <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="servo">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition</value>
+                    </entry>
+                </Actions>
+            </value>
+        </entry>
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterTitan">
+            <value xsi:type="brushlessThruster">
+                <noise_type>3</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>thrusterTitan</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Position>
+                    <x>-0.22</x>
+                    <y>-0.06</y>
+                    <z>0.0</z>
+                </Position>
+                <MotorDirection>
+                    <x>0.0</x>
+                    <y>1.0</y>
+                    <z>0.0</z>
                 </MotorDirection>
 				<Actions>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_left_forward">
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_left_forward">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_left_back">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward">
+                </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoHyperion">
+            <value xsi:type="dynamixelAX12PLUS">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>servoHyperion</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Position>
+                    <x>0.05</x>
+                    <y>0.03</y>
+                    <z>0.086</z>
+                </Position>
+                <ServoDirection>
+                    <x>0.5</x>
+                    <y>0.0</y>
+                    <z>1.0</z>
+                </ServoDirection>
+                <Slaves>thrusterHyperion</Slaves>
+                <OperatingAngle>5.235987</OperatingAngle>
+                <Resolution>0.005061</Resolution>
+                <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="servo">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition2</value>
+                    </entry>
+                </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterHyperion">
+            <value xsi:type="brushlessThruster">
+                <noise_type>3</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>thrusterHyperion</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Position>
+                    <x>0.11</x>
+                    <y>-0.06</y>
+                    <z>0.19</z>
+                </Position>
+                <MotorDirection>
+                    <x>0.0</x>
+                    <y>1.0</y>
+                    <z>0.0</z>
+                </MotorDirection>
+				<Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward_net">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
-                    </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back_net">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="setspeed">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">set_thruster_speed</value>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_right_forward">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_right_back">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoPrometheus">
+            <value xsi:type="dynamixelAX12PLUS">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>servoPrometheus</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Position>
+                    <x>0.05</x>
+                    <y>0.03</y>
+                    <z>-0.086</z>
+                </Position>
+                <ServoDirection>
+                    <x>0.5</x>
+                    <y>0.0</y>
+                    <z>-1.0</z>
+                </ServoDirection>
+                <Slaves>thrusterPrometheus</Slaves>
+                <OperatingAngle>5.235987</OperatingAngle>
+                <Resolution>0.005061</Resolution>
+                <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
+                <Actions>
+                </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterPrometheus">
+            <value xsi:type="brushlessThruster">
+                <noise_type>3</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>thrusterPrometheus</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Position>
+                    <x>0.11</x>
+                    <y>-0.06</y>
+                    <z>-0.19</z>
+                </Position>
+                <MotorDirection>
+                    <x>0.0</x>
+                    <y>1.0</y>
+                    <z>0.0</z>
+                </MotorDirection>
+				<Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
                     </entry>
                 </Actions>
             </value>
         </entry>
     </Actuators>
-</monsun2>
+</smarte>

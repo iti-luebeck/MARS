@@ -39,6 +39,7 @@ import javax.xml.bind.Unmarshaller;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
 import mars.actuators.Thruster;
+import mars.actuators.servos.Dynamixel_AX12PLUS;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -310,6 +311,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
+             
+             /*Dynamixel_AX12PLUS serv = new Dynamixel_AX12PLUS();
+                serv.setEnabled(true);
+                serv.setNodeVisibility(true);
+                serv.setPhysicalExchangerName("servo");
+                serv.setServoStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
+                serv.setServoDirection(new Vector3f(0f, 0f, -1f));
+                JAXBContext context = JAXBContext.newInstance( Dynamixel_AX12PLUS.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( serv, System.out );*/
+             
+             
              auvs = XML_JAXB_ConfigReaderWriter.loadAUVs();//xmll.getAuvs();
                 /*IMU im = new IMU();
                 im.setEnabled(true);
@@ -318,14 +332,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 Hanse hans = (Hanse)auvs.get(1);
                 hans.registerPhysicalExchanger(im);*/
              
-                /*serv = new Servo();
+                /*Dynamixel_AX12PLUS serv = new Dynamixel_AX12PLUS();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
                 serv.setPhysicalExchangerName("servo");
                 serv.setServoStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
                 serv.setServoDirection(new Vector3f(0f, 0f, -1f));
-                serv.test();
-                Hanse hans = null;
+                JAXBContext context = JAXBContext.newInstance( Dynamixel_AX12PLUS.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( serv, System.out );*/
+                
+                /*Hanse hans = null;
                 Iterator iter2 = auvs.iterator();
                 while(iter2.hasNext() ) {
                     AUV aaa = (AUV)iter2.next();

@@ -116,7 +116,8 @@ public class StartState extends AbstractAppState{
             
             loadModel(0.2f,"/smarte/smarte_very_high.obj",new Vector3f(16f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             loadModel(0.2f,"/smarte/smarte_high.obj",new Vector3f(18f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-
+            loadModel(0.2f,"/smarte/smarte_low.obj",new Vector3f(18f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            
             rootNode.attachChild(mars_node);
             /*
             System.out.println("SOUNDSPEED  ChenMillero " + SoundHelper.getUnderWaterSoundSpeedChenMillero(10f, 35f, 10f));

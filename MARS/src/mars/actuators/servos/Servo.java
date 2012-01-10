@@ -67,16 +67,16 @@ public class Servo extends Actuator implements Manipulating,Keys{
     private List<Moveable> slaves = new ArrayList<Moveable>();
     
     @XmlElement
-    private float OperatingAngle = 5.235987f;
+    protected  float OperatingAngle = 5.235987f;
     
     @XmlElement
-    private int ServoNeutralPosition = 0;
+    protected int ServoNeutralPosition = 0;
     
     @XmlElement
-    private float Resolution = 0.005061f;
+    protected float Resolution = 0.005061f;
     
     @XmlElement
-    private float SpeedPerDegree = 0.003266f;
+    protected float SpeedPerDegree = 0.003266f;
     
     private int current_angle_iteration = 0;
     
@@ -235,8 +235,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     @Override
     public void reset(){
-        current_angle_iteration = 0;
-        desired_angle_iteration = 0;
+        this.setDesiredAnglePosition(0);
     }
     
     private void updateAnglePosition(float tpf){
@@ -387,7 +386,17 @@ public class Servo extends Actuator implements Manipulating,Keys{
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(200);
+                                self.setDesiredAnglePosition(300);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
+            }else if(action.equals("setDesiredAnglePosition2")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(-300);
                             }
                         }
                     };

@@ -7,6 +7,8 @@ package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
@@ -30,6 +32,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.MARS_Main;
+import mars.Moveable;
 import mars.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
@@ -42,7 +45,7 @@ import org.ros.node.topic.Publisher;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {BlackfinCamera.class} )
-public class VideoCamera extends Sensor{
+public class VideoCamera extends Sensor implements Moveable{
 
     private Geometry CameraStart;
     private Geometry CameraEnd;
@@ -84,6 +87,10 @@ public class VideoCamera extends Sensor{
     private Publisher<org.ros.message.sensor_msgs.Image> publisher = null;
     private org.ros.message.sensor_msgs.Image fl = new org.ros.message.sensor_msgs.Image(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    
+    //moveable stuff
+    private Vector3f local_rotation_axis = new Vector3f();
+    private Node Rotation_Node = new Node();
 
     /**
      * 
@@ -217,27 +224,32 @@ public class VideoCamera extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Green);
         CameraStart.setMaterial(mark_mat7);
-        CameraStart.setLocalTranslation(CameraStartVector);
+        //CameraStart.setLocalTranslation(CameraStartVector);
         CameraStart.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(CameraStart);
+        //PhysicalExchanger_Node.attachChild(CameraStart);
+        Rotation_Node.attachChild(CameraStart);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
         CameraEnd = new Geometry("CameraEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
         CameraEnd.setMaterial(mark_mat9);
-        CameraEnd.setLocalTranslation(CameraStartVector.add(CameraDirection));
+        //CameraEnd.setLocalTranslation(CameraStartVector.add(CameraDirection));
+        CameraEnd.setLocalTranslation(CameraDirection);
         CameraEnd.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(CameraEnd);
+        //PhysicalExchanger_Node.attachChild(CameraEnd);
+        Rotation_Node.attachChild(CameraEnd);
 
         Sphere sphere10 = new Sphere(16, 16, 0.025f);
         CameraTop = new Geometry("CameraTop", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.DarkGray);
         CameraTop.setMaterial(mark_mat10);
-        CameraTop.setLocalTranslation(CameraStartVector.add(CameraTopDirection));
+        //CameraTop.setLocalTranslation(CameraStartVector.add(CameraTopDirection));
+        CameraTop.setLocalTranslation(CameraTopDirection);
         CameraTop.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(CameraTop);
+        //PhysicalExchanger_Node.attachChild(CameraTop);
+        Rotation_Node.attachChild(CameraTop);
 
         Vector3f ray_start = CameraStartVector;
         Vector3f ray_direction = CameraDirection;
@@ -245,9 +257,10 @@ public class VideoCamera extends Sensor{
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Green);
         mark4.setMaterial(mark_mat4);
-        mark4.setLocalTranslation(ray_start);
+        //mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(mark4);
+        //PhysicalExchanger_Node.attachChild(mark4);
+        Rotation_Node.attachChild(mark4);
 
         ray_start = CameraStartVector;
         ray_direction = CameraTopDirection;
@@ -255,10 +268,13 @@ public class VideoCamera extends Sensor{
         Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat5.setColor("Color", ColorRGBA.Green);
         mark5.setMaterial(mark_mat5);
-        mark5.setLocalTranslation(ray_start);
+        //mark5.setLocalTranslation(ray_start);
         mark5.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(mark5);
+        //PhysicalExchanger_Node.attachChild(mark5);
+        Rotation_Node.attachChild(mark5);
 
+        PhysicalExchanger_Node.setLocalTranslation(CameraStartVector);
+        PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
 
@@ -276,7 +292,7 @@ public class VideoCamera extends Sensor{
     private void setupDebugCam(){
         debugCamera = new Camera(CameraWidth,CameraHeight);
         
-        debugCamera.setFrustumPerspective(CameraAngle, 1f, 0.1f, 1000f);
+        debugCamera.setFrustumPerspective(CameraAngle, 1f, 0.01f, 1000f);
         debugCamera.setParallelProjection(false);
         //float aspect = (float) CameraWidth / CameraHeight;
        // debugCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
@@ -317,7 +333,7 @@ public class VideoCamera extends Sensor{
         offCamera.setParallelProjection(false);
         float aspect = (float) CameraWidth / CameraHeight;
         //offCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        offCamera.setFrustumPerspective(CameraAngle, 1f, 0.1f, 1000f);
+        offCamera.setFrustumPerspective(CameraAngle, 1f, 0.01f, 1000f);
         offCamera.setLocation(CameraStartVector);
         offCamera.lookAt( this.CameraEnd.getWorldTranslation()
                 , CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
@@ -460,5 +476,63 @@ public class VideoCamera extends Sensor{
         fl.data = ros_image;*/
         fl.data = this.getImage();
         this.publisher.publish(fl);
+    }
+    
+   /**
+     * Don't call this anymore. You have first to call setLocalRotationAxisPoints once at the begining of the simulation
+     * @param rotation_axis
+     * @param alpha
+     */
+    @Override
+    @Deprecated
+    public void updateRotation(Vector3f rotation_axis, float alpha){
+        System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + rotation_axis );
+        Vector3f local_rotation_axis = new Vector3f();
+        PhysicalExchanger_Node.worldToLocal(rotation_axis, local_rotation_axis);
+        System.out.println("My local rotation axis is:" + local_rotation_axis );
+        Quaternion quat = new Quaternion();
+        quat.fromAngleAxis(alpha, local_rotation_axis);
+        PhysicalExchanger_Node.setLocalRotation(quat);
+    }
+    
+    @Override
+    public void updateRotation(float alpha){
+        /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
+        System.out.println("My local rotation axis is:" + local_rotation_axis );
+        System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
+        Quaternion quat = new Quaternion();
+        quat.fromAngleAxis(alpha, local_rotation_axis);
+        Rotation_Node.setLocalRotation(quat);
+    }
+    
+    @Override
+    public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points){
+        Vector3f WorldServoEnd = world_rotation_axis_points.getColumn(0);
+        Vector3f WorldServoStart = world_rotation_axis_points.getColumn(1);
+        Vector3f LocalServoEnd = new Vector3f();
+        Vector3f LocalServoStart = new Vector3f();
+        Rotation_Node.worldToLocal(WorldServoEnd, LocalServoEnd);
+        Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
+        local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
+        
+        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis );
+        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );
+        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation() );
+        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation() );
+    }
+    
+    /**
+     * 
+     * @param translation_axis
+     * @param new_realative_position
+     */
+    @Override
+    public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
+        
+    }
+    
+    @Override
+    public String getSlaveName(){
+        return getPhysicalExchangerName();
     }
 }

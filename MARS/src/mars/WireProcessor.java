@@ -29,7 +29,7 @@ public class WireProcessor implements SceneProcessor {
      * @param color
      */
     public WireProcessor(AssetManager manager, ColorRGBA color) {
-        wireMaterial = new Material(manager, "/Common/MatDefs/Misc/WireColor.j3md");
+        wireMaterial = new Material(manager, "/Common/MatDefs/Misc/Unshaded.j3md");
         wireMaterial.setColor("Color", color);
     }
 
