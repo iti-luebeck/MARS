@@ -12,6 +12,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.ChaseCamera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 
 /**
@@ -82,10 +84,18 @@ public class MARS_Main extends SimpleApplication{
      */
     public void startSimulation(){
         endStart();
-        SimState simstate = new SimState(view);
+        Future fut = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                SimState simstate = new SimState(view);
+                viewPort.attachScene(simstate.getRootNode());
+                stateManager.attach(simstate);
+                return null;
+            }
+        });
+        /*SimState simstate = new SimState(view);
         viewPort.attachScene(simstate.getRootNode());
-        stateManager.attach(simstate);
-        rootNode.updateGeometricState();
+        stateManager.attach(simstate);*/
+        //rootNode.updateGeometricState();
     }
     
     private void endStart(){

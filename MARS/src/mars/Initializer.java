@@ -182,9 +182,6 @@ public class Initializer {
         if(MARS_settings.isSetupWireFrame()){
             setupWireFrame();
         }
-        if(MARS_settings.isSetupTerrain()){
-            setupTerrain();
-        }
         if(MARS_settings.isSetupCrossHairs()){
             setupCrossHairs();
         }
