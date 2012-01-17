@@ -10,6 +10,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.RenderingHints.Key;
 import org.jdesktop.application.Action;
@@ -204,7 +205,13 @@ public class MARSView extends FrameView {
         this.simauv_settings = simauv_settings;
         this.auvs = auvs;
         this.simobs = simobs;
-        createNodes(top);
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    createNodes(top);
+                }
+            }
+        );
     }
 
     /**
@@ -515,6 +522,10 @@ public class MARSView extends FrameView {
         }
         top.add(treenode);
     }
+    
+    public void showpopup(){
+        addAUVPopUpMenu.show(JMEPanel1.getParent(),200,0);
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -812,6 +823,8 @@ public class MARSView extends FrameView {
                 .addContainerGap(123, Short.MAX_VALUE))
         );
 
+        addAUVPopUpMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        addAUVPopUpMenu.setLightWeightPopupEnabled(false);
         addAUVPopUpMenu.setName("addAUVPopUpMenu"); // NOI18N
 
         add_auv.setText(resourceMap.getString("add_auv.text")); // NOI18N
