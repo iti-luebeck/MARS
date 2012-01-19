@@ -523,8 +523,25 @@ public class MARSView extends FrameView {
         top.add(treenode);
     }
     
-    public void showpopup(){
-        addAUVPopUpMenu.show(JMEPanel1.getParent(),200,0);
+    public void showpopupWindowSwitcher(final int x, final int y){
+        System.out.println("mouse " + x + " " + y);
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jme3_window_switcher.show(JMEPanel1.getComponent(0),x,y);
+                }
+            }
+        );
+    }
+    
+    public void hideAllPopupWindows(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jme3_window_switcher.setVisible(false);
+                }
+            }
+        );
     }
 
     /** This method is called from within the constructor to
@@ -611,6 +628,10 @@ public class MARSView extends FrameView {
         jLabel17 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
+        jme3_window_switcher = new javax.swing.JPopupMenu();
+        split_view = new javax.swing.JMenuItem();
+        jme3_auv = new javax.swing.JPopupMenu();
+        jme3_chase_auv = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1170,6 +1191,19 @@ public class MARSView extends FrameView {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jme3_window_switcher.setLightWeightPopupEnabled(false);
+        jme3_window_switcher.setName("jme3_window_switcher"); // NOI18N
+
+        split_view.setText(resourceMap.getString("split_view.text")); // NOI18N
+        split_view.setName("split_view"); // NOI18N
+        jme3_window_switcher.add(split_view);
+
+        jme3_auv.setName("jme3_auv"); // NOI18N
+
+        jme3_chase_auv.setText(resourceMap.getString("jme3_chase_auv.text")); // NOI18N
+        jme3_chase_auv.setName("jme3_chase_auv"); // NOI18N
+        jme3_auv.add(jme3_chase_auv);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -1709,6 +1743,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JPopupMenu jme3_auv;
+    private javax.swing.JMenuItem jme3_chase_auv;
+    private javax.swing.JPopupMenu jme3_window_switcher;
     private javax.swing.JMenuItem keys;
     private javax.swing.JDialog keys_dialog;
     private javax.swing.JLabel lblChart;
@@ -1727,6 +1764,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     public mars.gui.TextFieldCellEditor textfieldEditor;
     private DefaultTreeCellRenderer renderer;
     private javax.swing.JPopupMenu simob_popup_menu;
+    private javax.swing.JMenuItem split_view;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;

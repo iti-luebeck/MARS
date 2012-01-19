@@ -9,18 +9,31 @@ import com.jme3.font.BitmapFont;
 import mars.gui.MARSView;
 import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
+import de.lessvoid.xml.xpp3.Attributes;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 
 /**
  * This is the MAIN class for JME3.
  * @author Thomas Tosik
  */
-public class MARS_Main extends SimpleApplication{
+public class MARS_Main extends SimpleApplication implements ScreenController,Controller{
 
     //needed for graphs
     private MARSView view;
@@ -29,6 +42,15 @@ public class MARS_Main extends SimpleApplication{
     StartState startstate;
 
     ChaseCamera chaseCam;
+    
+    //nifty(gui) stuff
+    private NiftyJmeDisplay niftyDisplay;
+    private Nifty nifty;
+    private Element progressBarElement;
+    private TextRenderer textRenderer;
+    private boolean load = false;
+    private Future simStateFuture = null;
+    private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
 
     /**
      *
@@ -53,6 +75,7 @@ public class MARS_Main extends SimpleApplication{
      */
     @Override
     public void simpleInitApp() {
+        //initNifty();
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
@@ -69,6 +92,18 @@ public class MARS_Main extends SimpleApplication{
             stateManager.getState(SimState.class).setView(view);
             view_init = true;
         }
+       
+        /*if (load) {//we will be loading,switching appstates
+            //this.setProgress(0.5f, "dfsdfsdf");
+            //System.out.println("we are loading!!!");
+            if (simStateFuture != null && simStateFuture.isDone()) {//cleanup
+                System.out.println("simStateFuture is done!!!!");
+                nifty.gotoScreen("end");
+                nifty.exit();
+                guiViewPort.removeProcessor(niftyDisplay);
+                load = false;
+            }
+        }*/
     }
 
     /**
@@ -84,7 +119,12 @@ public class MARS_Main extends SimpleApplication{
      */
     public void startSimulation(){
         endStart();
-        Future fut = this.enqueue(new Callable() {
+        /*Element element = nifty.getScreen("loadlevel").findElementByName("loadingtext");
+        textRenderer = element.getRenderer(TextRenderer.class);
+        progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
+        nifty.gotoScreen("loadlevel");
+        load = true;*/
+        simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
                 SimState simstate = new SimState(view);
                 viewPort.attachScene(simstate.getRootNode());
@@ -141,5 +181,80 @@ public class MARS_Main extends SimpleApplication{
      */
     public void setGuiFont(BitmapFont guiFont) {
         this.guiFont = guiFont;
+    }
+    
+    public void initNifty(){
+        assetManager.registerLocator("Assets/Interface", FileLocator.class.getName());
+        niftyDisplay = new NiftyJmeDisplay(assetManager,
+                inputManager,
+                audioRenderer,
+                guiViewPort);
+        nifty = niftyDisplay.getNifty();
+ 
+        //nifty.fromXml("nifty_loading.xml", "start", this);
+        nifty.fromXml("nifty_loading.xml", "start");
+ 
+        guiViewPort.addProcessor(niftyDisplay);
+    }
+    
+    @Override
+    public void onStartScreen() {
+    }
+ 
+    @Override
+    public void onEndScreen() {
+    }
+    
+    @Override
+    public void bind(Nifty nifty, Screen screen) {
+        //progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
+    }
+ 
+    // methods for Controller
+    @Override
+    public boolean inputEvent(final NiftyInputEvent inputEvent) {
+        return false;
+    }
+ 
+    @Override
+    public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
+        //progressBarElement = elmnt.findElementByName("progressbar");
+    }
+    
+    @Override
+    public void init(Properties prprts, Attributes atrbts) {
+    }
+ 
+    public void onFocus(boolean getFocus) {
+    }
+    
+    public void setProgress(final float progress, final String loadingText) {
+        //since this method is called from another thread, we enqueue the changes to the progressbar to the update loop thread
+        enqueue(new Callable() {
+ 
+            public Object call() throws Exception {
+                final int MIN_WIDTH = 32;
+                int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
+                progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+                progressBarElement.getParent().layoutElements();
+ 
+                textRenderer.setText(loadingText);
+                return null;
+            }
+        });
+ 
+    }
+    
+    public void setProgressWithoutEnq(final float progress, String loadingText) {
+        final int MIN_WIDTH = 32;
+        int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
+        progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+        progressBarElement.getParent().layoutElements();
+ 
+        textRenderer.setText(loadingText);
+    }
+    
+    public Nifty getNifty() {
+        return nifty;
     }
 }

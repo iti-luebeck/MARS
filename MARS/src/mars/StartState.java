@@ -9,18 +9,24 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.tools.SizeValue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
@@ -45,6 +51,14 @@ public class StartState extends AbstractAppState{
     private Geometry cube2 = new Geometry("My Textured Box", boxshape2);
     private Node mars_node = new Node("Mars_Node");
     private Node hanse_node = new Node("Hanse_Node");
+    private Node nd_selection = new Node();
+    
+    //nifty(gui) stuff
+    /*private NiftyJmeDisplay niftyDisplay;
+    private Nifty nifty;
+    private Element progressBarElement;
+    private TextRenderer textRenderer;
+    private boolean load = false;*/
 
     /**
      * 
@@ -77,6 +91,9 @@ public class StartState extends AbstractAppState{
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
+            
+            //initNifty();
+            //this.setProgressWithoutEnq(1f, "Loading complete");
             mars.getFlyByCamera().setEnabled(false);
             setupLight();
             mars.getRenderManager().getMainView("Default").setBackgroundColor( ColorRGBA.Black );
@@ -89,8 +106,24 @@ public class StartState extends AbstractAppState{
             Texture tex_ml = assetManager.loadTexture("mars_logo_12f_white.png");
             mat_stl.setTexture("ColorMap", tex_ml);
             cube.setMaterial(mat_stl);
-            mars_node.attachChild(cube);
             
+            AmbientLight al = new AmbientLight();
+            al.setColor(new ColorRGBA(255f*1f/255f,215f*1f/255f,0f*1f/255f,1.0f));
+            rootNode.addLight(al); 
+            
+            //shader stuff
+            /*assetManager.registerLocator("Assets/MatDefs", FileLocator.class.getName());
+            Material mat_stlr = new Material(assetManager, "RimLighting.j3md");
+            float red = 1.0f;
+            float blue = 0.0f;
+            float green = 1.0f;
+            float power = 10.0f;
+            mat_stlr.setColor("RimLighting", new ColorRGBA(red,blue,green,power));
+            cube.setMaterial(mat_stlr);*/
+            
+            mars_node.attachChild(cube);
+            hanse_node.attachChild(nd_selection);
+                    
             assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
             Material mat_stl2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             Texture tex_ml2 = assetManager.loadTexture("japanese-airplane-doubilet.jpg");
@@ -142,9 +175,39 @@ public class StartState extends AbstractAppState{
             } catch (JAXBException ex) {
                 Logger.getLogger(StartState.class.getName()).log(Level.SEVERE, null, ex);
             }*/                
+            /*nifty.gotoScreen("end");
+            nifty.exit();
+            mars.getGuiViewPort().removeProcessor(niftyDisplay);*/
         }
         super.initialize(stateManager, app);
     }
+    
+    /*public void initNifty(){
+        assetManager.registerLocator("Assets/Interface", FileLocator.class.getName());
+        niftyDisplay = new NiftyJmeDisplay(assetManager,
+                mars.getInputManager(),
+                mars.getAudioRenderer(),
+                mars.getGuiViewPort());
+        nifty = niftyDisplay.getNifty();
+ 
+        nifty.fromXml("nifty_loading.xml", "start");
+ 
+        mars.getGuiViewPort().addProcessor(niftyDisplay);
+        
+        Element element = nifty.getScreen("loadlevel").findElementByName("loadingtext");
+        textRenderer = element.getRenderer(TextRenderer.class);
+        progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
+        nifty.gotoScreen("loadlevel");
+    }
+    
+    public void setProgressWithoutEnq(final float progress, String loadingText) {
+        final int MIN_WIDTH = 32;
+        int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
+        progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+        progressBarElement.getParent().layoutElements();
+ 
+        textRenderer.setText(loadingText);
+    }*/
 
     @Override
     public boolean isEnabled() {
@@ -247,7 +310,14 @@ public class StartState extends AbstractAppState{
         //auv_spatial.setModelBound(bounds);
         auv_spatial.updateModelBound();
         auv_spatial.setName("HANSE");
-        hanse_node.attachChild(auv_spatial);
+        
+        //Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        //auv_spatial.setMaterial(mat);
+        /*Material mat_brick = new Material( 
+        assetManager, "Common/MatDefs/Misc/Unshaded.j3md");mat_brick.
+        auv_spatial.setMaterial(mat_brick);*/
+        nd_selection.attachChild(auv_spatial);
+        //hanse_node.attachChild(auv_spatial);
         //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
         //System.out.println("vol bv " + auv_spatial.getWorldBound());
     }

@@ -12,15 +12,29 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -97,9 +111,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
+    private Node AUVsNode = new Node("AUVNode");
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
+    
+    //loading screen
+    private Nifty nifty_load;
+    //private TextRenderer textRenderer;
+    
+    //nifty(gui) stuff
+    private NiftyJmeDisplay niftyDisplay;
+    private Nifty nifty;
+    private Element progressBarElement;
+    private TextRenderer textRenderer;
+    private boolean load = false;
+    private Future simStateFuture = null;
     
     /**
      * 
@@ -131,6 +158,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mars = null;
         assetManager = null;
         mars_settings = null;
+        nifty_load = null;
         super.cleanup();
     }
 
@@ -141,19 +169,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mars = (MARS_Main)app;
                 assetManager = mars.getAssetManager();
                 inputManager = mars.getInputManager();
+                nifty_load = mars.getNifty();
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
                     
             sceneReflectionNode.attachChild(SonarDetectableNode);
+            sceneReflectionNode.attachChild(AUVsNode);
             rootNode.attachChild(sceneReflectionNode);
             
+            initNiftyLoading();
             loadXML();
             initPrivateKeys();// load custom key mappings
             setupPhysics();
             setupGUI();
             setupCams();
-        
+            
             auv_manager = new AUV_Manager(this);
             simob_manager = new SimObjectManager(this);
             com_manager = new Communication_Manager(auv_manager, this, rootNode, physical_environment);
@@ -383,6 +414,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
         inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(actionListener, "reset");
+        
+        inputManager.addMapping("context_menue",new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "context_menue");
+        
+        inputManager.addMapping("context_menue_off",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "context_menue_off");
     }
     
     /*
@@ -406,9 +443,50 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 System.out.println("RESET!!!");
                 time = 0f;
                 auv_manager.resetAllAUVs();
+            }else if(name.equals("context_menue") && !keyPressed) {
+                System.out.println("context");
+                pick();
+            }else if(name.equals("context_menue_off") && !keyPressed) {
+                System.out.println("context_menue_off");
+                auv_manager.deselectAllAUVs();
+                view.hideAllPopupWindows();
             }
         }
     };
+    
+    private void pick(){
+        CollisionResults results = new CollisionResults();
+        // Convert screen click to 3d position
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+
+        // Aim the ray from the clicked spot forwards.
+        Ray ray = new Ray(click3d, dir);
+        // Collect intersections between ray and all nodes in results list.
+        AUVsNode.collideWith(ray, results);
+        // (Print the results so we see what is going on:)
+        /*for (int i = 0; i < results.size(); i++) {
+          // (For each “hit”, we know distance, impact point, geometry.)
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String target = results.getCollision(i).getGeometry().getName();
+          System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
+        }*/
+        // Use the results -- we rotate the selected geometry.
+        if (results.size() > 0) {
+          // The closest result is the target that the player picked:
+          Geometry target = results.getClosestCollision().getGeometry();
+          // Here comes the action:
+          /*if (target.getName().equals("Red Box")) {
+
+          }*/
+          System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
+          BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
+          auv.setSelected(true);
+          view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+        }
+    }
     
      /*
      *
@@ -505,7 +583,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
-        
+
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
         //initer.testraw();
@@ -533,6 +611,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public Node getSceneReflectionNode() {
         return sceneReflectionNode;
+    }
+
+    public Node getAUVsNode() {
+        return AUVsNode;
     }
 
     /**
@@ -633,4 +715,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
     }
 
+    private void initNiftyLoading(){
+        //Element element = nifty_load.getScreen("loadlevel").findElementByName("loadingtext");
+        //textRenderer = element.getRenderer(TextRenderer.class);
+        //mars.setProgressWithoutEnq(0.5f, "dfsdfsdf");
+        //System.out.println("setting loading!!!");
+        //mars.setProgress(0.5f, "dfsdfsdf");
+        /*try {
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }
 }
