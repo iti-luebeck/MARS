@@ -35,6 +35,8 @@ import com.jme3.scene.debug.Arrow;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -420,8 +422,21 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
         inputManager.addMapping("context_menue_off",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));         // trigger 2: left-button click
         inputManager.addListener(actionListener, "context_menue_off");
+        
+        inputManager.addRawInputListener(mouseMotionListener);
     }
     
+    private MouseMotionListener mouseMotionListener = new MouseMotionListener() {
+
+        public void mouseDragged(MouseEvent e) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public void mouseMoved(MouseEvent e) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    };
+            
     /*
      * what actions should be done when pressing a registered button?
      */
@@ -478,13 +493,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           // The closest result is the target that the player picked:
           Geometry target = results.getClosestCollision().getGeometry();
           // Here comes the action:
-          /*if (target.getName().equals("Red Box")) {
-
-          }*/
           System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           auv.setSelected(true);
           view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+        }else{//nothing to pick
+            auv_manager.deselectAllAUVs();
+            view.hideAllPopupWindows();
         }
     }
     

@@ -41,7 +41,7 @@ import java.net.InetAddress;
  *  will be setup the same as if Network.connectToServer
  *  had been called.  
  *
- *  @version   $Revision: 7106 $
+ *  @version   $Revision: 8979 $
  *  @author    Paul Speed
  */
 public interface NetworkClient extends Client
@@ -55,9 +55,9 @@ public interface NetworkClient extends Client
      *  Connects this client to the specified remote server and ports.
      *  
      *  @param address  The hosts internet address.
-     *  @param tcpPort  The remote TCP port on the server to which this client should
+     *  @param port  The remote TCP port on the server to which this client should
      *                  send reliable messages. 
-     *  @param udpPort  The remote UDP port on the server to which this client should
+     *  @param remoteUdpPort  The remote UDP port on the server to which this client should
      *                  send 'fast'/unreliable messages.   Set to -1 if 'fast' traffic should 
      *                  go over TCP.  This will completely disable UDP traffic for this
      *                  client.

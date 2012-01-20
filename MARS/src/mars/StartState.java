@@ -107,9 +107,9 @@ public class StartState extends AbstractAppState{
             mat_stl.setTexture("ColorMap", tex_ml);
             cube.setMaterial(mat_stl);
             
-            AmbientLight al = new AmbientLight();
+            /*AmbientLight al = new AmbientLight();
             al.setColor(new ColorRGBA(255f*1f/255f,215f*1f/255f,0f*1f/255f,1.0f));
-            rootNode.addLight(al); 
+            rootNode.addLight(al); */
             
             //shader stuff
             /*assetManager.registerLocator("Assets/MatDefs", FileLocator.class.getName());

@@ -89,6 +89,37 @@ public class InputSystemJme implements InputSystem, RawInputListener {
         boolean result = nifty.update();
     }
 
+    private void onTouchEventQueued(TouchEvent evt, NiftyInputConsumer nic) {  
+        boolean consumed = false;
+
+        x = (int) evt.getX();
+        y = (int) (height - evt.getY());
+
+        switch (evt.getType()) {
+           case DOWN:
+               consumed = nic.processMouseEvent(x, y, 0, 0, false);
+               isDragging = true;
+               niftyOwnsDragging = consumed;
+               if (consumed){
+                   evt.setConsumed();
+               }
+
+               break;
+
+           case UP:
+               if (niftyOwnsDragging){
+                   consumed = nic.processMouseEvent(x, y, 0, buttonIndex, pressed);
+                   if (consumed){
+                       evt.setConsumed();
+                   }
+               }
+
+               isDragging = false;
+               niftyOwnsDragging = false;
+               break;
+       }
+    }
+    
     private void onMouseMotionEventQueued(MouseMotionEvent evt, NiftyInputConsumer nic) {
         x = evt.getX();
         y = height - evt.getY();
@@ -160,7 +191,7 @@ public class InputSystemJme implements InputSystem, RawInputListener {
     }
 
     public void onMouseButtonEvent(MouseButtonEvent evt) {
-        if (inputManager.isCursorVisible() && evt.getButtonIndex() >= 0 || evt.getButtonIndex() <= 2){
+        if (inputManager.isCursorVisible() && evt.getButtonIndex() >= 0 && evt.getButtonIndex() <= 2){
             inputQueue.add(evt);
         }
     }
@@ -175,7 +206,8 @@ public class InputSystemJme implements InputSystem, RawInputListener {
         inputQueue.add(evt);
     }
     
-    public void onTouchEvent(TouchEvent evt) {        
+    public void onTouchEvent(TouchEvent evt) {     
+        inputQueue.add(evt);
     }
 
     public void forwardEvents(NiftyInputConsumer nic) {
@@ -189,6 +221,8 @@ public class InputSystemJme implements InputSystem, RawInputListener {
                 onMouseButtonEventQueued( (MouseButtonEvent)evt, nic);
             }else if (evt instanceof KeyInputEvent){
                 onKeyEventQueued( (KeyInputEvent)evt, nic);
+            }else if (evt instanceof TouchEvent){
+                onTouchEventQueued( (TouchEvent)evt, nic);
             }
         }
 
