@@ -580,7 +580,7 @@ public class AUV_Manager {
         }
     }
     
-        /**
+     /**
      *
      * @param auvs
      */
@@ -590,5 +590,16 @@ public class AUV_Manager {
             AUV auv = (AUV)auvs.get(elem);
             auv.setSelected(false);
         }
+    }
+    
+    public AUV getSelectedAUV(){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.isSelected()){
+                return auv;
+            }
+        }
+        return null;
     }
 }

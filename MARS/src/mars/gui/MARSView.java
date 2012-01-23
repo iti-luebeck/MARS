@@ -703,6 +703,7 @@ public class MARSView extends FrameView {
         jFileMenu.add(jSeparator3);
 
         saveconfigto.setText(resourceMap.getString("saveconfigto.text")); // NOI18N
+        saveconfigto.setEnabled(false);
         saveconfigto.setName("saveconfigto"); // NOI18N
         saveconfigto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -712,6 +713,7 @@ public class MARSView extends FrameView {
         jFileMenu.add(saveconfigto);
 
         saveconfig.setText(resourceMap.getString("saveconfig.text")); // NOI18N
+        saveconfig.setEnabled(false);
         saveconfig.setName("saveconfig"); // NOI18N
         saveconfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

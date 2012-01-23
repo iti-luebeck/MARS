@@ -172,6 +172,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
+    private Spatial ghost_auv_spatial;
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it.
@@ -474,6 +475,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void init(){
         Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Initialising AUV: " + this.getName(), "");
         loadModel();
+        createGhostAUV();
         createPhysicsNode();
 
         initCenters();
@@ -1082,6 +1084,31 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_node.attachChild(auv_spatial);
         //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
         //System.out.println("vol bv " + auv_spatial.getWorldBound());
+    }
+    
+    private void createGhostAUV(){
+        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
+        ghost_auv_spatial.setLocalScale(auv_param.getModel_scale());
+        ghost_auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
+        ghost_auv_spatial.updateGeometricState();
+        ghost_auv_spatial.updateModelBound();
+        ghost_auv_spatial.setName(auv_param.getModel_name() + "_ghost");
+        ghost_auv_spatial.setUserData("auv_name", getName());
+        ghost_auv_spatial.setCullHint(CullHint.Always);
+        auv_node.attachChild(ghost_auv_spatial);
+    }
+    
+    public Spatial getGhostAUV(){
+        return ghost_auv_spatial;
+    }
+    
+    public void hideGhostAUV(boolean hide){
+        if(hide){
+             ghost_auv_spatial.setCullHint(CullHint.Always);
+        }else{
+             ghost_auv_spatial.setCullHint(CullHint.Never);
+        }
     }
 
     /*

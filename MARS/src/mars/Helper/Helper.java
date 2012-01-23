@@ -46,5 +46,10 @@ public class Helper {
                 FastMath.cos(angle)+FastMath.pow(unitvector.z,2)*(1-FastMath.cos(angle)));
         return rotation_matrix;
     }
+    
+    public static Vector3f getIntersectionWithPlane(Vector3f planeStart, Vector3f planeNormal, Vector3f rayStart, Vector3f rayDirection){
+        float t = ((planeStart.subtract(rayStart)).dot(planeNormal)/((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).dot(planeNormal));
+        return rayStart.add(((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).mult(t));
+    }
 
 }

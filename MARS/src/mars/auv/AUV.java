@@ -295,4 +295,6 @@ public interface AUV{
     
     public void setSelected(boolean selected);
     public boolean isSelected();
+    public Spatial getGhostAUV();
+    public void hideGhostAUV(boolean hide);
 }
