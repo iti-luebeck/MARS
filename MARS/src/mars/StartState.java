@@ -15,10 +15,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
@@ -27,6 +29,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.SizeValue;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
@@ -137,6 +141,10 @@ public class StartState extends AbstractAppState{
             loadModel(0.2f,"hanse_very_high.obj",new Vector3f(4f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             loadModel(0.2f,"hanse_high.obj",new Vector3f(6f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             loadModel(0.2f,"hanse_low.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            //long old_time = System.currentTimeMillis();
+            //loadModel2(0.2f,"hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            //long new_time = System.currentTimeMillis();
+            //System.out.println("time: " + (new_time-old_time));
             loadModel(0.2f,"hanse_very_low.obj",new Vector3f(8f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             
             loadModel(0.6f,"/Monsun2/monsun2_very_high.obj",new Vector3f(10f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
@@ -283,6 +291,67 @@ public class StartState extends AbstractAppState{
         sun.setDirection(new Vector3f(0f,-1f,0f));
         rootNode.addLight(sun);
     }
+    
+    private void loadModel2(float scale, String model, Vector3f pos, Vector3f rot){
+        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+
+        Spatial auv_spatial = assetManager.loadModel(model);
+        //auv_spatial.setLocalScale(scale);//0.5f
+        //auv_spatial.rotate(-(float)Math.PI/4 , (float)Math.PI/4 , 0f);
+        //Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat_white.setColor("Color", ColorRGBA.White);
+        //auv_spatial.setMaterial(mat_white);
+        /*Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
+        mat_white.setColor("Color", ColorRGBA.Blue);
+        auv_spatial.setMaterial(mat_white);*/
+        //auv_spatial.setLocalTranslation(pos);
+        //Quaternion quat4 = new Quaternion().fromAngles(rot.x,rot.y,rot.z);
+        /*Quaternion quat2 = new Quaternion().fromAngleAxis((-FastMath.PI/2), new Vector3f(0f,1f,0f));
+        Quaternion quat3 = new Quaternion().fromAngleAxis((-FastMath.PI/4), new Vector3f(0f,0f,1f));*/
+        //auv_spatial.setLocalRotation(quat2.mult(quat3));
+        //auv_spatial.setLocalRotation(quat4);
+        //auv_spatial.updateGeometricState();
+        //BoundingBox bounds = new BoundingBox();
+        //auv_spatial.setModelBound(bounds);
+        //auv_spatial.updateModelBound();
+        auv_spatial.setName("HANSE");
+        hanse_node.attachChild(auv_spatial);
+        Node nodes = (Node)auv_spatial;
+        List<Spatial> children = nodes.getChildren();
+        float volume = 0;
+        int tcount = 0;
+        for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
+            Spatial spatial = it.next();
+            System.out.println(spatial.getName());
+            if(spatial instanceof Geometry){
+                Geometry geom = (Geometry)spatial;
+                Mesh mesh = geom.getMesh();
+                System.out.println(mesh.getTriangleCount());
+                tcount = tcount + mesh.getTriangleCount();
+                for (int i = 0; i < mesh.getTriangleCount(); i++) {
+                    Triangle t = new Triangle();
+                    mesh.getTriangle(i, t);
+                    float sign = Math.signum(t.get1().dot(t.getNormal()));
+                    Vector3f a = t.get1();
+                    Vector3f b = t.get2();
+                    Vector3f c = t.get3();
+                    //float volume_t = sign * Math.abs((1.0f/6.0f)*(-(c.x*b.y*a.z)+b.x*c.y*a.z+c.getX()*a.y*b.z-(a.x*c.y*b.z)-(b.x*a.y*c.z)+a.x*b.y*c.z));
+                    //float volume_t = sign * Math.abs((1.0f/6.0f)*(-(c.getX()*b.getY()*a.getZ())+b.getX()*c.getY()*a.getZ()+c.getX()*a.getY()*b.getZ()-(a.getX()*c.getY()*b.getZ())-(b.getX()*a.getY()*c.getZ())+a.getX()*b.getY()*c.getZ()));
+                    //float volume_t = (1f/6f)*((-1)*(c.getX()*b.getY()*a.getZ())+(b.getX()*c.getY()*a.getZ())+(c.getX()*a.getY()*b.getZ())+(-1)*(a.getX()*c.getY()*b.getZ())+(-1)*(b.getX()*a.getY()*c.getZ())+(a.getX()*b.getY()*c.getZ()));
+                    float volume_t = sign * Math.abs((1.0f/6.0f)*((a.cross(b)).dot(c)));
+                    volume = volume + volume_t;
+
+                    /*System.out.println("#" + i + ": Vec1: " + t.get1() + "Vec2: " + t.get2() + "Vec3: " + t.get3() + "Norm: " + t.getNormal());
+                    System.out.println("sign: " + sign);
+                    System.out.println("volume_t: " + volume_t);*/
+                }
+            }
+        }
+        System.out.println("Volume: " + FastMath.abs(volume));
+        System.out.println("tcount: " + tcount);
+                                 //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
+                                 //System.out.println("vol bv " + auv_spatial.getWorldBound());
+    } 
     
     /*
      *

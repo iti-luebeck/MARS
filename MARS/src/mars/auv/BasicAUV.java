@@ -487,7 +487,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
 
         //calculate the volume one time exact as possible, ignore water height
+        long old_time = System.currentTimeMillis();
         volume = (float)calculateVolume(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
+        long new_time = System.currentTimeMillis();
+        System.out.println("time: " + (new_time-old_time));
         System.out.println("VOLUME: " + volume);
         actual_vol = volume;
         buoyancy_force = physical_environment.getFluid_density() * (physical_environment.getGravitational_acceleration()) * actual_vol;

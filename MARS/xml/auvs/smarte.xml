@@ -285,7 +285,7 @@
                     <y>1.0</y>
                     <z>0.0</z>
                 </CameraTopDirection>
-                <debug>true</debug>
+                <debug>false</debug>
                 <CameraWidth>640</CameraWidth>
                 <CameraHeight>480</CameraHeight>
                 <CameraAngle>45.0</CameraAngle>
