@@ -138,14 +138,14 @@ public class StartState extends AbstractAppState{
             
             hanse_node.setLocalTranslation(new Vector3f(0f,0f,0f));
                     
-            loadModel(0.2f,"hanse_very_high.obj",new Vector3f(4f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-            loadModel(0.2f,"hanse_high.obj",new Vector3f(6f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-            loadModel(0.2f,"hanse_low.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse/hanse_very_high.obj",new Vector3f(4f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse/hanse_high.obj",new Vector3f(6f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse/hanse_low.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             //long old_time = System.currentTimeMillis();
             //loadModel2(0.2f,"hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             //long new_time = System.currentTimeMillis();
             //System.out.println("time: " + (new_time-old_time));
-            loadModel(0.2f,"hanse_very_low.obj",new Vector3f(8f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            loadModel(0.2f,"hanse/hanse_very_low.obj",new Vector3f(8f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             
             loadModel(0.6f,"/Monsun2/monsun2_very_high.obj",new Vector3f(10f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
             loadModel(0.6f,"/Monsun2/monsun2_high.obj",new Vector3f(12f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));

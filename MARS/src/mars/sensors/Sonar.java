@@ -261,6 +261,7 @@ public class Sonar extends Sensor{
 
         auv_node.attachChild(angle_node);
         auv_node.attachChild(PhysicalExchanger_Node);
+        rootNode.attachChild(debug_node);
     }
 
 

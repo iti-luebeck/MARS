@@ -102,16 +102,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private MARS_Main mars;
     
     private boolean initial_ready = false;
-        
-    //physics
-    private RigidBodyControl AUVPhysicsControl;
 
     private float time = 0f;
 
     //needed for graphs
     private MARSView view;
     private boolean view_init = false;
-    private boolean man_init = false;
     
     //main settings file
     MARS_Settings mars_settings;
@@ -641,14 +637,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         Ray ray = new Ray(click3d, dir);
         // Collect intersections between ray and all nodes in results list.
         AUVsNode.collideWith(ray, results);
-        // (Print the results so we see what is going on:)
-        /*for (int i = 0; i < results.size(); i++) {
-          // (For each “hit”, we know distance, impact point, geometry.)
-          float dist = results.getCollision(i).getDistance();
-          Vector3f pt = results.getCollision(i).getContactPoint();
-          String target = results.getCollision(i).getGeometry().getName();
-          System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-        }*/
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
           // The closest result is the target that the player picked:
@@ -677,14 +665,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         Ray ray = new Ray(click3d, dir);
         // Collect intersections between ray and all nodes in results list.
         AUVsNode.collideWith(ray, results);
-        // (Print the results so we see what is going on:)
-        /*for (int i = 0; i < results.size(); i++) {
-          // (For each “hit”, we know distance, impact point, geometry.)
-          float dist = results.getCollision(i).getDistance();
-          Vector3f pt = results.getCollision(i).getContactPoint();
-          String target = results.getCollision(i).getGeometry().getName();
-          System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-        }*/
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
           // The closest result is the target that the player picked:
@@ -715,13 +695,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
         auv_manager.registerAUVs(auvs);
         
-        Iterator iter = auvs.iterator();
+        /*Iterator iter = auvs.iterator();
         while(iter.hasNext() ) {
             AUV aaa = (AUV)iter.next();
             if(            aaa.getAuv_param().getAuv_name().equals("hanse2") ){
                 auv_hanse = (Hanse)aaa;
             }
-        }
+        }*/
     }
     
     /*
@@ -892,10 +872,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
 
     public void prePhysicsTick(PhysicsSpace ps, float tpf) {
-        if(auv_manager.isEmpty() == false && AUVPhysicsControl == null && !man_init){
-            AUVPhysicsControl = auv_hanse.getPhysicsControl();
-            man_init = true;
-        }
         if(view == null){
             System.out.println("View is NULL");
         }
@@ -904,7 +880,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
-            auv_hanse.setView(view);
+            //auv_hanse.setView(view);
             //auv_monsun2.setView(view);
             view_init = true;
         }
@@ -915,9 +891,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 com_manager.update(tpf);
                 //time = time + tpf;
                 //System.out.println("time: " + time);
-            }else if(auv_manager != null && auv_hanse != null && !initial_ready){
+            }/*else if(auv_manager != null && auv_hanse != null && !initial_ready){
                 //auv_manager.clearForcesOfAUVs();
-            }
+            }*/
             
             if(auv_manager != null){
                 com_manager.update(tpf);

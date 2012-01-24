@@ -7,16 +7,16 @@
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="position">
                 <value>
-                    <x>-22.0</x>
+                    <x>0.0</x>
                     <y>-0.25</y>
-                    <z>18.0</z>
+                    <z>0.0</z>
                 </value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_distance">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="offCamera_width">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">320</value>
@@ -30,7 +30,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse_low.obj</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse/hanse_low.obj</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">HANSE_MODEL</value>
@@ -73,7 +73,7 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Debug">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="physical_exchanger">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="drag">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
@@ -163,7 +163,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>sonar_ground</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
                     <x>0.2</x>
@@ -197,13 +197,13 @@
                 <SonarConeType>0</SonarConeType>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="press">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="pressure/depth">
             <value xsi:type="pressureSensor">
                 <noise_type>1</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>press</name>
+                <name>pressure/depth</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
+                <ros_publish_rate>100</ros_publish_rate>
                 <Position>
                     <x>-0.12</x>
                     <y>0.19</y>
@@ -211,13 +211,13 @@
                 </Position>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar_360">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar/scan">
             <value xsi:type="imagenexSonar852Scanning">
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>sonar_360</name>
+                <name>sonar/scan</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
+                <ros_publish_rate>100</ros_publish_rate>
                 <Position>
                     <x>0.0125</x>
                     <y>-0.03</y>
@@ -255,15 +255,15 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>gyroscope</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="temp">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="pressure/temp">
             <value xsi:type="temperatureSensor">
                 <noise_type>1</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>temp</name>
+                <name>pressure/temp</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
@@ -271,6 +271,29 @@
                     <y>0.19</y>
                     <z>-0.31</z>
                 </Position>
+            </value>
+        </entry>
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
+            <value xsi:type="imu">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>imu</name>
+                <enabled>true</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+                <Accelerometer>
+                    <noise_type>0</noise_type>
+                    <noise_value>1.0</noise_value>
+                    <name>imu_accelerometer</name>
+                    <enabled>true</enabled>
+                    <ros_publish_rate>1000</ros_publish_rate>
+                </Accelerometer>
+                <Gyroscope>
+                    <noise_type>0</noise_type>
+                    <noise_value>1.0</noise_value>
+                    <name>imu_gyroscope</name>
+                    <enabled>true</enabled>
+                    <ros_publish_rate>1000</ros_publish_rate>
+                </Gyroscope>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="bottom_cam">
@@ -358,13 +381,13 @@
                 <CameraAngle>45.0</CameraAngle>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar_side">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar/echo">
             <value xsi:type="imagenexSonar852Echo">
                 <noise_type>0</noise_type>
                 <noise_value>0.5</noise_value>
-                <name>sonar_side</name>
+                <name>sonar/echo</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
+                <ros_publish_rate>100</ros_publish_rate>
                 <Position>
                     <x>-0.2</x>
                     <y>0.05</y>
@@ -422,17 +445,17 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>accelerometer</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
     </Sensors>
     <Actuators>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterDownFront">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downBack">
             <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterDownFront</name>
+                <name>motors/downBack</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
@@ -445,13 +468,27 @@
                     <y>1.0</y>
                     <z>0.0</z>
                 </MotorDirection>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterDown">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downFront">
             <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterDown</name>
+                <name>motors/downFront</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
@@ -464,13 +501,27 @@
                     <y>1.0</y>
                     <z>0.0</z>
                 </MotorDirection>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_down_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterLeft">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/left">
             <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterLeft</name>
+                <name>motors/left</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
@@ -483,13 +534,36 @@
                     <y>0.0</y>
                     <z>1.0</z>
                 </MotorDirection>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_left_forward">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_left_back">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="setspeed">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">set_thruster_speed</value>
+                    </entry>
+                </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterRight">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/right">
             <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
-                <name>thrusterRight</name>
+                <name>motors/right</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
@@ -502,6 +576,29 @@
                     <y>0.0</y>
                     <z>1.0</z>
                 </MotorDirection>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_right_back">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_right_forward">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_forward_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back_net">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="setspeed">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">set_thruster_speed</value>
+                    </entry>
+                </Actions>
             </value>
         </entry>
     </Actuators>

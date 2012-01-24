@@ -16,7 +16,7 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.05</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="offCamera_width">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">320</value>
@@ -203,7 +203,7 @@
                 <noise_value>1.0</noise_value>
                 <name>press</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>100</ros_publish_rate>
                 <Position>
                     <x>0.1</x>
                     <y>0.02</y>
@@ -217,7 +217,7 @@
                 <noise_value>1.0</noise_value>
                 <name>gyroscope</name>
                 <enabled>false</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="temp">
@@ -226,7 +226,7 @@
                 <noise_value>1.0</noise_value>
                 <name>temp</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
                     <x>0.1</x>
                     <y>0.02</y>
@@ -240,7 +240,7 @@
                 <noise_value>1.0</noise_value>
                 <name>compass</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
                     <x>0.0</x>
                     <y>0.0</y>
@@ -269,7 +269,7 @@
                 <noise_value>1.0</noise_value>
                 <name>front_cam</name>
                 <enabled>true</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
                 <Position>
                     <x>-0.13</x>
                     <y>-0.07</y>
@@ -297,7 +297,7 @@
                 <noise_value>1.0</noise_value>
                 <name>accelerometer</name>
                 <enabled>false</enabled>
-                <ros_publish_rate>2000</ros_publish_rate>
+                <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
