@@ -121,6 +121,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="saveconfigto">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="saveconfigto.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="saveconfigto" noResource="true"/>
               </Properties>
               <Events>
@@ -130,6 +131,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="saveconfig">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="saveconfig.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="saveconfig" noResource="true"/>
               </Properties>
               <Events>
@@ -345,6 +347,10 @@
     </Container>
     <Container class="javax.swing.JPopupMenu" name="addAUVPopUpMenu">
       <Properties>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Standardcursor"/>
+        </Property>
+        <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="addAUVPopUpMenu" noResource="true"/>
       </Properties>
 
@@ -870,6 +876,41 @@
             </Component>
           </SubComponents>
         </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPopupMenu" name="jme3_window_switcher">
+      <Properties>
+        <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
+        <Property name="name" type="java.lang.String" value="jme3_window_switcher" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="split_view">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="split_view.text"/>
+            <Property name="name" type="java.lang.String" value="split_view" noResource="true"/>
+          </Properties>
+        </MenuItem>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPopupMenu" name="jme3_auv">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jme3_auv" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="jme3_chase_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_chase_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_chase_auv" noResource="true"/>
+          </Properties>
+        </MenuItem>
       </SubComponents>
     </Container>
   </NonVisualComponents>

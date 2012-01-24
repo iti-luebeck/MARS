@@ -201,7 +201,7 @@ public class MotionTrack extends AbstractCinematicEvent implements Control {
         vars.release();
     }
 
-    public void onUpdate(float tpf) {
+    public void onUpdate(float tpf) {       
         traveledDistance = path.interpolatePath(time, this);
         computeTargetDirection();
 
@@ -305,6 +305,7 @@ public class MotionTrack extends AbstractCinematicEvent implements Control {
 
     @Override
     public void onPlay() {
+        traveledDistance = 0;
     }
 
     @Override

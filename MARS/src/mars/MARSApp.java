@@ -17,7 +17,6 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 /**
@@ -64,10 +63,6 @@ public class MARSApp extends SingleFrameApplication {
         try {
             MARS_Settings mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
             mars_settings.init();
-             /*XMLConfigReaderWriter xmll = new XMLConfigReaderWriter();
-             resolution_height = xmll.getResolutionHeight();
-             resolution_width = xmll.getResolutionWidth();
-             framelimit = xmll.getFrameLimit();*/
             resolution_height = mars_settings.getResolution_Height();
             resolution_width = mars_settings.getResolution_Width();
             framelimit = mars_settings.getFrameLimit();
@@ -78,6 +73,7 @@ public class MARSApp extends SingleFrameApplication {
         settings.setWidth(resolution_width);
         settings.setHeight(resolution_height);
         settings.setFrameRate(framelimit);
+        //settings.setCustomRenderer(app);
         view.setCanvasPanel(settings.getWidth(),settings.getHeight());
 
         //JmeSystem.setLowPermissions(true);

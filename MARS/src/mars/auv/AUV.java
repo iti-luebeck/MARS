@@ -110,6 +110,7 @@ public interface AUV{
      * @return
      */
     public Node getAUVNode();
+    public Node getSelectionNode();
     /**
      *
      * @return
@@ -291,4 +292,9 @@ public interface AUV{
      * @param mars_node
      */
     public void setROS_Node(MARSNodeMain mars_node);
+    
+    public void setSelected(boolean selected);
+    public boolean isSelected();
+    public Spatial getGhostAUV();
+    public void hideGhostAUV(boolean hide);
 }

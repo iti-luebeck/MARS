@@ -21,6 +21,7 @@ import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
+import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
@@ -109,6 +110,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Vector3f volume_center_precise = new Vector3f(0,0,0);
     private Spatial auv_spatial;
     private Node auv_node = new Node("");
+    private Node selectionNode = new Node("selectionNode");
     private RigidBodyControl physics_control;
     private CollisionShape collisionShape;
 
@@ -166,6 +168,11 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Deprecated
     private org.ros.node.Node ros_node;  
     private MARSNodeMain mars_node;
+    
+    //selection stuff aka highlightening
+    private boolean selected = false;
+    AmbientLight ambient_light = new AmbientLight();
+    private Spatial ghost_auv_spatial;
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it.
@@ -192,6 +199,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         this.rootNode = simstate.getRootNode();
         this.physicalvalues = new PhysicalValues();
         this.initer = simstate.getIniter();
+        selectionNode.attachChild(auv_node);
     }
 
     /**
@@ -208,6 +216,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             logger.addHandler(handler);
         } catch (IOException e) { }
         this.physicalvalues = new PhysicalValues();
+        selectionNode.attachChild(auv_node);
     }
 
     /**
@@ -466,6 +475,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void init(){
         Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Initialising AUV: " + this.getName(), "");
         loadModel();
+        createGhostAUV();
         createPhysicsNode();
 
         initCenters();
@@ -477,7 +487,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
 
         //calculate the volume one time exact as possible, ignore water height
+        long old_time = System.currentTimeMillis();
         volume = (float)calculateVolume(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
+        long new_time = System.currentTimeMillis();
+        System.out.println("time: " + (new_time-old_time));
         System.out.println("VOLUME: " + volume);
         actual_vol = volume;
         buoyancy_force = physical_environment.getFluid_density() * (physical_environment.getGravitational_acceleration()) * actual_vol;
@@ -846,7 +859,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      * @param tpf
      */
     public void updateForces(float tpf){
-        if(auv_node.getParent().getParent().getName() != null && auv_node.getParent().getParent().getName().equals("Root Node")){//check if PhysicsNode added to rootNode
+        if(auv_node.getParent().getParent().getParent().getParent().getName() != null && auv_node.getParent().getParent().getParent().getParent().getName().equals("Root Node")){//check if PhysicsNode added to rootNode
             //since bullet deactivate nodes that dont move enough we must activate it
             physics_control.activate();
             //calculate actuator(motors) forces
@@ -955,6 +968,14 @@ public class BasicAUV implements AUV,SceneProcessor{
     public Node getAUVNode() {
         return auv_node;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Node getSelectionNode() {
+        return selectionNode;
+    }
 
     /**
      *
@@ -1061,10 +1082,36 @@ public class BasicAUV implements AUV,SceneProcessor{
         //auv_spatial.setModelBound(bounds);
         auv_spatial.updateModelBound();
         auv_spatial.setName(auv_param.getModel_name());
+        auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_node.attachChild(auv_spatial);
         //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
         //System.out.println("vol bv " + auv_spatial.getWorldBound());
+    }
+    
+    private void createGhostAUV(){
+        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
+        ghost_auv_spatial.setLocalScale(auv_param.getModel_scale());
+        ghost_auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
+        ghost_auv_spatial.updateGeometricState();
+        ghost_auv_spatial.updateModelBound();
+        ghost_auv_spatial.setName(auv_param.getModel_name() + "_ghost");
+        ghost_auv_spatial.setUserData("auv_name", getName());
+        ghost_auv_spatial.setCullHint(CullHint.Always);
+        auv_node.attachChild(ghost_auv_spatial);
+    }
+    
+    public Spatial getGhostAUV(){
+        return ghost_auv_spatial;
+    }
+    
+    public void hideGhostAUV(boolean hide){
+        if(hide){
+             ghost_auv_spatial.setCullHint(CullHint.Always);
+        }else{
+             ghost_auv_spatial.setCullHint(CullHint.Never);
+        }
     }
 
     /*
@@ -1584,5 +1631,21 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     public void cleanup() {
         
+    }
+    
+    @Override
+    public void setSelected(boolean selected){
+        if(selected && this.selected==false){
+            ambient_light.setColor(new ColorRGBA(255f*1f/255f,215f*1f/255f,0f*1f/255f,1.0f));
+            selectionNode.addLight(ambient_light); 
+        }else if(selected == false){
+            selectionNode.removeLight(ambient_light);
+        }
+        this.selected = selected;
+    }
+    
+    @Override
+    public boolean isSelected(){
+        return selected;
     }
 }

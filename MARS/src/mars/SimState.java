@@ -12,15 +12,44 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.RawInputListener;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.event.JoyAxisEvent;
+import com.jme3.input.event.JoyButtonEvent;
+import com.jme3.input.event.KeyInputEvent;
+import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.input.event.MouseMotionEvent;
+import com.jme3.input.event.TouchEvent;
+import com.jme3.light.AmbientLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Plane;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
+import com.jme3.math.Rectangle;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -36,6 +65,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import mars.Helper.Helper;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
 import mars.actuators.Thruster;
@@ -97,9 +127,25 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
+    private Node AUVsNode = new Node("AUVNode");
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
+    
+    //loading screen
+    private Nifty nifty_load;
+    //private TextRenderer textRenderer;
+    
+    //nifty(gui) stuff
+    private NiftyJmeDisplay niftyDisplay;
+    private Nifty nifty;
+    private Element progressBarElement;
+    private TextRenderer textRenderer;
+    private boolean load = false;
+    private Future simStateFuture = null;
+    
+    //general gui stuff
+    GuiControlState guiControlState = new GuiControlState();
     
     /**
      * 
@@ -131,6 +177,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mars = null;
         assetManager = null;
         mars_settings = null;
+        nifty_load = null;
         super.cleanup();
     }
 
@@ -141,19 +188,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mars = (MARS_Main)app;
                 assetManager = mars.getAssetManager();
                 inputManager = mars.getInputManager();
+                nifty_load = mars.getNifty();
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
                     
             sceneReflectionNode.attachChild(SonarDetectableNode);
+            sceneReflectionNode.attachChild(AUVsNode);
             rootNode.attachChild(sceneReflectionNode);
             
+            initNiftyLoading();
             loadXML();
             initPrivateKeys();// load custom key mappings
             setupPhysics();
             setupGUI();
             setupCams();
-        
+            
             auv_manager = new AUV_Manager(this);
             simob_manager = new SimObjectManager(this);
             com_manager = new Communication_Manager(auv_manager, this, rootNode, physical_environment);
@@ -373,6 +423,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     /** Declaring the "Shoot" action and mapping to its triggers. */
     private void initPrivateKeys() {
+        inputManager.addRawInputListener(mouseMotionListener);
+        
         inputManager.addMapping("Shoott",new KeyTrigger(KeyInput.KEY_SPACE));         // trigger 2: left-button click
         inputManager.addListener(actionListener, "Shoott");
 
@@ -383,8 +435,72 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
         inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(actionListener, "reset");
+        
+        inputManager.addMapping("moveauv", new KeyTrigger(KeyInput.KEY_LCONTROL));
+        inputManager.addListener(actionListener, "moveauv");
+        
+        inputManager.addMapping("rotateauv", new KeyTrigger(KeyInput.KEY_LSHIFT));
+        inputManager.addListener(actionListener, "rotateauv");
+        
+        inputManager.addMapping("context_menue",new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "context_menue");
+        
+        inputManager.addMapping("context_menue_off",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "context_menue_off");
+        
+        inputManager.addMapping("depth_auv_down",new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "depth_auv_down");
+        
+        inputManager.addMapping("depth_auv_up",new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "depth_auv_up");
     }
     
+    private RawInputListener mouseMotionListener = new RawInputListener() {
+
+        public void beginInput() {
+        }
+
+        public void endInput() {
+        }
+
+        public void onJoyAxisEvent(JoyAxisEvent evt) {
+        }
+
+        public void onJoyButtonEvent(JoyButtonEvent evt) {
+        }
+
+        public void onMouseMotionEvent(MouseMotionEvent evt) {
+            /*System.out.println("Mouse moved from: " + evt.getX() + " " + evt.getY());
+            System.out.println("Mouse moved from: " + inputManager.getCursorPosition());*/
+            
+                if(guiControlState.isMove_auv()){
+                    System.out.println("Mouving auv to: " + inputManager.getCursorPosition());
+                    AUV selected_auv = auv_manager.getSelectedAUV();
+                    if(selected_auv != null){
+                        moveSelectedGhostAUV(selected_auv);
+                    }
+                }else if(guiControlState.isRotate_auv()){
+                    System.out.println("roating auv to: " + inputManager.getCursorPosition());
+                    AUV selected_auv = auv_manager.getSelectedAUV();
+                    if(selected_auv != null){
+                        rotateSelectedGhostAUV(selected_auv);
+                    }
+                }else{
+                    pickHover();
+                }
+            
+        }
+
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+        }
+
+        public void onKeyEvent(KeyInputEvent evt) {
+        }
+
+        public void onTouchEvent(TouchEvent evt) {
+        }
+    };
+            
     /*
      * what actions should be done when pressing a registered button?
      */
@@ -406,9 +522,185 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 System.out.println("RESET!!!");
                 time = 0f;
                 auv_manager.resetAllAUVs();
+            }else if(name.equals("context_menue") && !keyPressed) {
+                System.out.println("context");
+                pickRightClick();
+            }else if(name.equals("context_menue_off") && !keyPressed) {
+                System.out.println("context_menue_off");
+                auv_manager.deselectAllAUVs();
+                view.hideAllPopupWindows();
+            }else if(name.equals("depth_auv_down") && keyPressed) {
+                System.out.println("depth_auv_down");
+                if(guiControlState.isMove_auv()){
+                    AUV selected_auv = auv_manager.getSelectedAUV();
+                    if(selected_auv != null){
+                        System.out.println("ghost depth");
+                        guiControlState.decrementDepthIteration();
+                        guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
+                    }
+                }
+            }else if(name.equals("depth_auv_up") && keyPressed) {
+                if(guiControlState.isMove_auv()){
+                    AUV selected_auv = auv_manager.getSelectedAUV();
+                    if(selected_auv != null){
+                        System.out.println("ghost depth");
+                        guiControlState.incrementDepthIteration();
+                        guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
+                    }
+                }
+            }else if(name.equals("moveauv") && keyPressed) {
+                System.out.println("moveauv");
+                guiControlState.setMove_auv(true);
+                mars.getFlyByCamera().setEnabled(false);
+                System.out.println(guiControlState.isMove_auv());
+                System.out.println(guiControlState.isFree());
+                AUV selected_auv = auv_manager.getSelectedAUV();
+                if(selected_auv != null){
+                    guiControlState.setGhost_auv(selected_auv.getGhostAUV());
+                    guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
+                    selected_auv.hideGhostAUV(false);
+                }
+            }else if(name.equals("moveauv") && !keyPressed) {
+                System.out.println("stop moveauv");
+                AUV selected_auv = auv_manager.getSelectedAUV();
+                mars.getFlyByCamera().setEnabled(true);
+                if(selected_auv != null){
+                    selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
+                    guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//reset ghost auv for rotation
+                    selected_auv.hideGhostAUV(true);
+                }
+                guiControlState.setMove_auv(false);
+            }else if(name.equals("rotateauv") && keyPressed) {
+                System.out.println("rotateauv");
+                AUV selected_auv = auv_manager.getSelectedAUV();
+                mars.getFlyByCamera().setEnabled(false);
+                if(selected_auv != null){
+                    guiControlState.setGhost_auv(selected_auv.getGhostAUV());
+                    guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
+                    selected_auv.hideGhostAUV(false);
+                }
+                guiControlState.setRotate_auv(true);
+            }else if(name.equals("rotateauv") && !keyPressed) {
+                System.out.println("stop rotateauv");
+                AUV selected_auv = auv_manager.getSelectedAUV();
+                mars.getFlyByCamera().setEnabled(true);
+                if(selected_auv != null){
+                    selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
+                    selected_auv.hideGhostAUV(true);
+                }
+                guiControlState.setRotate_auv(false);
             }
         }
     };
+    
+    private void moveSelectedGhostAUV(AUV auv){
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        guiControlState.setIntersection(intersection);
+        //System.out.println("Intersection: " + intersection);
+        if(guiControlState.getGhost_auv() != null){
+            guiControlState.getGhost_auv().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
+        }
+    }
+    
+    private void rotateSelectedGhostAUV(AUV auv){
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        //System.out.println("Intersection: " + intersection);
+        Vector3f diff = intersection.subtract(auv.getAUVNode().getWorldTranslation());
+        diff.y = 0f;
+        diff.normalizeLocal();
+        float angle = 0f;
+        if(diff.z < 0f){
+            angle = diff.angleBetween(Vector3f.UNIT_X);
+        }else{
+            angle = diff.angleBetween(Vector3f.UNIT_X)*(-1);
+        }
+        
+        //System.out.println("angle: " + angle);
+        if(guiControlState.getGhost_auv() != null){
+            Quaternion quat = new Quaternion();
+            quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
+            guiControlState.setRotation(quat);
+            guiControlState.getGhost_auv().setLocalRotation(quat);
+        }
+    }
+    
+    private void pickHover(){
+        CollisionResults results = new CollisionResults();
+        // Convert screen click to 3d position
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+
+        // Aim the ray from the clicked spot forwards.
+        Ray ray = new Ray(click3d, dir);
+        // Collect intersections between ray and all nodes in results list.
+        AUVsNode.collideWith(ray, results);
+        // (Print the results so we see what is going on:)
+        /*for (int i = 0; i < results.size(); i++) {
+          // (For each “hit”, we know distance, impact point, geometry.)
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String target = results.getCollision(i).getGeometry().getName();
+          System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
+        }*/
+        // Use the results -- we rotate the selected geometry.
+        if (results.size() > 0) {
+          // The closest result is the target that the player picked:
+          Geometry target = results.getClosestCollision().getGeometry();
+          // Here comes the action:
+          System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
+          BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
+          if(auv != null){
+                auv.setSelected(true);
+            //guiControlState.setFree(false);
+          }
+        }else{//nothing to pickRightClick
+                auv_manager.deselectAllAUVs();
+            //guiControlState.setFree(true);
+        }
+    }
+    
+    private void pickRightClick(){
+        CollisionResults results = new CollisionResults();
+        // Convert screen click to 3d position
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+
+        // Aim the ray from the clicked spot forwards.
+        Ray ray = new Ray(click3d, dir);
+        // Collect intersections between ray and all nodes in results list.
+        AUVsNode.collideWith(ray, results);
+        // (Print the results so we see what is going on:)
+        /*for (int i = 0; i < results.size(); i++) {
+          // (For each “hit”, we know distance, impact point, geometry.)
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String target = results.getCollision(i).getGeometry().getName();
+          System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
+        }*/
+        // Use the results -- we rotate the selected geometry.
+        if (results.size() > 0) {
+          // The closest result is the target that the player picked:
+          Geometry target = results.getClosestCollision().getGeometry();
+          // Here comes the action:
+          System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
+          BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
+          if(auv != null){
+            auv.setSelected(true);
+          }
+          view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+        }else{//nothing to pickRightClick
+            auv_manager.deselectAllAUVs();
+            view.hideAllPopupWindows();
+        }
+    }
     
      /*
      *
@@ -505,7 +797,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
-        
+
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
         //initer.testraw();
@@ -533,6 +825,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public Node getSceneReflectionNode() {
         return sceneReflectionNode;
+    }
+
+    public Node getAUVsNode() {
+        return AUVsNode;
     }
 
     /**
@@ -633,4 +929,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
     }
 
+    private void initNiftyLoading(){
+        //Element element = nifty_load.getScreen("loadlevel").findElementByName("loadingtext");
+        //textRenderer = element.getRenderer(TextRenderer.class);
+        //mars.setProgressWithoutEnq(0.5f, "dfsdfsdf");
+        //System.out.println("setting loading!!!");
+        //mars.setProgress(0.5f, "dfsdfsdf");
+        /*try {
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }
 }

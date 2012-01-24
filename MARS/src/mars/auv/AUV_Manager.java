@@ -34,6 +34,7 @@ public class AUV_Manager {
     private HashMap<String,AUV> auvs = new HashMap<String,AUV> ();
     private Node SonarDetectableNode;
     private Node sceneReflectionNode;
+    private Node AUVsNode;
     private MARS_Main mars;
     private PhysicalEnvironment physical_environment;
     private MARS_Settings simauv_settings;
@@ -66,6 +67,7 @@ public class AUV_Manager {
         this.rootNode = simstate.getRootNode();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
+        this.AUVsNode = simstate.getAUVsNode();
         this.bulletAppState = simstate.getBulletAppState();
     }
 
@@ -419,7 +421,8 @@ public class AUV_Manager {
     @Deprecated
     private void addAUVsToScene(){
         initAUVs();
-        addAUVsToNode(sceneReflectionNode);
+        //addAUVsToNode(sceneReflectionNode);
+        addAUVsToNode(AUVsNode);
         addAUVsToBulletAppState(bulletAppState);
     }
 
@@ -432,15 +435,16 @@ public class AUV_Manager {
             //auv.setROS_Node(ros_node);
             auv.setROS_Node(mars_node);
             initAUV(auv);
-            addAUVToNode(auv,sceneReflectionNode);
+            //addAUVToNode(auv,sceneReflectionNode);
+            addAUVToNode(auv,AUVsNode);
             addAUVToBulletAppState(auv,bulletAppState);
         }
     }
 
     private void removeAUVFromScene( AUV auv){
-        bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
+        bulletAppState.getPhysicsSpace().remove(auv.getSelectionNode());
         auv.cleanupOffscreenView();
-        auv.getAUVNode().removeFromParent();
+        auv.getSelectionNode().removeFromParent();
     }
 
     /**
@@ -450,7 +454,7 @@ public class AUV_Manager {
     private void addAUVToNode(AUV auv, Node node){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
 
-        node.attachChild(auv.getAUVNode());
+        node.attachChild(auv.getSelectionNode());
 
         ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
         Iterator iter = sons.iterator();
@@ -475,7 +479,7 @@ public class AUV_Manager {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            node.attachChild(auv.getAUVNode());
+            node.attachChild(auv.getSelectionNode());
 
             ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
             Iterator iter = sons.iterator();
@@ -574,5 +578,28 @@ public class AUV_Manager {
             //auv.setROS_Node(ros_node);
             //auv.initROS();
         }
+    }
+    
+     /**
+     *
+     * @param auvs
+     */
+    public void deselectAllAUVs(){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            auv.setSelected(false);
+        }
+    }
+    
+    public AUV getSelectedAUV(){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.isSelected()){
+                return auv;
+            }
+        }
+        return null;
     }
 }

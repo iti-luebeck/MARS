@@ -16,8 +16,11 @@ import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class GeometryBatchFactory {
+
+    private static final Logger logger = Logger.getLogger(GeometryBatchFactory.class.getName());
 
     private static void doTransformVerts(FloatBuffer inBuf, int offset, FloatBuffer outBuf, Matrix4f transform) {
         Vector3f pos = new Vector3f();
@@ -61,7 +64,7 @@ public class GeometryBatchFactory {
 
     /**
      * Merges all geometries in the collection into
-     * the output mesh. Does not take into account materials.
+     * the output mesh. Creates a new material using the TextureAtlas.
      * 
      * @param geometries
      * @param outMesh
@@ -158,7 +161,7 @@ public class GeometryBatchFactory {
                 VertexBuffer inBuf = inMesh.getBuffer(Type.values()[bufType]);
                 VertexBuffer outBuf = outMesh.getBuffer(Type.values()[bufType]);
 
-                if (outBuf == null) {
+                if (inBuf == null || outBuf == null) {
                     continue;
                 }
 
@@ -288,7 +291,7 @@ public class GeometryBatchFactory {
         return retVal;
     }
 
-    private static void gatherGeoms(Spatial scene, List<Geometry> geoms) {
+    public static void gatherGeoms(Spatial scene, List<Geometry> geoms) {
         if (scene instanceof Node) {
             Node node = (Node) scene;
             for (Spatial child : node.getChildren()) {
@@ -335,7 +338,7 @@ public class GeometryBatchFactory {
 
         // Since the scene is returned unaltered the transform must be reset
         scene.setLocalTransform(Transform.IDENTITY);
-        
+
         return scene;
     }
 
