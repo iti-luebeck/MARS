@@ -555,11 +555,18 @@ public class MARSView extends FrameView {
 
         mainPanel = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        JMEPanel1 = new javax.swing.JPanel();
+        LeftMenuePanel = new javax.swing.JPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        TreePanel = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         top = new DefaultMutableTreeNode("SimAUV");
         //createNodes(top);
         simauv_tree = new javax.swing.JTree(top);
+        jPanel4 = new javax.swing.JPanel();
+        MapPanel = new javax.swing.JPanel();
+        JMEPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         jFileMenu = new javax.swing.JMenu();
         StartMenuItem = new javax.swing.JMenuItem();
@@ -635,24 +642,24 @@ public class MARSView extends FrameView {
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        jSplitPane1.setDividerLocation(250);
+        jSplitPane1.setDividerLocation(256);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
 
-        JMEPanel1.setName("JMEPanel1"); // NOI18N
-        JMEPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
+        LeftMenuePanel.setName("LeftMenuePanel"); // NOI18N
 
-        javax.swing.GroupLayout JMEPanel1Layout = new javax.swing.GroupLayout(JMEPanel1);
-        JMEPanel1.setLayout(JMEPanel1Layout);
-        JMEPanel1Layout.setHorizontalGroup(
-            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 680, Short.MAX_VALUE)
-        );
-        JMEPanel1Layout.setVerticalGroup(
-            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
-        );
+        jSplitPane2.setDividerLocation(150);
+        jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane2.setLastDividerLocation(150);
+        jSplitPane2.setMinimumSize(new java.awt.Dimension(258, 0));
+        jSplitPane2.setName("jSplitPane2"); // NOI18N
+        jSplitPane2.setPreferredSize(new java.awt.Dimension(258, 0));
 
-        jSplitPane1.setRightComponent(JMEPanel1);
+        TreePanel.setMinimumSize(new java.awt.Dimension(0, 256));
+        TreePanel.setName("TreePanel"); // NOI18N
+
+        jTabbedPane1.setName("jTabbedPane1"); // NOI18N
+
+        jPanel3.setName("jPanel3"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -671,13 +678,109 @@ public class MARSView extends FrameView {
         });
         jScrollPane1.setViewportView(simauv_tree);
 
-        jSplitPane1.setLeftComponent(jScrollPane1);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+        );
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSView.class);
+        jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+
+        jPanel4.setName("jPanel4"); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 228, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 99, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
+
+        javax.swing.GroupLayout TreePanelLayout = new javax.swing.GroupLayout(TreePanel);
+        TreePanel.setLayout(TreePanelLayout);
+        TreePanelLayout.setHorizontalGroup(
+            TreePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 253, Short.MAX_VALUE)
+            .addGroup(TreePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(TreePanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        TreePanelLayout.setVerticalGroup(
+            TreePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 149, Short.MAX_VALUE)
+            .addGroup(TreePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(TreePanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        jSplitPane2.setTopComponent(TreePanel);
+
+        MapPanel.setMinimumSize(new java.awt.Dimension(256, 256));
+        MapPanel.setName("MapPanel"); // NOI18N
+        MapPanel.setPreferredSize(new java.awt.Dimension(256, 256));
+
+        javax.swing.GroupLayout MapPanelLayout = new javax.swing.GroupLayout(MapPanel);
+        MapPanel.setLayout(MapPanelLayout);
+        MapPanelLayout.setHorizontalGroup(
+            MapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 253, Short.MAX_VALUE)
+        );
+        MapPanelLayout.setVerticalGroup(
+            MapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+
+        jSplitPane2.setBottomComponent(MapPanel);
+
+        javax.swing.GroupLayout LeftMenuePanelLayout = new javax.swing.GroupLayout(LeftMenuePanel);
+        LeftMenuePanel.setLayout(LeftMenuePanelLayout);
+        LeftMenuePanelLayout.setHorizontalGroup(
+            LeftMenuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 255, Short.MAX_VALUE)
+        );
+        LeftMenuePanelLayout.setVerticalGroup(
+            LeftMenuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+        );
+
+        jSplitPane1.setLeftComponent(LeftMenuePanel);
+
+        JMEPanel1.setName("JMEPanel1"); // NOI18N
+        JMEPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
+
+        javax.swing.GroupLayout JMEPanel1Layout = new javax.swing.GroupLayout(JMEPanel1);
+        JMEPanel1.setLayout(JMEPanel1Layout);
+        JMEPanel1Layout.setHorizontalGroup(
+            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 683, Short.MAX_VALUE)
+        );
+        JMEPanel1Layout.setVerticalGroup(
+            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 484, Short.MAX_VALUE)
+        );
+
+        jSplitPane1.setRightComponent(JMEPanel1);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,7 +789,6 @@ public class MARSView extends FrameView {
 
         menuBar.setName("menuBar"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSView.class);
         jFileMenu.setText(resourceMap.getString("jFileMenu.text")); // NOI18N
         jFileMenu.setName("jFileMenu"); // NOI18N
 
@@ -1295,38 +1397,6 @@ public class MARSView extends FrameView {
          frame1.setSize(1024,512);
     }//GEN-LAST:event_JME_MenuItemActionPerformed
 
-    private void simauv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simauv_treeMouseClicked
-        if( evt.getButton() == MouseEvent.BUTTON3){
-            int selRow = simauv_tree.getRowForLocation(evt.getX(), evt.getY());
-            TreePath selPath = simauv_tree.getPathForLocation(evt.getX(), evt.getY());
-            System.out.println(selPath.toString());
-            System.out.println(selPath.getLastPathComponent().toString());
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)selPath.getLastPathComponent();
-            if(selRow != -1){
-                simauv_tree.setSelectionPath(selPath);
-                try{
-                    if(selPath.getLastPathComponent().toString().equals(s_auv)){
-                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(selPath.getLastPathComponent().toString().equals(s_simob)){
-                        addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(selPath.getLastPathComponent().toString().equals(s_actuators)){
-                        addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(selPath.getLastPathComponent().toString().equals(s_sensors)){
-                        addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(node.getUserObject() instanceof AUV){
-                        auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(node.getUserObject() instanceof SimObject){
-                        simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }else if(node.getUserObject() instanceof PhysicalExchanger){
-                        sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }
-                }catch(IllegalArgumentException e){
-
-                }
-            }
-        }
-    }//GEN-LAST:event_simauv_treeMouseClicked
-
     private void helpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpActionPerformed
         // TODO add your handling code here:
         Random rand = new Random();
@@ -1694,13 +1764,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     simauv.startSimulation();
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
+    private void simauv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simauv_treeMouseClicked
+
+        if (evt.getButton() == MouseEvent.BUTTON3) {             int selRow = simauv_tree.getRowForLocation(evt.getX(), evt.getY());             TreePath selPath = simauv_tree.getPathForLocation(evt.getX(), evt.getY());             System.out.println(selPath.toString());             System.out.println(selPath.getLastPathComponent().toString());             DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();             if (selRow != -1) {                 simauv_tree.setSelectionPath(selPath);                 try {                     if (selPath.getLastPathComponent().toString().equals(s_auv)) {                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {                         addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {                         addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {                         addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof AUV) {                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof SimObject) {                         simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof PhysicalExchanger) {                         sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     }                 } catch (IllegalArgumentException e) {                 }             }         }     }//GEN-LAST:event_simauv_treeMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JMenuItem JME_MenuItem;
     private javax.swing.JDialog JME_SettingsDialog;
+    private javax.swing.JPanel LeftMenuePanel;
+    private javax.swing.JPanel MapPanel;
     private javax.swing.JMenu SettingsMenu;
     private javax.swing.JMenuItem StartMenuItem;
+    private javax.swing.JPanel TreePanel;
     private javax.swing.JPopupMenu addAUVPopUpMenu;
     private javax.swing.JMenuItem addAct;
     private javax.swing.JPopupMenu addActPopUpMenu;
@@ -1740,11 +1817,15 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JPopupMenu jme3_window_switcher;
@@ -1773,7 +1854,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.6.0";
+    private final String VERSION = "0.6.1";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;
