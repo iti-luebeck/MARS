@@ -571,6 +571,7 @@ public class MARSView extends FrameView {
         jFileMenu = new javax.swing.JMenu();
         StartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem1 = new javax.swing.JMenuItem();
         saveconfigto = new javax.swing.JMenuItem();
         saveconfig = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -656,6 +657,7 @@ public class MARSView extends FrameView {
 
         TreePanel.setMinimumSize(new java.awt.Dimension(0, 256));
         TreePanel.setName("TreePanel"); // NOI18N
+        TreePanel.setPreferredSize(new java.awt.Dimension(200, 149));
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
 
@@ -682,15 +684,15 @@ public class MARSView extends FrameView {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
         );
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSView.class);
-        jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
+        jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel3.TabConstraints.tabIcon"), jPanel3); // NOI18N
 
         jPanel4.setName("jPanel4"); // NOI18N
 
@@ -702,10 +704,10 @@ public class MARSView extends FrameView {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 99, Short.MAX_VALUE)
+            .addGap(0, 97, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
+        jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel4.TabConstraints.tabIcon"), jPanel4); // NOI18N
 
         javax.swing.GroupLayout TreePanelLayout = new javax.swing.GroupLayout(TreePanel);
         TreePanel.setLayout(TreePanelLayout);
@@ -767,7 +769,7 @@ public class MARSView extends FrameView {
         JMEPanel1.setLayout(JMEPanel1Layout);
         JMEPanel1Layout.setHorizontalGroup(
             JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
+            .addGap(0, 674, Short.MAX_VALUE)
         );
         JMEPanel1Layout.setVerticalGroup(
             JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -780,7 +782,7 @@ public class MARSView extends FrameView {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -792,6 +794,7 @@ public class MARSView extends FrameView {
         jFileMenu.setText(resourceMap.getString("jFileMenu.text")); // NOI18N
         jFileMenu.setName("jFileMenu"); // NOI18N
 
+        StartMenuItem.setIcon(resourceMap.getIcon("StartMenuItem.icon")); // NOI18N
         StartMenuItem.setText(resourceMap.getString("StartMenuItem.text")); // NOI18N
         StartMenuItem.setName("StartMenuItem"); // NOI18N
         StartMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -803,6 +806,11 @@ public class MARSView extends FrameView {
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         jFileMenu.add(jSeparator3);
+
+        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
+        jMenuItem1.setEnabled(false);
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jFileMenu.add(jMenuItem1);
 
         saveconfigto.setText(resourceMap.getString("saveconfigto.text")); // NOI18N
         saveconfigto.setEnabled(false);
@@ -829,6 +837,7 @@ public class MARSView extends FrameView {
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getActionMap(MARSView.class, this);
         ExitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        ExitMenuItem.setIcon(resourceMap.getIcon("ExitMenuItem.icon")); // NOI18N
         ExitMenuItem.setText(resourceMap.getString("ExitMenuItem.text")); // NOI18N
         ExitMenuItem.setName("ExitMenuItem"); // NOI18N
         jFileMenu.add(ExitMenuItem);
@@ -1815,6 +1824,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
