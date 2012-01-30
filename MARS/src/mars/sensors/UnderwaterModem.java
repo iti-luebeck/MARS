@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
-import mars.SimState;
+import mars.states.SimState;
 import mars.auv.Communication_Manager;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;

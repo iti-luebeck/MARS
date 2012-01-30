@@ -67,7 +67,7 @@ import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.Manipulating;
 import mars.Moveable;
-import mars.SimState;
+import mars.states.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;

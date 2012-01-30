@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.states;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -37,6 +37,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import mars.Helper.SoundHelper;
+import mars.MARS_Main;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 /**

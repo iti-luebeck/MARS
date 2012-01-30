@@ -16,7 +16,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Main;
 import mars.ros.ROS_Publisher;
-import mars.SimState;
+import mars.states.SimState;
 
 /**
  * This is a basic sensors interface. Extend from here to make you

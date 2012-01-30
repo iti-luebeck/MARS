@@ -17,7 +17,7 @@ import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.MARS_Main;
 import mars.ros.ROS_Subscriber;
-import mars.SimState;
+import mars.states.SimState;
 
 /**
  * This is the basic class for Actuators like Thrusters.

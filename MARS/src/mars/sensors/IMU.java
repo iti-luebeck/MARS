@@ -8,7 +8,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import org.ros.node.topic.Publisher;
 import mars.PhysicalEnvironment;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

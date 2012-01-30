@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.PhysicalEnvironment;
-import mars.SimState;
+import mars.states.SimState;
 import mars.hardware.Imaginex;
 
 /**

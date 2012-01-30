@@ -7,7 +7,7 @@ package mars.actuators.servos;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import org.ros.message.MessageListener;
 

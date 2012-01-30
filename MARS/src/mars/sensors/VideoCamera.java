@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.Moveable;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;

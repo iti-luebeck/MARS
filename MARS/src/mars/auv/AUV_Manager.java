@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Sonar;

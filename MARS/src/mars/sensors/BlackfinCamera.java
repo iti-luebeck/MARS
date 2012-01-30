@@ -6,7 +6,7 @@ package mars.sensors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.SimState;
+import mars.states.SimState;
 
 /**
  *

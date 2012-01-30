@@ -5,6 +5,8 @@
 
 package mars;
 
+import mars.states.SimState;
+import mars.states.StartState;
 import com.jme3.font.BitmapFont;
 import mars.gui.MARSView;
 import mars.xml.XMLConfigReaderWriter;
@@ -14,6 +16,7 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import com.jme3.system.awt.AwtPanel;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
@@ -79,6 +82,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
+        //panel.attachTo(true, viewPort);
+    }
+    
+    public void test(){
+        //panel.attachTo(true, viewPort);
     }
 
     /**
@@ -117,7 +125,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     /**
      * 
      */
-    public void startSimulation(){
+    public void startSimState(){
         endStart();
         /*Element element = nifty.getScreen("loadlevel").findElementByName("loadingtext");
         textRenderer = element.getRenderer(TextRenderer.class);
@@ -132,10 +140,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
-        /*SimState simstate = new SimState(view);
-        viewPort.attachScene(simstate.getRootNode());
-        stateManager.attach(simstate);*/
-        //rootNode.updateGeometricState();
     }
     
     private void endStart(){
@@ -256,5 +260,41 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     
     public Nifty getNifty() {
         return nifty;
+    }
+    
+    public void startSimulation(){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.startSimulation();
+                }
+                return null;
+            }
+        });
+    }
+    
+    public void pauseSimulation(){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.pauseSimulation();
+                }
+                return null;
+            }
+        });
+    }
+        
+    public void restartSimulation(){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.restartSimulation();
+                }
+                return null;
+            }
+        });
     }
 }

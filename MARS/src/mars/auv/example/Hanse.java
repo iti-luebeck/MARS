@@ -7,7 +7,7 @@ package mars.auv.example;
 
 import com.jme3.math.Vector3f;
 import javax.xml.bind.annotation.XmlRootElement;
-import mars.SimState;
+import mars.states.SimState;
 import mars.auv.BasicAUV;
 
 /**

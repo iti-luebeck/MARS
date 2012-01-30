@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
-import mars.SimState;
+import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;

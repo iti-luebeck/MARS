@@ -5,10 +5,13 @@
 package mars.gui;
 
 import com.jme3.input.ChaseCamera;
+import com.jme3.system.awt.AwtPanel;
+import java.awt.BorderLayout;
 import mars.gui.MARSAboutBox;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -41,6 +44,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -106,7 +110,7 @@ public class MARSView extends FrameView {
     private AUV_Manager auv_manager;
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
-    private MARS_Main simauv;
+    private MARS_Main mars;
 
     /**
      *
@@ -182,8 +186,17 @@ public class MARSView extends FrameView {
      *
      * @param can
      */
+    @Deprecated
     public void addCanvas(Canvas can){
         this.JMEPanel1.add(can);
+    }
+    
+    public void addAWTMainPanel(AwtPanel sim_panel){
+        this.JMEPanel1.add(sim_panel);
+    }
+    
+    public void addAWTMapPanel(AwtPanel map_panel){
+        this.MapPanel.add(map_panel);
     }
 
     /**
@@ -224,10 +237,10 @@ public class MARSView extends FrameView {
 
     /**
      * 
-     * @param simauv
+     * @param mars
      */
     public void setSimAUV(MARS_Main simauv){
-        this.simauv = simauv;
+        this.mars = simauv;
     }
     
     /**
@@ -640,6 +653,10 @@ public class MARSView extends FrameView {
         split_view = new javax.swing.JMenuItem();
         jme3_auv = new javax.swing.JPopupMenu();
         jme3_chase_auv = new javax.swing.JMenuItem();
+        jToolBarPlay = new javax.swing.JToolBar();
+        jButtonPlay = new javax.swing.JButton();
+        jButtonPause = new javax.swing.JButton();
+        jButtonRestart = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -735,18 +752,7 @@ public class MARSView extends FrameView {
         MapPanel.setMinimumSize(new java.awt.Dimension(256, 256));
         MapPanel.setName("MapPanel"); // NOI18N
         MapPanel.setPreferredSize(new java.awt.Dimension(256, 256));
-
-        javax.swing.GroupLayout MapPanelLayout = new javax.swing.GroupLayout(MapPanel);
-        MapPanel.setLayout(MapPanelLayout);
-        MapPanelLayout.setHorizontalGroup(
-            MapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
-        );
-        MapPanelLayout.setVerticalGroup(
-            MapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
-        );
-
+        MapPanel.setLayout(new javax.swing.BoxLayout(MapPanel, javax.swing.BoxLayout.LINE_AXIS));
         jSplitPane2.setBottomComponent(MapPanel);
 
         javax.swing.GroupLayout LeftMenuePanelLayout = new javax.swing.GroupLayout(LeftMenuePanel);
@@ -757,25 +763,15 @@ public class MARSView extends FrameView {
         );
         LeftMenuePanelLayout.setVerticalGroup(
             LeftMenuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(LeftMenuePanel);
 
+        JMEPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         JMEPanel1.setName("JMEPanel1"); // NOI18N
         JMEPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
-
-        javax.swing.GroupLayout JMEPanel1Layout = new javax.swing.GroupLayout(JMEPanel1);
-        JMEPanel1.setLayout(JMEPanel1Layout);
-        JMEPanel1Layout.setHorizontalGroup(
-            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
-        );
-        JMEPanel1Layout.setVerticalGroup(
-            JMEPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
-        );
-
+        JMEPanel1.setLayout(new javax.swing.BoxLayout(JMEPanel1, javax.swing.BoxLayout.LINE_AXIS));
         jSplitPane1.setRightComponent(JMEPanel1);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -786,7 +782,7 @@ public class MARSView extends FrameView {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -1317,9 +1313,56 @@ public class MARSView extends FrameView {
         jme3_chase_auv.setName("jme3_chase_auv"); // NOI18N
         jme3_auv.add(jme3_chase_auv);
 
+        jToolBarPlay.setRollover(true);
+        jToolBarPlay.setName("jToolBarPlay"); // NOI18N
+
+        jButtonPlay.setIcon(resourceMap.getIcon("jButtonPlay.icon")); // NOI18N
+        jButtonPlay.setText(resourceMap.getString("jButtonPlay.text")); // NOI18N
+        jButtonPlay.setToolTipText(resourceMap.getString("jButtonPlay.toolTipText")); // NOI18N
+        jButtonPlay.setFocusable(false);
+        jButtonPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPlay.setName("jButtonPlay"); // NOI18N
+        jButtonPlay.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonPlayMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonPlay);
+
+        jButtonPause.setIcon(resourceMap.getIcon("jButtonPause.icon")); // NOI18N
+        jButtonPause.setText(resourceMap.getString("jButtonPause.text")); // NOI18N
+        jButtonPause.setToolTipText(resourceMap.getString("jButtonPause.toolTipText")); // NOI18N
+        jButtonPause.setEnabled(false);
+        jButtonPause.setFocusable(false);
+        jButtonPause.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPause.setName("jButtonPause"); // NOI18N
+        jButtonPause.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonPause.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonPauseMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonPause);
+
+        jButtonRestart.setIcon(resourceMap.getIcon("jButtonRestart.icon")); // NOI18N
+        jButtonRestart.setText(resourceMap.getString("jButtonRestart.text")); // NOI18N
+        jButtonRestart.setToolTipText(resourceMap.getString("jButtonRestart.toolTipText")); // NOI18N
+        jButtonRestart.setFocusable(false);
+        jButtonRestart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonRestart.setName("jButtonRestart"); // NOI18N
+        jButtonRestart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonRestart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonRestartMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonRestart);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
+        setToolBar(jToolBarPlay);
     }// </editor-fold>//GEN-END:initComponents
 
     private void JME_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JME_MenuItemActionPerformed
@@ -1699,9 +1742,9 @@ public class MARSView extends FrameView {
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
         AUV auv = (AUV)node.getUserObject();
-        simauv.getFlyByCamera().setEnabled(false);
-        simauv.getChaseCam().setSpatial(auv.getAUVNode());
-        simauv.getChaseCam().setEnabled(true);
+        mars.getFlyByCamera().setEnabled(false);
+        mars.getChaseCam().setSpatial(auv.getAUVNode());
+        mars.getChaseCam().setEnabled(true);
     }//GEN-LAST:event_chase_auvActionPerformed
 
     private void delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_auvActionPerformed
@@ -1727,16 +1770,16 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_delete_simobActionPerformed
 
     private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
-        simauv.getChaseCam().setEnabled(false);
-        simauv.getFlyByCamera().setEnabled(true);
+        mars.getChaseCam().setEnabled(false);
+        mars.getFlyByCamera().setEnabled(true);
     }//GEN-LAST:event_CameraActionPerformed
 
     private void chase_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_simobActionPerformed
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
         SimObject simob = (SimObject)node.getUserObject();
-        simauv.getFlyByCamera().setEnabled(false);
-        simauv.getChaseCam().setSpatial(simob.getSpatial());
-        simauv.getChaseCam().setEnabled(true);
+        mars.getFlyByCamera().setEnabled(false);
+        mars.getChaseCam().setSpatial(simob.getSpatial());
+        mars.getChaseCam().setEnabled(true);
     }//GEN-LAST:event_chase_simobActionPerformed
 
     private void delete_sens_actActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_sens_actActionPerformed
@@ -1770,12 +1813,28 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_keysActionPerformed
 
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
-    simauv.startSimulation();
+    mars.startSimState();
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
     private void simauv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simauv_treeMouseClicked
 
         if (evt.getButton() == MouseEvent.BUTTON3) {             int selRow = simauv_tree.getRowForLocation(evt.getX(), evt.getY());             TreePath selPath = simauv_tree.getPathForLocation(evt.getX(), evt.getY());             System.out.println(selPath.toString());             System.out.println(selPath.getLastPathComponent().toString());             DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();             if (selRow != -1) {                 simauv_tree.setSelectionPath(selPath);                 try {                     if (selPath.getLastPathComponent().toString().equals(s_auv)) {                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {                         addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {                         addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {                         addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof AUV) {                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof SimObject) {                         simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof PhysicalExchanger) {                         sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     }                 } catch (IllegalArgumentException e) {                 }             }         }     }//GEN-LAST:event_simauv_treeMouseClicked
+
+    private void jButtonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPlayMouseClicked
+        mars.startSimulation();
+        jButtonPlay.setEnabled(false);
+        jButtonPause.setEnabled(true);
+    }//GEN-LAST:event_jButtonPlayMouseClicked
+
+    private void jButtonPauseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPauseMouseClicked
+        mars.pauseSimulation();
+        jButtonPause.setEnabled(false);
+        jButtonPlay.setEnabled(true);
+    }//GEN-LAST:event_jButtonPauseMouseClicked
+
+    private void jButtonRestartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRestartMouseClicked
+        mars.restartSimulation();
+    }//GEN-LAST:event_jButtonRestartMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
@@ -1804,6 +1863,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem help;
     private javax.swing.JDialog help_dialog;
     private javax.swing.JOptionPane help_optionpane;
+    private javax.swing.JButton jButtonPause;
+    private javax.swing.JButton jButtonPlay;
+    private javax.swing.JButton jButtonRestart;
     private javax.swing.JMenu jFileMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1836,6 +1898,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JPopupMenu jme3_window_switcher;

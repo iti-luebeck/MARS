@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.PhysicalEnvironment;
-import mars.SimState;
+import mars.states.SimState;
 import mars.sensors.UnderwaterModem;
 import mars.server.MARS_Server;
 

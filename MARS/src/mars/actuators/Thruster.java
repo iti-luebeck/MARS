@@ -27,7 +27,7 @@ import mars.KeyConfig;
 import mars.Keys;
 import mars.Moveable;
 import mars.NoiseType;
-import mars.SimState;
+import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 import mars.xml.Vector3fAdapter;
 

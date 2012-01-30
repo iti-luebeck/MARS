@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.states;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -65,7 +65,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import mars.GuiControlState;
 import mars.Helper.Helper;
+import mars.Initializer;
+import mars.KeyConfig;
+import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.actuators.BrushlessThruster;
 import mars.actuators.SeaBotixThruster;
 import mars.actuators.Thruster;
@@ -504,20 +510,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
         public void onAction(String name, boolean keyPressed, float tpf) {
             if(name.equals("start") && !keyPressed) {
-                bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
-                initial_ready = true;
-                System.out.println("Simulation started...");
+                startSimulation();
             }else if(name.equals("stop") && !keyPressed) {
-                bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-                auv_manager.clearForcesOfAUVs();
-                initial_ready = false;
-                System.out.println("Simulation stopped...");
+                pauseSimulation();
             }else  if (name.equals("Shoott") && !keyPressed) {
 
             }else if(name.equals("reset") && !keyPressed) {
-                System.out.println("RESET!!!");
-                time = 0f;
-                auv_manager.resetAllAUVs();
+                restartSimulation();
             }else if(name.equals("context_menue") && !keyPressed) {
                 System.out.println("context");
                 pickRightClick();
@@ -916,5 +915,24 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         } catch (InterruptedException ex) {
             Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
         }*/
+    }
+    
+    public void startSimulation(){
+        bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
+        initial_ready = true;
+        System.out.println("Simulation started...");
+    }
+            
+    public void pauseSimulation(){
+        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
+        auv_manager.clearForcesOfAUVs();
+        initial_ready = false;
+        System.out.println("Simulation stopped...");            
+    }
+    
+    public void restartSimulation(){
+        System.out.println("RESET!!!");
+        time = 0f;
+        auv_manager.resetAllAUVs();
     }
 }

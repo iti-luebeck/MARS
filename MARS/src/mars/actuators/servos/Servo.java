@@ -35,7 +35,7 @@ import mars.Keys;
 import mars.Manipulating;
 import mars.Moveable;
 import mars.PhysicalExchanger;
-import mars.SimState;
+import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.xml.HashMapAdapter;

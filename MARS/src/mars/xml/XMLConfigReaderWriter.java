@@ -32,7 +32,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.MARS_Main;
-import mars.SimState;
+import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.actuators.BrushlessThruster;
 import mars.simobjects.SimObject;

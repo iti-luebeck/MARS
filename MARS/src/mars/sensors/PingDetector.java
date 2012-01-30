@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
-import mars.SimState;
+import mars.states.SimState;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.Vector3fAdapter;

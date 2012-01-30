@@ -5,6 +5,7 @@
 
 package mars;
 
+import mars.states.SimState;
 import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;

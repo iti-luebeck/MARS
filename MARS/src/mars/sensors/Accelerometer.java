@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
 /**

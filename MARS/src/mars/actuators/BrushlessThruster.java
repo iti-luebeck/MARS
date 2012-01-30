@@ -8,7 +8,7 @@ import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
 /**

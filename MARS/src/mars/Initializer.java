@@ -5,6 +5,7 @@
 
 package mars;
 
+import mars.states.SimState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;

@@ -19,7 +19,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.MARS_Main;
-import mars.SimState;
+import mars.states.SimState;
 
 /**
  * This manager manages the SimObjects. He intialises them...

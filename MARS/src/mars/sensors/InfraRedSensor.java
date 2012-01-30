@@ -25,7 +25,7 @@ import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.SimState;
+import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
 
