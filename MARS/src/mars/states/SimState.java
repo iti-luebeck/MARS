@@ -8,6 +8,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
@@ -44,6 +45,9 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Texture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.elements.Element;
@@ -206,6 +210,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             setupGUI();
             setupCams();
             
+            initMap();
+            
             auv_manager = new AUV_Manager(this);
             simob_manager = new SimObjectManager(this);
             com_manager = new Communication_Manager(auv_manager, this, rootNode, physical_environment);
@@ -312,6 +318,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.updateGeometricState();
         }
         super.initialize(stateManager, app);
+    }
+    
+    private void initMap(){
+        mars.getMapstate().loadMap(mars_settings.getTerrainfilepath_cm());
     }
     
     /*

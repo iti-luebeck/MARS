@@ -24,6 +24,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -281,7 +282,7 @@ public class StartState extends AbstractAppState{
             hanse_node.setLocalTranslation(0f, 0f, 0f);
         }
         hanse_node.move(tpf*-0.4f, 0f, 0);
-        
+       
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
     }

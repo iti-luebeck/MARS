@@ -2,7 +2,10 @@ package mars;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
@@ -62,7 +65,7 @@ public class TestAwtPanels extends SimpleApplication {
                 ctx.setInputSource(panel);
                 
                 panel2 = ctx.createPanel(PaintMode.Accelerated);
-                panel2.setPreferredSize(new Dimension(400, 300));
+                panel2.setPreferredSize(new Dimension(300, 200));
                 
                 createWindowForPanel(panel, 300);
                 createWindowForPanel(panel2, 700);
@@ -74,6 +77,13 @@ public class TestAwtPanels extends SimpleApplication {
     public void simpleInitApp() {
         flyCam.setDragToRotate(true);
         
+        Camera cam2 = cam.clone();
+        //cam2.setViewPort(.4f, .6f, 0.8f, 1f);
+        ViewPort viewPort2 = renderManager.createMainView("PiP", cam2);
+        viewPort2.setClearFlags(true, true, true);
+        viewPort2.setBackgroundColor(ColorRGBA.Cyan);
+        viewPort2.attachScene(rootNode);
+        
         Box b = new Box(Vector3f.ZERO, 1, 1, 1);
         Geometry geom = new Geometry("Box", b);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -83,6 +93,6 @@ public class TestAwtPanels extends SimpleApplication {
         
         panel.attachTo(true, viewPort);
         guiViewPort.setClearFlags(true, true, true);
-        panel2.attachTo(false, guiViewPort);
+        panel2.attachTo(false, viewPort2);
     }
 }

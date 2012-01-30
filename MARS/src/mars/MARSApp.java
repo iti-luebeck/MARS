@@ -202,10 +202,10 @@ public class MARSApp extends SingleFrameApplication {
                                 view.addAWTMapPanel(map_panel);
                                 app.enqueue(new Callable<Void>(){
                                 public Void call(){
-                                        sim_panel.attachTo(true, app.getViewPort());
-                                        //map_panel.attachTo(true, app.getViewPort());
                                         app.getViewPort().setClearFlags(true, true, true);
                                         app.getFlyByCamera().setDragToRotate(true);
+                                        sim_panel.attachTo(true, app.getViewPort());
+                                        map_panel.attachTo(false, app.getMapViewPort());
                                         return null;
                                     }
                                 });

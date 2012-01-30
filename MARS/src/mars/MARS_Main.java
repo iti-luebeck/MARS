@@ -13,8 +13,11 @@ import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
+import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
 import com.jme3.system.awt.AwtPanel;
 import de.lessvoid.nifty.Nifty;
@@ -30,6 +33,7 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import mars.states.MapState;
 
 
 /**
@@ -43,8 +47,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     private boolean view_init = false;
 
     StartState startstate;
-
+    MapState mapstate;
+    
     ChaseCamera chaseCam;
+    
+    ViewPort MapViewPort;
     
     //nifty(gui) stuff
     private NiftyJmeDisplay niftyDisplay;
@@ -79,14 +86,25 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleInitApp() {
         //initNifty();
+        initMapViewPort();
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
-        //panel.attachTo(true, viewPort);
+        
+        mapstate = new MapState(assetManager);
+        MapViewPort.attachScene(mapstate.getRootNode());
+        stateManager.attach(mapstate);
     }
     
-    public void test(){
-        //panel.attachTo(true, viewPort);
+    private void initMapViewPort(){
+        Camera map_cam = cam.clone();
+        float aspect = (float) map_cam.getWidth() / map_cam.getHeight();
+        float frustumSize = 1f;
+        map_cam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
+        map_cam.setParallelProjection(true);
+        MapViewPort = renderManager.createMainView("MapView", map_cam);
+        MapViewPort.setClearFlags(true, true, true);
+        MapViewPort.setBackgroundColor(ColorRGBA.Black);
     }
 
     /**
@@ -296,5 +314,13 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
+    }
+    
+    public ViewPort getMapViewPort(){
+        return MapViewPort;
+    }
+
+    public MapState getMapstate() {
+        return mapstate;
     }
 }
