@@ -153,6 +153,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     //general gui stuff
     GuiControlState guiControlState = new GuiControlState();
     
+    //map stuff
+    MapState mapState;
+    
     /**
      * 
      * @param assetManager
@@ -210,8 +213,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             setupGUI();
             setupCams();
             
-            initMap();
-            
             auv_manager = new AUV_Manager(this);
             simob_manager = new SimObjectManager(this);
             com_manager = new Communication_Manager(auv_manager, this, rootNode, physical_environment);
@@ -246,6 +247,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
             populateSim_Object_Manager(simobs);
+            
+            initMap();
             
             initPublicKeys();
             
@@ -321,7 +324,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     private void initMap(){
-        mars.getMapstate().loadMap(mars_settings.getTerrainfilepath_cm());
+        mapState.loadMap(mars_settings.getTerrainfilepath_cm());
+        Future fut = mars.enqueue(new Callable() {
+             public Void call() throws Exception {
+                mapState.setMars_settings(mars_settings);
+                mapState.setAuv_manager(auv_manager);
+                return null;
+            }
+        });
     }
     
     /*
@@ -944,5 +954,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         System.out.println("RESET!!!");
         time = 0f;
         auv_manager.resetAllAUVs();
+    }
+    
+    public void setMapState(MapState mapState) {
+        this.mapState = mapState;
     }
 }

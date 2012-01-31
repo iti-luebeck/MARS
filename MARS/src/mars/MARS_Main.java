@@ -154,6 +154,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             public Void call() throws Exception {
                 SimState simstate = new SimState(view);
                 viewPort.attachScene(simstate.getRootNode());
+                simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
                 return null;
             }

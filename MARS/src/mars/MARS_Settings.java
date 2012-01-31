@@ -38,6 +38,7 @@ public class MARS_Settings implements CellEditorListener{
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> settings;
     private HashMap<String,Object> Graphics;
+    private HashMap<String,Object> Gui;
     private HashMap<String,Object> Server;
     private HashMap<String,Object> RAW;
     private HashMap<String,Object> ROS;
@@ -112,6 +113,7 @@ public class MARS_Settings implements CellEditorListener{
     public MARS_Settings(XMLConfigReaderWriter xmll){
         settings = new HashMap<String,Object> ();
         Graphics = new HashMap<String,Object> ();
+        Gui = new HashMap<String,Object> ();
         Server = new HashMap<String,Object> ();
         RAW = new HashMap<String,Object> ();
         ROS = new HashMap<String,Object> ();
@@ -154,6 +156,7 @@ public class MARS_Settings implements CellEditorListener{
         Misc.put("Camera", Camera);
         Server.put("RAW", RAW);
         Server.put("ROS", ROS);
+        settings.put("Gui", Gui);
         this.xmll = xmll;
     }
     
@@ -171,6 +174,7 @@ public class MARS_Settings implements CellEditorListener{
         Physics = (HashMap<String,Object>)settings.get("Physics");
         Server = (HashMap<String,Object>)settings.get("Server");
         Graphics = (HashMap<String,Object>)settings.get("Graphics");
+        Gui = (HashMap<String,Object>)settings.get("Gui");
         Misc = (HashMap<String,Object>)settings.get("Misc");
         RAW = (HashMap<String,Object>)Server.get("RAW");
         ROS = (HashMap<String,Object>)Server.get("ROS");
@@ -984,5 +988,21 @@ public class MARS_Settings implements CellEditorListener{
      */
     public void setWireframecolor(ColorRGBA color) {
         WireFrame.put("color", color);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ColorRGBA getSelectionColor() {
+        return (ColorRGBA)Gui.get("selection_color");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setSelectionColor(ColorRGBA color) {
+        Gui.put("selection_color", color);
     }
 }

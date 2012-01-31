@@ -17,7 +17,6 @@ import javax.xml.bind.Unmarshaller;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.auv.AUV;
 import mars.auv.BasicAUV;
 import mars.simobjects.SimObject;
 
@@ -38,7 +37,7 @@ public class XML_JAXB_ConfigReaderWriter {
                         return s.toLowerCase().endsWith( ".xml" );
                     }           
         };
-        File dir = new File("./xml/simobjects");
+        File dir = new File("./config/default/simobjects");
         
         if(dir.isDirectory()){
             File[] files = dir.listFiles(filter);
@@ -83,7 +82,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static SimObject loadSimObject(String name){
         try {
-            File file = new File("./xml/simobjects/" + name + ".xml");
+            File file = new File("./config/default/simobjects/" + name + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -109,7 +108,7 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( SimObject.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            File file = new File( "./xml/simobjects/" + simob.getName() + ".xml" );
+            File file = new File( "./config/default/simobjects/" + simob.getName() + ".xml" );
             m.marshal( simob, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,7 +138,7 @@ public class XML_JAXB_ConfigReaderWriter {
                         return s.toLowerCase().endsWith( ".xml" );
                     }           
         };
-        File dir = new File("./xml/auvs");
+        File dir = new File("./config/default/auvs");
         
         if(dir.isDirectory()){
             File[] files = dir.listFiles(filter);
@@ -184,7 +183,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static BasicAUV loadAUV(String name){
         try {
-            File file = new File("./xml/auvs/" + name + ".xml");
+            File file = new File("./config/default/auvs/" + name + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -210,7 +209,7 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            File file = new File( "./xml/auvs/" + auv.getName() + ".xml" );
+            File file = new File( "./config/default/auvs/" + auv.getName() + ".xml" );
             m.marshal( auv, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -235,7 +234,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static MARS_Settings loadMARS_Settings(){
         try {
-            File file = new File("./xml/" + "Settings" + ".xml");
+            File file = new File("./config/default/" + "Settings" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -260,7 +259,7 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            File file = new File( "./xml/" + "Settings" + ".xml" );
+            File file = new File( "./config/default/" + "Settings" + ".xml" );
             m.marshal( mars_settings, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -273,7 +272,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static PhysicalEnvironment loadPhysicalEnvironment(){
         try {
-            File file = new File("./xml/" + "PhysicalEnvironment" + ".xml");
+            File file = new File("./config/default/" + "PhysicalEnvironment" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -298,7 +297,7 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            File file = new File( "./xml/" + "PhysicalEnvironment" + ".xml" );
+            File file = new File( "./config/default/" + "PhysicalEnvironment" + ".xml" );
             m.marshal( pe, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -311,7 +310,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static KeyConfig loadKeyConfig(){
         try {
-            File file = new File("./xml/" + "KeyConfig" + ".xml");
+            File file = new File("./config/default/" + "KeyConfig" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -336,7 +335,7 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            File file = new File( "./xml/" + "KeyConfig" + ".xml" );
+            File file = new File( "./config/default/" + "KeyConfig" + ".xml" );
             m.marshal( keyconfig, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);

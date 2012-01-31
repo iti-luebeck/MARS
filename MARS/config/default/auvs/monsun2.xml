@@ -35,6 +35,22 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">MONSUN2_MODEL</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeColorRGBA" key="selection_color">
+                        <value>
+                            <a>1.0</a>
+                            <b>0.0</b>
+                            <g>0.0</g>
+                            <r>1.0</r>
+                        </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeColorRGBA" key="map_color">
+                        <value>
+                            <a>1.0</a>
+                            <b>0.0</b>
+                            <g>0.0</g>
+                            <r>1.0</r>
+                        </value>
+                    </entry>
                 </value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="physicalvalues_updaterate">

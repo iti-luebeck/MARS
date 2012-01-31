@@ -1636,7 +1636,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Override
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
-            ambient_light.setColor(new ColorRGBA(255f*1f/255f,215f*1f/255f,0f*1f/255f,1.0f));
+            ambient_light.setColor(mars_settings.getSelectionColor());
             selectionNode.addLight(ambient_light); 
         }else if(selected == false){
             selectionNode.removeLight(ambient_light);

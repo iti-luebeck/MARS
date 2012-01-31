@@ -77,6 +77,8 @@ public class AUV_Parameters implements CellEditorListener{
     private float buoyancy_distance = 0f;
     private float buoyancy_scale = 0.9f;
     private boolean enabled = false;
+    private ColorRGBA selection_color = ColorRGBA.Red;
+    private ColorRGBA map_color = ColorRGBA.Red;
 
     /**
      *
@@ -127,6 +129,8 @@ public class AUV_Parameters implements CellEditorListener{
         setType(type);
         setDebugCenters(debug_centers);
         setEnabled(enabled);
+        setSelection_color(selection_color);
+        setMapColor(map_color);
         this.xmll = xmll;
     }
     
@@ -497,6 +501,38 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setDrag_updaterate(int drag_updaterate) {
         params.put("drag_updaterate", drag_updaterate);;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ColorRGBA getSelection_color() {
+         return (ColorRGBA)model.get("selection_color");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setSelection_color(ColorRGBA color) {
+        model.put("selection_color", color);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public ColorRGBA getMapColor() {
+         return (ColorRGBA)model.get("map_color");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setMapColor(ColorRGBA color) {
+        model.put("map_color", color);
     }
 
     /**

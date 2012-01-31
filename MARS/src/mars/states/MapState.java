@@ -18,8 +18,13 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
+import java.util.HashMap;
 import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 
 /**
  * This state is for updating the map in the gui.
@@ -28,12 +33,17 @@ import mars.MARS_Main;
 public class MapState extends AbstractAppState{
 
     private Node rootNode = new Node("Root Node");
+    private Node auvsNode = new Node("AUVS Node");
     private AssetManager assetManager;
     private MARS_Main mars;
+    private AUV_Manager auv_manager;
+    private HashMap<String,Geometry> auv_geoms = new HashMap<String,Geometry> ();
+    private MARS_Settings mars_settings;
     
     //map stuff
     Quad quad = new Quad(2f, 2f);
     Geometry map_geom = new Geometry("My Textured Box", quad);
+    Texture tex_ml;
 
     /**
      * 
@@ -69,16 +79,51 @@ public class MapState extends AbstractAppState{
 
             mars.getFlyByCamera().setEnabled(false);
             initMap();
+            rootNode.attachChild(auvsNode);
         }
         super.initialize(stateManager, app);
+    }
+    
+    public void setAuv_manager(AUV_Manager auv_manager) {
+        this.auv_manager = auv_manager;
+        HashMap<String, AUV> auvs = this.auv_manager.getAUVs();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled()){
+                Sphere sphere7 = new Sphere(16, 16, 0.025f);
+                Geometry auv_geom = new Geometry(auv.getName() + "-geom", sphere7);
+                Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                mark_mat7.setColor("Color", auv.getAuv_param().getMapColor());
+                auv_geom.setMaterial(mark_mat7);
+                Vector3f ter_pos = mars_settings.getTerrain_position();
+                float tile_length = mars_settings.getTileLength();
+                int terx_px = tex_ml.getImage().getWidth();
+                int tery_px = tex_ml.getImage().getHeight();
+                System.out.println("ter: " + terx_px + " " + terx_px*tile_length + " " + tery_px + " " + tery_px*tile_length);
+                //auv_geom.setLocalTranslation(new Vector3f((-1f)*ter_pos.x*(1f/(terx_px*tile_length)), (-1f)*ter_pos.z*(1f/(tery_px*tile_length)), -0.5f));
+                Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                System.out.println("auv_dist" + auv_dist);
+                //auv_geom.setLocalTranslation(Vector3f.ZERO);
+                auv_geom.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
+                System.out.println("x: " + ter_pos.x*(1f/(terx_px*tile_length)));
+                System.out.println("y: " + ter_pos.z*(1f/(tery_px*tile_length)));
+                auv_geom.updateGeometricState();
+                auvsNode.attachChild(auv_geom);
+                auv_geoms.put(auv.getName(), auv_geom);
+            }
+        }
+    }
+    
+    public void setMars_settings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
     }
     
     private void initMap(){
        assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
        Material mat_stl = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-       Texture tex_ml = assetManager.loadTexture("mars_logo_12f_white.png");
+       tex_ml = assetManager.loadTexture("mars_logo_12f_white.png");
        mat_stl.setTexture("ColorMap", tex_ml);
-       map_geom.setLocalTranslation(new Vector3f(-1f,-1f,0f));
+       map_geom.setLocalTranslation(new Vector3f(-1f,-1f,-1f));
        map_geom.setMaterial(mat_stl);
        rootNode.attachChild(map_geom);
     }
@@ -86,7 +131,7 @@ public class MapState extends AbstractAppState{
     public void loadMap(String terrain_image){
        assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class.getName());
        Material mat_stl = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-       Texture tex_ml = assetManager.loadTexture(terrain_image);
+       tex_ml = assetManager.loadTexture(terrain_image);
        mat_stl.setTexture("ColorMap", tex_ml);
        map_geom.setMaterial(mat_stl);
     }
@@ -144,6 +189,34 @@ public class MapState extends AbstractAppState{
         }
         super.update(tpf);
         
+        if(auv_manager != null){
+            for ( String elem : auv_geoms.keySet() ){
+                Geometry auv_geom = (Geometry)auv_geoms.get(elem);
+                AUV auv = auv_manager.getAUV(elem);
+                    if(auv.getAuv_param().isEnabled()){   
+                        if(auv.isSelected()){
+                            Vector3f ter_pos = mars_settings.getTerrain_position();
+                            float tile_length = mars_settings.getTileLength();
+                            int terx_px = tex_ml.getImage().getWidth();
+                            int tery_px = tex_ml.getImage().getHeight(); Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            auv_geom.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
+                            auv_geom.getMaterial().setColor("Color", mars_settings.getSelectionColor());
+                        }else{
+                            Vector3f ter_pos = mars_settings.getTerrain_position();
+                            float tile_length = mars_settings.getTileLength();
+                            int terx_px = tex_ml.getImage().getWidth();
+                            int tery_px = tex_ml.getImage().getHeight(); Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            auv_geom.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
+                            auv_geom.getMaterial().setColor("Color",  auv.getAuv_param().getMapColor());
+                            
+                            /*float[] hsv = java.awt.Color.RGBtoHSB(255, 255, 255, null);
+                            
+                            java.awt.Color col = new java.awt.Color(java.awt.Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
+                            col.get*/
+                        }
+                    }
+            }
+        }
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
     }
