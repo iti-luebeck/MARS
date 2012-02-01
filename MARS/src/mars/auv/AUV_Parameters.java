@@ -79,6 +79,7 @@ public class AUV_Parameters implements CellEditorListener{
     private boolean enabled = false;
     private ColorRGBA selection_color = ColorRGBA.Red;
     private ColorRGBA map_color = ColorRGBA.Red;
+    private float alpha_depth_scale = 3.0f;
 
     /**
      *
@@ -131,6 +132,7 @@ public class AUV_Parameters implements CellEditorListener{
         setEnabled(enabled);
         setSelection_color(selection_color);
         setMapColor(map_color);
+        setAlphaDepthScale(alpha_depth_scale);
         this.xmll = xmll;
     }
     
@@ -533,6 +535,22 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setMapColor(ColorRGBA color) {
         model.put("map_color", color);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getAlphaDepthScale() {
+        return (Float)model.get("alpha_depth_scale");
+    }
+
+    /**
+     *
+     * @param scale
+     */
+    public void setAlphaDepthScale(float scale) {
+        model.put("alpha_depth_scale", scale);
     }
 
     /**

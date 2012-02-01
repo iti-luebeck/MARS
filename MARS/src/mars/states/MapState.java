@@ -11,9 +11,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -90,11 +92,16 @@ public class MapState extends AbstractAppState{
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
-                Sphere sphere7 = new Sphere(16, 16, 0.025f);
-                Geometry auv_geom = new Geometry(auv.getName() + "-geom", sphere7);
-                Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                mark_mat7.setColor("Color", auv.getAuv_param().getMapColor());
-                auv_geom.setMaterial(mark_mat7);
+                Sphere auv_geom_sphere = new Sphere(16, 16, 0.025f);
+                Geometry auv_geom = new Geometry(auv.getName() + "-geom", auv_geom_sphere);
+                Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                auv_geom_mat.setColor("Color", auv.getAuv_param().getMapColor());
+                
+                //don't forget transparency for depth
+                auv_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                auv_geom.setQueueBucket(Bucket.Transparent);
+                
+                auv_geom.setMaterial(auv_geom_mat);
                 Vector3f ter_pos = mars_settings.getTerrain_position();
                 float tile_length = mars_settings.getTileLength();
                 int terx_px = tex_ml.getImage().getWidth();
@@ -207,10 +214,17 @@ public class MapState extends AbstractAppState{
                             int terx_px = tex_ml.getImage().getWidth();
                             int tery_px = tex_ml.getImage().getHeight(); Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
                             auv_geom.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
-                            auv_geom.getMaterial().setColor("Color",  auv.getAuv_param().getMapColor());
+                            float alpha = 0f;
+                            if(auv.getAuv_param().getAlphaDepthScale() > 0f){
+                                alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getAlphaDepthScale()))*(1f/auv.getAuv_param().getAlphaDepthScale());
+                            }
+                            ColorRGBA auv_geom_color = auv.getAuv_param().getMapColor();
+                            auv_geom.getMaterial().setColor("Color",  new ColorRGBA(auv_geom_color.getRed(), auv_geom_color.getGreen(), auv_geom_color.getBlue(), 1f-alpha));
                             
+                            
+                            
+                            //some color stuff for depth. not finished. using alpha instead
                             /*float[] hsv = java.awt.Color.RGBtoHSB(255, 255, 255, null);
-                            
                             java.awt.Color col = new java.awt.Color(java.awt.Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
                             col.get*/
                         }

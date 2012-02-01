@@ -51,6 +51,9 @@
                             <r>1.0</r>
                         </value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="alpha_depth_scale">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">3.0</value>
+                    </entry>
                 </value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="physicalvalues_updaterate">
@@ -285,7 +288,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>compass</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>2000</ros_publish_rate>
                 <Position>
                     <x>0.0</x>
@@ -367,6 +370,33 @@
                     <enabled>true</enabled>
                     <ros_publish_rate>1000</ros_publish_rate>
                 </Gyroscope>
+				<Compass>
+					<noise_type>0</noise_type>
+					<noise_value>1.0</noise_value>
+					<name>imu_compass</name>
+					<enabled>true</enabled>
+					<ros_publish_rate>1000</ros_publish_rate>
+					<Position>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</Position>
+					<CompassYawAxisVector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</CompassYawAxisVector>
+					<CompassPitchAxisVector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</CompassPitchAxisVector>
+					<CompassRollAxisVector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</CompassRollAxisVector>
+				</Compass>
             </value>
         </entry>
     </Sensors>

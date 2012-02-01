@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import org.ros.message.Time;
+import org.ros.message.geometry_msgs.Quaternion;
 import org.ros.message.geometry_msgs.Vector3;
 
 /**
@@ -27,6 +28,8 @@ public class IMU extends Sensor{
     Accelerometer acc = new Accelerometer();
     @XmlElement(name="Gyroscope")
     Gyroscope gyro = new Gyroscope();
+    @XmlElement(name="Compass")
+    Compass comp = new Compass();
     
     ///ROS stuff
     private Publisher<org.ros.message.sensor_msgs.Imu> publisher = null;
@@ -49,9 +52,11 @@ public class IMU extends Sensor{
         super(simstate);
         this.pe = pe;
         acc.setPhysical_environment(pe);
+        comp.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
         acc.setSimState(simState);
         gyro.setSimState(simState);
+        comp.setSimState(simState);
     }
 
     /**
@@ -62,6 +67,7 @@ public class IMU extends Sensor{
         super(simstate);
         acc.setSimState(simState);
         gyro.setSimState(simState);
+        comp.setSimState(simState);
     }
 
     /**
@@ -71,6 +77,7 @@ public class IMU extends Sensor{
         this.auv_node = auv_node;
         acc.init(auv_node);
         gyro.init(auv_node);
+        comp.init(auv_node);
     }
 
     /**
@@ -80,6 +87,7 @@ public class IMU extends Sensor{
     public void update(float tpf){
         acc.update(tpf);
         gyro.update(tpf);
+        comp.update(tpf);
     }
     
     /**
@@ -88,6 +96,7 @@ public class IMU extends Sensor{
     public void reset(){
         acc.reset();
         gyro.reset();
+        comp.reset();
     }
     
     @Override
@@ -95,6 +104,7 @@ public class IMU extends Sensor{
         super.setPhysical_environment(pe);
         acc.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
+        comp.setPhysical_environment(pe);
     }
     
     /**
@@ -106,6 +116,7 @@ public class IMU extends Sensor{
         super.setSimState(simState);
         acc.setSimState(simState);
         gyro.setSimState(simState);
+        comp.setSimState(simState);
     }
     
     @Override
@@ -113,6 +124,7 @@ public class IMU extends Sensor{
         super.setPhysicsControl(physics_control);
         acc.setPhysicsControl(physics_control);
         gyro.setPhysicsControl(physics_control);
+        comp.setPhysicsControl(physics_control);
     }
     
         /**
@@ -124,6 +136,7 @@ public class IMU extends Sensor{
         super.setNodeVisibility(visible);
         acc.setNodeVisibility(visible);
         gyro.setNodeVisibility(visible);
+        comp.setNodeVisibility(visible);
     }
 
     /**
@@ -135,6 +148,7 @@ public class IMU extends Sensor{
         super.setPhysicalExchangerName(name);
         acc.setPhysicalExchangerName(name + "_accelerometer");
         gyro.setPhysicalExchangerName(name + "_gyroscope");
+        comp.setPhysicalExchangerName(name + "_compass");
     }
     
     /**
@@ -146,6 +160,7 @@ public class IMU extends Sensor{
         super.setEnabled(enabled);
         acc.setEnabled(enabled);
         gyro.setEnabled(enabled);
+        comp.setEnabled(enabled);
     }
     
     /**
@@ -178,6 +193,14 @@ public class IMU extends Sensor{
         ang_vec.y = gyro.getAngularVelocityZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
         ang_vec.z = gyro.getAngularVelocityYAxis();
         fl.angular_velocity = ang_vec;
+        Quaternion quat = new Quaternion();
+        com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
+        jme3_quat.fromAngles(comp.getYawRadiant(), comp.getRollRadiant(), comp.getPitchRadiant());
+        quat.x = jme3_quat.getX();
+        quat.y = jme3_quat.getY();
+        quat.z = jme3_quat.getZ();
+        quat.w = jme3_quat.getW();
+        fl.orientation = quat;
         this.publisher.publish(fl);
     }
 }
