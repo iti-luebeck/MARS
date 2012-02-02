@@ -91,6 +91,7 @@ import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
 import mars.sensors.IMU;
 import mars.sensors.InfraRedSensor;
+import mars.sensors.Positionmeter;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
@@ -394,6 +395,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 m.marshal( serv, System.out );*/
+                /*Positionmeter serv = new Positionmeter();
+                serv.setEnabled(true);
+                serv.setNodeVisibility(true);
+                serv.setPhysicalExchangerName("positionmeter");
+                JAXBContext context = JAXBContext.newInstance( Positionmeter.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( serv, System.out );*/
              
              
              auvs = XML_JAXB_ConfigReaderWriter.loadAUVs();//xmll.getAuvs();
@@ -661,7 +670,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           // The closest result is the target that the player picked:
           Geometry target = results.getClosestCollision().getGeometry();
           // Here comes the action:
-          System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
+          System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           if(auv != null){
                 auv.setSelected(true);
@@ -677,9 +686,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         CollisionResults results = new CollisionResults();
         // Convert screen click to 3d position
         Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        System.out.println("click2d: " + click2d);
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 1f).subtractLocal(click3d);
 
+
+        /*Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(dir));
+        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.White);
+        mark4.setMaterial(mark_mat4);
+        mark4.setLocalTranslation(click3d);
+        mark4.updateGeometricState();
+        rootNode.attachChild(mark4);*/
+        
         // Aim the ray from the clicked spot forwards.
         Ray ray = new Ray(click3d, dir);
         // Collect intersections between ray and all nodes in results list.
@@ -694,8 +713,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           if(auv != null){
             auv.setSelected(true);
           }
-          view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+          //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+          view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }else{//nothing to pickRightClick
+            //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();
             view.hideAllPopupWindows();
         }

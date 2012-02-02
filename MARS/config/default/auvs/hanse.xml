@@ -432,7 +432,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>0.5</noise_value>
                 <name>sonar/echo</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>100</ros_publish_rate>
                 <Position>
                     <x>-0.2</x>
@@ -492,6 +492,15 @@
                 <noise_value>1.0</noise_value>
                 <name>accelerometer</name>
                 <enabled>false</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="positionmeter">
+            <value xsi:type="positionmeter">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>positionmeter</name>
+                <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
             </value>
         </entry>
