@@ -585,7 +585,7 @@ public class AUV_Manager {
      * @param auvs
      */
     public void deselectAllAUVs(){
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
+        //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
             auv.setSelected(false);
@@ -593,7 +593,7 @@ public class AUV_Manager {
     }
     
     public AUV getSelectedAUV(){
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
+        //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
             if(auv.isSelected()){

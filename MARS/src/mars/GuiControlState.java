@@ -87,7 +87,6 @@ public class GuiControlState {
 
     public void setGhost_auv(Spatial ghost_auv) {
         this.ghost_auv = ghost_auv;
-        setDepth_iteration(0);
     }
 
     public Quaternion getRotation() {
@@ -115,10 +114,10 @@ public class GuiControlState {
     }
     
     public void incrementDepthIteration(){
-        depth_iteration++;
+        depth_iteration = depth_iteration + 1;
     }
     
     public void decrementDepthIteration(){
-        depth_iteration--;
+        depth_iteration = depth_iteration - 1;
     }
 }

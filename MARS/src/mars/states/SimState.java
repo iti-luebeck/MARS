@@ -558,7 +558,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 if(guiControlState.isMove_auv()){
                     AUV selected_auv = auv_manager.getSelectedAUV();
                     if(selected_auv != null){
-                        System.out.println("ghost depth");
                         guiControlState.decrementDepthIteration();
                         guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
                     }
@@ -567,21 +566,20 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 if(guiControlState.isMove_auv()){
                     AUV selected_auv = auv_manager.getSelectedAUV();
                     if(selected_auv != null){
-                        System.out.println("ghost depth");
                         guiControlState.incrementDepthIteration();
                         guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
                     }
                 }
             }else if(name.equals("moveauv") && keyPressed) {
-                System.out.println("moveauv");
+                //System.out.println("moveauv");
                 guiControlState.setMove_auv(true);
                 mars.getFlyByCamera().setEnabled(false);
-                System.out.println(guiControlState.isMove_auv());
-                System.out.println(guiControlState.isFree());
+                //System.out.println(guiControlState.isMove_auv());
+                //System.out.println(guiControlState.isFree());
                 AUV selected_auv = auv_manager.getSelectedAUV();
                 if(selected_auv != null){
                     guiControlState.setGhost_auv(selected_auv.getGhostAUV());
-                    guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
+                    //guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
                     selected_auv.hideGhostAUV(false);
                 }
             }else if(name.equals("moveauv") && !keyPressed) {
@@ -593,6 +591,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//reset ghost auv for rotation
                     selected_auv.hideGhostAUV(true);
                 }
+                guiControlState.setDepth_iteration(0);
                 guiControlState.setMove_auv(false);
             }else if(name.equals("rotateauv") && keyPressed) {
                 System.out.println("rotateauv");
@@ -600,7 +599,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mars.getFlyByCamera().setEnabled(false);
                 if(selected_auv != null){
                     guiControlState.setGhost_auv(selected_auv.getGhostAUV());
-                    guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
+                    //guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                     selected_auv.hideGhostAUV(false);
                 }
                 guiControlState.setRotate_auv(true);
@@ -612,6 +611,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
                     selected_auv.hideGhostAUV(true);
                 }
+                //guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                 guiControlState.setRotate_auv(false);
             }
         }
@@ -626,6 +626,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //System.out.println("Intersection: " + intersection);
         if(guiControlState.getGhost_auv() != null){
             guiControlState.getGhost_auv().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
+            guiControlState.getGhost_auv().setLocalRotation(guiControlState.getRotation());
         }
     }
     
@@ -742,19 +743,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auv_hanse = (Hanse)aaa;
             }
         }*/
-    }
-    
-    /*
-     *
-     */
-    @Deprecated
-    private void populateAUV_Manager(HashMap auvs,PhysicalEnvironment pe, MARS_Settings simauv_settings){
-        /*auv_manager.setBulletAppState(bulletAppState);
-        auv_manager.setPhysical_environment(pe);
-        auv_manager.setSimauv_settings(mars_settings);
-        auv_manager.registerAUVs(auvs);
-        //auv_hanse = (Hanse)auvs.get(0);
-        auv_monsun2 = (Monsun2)auvs.get(2);*/
     }
 
     /*
