@@ -67,6 +67,11 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     @XmlElement
     protected int ros_publish_rate = 1000;
+    /**
+     * 
+     */
+    @XmlElement
+    protected String ros_frame_id = "/map";
     /*
      * 
      */
@@ -270,6 +275,14 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void setRos_publish_rate(int ros_publish_rate) {
         this.ros_publish_rate = ros_publish_rate;
+    }
+
+    public String getRos_frame_id() {
+        return ros_frame_id;
+    }
+
+    public void setRos_frame_id(String ros_frame_id) {
+        this.ros_frame_id = ros_frame_id;
     }
     
     /**

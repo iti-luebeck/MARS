@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.ros.MARSNodeMain;
@@ -27,8 +26,8 @@ public class Positionmeter extends Sensor{
     private Vector3f new_position = new Vector3f(0f,0f,0f);
     
     ///ROS stuff
-    private Publisher<org.ros.message.geometry_msgs.PoseStamped> publisher = null;
-    private org.ros.message.geometry_msgs.PoseStamped fl = new org.ros.message.geometry_msgs.PoseStamped ();
+    private Publisher<org.ros.message.geometry_msgs.PointStamped> publisher = null;
+    private org.ros.message.geometry_msgs.PointStamped fl = new org.ros.message.geometry_msgs.PointStamped ();
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     /**
@@ -161,16 +160,14 @@ public class Positionmeter extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = "positionmeter";
+        header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
         point.x = getPosition().x;
         point.y = getPosition().z;
         point.z = getPosition().y;
-        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
-        pose.position = point;
-        fl.pose = pose;      
+        fl.point = point;      
         this.publisher.publish(fl);
     }
 }

@@ -442,7 +442,7 @@ public class VideoCamera extends Sensor implements Moveable{
     @Override
     public void publish() {
         //header.seq = 0;
-        header.frame_id = "camera";
+        header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         fl.height = getCameraHeight();

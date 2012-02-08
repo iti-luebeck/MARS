@@ -379,6 +379,22 @@ public class MARS_Settings implements CellEditorListener{
     public void setPhysicsFramerate(int framerate) {
         Physics.put("framerate", framerate);
     }
+    
+     /**
+     *
+     * @return
+     */
+    public int getPhysicsMaxSubSteps() {
+        return (Integer)Physics.get("maxsubsteps");
+    }
+
+    /**
+     *
+     * @param framerate 
+     */
+    public void setPhysicsMaxSubSteps(int maxsubsteps) {
+        Physics.put("maxsubsteps", maxsubsteps);
+    }
 
     /**
      *
@@ -587,6 +603,22 @@ public class MARS_Settings implements CellEditorListener{
      */
     public void setROS_Master_IP(String master_ip) {
         ROS.put("masterip", master_ip);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getROS_Local_IP() {
+        return (String)ROS.get("localip");
+    }
+
+    /**
+     *
+     * @param master_ip 
+     */
+    public void setROS_Local_IP(String localip) {
+        ROS.put("localip", localip);
     }
     
     /**

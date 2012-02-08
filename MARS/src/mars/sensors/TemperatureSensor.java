@@ -180,7 +180,7 @@ public class TemperatureSensor extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = "temperature";
+        header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         fl.data = (int)(getTemperature()*10);

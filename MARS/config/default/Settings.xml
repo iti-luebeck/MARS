@@ -9,6 +9,9 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="framerate">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">60</value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="maxsubsteps">
+                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
+                </entry>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Misc">
@@ -193,10 +196,10 @@
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.15625</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_heightmap">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_hm.jpg</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">image7.jpg</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_color">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_cm.jpg</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">image7.jpg</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">85.0</value>
@@ -238,13 +241,16 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="ROS">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterport">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">11311</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="localip">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">auto</value>
                         </entry>
                     </value>
                 </entry>

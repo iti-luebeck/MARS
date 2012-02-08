@@ -91,7 +91,9 @@ import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
 import mars.sensors.IMU;
 import mars.sensors.InfraRedSensor;
+import mars.sensors.Posemeter;
 import mars.sensors.Positionmeter;
+import mars.sensors.TerrainSender;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
@@ -220,6 +222,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
             initer = new Initializer(mars,this,auv_manager,com_manager);
             initer.init();
+            
+            //set camera to look to (0,0,0)
+            mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
             
             com_manager.setServer(initer.getRAW_Server());
 
@@ -355,7 +360,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
-        bulletAppState.getPhysicsSpace().setMaxSubSteps(4);
+        bulletAppState.getPhysicsSpace().setMaxSubSteps(mars_settings.getPhysicsMaxSubSteps());
         if(mars_settings.isPhysicsDebug()){
             bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         }
@@ -395,11 +400,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 m.marshal( serv, System.out );*/
-                /*Positionmeter serv = new Positionmeter();
+               /* TerrainSender serv = new TerrainSender();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
-                serv.setPhysicalExchangerName("positionmeter");
-                JAXBContext context = JAXBContext.newInstance( Positionmeter.class );
+                serv.setPhysicalExchangerName("terrainsender");
+                JAXBContext context = JAXBContext.newInstance( TerrainSender.class );
                 Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 m.marshal( serv, System.out );*/
@@ -708,6 +713,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if (results.size() > 0) {
           // The closest result is the target that the player picked:
           Geometry target = results.getClosestCollision().getGeometry();
+          guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
+          guiControlState.setAuvContactDirection(dir.normalize());
           // Here comes the action:
           System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
@@ -715,7 +722,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             auv.setSelected(true);
           }
           //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
-          view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
+          view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }else{//nothing to pickRightClick
             //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();
@@ -904,6 +911,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             System.out.println("View is NULL");
         }
         if(view != null && !view_init && mars_settings!=null){
+            view.setMarsSettings(mars_settings);
             view.initTree(mars_settings,auvs,simobs);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
@@ -967,5 +975,43 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     public void setMapState(MapState mapState) {
         this.mapState = mapState;
+    }
+    
+    public void pokeSelectedAUV(){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
+            Vector3f direction = guiControlState.getAuvContactDirection().mult(50f);
+            System.out.println("POKE!");     
+            selected_auv.getPhysicsControl().applyImpulse(direction.mult(1f), rel_pos);
+            
+            /*Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(direction));
+            Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mark_mat4.setColor("Color", ColorRGBA.White);
+            mark4.setMaterial(mark_mat4);
+            mark4.setLocalTranslation(guiControlState.getAuvContactPoint());
+            mark4.updateGeometricState();
+            rootNode.attachChild(mark4);*/
+        }
+    }
+    
+    public void chaseSelectedAUV(){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            mars.getFlyByCamera().setEnabled(false);
+            mars.getChaseCam().setSpatial(selected_auv.getAUVNode());
+            mars.getChaseCam().setEnabled(true);
+        }
+    }
+    
+    public void debugSelectedAUV(int debug_mode){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            switch(debug_mode){
+                case 0:System.out.println("debug 0");
+                case 1:;
+                default:;
+            }                
+        }
     }
 }

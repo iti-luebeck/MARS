@@ -25,6 +25,8 @@ public class GuiControlState {
     private Quaternion rotation = new Quaternion();
     private int depth_iteration = 0;
     private float depth_factor = 0.25f;
+    private Vector3f contact_point = Vector3f.ZERO;
+    private Vector3f contact_direction = Vector3f.ZERO;
 
     public GuiControlState() {
     }
@@ -119,5 +121,21 @@ public class GuiControlState {
     
     public void decrementDepthIteration(){
         depth_iteration = depth_iteration - 1;
+    }
+    
+    public void setAuvContactPoint(Vector3f contact_point){
+        this.contact_point = contact_point;
+    }
+    
+    public Vector3f getAuvContactPoint(){
+        return contact_point;
+    }
+    
+    public void setAuvContactDirection(Vector3f contact_direction){
+        this.contact_direction = contact_direction;
+    }
+    
+    public Vector3f getAuvContactDirection(){
+        return contact_direction;
     }
 }

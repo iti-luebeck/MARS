@@ -82,7 +82,10 @@ public class Initializer {
     private Node terrain_node;
     private int[] pixelSamples;
     private int[][] pixelSample;
-
+    private int terrain_image_width = 0;
+    private int terrain_image_heigth = 0;
+    private byte[] terrain_byte_arrray;
+    
     //water
     private WaterFilter water;
     private float waves_time = 0f;
@@ -237,6 +240,7 @@ public class Initializer {
             ros_server = new ROS_Node( mars, auv_manager );
             ros_server.setMaster_port(MARS_settings.getROS_Server_port());
             ros_server.setMaster_ip(MARS_settings.getROS_Master_IP());
+            ros_server.setLocal_ip(MARS_settings.getROS_Local_IP());
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
@@ -250,6 +254,7 @@ public class Initializer {
             ros_server = new ROS_Node( mars, auv_manager );
             ros_server.setMaster_port(MARS_settings.getROS_Server_port());
             ros_server.setMaster_ip(MARS_settings.getROS_Master_IP());
+            ros_server.setLocal_ip(MARS_settings.getROS_Local_IP());
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
@@ -492,13 +497,22 @@ public class Initializer {
 
         int w = bimage.getWidth();
         int h = bimage.getHeight();
+        terrain_image_width = w;
+        terrain_image_heigth = h;
         pixelSamples = new int[h * w];
         pixelSample = new int[h][w];
+        terrain_byte_arrray = new byte[h*w];
         bimage.getRaster().getSamples(0, 0, w, h, 0, pixelSamples);
         int count = 0;
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 pixelSample[i][j] = pixelSamples[count];
+                /*if(Math.round(((pixelSamples[count]*100f)/256f)) < 20f){
+                    terrain_byte_arrray[count] = (byte)(0);
+                }else{*/
+                    terrain_byte_arrray[count] = (byte)Math.round(((pixelSamples[count]*100f)/255f));
+                //}
+                //System.out.println(count + ": " + pixelSamples[count]);
                 count++;
             }
         }
@@ -567,5 +581,17 @@ public class Initializer {
      */
     public RigidBodyControl getTerrain_physics_control() {
         return terrain_physics_control;
+    }
+    
+    public int getTerrain_image_heigth() {
+        return terrain_image_heigth;
+    }
+
+    public int getTerrain_image_width() {
+        return terrain_image_width;
+    }
+    
+    public byte[] getTerrainByteArray() {
+        return terrain_byte_arrray;
     }
 }

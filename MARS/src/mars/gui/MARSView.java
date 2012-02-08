@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.Timer;
@@ -84,6 +86,7 @@ import mars.auv.PhysicalValues;
 import mars.sensors.Sensor;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
+import mars.states.SimState;
 import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
 
@@ -215,7 +218,6 @@ public class MARSView extends FrameView {
      * @param simobs
      */
     public void initTree(MARS_Settings simauv_settings, ArrayList auvs, ArrayList simobs){
-        this.simauv_settings = simauv_settings;
         this.auvs = auvs;
         this.simobs = simobs;
         EventQueue.invokeLater(new Runnable(){
@@ -239,8 +241,8 @@ public class MARSView extends FrameView {
      * 
      * @param mars
      */
-    public void setSimAUV(MARS_Main simauv){
-        this.mars = simauv;
+    public void setSimAUV(MARS_Main mars){
+        this.mars = mars;
     }
     
     /**
@@ -275,6 +277,14 @@ public class MARSView extends FrameView {
         }else if(series == 3){
             torque_series.add(torque_series.getItemCount()+1, value);
         }
+    }
+    
+    public void setMarsSettings(MARS_Settings simauv_settings){
+        this.simauv_settings = simauv_settings;
+    }
+    
+    public void initPopUpMenues(){
+        
     }
 
     /**
@@ -537,11 +547,20 @@ public class MARSView extends FrameView {
     }
     
     public void showpopupWindowSwitcher(final int x, final int y){
-        System.out.println("mouse " + x + " " + y);
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
                     jme3_window_switcher.show(JMEPanel1.getComponent(0),x,y);
+                }
+            }
+        );
+    }
+    
+    public void showpopupAUV(final int x, final int y){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jme3_auv.show(JMEPanel1.getComponent(0),x,y);
                 }
             }
         );
@@ -653,6 +672,13 @@ public class MARSView extends FrameView {
         split_view = new javax.swing.JMenuItem();
         jme3_auv = new javax.swing.JPopupMenu();
         jme3_chase_auv = new javax.swing.JMenuItem();
+        jme3_move_auv = new javax.swing.JMenuItem();
+        jme3_rotate_auv = new javax.swing.JMenuItem();
+        jme3_poke = new javax.swing.JMenuItem();
+        jme3_params_auv = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jme3_debug_auv = new javax.swing.JMenu();
+        jme3_debug_auv_pe = new javax.swing.JCheckBoxMenuItem();
         jToolBarPlay = new javax.swing.JToolBar();
         jButtonPlay = new javax.swing.JButton();
         jButtonPause = new javax.swing.JButton();
@@ -1307,11 +1333,57 @@ public class MARSView extends FrameView {
         split_view.setName("split_view"); // NOI18N
         jme3_window_switcher.add(split_view);
 
+        jme3_auv.setLightWeightPopupEnabled(false);
         jme3_auv.setName("jme3_auv"); // NOI18N
 
         jme3_chase_auv.setText(resourceMap.getString("jme3_chase_auv.text")); // NOI18N
         jme3_chase_auv.setName("jme3_chase_auv"); // NOI18N
+        jme3_chase_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_chase_auvActionPerformed(evt);
+            }
+        });
         jme3_auv.add(jme3_chase_auv);
+
+        jme3_move_auv.setText(resourceMap.getString("jme3_move_auv.text")); // NOI18N
+        jme3_move_auv.setName("jme3_move_auv"); // NOI18N
+        jme3_auv.add(jme3_move_auv);
+
+        jme3_rotate_auv.setText(resourceMap.getString("jme3_rotate_auv.text")); // NOI18N
+        jme3_rotate_auv.setName("jme3_rotate_auv"); // NOI18N
+        jme3_auv.add(jme3_rotate_auv);
+
+        jme3_poke.setText(resourceMap.getString("jme3_poke.text")); // NOI18N
+        jme3_poke.setName("jme3_poke"); // NOI18N
+        jme3_poke.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_pokeActionPerformed(evt);
+            }
+        });
+        jme3_auv.add(jme3_poke);
+
+        jme3_params_auv.setText(resourceMap.getString("jme3_params_auv.text")); // NOI18N
+        jme3_params_auv.setName("jme3_params_auv"); // NOI18N
+
+        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jme3_params_auv.add(jMenuItem2);
+
+        jme3_auv.add(jme3_params_auv);
+
+        jme3_debug_auv.setText(resourceMap.getString("jme3_debug_auv.text")); // NOI18N
+        jme3_debug_auv.setName("jme3_debug_auv"); // NOI18N
+
+        jme3_debug_auv_pe.setText(resourceMap.getString("jme3_debug_auv_pe.text")); // NOI18N
+        jme3_debug_auv_pe.setName("jme3_debug_auv_pe"); // NOI18N
+        jme3_debug_auv_pe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_peActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_pe);
+
+        jme3_auv.add(jme3_debug_auv);
 
         jToolBarPlay.setRollover(true);
         jToolBarPlay.setName("jToolBarPlay"); // NOI18N
@@ -1836,6 +1908,42 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         mars.restartSimulation();
     }//GEN-LAST:event_jButtonRestartMouseClicked
 
+    private void jme3_pokeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_pokeActionPerformed
+            Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.pokeSelectedAUV();
+                }
+                return null;
+            }
+            });
+    }//GEN-LAST:event_jme3_pokeActionPerformed
+
+    private void jme3_chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_chase_auvActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.chaseSelectedAUV();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jme3_chase_auvActionPerformed
+
+    private void jme3_debug_auv_peActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_peActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.debugSelectedAUV(0);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jme3_debug_auv_peActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JPanel JMEPanel1;
@@ -1887,6 +1995,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1901,6 +2010,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
+    private javax.swing.JMenu jme3_debug_auv;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
+    private javax.swing.JMenuItem jme3_move_auv;
+    private javax.swing.JMenu jme3_params_auv;
+    private javax.swing.JMenuItem jme3_poke;
+    private javax.swing.JMenuItem jme3_rotate_auv;
     private javax.swing.JPopupMenu jme3_window_switcher;
     private javax.swing.JMenuItem keys;
     private javax.swing.JDialog keys_dialog;
@@ -1927,7 +2042,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.6.1";
+    private final String VERSION = "0.6.2";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

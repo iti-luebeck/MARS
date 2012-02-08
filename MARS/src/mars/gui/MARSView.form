@@ -1063,6 +1063,7 @@
     </Container>
     <Container class="javax.swing.JPopupMenu" name="jme3_auv">
       <Properties>
+        <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="jme3_auv" noResource="true"/>
       </Properties>
 
@@ -1075,7 +1076,62 @@
             <Property name="text" type="java.lang.String" resourceKey="jme3_chase_auv.text"/>
             <Property name="name" type="java.lang.String" value="jme3_chase_auv" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_chase_auvActionPerformed"/>
+          </Events>
         </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jme3_move_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_move_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_move_auv" noResource="true"/>
+          </Properties>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jme3_rotate_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_rotate_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_rotate_auv" noResource="true"/>
+          </Properties>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="jme3_poke">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_poke.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_poke" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_pokeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Menu class="javax.swing.JMenu" name="jme3_params_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_params_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_params_auv" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jMenuItem2.text"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem2" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jme3_debug_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_debug_auv" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_pe">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_pe.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_pe" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_peActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JToolBar" name="jToolBarPlay">

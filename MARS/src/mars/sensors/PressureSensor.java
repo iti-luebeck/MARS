@@ -220,7 +220,7 @@ public class PressureSensor extends Sensor{
     @Override
     public void publish() {
         //header.seq = 0;
-        header.frame_id = "pressure";
+        header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         fl.data = (int)getPressureMbar();

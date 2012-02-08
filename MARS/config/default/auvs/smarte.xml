@@ -184,6 +184,7 @@
                 <name>sonar_360</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.0</x>
                     <y>-0.10</y>
@@ -223,6 +224,7 @@
                 <name>press</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>100</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.1</x>
                     <y>0.02</y>
@@ -237,6 +239,7 @@
                 <name>gyroscope</name>
                 <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="temp">
@@ -246,6 +249,7 @@
                 <name>temp</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.1</x>
                     <y>0.02</y>
@@ -260,6 +264,7 @@
                 <name>compass</name>
                 <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.0</x>
                     <y>0.0</y>
@@ -289,6 +294,7 @@
                 <name>front_cam</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>-0.13</x>
                     <y>-0.07</y>
@@ -317,6 +323,7 @@
                 <name>accelerometer</name>
                 <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
@@ -326,12 +333,14 @@
                 <name>imu</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Accelerometer>
                     <noise_type>0</noise_type>
                     <noise_value>1.0</noise_value>
                     <name>imu_accelerometer</name>
                     <enabled>true</enabled>
                     <ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
                 </Accelerometer>
                 <Gyroscope>
                     <noise_type>0</noise_type>
@@ -339,6 +348,7 @@
                     <name>imu_gyroscope</name>
                     <enabled>true</enabled>
                     <ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
                 </Gyroscope>
 				<Compass>
 					<noise_type>0</noise_type>
@@ -346,6 +356,7 @@
 					<name>imu_compass</name>
 					<enabled>true</enabled>
 					<ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
 					<Position>
 						<x>0.0</x>
 						<y>0.0</y>
@@ -378,6 +389,7 @@
                 <name>servoFrontCam</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>-0.10</x>
                     <y>-0.07</y>
@@ -407,6 +419,7 @@
                 <name>servoTitan</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>-0.10</x>
                     <y>0.03</y>
@@ -436,6 +449,7 @@
                 <name>thrusterTitan</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>-0.22</x>
                     <y>-0.06</y>
@@ -475,6 +489,7 @@
                 <name>servoHyperion</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.05</x>
                     <y>0.03</y>
@@ -504,6 +519,7 @@
                 <name>thrusterHyperion</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.11</x>
                     <y>-0.06</y>
@@ -543,6 +559,7 @@
                 <name>servoPrometheus</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.05</x>
                     <y>0.03</y>
@@ -569,6 +586,7 @@
                 <name>thrusterPrometheus</name>
                 <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
                 <Position>
                     <x>0.11</x>
                     <y>-0.06</y>

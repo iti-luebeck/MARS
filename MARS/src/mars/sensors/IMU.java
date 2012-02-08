@@ -180,7 +180,7 @@ public class IMU extends Sensor{
     @Override
     public void publish() {
         //header.seq = 0;
-        header.frame_id = "imu";
+        header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         Vector3 acc_vec = new Vector3();

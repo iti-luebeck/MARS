@@ -34,6 +34,7 @@ public class ROS_Node implements Runnable {
     private static final long sleeptime = 2;
     
     private String master_ip = "127.0.0.1"; //localhost
+    private String local_ip = "127.0.0.1";
     private int master_port = 11311;// port
     private String master_uri = "http://" + master_ip + ":" + master_port + "/";
 
@@ -79,6 +80,14 @@ public class ROS_Node implements Runnable {
     public void setMaster_ip(String master_ip) {
         this.master_ip = master_ip;
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
+    }
+
+    public void setLocal_ip(String local_ip) {
+        this.local_ip = local_ip;
+    }
+
+    public String getLocal_ip() {
+        return local_ip;
     }
 
     /**
@@ -142,14 +151,23 @@ public class ROS_Node implements Runnable {
         InetAddress ownIP = null;
         try {
             ownIP = InetAddress.getLocalHost();
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server IP: " + ownIP.getHostAddress(), "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS MARS Node IP: " + ownIP.getHostAddress(), "");
         } catch (UnknownHostException ex) {
             Logger.getLogger(ROS_Node.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         System.out.println("ROS Master IP: " + getMaster_uri());
         java.net.URI muri = java.net.URI.create(getMaster_uri());
-        NodeConfiguration nodeConf = NodeConfiguration.newPublic(ownIP.getHostAddress(), muri);
+        
+        String own_ip_string = "127.0.0.1";
+        if(getLocal_ip().equals("auto")){
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUTO IP Detection activated. Using: " + ownIP.getHostAddress(), "");
+            own_ip_string = ownIP.getHostAddress();
+        }else{
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Local IP Settings activated. Using: " + getLocal_ip(), "");
+            own_ip_string = getLocal_ip();
+        }
+        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
         nodeConf.setNodeName("MARS");
         
         Preconditions.checkState(marsnode == null);

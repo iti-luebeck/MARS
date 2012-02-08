@@ -75,6 +75,7 @@ import mars.auv.example.SMARTE;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Sonar;
+import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.xml.HashMapAdapter;
@@ -526,6 +527,10 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(element instanceof Sonar){
                     ((Sonar)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
                 } 
+                if(element instanceof TerrainSender){
+                    ((TerrainSender)element).setIniter(initer);
+                    ((TerrainSender)element).setMarsSettings(mars_settings);
+                }
                 element.init(auv_node);
                 if(element instanceof Keys){
                     Keys elementKeys = (Keys)element;
@@ -681,14 +686,19 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
 
     private void updateAngularDragForces(){
+        Vector3f cur_ang = physics_control.getAngularVelocity();
         float angular_velocity = physics_control.getAngularVelocity().length();
-        float drag_force = (float)(auv_param.getDrag_coefficient_angular() * drag_area * 0.5f * physical_environment.getFluid_density()* Math.pow(angular_velocity, 2));
-
-        Vector3f drag_direction = physics_control.getAngularVelocity().negate().normalize();
-        //drag_force_vec = drag_direction.mult(drag_force/simauv_settings.getPhysicsFramerate());
-        drag_force_vec = drag_direction.mult(drag_force);
-        //physics_control.applyTorqueImpulse(drag_force_vec);
-        physics_control.applyTorque(drag_force_vec);
+        float drag_torque = (float)(auv_param.getDrag_coefficient_angular() * drag_area * 0.25f * physical_environment.getFluid_density()* Math.pow(angular_velocity, 2));
+        Vector3f drag_direction = physics_control.getAngularVelocity().normalize().negate();
+        Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque/mars_settings.getPhysicsFramerate());
+        /*System.out.println("cur_ang: " + cur_ang);
+        System.out.println("angular_velocity: " + angular_velocity);
+        System.out.println("drag_torque: " + drag_torque);
+        System.out.println("drag_direction: " + drag_direction);
+        System.out.println("angular_drag_torque_vec: " + angular_drag_torque_vec);
+        System.out.println("angular_drag_torque_scalar: " + angular_drag_torque_vec.length());
+        System.out.println("==========================");*/
+        physics_control.applyTorqueImpulse(angular_drag_torque_vec);
     }
 
     private void updateStaticBuyocancyForces(){
