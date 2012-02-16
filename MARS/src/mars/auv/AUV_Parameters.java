@@ -62,6 +62,7 @@ public class AUV_Parameters implements CellEditorListener{
     private int maxWaypoints = 0;
     private ColorRGBA waypoints_color = new ColorRGBA(0f, 0f, 0f, 0.0f);
     private boolean waypoints_enabled = true;
+    private boolean waypoints_gradient = true;
     private boolean waypoints_visible = false;
     private float angular_factor = 1.0f;
     private Vector3f linear_factor = new Vector3f(1f,1f,1f);
@@ -121,6 +122,7 @@ public class AUV_Parameters implements CellEditorListener{
         setWaypoints_enabled(waypoints_enabled);
         setWaypoints_updaterate(waypoints_updaterate);
         setWaypoints_visible(waypoints_visible);
+        setWaypoints_gradient(waypoints_gradient);
         setDebugDrag(debug_drag);
         setDebugBuoycancy(debug_buoycancy);
         setDebugPhysicalExchanger(debug_physical_exchanger);
@@ -391,6 +393,22 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setWaypoints_enabled(boolean enabled) {
         waypoints.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isWaypoints_gradient() {
+         return (Boolean)waypoints.get("gradient");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setWaypoints_gradient(boolean gradient) {
+        waypoints.put("gradient", gradient);
     }
 
     /**

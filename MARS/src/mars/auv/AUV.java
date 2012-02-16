@@ -297,4 +297,12 @@ public interface AUV{
     public boolean isSelected();
     public Spatial getGhostAUV();
     public void hideGhostAUV(boolean hide);
+    public void setCentersVisible(boolean visible);
+    public void setPhysicalExchangerVisible(boolean visible);
+    public void setCollisionVisible(boolean visible);
+    public void setBuoycancyVisible(boolean visible);
+    public void setDragVisible(boolean visible);
+    public void setWayPointsVisible(boolean visible);
+    public void setWaypointsEnabled(boolean enabled);
+    public WayPoints getWaypoints();
 }

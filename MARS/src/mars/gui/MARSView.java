@@ -43,6 +43,7 @@ import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -285,6 +286,56 @@ public class MARSView extends FrameView {
     
     public void initPopUpMenues(){
         
+    }
+    
+    public void initPopUpMenuesForAUV(final AUV_Parameters auv_param){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    //first the dbug stuff
+                    if(auv_param.isDebugPhysicalExchanger()){
+                        jme3_debug_auv_pe.setSelected(true);
+                    }else{
+                        jme3_debug_auv_pe.setSelected(false);
+                    }
+                    if(auv_param.isDebugDrag()){
+                        jme3_debug_auv_drag.setSelected(true);
+                    }else{
+                        jme3_debug_auv_drag.setSelected(false);
+                    }
+                    if(auv_param.isDebugCenters()){
+                        jme3_debug_auv_centers.setSelected(true);
+                    }else{
+                        jme3_debug_auv_centers.setSelected(false);
+                    }
+                    if(auv_param.isDebugCollision()){
+                        jme3_debug_auv_collision.setSelected(true);
+                    }else{
+                        jme3_debug_auv_collision.setSelected(false);
+                    }
+                    if(auv_param.isDebugBuoycancy()){
+                        jme3_debug_auv_buoy.setSelected(true);
+                    }else{
+                        jme3_debug_auv_buoy.setSelected(false);
+                    }
+                    if(auv_param.isWaypoints_enabled()){
+                        jme3_waypoints_auv_enable.setSelected(true);
+                    }else{
+                        jme3_waypoints_auv_enable.setSelected(false);
+                    }
+                    if(auv_param.isWaypoints_visible()){
+                        jme3_waypoints_auv_visible.setSelected(true);
+                    }else{
+                        jme3_waypoints_auv_visible.setSelected(false);
+                    }
+                    if(auv_param.isWaypoints_gradient()){
+                        jme3_waypoints_auv_gradient.setSelected(true);
+                    }else{
+                        jme3_waypoints_auv_gradient.setSelected(false);
+                    }
+                }
+            }
+        );
     }
 
     /**
@@ -575,6 +626,14 @@ public class MARSView extends FrameView {
             }
         );
     }
+    
+    private void toggleJMenuCheckbox(JCheckBoxMenuItem jmenucheck){
+        if(jmenucheck.isSelected()){
+            jmenucheck.setSelected(true);
+        }else{
+            jmenucheck.setSelected(false);
+        }
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -676,9 +735,17 @@ public class MARSView extends FrameView {
         jme3_rotate_auv = new javax.swing.JMenuItem();
         jme3_poke = new javax.swing.JMenuItem();
         jme3_params_auv = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jme3_debug_auv = new javax.swing.JMenu();
         jme3_debug_auv_pe = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_centers = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_buoy = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_collision = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_drag = new javax.swing.JCheckBoxMenuItem();
+        jme3_waypoints_auv = new javax.swing.JMenu();
+        jme3_waypoints_auv_enable = new javax.swing.JCheckBoxMenuItem();
+        jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
+        jme3_waypoints_auv_gradient = new javax.swing.JCheckBoxMenuItem();
+        jme3_waypoints_auv_reset = new javax.swing.JMenuItem();
         jToolBarPlay = new javax.swing.JToolBar();
         jButtonPlay = new javax.swing.JButton();
         jButtonPause = new javax.swing.JButton();
@@ -1364,11 +1431,6 @@ public class MARSView extends FrameView {
 
         jme3_params_auv.setText(resourceMap.getString("jme3_params_auv.text")); // NOI18N
         jme3_params_auv.setName("jme3_params_auv"); // NOI18N
-
-        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        jme3_params_auv.add(jMenuItem2);
-
         jme3_auv.add(jme3_params_auv);
 
         jme3_debug_auv.setText(resourceMap.getString("jme3_debug_auv.text")); // NOI18N
@@ -1383,7 +1445,87 @@ public class MARSView extends FrameView {
         });
         jme3_debug_auv.add(jme3_debug_auv_pe);
 
+        jme3_debug_auv_centers.setText(resourceMap.getString("jme3_debug_auv_centers.text")); // NOI18N
+        jme3_debug_auv_centers.setName("jme3_debug_auv_centers"); // NOI18N
+        jme3_debug_auv_centers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_centersActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_centers);
+
+        jme3_debug_auv_buoy.setText(resourceMap.getString("jme3_debug_auv_buoy.text")); // NOI18N
+        jme3_debug_auv_buoy.setEnabled(false);
+        jme3_debug_auv_buoy.setName("jme3_debug_auv_buoy"); // NOI18N
+        jme3_debug_auv_buoy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_buoyActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_buoy);
+
+        jme3_debug_auv_collision.setText(resourceMap.getString("jme3_debug_auv_collision.text")); // NOI18N
+        jme3_debug_auv_collision.setEnabled(false);
+        jme3_debug_auv_collision.setName("jme3_debug_auv_collision"); // NOI18N
+        jme3_debug_auv_collision.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_collisionActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_collision);
+
+        jme3_debug_auv_drag.setText(resourceMap.getString("jme3_debug_auv_drag.text")); // NOI18N
+        jme3_debug_auv_drag.setEnabled(false);
+        jme3_debug_auv_drag.setName("jme3_debug_auv_drag"); // NOI18N
+        jme3_debug_auv_drag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_dragActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_drag);
+
         jme3_auv.add(jme3_debug_auv);
+
+        jme3_waypoints_auv.setText(resourceMap.getString("jme3_waypoints_auv.text")); // NOI18N
+        jme3_waypoints_auv.setName("jme3_waypoints_auv"); // NOI18N
+
+        jme3_waypoints_auv_enable.setText(resourceMap.getString("jme3_waypoints_auv_enable.text")); // NOI18N
+        jme3_waypoints_auv_enable.setName("jme3_waypoints_auv_enable"); // NOI18N
+        jme3_waypoints_auv_enable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_auv_enableActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_auv_enable);
+
+        jme3_waypoints_auv_visible.setText(resourceMap.getString("jme3_waypoints_auv_visible.text")); // NOI18N
+        jme3_waypoints_auv_visible.setName("jme3_waypoints_auv_visible"); // NOI18N
+        jme3_waypoints_auv_visible.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_auv_visibleActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_auv_visible);
+
+        jme3_waypoints_auv_gradient.setText(resourceMap.getString("jme3_waypoints_auv_gradient.text")); // NOI18N
+        jme3_waypoints_auv_gradient.setName("jme3_waypoints_auv_gradient"); // NOI18N
+        jme3_waypoints_auv_gradient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_auv_gradientActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_auv_gradient);
+
+        jme3_waypoints_auv_reset.setText(resourceMap.getString("jme3_waypoints_auv_reset.text")); // NOI18N
+        jme3_waypoints_auv_reset.setName("jme3_waypoints_auv_reset"); // NOI18N
+        jme3_waypoints_auv_reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_auv_resetActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_auv_reset);
+
+        jme3_auv.add(jme3_waypoints_auv);
 
         jToolBarPlay.setRollover(true);
         jToolBarPlay.setName("jToolBarPlay"); // NOI18N
@@ -1391,6 +1533,7 @@ public class MARSView extends FrameView {
         jButtonPlay.setIcon(resourceMap.getIcon("jButtonPlay.icon")); // NOI18N
         jButtonPlay.setText(resourceMap.getString("jButtonPlay.text")); // NOI18N
         jButtonPlay.setToolTipText(resourceMap.getString("jButtonPlay.toolTipText")); // NOI18N
+        jButtonPlay.setEnabled(false);
         jButtonPlay.setFocusable(false);
         jButtonPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonPlay.setName("jButtonPlay"); // NOI18N
@@ -1420,6 +1563,7 @@ public class MARSView extends FrameView {
         jButtonRestart.setIcon(resourceMap.getIcon("jButtonRestart.icon")); // NOI18N
         jButtonRestart.setText(resourceMap.getString("jButtonRestart.text")); // NOI18N
         jButtonRestart.setToolTipText(resourceMap.getString("jButtonRestart.toolTipText")); // NOI18N
+        jButtonRestart.setEnabled(false);
         jButtonRestart.setFocusable(false);
         jButtonRestart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonRestart.setName("jButtonRestart"); // NOI18N
@@ -1885,6 +2029,9 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_keysActionPerformed
 
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
+    jButtonPause.setEnabled(false);
+    jButtonPlay.setEnabled(true);
+    jButtonRestart.setEnabled(true);
     mars.startSimState();
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
@@ -1893,19 +2040,25 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         if (evt.getButton() == MouseEvent.BUTTON3) {             int selRow = simauv_tree.getRowForLocation(evt.getX(), evt.getY());             TreePath selPath = simauv_tree.getPathForLocation(evt.getX(), evt.getY());             System.out.println(selPath.toString());             System.out.println(selPath.getLastPathComponent().toString());             DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();             if (selRow != -1) {                 simauv_tree.setSelectionPath(selPath);                 try {                     if (selPath.getLastPathComponent().toString().equals(s_auv)) {                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {                         addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {                         addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {                         addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof AUV) {                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof SimObject) {                         simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof PhysicalExchanger) {                         sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     }                 } catch (IllegalArgumentException e) {                 }             }         }     }//GEN-LAST:event_simauv_treeMouseClicked
 
     private void jButtonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPlayMouseClicked
-        mars.startSimulation();
-        jButtonPlay.setEnabled(false);
-        jButtonPause.setEnabled(true);
+        if(jButtonPlay.isEnabled()){
+            mars.startSimulation();
+            jButtonPlay.setEnabled(false);
+            jButtonPause.setEnabled(true);
+        }
     }//GEN-LAST:event_jButtonPlayMouseClicked
 
     private void jButtonPauseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPauseMouseClicked
-        mars.pauseSimulation();
-        jButtonPause.setEnabled(false);
-        jButtonPlay.setEnabled(true);
+        if(jButtonPause.isEnabled()){
+            mars.pauseSimulation();
+            jButtonPause.setEnabled(false);
+            jButtonPlay.setEnabled(true);
+        }
     }//GEN-LAST:event_jButtonPauseMouseClicked
 
     private void jButtonRestartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRestartMouseClicked
-        mars.restartSimulation();
+        if(jButtonRestart.isEnabled()){
+            mars.restartSimulation();
+        }
     }//GEN-LAST:event_jButtonRestartMouseClicked
 
     private void jme3_pokeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_pokeActionPerformed
@@ -1937,12 +2090,124 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.debugSelectedAUV(0);
+                    final boolean selected = jme3_debug_auv_pe.isSelected();
+                    simState.debugSelectedAUV(0,selected);
                 }
                 return null;
             }
         });
+        toggleJMenuCheckbox(jme3_debug_auv_pe);
     }//GEN-LAST:event_jme3_debug_auv_peActionPerformed
+
+    private void jme3_debug_auv_centersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_centersActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_centers.isSelected();
+                    simState.debugSelectedAUV(1,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_centers);
+    }//GEN-LAST:event_jme3_debug_auv_centersActionPerformed
+
+    private void jme3_debug_auv_buoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_buoyActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_buoy.isSelected();
+                    simState.debugSelectedAUV(2,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_buoy);
+    }//GEN-LAST:event_jme3_debug_auv_buoyActionPerformed
+
+    private void jme3_debug_auv_collisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_collisionActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_collision.isSelected();
+                    simState.debugSelectedAUV(3,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_collision);
+    }//GEN-LAST:event_jme3_debug_auv_collisionActionPerformed
+
+    private void jme3_debug_auv_dragActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_dragActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_drag.isSelected();
+                    simState.debugSelectedAUV(4,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_drag);
+    }//GEN-LAST:event_jme3_debug_auv_dragActionPerformed
+
+    private void jme3_waypoints_auv_enableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_enableActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_waypoints_auv_enable.isSelected();
+                    simState.waypointsSelectedAUV(0,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_waypoints_auv_enable);
+    }//GEN-LAST:event_jme3_waypoints_auv_enableActionPerformed
+
+    private void jme3_waypoints_auv_visibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_visibleActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_waypoints_auv_visible.isSelected();
+                    simState.waypointsSelectedAUV(1,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_waypoints_auv_visible);
+    }//GEN-LAST:event_jme3_waypoints_auv_visibleActionPerformed
+
+    private void jme3_waypoints_auv_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_resetActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.waypointsSelectedAUV(2,true);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jme3_waypoints_auv_resetActionPerformed
+
+    private void jme3_waypoints_auv_gradientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_gradientActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_waypoints_auv_gradient.isSelected();
+                    simState.waypointsSelectedAUV(3,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_waypoints_auv_gradient);
+    }//GEN-LAST:event_jme3_waypoints_auv_gradientActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
@@ -1995,7 +2260,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2011,11 +2275,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JMenu jme3_debug_auv;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_buoy;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_centers;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_collision;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_drag;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
     private javax.swing.JMenuItem jme3_move_auv;
     private javax.swing.JMenu jme3_params_auv;
     private javax.swing.JMenuItem jme3_poke;
     private javax.swing.JMenuItem jme3_rotate_auv;
+    private javax.swing.JMenu jme3_waypoints_auv;
+    private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_enable;
+    private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_gradient;
+    private javax.swing.JMenuItem jme3_waypoints_auv_reset;
+    private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_visible;
     private javax.swing.JPopupMenu jme3_window_switcher;
     private javax.swing.JMenuItem keys;
     private javax.swing.JDialog keys_dialog;

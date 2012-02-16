@@ -127,8 +127,8 @@ public class Orientationmeter extends Sensor{
         fl.header = header;
         org.ros.message.geometry_msgs.Quaternion quat = new org.ros.message.geometry_msgs.Quaternion();
         quat.x = getOrientation().getX();
-        quat.y = getOrientation().getZ();
-        quat.z = getOrientation().getY();
+        quat.y = getOrientation().getY();
+        quat.z = getOrientation().getZ();
         quat.w = getOrientation().getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.orientation = quat;

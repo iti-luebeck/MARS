@@ -1052,7 +1052,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      *
      */
     private void initWaypoints(){
-        if(auv_param.isWaypoints_enabled()){
+        //if(auv_param.isWaypoints_enabled()){
             WayPoints = new WayPoints("WayPoints_" + getName(),mars,auv_param);
             Future fut = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
@@ -1060,7 +1060,7 @@ public class BasicAUV implements AUV,SceneProcessor{
                     return null;
                 }
             });
-        }
+        //}
     }
 
     /**
@@ -1509,6 +1509,9 @@ public class BasicAUV implements AUV,SceneProcessor{
             if(WayPoints.getTime() >= auv_param.getWaypoints_updaterate()){
                 WayPoints.clearTime();
                 WayPoints.addWaypoint(getMassCenterGeom().getWorldTranslation().clone());
+                if(auv_param.isWaypoints_gradient()){
+                    WayPoints.updateGradient();
+                }
             }
         }
     }
@@ -1657,5 +1660,56 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Override
     public boolean isSelected(){
         return selected;
+    }
+    
+    public void setCentersVisible(boolean visible){
+        if(!visible){
+            VolumeCenterGeom.setCullHint(CullHint.Always);
+            OldCenterGeom.setCullHint(CullHint.Always);
+            MassCenterGeom.setCullHint(CullHint.Always);
+            VolumeCenterPreciseGeom.setCullHint(CullHint.Always);
+        }else{
+            VolumeCenterGeom.setCullHint(CullHint.Never);
+            OldCenterGeom.setCullHint(CullHint.Never);
+            MassCenterGeom.setCullHint(CullHint.Never);
+            VolumeCenterPreciseGeom.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void setPhysicalExchangerVisible(boolean visible){
+        for ( String elem : sensors.keySet() ){
+            Sensor element = (Sensor)sensors.get(elem);
+            if(element.isEnabled()){
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+            }
+        }
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            if(element.isEnabled()){
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+            }
+        }
+    }
+    
+    public void setCollisionVisible(boolean visible){
+        
+    }
+    public void setBuoycancyVisible(boolean visible){
+        
+    }
+    
+    public void setDragVisible(boolean visible){
+        
+    }
+    
+    public void setWayPointsVisible(boolean visible){
+        WayPoints.setWaypointVisibility(visible);
+    }
+    
+    public void setWaypointsEnabled(boolean enabled){
+    }
+    
+    public WayPoints getWaypoints(){
+        return WayPoints;
     }
 }

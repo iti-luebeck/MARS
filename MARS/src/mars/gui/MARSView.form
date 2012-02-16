@@ -1106,14 +1106,6 @@
             <Property name="text" type="java.lang.String" resourceKey="jme3_params_auv.text"/>
             <Property name="name" type="java.lang.String" value="jme3_params_auv" noResource="true"/>
           </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuItem2.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuItem2" noResource="true"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jme3_debug_auv">
           <Properties>
@@ -1128,6 +1120,89 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_peActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_centers">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_centers.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_centers" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_centersActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_buoy">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_buoy.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_buoy" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_buoyActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_collision">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_collision.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_collision" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_collisionActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_drag">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_drag.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_drag" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_dragActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jme3_waypoints_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_waypoints_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_waypoints_auv" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_waypoints_auv_enable">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_waypoints_auv_enable.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_waypoints_auv_enable" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_waypoints_auv_enableActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_waypoints_auv_visible">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_waypoints_auv_visible.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_waypoints_auv_visible" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_waypoints_auv_visibleActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_waypoints_auv_gradient">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_waypoints_auv_gradient.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_waypoints_auv_gradient" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_waypoints_auv_gradientActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jme3_waypoints_auv_reset">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_waypoints_auv_reset.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_waypoints_auv_reset" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_waypoints_auv_resetActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -1147,6 +1222,7 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonPlay.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="jButtonPlay.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonPlay.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="jButtonPlay" noResource="true"/>
@@ -1176,6 +1252,7 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonRestart.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="jButtonRestart.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonRestart.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="jButtonRestart" noResource="true"/>

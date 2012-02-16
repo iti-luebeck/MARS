@@ -5,6 +5,8 @@
 package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -171,10 +173,14 @@ public class Posemeter extends Sensor{
         point.y = pos.getPosition().z;//dont forget to switch y and z!!!!
         point.z = pos.getPosition().y;
         org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
-        orientation.x = oro.getOrientation().getX();
-        orientation.y = oro.getOrientation().getZ();//dont forget to switch y and z!!!!
-        orientation.z = oro.getOrientation().getY();
-        orientation.w = oro.getOrientation().getW();
+        
+        Quaternion ter_orientation = new Quaternion();
+        ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
+        
+        orientation.x = oro.getOrientation().mult(ter_orientation).getX();
+        orientation.y = oro.getOrientation().mult(ter_orientation).getZ();//dont forget to switch y and z!!!!
+        orientation.z = oro.getOrientation().mult(ter_orientation).getY();
+        orientation.w = oro.getOrientation().mult(ter_orientation).getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;
         pose.orientation = orientation;

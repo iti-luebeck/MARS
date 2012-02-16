@@ -129,15 +129,15 @@ public class TerrainSender extends Sensor{
         info.resolution = mars_settings.getTileLength();
         
         org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
-        point.x = mars_settings.getTerrain_position().x;
+        point.x = mars_settings.getTerrain_position().x;// - ((0.15625f*256f)/2f);
         point.y = mars_settings.getTerrain_position().z;//dont forget to switch y and z!!!!
         point.z = mars_settings.getTerrain_position().y;
         org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
         Quaternion ter_orientation = new Quaternion();
-        ter_orientation.fromAngles(0f, FastMath.PI, 0f);
+        //ter_orientation.fromAngles(0f, FastMath.PI, 0f);
         orientation.x = ter_orientation.getX();
-        orientation.y = ter_orientation.getY();//dont forget to switch y and z!!!!
-        orientation.z = ter_orientation.getZ();
+        orientation.y = ter_orientation.getZ();//dont forget to switch y and z!!!!
+        orientation.z = ter_orientation.getY();
         orientation.w = ter_orientation.getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;

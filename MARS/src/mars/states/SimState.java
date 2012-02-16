@@ -722,6 +722,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             auv.setSelected(true);
           }
           //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+          view.initPopUpMenuesForAUV(auv.getAuv_param());
           view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }else{//nothing to pickRightClick
             //System.out.println("nothing to choose");
@@ -1004,12 +1005,28 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
-    public void debugSelectedAUV(int debug_mode){
+    public void debugSelectedAUV(int debug_mode, boolean selected){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
             switch(debug_mode){
-                case 0:System.out.println("debug 0");
-                case 1:;
+                case 0: selected_auv.getAuv_param().setDebugPhysicalExchanger(selected);selected_auv.setPhysicalExchangerVisible(selected);break;
+                case 1: selected_auv.getAuv_param().setDebugCenters(selected);selected_auv.setCentersVisible(selected);break;
+                case 2: selected_auv.getAuv_param().setDebugBuoycancy(selected);selected_auv.setBuoycancyVisible(selected);break;
+                case 3: selected_auv.getAuv_param().setDebugCollision(selected);selected_auv.setCollisionVisible(selected);break;
+                case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
+                default:;
+            }                
+        }
+    }
+    
+    public void waypointsSelectedAUV(int debug_mode, boolean selected){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            switch(debug_mode){
+                case 0: selected_auv.getAuv_param().setWaypoints_enabled(selected);selected_auv.setWaypointsEnabled(selected);break;
+                case 1: selected_auv.getAuv_param().setWaypoints_visible(selected);selected_auv.setWayPointsVisible(selected);break;
+                case 2: selected_auv.getWaypoints().reset();break;
+                case 3: selected_auv.getAuv_param().setWaypoints_gradient(selected);if(!selected){selected_auv.getWaypoints().updateColor();}break;
                 default:;
             }                
         }

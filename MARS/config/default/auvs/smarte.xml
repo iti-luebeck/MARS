@@ -67,6 +67,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="visiblity">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="gradient">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeColorRGBA" key="color">
                         <value>
                             <a>0.0</a>

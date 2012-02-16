@@ -196,10 +196,10 @@
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.15625</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_heightmap">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">image7.jpg</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_hm.jpg</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_color">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">image7.jpg</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_cm.jpg</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">85.0</value>
@@ -241,7 +241,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="ROS">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value>
