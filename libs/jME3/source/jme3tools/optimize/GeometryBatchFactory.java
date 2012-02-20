@@ -61,6 +61,29 @@ public class GeometryBatchFactory {
             outBuf.put(offset + i * 3 + 2, norm.z);
         }
     }
+    
+    private static void doTransformTangents(FloatBuffer inBuf, int offset, FloatBuffer outBuf, Matrix4f transform) {
+        Vector3f tan = new Vector3f();
+        float handedness = 0;
+        // offset is given in element units
+        // convert to be in component units
+        offset *= 4;
+
+        for (int i = 0; i < inBuf.capacity() / 4; i++) {
+            tan.x = inBuf.get(i * 4 + 0);
+            tan.y = inBuf.get(i * 4 + 1);
+            tan.z = inBuf.get(i * 4 + 2);
+            handedness = inBuf.get(i * 4 + 3);
+
+            transform.multNormal(tan, tan);
+
+            outBuf.put(offset + i * 4 + 0, tan.x);
+            outBuf.put(offset + i * 4 + 1, tan.y);
+            outBuf.put(offset + i * 4 + 2, tan.z);
+            outBuf.put(offset + i * 4 + 3, handedness);
+             
+        }
+    }
 
     /**
      * Merges all geometries in the collection into
@@ -178,18 +201,19 @@ public class GeometryBatchFactory {
                         }
                     }
                 } else if (Type.Position.ordinal() == bufType) {
-                    FloatBuffer inPos = (FloatBuffer) inBuf.getData();
+                    FloatBuffer inPos = (FloatBuffer) inBuf.getDataReadOnly();
                     FloatBuffer outPos = (FloatBuffer) outBuf.getData();
                     doTransformVerts(inPos, globalVertIndex, outPos, worldMatrix);
-                } else if (Type.Normal.ordinal() == bufType || Type.Tangent.ordinal() == bufType) {
-                    FloatBuffer inPos = (FloatBuffer) inBuf.getData();
+                } else if (Type.Normal.ordinal() == bufType) {
+                    FloatBuffer inPos = (FloatBuffer) inBuf.getDataReadOnly();
                     FloatBuffer outPos = (FloatBuffer) outBuf.getData();
                     doTransformNorms(inPos, globalVertIndex, outPos, worldMatrix);
+                }else if(Type.Tangent.ordinal() == bufType){                    
+                    FloatBuffer inPos = (FloatBuffer) inBuf.getDataReadOnly();
+                    FloatBuffer outPos = (FloatBuffer) outBuf.getData();
+                    doTransformTangents(inPos, globalVertIndex, outPos, worldMatrix);
                 } else {
-                    for (int vert = 0; vert < geomVertCount; vert++) {
-                        int curGlobalVertIndex = globalVertIndex + vert;
-                        inBuf.copyElement(vert, outBuf, curGlobalVertIndex);
-                    }
+                    inBuf.copyElements(0, outBuf, globalVertIndex, geomVertCount);
                 }
             }
 
@@ -229,8 +253,7 @@ public class GeometryBatchFactory {
                 numOfVertices = g.getVertexCount();
             }
             for (int i = 0; i < lodLevels; i++) {
-                ShortBuffer buffer = (ShortBuffer) g.getMesh().getLodLevel(i).getData();
-                buffer.rewind();
+                ShortBuffer buffer = (ShortBuffer) g.getMesh().getLodLevel(i).getDataReadOnly();
                 //System.out.println("buffer: " + buffer.capacity() + " limit: " + lodSize[i] + " " + index);
                 for (int j = 0; j < buffer.capacity(); j++) {
                     lodData[i][bufferPos[i] + j] = buffer.get() + numOfVertices * curGeom;

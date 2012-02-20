@@ -1,7 +1,6 @@
 checkers.quals
 com.jme3.animation
 com.jme3.app
-com.jme3.app.android
 com.jme3.app.state
 com.jme3.asset
 com.jme3.asset.plugins
@@ -106,7 +105,6 @@ com.jme3.texture
 com.jme3.texture.plugins
 com.jme3.ui
 com.jme3.util
-com.jme3.util.android
 com.jme3.util.blockparser
 com.jme3.util.xml
 com.jme3.water

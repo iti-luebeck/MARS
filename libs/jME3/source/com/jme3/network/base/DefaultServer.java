@@ -51,7 +51,7 @@ import java.util.logging.Logger;
  *  A default implementation of the Server interface that delegates
  *  its network connectivity to kernel.Kernel.
  *
- *  @version   $Revision: 8944 $
+ *  @version   $Revision: 9114 $
  *  @author    Paul Speed
  */
 public class DefaultServer implements Server
@@ -95,12 +95,11 @@ public class DefaultServer implements Server
         this.version = version;
         
         reliableAdapter = new KernelAdapter( this, reliable, dispatcher, true );
+        channels.add( reliableAdapter );
         if( fast != null ) {
             fastAdapter = new KernelAdapter( this, fast, dispatcher, false );
+            channels.add( fastAdapter );
         }
-        
-        channels.add( reliableAdapter );
-        channels.add( fastAdapter );
     }   
 
     public String getGameName()

@@ -114,8 +114,7 @@ public class Technique implements Savable {
     void notifySetParam(String paramName, VarType type, Object value) {
         String defineName = def.getShaderParamDefine(paramName);
         if (defineName != null) {
-            defines.set(defineName, type, value);
-            needReload = true;
+            needReload = defines.set(defineName, type, value);
         }
         if (shader != null) {
             updateUniformParam(paramName, type, value);
@@ -128,8 +127,7 @@ public class Technique implements Savable {
     void notifyClearParam(String paramName) {
         String defineName = def.getShaderParamDefine(paramName);
         if (defineName != null) {
-            defines.remove(defineName);
-            needReload = true;
+            needReload = defines.remove(defineName);
         }
         if (shader != null) {
             if (!paramName.startsWith("m_")) {
@@ -228,13 +226,14 @@ public class Technique implements Savable {
 
         // register the world bound uniforms
         worldBindUniforms.clear();
-        for (UniformBinding binding : def.getWorldBindings()) {
-            Uniform uniform = shader.getUniform("g_" + binding.name());
-            uniform.setBinding(binding);
-            if (uniform != null) {
-                worldBindUniforms.add(uniform);
-
-            }
+        if (def.getWorldBindings() != null) {
+           for (UniformBinding binding : def.getWorldBindings()) {
+               Uniform uniform = shader.getUniform("g_" + binding.name());
+               uniform.setBinding(binding);
+               if (uniform != null) {
+                   worldBindUniforms.add(uniform);
+               }
+           }
         }
 
         needReload = false;

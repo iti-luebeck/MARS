@@ -80,6 +80,7 @@ public class BatchNode extends Node implements Savable {
     private float[] tmpFloatT;
     int maxVertCount = 0;
     boolean useTangents = false;
+    boolean needsFullRebatch = true;
 
     /**
      * Construct a batchNode
@@ -178,16 +179,25 @@ public class BatchNode extends Node implements Savable {
     }
 
     protected void doBatch() {
-        ///List<Geometry> tmpList = new ArrayList<Geometry>();
         Map<Material, List<Geometry>> matMap = new HashMap<Material, List<Geometry>>();
         maxVertCount = 0;
-        gatherGeomerties(matMap, this);
-        batches.clear();
         int nbGeoms = 0;
+
+        gatherGeomerties(matMap, this, needsFullRebatch);
+        if (needsFullRebatch) {
+            for (Batch batch : batches.values()) {
+                batch.geometry.removeFromParent();
+            }
+            batches.clear();
+        }
+        
         for (Material material : matMap.keySet()) {
             Mesh m = new Mesh();
             List<Geometry> list = matMap.get(material);
             nbGeoms += list.size();
+            if (!needsFullRebatch) {
+                list.add(batches.get(material).geometry);
+            }
             mergeGeometries(m, list);
             m.setDynamic();
             Batch batch = new Batch();
@@ -202,30 +212,36 @@ public class BatchNode extends Node implements Savable {
             batch.geometry.getMesh().updateBound();
             batches.put(material, batch);
         }
+
+        logger.log(Level.INFO, "Batched {0} geometries in {1} batches.", new Object[]{nbGeoms, batches.size()});
+
+
         //init temp float arrays
         tmpFloat = new float[maxVertCount * 3];
         tmpFloatN = new float[maxVertCount * 3];
         if (useTangents) {
             tmpFloatT = new float[maxVertCount * 4];
         }
-        logger.log(Level.INFO, "Batched {0} geometries in {1} batches.", new Object[]{nbGeoms, batches.size()});
     }
 
-    private void gatherGeomerties(Map<Material, List<Geometry>> map, Spatial n) {
+    private void gatherGeomerties(Map<Material, List<Geometry>> map, Spatial n, boolean rebatch) {
 
         if (n.getClass() == Geometry.class) {
 
             if (!isBatch(n) && n.getBatchHint() != BatchHint.Never) {
                 Geometry g = (Geometry) n;
-                if (g.getMaterial() == null) {
-                    throw new IllegalStateException("No material is set for Geometry: " + g.getName() + " please set a material before batching");
+                if (!g.isBatched() || rebatch) {
+                    if (g.getMaterial() == null) {
+                        throw new IllegalStateException("No material is set for Geometry: " + g.getName() + " please set a material before batching");
+                    }
+                    List<Geometry> list = map.get(g.getMaterial());
+                    if (list == null) {
+                        list = new ArrayList<Geometry>();
+                        map.put(g.getMaterial(), list);
+                    }
+                    g.setTransformRefresh();
+                    list.add(g);
                 }
-                List<Geometry> list = map.get(g.getMaterial());
-                if (list == null) {
-                    list = new ArrayList<Geometry>();
-                    map.put(g.getMaterial(), list);
-                }
-                list.add(g);
             }
 
         } else if (n instanceof Node) {
@@ -233,7 +249,7 @@ public class BatchNode extends Node implements Savable {
                 if (child instanceof BatchNode) {
                     continue;
                 }
-                gatherGeomerties(map, child);
+                gatherGeomerties(map, child, rebatch);
             }
         }
 
@@ -465,20 +481,21 @@ public class BatchNode extends Node implements Savable {
                     }
                 } else if (VertexBuffer.Type.Position.ordinal() == bufType) {
                     FloatBuffer inPos = (FloatBuffer) inBuf.getData();
-                    FloatBuffer outPos = (FloatBuffer) outBuf.getData();
-                    doCopyBuffer(inPos, globalVertIndex, outPos);
+                    FloatBuffer outPos = (FloatBuffer) outBuf.getData();                    
+                    doCopyBuffer(inPos, globalVertIndex, outPos, 3);
                 } else if (VertexBuffer.Type.Normal.ordinal() == bufType || VertexBuffer.Type.Tangent.ordinal() == bufType) {
                     FloatBuffer inPos = (FloatBuffer) inBuf.getData();
                     FloatBuffer outPos = (FloatBuffer) outBuf.getData();
-                    doCopyBuffer(inPos, globalVertIndex, outPos);
+                    doCopyBuffer(inPos, globalVertIndex, outPos, compsForBuf[bufType]);
                     if (VertexBuffer.Type.Tangent.ordinal() == bufType) {
                         useTangents = true;
                     }
                 } else {
-                    for (int vert = 0; vert < geomVertCount; vert++) {
-                        int curGlobalVertIndex = globalVertIndex + vert;
-                        inBuf.copyElement(vert, outBuf, curGlobalVertIndex);
-                    }
+                    inBuf.copyElements(0, outBuf, globalVertIndex, geomVertCount);
+//                    for (int vert = 0; vert < geomVertCount; vert++) {
+//                        int curGlobalVertIndex = globalVertIndex + vert;
+//                        inBuf.copyElement(vert, outBuf, curGlobalVertIndex);
+//                    }
                 }
             }
 
@@ -566,7 +583,6 @@ public class BatchNode extends Node implements Savable {
             tan.y = tmpFloatT[tanIndex++];
             tan.z = tmpFloatT[tanIndex++];
 
-
             transform.mult(pos, pos);
             transform.multNormal(norm, norm);
             transform.multNormal(tan, tan);
@@ -585,6 +601,7 @@ public class BatchNode extends Node implements Savable {
             tmpFloatT[tanIndex++] = tan.y;
             tmpFloatT[tanIndex++] = tan.z;
 
+            //Skipping 4th element of tangent buffer (handedness)
             tanIndex++;
 
         }
@@ -600,22 +617,22 @@ public class BatchNode extends Node implements Savable {
         bufTangents.put(tmpFloatT, 0, tanLength);
     }
 
-    private void doCopyBuffer(FloatBuffer inBuf, int offset, FloatBuffer outBuf) {
+    private void doCopyBuffer(FloatBuffer inBuf, int offset, FloatBuffer outBuf, int componentSize) {
         TempVars vars = TempVars.get();
         Vector3f pos = vars.vect1;
 
         // offset is given in element units
         // convert to be in component units
-        offset *= 3;
+        offset *= componentSize;
 
-        for (int i = 0; i < inBuf.capacity() / 3; i++) {
-            pos.x = inBuf.get(i * 3 + 0);
-            pos.y = inBuf.get(i * 3 + 1);
-            pos.z = inBuf.get(i * 3 + 2);
+        for (int i = 0; i < inBuf.capacity() / componentSize; i++) {
+            pos.x = inBuf.get(i * componentSize + 0);
+            pos.y = inBuf.get(i * componentSize + 1);
+            pos.z = inBuf.get(i * componentSize + 2);
 
-            outBuf.put(offset + i * 3 + 0, pos.x);
-            outBuf.put(offset + i * 3 + 1, pos.y);
-            outBuf.put(offset + i * 3 + 2, pos.z);
+            outBuf.put(offset + i * componentSize + 0, pos.x);
+            outBuf.put(offset + i * componentSize + 1, pos.y);
+            outBuf.put(offset + i * componentSize + 2, pos.z);
         }
         vars.release();
     }
@@ -624,5 +641,13 @@ public class BatchNode extends Node implements Savable {
 
         Geometry geometry;
         boolean needMeshUpdate = false;
+    }
+
+    protected void setNeedsFullRebatch(boolean needsFullRebatch) {
+        this.needsFullRebatch = needsFullRebatch;
+    }
+    
+    public int getOffsetIndex(Geometry batchedGeometry){
+        return batchedGeometry.startIndex;
     }
 }

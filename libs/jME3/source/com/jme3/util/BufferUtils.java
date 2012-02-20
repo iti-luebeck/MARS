@@ -1145,25 +1145,41 @@ public final class BufferUtils {
     }
     
     /**
-    * DirectByteBuffers are garbage collected by using a phantom reference and a
+    * Direct buffers are garbage collected by using a phantom reference and a
     * reference queue. Every once a while, the JVM checks the reference queue and
-    * cleans the DirectByteBuffers. However, as this doesn't happen
-    * immediately after discarding all references to a DirectByteBuffer, it's
-    * easy to OutOfMemoryError yourself using DirectByteBuffers. This function
-    * explicitly calls the Cleaner method of a DirectByteBuffer.
+    * cleans the direct buffers. However, as this doesn't happen
+    * immediately after discarding all references to a direct buffer, it's
+    * easy to OutOfMemoryError yourself using direct buffers. This function
+    * explicitly calls the Cleaner method of a direct buffer.
     * 
     * @param toBeDestroyed
-    *          The DirectByteBuffer that will be "cleaned". Utilizes reflection.
+    *          The direct buffer that will be "cleaned". Utilizes reflection.
     *          
     */
-    public static void destroyByteBuffer(ByteBuffer toBeDestroyed) {
+    public static void destroyDirectBuffer(Buffer toBeDestroyed) {
+    
+        if (!toBeDestroyed.isDirect()) {
+            return;
+        }
         try {
             Method cleanerMethod = toBeDestroyed.getClass().getMethod("cleaner");
             cleanerMethod.setAccessible(true);
             Object cleaner = cleanerMethod.invoke(toBeDestroyed);
-            Method cleanMethod = cleaner.getClass().getMethod("clean");
-            cleanMethod.setAccessible(true);
-            cleanMethod.invoke(cleaner);
+            if (cleaner != null) {
+                Method cleanMethod = cleaner.getClass().getMethod("clean");
+                cleanMethod.setAccessible(true);
+                cleanMethod.invoke(cleaner);
+            } else {
+                // Try the alternate approach of getting the viewed buffer
+                Method viewedBufferMethod = toBeDestroyed.getClass().getMethod("viewedBuffer");
+                viewedBufferMethod.setAccessible(true);
+                Object viewedBuffer = viewedBufferMethod.invoke(toBeDestroyed);
+                if (viewedBuffer != null) {
+                    destroyDirectBuffer( (Buffer)viewedBuffer );
+                } else {
+                    Logger.getLogger(BufferUtils.class.getName()).log(Level.SEVERE, "Buffer cannot be destroyed: {0}", toBeDestroyed);
+                }
+            }
         } catch (IllegalAccessException ex) {
             Logger.getLogger(BufferUtils.class.getName()).log(Level.SEVERE, "{0}", ex);
         } catch (IllegalArgumentException ex) {
