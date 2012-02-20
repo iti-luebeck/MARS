@@ -635,6 +635,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    private void moveSelectedGhostAUV(AUV auv, Vector3f position){
+        auv.hideGhostAUV(false);
+        auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(position,null));
+    }
+    
     private void rotateSelectedGhostAUV(AUV auv){
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
@@ -680,6 +685,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           if(auv != null){
                 auv.setSelected(true);
+                guiControlState.setLatestSelectedAUV(auv);
             //guiControlState.setFree(false);
           }
         }else{//nothing to pickRightClick
@@ -917,6 +923,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
+            view.initPopUpMenues();
             //auv_hanse.setView(view);
             //auv_monsun2.setView(view);
             view_init = true;
@@ -996,6 +1003,24 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void moveSelectedAUV(Vector3f new_position){
+        System.out.println("moveSelectedAUV" + new_position);
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
+        if(selected_auv != null){
+            selected_auv.hideGhostAUV(true);
+            selected_auv.getAuv_param().setPosition(new_position);
+            selected_auv.getPhysicsControl().setPhysicsLocation(selected_auv.getAUVNode().worldToLocal(new_position,null));
+        }
+    }
+    
+    public void moveSelectedGhostAUV(Vector3f new_position){
+        System.out.println("moveSelectedGhostAUV" + new_position);
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
+        if(selected_auv != null){
+            moveSelectedGhostAUV(selected_auv,new_position);
+        }
+    }
+    
     public void chaseSelectedAUV(){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1029,6 +1054,20 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 case 3: selected_auv.getAuv_param().setWaypoints_gradient(selected);if(!selected){selected_auv.getWaypoints().updateColor();}break;
                 default:;
             }                
+        }
+    }
+    
+    public void waypointsColorSelectedAUV(java.awt.Color newColor){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            selected_auv.getAuv_param().setWaypoints_color(new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f));
+        }
+    }
+    
+    public void resetSelectedAUV(){
+        AUV selected_auv = auv_manager.getSelectedAUV();
+        if(selected_auv != null){
+            selected_auv.reset();
         }
     }
 }

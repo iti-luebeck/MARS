@@ -7,6 +7,7 @@ package mars;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import mars.auv.AUV;
 
 /**
  * This class is used for storing in which state the gui controls are currently. 
@@ -27,8 +28,17 @@ public class GuiControlState {
     private float depth_factor = 0.25f;
     private Vector3f contact_point = Vector3f.ZERO;
     private Vector3f contact_direction = Vector3f.ZERO;
+    private AUV latestSelectedAUV = null;
 
     public GuiControlState() {
+    }
+
+    public AUV getLatestSelectedAUV() {
+        return latestSelectedAUV;
+    }
+
+    public void setLatestSelectedAUV(AUV latestSelectedAUV) {
+        this.latestSelectedAUV = latestSelectedAUV;
     }
 
     public boolean isMove_auv() {

@@ -5,6 +5,7 @@
 package mars.gui;
 
 import com.jme3.input.ChaseCamera;
+import com.jme3.math.Vector3f;
 import com.jme3.system.awt.AwtPanel;
 import java.awt.BorderLayout;
 import mars.gui.MARSAboutBox;
@@ -47,6 +48,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
@@ -285,7 +287,8 @@ public class MARSView extends FrameView {
     }
     
     public void initPopUpMenues(){
-        
+        //JMenuItem jm = new JMenuItem("heavy");
+        //jme3_params_auv.add(jm);
     }
     
     public void initPopUpMenuesForAUV(final AUV_Parameters auv_param){
@@ -333,6 +336,32 @@ public class MARSView extends FrameView {
                     }else{
                         jme3_waypoints_auv_gradient.setSelected(false);
                     }
+                    
+                    //params
+                    jme3_params_auv.removeAll();
+                    final HashMap<String, Object> allVariables = auv_param.getAllVariables();
+                    for ( final String elem : allVariables.keySet() ){
+                        Object element = (Object)allVariables.get(elem);
+                        if(element instanceof Boolean){
+                            boolean bool = (Boolean)element;
+                            final JCheckBoxMenuItem jcm = new JCheckBoxMenuItem(elem);
+                            jcm.setSelected(bool);
+                            
+                            //listener for changes
+                            jcm.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    final boolean selected = jcm.isSelected();
+                                    allVariables.put(elem, selected);
+                                    toggleJMenuCheckbox(jcm);
+                                }
+                            });
+                                    
+                            jme3_params_auv.add(jcm);
+                            System.out.println("bool!" + elem);
+                        }
+                    }
+                                                       /*JMenuItem jm = new JMenuItem("heavy");
+                                                       jme3_params_auv.add(jm);*/;
                 }
             }
         );
@@ -746,10 +775,34 @@ public class MARSView extends FrameView {
         jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_gradient = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_reset = new javax.swing.JMenuItem();
+        jme3_waypoints_color = new javax.swing.JMenuItem();
+        jme3_reset_auv = new javax.swing.JMenuItem();
+        jme3_delete_auv = new javax.swing.JMenuItem();
         jToolBarPlay = new javax.swing.JToolBar();
         jButtonPlay = new javax.swing.JButton();
         jButtonPause = new javax.swing.JButton();
         jButtonRestart = new javax.swing.JButton();
+        auv_move_vector_dialog = new javax.swing.JDialog();
+        jButton1 = new javax.swing.JButton();
+        Cancel = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jButton30 = new javax.swing.JButton();
+        jColorChooser1 = new javax.swing.JColorChooser();
+        auv_rotate_vector_dialog = new javax.swing.JDialog();
+        jButton22 = new javax.swing.JButton();
+        Cancel1 = new javax.swing.JButton();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jButton31 = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1414,10 +1467,20 @@ public class MARSView extends FrameView {
 
         jme3_move_auv.setText(resourceMap.getString("jme3_move_auv.text")); // NOI18N
         jme3_move_auv.setName("jme3_move_auv"); // NOI18N
+        jme3_move_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_move_auvActionPerformed(evt);
+            }
+        });
         jme3_auv.add(jme3_move_auv);
 
         jme3_rotate_auv.setText(resourceMap.getString("jme3_rotate_auv.text")); // NOI18N
         jme3_rotate_auv.setName("jme3_rotate_auv"); // NOI18N
+        jme3_rotate_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_rotate_auvActionPerformed(evt);
+            }
+        });
         jme3_auv.add(jme3_rotate_auv);
 
         jme3_poke.setText(resourceMap.getString("jme3_poke.text")); // NOI18N
@@ -1525,7 +1588,35 @@ public class MARSView extends FrameView {
         });
         jme3_waypoints_auv.add(jme3_waypoints_auv_reset);
 
+        jme3_waypoints_color.setText(resourceMap.getString("jme3_waypoints_color.text")); // NOI18N
+        jme3_waypoints_color.setName("jme3_waypoints_color"); // NOI18N
+        jme3_waypoints_color.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_colorActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_color);
+
         jme3_auv.add(jme3_waypoints_auv);
+
+        jme3_reset_auv.setText(resourceMap.getString("jme3_reset_auv.text")); // NOI18N
+        jme3_reset_auv.setName("jme3_reset_auv"); // NOI18N
+        jme3_reset_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_reset_auvActionPerformed(evt);
+            }
+        });
+        jme3_auv.add(jme3_reset_auv);
+
+        jme3_delete_auv.setText(resourceMap.getString("jme3_delete_auv.text")); // NOI18N
+        jme3_delete_auv.setEnabled(false);
+        jme3_delete_auv.setName("jme3_delete_auv"); // NOI18N
+        jme3_delete_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_delete_auvActionPerformed(evt);
+            }
+        });
+        jme3_auv.add(jme3_delete_auv);
 
         jToolBarPlay.setRollover(true);
         jToolBarPlay.setName("jToolBarPlay"); // NOI18N
@@ -1574,6 +1665,229 @@ public class MARSView extends FrameView {
             }
         });
         jToolBarPlay.add(jButtonRestart);
+
+        auv_move_vector_dialog.setTitle(resourceMap.getString("auv_move_vector_dialog.title")); // NOI18N
+        auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 194));
+        auv_move_vector_dialog.setName("auv_move_vector_dialog"); // NOI18N
+
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        Cancel.setText(resourceMap.getString("Cancel.text")); // NOI18N
+        Cancel.setName("Cancel"); // NOI18N
+        Cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
+        jTextField1.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField1.setName("jTextField1"); // NOI18N
+        jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jTextField1MouseExited(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
+
+        jTextField2.setText(resourceMap.getString("jTextField2.text")); // NOI18N
+        jTextField2.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField2.setName("jTextField2"); // NOI18N
+
+        jTextField3.setText(resourceMap.getString("jTextField3.text")); // NOI18N
+        jTextField3.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField3.setName("jTextField3"); // NOI18N
+
+        jLabel20.setText(resourceMap.getString("jLabel20.text")); // NOI18N
+        jLabel20.setName("jLabel20"); // NOI18N
+
+        jLabel21.setText(resourceMap.getString("jLabel21.text")); // NOI18N
+        jLabel21.setName("jLabel21"); // NOI18N
+
+        jLabel22.setText(resourceMap.getString("jLabel22.text")); // NOI18N
+        jLabel22.setName("jLabel22"); // NOI18N
+
+        jButton30.setText(resourceMap.getString("jButton30.text")); // NOI18N
+        jButton30.setName("jButton30"); // NOI18N
+        jButton30.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton30ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout auv_move_vector_dialogLayout = new javax.swing.GroupLayout(auv_move_vector_dialog.getContentPane());
+        auv_move_vector_dialog.getContentPane().setLayout(auv_move_vector_dialogLayout);
+        auv_move_vector_dialogLayout.setHorizontalGroup(
+            auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, auv_move_vector_dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, auv_move_vector_dialogLayout.createSequentialGroup()
+                        .addComponent(jButton30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
+                                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel21)
+                                    .addComponent(jLabel22))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
+                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        auv_move_vector_dialogLayout.setVerticalGroup(
+            auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton30)
+                    .addComponent(Cancel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jColorChooser1.setName("jColorChooser1"); // NOI18N
+
+        auv_rotate_vector_dialog.setTitle(resourceMap.getString("auv_rotate_vector_dialog.title")); // NOI18N
+        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 194));
+        auv_rotate_vector_dialog.setName("auv_rotate_vector_dialog"); // NOI18N
+
+        jButton22.setText(resourceMap.getString("jButton22.text")); // NOI18N
+        jButton22.setName("jButton22"); // NOI18N
+        jButton22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton22ActionPerformed(evt);
+            }
+        });
+
+        Cancel1.setText(resourceMap.getString("Cancel1.text")); // NOI18N
+        Cancel1.setName("Cancel1"); // NOI18N
+        Cancel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Cancel1ActionPerformed(evt);
+            }
+        });
+
+        jTextField4.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField4.setName("jTextField4"); // NOI18N
+        jTextField4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jTextField4MouseExited(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
+        });
+
+        jTextField5.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField5.setName("jTextField5"); // NOI18N
+
+        jTextField6.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField6.setName("jTextField6"); // NOI18N
+
+        jLabel23.setText(resourceMap.getString("jLabel23.text")); // NOI18N
+        jLabel23.setName("jLabel23"); // NOI18N
+
+        jLabel24.setText(resourceMap.getString("jLabel24.text")); // NOI18N
+        jLabel24.setName("jLabel24"); // NOI18N
+
+        jLabel25.setText(resourceMap.getString("jLabel25.text")); // NOI18N
+        jLabel25.setName("jLabel25"); // NOI18N
+
+        jButton31.setText(resourceMap.getString("jButton31.text")); // NOI18N
+        jButton31.setName("jButton31"); // NOI18N
+        jButton31.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton31ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout auv_rotate_vector_dialogLayout = new javax.swing.GroupLayout(auv_rotate_vector_dialog.getContentPane());
+        auv_rotate_vector_dialog.getContentPane().setLayout(auv_rotate_vector_dialogLayout);
+        auv_rotate_vector_dialogLayout.setHorizontalGroup(
+            auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, auv_rotate_vector_dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, auv_rotate_vector_dialogLayout.createSequentialGroup()
+                        .addComponent(jButton31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Cancel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel24)
+                                    .addComponent(jLabel25))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
+                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                                .addComponent(jLabel23)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        auv_rotate_vector_dialogLayout.setVerticalGroup(
+            auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton31)
+                    .addComponent(Cancel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton22)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -2209,8 +2523,115 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         toggleJMenuCheckbox(jme3_waypoints_auv_gradient);
     }//GEN-LAST:event_jme3_waypoints_auv_gradientActionPerformed
 
+    private void jme3_move_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_move_auvActionPerformed
+        auv_move_vector_dialog.setTitle("Change position of AUV");
+        auv_move_vector_dialog.setLocationRelativeTo(JMEPanel1);
+        auv_move_vector_dialog.setVisible(true);
+    }//GEN-LAST:event_jme3_move_auvActionPerformed
+
+    private void jme3_reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_reset_auvActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.resetSelectedAUV();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jme3_reset_auvActionPerformed
+
+    private void jme3_delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_delete_auvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jme3_delete_auvActionPerformed
+
+    private void jme3_waypoints_colorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_colorActionPerformed
+        final Color newColor = jColorChooser1.showDialog(
+                     this.getRootPane(),
+                     "Choose Color for Waypoints",
+                     Color.WHITE);
+        if(newColor != null){
+            Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.waypointsColorSelectedAUV(newColor);
+                }
+                return null;
+            }
+            });
+        }
+    }//GEN-LAST:event_jme3_waypoints_colorActionPerformed
+
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+        auv_move_vector_dialog.setVisible(false);
+    }//GEN-LAST:event_CancelActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        auv_move_vector_dialog.setVisible(false);
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.moveSelectedAUV(new Vector3f(Float.valueOf(jTextField1.getText()), Float.valueOf(jTextField2.getText()), Float.valueOf(jTextField3.getText())));
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            System.out.println("test");
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jTextField1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseExited
+        System.out.println("test");
+    }//GEN-LAST:event_jTextField1MouseExited
+
+    private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.moveSelectedGhostAUV(new Vector3f(Float.valueOf(jTextField1.getText()), Float.valueOf(jTextField2.getText()), Float.valueOf(jTextField3.getText())));
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButton30ActionPerformed
+
+    private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton22ActionPerformed
+
+    private void Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Cancel1ActionPerformed
+
+    private void jTextField4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField4MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4MouseExited
+
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4KeyPressed
+
+    private void jButton31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton31ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton31ActionPerformed
+
+    private void jme3_rotate_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_rotate_auvActionPerformed
+        auv_rotate_vector_dialog.setTitle("Change rotation of AUV");
+        auv_rotate_vector_dialog.setLocationRelativeTo(JMEPanel1);
+        auv_rotate_vector_dialog.setVisible(true);
+    }//GEN-LAST:event_jme3_rotate_auvActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
+    private javax.swing.JButton Cancel;
+    private javax.swing.JButton Cancel1;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JMenuItem JME_MenuItem;
     private javax.swing.JDialog JME_SettingsDialog;
@@ -2227,7 +2648,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu addSensPopUpMenu;
     private javax.swing.JMenuItem add_auv;
     private javax.swing.JMenuItem add_simob;
+    private javax.swing.JDialog auv_move_vector_dialog;
     private javax.swing.JPopupMenu auv_popup_menu;
+    private javax.swing.JDialog auv_rotate_vector_dialog;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;
     private javax.swing.JMenuItem delete_auv;
@@ -2236,9 +2659,14 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem help;
     private javax.swing.JDialog help_dialog;
     private javax.swing.JOptionPane help_optionpane;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton22;
+    private javax.swing.JButton jButton30;
+    private javax.swing.JButton jButton31;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
+    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JMenu jFileMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2252,6 +2680,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -2271,6 +2705,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
@@ -2280,15 +2720,18 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_collision;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_drag;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
+    private javax.swing.JMenuItem jme3_delete_auv;
     private javax.swing.JMenuItem jme3_move_auv;
     private javax.swing.JMenu jme3_params_auv;
     private javax.swing.JMenuItem jme3_poke;
+    private javax.swing.JMenuItem jme3_reset_auv;
     private javax.swing.JMenuItem jme3_rotate_auv;
     private javax.swing.JMenu jme3_waypoints_auv;
     private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_enable;
     private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_gradient;
     private javax.swing.JMenuItem jme3_waypoints_auv_reset;
     private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_visible;
+    private javax.swing.JMenuItem jme3_waypoints_color;
     private javax.swing.JPopupMenu jme3_window_switcher;
     private javax.swing.JMenuItem keys;
     private javax.swing.JDialog keys_dialog;
