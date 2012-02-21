@@ -169,7 +169,7 @@ public class MARSApp extends SingleFrameApplication {
 
                         view.setSimAUV(app);
 
-                        app.setPauseOnLostFocus(false);
+                        app.setPauseOnLostFocus(false);                  
                         app.setShowSettings(false);
                         app.setSettings(settings);
                         app.setView(view);
@@ -203,8 +203,10 @@ public class MARSApp extends SingleFrameApplication {
                                 app.enqueue(new Callable<Void>(){
                                 public Void call(){
                                         app.getViewPort().setClearFlags(true, true, true);
+                                        app.getGuiViewPort().setEnabled(true);
                                         app.getFlyByCamera().setDragToRotate(true);
                                         sim_panel.attachTo(true, app.getViewPort());
+                                        sim_panel.attachTo(false, app.getGuiViewPort());
                                         map_panel.attachTo(false, app.getMapViewPort());
                                         return null;
                                     }
