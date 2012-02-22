@@ -41,12 +41,16 @@ import com.jme3.math.Rectangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
+import com.jme3.system.Timer;
 import com.jme3.texture.Texture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Console;
@@ -96,6 +100,9 @@ import mars.sensors.Positionmeter;
 import mars.sensors.TerrainSender;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
+import mars.waves.MyProjectedGrid;
+import mars.waves.ProjectedWaterProcessorWithRefraction;
+import mars.waves.WaterHeightGenerator;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 
@@ -137,6 +144,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
+    private MyProjectedGrid grid;
+    private Geometry projectedGridGeometry;
+    private ProjectedWaterProcessorWithRefraction waterProcessor;
+    private WaterHeightGenerator whg = new WaterHeightGenerator();
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
@@ -222,6 +233,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
             initer = new Initializer(mars,this,auv_manager,com_manager);
             initer.init();
+            
+            setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
             
             //set camera to look to (0,0,0)
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
@@ -346,7 +359,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private void setupGUI(){
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
-        if(!mars_settings.isFPS()){
+        if(mars_settings.isFPS()){
+            mars.setDisplayFps(true);
+            mars.setDisplayStatView(true);
+        }else{
             mars.setDisplayFps(false);
             mars.setDisplayStatView(false);
         }
@@ -489,6 +505,30 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
         inputManager.addMapping("depth_auv_up",new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));         // trigger 2: left-button click
         inputManager.addListener(actionListener, "depth_auv_up");
+        
+        inputManager.addMapping("ampp",new KeyTrigger(KeyInput.KEY_H));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "ampp");
+        
+        inputManager.addMapping("ampm",new KeyTrigger(KeyInput.KEY_J));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "ampm");
+        
+        inputManager.addMapping("octp",new KeyTrigger(KeyInput.KEY_K));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "octp");
+        
+        inputManager.addMapping("octm",new KeyTrigger(KeyInput.KEY_L));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "octm");
+        
+        inputManager.addMapping("scalebigp",new KeyTrigger(KeyInput.KEY_U));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "scalebigp");
+        
+        inputManager.addMapping("scalebigm",new KeyTrigger(KeyInput.KEY_I));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "scalebigm");
+        
+        inputManager.addMapping("speedbigp",new KeyTrigger(KeyInput.KEY_O));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "speedbigp");
+        
+        inputManager.addMapping("speedbigm",new KeyTrigger(KeyInput.KEY_P));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "speedbigm");
     }
     
     private RawInputListener mouseMotionListener = new RawInputListener() {
@@ -547,6 +587,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 startSimulation();
             }else if(name.equals("stop") && !keyPressed) {
                 pauseSimulation();
+            }else if(name.equals("ampp") && !keyPressed) {
+                whg.setHeightbig(whg.getHeightbig()+0.1f);
+            }else if(name.equals("ampm") && !keyPressed) {
+                whg.setHeightbig(whg.getHeightbig()-0.1f);
+            }else if(name.equals("octp") && !keyPressed) {
+                whg.setOctaves(whg.getOctaves()+1);
+            }else if(name.equals("octm") && !keyPressed) {
+                whg.setOctaves(whg.getOctaves()-1);
+            }else if(name.equals("scalebigp") && !keyPressed) {
+                whg.setScaleybig(whg.getScaleybig()+0.1f);
+            }else if(name.equals("scalebigm") && !keyPressed) {
+                whg.setScaleybig(whg.getScaleybig()-0.1f);
+            }else if(name.equals("speedbigp") && !keyPressed) {
+                whg.setSpeedbig(whg.getSpeedbig()+0.1f);
+            }else if(name.equals("speedbigm") && !keyPressed) {
+                whg.setSpeedbig(whg.getSpeedbig()-0.1f);
             }else  if (name.equals("Shoott") && !keyPressed) {
 
             }else if(name.equals("reset") && !keyPressed) {
@@ -726,10 +782,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           if(auv != null){
             auv.setSelected(true);
+            //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+            view.initPopUpMenuesForAUV(auv.getAuv_param());
+            view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
           }
-          //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
-          view.initPopUpMenuesForAUV(auv.getAuv_param());
-          view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }else{//nothing to pickRightClick
             //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();
@@ -815,10 +871,29 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
         super.update(tpf);
         
+        if(view == null){
+            System.out.println("View is NULL");
+        }
+        if(view != null && !view_init && mars_settings!=null){
+            view.setMarsSettings(mars_settings);
+            view.initTree(mars_settings,auvs,simobs);
+            view.setXMLL(xmll);
+            view.setAuv_manager(auv_manager);
+            view.setSimob_manager(simob_manager);
+            view.initPopUpMenues();
+            //auv_hanse.setView(view);
+            //auv_monsun2.setView(view);
+            view_init = true;
+        }
+        
         //System.out.println("time: " + tpf);
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
+        
+        float[] angles = new float[3];
+        mars.getCamera().getRotation().toAngles(angles);
+        grid.update( mars.getCamera().getViewMatrix().clone());
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -914,7 +989,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
 
     public void prePhysicsTick(PhysicsSpace ps, float tpf) {
-        if(view == null){
+        /*if(view == null){
             System.out.println("View is NULL");
         }
         if(view != null && !view_init && mars_settings!=null){
@@ -927,7 +1002,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //auv_hanse.setView(view);
             //auv_monsun2.setView(view);
             view_init = true;
-        }
+        }*/
         if(/*AUVPhysicsControl != null*/true){
             //only update physics if auv_hanse exists and when simulation is started
             if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
@@ -1069,5 +1144,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(selected_auv != null){
             selected_auv.reset();
         }
+    }
+    
+    private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
+        grid = new MyProjectedGrid(timer, cam, 100, 70, 0.02f, whg);
+        projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
+        projectedGridGeometry.setCullHint(CullHint.Never);
+        projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
+        projectedGridGeometry.setLocalTranslation(0, 0, 0);
+        rootNode.attachChild(projectedGridGeometry);
+    }
+    
+    private Material setWaterProcessor(Camera cam, ViewPort viewPort){   
+        waterProcessor = new ProjectedWaterProcessorWithRefraction(cam,assetManager);
+        waterProcessor.setReflectionScene(sceneReflectionNode);
+        waterProcessor.setDebug(false);
+        viewPort.addProcessor(waterProcessor);              
+        return waterProcessor.getMaterial();
+    }
+
+    public WaterHeightGenerator getWhg() {
+        return whg;
     }
 }
