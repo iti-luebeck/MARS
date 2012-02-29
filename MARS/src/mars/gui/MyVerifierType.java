@@ -25,4 +25,20 @@ public class MyVerifierType {
      * 
      */
     public static final int FLOAT = 3;
+    /**
+     * 
+     */
+    public static final int INTEGER = 4;
+    /**
+     * 
+     */
+    public static final int COLORRGBA = 5;
+    /**
+     * 
+     */
+    public static final int BOOLEAN = 6;
+    /**
+     * 
+     */
+    public static final int STRING = 7;
 }

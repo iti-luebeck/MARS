@@ -515,6 +515,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              Iterator iter = auvs.iterator();
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
+                bas_auv.getAuv_param().setAuv(bas_auv);
                 bas_auv.getAuv_param().init();
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
@@ -1143,13 +1144,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
-    public void moveSelectedAUV(Vector3f new_position){
+    public void moveSelectedAUV(Vector3f new_position, boolean relative){
         System.out.println("moveSelectedAUV" + new_position);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             selected_auv.hideGhostAUV(true);
-            selected_auv.getAuv_param().setPosition(new_position);
-            selected_auv.getPhysicsControl().setPhysicsLocation(selected_auv.getAUVNode().worldToLocal(new_position,null));
+            if(!relative){
+                selected_auv.getAuv_param().setPosition(new_position);
+                selected_auv.getPhysicsControl().setPhysicsLocation(new_position);
+            }else{
+                selected_auv.getAuv_param().setPosition(new_position.add(selected_auv.getAuv_param().getPosition()));
+                selected_auv.getPhysicsControl().setPhysicsLocation(selected_auv.getPhysicsControl().getPhysicsLocation().add(new_position));
+            }
         }
     }
     

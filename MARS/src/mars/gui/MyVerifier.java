@@ -148,7 +148,7 @@ class MyVerifier extends InputVerifier implements ActionListener {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
                     return false;
                 }
-            }else if(((MyVerifierType.VECTOR3F == type) || (MyVerifierType.ALL == type))){
+            }else if(((MyVerifierType.INTEGER == type) || (MyVerifierType.ALL == type))){
                 try {
                     String tmp = mytext.getText();
                     int value = Integer.valueOf(tmp);
@@ -157,7 +157,7 @@ class MyVerifier extends InputVerifier implements ActionListener {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid integer).
                     return false;
                 }
-            }else if(((MyVerifierType.VECTOR3F == type) || (MyVerifierType.ALL == type))){
+            }else if(((MyVerifierType.BOOLEAN == type) || (MyVerifierType.ALL == type))){
                 try {
                     String tmp = mytext.getText();
                     boolean value = Boolean.valueOf(tmp);
@@ -166,7 +166,7 @@ class MyVerifier extends InputVerifier implements ActionListener {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid Boolean).
                     return false;
                 }
-            }else if(((MyVerifierType.VECTOR3F == type) || (MyVerifierType.ALL == type))){
+            }else if(((MyVerifierType.STRING == type) || (MyVerifierType.ALL == type))){
                 try {
                     String tmp = mytext.getText();
                     String value = String.valueOf(tmp);
@@ -189,7 +189,7 @@ class MyVerifier extends InputVerifier implements ActionListener {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid vector/float).
                     return false;
                 }
-            }else if(((MyVerifierType.VECTOR3F == type) || (MyVerifierType.ALL == type))){
+            }else if(((MyVerifierType.COLORRGBA == type) || (MyVerifierType.ALL == type))){
                 try {
                     String tmp = mytext.getText();
                     int firstbracket = tmp.indexOf("[",0);

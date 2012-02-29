@@ -220,16 +220,16 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
 
-    private void updateState(String target){
+    public void updateState(String target){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision")){
-            if( isDebugCollision() == false && physics_control != null ){
+           /* if( isDebugCollision() == false && physics_control != null ){
                 physics_control.detachDebugShape();
             }else if( isDebugCollision() && physics_control != null ){
                 Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
                 debug_mat.setColor("Color", ColorRGBA.Red);
                 //physics_control.attachDebugShape(debug_mat);
-            }
+            }*/
         }else if(target.equals("position")){
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getPosition());
@@ -260,10 +260,6 @@ public class AUV_Parameters implements CellEditorListener{
                 new_physics_control.setDamping(getDamping_linear(), getDamping_angular());
                 auv.setPhysicsControl(new_physics_control);
             }*/
-        }else if(target.equals("physical_exchanger")){
-            auv.debugView(isDebugPhysicalExchanger());
-        }else if(target.equals("drag")){
-            //nothing here yet
         }
     }
     
