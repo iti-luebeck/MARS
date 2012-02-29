@@ -34,6 +34,7 @@ import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -144,10 +145,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
-    private MyProjectedGrid grid;
+    /*private MyProjectedGrid grid;
     private Geometry projectedGridGeometry;
     private ProjectedWaterProcessorWithRefraction waterProcessor;
-    private WaterHeightGenerator whg = new WaterHeightGenerator();
+    private WaterHeightGenerator whg = new WaterHeightGenerator();*/
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
@@ -215,7 +216,62 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
-                    
+            
+         /*   Matrix4f matrix = new Matrix4f(0.099684946f, 0.003476259f, 0.007129367f, -0.05035142f, -0.0035146326f, 0.099937364f, 4.1346974E-4f, -0.021245062f, -0.0071105273f, -6.6273817E-4f, 0.09974468f, -0.023290642f, 0.0f, 0.0f, 0.0f, 1.0f);
+            Vector3f start = new Vector3f(1.9252679f, -49.951576f, -2.914092f); 
+            Vector3f dir = new Vector3f(-0.035146322f, 0.9993737f, 0.0041346983f);
+            Ray test = new Ray(start, dir);
+            Vector3f v1 = new Vector3f(2.154625f, -0.832799f, -2.879551f);
+            Vector3f v2 = new Vector3f(2.154625f, -0.832799f, -2.534256f);
+            Vector3f v3 =  new Vector3f(-1.67098f, -0.832798f, -2.879551f);
+            Vector3f v4 = Vector3f.ZERO;
+            Vector3f v5 = Vector3f.ZERO;
+            Vector3f v6 = Vector3f.ZERO;
+            float t_world = 0f;
+            float t = test.intersects(v1, v2, v3);
+                if (!Float.isInfinite(t)) {
+                        matrix.mult(v1, v4);
+                        matrix.mult(v2, v5);
+                        matrix.mult(v3, v6);
+                        t_world = test.intersects(v4, v5, v6);
+                }*/
+            
+          /*  Vector3f start = new Vector3f(0.2182425f, -5.027495f, 0.12827098f); 
+            Vector3f dir = new Vector3f(0f, 1f, 0f);    
+            Vector3f v1 = new Vector3f(0.19529787f, -0.10055651f, 0.12947007f);
+            Vector3f v2 = new Vector3f(0.22324294f, -0.13183054f, 0.12800966f);
+            Vector3f v3 =  new Vector3f(0.21205825f, -0.13176638f, 0.12909873f);
+            mars.Ray test = new mars.Ray(start, dir);
+            float testt = test.intersects(v1, v2, v3);
+            
+        Geometry mark5 = new Geometry("VideoCamera_Arrow_2", new Arrow(test.getDirection().mult(10f)));
+        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.Green);
+        mark5.setMaterial(mark_mat4);
+        mark5.setLocalTranslation(test.getOrigin());
+        mark5.updateGeometricState();
+        rootNode.attachChild(mark5);
+        
+        Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat5.setColor("Color", ColorRGBA.Red);
+        Geometry mark6 = new Geometry("VideoCamera_Arrow_3", new Arrow(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f).subtract(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f)).mult(1f)));
+        mark6.setMaterial(mark_mat5);
+        mark6.setLocalTranslation(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f));
+        mark6.updateGeometricState();
+        rootNode.attachChild(mark6);
+        
+        Geometry mark7 = new Geometry("VideoCamera_Arrow_4", new Arrow(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f).subtract(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f)).mult(1f)));
+        mark7.setMaterial(mark_mat5);
+        mark7.setLocalTranslation(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f));
+        mark7.updateGeometricState();
+        rootNode.attachChild(mark7);
+        
+        Geometry mark8 = new Geometry("VideoCamera_Arrow_5", new Arrow(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f).subtract(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f)).mult(1f)));
+        mark8.setMaterial(mark_mat5);
+        mark8.setLocalTranslation(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f));
+        mark8.updateGeometricState();
+        rootNode.attachChild(mark8);*/
+            
             sceneReflectionNode.attachChild(SonarDetectableNode);
             sceneReflectionNode.attachChild(AUVsNode);
             rootNode.attachChild(sceneReflectionNode);
@@ -234,7 +290,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             initer = new Initializer(mars,this,auv_manager,com_manager);
             initer.init();
             
-            setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
+            //setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
             
             //set camera to look to (0,0,0)
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
@@ -588,21 +644,21 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             }else if(name.equals("stop") && !keyPressed) {
                 pauseSimulation();
             }else if(name.equals("ampp") && !keyPressed) {
-                whg.setHeightbig(whg.getHeightbig()+0.1f);
+                initer.getWhg().setHeightbig(initer.getWhg().getHeightbig()+0.1f);
             }else if(name.equals("ampm") && !keyPressed) {
-                whg.setHeightbig(whg.getHeightbig()-0.1f);
+                initer.getWhg().setHeightbig(initer.getWhg().getHeightbig()-0.1f);
             }else if(name.equals("octp") && !keyPressed) {
-                whg.setOctaves(whg.getOctaves()+1);
+                initer.getWhg().setOctaves(initer.getWhg().getOctaves()+1);
             }else if(name.equals("octm") && !keyPressed) {
-                whg.setOctaves(whg.getOctaves()-1);
+                initer.getWhg().setOctaves(initer.getWhg().getOctaves()-1);
             }else if(name.equals("scalebigp") && !keyPressed) {
-                whg.setScaleybig(whg.getScaleybig()+0.1f);
+                initer.getWhg().setScaleybig(initer.getWhg().getScaleybig()+0.1f);
             }else if(name.equals("scalebigm") && !keyPressed) {
-                whg.setScaleybig(whg.getScaleybig()-0.1f);
+                initer.getWhg().setScaleybig(initer.getWhg().getScaleybig()-0.1f);
             }else if(name.equals("speedbigp") && !keyPressed) {
-                whg.setSpeedbig(whg.getSpeedbig()+0.1f);
+                initer.getWhg().setSpeedbig(initer.getWhg().getSpeedbig()+0.1f);
             }else if(name.equals("speedbigm") && !keyPressed) {
-                whg.setSpeedbig(whg.getSpeedbig()-0.1f);
+                initer.getWhg().setSpeedbig(initer.getWhg().getSpeedbig()-0.1f);
             }else  if (name.equals("Shoott") && !keyPressed) {
 
             }else if(name.equals("reset") && !keyPressed) {
@@ -891,9 +947,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //initer.updateWavesWater(tpf);
         }*/
         
-        float[] angles = new float[3];
+        /*float[] angles = new float[3];
         mars.getCamera().getRotation().toAngles(angles);
-        grid.update( mars.getCamera().getViewMatrix().clone());
+        grid.update( mars.getCamera().getViewMatrix().clone());*/
+        if(mars_settings.isSetupProjectedWavesWater()){
+            initer.updateProjectedWavesWater(tpf);
+        }
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -988,7 +1047,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         this.view = view;
     }
 
-    public void prePhysicsTick(PhysicsSpace ps, float tpf) {
+    public void prePhysicsTick(PhysicsSpace ps, final float tpf) {
         /*if(view == null){
             System.out.println("View is NULL");
         }
@@ -1006,6 +1065,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(/*AUVPhysicsControl != null*/true){
             //only update physics if auv_hanse exists and when simulation is started
             if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
+                /*Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    auv_manager.updateAllAUVs(tpf);
+                    return null;
+                }
+                });*/
                 auv_manager.updateAllAUVs(tpf);
                 com_manager.update(tpf);
                 //time = time + tpf;
@@ -1146,7 +1211,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
-    private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
+    /*private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
         grid = new MyProjectedGrid(timer, cam, 100, 70, 0.02f, whg);
         projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
         projectedGridGeometry.setCullHint(CullHint.Never);
@@ -1165,5 +1230,5 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
     public WaterHeightGenerator getWhg() {
         return whg;
-    }
+    }*/
 }

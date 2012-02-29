@@ -150,7 +150,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
         nifty.gotoScreen("loadlevel");
         load = true;*/
-        
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
                 SimState simstate = new SimState(view);

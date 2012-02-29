@@ -48,9 +48,15 @@ import mars.server.MARS_Server;
 import mars.terrain.MultMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.system.AppSettings;
+import com.jme3.system.Timer;
 import mars.auv.Communication_Manager;
 import mars.server.ros.ROS_Node;
+import mars.waves.MyProjectedGrid;
+import mars.waves.ProjectedWaterProcessorWithRefraction;
+import mars.waves.WaterHeightGenerator;
 
 /**
  * With this class we initialize all the different things on the
@@ -89,7 +95,13 @@ public class Initializer {
     //water
     private WaterFilter water;
     private float waves_time = 0f;
-
+    
+    //projected waves water
+    private MyProjectedGrid grid;
+    private Geometry projectedGridGeometry;
+    private ProjectedWaterProcessorWithRefraction waterProcessor;
+    private WaterHeightGenerator whg = new WaterHeightGenerator();
+    
     //Server
     private MARS_Server raw_server;
     private Thread raw_server_thread;
@@ -182,6 +194,9 @@ public class Initializer {
         }
         if(MARS_settings.isSetupWavesWater()){
             setupWavesWater();
+        }
+        if(MARS_settings.isSetupProjectedWavesWater()){
+            setupProjectedWavesWater();
         }
         if(MARS_settings.isSetupWireFrame()){
             setupWireFrame();
@@ -334,7 +349,38 @@ public class Initializer {
         water.setWaterHeight(water_height);
         fpp.addFilter(water);
     }
+    
+    private void setupProjectedWavesWater(){
+        setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
+    }
 
+    private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
+        grid = new MyProjectedGrid(timer, cam, 100, 70, 0.02f, whg);
+        projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
+        projectedGridGeometry.setCullHint(CullHint.Never);
+        projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
+        projectedGridGeometry.setLocalTranslation(0, 0, 0);
+        rootNode.attachChild(projectedGridGeometry);
+    }
+    
+    private Material setWaterProcessor(Camera cam, ViewPort viewPort){   
+        waterProcessor = new ProjectedWaterProcessorWithRefraction(cam,assetManager);
+        waterProcessor.setReflectionScene(sceneReflectionNode);
+        waterProcessor.setDebug(false);
+        viewPort.addProcessor(waterProcessor);              
+        return waterProcessor.getMaterial();
+    }
+
+    public WaterHeightGenerator getWhg() {
+        return whg;
+    }
+    
+    public void updateProjectedWavesWater(float tpf){
+        float[] angles = new float[3];
+        mars.getCamera().getRotation().toAngles(angles);
+        grid.update( mars.getCamera().getViewMatrix().clone());
+    }
+    
     /**
      *
      * @param tpf

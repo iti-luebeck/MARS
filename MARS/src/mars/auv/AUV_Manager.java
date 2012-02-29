@@ -282,10 +282,16 @@ public class AUV_Manager {
      * The forces of the auv's will be updated here. Normaly in a SimpleUpdate method in the Main_Loop.
      * @param tpf
      */
-    private void updateForcesOfAUVs(float tpf){
+    private void updateForcesOfAUVs(final float tpf){
         for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
+            final AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
+              /*  Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    auv.updateForces(tpf);
+                    return null;
+                }
+                });*/
                 auv.updateForces(tpf);
             }
         }

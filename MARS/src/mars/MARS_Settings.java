@@ -48,6 +48,7 @@ public class MARS_Settings implements CellEditorListener{
     private HashMap<String,Object> Fog;
     private HashMap<String,Object> DepthOfField;
     private HashMap<String,Object> WavesWater;
+    private HashMap<String,Object> ProjectedWavesWater;
     private HashMap<String,Object> Water;
     private HashMap<String,Object> PlaneWater;
     private HashMap<String,Object> SkyBox;
@@ -123,6 +124,7 @@ public class MARS_Settings implements CellEditorListener{
         Fog = new HashMap<String,Object> ();
         DepthOfField = new HashMap<String,Object> ();
         WavesWater = new HashMap<String,Object> ();
+        ProjectedWavesWater = new HashMap<String,Object> ();
         Water = new HashMap<String,Object> ();
         PlaneWater = new HashMap<String,Object> ();
         SkyBox = new HashMap<String,Object> ();
@@ -142,6 +144,7 @@ public class MARS_Settings implements CellEditorListener{
         Graphics.put("Fog", Fog);
         Graphics.put("DepthOfField", DepthOfField);
         Graphics.put("WavesWater", WavesWater);
+        Graphics.put("ProjectedWavesWater", ProjectedWavesWater);
         Graphics.put("Water", Water);
         Graphics.put("PlaneWater", PlaneWater);
         Graphics.put("SkyBox", SkyBox);
@@ -183,6 +186,7 @@ public class MARS_Settings implements CellEditorListener{
         Fog = (HashMap<String,Object>)Graphics.get("Fog");
         DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
         WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
+        ProjectedWavesWater = (HashMap<String,Object>)Graphics.get("ProjectedWavesWater");
         Water = (HashMap<String,Object>)Graphics.get("Water");
         PlaneWater = (HashMap<String,Object>)Graphics.get("PlaneWater");
         SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
@@ -491,6 +495,22 @@ public class MARS_Settings implements CellEditorListener{
      */
     public void setSetupWavesWater(boolean enabled) {
         WavesWater.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSetupProjectedWavesWater() {
+        return (Boolean)ProjectedWavesWater.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupProjectedWavesWater(boolean enabled) {
+        ProjectedWavesWater.put("enabled", enabled);
     }
 
     /**

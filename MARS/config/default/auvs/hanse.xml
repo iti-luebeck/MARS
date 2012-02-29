@@ -30,7 +30,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse/hanse_low.obj</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse/hanse_clean_v2_very_low_merge_new.obj</value><!--hanse_low.obj-->
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">HANSE_MODEL</value>
@@ -162,10 +162,10 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.3</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_updaterate">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">5</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="mass_auv">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">21.8</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">15.5</value><!--21.8 20.5 15.5-->
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.8</value>

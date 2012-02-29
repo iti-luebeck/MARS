@@ -180,6 +180,13 @@
                         </entry>
                     </value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="ProjectedWavesWater">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        </entry>
+                    </value>
+                </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Terrain">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
