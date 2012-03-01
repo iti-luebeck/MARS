@@ -366,7 +366,7 @@ public class MARSView extends FrameView {
                             jcm.addActionListener(new java.awt.event.ActionListener() {
                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                                     final boolean selected = jcm.isSelected();
-                                    auv_param.updateState(elem);
+                                    auv_param.updateState(elem,hashmapname);
                                     auv_param.setValue(elem, selected, hashmapname);
                                     toggleJMenuCheckbox(jcm);
                                 }
@@ -391,7 +391,7 @@ public class MARSView extends FrameView {
                                     vectorDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem);
+                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, new Vector3f(Float.valueOf(vectorDialog_x.getText()), Float.valueOf(vectorDialog_y.getText()), Float.valueOf(vectorDialog_z.getText())), hashmapname);
                                                     vector_dialog.setVisible(false);
                                                 }
@@ -416,7 +416,7 @@ public class MARSView extends FrameView {
                                     floatDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem);
+                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, Float.valueOf(floatDialog_x.getText()), hashmapname);
                                                     float_dialog.setVisible(false);
                                                 }
@@ -441,7 +441,7 @@ public class MARSView extends FrameView {
                                     intDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem);
+                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, Integer.valueOf(intDialog_x.getText()), hashmapname);
                                                     int_dialog.setVisible(false);
                                                 }
@@ -466,7 +466,7 @@ public class MARSView extends FrameView {
                                     stringDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem);
+                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, stringDialog_x.getText(), hashmapname);
                                                     string_dialog.setVisible(false);
                                                 }
@@ -491,7 +491,7 @@ public class MARSView extends FrameView {
                                             System.out.println("newColor: " + newColor);
                                             System.out.println("color: " + color);
                                             if(newColor != null){
-                                                auv_param.updateState(elem);
+                                                auv_param.updateState(elem,hashmapname);
                                                 auv_param.setValue(elem, new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f), hashmapname);
                                             }
                                 }

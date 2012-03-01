@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import mars.Initializer;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.MARS_Main;
@@ -58,7 +59,11 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      *
      */
     protected MARS_Settings simauv_settings;
-
+    /*
+     * 
+     */
+    private Initializer initer;
+    
     /**
      * 
      */
@@ -93,9 +98,10 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
     @Override
     public void setSimState(SimState simState) {
         this.simState = simState;
-        this.simauv = this.simState.getMARS();
-        this.assetManager = this.simauv.getAssetManager();
-        this.rootNode = this.simState.getRootNode();
+        this.simauv = simState.getMARS();
+        this.assetManager = simauv.getAssetManager();
+        this.rootNode = simState.getRootNode();
+        this.initer = simState.getIniter();
     }
 
     /**
@@ -136,4 +142,20 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      *
      */
     public abstract void reset();
+    
+    /**
+     *
+     * @return
+     */
+    public Initializer getIniter() {
+        return initer;
+    }
+
+    /**
+     *
+     * @param initer
+     */
+    public void setIniter(Initializer initer) {
+        this.initer = initer;
+    }
 }

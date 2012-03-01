@@ -195,32 +195,32 @@ public class AUV_Parameters implements CellEditorListener{
         int pathcount = editor.getTreepath().getPathCount();
         if(obj instanceof Float){
             hashmap.put(target, (Float)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }else if(obj instanceof Integer){
             hashmap.put(target, (Integer)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }else if(obj instanceof Boolean){
             hashmap.put(target, (Boolean)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }else if(obj instanceof String){
             hashmap.put(target, (String)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }else if(obj instanceof Vector3f){
             hashmap.put(target, (Vector3f)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }else if(obj instanceof ColorRGBA){
             hashmap.put(target, (ColorRGBA)node_obj);
-            updateState(target);
+            updateState(target,"");
             xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
         }
     }
 
-    public void updateState(String target){
+    public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision")){
            /* if( isDebugCollision() == false && physics_control != null ){

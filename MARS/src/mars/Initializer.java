@@ -61,13 +61,14 @@ import mars.waves.WaterHeightGenerator;
 /**
  * With this class we initialize all the different things on the
  * begining like "Do we want to load the terrrain?" Uses the MARS_Settings to determine
- * what ist activated with what MARS_settings.
+ * what ist activated with what mars_settings.
  * @author Thomas Tosik
  */
 public class Initializer {
 
-    private MARS_Settings MARS_settings;
+    private MARS_Settings mars_settings;
     private MARS_Main mars;
+    private PhysicalEnvironment physical_environment;
     private Node guiNode;
     private Node rootNode;
     private AppSettings settings;
@@ -111,7 +112,7 @@ public class Initializer {
     /**
      *
      * @param mars
-     * @param MARS_settings
+     * @param mars_settings
      * @param auv_manager 
      * @param com_manager 
      * @deprecated 
@@ -119,7 +120,7 @@ public class Initializer {
     @Deprecated
     public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, Communication_Manager com_manager){
         this.mars = mars;
-        this.MARS_settings = MARS_settings;
+        this.mars_settings = MARS_settings;
         this.guiNode = mars.getGuiNode();
         this.settings = mars.getSettings();
         this.rootNode = mars.getRootNode();
@@ -133,7 +134,7 @@ public class Initializer {
         this.com_manager = com_manager;
         this.renderManager = mars.getRenderManager();
         this.bulletAppState = mars.getStateManager().getState(BulletAppState.class);
-        this.MARS_settings.setInit(this);
+        this.mars_settings.setInit(this);
         fpp = new FilterPostProcessor(assetManager);
     }
     
@@ -144,23 +145,24 @@ public class Initializer {
      * @param auv_manager
      * @param com_manager
      */
-    public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager){
+    public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager, PhysicalEnvironment physical_environment){
         this.mars = mars;
-        this.MARS_settings = simstate.getSimauv_settings();
+        this.mars_settings = simstate.getSimauv_settings();
         this.guiNode = mars.getGuiNode();
         this.settings = mars.getSettings();
         this.rootNode = simstate.getRootNode();
         this.inputManager = mars.getInputManager();
         this.assetManager = simstate.getAssetManager();
+        this.physical_environment = physical_environment;
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.viewPort = mars.getViewPort();
-        this.water_height = MARS_settings.getPhysical_environment().getWater_height();
+        this.water_height = mars_settings.getPhysical_environment().getWater_height();
         this.auv_manager = auv_manager;
         this.com_manager = com_manager;
         this.renderManager = mars.getRenderManager();
         this.bulletAppState = mars.getStateManager().getState(BulletAppState.class);
-        this.MARS_settings.setInit(this);
+        this.mars_settings.setInit(this);
         fpp = new FilterPostProcessor(assetManager);
     }
 
@@ -168,43 +170,43 @@ public class Initializer {
      * Calls this method once after you have added the MARS_Settings.
      */
     public void init(){
-        if(MARS_settings.isSetupAxis()){
+        if(mars_settings.isSetupAxis()){
             setupAxis();
         }
-        if(MARS_settings.isSetupFog()){
+        if(mars_settings.isSetupFog()){
             setupFog();
         }
-        if(MARS_settings.isSetupLight()){
+        if(mars_settings.isSetupLight()){
             setupLight();
         }
-        if(MARS_settings.isSetupPlaneWater()){
+        if(mars_settings.isSetupPlaneWater()){
             setupPlaneWater();
         }
-        if(MARS_settings.isSetupSimpleSkyBox()){
+        if(mars_settings.isSetupSimpleSkyBox()){
             setupSimpleSkyBox();
         }
-        if(MARS_settings.isSetupSkyBox()){
+        if(mars_settings.isSetupSkyBox()){
             setupSkyBox();
         }
-        if(MARS_settings.isSetupTerrain()){
+        if(mars_settings.isSetupTerrain()){
             setupTerrain();
         }
-        if(MARS_settings.isSetupWater()){
+        if(mars_settings.isSetupWater()){
             setupWater();
         }
-        if(MARS_settings.isSetupWavesWater()){
+        if(mars_settings.isSetupWavesWater()){
             setupWavesWater();
         }
-        if(MARS_settings.isSetupProjectedWavesWater()){
+        if(mars_settings.isSetupProjectedWavesWater()){
             setupProjectedWavesWater();
         }
-        if(MARS_settings.isSetupWireFrame()){
+        if(mars_settings.isSetupWireFrame()){
             setupWireFrame();
         }
-        if(MARS_settings.isSetupCrossHairs()){
+        if(mars_settings.isSetupCrossHairs()){
             setupCrossHairs();
         }
-        if(MARS_settings.isSetupDepthOfField()){
+        if(mars_settings.isSetupDepthOfField()){
             setupDepthOfField();
         }
         setupServer();
@@ -218,10 +220,10 @@ public class Initializer {
      */
     public void addFiltersToViewport(ViewPort NewViewPort){
         FilterPostProcessor fppp = new FilterPostProcessor(assetManager);
-        if(MARS_settings.isSetupFog()){
+        if(mars_settings.isSetupFog()){
             fppp.addFilter(createFog());
         }
-        if(MARS_settings.isSetupDepthOfField()){
+        if(mars_settings.isSetupDepthOfField()){
             fppp.addFilter(createDepthOfField());
         }
         NewViewPort.addProcessor(fppp);
@@ -245,17 +247,17 @@ public class Initializer {
      * setting up the raw_server for communication with the auvs
      */
     private void setupServer(){
-        if(MARS_settings.isRAW_Server_enabled()){
+        if(mars_settings.isRAW_Server_enabled()){
             raw_server = new MARS_Server( mars, auv_manager, com_manager );
-            raw_server.setServerPort(MARS_settings.getRAW_Server_port());
+            raw_server.setServerPort(mars_settings.getRAW_Server_port());
             raw_server_thread = new Thread( raw_server );
             raw_server_thread.start();
         }
-        if(MARS_settings.isROS_Server_enabled()){
+        if(mars_settings.isROS_Server_enabled()){
             ros_server = new ROS_Node( mars, auv_manager );
-            ros_server.setMaster_port(MARS_settings.getROS_Server_port());
-            ros_server.setMaster_ip(MARS_settings.getROS_Master_IP());
-            ros_server.setLocal_ip(MARS_settings.getROS_Local_IP());
+            ros_server.setMaster_port(mars_settings.getROS_Server_port());
+            ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
+            ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
@@ -265,11 +267,11 @@ public class Initializer {
      * 
      */
     public void setupROS_Server(){
-        if(MARS_settings.isROS_Server_enabled()){
+        if(mars_settings.isROS_Server_enabled()){
             ros_server = new ROS_Node( mars, auv_manager );
-            ros_server.setMaster_port(MARS_settings.getROS_Server_port());
-            ros_server.setMaster_ip(MARS_settings.getROS_Master_IP());
-            ros_server.setLocal_ip(MARS_settings.getROS_Local_IP());
+            ros_server.setMaster_port(mars_settings.getROS_Server_port());
+            ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
+            ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
@@ -323,14 +325,14 @@ public class Initializer {
 
     private void setupWireFrame(){
         //we want to see wireframes on all objects
-        viewPort.addProcessor(new WireProcessor(assetManager,MARS_settings.getWireframecolor()));
+        viewPort.addProcessor(new WireProcessor(assetManager,mars_settings.getWireframecolor()));
     }
 
     private DepthOfFieldFilter createDepthOfField(){
         DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
         dofFilter.setFocusDistance(0);
-        dofFilter.setFocusRange(MARS_settings.getFocusRange());
-        dofFilter.setBlurScale(MARS_settings.getBlurScale());
+        dofFilter.setFocusRange(mars_settings.getFocusRange());
+        dofFilter.setBlurScale(mars_settings.getBlurScale());
         return dofFilter;
     }
 
@@ -345,7 +347,7 @@ public class Initializer {
      * This creates water with waves.
      */
     private void setupWavesWater(){
-        water = new WaterFilter(rootNode, MARS_settings.getLight_direction().normalizeLocal());
+        water = new WaterFilter(rootNode, mars_settings.getLight_direction().normalizeLocal());
         water.setWaterHeight(water_height);
         fpp.addFilter(water);
     }
@@ -375,6 +377,15 @@ public class Initializer {
         return whg;
     }
     
+    public float getCurrentWaterHeight(float x, float z){
+        if(mars_settings.isSetupProjectedWavesWater()){
+            return whg.getHeight(x, z, mars.getTimer().getTimeInSeconds());
+        }else{
+            return physical_environment.getWater_height();
+        }
+    }
+
+    
     public void updateProjectedWavesWater(float tpf){
         float[] angles = new float[3];
         mars.getCamera().getRotation().toAngles(angles);
@@ -398,7 +409,7 @@ public class Initializer {
         SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assetManager);
         waterProcessor.setReflectionScene(sceneReflectionNode);
         waterProcessor.setDebug(false);
-        waterProcessor.setLightPosition(MARS_settings.getLight_direction().normalizeLocal());
+        waterProcessor.setLightPosition(mars_settings.getLight_direction().normalizeLocal());
 
         //setting the water plane
         Vector3f waterLocation=new Vector3f(0,-10,0);
@@ -439,7 +450,7 @@ public class Initializer {
         water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
         Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         assetManager.registerLocator("Assets/Textures/Water", FileLocator.class.getName());
-        mat_tt.setTexture("ColorMap", assetManager.loadTexture(MARS_settings.getPlanewaterfilepath()));
+        mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterfilepath()));
         mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         water_plane.setMaterial(mat_tt);
         water_plane.setQueueBucket(Bucket.Transparent);
@@ -448,9 +459,9 @@ public class Initializer {
 
     private FogFilter createFog(){
         FogFilter fog = new FogFilter();
-        fog.setFogColor(MARS_settings.getFogcolor());
-        fog.setFogDistance(MARS_settings.getFogDistance());
-        fog.setFogDensity(MARS_settings.getFogDensity());
+        fog.setFogColor(mars_settings.getFogcolor());
+        fog.setFogDistance(mars_settings.getFogDistance());
+        fog.setFogDensity(mars_settings.getFogDensity());
         return fog;
     }
     /*
@@ -462,9 +473,9 @@ public class Initializer {
 
     private void setupLight(){
         DirectionalLight sun = new DirectionalLight();
-        sun.setColor(MARS_settings.getLight_color());
+        sun.setColor(mars_settings.getLight_color());
         //sun.setColor(ColorRGBA.White.clone().multLocal(2));
-        sun.setDirection(MARS_settings.getLight_direction().normalize());
+        sun.setDirection(mars_settings.getLight_direction().normalize());
         rootNode.addLight(sun);
     }
 
@@ -472,7 +483,7 @@ public class Initializer {
      * A simple sky. Makes the background color of the viewport not black ;).
      */
     private void setupSimpleSkyBox(){
-        renderManager.getMainView("Default").setBackgroundColor( MARS_settings.getSimpleskycolor() );
+        renderManager.getMainView("Default").setBackgroundColor( mars_settings.getSimpleskycolor() );
     }
 
     /*
@@ -480,7 +491,7 @@ public class Initializer {
      */
     private void setupSkyBox(){
         assetManager.registerLocator("Assets/Textures/Sky", FileLocator.class.getName());
-        Spatial sky = (SkyFactory.createSky(assetManager, MARS_settings.getSkyboxfilepath(), false));
+        Spatial sky = (SkyFactory.createSky(assetManager, mars_settings.getSkyboxfilepath(), false));
         sky.setLocalScale(100);
         sceneReflectionNode.attachChild(sky);
     }
@@ -534,7 +545,7 @@ public class Initializer {
 
     private void setupTerrain(){
         //read the gray scale map
-        File file = new File("./Assets/Textures/Terrain/" + MARS_settings.getTerrainfilepath_hm());
+        File file = new File("./Assets/Textures/Terrain/" + mars_settings.getTerrainfilepath_hm());
         BufferedImage bimage = null;
         try {
             bimage = ImageIO.read(file);
@@ -566,7 +577,7 @@ public class Initializer {
         Vector3f[][] vertex = new Vector3f[h][w];
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                vertex[i][j] = new Vector3f(j * MARS_settings.getTileLength(), pixelSample[i][j] / MARS_settings.getTileHeigth(), i * MARS_settings.getTileLength());
+                vertex[i][j] = new Vector3f(j * mars_settings.getTileLength(), pixelSample[i][j] / mars_settings.getTileHeigth(), i * mars_settings.getTileLength());
             }
         }
         //pass the vectors to the MultMesh object
@@ -575,7 +586,7 @@ public class Initializer {
         //setup material
         Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class.getName());
-        TextureKey key2 = new TextureKey(MARS_settings.getTerrainfilepath_cm());
+        TextureKey key2 = new TextureKey(mars_settings.getTerrainfilepath_cm());
         key2.setGenerateMips(true);
         Texture tex2 = assetManager.loadTexture(key2);
         mat2.setTexture("ColorMap", tex2);
@@ -605,14 +616,14 @@ public class Initializer {
         //terrain_physics_control.setFriction(0f);
         //terrain_physics_control.setRestitution(1f);
 
-        terrain_node.setLocalTranslation(MARS_settings.getTerrain_position());
+        terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
         terrain_node.addControl(terrain_physics_control);
         terrain_node.updateGeometricState();
 
 
         /*physicsTerrain = new PhysicsNode(mmG,terrainShape,0);
         physicsTerrain.setName("terrain");
-        physicsTerrain.setLocalTranslation(MARS_settings.getTerrain_position());
+        physicsTerrain.setLocalTranslation(mars_settings.getTerrain_position());
         physicsTerrain.updateGeometricState();
         physicsTerrain.updateModelBound();*/
 

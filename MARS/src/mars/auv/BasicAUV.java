@@ -545,10 +545,12 @@ public class BasicAUV implements AUV,SceneProcessor{
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
                 element.setSimState(simstate);
+                element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
                 element.setSimauv_settings(mars_settings);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                element.setIniter(initer);
                 element.init(auv_node);
                 if(element instanceof Keys){
                     Keys elementKeys = (Keys)element;
@@ -1360,12 +1362,13 @@ public class BasicAUV implements AUV,SceneProcessor{
 
         
         //water height for checking what is air and water volume
-        float waterheight = 0;
+        /*float waterheight = 0;
         if(mars_settings.isSetupProjectedWavesWater()){
             waterheight = initer.getWhg().getHeight(start.x, start.z, mars.getTimer().getTimeInSeconds());
         }else{
             waterheight = physical_environment.getWater_height();
-        }
+        }*/
+        float waterheight = initer.getCurrentWaterHeight(start.x, start.z);
         
         boolean skip_inf = false;
         for (int i = 0; i < results.size(); i++) {

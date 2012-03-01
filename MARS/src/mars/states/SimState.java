@@ -287,7 +287,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             simob_manager = new SimObjectManager(this);
             com_manager = new Communication_Manager(auv_manager, this, rootNode, physical_environment);
         
-            initer = new Initializer(mars,this,auv_manager,com_manager);
+            initer = new Initializer(mars,this,auv_manager,com_manager,physical_environment);
             initer.init();
             
             //setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());

@@ -51,6 +51,10 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      *
      */
     protected RigidBodyControl physics_control;
+    /**
+     * 
+     */
+    protected PhysicalEnvironment pe;
     /*
      * 
      */
@@ -290,4 +294,20 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param tpf
      */
     public abstract void update(float tpf);
+    
+    /**
+     *
+     * @return
+     */
+    public PhysicalEnvironment getPhysical_environment() {
+        return pe;
+    }
+
+    /**
+     *
+     * @param pe 
+     */
+    public void setPhysical_environment(PhysicalEnvironment pe) {
+        this.pe = pe;
+    }
 }

@@ -46,10 +46,6 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      *
      */
     protected Node rootNode;
-    /**
-     * 
-     */
-    protected PhysicalEnvironment pe;
     /*
      * 
      */
@@ -101,22 +97,6 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      *
      */
     public abstract void init(Node auv_node);
-    
-    /**
-     *
-     * @return
-     */
-    public PhysicalEnvironment getPhysical_environment() {
-        return pe;
-    }
-
-    /**
-     *
-     * @param pe 
-     */
-    public void setPhysical_environment(PhysicalEnvironment pe) {
-        this.pe = pe;
-    }
     
     /**
      * 
