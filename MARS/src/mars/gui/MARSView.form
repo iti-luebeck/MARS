@@ -1053,12 +1053,82 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="split_view">
+        <Menu class="javax.swing.JMenu" name="jme3_view">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="split_view.text"/>
-            <Property name="name" type="java.lang.String" value="split_view" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_view.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_view" noResource="true"/>
           </Properties>
-        </MenuItem>
+          <SubComponents>
+            <Menu class="javax.swing.JMenu" name="jme3_view_chaseAUV">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_chaseAUV.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_chaseAUV" noResource="true"/>
+              </Properties>
+            </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="jme3_view_lookAt">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_lookAt.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_lookAt" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jme3_view_moveCamera">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_moveCamera.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_moveCamera" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_view_moveCameraActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jme3_view_rotateCamera">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_rotateCamera.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_rotateCamera" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_view_fixed">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_fixed.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_fixed" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_view_parrallel">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_parrallel.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_parrallel" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="jme3_view_debug">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_debug.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_debug" noResource="true"/>
+              </Properties>
+            </Menu>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jme3_splitview">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_splitview.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_splitview" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="split_view">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="split_view.text"/>
+                <Property name="name" type="java.lang.String" value="split_view" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="split_viewActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jme3_mergeview">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_mergeview.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_mergeview" noResource="true"/>
+          </Properties>
+        </Menu>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPopupMenu" name="jme3_auv">
@@ -2007,6 +2077,163 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jLabel31.text"/>
             <Property name="name" type="java.lang.String" value="jLabel31" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JDialog" name="moveCameraDialog">
+      <Properties>
+        <Property name="title" type="java.lang.String" resourceKey="moveCameraDialog.title"/>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[174, 234]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="moveCameraDialog" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel32" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel33" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel34" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jTextField9" alignment="1" pref="125" max="32767" attributes="0"/>
+                              <Component id="jTextField8" alignment="1" pref="125" max="32767" attributes="0"/>
+                              <Component id="jTextField7" alignment="0" pref="125" max="32767" attributes="0"/>
+                              <Component id="jCheckBox2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jButton32" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="Cancel6" pref="68" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="jButton700" alignment="0" pref="145" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTextField7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel32" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTextField8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel33" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTextField9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jButton32" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Cancel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButton700" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="jButton700">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jButton700.text"/>
+            <Property name="name" type="java.lang.String" value="jButton700" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton700ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="Cancel6">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="Cancel6.text"/>
+            <Property name="name" type="java.lang.String" value="Cancel6" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Cancel6ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextField7">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jTextField7.text"/>
+            <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new MyVerifier( MyVerifierType.FLOAT )" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jTextField7" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTextField7MouseExited"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField7KeyPressed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextField8">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jTextField8.text"/>
+            <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new MyVerifier( MyVerifierType.FLOAT )" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jTextField8" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextField9">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jTextField9.text"/>
+            <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new MyVerifier( MyVerifierType.FLOAT )" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jTextField9" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel32">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel32.text"/>
+            <Property name="name" type="java.lang.String" value="jLabel32" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel33">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel33.text"/>
+            <Property name="name" type="java.lang.String" value="jLabel33" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel34">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel34.text"/>
+            <Property name="name" type="java.lang.String" value="jLabel34" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton32">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jButton32.text"/>
+            <Property name="name" type="java.lang.String" value="jButton32" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton32ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="jCheckBox2">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jCheckBox2.text"/>
+            <Property name="name" type="java.lang.String" value="jCheckBox2" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

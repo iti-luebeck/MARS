@@ -897,7 +897,17 @@ public class MARSView extends FrameView {
         jPanel2 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jme3_window_switcher = new javax.swing.JPopupMenu();
+        jme3_view = new javax.swing.JMenu();
+        jme3_view_chaseAUV = new javax.swing.JMenu();
+        jme3_view_lookAt = new javax.swing.JMenuItem();
+        jme3_view_moveCamera = new javax.swing.JMenuItem();
+        jme3_view_rotateCamera = new javax.swing.JMenuItem();
+        jme3_view_fixed = new javax.swing.JCheckBoxMenuItem();
+        jme3_view_parrallel = new javax.swing.JCheckBoxMenuItem();
+        jme3_view_debug = new javax.swing.JMenu();
+        jme3_splitview = new javax.swing.JMenu();
         split_view = new javax.swing.JMenuItem();
+        jme3_mergeview = new javax.swing.JMenu();
         jme3_auv = new javax.swing.JPopupMenu();
         jme3_chase_auv = new javax.swing.JMenuItem();
         jme3_move_auv = new javax.swing.JMenuItem();
@@ -969,6 +979,17 @@ public class MARSView extends FrameView {
         Cancel5 = new javax.swing.JButton();
         stringDialog_x = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
+        moveCameraDialog = new javax.swing.JDialog();
+        jButton700 = new javax.swing.JButton();
+        Cancel6 = new javax.swing.JButton();
+        jTextField7 = new javax.swing.JTextField();
+        jTextField8 = new javax.swing.JTextField();
+        jTextField9 = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jButton32 = new javax.swing.JButton();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1615,9 +1636,61 @@ public class MARSView extends FrameView {
         jme3_window_switcher.setLightWeightPopupEnabled(false);
         jme3_window_switcher.setName("jme3_window_switcher"); // NOI18N
 
+        jme3_view.setText(resourceMap.getString("jme3_view.text")); // NOI18N
+        jme3_view.setName("jme3_view"); // NOI18N
+
+        jme3_view_chaseAUV.setText(resourceMap.getString("jme3_view_chaseAUV.text")); // NOI18N
+        jme3_view_chaseAUV.setName("jme3_view_chaseAUV"); // NOI18N
+        jme3_view.add(jme3_view_chaseAUV);
+
+        jme3_view_lookAt.setText(resourceMap.getString("jme3_view_lookAt.text")); // NOI18N
+        jme3_view_lookAt.setName("jme3_view_lookAt"); // NOI18N
+        jme3_view.add(jme3_view_lookAt);
+
+        jme3_view_moveCamera.setText(resourceMap.getString("jme3_view_moveCamera.text")); // NOI18N
+        jme3_view_moveCamera.setName("jme3_view_moveCamera"); // NOI18N
+        jme3_view_moveCamera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_view_moveCameraActionPerformed(evt);
+            }
+        });
+        jme3_view.add(jme3_view_moveCamera);
+
+        jme3_view_rotateCamera.setText(resourceMap.getString("jme3_view_rotateCamera.text")); // NOI18N
+        jme3_view_rotateCamera.setName("jme3_view_rotateCamera"); // NOI18N
+        jme3_view.add(jme3_view_rotateCamera);
+
+        jme3_view_fixed.setText(resourceMap.getString("jme3_view_fixed.text")); // NOI18N
+        jme3_view_fixed.setName("jme3_view_fixed"); // NOI18N
+        jme3_view.add(jme3_view_fixed);
+
+        jme3_view_parrallel.setText(resourceMap.getString("jme3_view_parrallel.text")); // NOI18N
+        jme3_view_parrallel.setName("jme3_view_parrallel"); // NOI18N
+        jme3_view.add(jme3_view_parrallel);
+
+        jme3_view_debug.setText(resourceMap.getString("jme3_view_debug.text")); // NOI18N
+        jme3_view_debug.setName("jme3_view_debug"); // NOI18N
+        jme3_view.add(jme3_view_debug);
+
+        jme3_window_switcher.add(jme3_view);
+
+        jme3_splitview.setText(resourceMap.getString("jme3_splitview.text")); // NOI18N
+        jme3_splitview.setName("jme3_splitview"); // NOI18N
+
         split_view.setText(resourceMap.getString("split_view.text")); // NOI18N
         split_view.setName("split_view"); // NOI18N
-        jme3_window_switcher.add(split_view);
+        split_view.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                split_viewActionPerformed(evt);
+            }
+        });
+        jme3_splitview.add(split_view);
+
+        jme3_window_switcher.add(jme3_splitview);
+
+        jme3_mergeview.setText(resourceMap.getString("jme3_mergeview.text")); // NOI18N
+        jme3_mergeview.setName("jme3_mergeview"); // NOI18N
+        jme3_window_switcher.add(jme3_mergeview);
 
         jme3_auv.setLightWeightPopupEnabled(false);
         jme3_auv.setName("jme3_auv"); // NOI18N
@@ -2338,6 +2411,119 @@ public class MARSView extends FrameView {
                     .addComponent(stringDialog_Confirm)
                     .addComponent(Cancel5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        moveCameraDialog.setTitle(resourceMap.getString("moveCameraDialog.title")); // NOI18N
+        moveCameraDialog.setMinimumSize(new java.awt.Dimension(174, 234));
+        moveCameraDialog.setName("moveCameraDialog"); // NOI18N
+
+        jButton700.setText(resourceMap.getString("jButton700.text")); // NOI18N
+        jButton700.setName("jButton700"); // NOI18N
+        jButton700.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton700ActionPerformed(evt);
+            }
+        });
+
+        Cancel6.setText(resourceMap.getString("Cancel6.text")); // NOI18N
+        Cancel6.setName("Cancel6"); // NOI18N
+        Cancel6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Cancel6ActionPerformed(evt);
+            }
+        });
+
+        jTextField7.setText(resourceMap.getString("jTextField7.text")); // NOI18N
+        jTextField7.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField7.setName("jTextField7"); // NOI18N
+        jTextField7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jTextField7MouseExited(evt);
+            }
+        });
+        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField7KeyPressed(evt);
+            }
+        });
+
+        jTextField8.setText(resourceMap.getString("jTextField8.text")); // NOI18N
+        jTextField8.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField8.setName("jTextField8"); // NOI18N
+
+        jTextField9.setText(resourceMap.getString("jTextField9.text")); // NOI18N
+        jTextField9.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField9.setName("jTextField9"); // NOI18N
+
+        jLabel32.setText(resourceMap.getString("jLabel32.text")); // NOI18N
+        jLabel32.setName("jLabel32"); // NOI18N
+
+        jLabel33.setText(resourceMap.getString("jLabel33.text")); // NOI18N
+        jLabel33.setName("jLabel33"); // NOI18N
+
+        jLabel34.setText(resourceMap.getString("jLabel34.text")); // NOI18N
+        jLabel34.setName("jLabel34"); // NOI18N
+
+        jButton32.setText(resourceMap.getString("jButton32.text")); // NOI18N
+        jButton32.setName("jButton32"); // NOI18N
+        jButton32.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton32ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox2.setText(resourceMap.getString("jCheckBox2.text")); // NOI18N
+        jCheckBox2.setName("jCheckBox2"); // NOI18N
+
+        javax.swing.GroupLayout moveCameraDialogLayout = new javax.swing.GroupLayout(moveCameraDialog.getContentPane());
+        moveCameraDialog.getContentPane().setLayout(moveCameraDialogLayout);
+        moveCameraDialogLayout.setHorizontalGroup(
+            moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(moveCameraDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(moveCameraDialogLayout.createSequentialGroup()
+                        .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel32)
+                            .addComponent(jLabel33)
+                            .addComponent(jLabel34))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField9, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jCheckBox2, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(moveCameraDialogLayout.createSequentialGroup()
+                        .addComponent(jButton32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Cancel6, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addComponent(jButton700, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        moveCameraDialogLayout.setVerticalGroup(
+            moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(moveCameraDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel32))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel33))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
+                .addGap(8, 8, 8)
+                .addComponent(jCheckBox2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(moveCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton32)
+                    .addComponent(Cancel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton700)
+                .addContainerGap())
         );
 
         setComponent(mainPanel);
@@ -3126,6 +3312,52 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_stringDialog_xKeyPressed
 
+    private void split_viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_split_viewActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.splitView();
+                }
+                return null;
+            }
+            });
+    }//GEN-LAST:event_split_viewActionPerformed
+
+    private void jme3_view_moveCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_view_moveCameraActionPerformed
+        moveCameraDialog.setLocationRelativeTo(JMEPanel1);
+        moveCameraDialog.setVisible(true);
+    }//GEN-LAST:event_jme3_view_moveCameraActionPerformed
+
+    private void jButton700ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton700ActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.moveCamera(new Vector3f(Float.valueOf(jTextField7.getText()), Float.valueOf(jTextField8.getText()), Float.valueOf(jTextField9.getText())),jCheckBox2.isSelected());
+                }
+                return null;
+            }
+        });
+        moveCameraDialog.setVisible(false);
+    }//GEN-LAST:event_jButton700ActionPerformed
+
+    private void Cancel6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel6ActionPerformed
+        moveCameraDialog.setVisible(false);
+    }//GEN-LAST:event_Cancel6ActionPerformed
+
+    private void jTextField7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField7MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField7MouseExited
+
+    private void jTextField7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField7KeyPressed
+
+    private void jButton32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton32ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton32ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3134,6 +3366,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton Cancel3;
     private javax.swing.JButton Cancel4;
     private javax.swing.JButton Cancel5;
+    private javax.swing.JButton Cancel6;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JMenuItem JME_MenuItem;
     private javax.swing.JDialog JME_SettingsDialog;
@@ -3172,10 +3405,13 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButton22;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
+    private javax.swing.JButton jButton32;
+    private javax.swing.JButton jButton700;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JMenu jFileMenu;
     private javax.swing.JLabel jLabel1;
@@ -3203,6 +3439,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -3227,6 +3466,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
@@ -3237,11 +3479,21 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_drag;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
     private javax.swing.JMenuItem jme3_delete_auv;
+    private javax.swing.JMenu jme3_mergeview;
     private javax.swing.JMenuItem jme3_move_auv;
     private javax.swing.JMenu jme3_params_auv;
     private javax.swing.JMenuItem jme3_poke;
     private javax.swing.JMenuItem jme3_reset_auv;
     private javax.swing.JMenuItem jme3_rotate_auv;
+    private javax.swing.JMenu jme3_splitview;
+    private javax.swing.JMenu jme3_view;
+    private javax.swing.JMenu jme3_view_chaseAUV;
+    private javax.swing.JMenu jme3_view_debug;
+    private javax.swing.JCheckBoxMenuItem jme3_view_fixed;
+    private javax.swing.JMenuItem jme3_view_lookAt;
+    private javax.swing.JMenuItem jme3_view_moveCamera;
+    private javax.swing.JCheckBoxMenuItem jme3_view_parrallel;
+    private javax.swing.JMenuItem jme3_view_rotateCamera;
     private javax.swing.JMenu jme3_waypoints_auv;
     private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_enable;
     private javax.swing.JCheckBoxMenuItem jme3_waypoints_auv_gradient;
@@ -3254,6 +3506,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel lblChart;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JDialog moveCameraDialog;
     private javax.swing.JDialog new_auv;
     private javax.swing.JDialog new_simob_dialog;
     private javax.swing.JProgressBar progressBar;
@@ -3282,7 +3535,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.6.2";
+    private final String VERSION = "0.6.3";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

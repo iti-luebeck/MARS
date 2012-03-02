@@ -8,11 +8,9 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
@@ -30,15 +28,9 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
-import com.jme3.light.AmbientLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.math.Rectangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -47,33 +39,15 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
-import com.jme3.system.Timer;
-import com.jme3.texture.Texture;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import mars.GuiControlState;
 import mars.Helper.Helper;
 import mars.Initializer;
@@ -81,29 +55,15 @@ import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.actuators.BrushlessThruster;
-import mars.actuators.SeaBotixThruster;
-import mars.actuators.Thruster;
-import mars.actuators.servos.Dynamixel_AX12PLUS;
-import mars.actuators.servos.Servo;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
 import mars.auv.Communication_Manager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
-import mars.sensors.IMU;
-import mars.sensors.InfraRedSensor;
-import mars.sensors.Posemeter;
-import mars.sensors.Positionmeter;
-import mars.sensors.TerrainSender;
-import mars.simobjects.SimObject;
+import mars.gui.ViewManager;
 import mars.simobjects.SimObjectManager;
-import mars.waves.MyProjectedGrid;
-import mars.waves.ProjectedWaterProcessorWithRefraction;
-import mars.waves.WaterHeightGenerator;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 
@@ -145,10 +105,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
-    /*private MyProjectedGrid grid;
-    private Geometry projectedGridGeometry;
-    private ProjectedWaterProcessorWithRefraction waterProcessor;
-    private WaterHeightGenerator whg = new WaterHeightGenerator();*/
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
@@ -167,6 +123,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     //general gui stuff
     GuiControlState guiControlState = new GuiControlState();
+    ViewManager viewManager = new ViewManager();
     
     //map stuff
     MapState mapState;
@@ -289,8 +246,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
             initer = new Initializer(mars,this,auv_manager,com_manager,physical_environment);
             initer.init();
-            
-            //setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
             
             //set camera to look to (0,0,0)
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
@@ -669,8 +624,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 pickRightClick();
             }else if(name.equals("context_menue_off") && !keyPressed) {
                 System.out.println("context_menue_off");
-                auv_manager.deselectAllAUVs();
-                view.hideAllPopupWindows();
+                //auv_manager.deselectAllAUVs();
+               // view.hideAllPopupWindows();
             }else if(name.equals("depth_auv_down") && keyPressed) {
                 System.out.println("depth_auv_down");
                 if(guiControlState.isMove_auv()){
@@ -843,10 +798,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.initPopUpMenuesForAUV(auv.getAuv_param());
             view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
           }
-        }else{//nothing to pickRightClick
+        }else{//nothing to pickRightClick but still normal context menu for split view
             //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();
             view.hideAllPopupWindows();
+            view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }
     }
     
@@ -947,17 +903,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
-        
-        /*float[] angles = new float[3];
-        mars.getCamera().getRotation().toAngles(angles);
-        grid.update( mars.getCamera().getViewMatrix().clone());*/
+
         if(mars_settings.isSetupProjectedWavesWater()){
             initer.updateProjectedWavesWater(tpf);
         }
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
-        //initer.testraw();
     }
     
     /**
@@ -1049,20 +1001,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
 
     public void prePhysicsTick(PhysicsSpace ps, final float tpf) {
-        /*if(view == null){
-            System.out.println("View is NULL");
-        }
-        if(view != null && !view_init && mars_settings!=null){
-            view.setMarsSettings(mars_settings);
-            view.initTree(mars_settings,auvs,simobs);
-            view.setXMLL(xmll);
-            view.setAuv_manager(auv_manager);
-            view.setSimob_manager(simob_manager);
-            view.initPopUpMenues();
-            //auv_hanse.setView(view);
-            //auv_monsun2.setView(view);
-            view_init = true;
-        }*/
         if(/*AUVPhysicsControl != null*/true){
             //only update physics if auv_hanse exists and when simulation is started
             if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
@@ -1076,10 +1014,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 com_manager.update(tpf);
                 //time = time + tpf;
                 //System.out.println("time: " + time);
-            }/*else if(auv_manager != null && auv_hanse != null && !initial_ready){
-                //auv_manager.clearForcesOfAUVs();
-            }*/
-            
+            }            
             if(auv_manager != null){
                 com_manager.update(tpf);
             }
@@ -1159,6 +1094,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void moveCamera(Vector3f new_position, boolean relative){
+        System.out.println("moveCamera" + new_position);
+        viewManager.moveCamera(new_position,relative);
+        mars.getCamera().setLocation(new_position);
+    }
+    
     public void moveSelectedGhostAUV(Vector3f new_position){
         System.out.println("moveSelectedGhostAUV" + new_position);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
@@ -1217,24 +1158,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
-    /*private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
-        grid = new MyProjectedGrid(timer, cam, 100, 70, 0.02f, whg);
-        projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
-        projectedGridGeometry.setCullHint(CullHint.Never);
-        projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
-        projectedGridGeometry.setLocalTranslation(0, 0, 0);
-        rootNode.attachChild(projectedGridGeometry);
+    public void splitView(){
+        System.out.println("splitView");
+        mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
+        //mars.getCamera().set
+        
+        Camera cam2 = mars.getCamera().clone();
+        cam2.setViewPort(0.0f,0.5f,0.0f,1.0f);
+        ViewPort viewPort2 = mars.getRenderManager().createMainView("PiP", cam2);
+        viewPort2.setClearFlags(true, true, true);
+        viewPort2.attachScene(rootNode);        
     }
-    
-    private Material setWaterProcessor(Camera cam, ViewPort viewPort){   
-        waterProcessor = new ProjectedWaterProcessorWithRefraction(cam,assetManager);
-        waterProcessor.setReflectionScene(sceneReflectionNode);
-        waterProcessor.setDebug(false);
-        viewPort.addProcessor(waterProcessor);              
-        return waterProcessor.getMaterial();
-    }
-
-    public WaterHeightGenerator getWhg() {
-        return whg;
-    }*/
 }
