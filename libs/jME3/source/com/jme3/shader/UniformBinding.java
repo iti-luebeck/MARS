@@ -73,11 +73,19 @@ public enum UniformBinding {
     WorldViewProjectionMatrix,
 
     /**
-     * The view projection matrix. Converts Model space to Clip/Projection
+     * The view projection matrix. Converts World space to Clip/Projection
      * space.
      * Type: mat4
      */
     ViewProjectionMatrix,
+
+    /**
+     * The world matrix inverse transpose. Converts a normals from Model space
+     * to world space.
+     * Type: mat3
+     */
+    WorldMatrixInverseTranspose,      
+
 
 
     WorldMatrixInverse,
@@ -111,6 +119,12 @@ public enum UniformBinding {
      * Type: vec2
      */
     Resolution,
+    
+    /**
+     * The inverse of the resolution, 1/width and 1/height. 
+     * Type: vec2
+     */
+    ResolutionInverse,
 
     /**
      * Aspect ratio of the resolution currently set. Width/Height.

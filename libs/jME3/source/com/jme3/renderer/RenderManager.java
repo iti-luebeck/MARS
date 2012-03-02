@@ -376,9 +376,14 @@ public class RenderManager {
                     u.setValue(VarType.Matrix4, tempMat4);
                     break;
                 case WorldMatrixInverse:
-                    tempMat4.multLocal(worldMatrix);
+                    tempMat4.set(worldMatrix);
                     tempMat4.invertLocal();
                     u.setValue(VarType.Matrix4, tempMat4);
+                    break;
+                case WorldMatrixInverseTranspose:
+                    worldMatrix.toRotationMatrix(tempMat3);
+                    tempMat3.invertLocal().transposeLocal();
+                    u.setValue(VarType.Matrix3, tempMat3);
                     break;
                 case ViewMatrixInverse:
                     tempMat4.set(viewMatrix);
@@ -422,6 +427,10 @@ public class RenderManager {
                     break;
                 case Resolution:
                     tempVec2.set(viewWidth, viewHeight);
+                    u.setValue(VarType.Vector2, tempVec2);
+                    break;
+                case ResolutionInverse:
+                    tempVec2.set(1f / viewWidth, 1f / viewHeight);
                     u.setValue(VarType.Vector2, tempVec2);
                     break;
                 case Aspect:
@@ -721,10 +730,9 @@ public class RenderManager {
             gm.getMaterial().preload(this);
             Mesh mesh = gm.getMesh();
             if (mesh != null) {
-                for (Entry<VertexBuffer> entry : mesh.getBuffers()) {
-                    VertexBuffer buf = entry.getValue();
-                    if (buf.getData() != null) {
-                        renderer.updateBufferData(buf);
+                for (VertexBuffer vb : mesh.getBufferList().getArray()) {
+                    if (vb.getData() != null) {
+                        renderer.updateBufferData(vb);
                     }
                 }
             }
