@@ -896,6 +896,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
             view.initPopUpMenues();
+            view.allowSimInteraction();
             //auv_hanse.setView(view);
             //auv_monsun2.setView(view);
             view_init = true;

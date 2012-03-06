@@ -233,6 +233,18 @@ public class MARSView extends FrameView {
             }
         );
     }
+    
+    public void allowSimInteraction(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jButtonPause.setEnabled(false);
+                    jButtonPlay.setEnabled(true);
+                    jButtonRestart.setEnabled(true);
+                }
+            }
+        );
+    }
 
     /**
      * 
@@ -2980,9 +2992,6 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_keysActionPerformed
 
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
-    jButtonPause.setEnabled(false);
-    jButtonPlay.setEnabled(true);
-    jButtonRestart.setEnabled(true);
     mars.startSimState();
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
