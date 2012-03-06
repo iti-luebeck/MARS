@@ -271,7 +271,7 @@ public class StartState extends AbstractAppState{
             return;
         }
         super.update(tpf);
-        
+
         Quaternion quat = new Quaternion().fromAngleAxis(tpf*(FastMath.PI/4), new Vector3f(0f,1f,0f));
         cube.rotate(quat);
         

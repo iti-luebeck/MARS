@@ -14,6 +14,7 @@ import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -39,6 +40,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.system.NanoTimer;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -907,7 +909,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(mars_settings.isSetupProjectedWavesWater()){
             initer.updateProjectedWavesWater(tpf);
         }
-
+        
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
     }
@@ -1097,7 +1099,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void moveCamera(Vector3f new_position, boolean relative){
         System.out.println("moveCamera" + new_position);
         viewManager.moveCamera(new_position,relative);
-        mars.getCamera().setLocation(new_position);
+        if(!relative){
+            mars.getCamera().setLocation(new_position);
+        }else{
+            mars.getCamera().setLocation(mars.getCamera().getLocation().add(new_position));
+        }
     }
     
     public void moveSelectedGhostAUV(Vector3f new_position){
@@ -1161,12 +1167,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void splitView(){
         System.out.println("splitView");
         mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
-        //mars.getCamera().set
-        
+
         Camera cam2 = mars.getCamera().clone();
         cam2.setViewPort(0.0f,0.5f,0.0f,1.0f);
         ViewPort viewPort2 = mars.getRenderManager().createMainView("PiP", cam2);
         viewPort2.setClearFlags(true, true, true);
-        viewPort2.attachScene(rootNode);        
+        viewPort2.attachScene(rootNode);  
+        
+        System.out.println("cam w: " + mars.getCamera().getWidth());
+        System.out.println("cam h: " + mars.getCamera().getHeight());
+        float aspect = (float) (mars.getCamera().getWidth()/2) / mars.getCamera().getHeight();
+        //mars.getCamera().setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
+        mars.getCamera().setFrustumLeft(1f*-aspect);
+        mars.getCamera().setFrustumRight(1f*aspect);
     }
 }

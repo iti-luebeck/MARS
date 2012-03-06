@@ -5,6 +5,7 @@
 
 package mars;
 
+import com.jme3.app.FlyCamAppState;
 import mars.states.SimState;
 import mars.states.StartState;
 import com.jme3.font.BitmapFont;
@@ -13,7 +14,10 @@ import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -52,6 +56,8 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     ChaseCamera chaseCam;
     
     ViewPort MapViewPort;
+    
+    AdvancedFlyByCamera advFlyCam;
     
     //nifty(gui) stuff
     private NiftyJmeDisplay niftyDisplay;
@@ -94,6 +100,23 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());
         stateManager.attach(mapstate);
+        
+        //overrirde standard flybycam      
+        flyCam.setEnabled(false);
+        advFlyCam = new AdvancedFlyByCamera(cam);
+        advFlyCam.setDragToRotate(true);
+        advFlyCam.setEnabled(false);
+        advFlyCam.registerWithInput(inputManager);
+            
+       /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
+        if(flycamState != null){
+            stateManager.detach(flycamState);
+            AdvancedFlyCamAppState flyc = new AdvancedFlyCamAppState();
+            AdvancedFlyByCamera advFlyCam = new AdvancedFlyByCamera(cam);
+            flyc.setCamera(advFlyCam);
+            flyCam = advFlyCam;
+            stateManager.attach(flyc);
+        }*/
     }
     
     private void initMapViewPort(){
@@ -323,5 +346,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
 
     public MapState getMapstate() {
         return mapstate;
+    }
+    
+    @Override
+    public FlyByCamera getFlyByCamera(){
+        return advFlyCam;
     }
 }

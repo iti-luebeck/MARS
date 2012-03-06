@@ -185,7 +185,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>sonar_360</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
                 <Position>
@@ -295,7 +295,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>front_cam</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
                 <Position>

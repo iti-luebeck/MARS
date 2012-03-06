@@ -90,6 +90,7 @@ public class MARSApp extends SingleFrameApplication {
         view.setSimAUV(app);
 
         app.setPauseOnLostFocus(false);
+        app.setShowSettings(false);
         app.setSettings(settings);
         app.start();
         
