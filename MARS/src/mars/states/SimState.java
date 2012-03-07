@@ -1107,6 +1107,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void rotateCamera(Vector3f new_rotation, boolean relative){
+        System.out.println("rotateCamera" + new_rotation);
+        if(!relative){
+            Quaternion quat = new Quaternion();
+            quat.fromAngles(new_rotation.getX(), new_rotation.getY(), new_rotation.getZ());
+            mars.getCamera().setRotation(quat);
+        }
+    }
+    
     public void moveSelectedGhostAUV(Vector3f new_position){
         System.out.println("moveSelectedGhostAUV" + new_position);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
@@ -1167,19 +1176,27 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     public void splitView(){
         System.out.println("splitView");
-        mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
 
         Camera cam2 = mars.getCamera().clone();
         cam2.setViewPort(0.0f,0.5f,0.0f,1.0f);
+        float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
+        aspect = 2f ;
+        cam2.setFrustum(-1000f, 1000f, -aspect * 1f, aspect * 1f, 1f, -1f);
         ViewPort viewPort2 = mars.getRenderManager().createMainView("PiP", cam2);
         viewPort2.setClearFlags(true, true, true);
-        viewPort2.attachScene(rootNode);  
+        viewPort2.attachScene(rootNode);
         
         System.out.println("cam w: " + mars.getCamera().getWidth());
         System.out.println("cam h: " + mars.getCamera().getHeight());
-        float aspect = (float) (mars.getCamera().getWidth()/2) / mars.getCamera().getHeight();
-        //mars.getCamera().setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        mars.getCamera().setFrustumLeft(1f*-aspect);
-        mars.getCamera().setFrustumRight(1f*aspect);
+        //float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
+        //mars.getCamera().resize((mars.getCamera().getWidth()/2), mars.getCamera().getHeight(), true);
+        //mars.getCamera().setFrustum(-1000, 1000, -aspect * 1f, aspect * 1f, 1f, -1f);
+        //mars.getCamera().setFrustumLeft(1f*-aspect);
+       // mars.getCamera().setFrustumRight(1f*aspect);
+        //cam2.resize((mars.getCamera().getWidth()), mars.getCamera().getHeight(), true);
+        //mars.getCamera().setFrustumPerspective(90f, aspect, 0.1f, 1000f);
+        //mars.getCamera().set
+        
+        mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
     }
 }

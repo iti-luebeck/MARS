@@ -1002,6 +1002,17 @@ public class MARSView extends FrameView {
         jLabel34 = new javax.swing.JLabel();
         jButton32 = new javax.swing.JButton();
         jCheckBox2 = new javax.swing.JCheckBox();
+        rotateCameraDialog = new javax.swing.JDialog();
+        jButton701 = new javax.swing.JButton();
+        Cancel7 = new javax.swing.JButton();
+        jTextField10 = new javax.swing.JTextField();
+        jTextField11 = new javax.swing.JTextField();
+        jTextField12 = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jButton33 = new javax.swing.JButton();
+        jCheckBox3 = new javax.swing.JCheckBox();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1108,12 +1119,13 @@ public class MARSView extends FrameView {
         );
         LeftMenuePanelLayout.setVerticalGroup(
             LeftMenuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(LeftMenuePanel);
 
         JMEPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        JMEPanel1.setMinimumSize(new java.awt.Dimension(640, 480));
         JMEPanel1.setName("JMEPanel1"); // NOI18N
         JMEPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
         JMEPanel1.setLayout(new javax.swing.BoxLayout(JMEPanel1, javax.swing.BoxLayout.LINE_AXIS));
@@ -1127,7 +1139,7 @@ public class MARSView extends FrameView {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -1670,6 +1682,11 @@ public class MARSView extends FrameView {
 
         jme3_view_rotateCamera.setText(resourceMap.getString("jme3_view_rotateCamera.text")); // NOI18N
         jme3_view_rotateCamera.setName("jme3_view_rotateCamera"); // NOI18N
+        jme3_view_rotateCamera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_view_rotateCameraActionPerformed(evt);
+            }
+        });
         jme3_view.add(jme3_view_rotateCamera);
 
         jme3_view_fixed.setText(resourceMap.getString("jme3_view_fixed.text")); // NOI18N
@@ -2538,6 +2555,119 @@ public class MARSView extends FrameView {
                 .addContainerGap())
         );
 
+        rotateCameraDialog.setTitle(resourceMap.getString("rotateCameraDialog.title")); // NOI18N
+        rotateCameraDialog.setMinimumSize(new java.awt.Dimension(174, 234));
+        rotateCameraDialog.setName("rotateCameraDialog"); // NOI18N
+
+        jButton701.setText(resourceMap.getString("jButton701.text")); // NOI18N
+        jButton701.setName("jButton701"); // NOI18N
+        jButton701.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton701ActionPerformed(evt);
+            }
+        });
+
+        Cancel7.setText(resourceMap.getString("Cancel7.text")); // NOI18N
+        Cancel7.setName("Cancel7"); // NOI18N
+        Cancel7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Cancel7ActionPerformed(evt);
+            }
+        });
+
+        jTextField10.setText(resourceMap.getString("jTextField10.text")); // NOI18N
+        jTextField10.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField10.setName("jTextField10"); // NOI18N
+        jTextField10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jTextField10MouseExited(evt);
+            }
+        });
+        jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField10KeyPressed(evt);
+            }
+        });
+
+        jTextField11.setText(resourceMap.getString("jTextField11.text")); // NOI18N
+        jTextField11.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField11.setName("jTextField11"); // NOI18N
+
+        jTextField12.setText(resourceMap.getString("jTextField12.text")); // NOI18N
+        jTextField12.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        jTextField12.setName("jTextField12"); // NOI18N
+
+        jLabel35.setText(resourceMap.getString("jLabel35.text")); // NOI18N
+        jLabel35.setName("jLabel35"); // NOI18N
+
+        jLabel36.setText(resourceMap.getString("jLabel36.text")); // NOI18N
+        jLabel36.setName("jLabel36"); // NOI18N
+
+        jLabel37.setText(resourceMap.getString("jLabel37.text")); // NOI18N
+        jLabel37.setName("jLabel37"); // NOI18N
+
+        jButton33.setText(resourceMap.getString("jButton33.text")); // NOI18N
+        jButton33.setName("jButton33"); // NOI18N
+        jButton33.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton33ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox3.setText(resourceMap.getString("jCheckBox3.text")); // NOI18N
+        jCheckBox3.setName("jCheckBox3"); // NOI18N
+
+        javax.swing.GroupLayout rotateCameraDialogLayout = new javax.swing.GroupLayout(rotateCameraDialog.getContentPane());
+        rotateCameraDialog.getContentPane().setLayout(rotateCameraDialogLayout);
+        rotateCameraDialogLayout.setHorizontalGroup(
+            rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rotateCameraDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(rotateCameraDialogLayout.createSequentialGroup()
+                        .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel35)
+                            .addComponent(jLabel36)
+                            .addComponent(jLabel37))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jCheckBox3, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(rotateCameraDialogLayout.createSequentialGroup()
+                        .addComponent(jButton33)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Cancel7, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addComponent(jButton701, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        rotateCameraDialogLayout.setVerticalGroup(
+            rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rotateCameraDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel35))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel36))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel37))
+                .addGap(8, 8, 8)
+                .addComponent(jCheckBox3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(rotateCameraDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton33)
+                    .addComponent(Cancel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton701)
+                .addContainerGap())
+        );
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -3367,6 +3497,40 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton32ActionPerformed
 
+    private void jme3_view_rotateCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_view_rotateCameraActionPerformed
+        rotateCameraDialog.setLocationRelativeTo(JMEPanel1);
+        rotateCameraDialog.setVisible(true);
+    }//GEN-LAST:event_jme3_view_rotateCameraActionPerformed
+
+    private void jButton701ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton701ActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.rotateCamera(new Vector3f(Float.valueOf(jTextField10.getText()), Float.valueOf(jTextField11.getText()), Float.valueOf(jTextField12.getText())),jCheckBox3.isSelected());
+                }
+                return null;
+            }
+        });
+        rotateCameraDialog.setVisible(false);
+    }//GEN-LAST:event_jButton701ActionPerformed
+
+    private void Cancel7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel7ActionPerformed
+        rotateCameraDialog.setVisible(false);
+    }//GEN-LAST:event_Cancel7ActionPerformed
+
+    private void jTextField10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField10MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField10MouseExited
+
+    private void jTextField10KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField10KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField10KeyPressed
+
+    private void jButton33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton33ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton33ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3376,6 +3540,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton Cancel4;
     private javax.swing.JButton Cancel5;
     private javax.swing.JButton Cancel6;
+    private javax.swing.JButton Cancel7;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JMenuItem JME_MenuItem;
     private javax.swing.JDialog JME_SettingsDialog;
@@ -3415,12 +3580,15 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
+    private javax.swing.JButton jButton33;
     private javax.swing.JButton jButton700;
+    private javax.swing.JButton jButton701;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JMenu jFileMenu;
     private javax.swing.JLabel jLabel1;
@@ -3451,6 +3619,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -3470,6 +3641,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -3521,6 +3695,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenuItem reset_auv;
     private javax.swing.JMenuItem reset_auvs;
+    private javax.swing.JDialog rotateCameraDialog;
     private javax.swing.JFileChooser save_config_FileChooser;
     private javax.swing.JMenuItem saveconfig;
     private javax.swing.JMenuItem saveconfigto;
