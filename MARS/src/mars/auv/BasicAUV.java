@@ -74,7 +74,7 @@ import mars.auv.example.Monsun2;
 import mars.auv.example.SMARTE;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
-import mars.sensors.Sonar;
+import mars.sensors.sonar.Sonar;
 import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;

@@ -22,7 +22,7 @@ import mars.MARS_Main;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
-import mars.sensors.Sonar;
+import mars.sensors.sonar.Sonar;
 
 /**
  * Creates an AUV_Manger. You register your auv's here.
@@ -607,5 +607,10 @@ public class AUV_Manager {
             }
         }
         return null;
+    }
+    
+    @Override
+    public String toString(){
+        return "AUVs";
     }
 }

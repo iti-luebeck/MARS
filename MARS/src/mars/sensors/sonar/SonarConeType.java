@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mars.sensors;
+package mars.sensors.sonar;
 
 /**
  *

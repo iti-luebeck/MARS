@@ -891,12 +891,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
         if(view != null && !view_init && mars_settings!=null){
             view.setMarsSettings(mars_settings);
-            view.initTree(mars_settings,auvs,simobs);
+            //view.initTree(mars_settings,auvs,simobs);
+            view.initAUVTree(auv_manager);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
             view.initPopUpMenues();
             view.allowSimInteraction();
+            Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    view.updateTrees();
+                    return null;
+                }
+                });
             //auv_hanse.setView(view);
             //auv_monsun2.setView(view);
             view_init = true;

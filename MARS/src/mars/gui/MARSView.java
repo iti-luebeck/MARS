@@ -215,6 +215,27 @@ public class MARSView extends FrameView {
     public void setCanvasPanel(int Width, int Height){
         this.JMEPanel1.setMinimumSize(new Dimension(Width,Height));
     }
+    
+    public void initAUVTree(AUV_Manager auvManager){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    auv_tree.setModel(new AUVManagerModel(auv_manager));
+                    auv_tree.updateUI();
+                }
+            }
+        );
+    }
+    
+    public void updateTrees(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    auv_tree.updateUI();
+                }
+            }  
+        );
+    }
 
     /**
      *
@@ -222,6 +243,7 @@ public class MARSView extends FrameView {
      * @param auvs
      * @param simobs
      */
+    @Deprecated
     public void initTree(MARS_Settings simauv_settings, ArrayList auvs, ArrayList simobs){
         this.auvs = auvs;
         this.simobs = simobs;
@@ -537,7 +559,7 @@ public class MARSView extends FrameView {
 
         //actualize value
         TreePath tp = new TreePath(((DefaultMutableTreeNode)nd.getChildAt(0)).getPath());
-        ((DefaultTreeModel)simauv_tree.getModel()).valueForPathChanged(tp, value);
+        ((DefaultTreeModel)auv_tree.getModel()).valueForPathChanged(tp, value);
     }
 
     private DefaultMutableTreeNode searchNode(DefaultMutableTreeNode rootSearchNode, String node_search_string){
@@ -565,12 +587,13 @@ public class MARSView extends FrameView {
         MARSApp.getApplication().show(aboutBox);
     }
 
+    @Deprecated
     private void createNodes(DefaultMutableTreeNode top){
         createAUVSNodes(auvs_treenode);
         createSIMOBSNodes(simobs_treenode);
         createPENodes(physical_env_treenode);
         createSettingsNodes(settings_treenode);
-        simauv_tree.updateUI();
+        auv_tree.updateUI();
     }
 
     private void createSettingsNodes(DefaultMutableTreeNode treenode){
@@ -833,10 +856,12 @@ public class MARSView extends FrameView {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        top = new DefaultMutableTreeNode("SimAUV");
+        top = new DefaultMutableTreeNode("AUVs");
         //createNodes(top);
-        simauv_tree = new javax.swing.JTree(top);
+        auv_tree = new javax.swing.JTree(top);
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        simob_tree = new javax.swing.JTree();
         MapPanel = new javax.swing.JPanel();
         JMEPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
@@ -1038,20 +1063,20 @@ public class MARSView extends FrameView {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        renderer = (DefaultTreeCellRenderer) simauv_tree
+        renderer = (DefaultTreeCellRenderer) auv_tree
         .getCellRenderer();
-        textfieldEditor = new mars.gui.TextFieldCellEditor(simauv_tree);
-        DefaultTreeCellEditor editor = new DefaultTreeCellEditor(simauv_tree,
+        textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);
+        DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,
             renderer, textfieldEditor);
-        simauv_tree.setCellEditor(editor);
-        simauv_tree.setEditable(true);
-        simauv_tree.setName("simauv_tree"); // NOI18N
-        simauv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
+        auv_tree.setCellEditor(editor);
+        auv_tree.setEditable(true);
+        auv_tree.setName("auv_tree"); // NOI18N
+        auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                simauv_treeMouseClicked(evt);
+                auv_treeMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(simauv_tree);
+        jScrollPane1.setViewportView(auv_tree);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1069,15 +1094,27 @@ public class MARSView extends FrameView {
 
         jPanel4.setName("jPanel4"); // NOI18N
 
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        simob_tree.setName("simob_tree"); // NOI18N
+        simob_tree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                simob_treeMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(simob_tree);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 228, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 97, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel4.TabConstraints.tabIcon"), jPanel4); // NOI18N
@@ -2920,7 +2957,7 @@ public class MARSView extends FrameView {
             simob_manager.registerSimObject(simob);
             createSIMOBNode(simobs_treenode, simob);
             xmll.addSimObject(simob);
-            simauv_tree.updateUI();
+            auv_tree.updateUI();
             new_simob_dialog.setVisible(false);
         }
     }
@@ -2946,7 +2983,7 @@ public class MARSView extends FrameView {
             auv_manager.registerAUV(hans2);
             xmll.addAUV(hans2);
             createAUVNode(auvs_treenode, hans2);
-            simauv_tree.updateUI();
+            auv_tree.updateUI();
             new_auv.setVisible(false);
         }
     }
@@ -3044,12 +3081,11 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_add_auvActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
-        // TODO add your handling code here:
         System.out.println("NO EFFECT YET!!!!!!!!!!!!!!!!!!!");
     }//GEN-LAST:event_saveconfigActionPerformed
 
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         AUV auv = (AUV)node.getUserObject();
         mars.getFlyByCamera().setEnabled(false);
         mars.getChaseCam().setSpatial(auv.getAUVNode());
@@ -3057,25 +3093,25 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_chase_auvActionPerformed
 
     private void delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         AUV auv = (AUV)node.getUserObject();
 
         //cleanup
         auv_manager.deregisterAUV(auv);
         xmll.deleteAUV(auv);
         node.removeFromParent();
-        simauv_tree.updateUI();
+        auv_tree.updateUI();
     }//GEN-LAST:event_delete_auvActionPerformed
 
     private void delete_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_simobActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         SimObject simobj = (SimObject)node.getUserObject();
 
         //cleanup
         simob_manager.deregisterSimObject(simobj);
         xmll.deleteSimObj(simobj);
         node.removeFromParent();
-        simauv_tree.updateUI();
+        auv_tree.updateUI();
     }//GEN-LAST:event_delete_simobActionPerformed
 
     private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
@@ -3084,7 +3120,7 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_CameraActionPerformed
 
     private void chase_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_simobActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         SimObject simob = (SimObject)node.getUserObject();
         mars.getFlyByCamera().setEnabled(false);
         mars.getChaseCam().setSpatial(simob.getSpatial());
@@ -3104,7 +3140,7 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_addActActionPerformed
 
     private void reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)simauv_tree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         AUV auv = (AUV)node.getUserObject();
         //reset
         auv.reset();
@@ -3124,10 +3160,6 @@ public class MARSView extends FrameView {
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
     mars.startSimState();
 }//GEN-LAST:event_StartMenuItemActionPerformed
-
-    private void simauv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simauv_treeMouseClicked
-
-        if (evt.getButton() == MouseEvent.BUTTON3) {             int selRow = simauv_tree.getRowForLocation(evt.getX(), evt.getY());             TreePath selPath = simauv_tree.getPathForLocation(evt.getX(), evt.getY());             System.out.println(selPath.toString());             System.out.println(selPath.getLastPathComponent().toString());             DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();             if (selRow != -1) {                 simauv_tree.setSelectionPath(selPath);                 try {                     if (selPath.getLastPathComponent().toString().equals(s_auv)) {                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {                         addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {                         addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {                         addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof AUV) {                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof SimObject) {                         simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     } else if (node.getUserObject() instanceof PhysicalExchanger) {                         sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());                     }                 } catch (IllegalArgumentException e) {                 }             }         }     }//GEN-LAST:event_simauv_treeMouseClicked
 
     private void jButtonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPlayMouseClicked
         if(jButtonPlay.isEnabled()){
@@ -3531,6 +3563,41 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton33ActionPerformed
 
+    private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
+       /* if (evt.getButton() == MouseEvent.BUTTON3) {   
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());     
+            TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+            System.out.println(selPath.toString());         
+            System.out.println(selPath.getLastPathComponent().toString());      
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            if (selRow != -1) {               
+                auv_tree.setSelectionPath(selPath);  
+                try {                 
+                    if (selPath.getLastPathComponent().toString().equals(s_auv)) {   
+                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
+                    } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {   
+                        addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());    
+                    } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {   
+                        addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());             
+                    } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {        
+                        addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());            
+                    } else if (node.getUserObject() instanceof AUV) {                        
+                        auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());         
+                    } else if (node.getUserObject() instanceof SimObject) {                
+                        simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());    
+                    } else if (node.getUserObject() instanceof PhysicalExchanger) {       
+                        sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());  
+                    }            
+                } catch (IllegalArgumentException e) {       
+                }         
+            }        
+        }      */                                  
+    }//GEN-LAST:event_auv_treeMouseClicked
+
+    private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_simob_treeMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3560,6 +3627,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JDialog auv_move_vector_dialog;
     private javax.swing.JPopupMenu auv_popup_menu;
     private javax.swing.JDialog auv_rotate_vector_dialog;
+    private javax.swing.JTree auv_tree;
+    public mars.gui.TextFieldCellEditor textfieldEditor;
+    private DefaultTreeCellRenderer renderer;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;
     private javax.swing.JColorChooser color_dialog;
@@ -3634,6 +3704,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -3700,10 +3771,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem saveconfig;
     private javax.swing.JMenuItem saveconfigto;
     private javax.swing.JPopupMenu sens_act_popup_menu;
-    private javax.swing.JTree simauv_tree;
-    public mars.gui.TextFieldCellEditor textfieldEditor;
-    private DefaultTreeCellRenderer renderer;
     private javax.swing.JPopupMenu simob_popup_menu;
+    private javax.swing.JTree simob_tree;
     private javax.swing.JMenuItem split_view;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;

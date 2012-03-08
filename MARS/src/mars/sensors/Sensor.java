@@ -5,6 +5,7 @@
 
 package mars.sensors;
 
+import mars.sensors.sonar.Sonar;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;

@@ -94,7 +94,7 @@ public class SeaBotixThruster extends Thruster{
           new MessageListener<org.ros.message.hanse_msgs.sollSpeed>() {
             @Override
             public void onNewMessage(org.ros.message.hanse_msgs.sollSpeed message) {
-              //System.out.println("I heard: \"" + message.data + "\"");
+              System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.data + "\"");
               self.set_thruster_speed((int)message.data);
             }
           });

@@ -195,11 +195,14 @@ public class IMU extends Sensor{
         fl.angular_velocity = ang_vec;
         Quaternion quat = new Quaternion();
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        jme3_quat.fromAngles(comp.getYawRadiant(), comp.getRollRadiant(), comp.getPitchRadiant());
-        quat.x = jme3_quat.getX();
+       // jme3_quat.fromAngles(comp.getYawRadiant(), comp.getRollRadiant(), comp.getPitchRadiant());
+        jme3_quat.fromAngles(comp.getYawRadiant(), 0f, 0f);
+        quat.x = jme3_quat.getZ();
         quat.y = jme3_quat.getY();
-        quat.z = jme3_quat.getZ();
+        quat.z = jme3_quat.getX();
         quat.w = jme3_quat.getW();
+        System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
+        System.out.println("jme3_quat: " + jme3_quat);
         fl.orientation = quat;
         this.publisher.publish(fl);
     }

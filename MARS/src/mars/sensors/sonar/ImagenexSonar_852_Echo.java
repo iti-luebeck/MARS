@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mars.sensors;
+package mars.sensors.sonar;
 
 import com.jme3.scene.Node;
 import java.io.IOException;
@@ -22,24 +22,24 @@ import mars.hardware.Imaginex;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class ImagenexSonar_852_Scanning extends Sonar{
+public class ImagenexSonar_852_Echo extends Sonar{
 
-    private int SonarReturnDataHeaderLength = 12;//265
+    private int SonarReturnDataHeaderLength = 12;
 
     /**
      * 
      */
-    public ImagenexSonar_852_Scanning(){
+    public ImagenexSonar_852_Echo(){
         super();
     }
-    
+        
     /**
-     * 
+     *
      * @param simstate 
      * @param detectable
      * @param pe
      */
-    public ImagenexSonar_852_Scanning(SimState simstate, Node detectable,PhysicalEnvironment pe) {
+    public ImagenexSonar_852_Echo(SimState simstate, Node detectable,PhysicalEnvironment pe) {
         super(simstate,detectable,pe);
         //set the logging
         try {
@@ -57,7 +57,7 @@ public class ImagenexSonar_852_Scanning extends Sonar{
      * @param simstate 
      * @param detectable
      */
-    public ImagenexSonar_852_Scanning(SimState simstate, Node detectable) {
+    public ImagenexSonar_852_Echo(SimState simstate, Node detectable) {
         super(simstate,detectable);
         //set the logging
         try {
@@ -85,28 +85,24 @@ public class ImagenexSonar_852_Scanning extends Sonar{
     public int getSonarReturnDataTotalLength() {
         return super.getSonarReturnDataLength()+SonarReturnDataHeaderLength+1;//+1 is the termination byte
     }
-
+    
     @Override
     protected byte[] encapsulateWithHeaderTail(byte[] sondat){
         byte[] header = new byte[SonarReturnDataHeaderLength];
         byte[] end = new byte[1];
 
-        //calculate the sonar head postion
-        int head_position = Imaginex.getHeading(getLastHeadPosition());
-
         //build the header for the imaginex sonar
-        byte[] imaginex_bytes = Imaginex.imaginexByteConverterHead(head_position);
         byte[] imaginex_bytes_2 = Imaginex.imaginexByteConverterDataLength(super.getSonarReturnDataLength());
-        header[5] = imaginex_bytes[0];
-        header[6] = imaginex_bytes[1];
+        header[5] = 0;
+        header[6] = 0;
         header[7] = 50;
         header[10] = imaginex_bytes_2[0];
         header[11] = imaginex_bytes_2[1];
         header[0] = 'I';
         header[1] = 'M';
         header[2] = 'X';
-        header[3] = Imaginex.sonar_head_id;
-        header[4] = Imaginex.sonar_serial_status;
+        header[3] = Imaginex.echo_head_id;
+        header[4] = Imaginex.echo_serial_status;
         end[0] = Imaginex.termination_byte;
 
         byte[] arr_ret = Helper.concatByteArrays(header, sondat);
@@ -119,7 +115,7 @@ public class ImagenexSonar_852_Scanning extends Sonar{
     public byte[] getSonarData(){
         return encapsulateWithHeaderTail(super.getSonarData());
     }
-
+    
     /**
      * 
      * @return
@@ -139,3 +135,4 @@ public class ImagenexSonar_852_Scanning extends Sonar{
         return 7.50837174f*((float)Math.pow(1.02266704f, (float)Math.abs(x)) );
     }
 }
+

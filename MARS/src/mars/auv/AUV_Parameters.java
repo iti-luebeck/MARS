@@ -949,4 +949,8 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
 
+    @Override
+    public String toString(){
+        return "AUVParameters";
+    }
 }

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mars.sensors;
+package mars.sensors.sonar;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
@@ -29,6 +29,7 @@ import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.sensors.Sensor;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;

@@ -176,7 +176,8 @@ public class Posemeter extends Sensor{
         
         Quaternion ter_orientation = new Quaternion();
         ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
-        
+        float[] bla = oro.getOrientation().toAngles(null);
+        System.out.println("oro:" + "yaw: " + bla[0] + " roll: " + bla[1] + " pitch: " + bla[2]);
         orientation.x = oro.getOrientation().mult(ter_orientation).getX();
         orientation.y = oro.getOrientation().mult(ter_orientation).getZ();//dont forget to switch y and z!!!!
         orientation.z = oro.getOrientation().mult(ter_orientation).getY();

@@ -153,18 +153,18 @@
 
                                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                                   <SubComponents>
-                                    <Component class="javax.swing.JTree" name="simauv_tree">
+                                    <Component class="javax.swing.JTree" name="auv_tree">
                                       <Properties>
-                                        <Property name="name" type="java.lang.String" value="simauv_tree" noResource="true"/>
+                                        <Property name="name" type="java.lang.String" value="auv_tree" noResource="true"/>
                                       </Properties>
                                       <Events>
-                                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simauv_treeMouseClicked"/>
+                                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="auv_treeMouseClicked"/>
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree(top)"/>
-                                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="top = new DefaultMutableTreeNode(&quot;SimAUV&quot;);&#xa;//createNodes(top);"/>
+                                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="top = new DefaultMutableTreeNode(&quot;AUVs&quot;);&#xa;//createNodes(top);"/>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor;&#xa;private DefaultTreeCellRenderer renderer;"/>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="renderer = (DefaultTreeCellRenderer) simauv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(simauv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(simauv_tree,&#xa;        renderer, textfieldEditor);&#xa;simauv_tree.setCellEditor(editor);&#xa;simauv_tree.setEditable(true);"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);"/>
                                       </AuxValues>
                                     </Component>
                                   </SubComponents>
@@ -188,14 +188,38 @@
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <EmptySpace min="0" pref="228" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" alignment="0" pref="228" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <EmptySpace min="0" pref="97" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" alignment="0" pref="97" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTree" name="simob_tree">
+                                      <Properties>
+                                        <Property name="name" type="java.lang.String" value="simob_tree" noResource="true"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMouseClicked"/>
+                                      </Events>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
                             </Container>
                           </SubComponents>
                         </Container>
