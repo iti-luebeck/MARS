@@ -15,6 +15,9 @@ import mars.Helper.Helper;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 import mars.hardware.Imaginex;
+import mars.ros.MARSNodeMain;
+import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * This is the Imaginex Sonar class. It's the sonar used in the AUV HANSE.
@@ -25,6 +28,18 @@ import mars.hardware.Imaginex;
 public class ImagenexSonar_852_Echo extends Sonar{
 
     private int SonarReturnDataHeaderLength = 12;
+
+    ///ROS stuff
+    //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
+    //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    /**
+     * 
+     */
+    protected Publisher<org.ros.message.hanse_msgs.EchoSounder> publisher = null;
+    /**
+     * 
+     */
+    protected org.ros.message.hanse_msgs.EchoSounder fl = new org.ros.message.hanse_msgs.EchoSounder(); 
 
     /**
      * 
@@ -133,6 +148,32 @@ public class ImagenexSonar_852_Echo extends Sonar{
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x){
         return 7.50837174f*((float)Math.pow(1.02266704f, (float)Math.abs(x)) );
+    }
+    
+        /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.setROS_Node(ros_node);
+        this.publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/EchoSounder");  
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    public void publish() {
+        //header.seq = 0;
+        header.frame_id = this.getRos_frame_id();
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        fl.header = header;
+        fl.echoData = getRawSonarData();
+        fl.startGain = (byte)getScanning_gain();
+        fl.range = (byte)getSonarMaxRange();
+        this.publisher.publish(fl);
     }
 }
 

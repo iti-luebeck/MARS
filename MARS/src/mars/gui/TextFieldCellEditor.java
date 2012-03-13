@@ -17,7 +17,7 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 /**
- *
+ * Is used to check if a cell in the JTre is editable or not.
  * @author Thomas Tosik
  */
 public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellEditor {
@@ -45,19 +45,28 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
 
     @Override
     public boolean isCellEditable(EventObject event) {
-        
         boolean returnValue = false;
         if (event instanceof MouseEvent) {
             MouseEvent mouseEvent = (MouseEvent) event;
             TreePath path = tree.getPathForLocation(mouseEvent.getX(),mouseEvent.getY());
             if (path != null) {
                 Object node = path.getLastPathComponent();
+                System.out.println("editable!!!! " + path + " comp: " + node);
                 if ((node != null) && (node instanceof DefaultMutableTreeNode)) {
                     DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
                     //Object userObject = treeNode.getUserObject();
                     //returnValue = ((treeNode.isLeaf()) && (userObject instanceof CheckBoxNode));
+                    System.out.println("leaf");
                     returnValue = treeNode.isLeaf();
                     //returnValue = true;
+                }else if ((node != null) && (node instanceof Float)) {
+                    return true;
+                }else if ((node != null) && (node instanceof Integer)) {
+                    return true;
+                }else if ((node != null) && (node instanceof Boolean)) {
+                    return true;
+                }else if ((node != null) && (node instanceof String)) {
+                    return true;
                 }
             }
         }
@@ -74,22 +83,27 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
         return (Component) currentEditor;
     }
 
+    @Override
     public boolean shouldSelectCell(EventObject event) {
         return currentEditor.shouldSelectCell(event);
     }
 
+    @Override
     public boolean stopCellEditing() {
         return currentEditor.stopCellEditing();
     }
 
+    @Override
     public void cancelCellEditing() {
         currentEditor.cancelCellEditing();
     }
 
+    @Override
     public void addCellEditorListener(CellEditorListener l) {
         leafEditor.addCellEditorListener(l);
     }
 
+    @Override
     public void removeCellEditorListener(CellEditorListener l) {
         leafEditor.removeCellEditorListener(l);
     }

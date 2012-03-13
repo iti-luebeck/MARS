@@ -28,6 +28,8 @@ public class Posemeter extends Sensor{
     Positionmeter pos = new Positionmeter();
     @XmlElement(name="Orientationmeter")
     Orientationmeter oro = new Orientationmeter();
+    @XmlElement(name="Compass")
+    Compass comp = new Compass();
     
     ///ROS stuff
     private Publisher<org.ros.message.geometry_msgs.PoseStamped> publisher = null;
@@ -51,10 +53,12 @@ public class Posemeter extends Sensor{
         this.pe = pe;
         pos.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
+        comp.setPhysical_environment(pe);
         pos.setSimState(simState);
         oro.setSimState(simState);
+        comp.setSimState(simState);
     }
-
+    
     /**
      * 
      * @param simstate 
@@ -63,6 +67,7 @@ public class Posemeter extends Sensor{
         super(simstate);
         pos.setSimState(simState);
         oro.setSimState(simState);
+        comp.setSimState(simState);
     }
 
     /**
@@ -72,6 +77,7 @@ public class Posemeter extends Sensor{
         this.auv_node = auv_node;
         pos.init(auv_node);
         oro.init(auv_node);
+        comp.init(auv_node);
     }
 
     /**
@@ -81,6 +87,7 @@ public class Posemeter extends Sensor{
     public void update(float tpf){
         pos.update(tpf);
         oro.update(tpf);
+        comp.update(tpf);
     }
     
     /**
@@ -89,6 +96,7 @@ public class Posemeter extends Sensor{
     public void reset(){
         pos.reset();
         oro.reset();
+        comp.reset();
     }
     
     @Override
@@ -96,6 +104,7 @@ public class Posemeter extends Sensor{
         super.setPhysical_environment(pe);
         pos.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
+        comp.setPhysical_environment(pe);
     }
     
     /**
@@ -107,6 +116,7 @@ public class Posemeter extends Sensor{
         super.setSimState(simState);
         pos.setSimState(simState);
         oro.setSimState(simState);
+        comp.setSimState(simState);
     }
     
     @Override
@@ -114,6 +124,7 @@ public class Posemeter extends Sensor{
         super.setPhysicsControl(physics_control);
         pos.setPhysicsControl(physics_control);
         oro.setPhysicsControl(physics_control);
+        comp.setPhysicsControl(physics_control);
     }
     
         /**
@@ -125,6 +136,7 @@ public class Posemeter extends Sensor{
         super.setNodeVisibility(visible);
         pos.setNodeVisibility(visible);
         oro.setNodeVisibility(visible);
+        comp.setNodeVisibility(visible);
     }
 
     /**
@@ -136,6 +148,7 @@ public class Posemeter extends Sensor{
         super.setPhysicalExchangerName(name);
         pos.setPhysicalExchangerName(name + "_positionmeter");
         oro.setPhysicalExchangerName(name + "_orientationmeter");
+        comp.setPhysicalExchangerName(name + "_compass");
     }
     
     /**
@@ -147,6 +160,7 @@ public class Posemeter extends Sensor{
         super.setEnabled(enabled);
         pos.setEnabled(enabled);
         oro.setEnabled(enabled);
+        comp.setEnabled(enabled);
     }
     
     /**
@@ -175,13 +189,27 @@ public class Posemeter extends Sensor{
         org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
         
         Quaternion ter_orientation = new Quaternion();
-        ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
+        //ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
+        //ter_orientation.fromAngles(0f, -FastMath.HALF_PI, 0f);
+        ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         float[] bla = oro.getOrientation().toAngles(null);
-        System.out.println("oro:" + "yaw: " + bla[0] + " roll: " + bla[1] + " pitch: " + bla[2]);
-        orientation.x = oro.getOrientation().mult(ter_orientation).getX();
+        //System.out.println("oroa:" + "yaw: " + bla[0] + " roll: " + bla[1] + " pitch: " + bla[2]);
+        //System.out.println("oro:" + oro.getOrientation());
+        /*orientation.x = oro.getOrientation().mult(ter_orientation).getX();
         orientation.y = oro.getOrientation().mult(ter_orientation).getZ();//dont forget to switch y and z!!!!
         orientation.z = oro.getOrientation().mult(ter_orientation).getY();
-        orientation.w = oro.getOrientation().mult(ter_orientation).getW();
+        orientation.w = oro.getOrientation().mult(ter_orientation).getW();*/
+        /*orientation.x = oro.getOrientation().getX();
+        orientation.y = oro.getOrientation().getY();//dont forget to switch y and z!!!!
+        orientation.z = oro.getOrientation().getZ();
+        orientation.w = oro.getOrientation().getW();*/
+        com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
+        jme3_quat.fromAngles(comp.getPitchRadiant(), comp.getYawRadiant(), comp.getRollRadiant());
+        //jme3_quat.fromAngles(comp.getYawRadiant(), 0f, 0f);
+        orientation.x = jme3_quat.mult(ter_orientation).getX();// switching x and z!!!!
+        orientation.y = jme3_quat.mult(ter_orientation).getY();
+        orientation.z = jme3_quat.mult(ter_orientation).getZ();
+        orientation.w = jme3_quat.mult(ter_orientation).getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;
         pose.orientation = orientation;

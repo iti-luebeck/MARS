@@ -323,8 +323,6 @@ public class MARSView extends FrameView {
     }
     
     public void initPopUpMenues(){
-        //JMenuItem jm = new JMenuItem("heavy");
-        //jme3_params_auv.add(jm);
     }
     
     public void initPopUpMenuesForAUV(final AUV_Parameters auv_param){
@@ -596,6 +594,7 @@ public class MARSView extends FrameView {
         auv_tree.updateUI();
     }
 
+    @Deprecated
     private void createSettingsNodes(DefaultMutableTreeNode treenode){
         textfieldEditor.addCellEditorListener(simauv_settings);
         HashMap<String,Object> set = simauv_settings.getSettings();
@@ -613,6 +612,7 @@ public class MARSView extends FrameView {
         top.add(treenode);
     }
 
+    @Deprecated
     private void createAUVSNodes(DefaultMutableTreeNode treenode){
         Iterator iter = auvs.iterator();
         while(iter.hasNext() ) {
@@ -630,6 +630,7 @@ public class MARSView extends FrameView {
         top.add(treenode);
     }
 
+    @Deprecated
     private void createAUVNode(DefaultMutableTreeNode treenode, AUV auv){
         DefaultMutableTreeNode auv_treenode = new DefaultMutableTreeNode(auv);
         treenode.add(auv_treenode);
@@ -671,6 +672,7 @@ public class MARSView extends FrameView {
         param_treenode.add(hash_treenode);
     }
 
+    @Deprecated
     private void createHashMapNodesSettings(DefaultMutableTreeNode param_treenode, String hashmap_name, HashMap<String,Object> hash){
         DefaultMutableTreeNode hash_treenode = new DefaultMutableTreeNode(hashmap_name);
         SortedSet<String> sortedset= new TreeSet<String>(hash.keySet());
@@ -691,6 +693,7 @@ public class MARSView extends FrameView {
         param_treenode.add(hash_treenode);
     }
 
+    @Deprecated
     private void createParamNodes(DefaultMutableTreeNode treenode, AUV auv){
         AUV_Parameters param = auv.getAuv_param();
         textfieldEditor.addCellEditorListener(param);
@@ -714,6 +717,7 @@ public class MARSView extends FrameView {
         treenode.add(param_treenode);
     }
 
+    @Deprecated
     private void createSensorsNodes(DefaultMutableTreeNode treenode, HashMap<String,Sensor> sensors){
         DefaultMutableTreeNode sensors_treenode = null;
         sensors_treenode = new DefaultMutableTreeNode(s_sensors);
@@ -725,6 +729,7 @@ public class MARSView extends FrameView {
         treenode.add(sensors_treenode);
     }
 
+    @Deprecated
     private void createActuatorsNodes(DefaultMutableTreeNode treenode, HashMap<String,Actuator> actuators){
         DefaultMutableTreeNode actuators_treenode = null;
         actuators_treenode = new DefaultMutableTreeNode(s_actuators);
@@ -736,6 +741,7 @@ public class MARSView extends FrameView {
         treenode.add(actuators_treenode);
     }
 
+    @Deprecated
     private void createSIMOBSNodes(DefaultMutableTreeNode treenode){
         Iterator iter = simobs.iterator();
         while(iter.hasNext() ) {
@@ -763,6 +769,7 @@ public class MARSView extends FrameView {
         top.add(treenode);
     }
 
+    @Deprecated
     private void createSIMOBNode(DefaultMutableTreeNode treenode, SimObject simob){
         DefaultMutableTreeNode simob_treenode = new DefaultMutableTreeNode(simob);
         treenode.add(simob_treenode);
@@ -782,6 +789,7 @@ public class MARSView extends FrameView {
         }
     }
 
+    @Deprecated
     private void createPENodes(DefaultMutableTreeNode treenode){
         PhysicalEnvironment penv = simauv_settings.getPhysical_environment();
         textfieldEditor.addCellEditorListener(penv);
@@ -991,6 +999,7 @@ public class MARSView extends FrameView {
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jButton31 = new javax.swing.JButton();
+        jCheckBox4 = new javax.swing.JCheckBox();
         vector_dialog = new javax.swing.JDialog();
         vectorDialog_Confirm = new javax.swing.JButton();
         Cancel2 = new javax.swing.JButton();
@@ -1108,12 +1117,10 @@ public class MARSView extends FrameView {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 228, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 97, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
         );
 
@@ -2087,7 +2094,7 @@ public class MARSView extends FrameView {
         jColorChooser1.setName("jColorChooser1"); // NOI18N
 
         auv_rotate_vector_dialog.setTitle(resourceMap.getString("auv_rotate_vector_dialog.title")); // NOI18N
-        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 194));
+        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 214));
         auv_rotate_vector_dialog.setName("auv_rotate_vector_dialog"); // NOI18N
 
         jButton22.setText(resourceMap.getString("jButton22.text")); // NOI18N
@@ -2145,33 +2152,32 @@ public class MARSView extends FrameView {
             }
         });
 
+        jCheckBox4.setText(resourceMap.getString("jCheckBox4.text")); // NOI18N
+        jCheckBox4.setName("jCheckBox4"); // NOI18N
+
         javax.swing.GroupLayout auv_rotate_vector_dialogLayout = new javax.swing.GroupLayout(auv_rotate_vector_dialog.getContentPane());
         auv_rotate_vector_dialog.getContentPane().setLayout(auv_rotate_vector_dialogLayout);
         auv_rotate_vector_dialogLayout.setHorizontalGroup(
             auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, auv_rotate_vector_dialogLayout.createSequentialGroup()
+            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, auv_rotate_vector_dialogLayout.createSequentialGroup()
+                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel25))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(jCheckBox4, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addComponent(jButton22, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                         .addComponent(jButton31)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Cancel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
-                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel24)
-                                    .addComponent(jLabel25))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel23)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))))
+                        .addComponent(Cancel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         auv_rotate_vector_dialogLayout.setVerticalGroup(
@@ -2179,17 +2185,19 @@ public class MARSView extends FrameView {
             .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton31)
                     .addComponent(Cancel1))
@@ -3410,7 +3418,16 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_jButton30ActionPerformed
 
     private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
-        // TODO add your handling code here:
+        auv_move_vector_dialog.setVisible(false);
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.rotateSelectedAUV(new Vector3f(Float.valueOf(jTextField4.getText()), Float.valueOf(jTextField5.getText()), Float.valueOf(jTextField6.getText())),jCheckBox4.isSelected());
+                }
+                return null;
+            }
+        });
     }//GEN-LAST:event_jButton22ActionPerformed
 
     private void Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel1ActionPerformed
@@ -3659,6 +3676,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JMenu jFileMenu;
     private javax.swing.JLabel jLabel1;

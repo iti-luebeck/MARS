@@ -446,7 +446,7 @@
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterTitan">
-            <value xsi:type="brushlessThruster">
+            <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>thrusterTitan</name>
@@ -516,7 +516,7 @@
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterHyperion">
-            <value xsi:type="brushlessThruster">
+            <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>thrusterHyperion</name>
@@ -583,7 +583,7 @@
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterPrometheus">
-            <value xsi:type="brushlessThruster">
+            <value xsi:type="seaBotixThruster">
                 <noise_type>3</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>thrusterPrometheus</name>

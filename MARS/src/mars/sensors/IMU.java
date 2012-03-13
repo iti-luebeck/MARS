@@ -5,7 +5,13 @@
 package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
 import org.ros.node.topic.Publisher;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
@@ -35,6 +41,8 @@ public class IMU extends Sensor{
     private Publisher<org.ros.message.sensor_msgs.Imu> publisher = null;
     private org.ros.message.sensor_msgs.Imu fl = new org.ros.message.sensor_msgs.Imu(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    
+    Arrow arrow;
     
     /**
      * 
@@ -78,6 +86,19 @@ public class IMU extends Sensor{
         acc.init(auv_node);
         gyro.init(auv_node);
         comp.init(auv_node);
+        
+        Vector3f angax = new Vector3f();
+        //jme3_quat.toAngleAxis(angax);
+        Vector3f ray_start =  new Vector3f(0f, 0f, 0f);
+        Vector3f ray_direction = angax;//new Vector3f(jme3_quat.getX(), jme3_quat.getY(), jme3_quat.getZ());
+        arrow = new Arrow(ray_direction.mult(1f));
+        Geometry mark4 = new Geometry("VideoCamera_Arrow_1", arrow);
+        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.Green);
+        mark4.setMaterial(mark_mat4);
+        mark4.setLocalTranslation(ray_start);
+        mark4.updateGeometricState();
+        rootNode.attachChild(mark4);
     }
 
     /**
@@ -195,14 +216,30 @@ public class IMU extends Sensor{
         fl.angular_velocity = ang_vec;
         Quaternion quat = new Quaternion();
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-       // jme3_quat.fromAngles(comp.getYawRadiant(), comp.getRollRadiant(), comp.getPitchRadiant());
-        jme3_quat.fromAngles(comp.getYawRadiant(), 0f, 0f);
-        quat.x = jme3_quat.getZ();
+        jme3_quat.fromAngles(comp.getPitchRadiant(), comp.getYawRadiant(), comp.getRollRadiant());
+        
+        com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
+        ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
+        //jme3_quat.fromAngles(0f, 0f, comp.getPitchRadiant());
+        quat.x = jme3_quat.mult(ter_orientation).getX();// switching x and z!!!!
+        quat.y = jme3_quat.mult(ter_orientation).getY();
+        quat.z = jme3_quat.mult(ter_orientation).getZ();
+        quat.w = jme3_quat.mult(ter_orientation).getW();
+        /*quat.x = jme3_quat.getZ();// switching x and z!!!!
         quat.y = jme3_quat.getY();
         quat.z = jme3_quat.getX();
-        quat.w = jme3_quat.getW();
+        quat.w = jme3_quat.getW();*/
         System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
         System.out.println("jme3_quat: " + jme3_quat);
+        float[] ff = jme3_quat.toAngles(null);
+        System.out.println("jme3_quat: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
+        /*Vector3f angax = new Vector3f();
+        jme3_quat.toAngleAxis(angax);
+        System.out.println("angax: " + angax);
+        Vector3f ray_start =  new Vector3f(0f, 0f, 0f);
+        Vector3f ray_direction = angax;//new Vector3f(jme3_quat.getX(), jme3_quat.getY(), jme3_quat.getZ());
+        arrow.setArrowExtent(ray_direction.mult(1f));*/
+        
         fl.orientation = quat;
         this.publisher.publish(fl);
     }

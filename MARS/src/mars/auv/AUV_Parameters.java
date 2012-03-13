@@ -155,9 +155,11 @@ public class AUV_Parameters implements CellEditorListener{
         collision = (HashMap<String,Object>)params.get("Collision");
     }
     
+    @Deprecated
     public void editingCanceled(ChangeEvent e){
     }
 
+    @Deprecated
     public void editingStopped(ChangeEvent e){
         Object obj = e.getSource();
         if (obj instanceof TextFieldEditor) {
@@ -169,6 +171,7 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
     
+    @Deprecated
     private void saveValue(TextFieldEditor editor){
         HashMap<String,Object> hashmap = params;
         String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
@@ -188,6 +191,7 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
 
+    @Deprecated
     private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
         Object node_obj = node.getUserObject();

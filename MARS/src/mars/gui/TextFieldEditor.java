@@ -98,6 +98,7 @@ public class TextFieldEditor extends JTextField implements CellEditor {
      * @param treepath
      */
     public void setTreepath(TreePath treepath) {
+        //System.out.println("TFE: " + treepath);
         this.treepath = treepath;
     }
 
@@ -108,69 +109,72 @@ public class TextFieldEditor extends JTextField implements CellEditor {
 
     // Stop editing only if the user entered a valid value.
     public boolean stopCellEditing() {        
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)this.getTreepath().getLastPathComponent();
-        Object obj = node.getUserObject();
-        if(obj instanceof Float){
-            try {
-                String tmp = getText();
-                value = Float.valueOf(tmp);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
-                return false;
+        //System.out.println("this.getTreepath().getLastPathComponent(): " + this.getTreepath().getLastPathComponent());
+        //System.out.println("this.getTreepath().: " + this.getTreepath().getParentPath().getLastPathComponent());
+        /*DefaultMutableTreeNode node = (DefaultMutableTreeNode)this.getTreepath().getLastPathComponent();
+        Object obj = node.getUserObject();*/
+        Object obj = this.getTreepath().getLastPathComponent();
+            if(obj instanceof Float){
+                try {
+                    String tmp = getText();
+                    value = Float.valueOf(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
+                    return false;
+                }
+            }else if(obj instanceof Integer){
+                try {
+                    String tmp = getText();
+                    value = Integer.valueOf(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid integer).
+                    return false;
+                }
+            }else if(obj instanceof Boolean){
+                try {
+                    String tmp = getText();
+                    value = Boolean.valueOf(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid Boolean).
+                    return false;
+                }
+            }else if(obj instanceof String){
+                try {
+                    String tmp = getText();
+                    value = String.valueOf(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid string).
+                    return false;
+                }
+            }else if(obj instanceof Vector3f){
+                try {
+                    String tmp = getText();
+                    int firstkomma = tmp.indexOf(",",0);
+                    int secondkomma = tmp.indexOf(",",firstkomma+1);
+                    float x = Float.valueOf(tmp.substring(1, firstkomma));
+                    float y = Float.valueOf(tmp.substring(firstkomma+1, secondkomma));
+                    float z = Float.valueOf(tmp.substring(secondkomma+1, tmp.length()-1));
+                    value = new Vector3f(x,y,z);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid vector/float).
+                    return false;
+                }
+            }else if(obj instanceof ColorRGBA){
+                try {
+                    String tmp = getText();
+                    int firstbracket = tmp.indexOf("[",0);
+                    int firstkomma = tmp.indexOf(",",0);
+                    int secondkomma = tmp.indexOf(",",firstkomma+1);
+                    int thirdkomma = tmp.indexOf(",",secondkomma+1);
+                    float r = Float.valueOf(tmp.substring(firstbracket+1, firstkomma));
+                    float g = Float.valueOf(tmp.substring(firstkomma+1, secondkomma));
+                    float b = Float.valueOf(tmp.substring(secondkomma+1, thirdkomma));
+                    value = new ColorRGBA(r,g,b,0f);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid color/float).
+                    return false;
+                }
             }
-        }else if(obj instanceof Integer){
-            try {
-                String tmp = getText();
-                value = Integer.valueOf(tmp);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid integer).
-                return false;
-            }
-        }else if(obj instanceof Boolean){
-            try {
-                String tmp = getText();
-                value = Boolean.valueOf(tmp);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid Boolean).
-                return false;
-            }
-        }else if(obj instanceof String){
-            try {
-                String tmp = getText();
-                value = String.valueOf(tmp);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid string).
-                return false;
-            }
-        }else if(obj instanceof Vector3f){
-            try {
-                String tmp = getText();
-                int firstkomma = tmp.indexOf(",",0);
-                int secondkomma = tmp.indexOf(",",firstkomma+1);
-                float x = Float.valueOf(tmp.substring(1, firstkomma));
-                float y = Float.valueOf(tmp.substring(firstkomma+1, secondkomma));
-                float z = Float.valueOf(tmp.substring(secondkomma+1, tmp.length()-1));
-                value = new Vector3f(x,y,z);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid vector/float).
-                return false;
-            }
-        }else if(obj instanceof ColorRGBA){
-            try {
-                String tmp = getText();
-                int firstbracket = tmp.indexOf("[",0);
-                int firstkomma = tmp.indexOf(",",0);
-                int secondkomma = tmp.indexOf(",",firstkomma+1);
-                int thirdkomma = tmp.indexOf(",",secondkomma+1);
-                float r = Float.valueOf(tmp.substring(firstbracket+1, firstkomma));
-                float g = Float.valueOf(tmp.substring(firstkomma+1, secondkomma));
-                float b = Float.valueOf(tmp.substring(secondkomma+1, thirdkomma));
-                value = new ColorRGBA(r,g,b,0f);
-                return true;
-            } catch (Exception e) {//Something went wrong (most likely we don't have a valid color/float).
-                return false;
-            }
-        }
         return false;
     }
 

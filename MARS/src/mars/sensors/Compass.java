@@ -193,10 +193,15 @@ public class Compass extends Sensor{
      */
     private float getPitchRadiantRaw(){
         Vector3f vec_roll = CompassRollAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
+        //System.out.println("vec_roll: " + vec_roll);
+        //System.out.println("pe.getMagnetic_east(): " + pe.getMagnetic_east());
         vec_roll = new Vector3f(0,vec_roll.getY(),vec_roll.getZ());
+        vec_roll.normalizeLocal();
+        //System.out.println("vec_roll_scal: " + vec_roll);
         if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
             return 0f;
         }
+        //return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
         Vector3f plus = (pe.getMagnetic_east().cross(vec_roll)).normalize();
         if( plus.getX() < 0 ){//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
@@ -242,7 +247,7 @@ public class Compass extends Sensor{
      * @return The yaw angle in radiant
      */
     private float getRollRadiantRaw(){
-        Vector3f vec_roll = CompassRollAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
+        Vector3f vec_roll = CompassYawAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
         vec_roll = new Vector3f(vec_roll.getX(),vec_roll.getY(),0);
         if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
             return 0f;

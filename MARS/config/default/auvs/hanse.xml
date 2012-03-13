@@ -308,22 +308,50 @@
 				<enabled>true</enabled>
 				<ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
-			<Positionmeter>
-				<noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>posemeter_positionmeter</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-			</Positionmeter>
-			<Orientationmeter>
-				<noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>posemeter_orientationmeter</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-			</Orientationmeter>
+				<Positionmeter>
+					<noise_type>0</noise_type>
+					<noise_value>1.0</noise_value>
+					<name>posemeter_positionmeter</name>
+					<enabled>true</enabled>
+					<ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
+				</Positionmeter>
+				<Orientationmeter>
+					<noise_type>0</noise_type>
+					<noise_value>1.0</noise_value>
+					<name>posemeter_orientationmeter</name>
+					<enabled>true</enabled>
+					<ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
+				</Orientationmeter>
+				<Compass>
+					<noise_type>0</noise_type>
+					<noise_value>1.0</noise_value>
+					<name>imu_compass</name>
+					<enabled>true</enabled>
+					<ros_publish_rate>1000</ros_publish_rate>
+					<ros_frame_id>/map</ros_frame_id>
+					<Position>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</Position>
+					<CompassYawAxisVector>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</CompassYawAxisVector>
+					<CompassPitchAxisVector>
+						<x>1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</CompassPitchAxisVector>
+					<CompassRollAxisVector>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+					</CompassRollAxisVector>
+				</Compass>
 			</value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
@@ -368,8 +396,8 @@
 						<z>0.0</z>
 					</CompassYawAxisVector>
 					<CompassPitchAxisVector>
-						<x>0.0</x>
-						<y>1.0</y>
+						<x>1.0</x>
+						<y>0.0</y>
 						<z>0.0</z>
 					</CompassPitchAxisVector>
 					<CompassRollAxisVector>
@@ -385,7 +413,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>bottom_cam</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
                 <Position>
@@ -444,7 +472,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>front_cam</name>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
                 <Position>

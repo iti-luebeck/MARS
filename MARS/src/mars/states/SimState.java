@@ -1104,6 +1104,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void rotateSelectedAUV(Vector3f new_rotation, boolean relative){
+        System.out.println("rotateSelectedAUV" + new_rotation);
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
+        if(selected_auv != null){
+            selected_auv.hideGhostAUV(true);
+            if(!relative){
+                selected_auv.getAuv_param().setRotation(new_rotation);
+                Quaternion quat = new Quaternion();
+                quat.fromAngles(new_rotation.x, new_rotation.y, new_rotation.z);
+                selected_auv.getPhysicsControl().setPhysicsRotation(quat);
+            }else{
+                
+            }
+        }
+    }
+    
     public void moveCamera(Vector3f new_position, boolean relative){
         System.out.println("moveCamera" + new_position);
         viewManager.moveCamera(new_position,relative);
