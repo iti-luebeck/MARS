@@ -561,7 +561,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         //init special actuators like manipulating ones(servos)
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
-            if(element instanceof Manipulating){
+            if(element instanceof Manipulating && element.isEnabled()){
                 Manipulating mani = (Manipulating)element;
                 ArrayList<String> slaves_names = mani.getSlavesNames();
                 Iterator iter = slaves_names.iterator();

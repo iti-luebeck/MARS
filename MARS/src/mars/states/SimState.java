@@ -50,6 +50,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import mars.GuiControlState;
 import mars.Helper.Helper;
 import mars.Initializer;
@@ -57,6 +59,7 @@ import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.actuators.weapons.Canon;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -419,6 +422,17 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
              
+          /*   Canon serv = new Canon();
+                serv.setEnabled(true);
+                serv.setNodeVisibility(true);
+                serv.setPhysicalExchangerName("canon");
+                serv.setCanonStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
+                serv.setCanonDirection(new Vector3f(0f, 0f, -1f));
+                JAXBContext context = JAXBContext.newInstance( Canon.class );
+                Marshaller m = context.createMarshaller();
+                m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                m.marshal( serv, System.out );*/
+                
              /*Dynamixel_AX12PLUS serv = new Dynamixel_AX12PLUS();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
@@ -892,10 +906,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(view != null && !view_init && mars_settings!=null){
             view.setMarsSettings(mars_settings);
             //view.initTree(mars_settings,auvs,simobs);
-            view.initAUVTree(auv_manager);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
+            view.initAUVTree(auv_manager);
+            view.initSimObjectTree(simob_manager);
             view.initPopUpMenues();
             view.allowSimInteraction();
             Future fut = mars.enqueue(new Callable() {
@@ -1156,6 +1171,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void chaseAUV(AUV auv){
+        if(auv != null){
+            mars.getFlyByCamera().setEnabled(false);
+            mars.getChaseCam().setSpatial(auv.getAUVNode());
+            mars.getChaseCam().setEnabled(true);
+        }
+    }
+    
     public void debugSelectedAUV(int debug_mode, boolean selected){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1195,6 +1218,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(selected_auv != null){
             selected_auv.reset();
         }
+    }
+    
+    public void selectAUV(AUV auv){
+        if(auv != null){
+            if(auv.getAuv_param().isEnabled()){
+                auv.setSelected(true);
+                guiControlState.setLatestSelectedAUV(auv);
+            }
+        }
+    }
+    
+    public void deselectAUV(AUV auv){
+        auv_manager.deselectAllAUVs();
     }
     
     public void splitView(){

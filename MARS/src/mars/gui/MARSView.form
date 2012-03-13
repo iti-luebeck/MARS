@@ -214,6 +214,10 @@
                                       <Events>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMouseClicked"/>
                                       </Events>
+                                      <AuxValues>
+                                        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor2;&#xa;private DefaultTreeCellRenderer renderer2;"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top2 = new DefaultMutableTreeNode(&quot;SimObjects&quot;);&#xa;simob_tree = new javax.swing.JTree(top2);&#xa;renderer2 = (DefaultTreeCellRenderer) simob_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);&#xa;DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,&#xa;        renderer, textfieldEditor2);&#xa;auv_tree.setCellEditor(editor2);&#xa;auv_tree.setEditable(true);"/>
+                                      </AuxValues>
                                     </Component>
                                   </SubComponents>
                                 </Container>

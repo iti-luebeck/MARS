@@ -216,12 +216,23 @@ public class MARSView extends FrameView {
         this.JMEPanel1.setMinimumSize(new Dimension(Width,Height));
     }
     
-    public void initAUVTree(AUV_Manager auvManager){
+    public void initAUVTree(final AUV_Manager auvManager){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    auv_tree.setModel(new AUVManagerModel(auv_manager));
+                    auv_tree.setModel(new AUVManagerModel(auvManager));
                     auv_tree.updateUI();
+                }
+            }
+        );
+    }
+    
+    public void initSimObjectTree(final SimObjectManager simobManager){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    simob_tree.setModel(new SimObjectManagerModel(simobManager));
+                    simob_tree.updateUI();
                 }
             }
         );
@@ -232,6 +243,7 @@ public class MARSView extends FrameView {
                 @Override
                 public void run() {
                     auv_tree.updateUI();
+                    simob_tree.updateUI();
                 }
             }  
         );
@@ -1105,6 +1117,15 @@ public class MARSView extends FrameView {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        DefaultMutableTreeNode top2 = new DefaultMutableTreeNode("SimObjects");
+        simob_tree = new javax.swing.JTree(top2);
+        renderer2 = (DefaultTreeCellRenderer) simob_tree
+        .getCellRenderer();
+        textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);
+        DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,
+            renderer, textfieldEditor2);
+        auv_tree.setCellEditor(editor2);
+        auv_tree.setEditable(true);
         simob_tree.setName("simob_tree"); // NOI18N
         simob_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2997,6 +3018,9 @@ public class MARSView extends FrameView {
     }
 
     private void add_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_auvActionPerformed
+
+        System.out.println("DEACTIVATED!");
+        /*
         AUV_Parameters auv_param = new AUV_Parameters(xmll);
         HashMap<String,Object> vars = auv_param.getAllVariables();
         SortedSet<String> sortedset= new TreeSet<String>(vars.keySet());
@@ -3085,7 +3109,7 @@ public class MARSView extends FrameView {
 
         new_auv.validate();
         new_auv.setVisible(true);
-        new_auv.setSize(432, 512);
+        new_auv.setSize(432, 512);*/
     }//GEN-LAST:event_add_auvActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
@@ -3093,22 +3117,28 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_saveconfigActionPerformed
 
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
-        AUV auv = (AUV)node.getUserObject();
-        mars.getFlyByCamera().setEnabled(false);
-        mars.getChaseCam().setSpatial(auv.getAUVNode());
-        mars.getChaseCam().setEnabled(true);
+        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.chaseAUV(auv);
+                }
+                return null;
+            }
+        });
     }//GEN-LAST:event_chase_auvActionPerformed
 
     private void delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
+       /* DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
         AUV auv = (AUV)node.getUserObject();
 
         //cleanup
         auv_manager.deregisterAUV(auv);
         xmll.deleteAUV(auv);
         node.removeFromParent();
-        auv_tree.updateUI();
+        auv_tree.updateUI();*/
+        System.out.println("NOT IMPLEMENTED YET!");
     }//GEN-LAST:event_delete_auvActionPerformed
 
     private void delete_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_simobActionPerformed
@@ -3148,15 +3178,27 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_addActActionPerformed
 
     private void reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvActionPerformed
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
-        AUV auv = (AUV)node.getUserObject();
-        //reset
-        auv.reset();
+        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    auv.reset();
+                }
+                return null;
+            }
+        });
     }//GEN-LAST:event_reset_auvActionPerformed
 
     private void reset_auvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvsActionPerformed
         //reset
-        auv_manager.resetAllAUVs();
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    auv_manager.resetAllAUVs();
+                }
+                return null;
+            }
+        });
     }//GEN-LAST:event_reset_auvsActionPerformed
 
     private void keysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keysActionPerformed
@@ -3581,16 +3623,21 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_jButton33ActionPerformed
 
     private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
-       /* if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());     
-            TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
-            System.out.println(selPath.toString());         
-            System.out.println(selPath.getLastPathComponent().toString());      
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
-            if (selRow != -1) {               
+        if (evt.getButton() == MouseEvent.BUTTON3) {   
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());         
+            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            if (selRow != -1) { 
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString());  
                 auv_tree.setSelectionPath(selPath);  
-                try {                 
-                    if (selPath.getLastPathComponent().toString().equals(s_auv)) {   
+                try {  
+                    if (selPath.getLastPathComponent() instanceof AUV) {   
+                        auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
+                    }else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
+                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
+                    } 
+                    /*if (selPath.getLastPathComponent().toString().equals(s_auv)) {   
                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {   
                         addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());    
@@ -3604,11 +3651,64 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());    
                     } else if (node.getUserObject() instanceof PhysicalExchanger) {       
                         sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());  
-                    }            
+                    }   */         
                 } catch (IllegalArgumentException e) {       
                 }         
-            }        
-        }      */                                  
+            }       
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());      
+            if (selRow != -1) { 
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString()); 
+                auv_tree.setSelectionPath(selPath);  
+                try {  
+                    if (selPath.getLastPathComponent() instanceof AUV) {   
+                        final AUV auv = (AUV)selPath.getLastPathComponent();
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectAUV(null);
+                                    simState.selectAUV(auv);
+                                }
+                                return null;
+                            }
+                        });  
+                    }else{
+                            Future simStateFuture = mars.enqueue(new Callable() {
+                                public Void call() throws Exception {
+                                    if(mars.getStateManager().getState(SimState.class) != null){
+                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                        simState.deselectAUV(null);
+                                    }
+                                    return null;
+                                }
+                            });
+                    }        
+                } catch (IllegalArgumentException e) {
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectAUV(null);
+                                }
+                                return null;
+                            }
+                        });
+                }         
+            }else{
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectAUV(null);
+                                }
+                                return null;
+                            }
+                        });
+            }
+        }                                        
     }//GEN-LAST:event_auv_treeMouseClicked
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
@@ -3791,6 +3891,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu sens_act_popup_menu;
     private javax.swing.JPopupMenu simob_popup_menu;
     private javax.swing.JTree simob_tree;
+    public mars.gui.TextFieldCellEditor textfieldEditor2;
+    private DefaultTreeCellRenderer renderer2;
     private javax.swing.JMenuItem split_view;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;

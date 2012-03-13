@@ -95,7 +95,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#34 G">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">servoDec</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#109 null">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
@@ -479,7 +479,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#57 Space">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">canon_shoot</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#167 null">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
@@ -620,7 +620,7 @@
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#33 F">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">servoInc</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="#111 null">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>

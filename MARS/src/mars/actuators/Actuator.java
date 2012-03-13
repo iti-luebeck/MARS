@@ -5,6 +5,7 @@
 
 package mars.actuators;
 
+import mars.actuators.weapons.Canon;
 import mars.actuators.servos.Servo;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
@@ -27,7 +28,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Thruster.class,Servo.class} )
+@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
     /*
      * 

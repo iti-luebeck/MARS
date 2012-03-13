@@ -622,6 +622,69 @@
                     </entry>
                 </Actions>
             </value>
+        </entry>	
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="canon">
+            <value xsi:type="canon">
+                <noise_type>0</noise_type>
+				<noise_value>1.0</noise_value>
+				<name>canon</name>
+				<enabled>false</enabled>
+				<ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
+				<CanonForce>10.0</CanonForce>
+				<RecoilForce>10.0</RecoilForce>
+				<Position>
+					<x>0.0</x>
+					<y>0.3</y>
+					<z>0.0</z>
+				</Position>
+				<CanonDirection>
+					<x>0.0</x>
+					<y>1.0</y>
+					<z>0.0</z>
+				</CanonDirection>
+				<Actions>
+					<entry xsi:type="myHashMapEntryTypeObject" key="canon_shoot">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">shoot</value>
+                    </entry>
+                </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoTitan">
+            <value xsi:type="dynamixelAX12PLUS">
+                <noise_type>0</noise_type>
+                <noise_value>1.0</noise_value>
+                <name>servoTitan</name>
+                <enabled>false</enabled>
+                <ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
+                <Position>
+                    <x>0.0</x>
+                    <y>0.3</y>
+                    <z>0.0</z>
+                </Position>
+                <ServoDirection>
+                    <x>1.0</x>
+                    <y>0.0</y>
+                    <z>0.0</z>
+                </ServoDirection>
+                <Slaves>canon</Slaves>
+                <OperatingAngle>5.235987</OperatingAngle>
+                <Resolution>0.005061</Resolution>
+                <SpeedPerDegree>0.003266</SpeedPerDegree>
+				<ServoNeutralPosition>0</ServoNeutralPosition>
+                <Actions>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="servo">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="servoInc">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">increment</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="servoDec">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">decrement</value>
+                    </entry>
+                </Actions>
+            </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downFront">
             <value xsi:type="seaBotixThruster">

@@ -19,18 +19,20 @@ import mars.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
+import mars.simobjects.SimObject;
+import mars.simobjects.SimObjectManager;
 
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
-public class AUVManagerModel implements TreeModel{
+public class SimObjectManagerModel implements TreeModel{
 
-    private final AUV_Manager auvManager;
+    private final SimObjectManager simobManager;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
-    public AUVManagerModel(AUV_Manager auvManager) {
-        this.auvManager = auvManager;
+    public SimObjectManagerModel(SimObjectManager simobManager) {
+        this.simobManager = simobManager;
     }
 
     public void removeTreeModelListener(TreeModelListener l) {
@@ -38,7 +40,7 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public boolean isLeaf(Object node) {
-        if(node instanceof AUV_Manager){
+        if(node instanceof SimObjectManager){
             return false;
         }else if(node instanceof AUV){
             return false;
@@ -72,7 +74,7 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public Object getRoot() {
-        return auvManager;
+        return simobManager;
     }
 
     public int getIndexOfChild(Object parent, Object child) {
@@ -81,8 +83,8 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public int getChildCount(Object parent) {
-        if(parent instanceof AUV_Manager){
-            return auvManager.getAUVs().size();
+        if(parent instanceof SimObjectManager){
+            return simobManager.getSimObjects().size();
         }else if(parent instanceof AUV){
             return 3;
         }else if(parent instanceof AUV_Parameters){
@@ -117,15 +119,15 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public Object getChild(Object parent, int index) {
-        if(parent instanceof AUV_Manager){
-            SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
+        if(parent instanceof SimObjectManager){
+            SortedSet<String> sortedset= new TreeSet<String>(simobManager.getSimObjects().keySet());
             Iterator<String> it = sortedset.iterator();
             int i = 0;
             while (it.hasNext()) {
                 String elem = it.next();
                 if(i == index){
-                    AUV auv = (AUV)auvManager.getAUVs().get(elem);
-                    return auv;
+                    SimObject simob = (SimObject)simobManager.getSimObjects().get(elem);
+                    return simob;
                 }else if(i > index){
                     return "null";
                 }

@@ -10,6 +10,7 @@ import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,6 +34,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param auv_node 
      */
     public abstract void init(Node auv_node);
+    
+    protected HashMap<String,Object> variables;
 
     /**
      *
@@ -309,5 +312,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void setPhysical_environment(PhysicalEnvironment pe) {
         this.pe = pe;
+    }
+    
+    public HashMap<String,Object> getAllVariables(){
+        return variables;
     }
 }

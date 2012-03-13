@@ -275,4 +275,9 @@ public class SimObjectManager {
     public void setBulletAppState(BulletAppState bulletAppState) {
         this.bulletAppState = bulletAppState;
     }
+    
+    @Override
+    public String toString(){
+        return "SimObjects";
+    }
 }

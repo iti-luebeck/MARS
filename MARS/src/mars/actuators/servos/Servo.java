@@ -383,6 +383,26 @@ public class Servo extends Actuator implements Manipulating,Keys{
                         }
                     };
                     inputManager.addListener(actionListener, elem);
+            }else if(action.equals("increment")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition((self.getDesiredAnglePosition())+10);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
+            }else if(action.equals("decrement")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition((self.getDesiredAnglePosition())-10);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
             }
         }
     }

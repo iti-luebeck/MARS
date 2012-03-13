@@ -16,6 +16,7 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -224,6 +225,17 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
 
+    public void updateState(TreePath path){
+        System.out.println("TREEPATH: " + path);
+        if(path.getPathComponent(2).equals(this)){//make sure we want to change auv params
+            if( path.getParentPath().getLastPathComponent().toString().equals("AUVParameters")){
+                updateState(path.getLastPathComponent().toString(),"");
+            }else{
+                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
+            }
+        }
+    }
+    
     public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision")){
@@ -234,11 +246,11 @@ public class AUV_Parameters implements CellEditorListener{
                 debug_mat.setColor("Color", ColorRGBA.Red);
                 //physics_control.attachDebugShape(debug_mat);
             }*/
-        }else if(target.equals("position")){
+        }else if(target.equals("position") && hashmapname.equals("")){
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getPosition());
             }
-        }else if(target.equals("rotation")){
+        }else if(target.equals("rotation") && hashmapname.equals("")){
             if(physics_control != null ){
                 Matrix3f m_rot = new Matrix3f();
                 Quaternion q_rot = new Quaternion();
@@ -246,7 +258,7 @@ public class AUV_Parameters implements CellEditorListener{
                 m_rot.set(q_rot);
                 physics_control.setPhysicsRotation(m_rot);
             }
-        }else if(target.equals("scale")){
+        }else if(target.equals("scale") && hashmapname.equals("Model")){
             auv.getAUVSpatial().setLocalScale(getModel_scale());
         }else if(target.equals("collisionbox")){
             /*if(physics_control != null ){
