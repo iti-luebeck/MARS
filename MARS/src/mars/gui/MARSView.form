@@ -155,6 +155,7 @@
                                   <SubComponents>
                                     <Component class="javax.swing.JTree" name="auv_tree">
                                       <Properties>
+                                        <Property name="dragEnabled" type="boolean" value="true"/>
                                         <Property name="name" type="java.lang.String" value="auv_tree" noResource="true"/>
                                       </Properties>
                                       <Events>
@@ -164,7 +165,7 @@
                                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree(top)"/>
                                         <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="top = new DefaultMutableTreeNode(&quot;AUVs&quot;);&#xa;//createNodes(top);"/>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor;&#xa;private DefaultTreeCellRenderer renderer;"/>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="auv_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);&#xa;auv_tree.setRootVisible(false);"/>
                                       </AuxValues>
                                     </Component>
                                   </SubComponents>
@@ -216,7 +217,7 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor2;&#xa;private DefaultTreeCellRenderer renderer2;"/>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top2 = new DefaultMutableTreeNode(&quot;SimObjects&quot;);&#xa;simob_tree = new javax.swing.JTree(top2);&#xa;renderer2 = (DefaultTreeCellRenderer) simob_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);&#xa;DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,&#xa;        renderer, textfieldEditor2);&#xa;auv_tree.setCellEditor(editor2);&#xa;auv_tree.setEditable(true);"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top2 = new DefaultMutableTreeNode(&quot;SimObjects&quot;);&#xa;simob_tree = new javax.swing.JTree(top2);&#xa;simob_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer2 = (DefaultTreeCellRenderer) simob_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);&#xa;DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,&#xa;        renderer, textfieldEditor2);&#xa;simob_tree.setCellEditor(editor2);&#xa;simob_tree.setEditable(true);&#xa;simob_tree.setRootVisible(false);"/>
                                       </AuxValues>
                                     </Component>
                                   </SubComponents>

@@ -59,6 +59,7 @@ import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.actuators.visualizer.VectorVisualizer;
 import mars.actuators.weapons.Canon;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -422,13 +423,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
              
-          /*   Canon serv = new Canon();
+             /*   VectorVisualizer serv = new VectorVisualizer();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
-                serv.setPhysicalExchangerName("canon");
-                serv.setCanonStartVector(new Vector3f(0.015f, -0.02f,-0.24f));
-                serv.setCanonDirection(new Vector3f(0f, 0f, -1f));
-                JAXBContext context = JAXBContext.newInstance( Canon.class );
+                serv.setPhysicalExchangerName("vec");
+                serv.setVectorVisualizerPosition(new Vector3f(0.0f, 0.0f,0.0f));
+                serv.setVectorVisualizerDirection(new Vector3f(0f, 1f, 0f));
+                JAXBContext context = JAXBContext.newInstance( VectorVisualizer.class );
                 Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 m.marshal( serv, System.out );*/
@@ -483,11 +484,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
                 hans.registerPhysicalExchanger(serv);*/
              
+             //do stuff after jaxb, see also UnmarshallListener
              Iterator iter = auvs.iterator();
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
-                bas_auv.getAuv_param().init();
+                //bas_auv.getAuv_param().init();
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
              }

@@ -15,10 +15,6 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import mars.PhysicalExchanger;
-import mars.auv.AUV;
-import mars.auv.AUV_Manager;
-import mars.auv.AUV_Parameters;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 
@@ -42,10 +38,6 @@ public class SimObjectManagerModel implements TreeModel{
     public boolean isLeaf(Object node) {
         if(node instanceof SimObjectManager){
             return false;
-        }else if(node instanceof AUV){
-            return false;
-        }else if(node instanceof AUV_Parameters){
-            return false;
         }else if(node instanceof HashMap){
             return false;
         }else if(node instanceof HashMapWrapper){
@@ -58,7 +50,7 @@ public class SimObjectManagerModel implements TreeModel{
             return false;
         }else if(node instanceof LeafWrapper){
             return false;
-        }else if(node instanceof PhysicalExchanger){
+        }else if(node instanceof SimObject){
             return false;
         }else if(node instanceof Float){
             return true;
@@ -85,11 +77,9 @@ public class SimObjectManagerModel implements TreeModel{
     public int getChildCount(Object parent) {
         if(parent instanceof SimObjectManager){
             return simobManager.getSimObjects().size();
-        }else if(parent instanceof AUV){
-            return 3;
-        }else if(parent instanceof AUV_Parameters){
-            AUV_Parameters auv_param = (AUV_Parameters)parent;
-            return auv_param.getAllVariables().size();
+        }else if(parent instanceof SimObject){
+            SimObject simob = (SimObject)parent;
+            return simob.getAllVariables().size();
         }else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
             return hashmap.size();
@@ -100,9 +90,6 @@ public class SimObjectManagerModel implements TreeModel{
             return 3;
         }else if(parent instanceof ColorRGBA){
             return 4;
-        }else if(parent instanceof PhysicalExchanger){
-            PhysicalExchanger pe = (PhysicalExchanger)parent;
-            return 1;
         }else if(parent instanceof Float){
             return 1;
         }else if(parent instanceof Boolean){
@@ -134,17 +121,23 @@ public class SimObjectManagerModel implements TreeModel{
                 i++;
             }
             return "null";
-        }else if(parent instanceof AUV){
-            AUV auv = (AUV)parent;
-            if(index == 0){
-                return auv.getAuv_param();
-            }else if (index == 1){
-                return new HashMapWrapper(auv.getSensors(),"Sensors");
-            }else if (index == 2){
-                return new HashMapWrapper(auv.getActuators(),"Actuators");
+        }else if(parent instanceof SimObject){
+            SimObject simob = (SimObject)parent;
+            SortedSet<String> sortedset= new TreeSet<String>(simob.getAllVariables().keySet());
+            Iterator<String> it = sortedset.iterator();
+            int i = 0;
+            while (it.hasNext()) {
+                String elem = it.next();
+                if(i == index){
+                    Object obj = (Object)simob.getAllVariables().get(elem);
+                    return new HashMapWrapper(obj,elem);
+                }else if(i > index){
+                    return "null";
+                }
+                i++;
             }
             return "null";
-        }else if(parent instanceof AUV_Parameters){
+        }/*else if(parent instanceof AUV_Parameters){
             AUV_Parameters auv_param = (AUV_Parameters)parent;
             SortedSet<String> sortedset= new TreeSet<String>(auv_param.getAllVariables().keySet());
             Iterator<String> it = sortedset.iterator();
@@ -163,7 +156,7 @@ public class SimObjectManagerModel implements TreeModel{
         }else if(parent instanceof PhysicalExchanger){
             
             return "null";
-        }else if(parent instanceof HashMap){
+        }*/else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
             SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
             Iterator<String> it = sortedset.iterator();
@@ -245,7 +238,7 @@ public class SimObjectManagerModel implements TreeModel{
         if(!(obj instanceof HashMapWrapper)){
             saveValue(originalPath,path.getParentPath(),value);
         }else{
-            HashMapWrapper hasher = (HashMapWrapper)obj;
+            /*HashMapWrapper hasher = (HashMapWrapper)obj;
             if(hasher.getUserData() instanceof LeafWrapper){
                 saveValue(originalPath,path.getParentPath(),value);
             }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
@@ -292,7 +285,7 @@ public class SimObjectManagerModel implements TreeModel{
                 }
                 AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
                 auvParam.updateState(path);    
-            }
+            }*/
         }
     }
     

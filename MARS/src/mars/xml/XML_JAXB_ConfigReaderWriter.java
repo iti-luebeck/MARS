@@ -63,6 +63,8 @@ public class XML_JAXB_ConfigReaderWriter {
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
                 //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 SimObject simob = (SimObject)u.unmarshal( file );
                 //System.out.println(simob.getName());
                 return simob;
@@ -87,6 +89,8 @@ public class XML_JAXB_ConfigReaderWriter {
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
                 //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 SimObject simob = (SimObject)u.unmarshal( file );
                 //System.out.println(simob.getName());
                 return simob;
@@ -163,6 +167,8 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
                 Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 BasicAUV auv = (BasicAUV)u.unmarshal( file );
                 //System.out.println(simob.getName());
@@ -187,6 +193,8 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
                 Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 BasicAUV auv = (BasicAUV)u.unmarshal( file );
                 //System.out.println(simob.getName());
@@ -276,6 +284,8 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
                 Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 PhysicalEnvironment pe = (PhysicalEnvironment)u.unmarshal( file );
                 //System.out.println(simob.getName());
                 return pe;
@@ -314,6 +324,8 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
                 Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 KeyConfig keyconfig = (KeyConfig)u.unmarshal( file );
                 //System.out.println(simob.getName());
                 return keyconfig;

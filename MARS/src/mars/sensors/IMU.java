@@ -221,18 +221,18 @@ public class IMU extends Sensor{
         com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         //jme3_quat.fromAngles(0f, 0f, comp.getPitchRadiant());
-        quat.x = jme3_quat.mult(ter_orientation).getX();// switching x and z!!!!
-        quat.y = jme3_quat.mult(ter_orientation).getY();
-        quat.z = jme3_quat.mult(ter_orientation).getZ();
-        quat.w = jme3_quat.mult(ter_orientation).getW();
+        quat.x = jme3_quat.multLocal(ter_orientation).getX();// switching x and z!!!!
+        quat.y = jme3_quat.multLocal(ter_orientation).getY();
+        quat.z = jme3_quat.multLocal(ter_orientation).getZ();
+        quat.w = jme3_quat.multLocal(ter_orientation).getW();
         /*quat.x = jme3_quat.getZ();// switching x and z!!!!
         quat.y = jme3_quat.getY();
         quat.z = jme3_quat.getX();
         quat.w = jme3_quat.getW();*/
-        System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
-        System.out.println("jme3_quat: " + jme3_quat);
+        //System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
+        //System.out.println("jme3_quat: " + jme3_quat);
         float[] ff = jme3_quat.toAngles(null);
-        System.out.println("jme3_quat: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
+        //System.out.println("jme3_quat: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
         /*Vector3f angax = new Vector3f();
         jme3_quat.toAngleAxis(angax);
         System.out.println("angax: " + angax);

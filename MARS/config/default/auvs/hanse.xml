@@ -117,6 +117,12 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="auv_name">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse</value>
             </entry>
+			<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse.png</value>
+            </entry>
+			<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse_dnd.png</value>
+            </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="damping_angular">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
             </entry>
@@ -628,7 +634,7 @@
                 <noise_type>0</noise_type>
 				<noise_value>1.0</noise_value>
 				<name>canon</name>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 				<ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
 				<CanonForce>10.0</CanonForce>
@@ -655,7 +661,7 @@
                 <noise_type>0</noise_type>
                 <noise_value>1.0</noise_value>
                 <name>servoTitan</name>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
                 <ros_publish_rate>1000</ros_publish_rate>
 				<ros_frame_id>/map</ros_frame_id>
                 <Position>
@@ -684,6 +690,32 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">decrement</value>
                     </entry>
                 </Actions>
+            </value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="vec">
+            <value xsi:type="vectorVisualizer">
+                <noise_type>0</noise_type>
+				<noise_value>1.0</noise_value>
+				<name>vec</name>
+				<enabled>true</enabled>
+				<ros_publish_rate>1000</ros_publish_rate>
+				<ros_frame_id>/map</ros_frame_id>
+				<Position>
+					<x>0.0</x>
+					<y>0.0</y>
+					<z>0.0</z>
+				</Position>
+				<VectorVisualizerDirection>
+					<x>0.0</x>
+					<y>2.0</y>
+					<z>0.0</z>
+				</VectorVisualizerDirection>
+				<Color>
+					<a>0.0</a>
+					<b>1.0</b>
+					<g>1.0</g>
+					<r>1.0</r>
+				</Color>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downFront">

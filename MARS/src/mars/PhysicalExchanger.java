@@ -317,4 +317,16 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public HashMap<String,Object> getAllVariables(){
         return variables;
     }
+    
+    public void initAfterJAXB(){
+        
+    };
+    
+    public String getIcon(){
+        return "";
+    }
+    
+    public String getIconDND(){
+        return "";
+    }
 }

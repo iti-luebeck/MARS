@@ -1084,6 +1084,7 @@ public class MARSView extends FrameView {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        auv_tree.setCellRenderer(new MyTreeCellRenderer(this));
         renderer = (DefaultTreeCellRenderer) auv_tree
         .getCellRenderer();
         textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);
@@ -1091,6 +1092,8 @@ public class MARSView extends FrameView {
             renderer, textfieldEditor);
         auv_tree.setCellEditor(editor);
         auv_tree.setEditable(true);
+        auv_tree.setRootVisible(false);
+        auv_tree.setDragEnabled(true);
         auv_tree.setName("auv_tree"); // NOI18N
         auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1119,13 +1122,15 @@ public class MARSView extends FrameView {
 
         DefaultMutableTreeNode top2 = new DefaultMutableTreeNode("SimObjects");
         simob_tree = new javax.swing.JTree(top2);
+        simob_tree.setCellRenderer(new MyTreeCellRenderer(this));
         renderer2 = (DefaultTreeCellRenderer) simob_tree
         .getCellRenderer();
         textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);
         DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,
             renderer, textfieldEditor2);
-        auv_tree.setCellEditor(editor2);
-        auv_tree.setEditable(true);
+        simob_tree.setCellEditor(editor2);
+        simob_tree.setEditable(true);
+        simob_tree.setRootVisible(false);
         simob_tree.setName("simob_tree"); // NOI18N
         simob_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -3908,7 +3913,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.6.3";
+    private final String VERSION = "0.6.5";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

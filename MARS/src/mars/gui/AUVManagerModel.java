@@ -223,8 +223,8 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
-        System.out.println("*** valueForPathChanged : "
-                           + path + " --> " + newValue);
+        //System.out.println("*** valueForPathChanged : "
+         //                  + path + " --> " + newValue);
         
         //save the new value
         saveValue(path, path, newValue);

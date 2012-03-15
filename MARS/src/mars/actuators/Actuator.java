@@ -18,6 +18,7 @@ import mars.Initializer;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.actuators.visualizer.VectorVisualizer;
 import mars.ros.ROS_Subscriber;
 import mars.states.SimState;
 
@@ -28,7 +29,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class} )
+@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
     /*
      * 

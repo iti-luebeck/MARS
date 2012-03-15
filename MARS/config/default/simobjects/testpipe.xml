@@ -71,5 +71,11 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="light">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
         </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testpipe.png</value>
+        </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testpipe_dnd.png</value>
+        </entry>
     </simob_variables>
 </SimObject>

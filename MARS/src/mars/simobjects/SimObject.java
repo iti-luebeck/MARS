@@ -63,6 +63,8 @@ public class SimObject implements CellEditorListener{
     private Vector3f dimensions = new Vector3f(0.5f,0.5f,0.5f);
     private Vector3f collision_position = new Vector3f(0.0f,0.0f,0.0f);
     private int type = CollisionType.CYLINDERCOLLISIONSHAPE;
+    private String icon = "box_closed.png";
+    private String dnd_icon = "box_closed.png";
 
     private MARS_Main simauv;
     private AssetManager assetManager;
@@ -91,6 +93,8 @@ public class SimObject implements CellEditorListener{
         setDimensions(dimensions);
         setCollisionPosition(collision_position);
         setType(type);
+        setIcon(icon);
+        setDNDIcon(dnd_icon);
         this.xmll = xmll;
     }
     
@@ -264,6 +268,10 @@ public class SimObject implements CellEditorListener{
         spatial.addControl(physics_control);
         spatial.updateGeometricState();
     }
+    
+    public void initAfterJAXB(){
+        collision = (HashMap<String,Object>)simob_variables.get("Collision");
+    }
 
     /**
      *
@@ -282,6 +290,38 @@ public class SimObject implements CellEditorListener{
         return physics_control;
     }
 
+        /**
+     *
+     * @return
+     */
+    public String getIcon() {
+        return (String)simob_variables.get("icon");
+    }
+
+    /**
+     *
+     * @param auv_name
+     */
+    public void setIcon(String icon) {
+        simob_variables.put("icon", icon);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public String getDNDIcon() {
+        return (String)simob_variables.get("dnd_icon");
+    }
+
+    /**
+     *
+     * @param auv_name
+     */
+    public void setDNDIcon(String dnd_icon) {
+        simob_variables.put("dnd_icon", dnd_icon);
+    }
+    
     /**
      *
      * @return

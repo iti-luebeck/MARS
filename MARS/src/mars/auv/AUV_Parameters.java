@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.Unmarshaller;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
@@ -82,6 +83,8 @@ public class AUV_Parameters implements CellEditorListener{
     private ColorRGBA selection_color = ColorRGBA.Red;
     private ColorRGBA map_color = ColorRGBA.Red;
     private float alpha_depth_scale = 3.0f;
+    private String icon = "yellow_submarine.png";
+    private String dnd_icon = "yellow_submarine.png";
 
     /**
      *
@@ -136,6 +139,8 @@ public class AUV_Parameters implements CellEditorListener{
         setSelection_color(selection_color);
         setMapColor(map_color);
         setAlphaDepthScale(alpha_depth_scale);
+        setIcon(icon);
+        setDNDIcon(dnd_icon);
         this.xmll = xmll;
     }
     
@@ -325,6 +330,38 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setAuv_name(String auv_name) {
         params.put("auv_name", auv_name);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getIcon() {
+        return (String)params.get("icon");
+    }
+
+    /**
+     *
+     * @param auv_name
+     */
+    public void setIcon(String icon) {
+        params.put("icon", icon);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public String getDNDIcon() {
+        return (String)params.get("dnd_icon");
+    }
+
+    /**
+     *
+     * @param auv_name
+     */
+    public void setDNDIcon(String dnd_icon) {
+        params.put("dnd_icon", dnd_icon);
     }
 
     /**
