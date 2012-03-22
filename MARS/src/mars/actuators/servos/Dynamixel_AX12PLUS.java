@@ -20,23 +20,20 @@ public class Dynamixel_AX12PLUS extends Servo{
     
     public Dynamixel_AX12PLUS(){
         super();
-        OperatingAngle = 5.235987f;
-        Resolution = 0.005061f;
-        SpeedPerDegree = 0.003266f;
     }
     
     public Dynamixel_AX12PLUS(SimState simstate,Geometry MassCenterGeom) {
         super(simstate,MassCenterGeom);
-        OperatingAngle = 5.235987f;
-        Resolution = 0.005061f;
-        SpeedPerDegree = 0.003266f;
+        setOperatingAngle(5.235987f);
+        setResolution(0.005061f);
+        setSpeedPerDegree(0.003266f);
     }
 
     public Dynamixel_AX12PLUS(SimState simstate) {
         super(simstate);
-        OperatingAngle = 5.235987f;
-        Resolution = 0.005061f;
-        SpeedPerDegree = 0.003266f;
+        setOperatingAngle(5.235987f);
+        setResolution(0.005061f);
+        setSpeedPerDegree(0.003266f);
     }
     
         /**

@@ -51,28 +51,18 @@ public class VideoCamera extends Sensor implements Moveable{
     private Geometry CameraEnd;
     private Geometry CameraTop;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraStartVector = new Vector3f(0,0,0);
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraDirection = new Vector3f(0,0,0);
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CameraTopDirection = new Vector3f(0,0,0);
 
-    @XmlElement
     private boolean debug = true;
 
     private Renderer renderer;
     private RenderManager renderManager;
     private Initializer initer;
 
-    @XmlElement
     private int CameraWidth = 640;
-    @XmlElement
     private int CameraHeight = 480;
-    @XmlElement
     private float CameraAngle = 45f;
 
     private Camera offCamera;
@@ -127,7 +117,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public Vector3f getCameraDirection() {
-        return CameraDirection;
+        return (Vector3f)variables.get("CameraDirection");
     }
 
     /**
@@ -135,7 +125,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param CameraDirection
      */
     public void setCameraDirection(Vector3f CameraDirection) {
-        this.CameraDirection = CameraDirection;
+        variables.put("CameraDirection", CameraDirection);
     }
 
     /**
@@ -143,15 +133,15 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public Vector3f getCameraStartVector() {
-        return CameraStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     /**
      *
      * @param CameraStartVector
      */
-    public void setCameraStartVector(Vector3f CameraStartVector) {
-        this.CameraStartVector = CameraStartVector;
+    public void setCameraStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
 
     /**
@@ -159,7 +149,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public Vector3f getCameraTopDirection() {
-        return CameraTopDirection;
+        return (Vector3f)variables.get("CameraTopDirection");
     }
 
     /**
@@ -167,7 +157,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param CameraTopDirection
      */
     public void setCameraTopDirection(Vector3f CameraTopDirection) {
-        this.CameraTopDirection = CameraTopDirection;
+        variables.put("CameraTopDirection", CameraTopDirection);
     }
 
     /**
@@ -175,7 +165,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public float getCameraAngle() {
-        return CameraAngle;
+         return (Float)variables.get("CameraAngle");
     }
 
     /**
@@ -183,7 +173,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param CameraAngle
      */
     public void setCameraAngle(float CameraAngle) {
-        this.CameraAngle = CameraAngle;
+        variables.put("CameraAngle", CameraAngle);
     }
 
     /**
@@ -191,7 +181,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public int getCameraHeight() {
-        return CameraHeight;
+        return (Integer)variables.get("CameraHeight");
     }
 
     /**
@@ -199,7 +189,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param CameraHeight
      */
     public void setCameraHeight(int CameraHeight) {
-        this.CameraHeight = CameraHeight;
+        variables.put("CameraHeight", CameraHeight);
     }
 
     /**
@@ -207,7 +197,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public int getCameraWidth() {
-        return CameraWidth;
+        return (Integer)variables.get("CameraWidth");
     }
 
     /**
@@ -215,7 +205,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param CameraWidth
      */
     public void setCameraWidth(int CameraWidth) {
-        this.CameraWidth = CameraWidth;
+         variables.put("CameraWidth", CameraWidth);
     }
 
     public void init(Node auv_node){
@@ -235,7 +225,7 @@ public class VideoCamera extends Sensor implements Moveable{
         mark_mat9.setColor("Color", ColorRGBA.Red);
         CameraEnd.setMaterial(mark_mat9);
         //CameraEnd.setLocalTranslation(CameraStartVector.add(CameraDirection));
-        CameraEnd.setLocalTranslation(CameraDirection);
+        CameraEnd.setLocalTranslation(getCameraDirection());
         CameraEnd.updateGeometricState();
         //PhysicalExchanger_Node.attachChild(CameraEnd);
         Rotation_Node.attachChild(CameraEnd);
@@ -246,13 +236,13 @@ public class VideoCamera extends Sensor implements Moveable{
         mark_mat10.setColor("Color", ColorRGBA.DarkGray);
         CameraTop.setMaterial(mark_mat10);
         //CameraTop.setLocalTranslation(CameraStartVector.add(CameraTopDirection));
-        CameraTop.setLocalTranslation(CameraTopDirection);
+        CameraTop.setLocalTranslation(getCameraTopDirection());
         CameraTop.updateGeometricState();
         //PhysicalExchanger_Node.attachChild(CameraTop);
         Rotation_Node.attachChild(CameraTop);
 
-        Vector3f ray_start = CameraStartVector;
-        Vector3f ray_direction = CameraDirection;
+        Vector3f ray_start = getCameraStartVector();
+        Vector3f ray_direction = getCameraDirection();
         Geometry mark4 = new Geometry("VideoCamera_Arrow_1", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Green);
@@ -262,8 +252,8 @@ public class VideoCamera extends Sensor implements Moveable{
         //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
 
-        ray_start = CameraStartVector;
-        ray_direction = CameraTopDirection;
+        ray_start = getCameraStartVector();
+        ray_direction = getCameraTopDirection();
         Geometry mark5 = new Geometry("VideoCamera_Arrow_2", new Arrow(ray_direction.mult(1f)));
         Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat5.setColor("Color", ColorRGBA.Green);
@@ -273,14 +263,14 @@ public class VideoCamera extends Sensor implements Moveable{
         //PhysicalExchanger_Node.attachChild(mark5);
         Rotation_Node.attachChild(mark5);
 
-        PhysicalExchanger_Node.setLocalTranslation(CameraStartVector);
+        PhysicalExchanger_Node.setLocalTranslation(getCameraStartVector());
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
 
-        cpuBuf = BufferUtils.createByteBuffer(CameraWidth * CameraHeight * 4);
+        cpuBuf = BufferUtils.createByteBuffer(getCameraWidth() * getCameraHeight() * 4);
         setupOffscreenView();
-        if(debug){
+        if(isDebug()){
             setupDebugCam();
         }
         update(0f);
@@ -290,15 +280,15 @@ public class VideoCamera extends Sensor implements Moveable{
      * With this method we can see what the camera can see and make it visible on the screen.
      */
     private void setupDebugCam(){
-        debugCamera = new Camera(CameraWidth,CameraHeight);
+        debugCamera = new Camera(getCameraWidth(),getCameraHeight());
         
-        debugCamera.setFrustumPerspective(CameraAngle, 1f, 0.01f, 1000f);
+        debugCamera.setFrustumPerspective(getCameraAngle(), 1f, 0.01f, 1000f);
         debugCamera.setParallelProjection(false);
         //float aspect = (float) CameraWidth / CameraHeight;
        // debugCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
 
-        debugCamera.setLocation(CameraStartVector);
-        debugCamera.lookAt(CameraStartVector, CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation().normalize()));
+        debugCamera.setLocation(getCameraStartVector());
+        debugCamera.lookAt(getCameraStartVector(), CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation().normalize()));
 
         debugCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         //debugCamera.setViewPort(0f, 1f, 0f, 1f);
@@ -314,7 +304,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * This view is needed for
      */
     private void setupOffscreenView(){
-        offCamera = new Camera(CameraWidth,CameraHeight);
+        offCamera = new Camera(getCameraWidth(),getCameraHeight());
         //offCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         // create a pre-view. a view that is rendered before the main view
         offView = renderManager.createPreView("Offscreen View2", offCamera);
@@ -327,14 +317,14 @@ public class VideoCamera extends Sensor implements Moveable{
         //offView.addProcessor(this);
 
         // create offscreen framebuffer
-        offBuffer = new FrameBuffer(CameraWidth,CameraHeight, 0);
+        offBuffer = new FrameBuffer(getCameraWidth(),getCameraHeight(), 0);
 
         //setup framebuffer's cam
         offCamera.setParallelProjection(false);
-        float aspect = (float) CameraWidth / CameraHeight;
+        float aspect = (float) getCameraWidth() / getCameraHeight();
         //offCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        offCamera.setFrustumPerspective(CameraAngle, 1f, 0.01f, 1000f);
-        offCamera.setLocation(CameraStartVector);
+        offCamera.setFrustumPerspective(getCameraAngle(), 1f, 0.01f, 1000f);
+        offCamera.setLocation(getCameraStartVector());
         offCamera.lookAt( this.CameraEnd.getWorldTranslation()
                 , CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
 
@@ -354,7 +344,7 @@ public class VideoCamera extends Sensor implements Moveable{
     }
 
     private byte[] updateImageContents(){
-        final byte[] cpuArray = new byte[CameraWidth * CameraHeight * 4];
+        final byte[] cpuArray = new byte[getCameraWidth() * getCameraHeight() * 4];
         if(renderer != null){
             cpuBuf.clear();
 
@@ -379,7 +369,7 @@ public class VideoCamera extends Sensor implements Moveable{
         offCamera.setLocation(CameraStart.getWorldTranslation());
         offCamera.lookAt( CameraEnd.getWorldTranslation()
                 , CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
-        if(debug){
+        if(isDebug()){
             debugCamera.setLocation(CameraStart.getWorldTranslation());
             debugCamera.lookAt( CameraEnd.getWorldTranslation()
                ,  CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize() );
@@ -391,7 +381,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @return
      */
     public boolean isDebug() {
-        return debug;
+        return (Boolean)variables.get("debug");
     }
 
     /**
@@ -399,7 +389,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param debug
      */
     public void setDebug(boolean debug) {
-        this.debug = debug;
+         variables.put("debug", debug);
     }
 
     /**

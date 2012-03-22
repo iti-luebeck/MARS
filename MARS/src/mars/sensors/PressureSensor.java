@@ -32,8 +32,6 @@ public class PressureSensor extends Sensor{
 
     private Geometry PressureSensorStart;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PressureSensorStartVector;
 
     ///ROS stuff
@@ -78,7 +76,7 @@ public class PressureSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         PressureSensorStart.setMaterial(mark_mat7);
-        PressureSensorStart.setLocalTranslation(PressureSensorStartVector);
+        PressureSensorStart.setLocalTranslation(getPressureSensorStartVector());
         PressureSensorStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PressureSensorStart);
         auv_node.attachChild(PhysicalExchanger_Node);
@@ -156,15 +154,15 @@ public class PressureSensor extends Sensor{
      * @return
      */
     public Vector3f getPressureSensorStartVector() {
-        return PressureSensorStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     /**
      *
      * @param PressureSensorStartVector
      */
-    public void setPressureSensorStartVector(Vector3f PressureSensorStartVector) {
-        this.PressureSensorStartVector = PressureSensorStartVector;
+    public void setPressureSensorStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
 
     /**

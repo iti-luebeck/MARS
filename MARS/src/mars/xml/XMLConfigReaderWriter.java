@@ -1223,7 +1223,7 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 sea.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                sea.setMotorStartVector(getVector(sensor_node));
+                sea.setMotorPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("MotorDirection")){
                 sea.setMotorDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){
@@ -1243,7 +1243,7 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 sea.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                sea.setMotorStartVector(getVector(sensor_node));
+                sea.setMotorPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("MotorDirection")){
                 sea.setMotorDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){

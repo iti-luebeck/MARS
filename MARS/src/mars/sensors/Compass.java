@@ -32,17 +32,9 @@ public class Compass extends Sensor{
     private Geometry CompassPitchAxis;
     private Geometry CompassRollAxis;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassStartVector;
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassYawAxisVector;
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassPitchAxisVector;
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CompassRollAxisVector;
 
     private Vector3f magnetic_north = Vector3f.UNIT_X;
@@ -84,7 +76,7 @@ public class Compass extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Black);
         CompassStart.setMaterial(mark_mat7);
-        CompassStart.setLocalTranslation(CompassStartVector);
+        CompassStart.setLocalTranslation(getCompassStartVector());
         CompassStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassStart);
 
@@ -93,7 +85,7 @@ public class Compass extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Black);
         CompassYawAxis.setMaterial(mark_mat9);
-        CompassYawAxis.setLocalTranslation(CompassStartVector.add(CompassYawAxisVector));
+        CompassYawAxis.setLocalTranslation(getCompassStartVector().add(getCompassYawAxisVector()));
         CompassYawAxis.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassYawAxis);
 
@@ -102,7 +94,7 @@ public class Compass extends Sensor{
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Black);
         CompassPitchAxis.setMaterial(mark_mat10);
-        CompassPitchAxis.setLocalTranslation(CompassStartVector.add(CompassPitchAxisVector));
+        CompassPitchAxis.setLocalTranslation(getCompassStartVector().add(getCompassPitchAxisVector()));
         CompassPitchAxis.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassPitchAxis);
 
@@ -111,7 +103,7 @@ public class Compass extends Sensor{
         Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat11.setColor("Color", ColorRGBA.Black);
         CompassRollAxis.setMaterial(mark_mat11);
-        CompassRollAxis.setLocalTranslation(CompassStartVector.add(CompassRollAxisVector));
+        CompassRollAxis.setLocalTranslation(getCompassStartVector().add(getCompassRollAxisVector()));
         CompassRollAxis.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassRollAxis);
 
@@ -279,7 +271,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassPitchAxisVector() {
-        return CompassPitchAxisVector;
+        return (Vector3f)variables.get("CompassPitchAxisVector");
     }
 
     /**
@@ -287,7 +279,7 @@ public class Compass extends Sensor{
      * @param CompassPitchAxisVector
      */
     public void setCompassPitchAxisVector(Vector3f CompassPitchAxisVector) {
-        this.CompassPitchAxisVector = CompassPitchAxisVector;
+        variables.put("CompassPitchAxisVector", CompassPitchAxisVector);
     }
 
     /**
@@ -295,7 +287,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassRollAxisVector() {
-        return CompassRollAxisVector;
+        return (Vector3f)variables.get("CompassRollAxisVector");
     }
 
     /**
@@ -303,7 +295,7 @@ public class Compass extends Sensor{
      * @param CompassRollAxisVector
      */
     public void setCompassRollAxisVector(Vector3f CompassRollAxisVector) {
-        this.CompassRollAxisVector = CompassRollAxisVector;
+         variables.put("CompassRollAxisVector", CompassRollAxisVector);
     }
 
     /**
@@ -311,15 +303,15 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassStartVector() {
-        return CompassStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     /**
      *
      * @param CompassStartVector
      */
-    public void setCompassStartVector(Vector3f CompassStartVector) {
-        this.CompassStartVector = CompassStartVector;
+    public void setCompassStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
 
     /**
@@ -327,7 +319,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassYawAxisVector() {
-        return CompassYawAxisVector;
+        return (Vector3f)variables.get("CompassYawAxisVector");
     }
 
     /**
@@ -335,7 +327,7 @@ public class Compass extends Sensor{
      * @param CompassYawAxisVector
      */
     public void setCompassYawAxisVector(Vector3f CompassYawAxisVector) {
-        this.CompassYawAxisVector = CompassYawAxisVector;
+        variables.put("CompassYawAxisVector", CompassYawAxisVector);
     }
 
     /**

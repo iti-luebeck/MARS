@@ -34,13 +34,10 @@ import mars.KeyConfig;
 import mars.Keys;
 import mars.Manipulating;
 import mars.Moveable;
-import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
-import mars.ros.MARSNodeMain;
 import mars.xml.HashMapAdapter;
 import mars.xml.Vector3fAdapter;
-import org.ros.message.MessageListener;
 
 /**
  * This is the default servo class. It uses the Dynamixel AX-12 servos as it basis.
@@ -54,28 +51,20 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     //servo
     private Geometry ServoStart;
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f ServoStartVector = new Vector3f(0,0,0);
     private Geometry ServoEnd;
-    @XmlElement(name="ServoDirection")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f ServoDirection = Vector3f.UNIT_Z;
     
     @XmlElement(name="Slaves")
     private List<String> slaves_names = new ArrayList<String>();
     private List<Moveable> slaves = new ArrayList<Moveable>();
     
-    @XmlElement
     protected  float OperatingAngle = 5.235987f;
     
-    @XmlElement
     protected int ServoNeutralPosition = 0;
     
-    @XmlElement
     protected float Resolution = 0.005061f;
     
-    @XmlElement
     protected float SpeedPerDegree = 0.003266f;
     
     private int current_angle_iteration = 0;
@@ -106,7 +95,6 @@ public class Servo extends Actuator implements Manipulating,Keys{
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
         } catch (IOException e) { }
-        computeAngleIterations();
     }
     /**
      *
@@ -123,7 +111,6 @@ public class Servo extends Actuator implements Manipulating,Keys{
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
         } catch (IOException e) { }
-        computeAngleIterations();
     }
 
     /**
@@ -140,52 +127,65 @@ public class Servo extends Actuator implements Manipulating,Keys{
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
         } catch (IOException e) { }
+    }
+
+    @Override
+    public void initAfterJAXB() {
+        super.initAfterJAXB();
         computeAngleIterations();
     }
-    
+
     private void computeAngleIterations(){
-        max_angle_iteration = (int)(Math.round(((OperatingAngle/2)/Resolution)));
-        SpeedPerIteration = (Resolution)*((SpeedPerDegree)/((float)(Math.PI*2)/360f));
+        max_angle_iteration = (int)(Math.round(((getOperatingAngle()/2)/getResolution())));
+        SpeedPerIteration = (getResolution())*((getSpeedPerDegree())/((float)(Math.PI*2)/360f));
     }
 
     public Vector3f getServoDirection() {
-        return ServoDirection;
+        return (Vector3f)variables.get("ServoDirection");
     }
 
     public void setServoDirection(Vector3f ServoDirection) {
-        this.ServoDirection = ServoDirection;
+        variables.put("ServoDirection", ServoDirection);
     }
 
     public Vector3f getServoStartVector() {
-        return ServoStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
-    public void setServoStartVector(Vector3f ServoStartVector) {
-        this.ServoStartVector = ServoStartVector;
+    public void setServoStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
     
     public float getOperatingAngle() {
-        return OperatingAngle;
+        return (Float)variables.get("OperatingAngle");
     }
 
     public void setOperatingAngle(float OperatingAngle) {
-        this.OperatingAngle = OperatingAngle;
+        variables.put("OperatingAngle", OperatingAngle);
     }
 
     public float getResolution() {
-        return Resolution;
+        return (Float)variables.get("Resolution");
     }
 
     public void setResolution(float Resolution) {
-        this.Resolution = Resolution;
+        variables.put("Resolution", Resolution);
+    }
+    
+    public int getServoNeutralPosition() {
+        return (Integer)variables.get("ServoNeutralPosition");
+    }
+
+    public void setServoNeutralPosition(float ServoNeutralPosition) {
+        variables.put("ServoNeutralPosition", ServoNeutralPosition);
     }
 
     public float getSpeedPerDegree() {
-        return SpeedPerDegree;
+        return (Float)variables.get("SpeedPerDegree");
     }
 
     public void setSpeedPerDegree(float SpeedPerDegree) {
-        this.SpeedPerDegree = SpeedPerDegree;
+        variables.put("SpeedPerDegree", SpeedPerDegree);
     }
     
      /**
@@ -198,7 +198,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         ServoStart.setMaterial(mark_mat7);
-        ServoStart.setLocalTranslation(ServoStartVector);
+        ServoStart.setLocalTranslation(getServoStartVector());
         ServoStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoStart);
 
@@ -207,12 +207,12 @@ public class Servo extends Actuator implements Manipulating,Keys{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.White);
         ServoEnd.setMaterial(mark_mat9);
-        ServoEnd.setLocalTranslation(ServoStartVector.add(this.ServoDirection));
+        ServoEnd.setLocalTranslation(getServoStartVector().add(getServoDirection()));
         ServoEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoEnd);
 
-        Vector3f ray_start = ServoStartVector;
-        Vector3f ray_direction = ServoDirection;
+        Vector3f ray_start = getServoStartVector();
+        Vector3f ray_direction = getServoDirection();
         Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.White);
@@ -266,7 +266,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
                     final int fin_do_it_iterations = do_it_iterations;
                     Future fut = this.simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {
-                            moves.updateRotation(Resolution*(fin_do_it_iterations+current_angle_iteration+ServoNeutralPosition));
+                            moves.updateRotation(getResolution()*(fin_do_it_iterations+current_angle_iteration+getServoNeutralPosition()));
                             return null;
                         }
                     });
@@ -311,6 +311,11 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     public int getCurentAnglePosition(){
         return this.current_angle_iteration;
+    }
+    
+    @Override
+    public HashMap<String,String> getAllActions(){
+        return action_mapping;
     }
     
     /**

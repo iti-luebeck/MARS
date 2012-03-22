@@ -1059,6 +1059,9 @@ public class MARSView extends FrameView {
         jLabel37 = new javax.swing.JLabel();
         jButton33 = new javax.swing.JButton();
         jCheckBox3 = new javax.swing.JCheckBox();
+        booleanPopUp = new javax.swing.JPopupMenu();
+        booleanPopUpEnable = new javax.swing.JMenuItem();
+        booleanPopUpDisable = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2120,7 +2123,7 @@ public class MARSView extends FrameView {
         jColorChooser1.setName("jColorChooser1"); // NOI18N
 
         auv_rotate_vector_dialog.setTitle(resourceMap.getString("auv_rotate_vector_dialog.title")); // NOI18N
-        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 214));
+        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 224));
         auv_rotate_vector_dialog.setName("auv_rotate_vector_dialog"); // NOI18N
 
         jButton22.setText(resourceMap.getString("jButton22.text")); // NOI18N
@@ -2738,6 +2741,26 @@ public class MARSView extends FrameView {
                 .addComponent(jButton701)
                 .addContainerGap())
         );
+
+        booleanPopUp.setName("booleanPopUp"); // NOI18N
+
+        booleanPopUpEnable.setText(resourceMap.getString("booleanPopUpEnable.text")); // NOI18N
+        booleanPopUpEnable.setName("booleanPopUpEnable"); // NOI18N
+        booleanPopUpEnable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpEnableActionPerformed(evt);
+            }
+        });
+        booleanPopUp.add(booleanPopUpEnable);
+
+        booleanPopUpDisable.setText(resourceMap.getString("booleanPopUpDisable.text")); // NOI18N
+        booleanPopUpDisable.setName("booleanPopUpDisable"); // NOI18N
+        booleanPopUpDisable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpDisableActionPerformed(evt);
+            }
+        });
+        booleanPopUp.add(booleanPopUpDisable);
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -3641,7 +3664,28 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
                     }else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
-                    } 
+                    }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                         if(hashwrap.getUserData() instanceof Boolean){
+                             if((Boolean)hashwrap.getUserData()){
+                                 booleanPopUpEnable.setVisible(false);
+                                 booleanPopUpDisable.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable.setVisible(true);
+                                 booleanPopUpDisable.setVisible(false);
+                             }
+                             booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                         }
+                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                        if((Boolean)selPath.getLastPathComponent()){
+                                 booleanPopUpEnable.setVisible(false);
+                                 booleanPopUpDisable.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable.setVisible(true);
+                                 booleanPopUpDisable.setVisible(false);
+                             }
+                        booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
                     /*if (selPath.getLastPathComponent().toString().equals(s_auv)) {   
                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
                     } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {   
@@ -3720,6 +3764,32 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_simob_treeMouseClicked
 
+    private void booleanPopUpEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnableActionPerformed
+        if (auv_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)auv_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                mod.valueForPathChanged(auv_tree.getSelectionPath(), true);
+            }
+        }else if(auv_tree.getLastSelectedPathComponent() instanceof Boolean){
+            AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+            mod.valueForPathChanged(auv_tree.getSelectionPath(), true);
+        }
+    }//GEN-LAST:event_booleanPopUpEnableActionPerformed
+
+    private void booleanPopUpDisableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisableActionPerformed
+        if (auv_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)auv_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                mod.valueForPathChanged(auv_tree.getSelectionPath(), false);
+            }
+        }else if(auv_tree.getLastSelectedPathComponent() instanceof Boolean){
+            AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+            mod.valueForPathChanged(auv_tree.getSelectionPath(), false);
+        }
+    }//GEN-LAST:event_booleanPopUpDisableActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3752,6 +3822,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTree auv_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor;
     private DefaultTreeCellRenderer renderer;
+    private javax.swing.JPopupMenu booleanPopUp;
+    private javax.swing.JMenuItem booleanPopUpDisable;
+    private javax.swing.JMenuItem booleanPopUpEnable;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;
     private javax.swing.JColorChooser color_dialog;

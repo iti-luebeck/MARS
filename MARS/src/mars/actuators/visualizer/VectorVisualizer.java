@@ -35,15 +35,9 @@ public class VectorVisualizer extends Actuator{
 
     //motor
     private Geometry VectorVisualizerStart;
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f VectorVisualizerStartVector = new Vector3f(0,0,0);
     private Geometry VectorVisualizerEnd;
-    @XmlElement(name="VectorVisualizerDirection")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f VectorVisualizerDirection = Vector3f.UNIT_X;
-    @XmlElement(name="Color")
-    @XmlJavaTypeAdapter(ColorRGBAAdapter.class)
     private ColorRGBA color = new ColorRGBA();
     
     private Node Rotation_Node = new Node();
@@ -80,8 +74,8 @@ public class VectorVisualizer extends Actuator{
      *
      * @param MotorStartVector
      */
-    public void setVectorVisualizerPosition(Vector3f VectorVisualizerStartVector){
-        this.VectorVisualizerStartVector = VectorVisualizerStartVector;
+    public void setVectorVisualizerPosition(Vector3f Position){
+        variables.put("Position", Position);
     }
 
     /**
@@ -89,7 +83,7 @@ public class VectorVisualizer extends Actuator{
      * @param MotorDirection
      */
     public void setVectorVisualizerDirection(Vector3f VectorVisualizerDirection){
-        this.VectorVisualizerDirection = VectorVisualizerDirection;
+        variables.put("VectorVisualizerDirection", VectorVisualizerDirection);
     }
 
     /**
@@ -97,7 +91,7 @@ public class VectorVisualizer extends Actuator{
      * @return
      */
     public Vector3f getVectorVisualizerDirection() {
-        return VectorVisualizerDirection;
+         return (Vector3f)variables.get("VectorVisualizerDirection");
     }
 
     /**
@@ -105,15 +99,15 @@ public class VectorVisualizer extends Actuator{
      * @return
      */
     public Vector3f getVectorVisualizerStartVector() {
-        return VectorVisualizerStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     public ColorRGBA getColor() {
-        return color;
+        return (ColorRGBA)variables.get("Color");
     }
 
-    public void setColor(ColorRGBA color) {
-        this.color = color;
+    public void setColor(ColorRGBA Color) {
+        variables.put("Color", Color);
     }
 
     /**
@@ -137,13 +131,13 @@ public class VectorVisualizer extends Actuator{
         mark_mat9.setColor("Color", getColor());
         VectorVisualizerEnd.setMaterial(mark_mat9);
         //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        VectorVisualizerEnd.setLocalTranslation(this.VectorVisualizerDirection);
+        VectorVisualizerEnd.setLocalTranslation(getVectorVisualizerDirection());
         VectorVisualizerEnd.updateGeometricState();
         //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(VectorVisualizerEnd);
 
-        Vector3f ray_start = VectorVisualizerStartVector;
-        Vector3f ray_direction = VectorVisualizerDirection;
+        Vector3f ray_start = getVectorVisualizerStartVector();
+        Vector3f ray_direction = getVectorVisualizerDirection();
         arrow = new Arrow(ray_direction.mult(1f));
         ArrowGeom = new Geometry("VectorVisualizer_Arrow", arrow);
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -154,7 +148,7 @@ public class VectorVisualizer extends Actuator{
         //PhysicalExchanger_Node.attachChild(ArrowGeom);
         Rotation_Node.attachChild(ArrowGeom);
 
-        PhysicalExchanger_Node.setLocalTranslation(VectorVisualizerStartVector);
+        PhysicalExchanger_Node.setLocalTranslation(getVectorVisualizerStartVector());
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }

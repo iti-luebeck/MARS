@@ -17,7 +17,7 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 /**
- * Is used to check if a cell in the JTre is editable or not.
+ * Is used to check if a cell in the JTree is editable or not.
  * @author Thomas Tosik
  */
 public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellEditor {

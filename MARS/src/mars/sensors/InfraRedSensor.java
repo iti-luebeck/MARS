@@ -19,15 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
-import mars.MARS_Main;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
-import mars.xml.Vector3fAdapter;
 
 /**
  *
@@ -44,28 +40,18 @@ public class InfraRedSensor extends Sensor{
      */
     protected Geometry End;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f StartVector = new Vector3f(0,0,0);
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f Direction = new Vector3f(0,0,0);
 
     private Node detectable;
 
     //Maximum sonar range
-    @XmlElement
     private float MaxRange = 50f;
-    @XmlElement
     private float MinRange = 0.1f;
 
-    @XmlElement
     private boolean angular_damping = false;
-    @XmlElement
     private float angular_factor = 1.0f;
-    @XmlElement
     private boolean length_damping = false;
-    @XmlElement
     private float length_factor = 1.0f;
     
     //ROS stuff
@@ -129,7 +115,7 @@ public class InfraRedSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Red);
         Start.setMaterial(mark_mat7);
-        Start.setLocalTranslation(StartVector);
+        Start.setLocalTranslation(getPosition());
         Start.updateGeometricState();
         PhysicalExchanger_Node.attachChild(Start);
 
@@ -138,12 +124,12 @@ public class InfraRedSensor extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
         End.setMaterial(mark_mat9);
-        End.setLocalTranslation(StartVector.add(Direction));
+        End.setLocalTranslation(getPosition().add(getDirection()));
         End.updateGeometricState();
         PhysicalExchanger_Node.attachChild(End);
 
-        Vector3f ray_start = StartVector;
-        Vector3f ray_direction = (StartVector.add(Direction)).subtract(ray_start);
+        Vector3f ray_start = getPosition();
+        Vector3f ray_direction = (getPosition().add(getDirection())).subtract(ray_start);
         Geometry mark4 = new Geometry("Infra_Arrow", new Arrow(ray_direction.mult(getMaxRange())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Red);
@@ -167,7 +153,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public float getAngular_factor() {
-        return angular_factor;
+        return (Float)variables.get("angular_factor");
     }
 
     /**
@@ -175,7 +161,7 @@ public class InfraRedSensor extends Sensor{
      * @param angular_factor
      */
     public void setAngular_factor(float angular_factor) {
-        this.angular_factor = angular_factor;
+        variables.put("angular_factor", angular_factor);
     }
 
     /**
@@ -183,7 +169,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public float getLength_factor() {
-        return length_factor;
+        return (Float)variables.get("length_factor");
     }
 
     /**
@@ -191,7 +177,7 @@ public class InfraRedSensor extends Sensor{
      * @param length_factor
      */
     public void setLength_factor(float length_factor) {
-        this.length_factor = length_factor;
+        variables.put("length_factor", length_factor);
     }
 
     /**
@@ -199,7 +185,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public boolean isAngular_damping() {
-        return angular_damping;
+        return (Boolean)variables.get("angular_damping");
     }
 
     /**
@@ -207,7 +193,7 @@ public class InfraRedSensor extends Sensor{
      * @param angular_damping
      */
     public void setAngular_damping(boolean angular_damping) {
-        this.angular_damping = angular_damping;
+        variables.put("angular_damping", angular_damping);
     }
 
     /**
@@ -215,7 +201,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public boolean isLength_damping() {
-        return length_damping;
+        return (Boolean)variables.get("length_damping");
     }
 
     /**
@@ -223,7 +209,7 @@ public class InfraRedSensor extends Sensor{
      * @param length_damping
      */
     public void setLength_damping(boolean length_damping) {
-        this.length_damping = length_damping;
+        variables.put("length_damping", length_damping);
     }
 
     /**
@@ -246,8 +232,8 @@ public class InfraRedSensor extends Sensor{
      *
      * @param StartVector 
      */
-    public void setPosition(Vector3f StartVector){
-        this.StartVector = StartVector;
+    public void setPosition(Vector3f Position){
+        variables.put("Position", Position);
     }
 
     /**
@@ -255,7 +241,23 @@ public class InfraRedSensor extends Sensor{
      * @param Direction 
      */
     public void setDirection(Vector3f Direction){
-        this.Direction = Direction;
+        variables.put("Direction", Direction);
+    }
+    
+    /**
+     *
+     * @param StartVector 
+     */
+    public Vector3f getPosition(){
+        return (Vector3f)variables.get("Position");
+    }
+
+    /**
+     * 
+     * @param Direction 
+     */
+    public Vector3f getDirection(){
+        return (Vector3f)variables.get("Direction");
     }
 
     /**
@@ -263,7 +265,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public float getMaxRange() {
-        return MaxRange;
+        return (Float)variables.get("MaxRange");
     }
 
     /**
@@ -271,7 +273,7 @@ public class InfraRedSensor extends Sensor{
      * @param MaxRange 
      */
     public void setMaxRange(float MaxRange) {
-        this.MaxRange = MaxRange;
+        variables.put("MaxRange", MaxRange);
     }
 
     /**
@@ -279,7 +281,7 @@ public class InfraRedSensor extends Sensor{
      * @return
      */
     public float getMinRange() {
-        return MinRange;
+        return (Float)variables.get("MinRange");
     }
 
     /**
@@ -287,7 +289,7 @@ public class InfraRedSensor extends Sensor{
      * @param MinRange 
      */
     public void setMinRange(float MinRange) {
-        this.MinRange = MinRange;
+        variables.put("MinRange", MinRange);
     }
     
          /**
@@ -338,12 +340,12 @@ public class InfraRedSensor extends Sensor{
         for (int i = 0; i < results.size(); i++) {
             float distance = results.getCollision(i).getDistance();
             //System.out.println(" d " + i + " " + distance);
-            if(distance >= MaxRange){//too far away
+            if(distance >= getMaxRange()){//too far away
                 //System.out.println("too far away");
                 break;
             }else if(results.getCollision(i).getContactPoint().y >= pe.getWater_height()){//forget hits over water
                 break;
-            }else if ((distance > MinRange)) {
+            }else if ((distance > getMinRange())) {
                 //first = results2.getCollision(i).getContactPoint();
                 Vector3f cnormal = results.getCollision(i).getContactNormal();
                 Vector3f direction_negated = direction.negate();

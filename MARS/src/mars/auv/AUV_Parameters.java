@@ -281,7 +281,15 @@ public class AUV_Parameters implements CellEditorListener{
                 new_physics_control.setDamping(getDamping_linear(), getDamping_angular());
                 auv.setPhysicsControl(new_physics_control);
             }*/
-        }
+        }else if(target.equals("physical_exchanger") && hashmapname.equals("Debug")){
+            auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
+        }else if(target.equals("centers") && hashmapname.equals("Debug")){
+            auv.setCentersVisible(isDebugCenters());
+        }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
+            auv.setWaypointsEnabled(isWaypoints_enabled());
+        }  else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
+            auv.setWayPointsVisible(isWaypoints_visible());
+        }       
     }
     
     /**

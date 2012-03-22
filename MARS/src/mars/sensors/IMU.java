@@ -216,8 +216,8 @@ public class IMU extends Sensor{
         fl.angular_velocity = ang_vec;
         Quaternion quat = new Quaternion();
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        jme3_quat.fromAngles(comp.getPitchRadiant(), comp.getYawRadiant(), comp.getRollRadiant());
-        
+        jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), comp.getPitchRadiant());
+        //System.out.println("jme3_quat: " + jme3_quat);
         com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         //jme3_quat.fromAngles(0f, 0f, comp.getPitchRadiant());
@@ -230,9 +230,9 @@ public class IMU extends Sensor{
         quat.z = jme3_quat.getX();
         quat.w = jme3_quat.getW();*/
         //System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
-        //System.out.println("jme3_quat: " + jme3_quat);
+        //System.out.println("jme3_quat_local: " + jme3_quat);
         float[] ff = jme3_quat.toAngles(null);
-        //System.out.println("jme3_quat: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
+        //System.out.println("yaw_loc: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
         /*Vector3f angax = new Vector3f();
         jme3_quat.toAngleAxis(angax);
         System.out.println("angax: " + angax);

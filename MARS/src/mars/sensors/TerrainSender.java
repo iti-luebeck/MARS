@@ -136,8 +136,8 @@ public class TerrainSender extends Sensor{
         Quaternion ter_orientation = new Quaternion();
         //ter_orientation.fromAngles(0f, FastMath.PI, 0f);
         orientation.x = ter_orientation.getX();
-        orientation.y = ter_orientation.getZ();//dont forget to switch y and z!!!!
-        orientation.z = ter_orientation.getY();
+        orientation.y = ter_orientation.getY();//dont forget to switch y and z!!!!
+        orientation.z = ter_orientation.getZ();
         orientation.w = ter_orientation.getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;

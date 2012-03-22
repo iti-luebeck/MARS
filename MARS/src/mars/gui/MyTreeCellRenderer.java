@@ -4,12 +4,15 @@
  */
 package mars.gui;
 
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import mars.PhysicalExchanger;
 import mars.actuators.Thruster;
+import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
@@ -73,6 +76,20 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"eye.png")); 
             }else if(hasher.getName().equals("Actuators")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"hand.png")); 
+            }else if(hasher.getName().equals("Noise")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"drop.png")); 
+            }else if(hasher.getName().equals("Actions")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"drill.png")); 
+            }else if(hasher.getName().equals("Variables")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"equalizer.png")); 
+            }else if(hasher.getName().equals("Waypoints")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"draw_vertex.png")); 
+            }else if(hasher.getName().equals("Collision")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"hardware_building_oem.png")); 
+            }else if(hasher.getName().equals("Debug")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"bug.png")); 
+            }else if(hasher.getName().equals("Model")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"yellow_submarine.png")); 
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();
@@ -101,8 +118,25 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"thruster_seabotix.png"));
                         }else if(hasher.getUserData() instanceof VectorVisualizer){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"arrow_up.png"));
+                        }else if(hasher.getUserData() instanceof Servo){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"AX-12.png"));
                         }
                     }
+                }else if(hasher.getUserData() instanceof ColorRGBA){
+                    setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"color.png"));
+                }else if(hasher.getUserData() instanceof Vector3f){
+                    setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"arrow_up.png"));
+                }else if(hasher.getUserData() instanceof Boolean){
+                    if((Boolean)hasher.getUserData() == true){
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"light-bulb.png"));
+                    }else{
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"light-bulb-off.png"));
+                    }    
+                    /*if(hasher.getName().equals("enabled") && ((Boolean)hasher.getUserData()) == true){
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"light-bulb.png"));
+                    }else if(hasher.getName().equals("enabled") && ((Boolean)hasher.getUserData()) == false){
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"light-bulb-off.png"));
+                    }*/
                 }
             }
         }else if(value instanceof AUV_Parameters){

@@ -35,16 +35,11 @@ public class PingDetector extends Sensor{
     private Geometry PingStart;
     private Geometry PingDirection;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PingStartVector;
-    @XmlElement(name="PingDirection")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f PingDirectionVector;
 
     private SimObjectManager simob_manager;
 
-    @XmlElement
     private float detection_range = 50.0f;
 
     public PingDetector(){
@@ -70,7 +65,7 @@ public class PingDetector extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.DarkGray);
         PingStart.setMaterial(mark_mat7);
-        PingStart.setLocalTranslation(PingStartVector);
+        PingStart.setLocalTranslation(getPingStartVector());
         PingStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PingStart);
 
@@ -79,12 +74,12 @@ public class PingDetector extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.DarkGray);
         PingDirection.setMaterial(mark_mat9);
-        PingDirection.setLocalTranslation(PingStartVector.add(PingDirectionVector));
+        PingDirection.setLocalTranslation(getPingStartVector().add(getPingDirectionVector()));
         PingDirection.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PingDirection);
 
-        Vector3f ray_start = PingStartVector;
-        Vector3f ray_direction = (PingStartVector.add(PingDirectionVector)).subtract(ray_start);
+        Vector3f ray_start = getPingStartVector();
+        Vector3f ray_direction = (getPingStartVector().add(getPingDirectionVector())).subtract(ray_start);
         Geometry mark4 = new Geometry("PingDetector_Arrow", new Arrow(ray_direction.mult(getDetection_range())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.DarkGray);
@@ -102,15 +97,15 @@ public class PingDetector extends Sensor{
      * @return
      */
     public Vector3f getPingDirectionVector() {
-        return PingDirectionVector;
+        return (Vector3f)variables.get("PingDirection");
     }
 
     /**
      *
      * @param PingDirectionVector
      */
-    public void setPingDirectionVector(Vector3f PingDirectionVector) {
-        this.PingDirectionVector = PingDirectionVector;
+    public void setPingDirectionVector(Vector3f PingDirection) {
+        variables.put("PingDirection", PingDirection);
     }
 
     /**
@@ -118,15 +113,15 @@ public class PingDetector extends Sensor{
      * @return
      */
     public Vector3f getPingStartVector() {
-        return PingStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     /**
      *
      * @param PingStartVector
      */
-    public void setPingStartVector(Vector3f PingStartVector) {
-        this.PingStartVector = PingStartVector;
+    public void setPingStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
 
     /**
@@ -134,7 +129,7 @@ public class PingDetector extends Sensor{
      * @return
      */
     public float getDetection_range() {
-        return detection_range;
+        return (Float)variables.get("detection_range");
     }
 
     /**
@@ -142,7 +137,7 @@ public class PingDetector extends Sensor{
      * @param detection_range
      */
     public void setDetection_range(float detection_range) {
-        this.detection_range = detection_range;
+        variables.put("detection_range", detection_range);
     }
 
     /**
@@ -151,12 +146,12 @@ public class PingDetector extends Sensor{
      */
     public float getNearestPingerDistance(){
         HashMap<String,SimObject> simobs = simob_manager.getSimObjects();
-        float ret = detection_range;
+        float ret = getDetection_range();
         for ( String elem : simobs.keySet() ){
             SimObject simob = (SimObject)simobs.get(elem);
             if(simob.isPinger()){
                 float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
-                if( distance <= detection_range && distance < ret ){
+                if( distance <= getDetection_range() && distance < ret ){
                    ret = distance;
                 }
             }
@@ -173,10 +168,10 @@ public class PingDetector extends Sensor{
         SimObject simob = simob_manager.getSimObject(pinger);
         if(simob != null && simob.isPinger()){
             float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
-            if(distance <= detection_range){
+            if(distance <= getDetection_range()){
                 return distance;
             }else{
-                return detection_range;
+                return getDetection_range();
             }
         }
         return 0.0f;

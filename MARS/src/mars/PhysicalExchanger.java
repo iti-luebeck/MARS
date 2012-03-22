@@ -13,12 +13,13 @@ import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
+import mars.xml.HashMapAdapter;
 
 /**
  * This is the basic interface for all sensors/actuators
@@ -35,6 +36,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public abstract void init(Node auv_node);
     
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
 
     /**
@@ -48,7 +50,6 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /**
      *
      */
-    @XmlElement(name="name")
     protected String PhysicalExchangerName = "";
     /**
      *
@@ -64,7 +65,6 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /**
      * 
      */
-    @XmlElement
     protected  boolean enabled = true;
     /*
      * 
@@ -72,12 +72,10 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /**
      * 
      */
-    @XmlElement
     protected int ros_publish_rate = 1000;
     /**
      * 
      */
-    @XmlElement
     protected String ros_frame_id = "/map";
     /*
      * 
@@ -153,7 +151,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param name
      */
     public void setPhysicalExchangerName(String name){
-        PhysicalExchangerName = name;
+        //PhysicalExchangerName = name;
+        variables.put("name", name);
         PhysicalExchanger_Node.setName(name);
     }
 
@@ -162,7 +161,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @return
      */
     public String getPhysicalExchangerName(){
-        return PhysicalExchangerName;
+        return (String)variables.get("name");
     }
 
     /**
@@ -175,7 +174,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @return
      */
     public boolean isEnabled() {
-        return enabled;
+        return (Boolean)variables.get("enabled");
     }
 
     /**
@@ -183,7 +182,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param enabled
      */
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        variables.put("enabled", enabled);
     }
 
     @Override
@@ -273,7 +272,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @return
      */
     public int getRos_publish_rate() {
-        return ros_publish_rate;
+        return (Integer)variables.get("ros_publish_rate");
     }
 
     /**
@@ -281,15 +280,16 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param ros_publish_rate
      */
     public void setRos_publish_rate(int ros_publish_rate) {
-        this.ros_publish_rate = ros_publish_rate;
+        variables.put("ros_publish_rate",ros_publish_rate);
     }
 
-    public String getRos_frame_id() {
-        return ros_frame_id;
+    public String getRos_frame_id() {       
+        return (String)variables.get("ros_frame_id");
     }
 
     public void setRos_frame_id(String ros_frame_id) {
-        this.ros_frame_id = ros_frame_id;
+        //this.ros_frame_id = ros_frame_id;
+        variables.put("ros_frame_id",ros_frame_id);
     }
     
     /**
@@ -318,15 +318,32 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         return variables;
     }
     
+    public HashMap<String,String> getAllActions(){
+        return null;
+    }
+    
     public void initAfterJAXB(){
-        
+       /* variables.put("noise_type", getNoise_type());
+        variables.put("noise_value", getNoise_value());
+        variables.put("name",getPhysicalExchangerName());
+        variables.put("enabled", isEnabled());
+        variables.put("ros_publish_rate", getRos_publish_rate());
+        variables.put("ros_frame_id", getRos_frame_id());*/
     };
     
     public String getIcon(){
-        return "";
+        return (String)variables.get("icon");
     }
     
     public String getIconDND(){
-        return "";
+        return (String)variables.get("dnd_icon");
+    }
+    
+    public void setIcon(String icon){
+        variables.put("icon",icon);
+    }
+    
+    public void setIconDND(String dnd_icon){
+        variables.put("dnd_icon",dnd_icon);
     }
 }

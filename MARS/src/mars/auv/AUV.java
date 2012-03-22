@@ -13,6 +13,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -305,4 +306,5 @@ public interface AUV{
     public void setWayPointsVisible(boolean visible);
     public void setWaypointsEnabled(boolean enabled);
     public WayPoints getWaypoints();
+    public void updateState(TreePath path);
 }

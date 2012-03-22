@@ -188,431 +188,969 @@
     <Sensors>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar_ground">
             <value xsi:type="imagenexSonar852Echo">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>sonar_ground</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.2</x>
-                    <y>0.05</y>
-                    <z>0.3</z>
-                </Position>
-                <SonarDirection>
-                    <x>0.0</x>
-                    <y>-1.0</y>
-                    <z>0.0</z>
-                </SonarDirection>
-                <SonarUpDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </SonarUpDirection>
-                <SonarMaxRange>50.0</SonarMaxRange>
-                <SonarMinRange>0.0</SonarMinRange>
-                <beam_width>0.04363323</beam_width>
-                <beam_height>0.38397244</beam_height>
-                <beam_ray_height_resolution>3</beam_ray_height_resolution>
-                <beam_ray_width_resolution>3</beam_ray_width_resolution>
-                <Scanning>false</Scanning>
-                <scanning_resolution>0.05235988</scanning_resolution>
-                <ScanningGain>50</ScanningGain>
-                <Debug>false</Debug>
-                <angular_damping>false</angular_damping>
-                <angular_factor>1.0</angular_factor>
-                <length_damping>false</length_damping>
-                <length_factor>1.0</length_factor>
-                <SonarConeType>0</SonarConeType>
+			    <variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">sonar_ground</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">250</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Scanning">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Debug">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_height_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_width_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ScanningGain">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">50</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarConeType">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMaxRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">50.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMinRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_width">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.04363323</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_height">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.38397244</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="scanning_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.05235988</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.2</x>
+							<y>0.05</y>
+							<z>0.3</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarDirection">
+						<value>
+							<x>0.0</x>
+							<y>-1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarUpDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">radar.png</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="pressure/depth">
             <value xsi:type="pressureSensor">
-                <noise_type>1</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>pressure/depth</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>100</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.12</x>
-                    <y>0.19</y>
-                    <z>-0.31</z>
-                </Position>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">pressure/depth</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.12</x>
+							<y>0.19</y>
+							<z>-0.31</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar/scan">
             <value xsi:type="imagenexSonar852Scanning">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>sonar/scan</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>100</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.0125</x>
-                    <y>-0.03</y>
-                    <z>0.0</z>
-                </Position>
-                <SonarDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </SonarDirection>
-                <SonarUpDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </SonarUpDirection>
-                <SonarMaxRange>50.0</SonarMaxRange>
-                <SonarMinRange>0.5</SonarMinRange>
-                <beam_width>0.04363323</beam_width>
-                <beam_height>0.38397244</beam_height>
-                <beam_ray_height_resolution>4</beam_ray_height_resolution>
-                <beam_ray_width_resolution>4</beam_ray_width_resolution>
-                <Scanning>true</Scanning>
-                <scanning_resolution>0.05235988</scanning_resolution>
-                <ScanningGain>10</ScanningGain>
-                <Debug>false</Debug>
-                <angular_damping>true</angular_damping>
-                <angular_factor>1.0</angular_factor>
-                <length_damping>false</length_damping>
-                <length_factor>1.0</length_factor>
-                <SonarConeType>3</SonarConeType>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">sonar/scan</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Scanning">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Debug">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_height_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_width_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ScanningGain">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">10</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarConeType">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMaxRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">50.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMinRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_width">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.04363323</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_height">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.38397244</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="scanning_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.05235988</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.0125</x>
+							<y>-0.03</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarUpDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="gyroscope">
             <value xsi:type="gyroscope">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>gyroscope</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">gyroscope</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="pressure/temp">
             <value xsi:type="temperatureSensor">
-                <noise_type>1</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>pressure/temp</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.12</x>
-                    <y>0.19</y>
-                    <z>-0.31</z>
-                </Position>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">pressure/temp</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.12</x>
+							<y>0.19</y>
+							<z>-0.31</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="posemeter">
             <value xsi:type="posemeter">   
-				<noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>posemeter</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">posemeter</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
 				<Positionmeter>
-					<noise_type>0</noise_type>
-					<noise_value>1.0</noise_value>
-					<name>posemeter_positionmeter</name>
-					<enabled>true</enabled>
-					<ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">posemeter_positionmeter</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
 				</Positionmeter>
 				<Orientationmeter>
-					<noise_type>0</noise_type>
-					<noise_value>1.0</noise_value>
-					<name>posemeter_orientationmeter</name>
-					<enabled>true</enabled>
-					<ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">posemeter_orientationmeter</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
 				</Orientationmeter>
 				<Compass>
-					<noise_type>0</noise_type>
-					<noise_value>1.0</noise_value>
-					<name>imu_compass</name>
-					<enabled>true</enabled>
-					<ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
-					<Position>
-						<x>0.0</x>
-						<y>0.0</y>
-						<z>0.0</z>
-					</Position>
-					<CompassYawAxisVector>
-						<x>0.0</x>
-						<y>1.0</y>
-						<z>0.0</z>
-					</CompassYawAxisVector>
-					<CompassPitchAxisVector>
-						<x>1.0</x>
-						<y>0.0</y>
-						<z>0.0</z>
-					</CompassPitchAxisVector>
-					<CompassRollAxisVector>
-						<x>0.0</x>
-						<y>0.0</y>
-						<z>1.0</z>
-					</CompassRollAxisVector>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">imu_compass</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+							<value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassYawAxisVector">
+							<value>
+								<x>0.0</x>
+								<y>1.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassPitchAxisVector">
+							<value>
+								<x>1.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassRollAxisVector">
+							<value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>1.0</z>
+							</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
 				</Compass>
 			</value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="imu">
             <value xsi:type="imu">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>imu</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">imu</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Accelerometer>
-                    <noise_type>0</noise_type>
-                    <noise_value>1.0</noise_value>
-                    <name>imu_accelerometer</name>
-                    <enabled>true</enabled>
-                    <ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">imu_accelerometer</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
                 </Accelerometer>
                 <Gyroscope>
-                    <noise_type>0</noise_type>
-                    <noise_value>1.0</noise_value>
-                    <name>imu_gyroscope</name>
-                    <enabled>true</enabled>
-                    <ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">imu_gyroscope</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
                 </Gyroscope>
 				<Compass>
-					<noise_type>0</noise_type>
-					<noise_value>1.0</noise_value>
-					<name>imu_compass</name>
-					<enabled>true</enabled>
-					<ros_publish_rate>1000</ros_publish_rate>
-					<ros_frame_id>/map</ros_frame_id>
-					<Position>
-						<x>0.0</x>
-						<y>0.0</y>
-						<z>0.0</z>
-					</Position>
-					<CompassYawAxisVector>
-						<x>0.0</x>
-						<y>1.0</y>
-						<z>0.0</z>
-					</CompassYawAxisVector>
-					<CompassPitchAxisVector>
-						<x>1.0</x>
-						<y>0.0</y>
-						<z>0.0</z>
-					</CompassPitchAxisVector>
-					<CompassRollAxisVector>
-						<x>0.0</x>
-						<y>0.0</y>
-						<z>1.0</z>
-					</CompassRollAxisVector>
+					<variables>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">imu_compass</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+							<value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassYawAxisVector">
+							<value>
+								<x>0.0</x>
+								<y>1.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassPitchAxisVector">
+							<value>
+								<x>1.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+							</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassRollAxisVector">
+							<value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>1.0</z>
+							</value>
+						</entry>
+					</variables>
+					<noise>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+						</entry>
+						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+						</entry>
+					</noise>
 				</Compass>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="bottom_cam">
             <value xsi:type="videoCamera">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>bottom_cam</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.09</x>
-                    <y>0.05</y>
-                    <z>0.16</z>
-                </Position>
-                <CameraDirection>
-                    <x>0.0</x>
-                    <y>-1.0</y>
-                    <z>0.0</z>
-                </CameraDirection>
-                <CameraTopDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </CameraTopDirection>
-                <debug>false</debug>
-                <CameraWidth>640</CameraWidth>
-                <CameraHeight>480</CameraHeight>
-                <CameraAngle>45.0</CameraAngle>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">bottom_cam</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.09</x>
+							<y>0.05</y>
+							<z>0.16</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CameraDirection">
+						<value>
+							<x>0.0</x>
+							<y>-1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CameraTopDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="debug">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraWidth">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">640</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraHeight">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">480</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraAngle">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">45.0</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="compass">
             <value xsi:type="compass">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>compass</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>0.0</z>
-                </Position>
-                <CompassYawAxisVector>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </CompassYawAxisVector>
-                <CompassPitchAxisVector>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </CompassPitchAxisVector>
-                <CompassRollAxisVector>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </CompassRollAxisVector>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">compass</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassYawAxisVector">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassPitchAxisVector">
+						<value>
+							<x>1.0</x>
+							<y>0.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CompassRollAxisVector">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="front_cam">
             <value xsi:type="videoCamera">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>front_cam</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.05</x>
-                    <y>0.15</y>
-                    <z>0.3</z>
-                </Position>
-                <CameraDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </CameraDirection>
-                <CameraTopDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </CameraTopDirection>
-                <debug>false</debug>
-                <CameraWidth>640</CameraWidth>
-                <CameraHeight>480</CameraHeight>
-                <CameraAngle>45.0</CameraAngle>
+						<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">front_cam</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.05</x>
+							<y>0.15</y>
+							<z>0.3</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CameraDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CameraTopDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="debug">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraWidth">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">640</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraHeight">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">480</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CameraAngle">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">45.0</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="sonar/echo">
             <value xsi:type="imagenexSonar852Echo">
-                <noise_type>0</noise_type>
-                <noise_value>0.5</noise_value>
-                <name>sonar/echo</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>100</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.2</x>
-                    <y>0.05</y>
-                    <z>0.3</z>
-                </Position>
-                <SonarDirection>
-                    <x>-1.0</x>
-                    <y>0.0</y>
-                    <z>0.0</z>
-                </SonarDirection>
-                <SonarUpDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </SonarUpDirection>
-                <SonarMaxRange>5.0</SonarMaxRange>
-                <SonarMinRange>0.0</SonarMinRange>
-                <beam_width>0.04363323</beam_width>
-                <beam_height>0.17453292</beam_height>
-                <beam_ray_height_resolution>3</beam_ray_height_resolution>
-                <beam_ray_width_resolution>3</beam_ray_width_resolution>
-                <Scanning>false</Scanning>
-                <scanning_resolution>0.05235988</scanning_resolution>
-                <ScanningGain>50</ScanningGain>
-                <Debug>false</Debug>
-                <angular_damping>false</angular_damping>
-                <angular_factor>1.0</angular_factor>
-                <length_damping>false</length_damping>
-                <length_factor>1.0</length_factor>
-                <SonarConeType>1</SonarConeType>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">sonar/echo</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Scanning">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Debug">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_damping">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_height_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_ray_width_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ScanningGain">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">50</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarConeType">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMaxRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">5.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SonarMinRange">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_width">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.04363323</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="beam_height">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.17453292</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="scanning_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.05235988</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="length_factor">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.2</x>
+							<y>0.05</y>
+							<z>0.3</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarDirection">
+						<value>
+							<x>-1.0</x>
+							<y>0.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="SonarUpDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="ping">
             <value xsi:type="pingDetector">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>ping</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.09</x>
-                    <y>0.1</y>
-                    <z>0.3</z>
-                </Position>
-                <PingDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </PingDirection>
-                <detection_range>50.0</detection_range>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">ping</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.09</x>
+							<y>0.1</y>
+							<z>0.3</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="PingDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="detection_range">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">50.0</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="accelerometer">
             <value xsi:type="accelerometer">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>accelerometer</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">accelerometer</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="positionmeter">
             <value xsi:type="positionmeter">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>positionmeter</name>
-                <enabled>false</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">positionmeter</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="terrainSender">
             <value xsi:type="terrainSender">
-                <noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>terrainsender</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>2000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">terrainsender</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">2000</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
     </Sensors>
     <Actuators>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downBack">
             <value xsi:type="seaBotixThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>motors/downBack</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.015</x>
-                    <y>-0.02</y>
-                    <z>-0.26</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </MotorDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/downBack</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.015</x>
+							<y>-0.02</y>
+							<z>-0.26</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="MotorDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
@@ -631,24 +1169,48 @@
         </entry>	
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="canon">
             <value xsi:type="canon">
-                <noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>canon</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-				<CanonForce>10.0</CanonForce>
-				<RecoilForce>10.0</RecoilForce>
-				<Position>
-					<x>0.0</x>
-					<y>0.3</y>
-					<z>0.0</z>
-				</Position>
-				<CanonDirection>
-					<x>0.0</x>
-					<y>1.0</y>
-					<z>0.0</z>
-				</CanonDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">canon</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.0</x>
+							<y>0.3</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="CanonDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="CanonForce">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="RecoilForce">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
 				<Actions>
 					<entry xsi:type="myHashMapEntryTypeObject" key="canon_shoot">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">shoot</value>
@@ -658,27 +1220,61 @@
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="servoTitan">
             <value xsi:type="dynamixelAX12PLUS">
-                <noise_type>0</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>servoTitan</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.0</x>
-                    <y>0.3</y>
-                    <z>0.0</z>
-                </Position>
-                <ServoDirection>
-                    <x>1.0</x>
-                    <y>0.0</y>
-                    <z>0.0</z>
-                </ServoDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">servoTitan</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.0</x>
+							<y>0.3</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="ServoDirection">
+						<value>
+							<x>1.0</x>
+							<y>0.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ServoNeutralPosition">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="SpeedPerDegree">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.003266</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="Resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.005061</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="OperatingAngle">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">5.235987</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">AX-12.png</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">AX-12_dnd.png</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Slaves>canon</Slaves>
-                <OperatingAngle>5.235987</OperatingAngle>
-                <Resolution>0.005061</Resolution>
-                <SpeedPerDegree>0.003266</SpeedPerDegree>
-				<ServoNeutralPosition>0</ServoNeutralPosition>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="servo">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">setDesiredAnglePosition</value>
@@ -694,48 +1290,90 @@
         </entry>
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="vec">
             <value xsi:type="vectorVisualizer">
-                <noise_type>0</noise_type>
-				<noise_value>1.0</noise_value>
-				<name>vec</name>
-				<enabled>true</enabled>
-				<ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-				<Position>
-					<x>0.0</x>
-					<y>0.0</y>
-					<z>0.0</z>
-				</Position>
-				<VectorVisualizerDirection>
-					<x>0.0</x>
-					<y>2.0</y>
-					<z>0.0</z>
-				</VectorVisualizerDirection>
-				<Color>
-					<a>0.0</a>
-					<b>1.0</b>
-					<g>1.0</g>
-					<r>1.0</r>
-				</Color>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">vec</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="VectorVisualizerDirection">
+						<value>
+							<x>0.0</x>
+							<y>2.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeColorRGBA" key="Color">
+                        <value>
+                            <a>0.0</a>
+                            <b>1.0</b>
+                            <g>1.0</g>
+                            <r>1.0</r>
+                        </value>
+                    </entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/downFront">
             <value xsi:type="seaBotixThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>motors/downFront</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.015</x>
-                    <y>-0.02</y>
-                    <z>0.215</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>1.0</y>
-                    <z>0.0</z>
-                </MotorDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/downFront</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.015</x>
+							<y>-0.02</y>
+							<z>0.215</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="MotorDirection">
+						<value>
+							<x>0.0</x>
+							<y>1.0</y>
+							<z>0.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_forward</value>
@@ -754,22 +1392,42 @@
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/left">
             <value xsi:type="seaBotixThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>motors/left</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>-0.2775</x>
-                    <y>0.12</y>
-                    <z>-0.09</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </MotorDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/left</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>-0.2775</x>
+							<y>0.12</y>
+							<z>-0.09</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="MotorDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>
@@ -797,22 +1455,42 @@
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/right">
             <value xsi:type="seaBotixThruster">
-                <noise_type>3</noise_type>
-                <noise_value>1.0</noise_value>
-                <name>motors/right</name>
-                <enabled>true</enabled>
-                <ros_publish_rate>1000</ros_publish_rate>
-				<ros_frame_id>/map</ros_frame_id>
-                <Position>
-                    <x>0.2775</x>
-                    <y>0.12</y>
-                    <z>-0.09</z>
-                </Position>
-                <MotorDirection>
-                    <x>0.0</x>
-                    <y>0.0</y>
-                    <z>1.0</z>
-                </MotorDirection>
+				<variables>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/right</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="Position">
+						<value>
+							<x>0.2775</x>
+							<y>0.12</y>
+							<z>-0.09</z>
+						</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="MotorDirection">
+						<value>
+							<x>0.0</x>
+							<y>0.0</y>
+							<z>1.0</z>
+						</value>
+					</entry>
+				</variables>
+				<noise>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_type">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="noise_value">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+					</entry>
+				</noise>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thruster_back</value>

@@ -32,8 +32,6 @@ public class TemperatureSensor extends Sensor{
 
     private Geometry TemperatureSensorStart;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f TemperatureSensorStartVector;
 
     ///ROS stuff
@@ -77,7 +75,7 @@ public class TemperatureSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         TemperatureSensorStart.setMaterial(mark_mat7);
-        TemperatureSensorStart.setLocalTranslation(TemperatureSensorStartVector);
+        TemperatureSensorStart.setLocalTranslation(getTemperatureSensorStartVector());
         TemperatureSensorStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(TemperatureSensorStart);
         auv_node.attachChild(PhysicalExchanger_Node);
@@ -116,15 +114,15 @@ public class TemperatureSensor extends Sensor{
      * @return
      */
     public Vector3f getTemperatureSensorStartVector() {
-        return TemperatureSensorStartVector;
+        return (Vector3f)variables.get("Position");
     }
 
     /**
      *
      * @param TemperatureSensorStartVector
      */
-    public void setTemperatureSensorStartVector(Vector3f TemperatureSensorStartVector) {
-        this.TemperatureSensorStartVector = TemperatureSensorStartVector;
+    public void setTemperatureSensorStartVector(Vector3f Position) {
+        variables.put("Position", Position);
     }
 
     /**

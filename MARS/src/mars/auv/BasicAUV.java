@@ -6,6 +6,7 @@
 package mars.auv;
 
 import com.jme3.renderer.queue.RenderQueue;
+import javax.swing.tree.TreePath;
 import mars.CollisionType;
 import mars.actuators.Thruster;
 import mars.actuators.Actuator;
@@ -1836,5 +1837,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     
     public WayPoints getWaypoints(){
         return WayPoints;
+    }
+
+    public void updateState(TreePath path) {
+        getAuv_param().updateState(path);
     }
 }

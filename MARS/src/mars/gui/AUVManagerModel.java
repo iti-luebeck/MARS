@@ -16,9 +16,11 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import mars.PhysicalExchanger;
+import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
+import mars.sensors.Sensor;
 
 /**
  * This is a TreeModel for the JTree
@@ -99,8 +101,11 @@ public class AUVManagerModel implements TreeModel{
         }else if(parent instanceof ColorRGBA){
             return 4;
         }else if(parent instanceof PhysicalExchanger){
-            PhysicalExchanger pe = (PhysicalExchanger)parent;
-            return 1;
+            if(((PhysicalExchanger)parent).getAllActions() != null){
+                return 3;
+            }else{
+                return 2;
+            }
         }else if(parent instanceof Float){
             return 1;
         }else if(parent instanceof Boolean){
@@ -159,7 +164,14 @@ public class AUVManagerModel implements TreeModel{
             }
             return "null";
         }else if(parent instanceof PhysicalExchanger){
-            
+            PhysicalExchanger pe = (PhysicalExchanger)parent;
+            if(index == 0){
+                return new HashMapWrapper(pe.getAllVariables(),"Variables");
+            }else if (index == 1){
+                return new HashMapWrapper(pe.getAllNoiseVariables(),"Noise");
+            }else if (index == 2 && pe.getAllActions() != null){
+                return new HashMapWrapper(pe.getAllActions(),"Actions");
+            }
             return "null";
         }else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
@@ -223,8 +235,8 @@ public class AUVManagerModel implements TreeModel{
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
-        //System.out.println("*** valueForPathChanged : "
-         //                  + path + " --> " + newValue);
+        System.out.println("*** valueForPathChanged : "
+                           + path + " --> " + newValue);
         
         //save the new value
         saveValue(path, path, newValue);
@@ -254,12 +266,17 @@ public class AUVManagerModel implements TreeModel{
                     hasher.setUserData(value);
                 }else if(preObj instanceof HashMapWrapper){
                     HashMapWrapper hashwrap = (HashMapWrapper)preObj;
-                    HashMap<String,Object> hashmap = (HashMap<String,Object>)hashwrap.getUserData();
-                    hashmap.put(hasher.getName(), value);
+                    if(hashwrap.getUserData() instanceof HashMap){
+                        HashMap<String,Object> hashmap = (HashMap<String,Object>)hashwrap.getUserData();
+                        hashmap.put(hasher.getName(), value);
+                    }/*if(hashwrap.getUserData() instanceof PhysicalExchanger){
+                        PhysicalExchanger pe = (PhysicalExchanger)hashwrap.getUserData();
+                        pe.getAllVariables().put(hasher.getName(), value);
+                    }*///only nessecary when direct variables in PE. But now we have only hashmaps
                     hasher.setUserData(value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);
+                AUV auv = (AUV)originalPath.getPathComponent(1);
+                auv.updateState(path);
             }else if(hasher.getUserData() instanceof Vector3f){
                 Vector3f vec = (Vector3f)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -272,8 +289,8 @@ public class AUVManagerModel implements TreeModel{
                 }else if(preObj.getName().equals("Z")){
                     vec.setZ((Float)value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);
+                AUV auv = (AUV)originalPath.getPathComponent(1);
+                auv.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
                 ColorRGBA color = (ColorRGBA)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -288,8 +305,8 @@ public class AUVManagerModel implements TreeModel{
                 }else if(preObj.getName().equals("A")){
                     color.a = ((Float)value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);    
+                AUV auv = (AUV)originalPath.getPathComponent(1);
+                auv.updateState(path);    
             }
         }
     }

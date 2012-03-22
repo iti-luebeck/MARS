@@ -42,12 +42,8 @@ public class Thruster extends Actuator implements Moveable,Keys{
 
     //motor
     private Geometry MotorStart;
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f MotorStartVector = new Vector3f(0,0,0);
     private Geometry MotorEnd;
-    @XmlElement(name="MotorDirection")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f MotorDirection = Vector3f.UNIT_Z;
     /**
      *
@@ -95,8 +91,8 @@ public class Thruster extends Actuator implements Moveable,Keys{
      *
      * @param MotorStartVector
      */
-    public void setMotorPosition(Vector3f MotorStartVector){
-        this.MotorStartVector = MotorStartVector;
+    public void setMotorPosition(Vector3f Position){
+        variables.put("Position", Position);
     }
 
     /**
@@ -104,7 +100,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
      * @param MotorDirection
      */
     public void setMotorDirection(Vector3f MotorDirection){
-        this.MotorDirection = MotorDirection;
+        variables.put("MotorDirection", MotorDirection);
     }
 
     /**
@@ -112,23 +108,15 @@ public class Thruster extends Actuator implements Moveable,Keys{
      * @return
      */
     public Vector3f getMotorDirection() {
-        return MotorDirection;
+        return (Vector3f)variables.get("MotorDirection");
     }
 
     /**
      *
      * @return
      */
-    public Vector3f getMotorStartVector() {
-        return MotorStartVector;
-    }
-
-    /**
-     *
-     * @param MotorStartVector
-     */
-    public void setMotorStartVector(Vector3f MotorStartVector) {
-        this.MotorStartVector = MotorStartVector;
+    public Vector3f getMotorPosition() {
+        return (Vector3f)variables.get("Position");
     }
 
     /**
@@ -152,13 +140,13 @@ public class Thruster extends Actuator implements Moveable,Keys{
         mark_mat9.setColor("Color", ColorRGBA.Orange);
         MotorEnd.setMaterial(mark_mat9);
         //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        MotorEnd.setLocalTranslation(this.MotorDirection);
+        MotorEnd.setLocalTranslation(getMotorDirection());
         MotorEnd.updateGeometricState();
         //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(MotorEnd);
 
-        Vector3f ray_start = MotorStartVector;
-        Vector3f ray_direction = MotorDirection;
+        Vector3f ray_start = getMotorPosition();
+        Vector3f ray_direction = getMotorDirection();
         Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Orange);
@@ -168,7 +156,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
         //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
 
-        PhysicalExchanger_Node.setLocalTranslation(MotorStartVector);
+        PhysicalExchanger_Node.setLocalTranslation(getMotorPosition());
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
@@ -296,6 +284,11 @@ public class Thruster extends Actuator implements Moveable,Keys{
     @Override
     public String getSlaveName(){
         return getPhysicalExchangerName();
+    }
+    
+    @Override
+    public HashMap<String,String> getAllActions(){
+        return action_mapping;
     }
     
     @Override

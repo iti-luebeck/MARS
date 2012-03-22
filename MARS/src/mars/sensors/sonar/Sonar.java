@@ -55,14 +55,9 @@ public class Sonar extends Sensor{
      */
     protected Geometry SonarUp;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
+
     private Vector3f SonarStartVector = new Vector3f(0,0,0);
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SonarDirection = new Vector3f(0,0,0);
-    @XmlElement
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f SonarUpDirection = new Vector3f(0,0,0);
 
     private Node detectable;
@@ -88,47 +83,30 @@ public class Sonar extends Sensor{
     protected  Node debug_node = new Node("Sonar_Arrow_Debug_Node");
 
     //Maximum sonar range
-    @XmlElement
     private float SonarMaxRange = 50f;
-    @XmlElement
     private float SonarMinRange = 0.1f;
 
     private float SonarScanSection = (float)Math.PI*2f;
 
-    @XmlElement
     private float beam_width = (float)(2.5f*(Math.PI/180f));//the beam width in radiant
-    @XmlElement
     private float beam_height = (float)(22f*(Math.PI/180f));//(float)Math.PI/4f;//the beam height in radiant
-    @XmlElement
     private int beam_ray_height_resolution = 3;//the beam resolution
-    @XmlElement
     private int beam_ray_width_resolution = 3;
 
-    @XmlElement(name="Scanning")
-    private boolean scanning = false;
+    private boolean Scanning = false;
 
-    @XmlElement
     private float scanning_resolution = (float)(3f*(Math.PI/180f));//(float)Math.PI/4f;// when it's a scanning sonar this value defines the scanning resolution (in radiant)
     private int scanning_iterations = 0;
     private float last_head_position = 0f;
 
-    @XmlElement(name="ScanningGain")
-    private int scanning_gain = 50;
+    private int ScanningGain = 50;
 
-    @XmlElement(name="Debug")
-    private boolean debug = false;
+    private boolean Debug = false;
 
-    @XmlElement
     private boolean angular_damping = false;
-    @XmlElement
     private float angular_factor = 1.0f;
-    @XmlElement
     private boolean length_damping = false;
-    @XmlElement
     private float length_factor = 1.0f;
-
-    @XmlElement(name="SonarConeType")
-    private int sonar_cone_type = 0;
 
     private int SonarReturnDataLength = 252;
     
@@ -215,7 +193,7 @@ public class Sonar extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
         SonarStart.setMaterial(mark_mat7);
-        SonarStart.setLocalTranslation(SonarStartVector);
+        SonarStart.setLocalTranslation(getSonarPosition());
         SonarStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarStart);
 
@@ -224,7 +202,7 @@ public class Sonar extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
         SonarEnd.setMaterial(mark_mat9);
-        SonarEnd.setLocalTranslation(SonarStartVector.add(SonarDirection));
+        SonarEnd.setLocalTranslation(getSonarPosition().add(getSonarDirection()));
         SonarEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarEnd);
 
@@ -233,12 +211,12 @@ public class Sonar extends Sensor{
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Blue);
         SonarUp.setMaterial(mark_mat10);
-        SonarUp.setLocalTranslation(SonarStartVector.add(SonarUpDirection));
+        SonarUp.setLocalTranslation(getSonarPosition().add(getSonarUpDirection()));
         SonarUp.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarUp);
 
-        Vector3f ray_start = SonarStartVector;
-        Vector3f ray_direction = (SonarStartVector.add(SonarDirection)).subtract(ray_start);
+        Vector3f ray_start = getSonarPosition();
+        Vector3f ray_direction = (getSonarPosition().add(getSonarDirection())).subtract(ray_start);
         Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(ray_direction.mult(getSonarMaxRange())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.White);
@@ -251,13 +229,13 @@ public class Sonar extends Sensor{
         //angle_node_start.setLocalTranslation(SonarStartVector);
         angle_node_start.updateGeometricState();
         angle_node.attachChild(angle_node_start);
-        angle_node_end.setLocalTranslation(SonarDirection);
+        angle_node_end.setLocalTranslation(getSonarDirection());
         angle_node_end.updateGeometricState();
         angle_node.attachChild(angle_node_end);
-        angle_node_up.setLocalTranslation(SonarUpDirection);
+        angle_node_up.setLocalTranslation(getSonarUpDirection());
         angle_node_up.updateGeometricState();
         angle_node.attachChild(angle_node_up);
-        angle_node.setLocalTranslation(SonarStartVector);
+        angle_node.setLocalTranslation(getSonarPosition());
         angle_node.updateGeometricState();
 
         auv_node.attachChild(angle_node);
@@ -271,15 +249,15 @@ public class Sonar extends Sensor{
      * @return
      */
     public int getSonar_cone_type() {
-        return sonar_cone_type;
+        return (Integer)variables.get("SonarConeType");
     }
 
     /**
      *
      * @param sonar_cone_type
      */
-    public void setSonar_cone_type(int sonar_cone_type) {
-        this.sonar_cone_type = sonar_cone_type;
+    public void setSonar_cone_type(int SonarConeType) {
+        variables.put("SonarConeType", SonarConeType);
     }
 
     /**
@@ -287,7 +265,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getAngular_factor() {
-        return angular_factor;
+        return (Float)variables.get("angular_factor");
     }
 
     /**
@@ -295,7 +273,7 @@ public class Sonar extends Sensor{
      * @param angular_factor
      */
     public void setAngular_factor(float angular_factor) {
-        this.angular_factor = angular_factor;
+        variables.put("angular_factor", angular_factor);
     }
 
     /**
@@ -303,7 +281,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getLength_factor() {
-        return length_factor;
+        return (Float)variables.get("length_factor");
     }
 
     /**
@@ -311,7 +289,7 @@ public class Sonar extends Sensor{
      * @param length_factor
      */
     public void setLength_factor(float length_factor) {
-        this.length_factor = length_factor;
+        variables.put("length_factor", length_factor);
     }
 
     /**
@@ -319,7 +297,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public boolean isAngular_damping() {
-        return angular_damping;
+        return (Boolean)variables.get("angular_damping");
     }
 
     /**
@@ -327,7 +305,7 @@ public class Sonar extends Sensor{
      * @param angular_damping
      */
     public void setAngular_damping(boolean angular_damping) {
-        this.angular_damping = angular_damping;
+        variables.put("angular_damping", angular_damping);
     }
 
     /**
@@ -335,7 +313,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public boolean isLength_damping() {
-        return length_damping;
+        return (Boolean)variables.get("length_damping");
     }
 
     /**
@@ -343,7 +321,7 @@ public class Sonar extends Sensor{
      * @param length_damping
      */
     public void setLength_damping(boolean length_damping) {
-        this.length_damping = length_damping;
+        variables.put("length_damping", length_damping);
     }
 
     /**
@@ -351,15 +329,15 @@ public class Sonar extends Sensor{
      * @return
      */
     public boolean isDebug() {
-        return debug;
+        return (Boolean)variables.get("Debug");
     }
 
     /**
      *
      * @param debug
      */
-    public void setDebug(boolean debug) {
-        this.debug = debug;
+    public void setDebug(boolean Debug) {
+        variables.put("Debug", Debug);
     }
 
     /**
@@ -382,8 +360,8 @@ public class Sonar extends Sensor{
      *
      * @param SonarStartVector
      */
-    public void setSonarPosition(Vector3f SonarStartVector){
-        this.SonarStartVector = SonarStartVector;
+    public void setSonarPosition(Vector3f Position){
+        variables.put("Position", Position);
     }
 
     /**
@@ -391,7 +369,7 @@ public class Sonar extends Sensor{
      * @param SonarDirection
      */
     public void setSonarDirection(Vector3f SonarDirection){
-        this.SonarDirection = SonarDirection;
+        variables.put("SonarDirection", SonarDirection);
     }
 
     /**
@@ -399,7 +377,31 @@ public class Sonar extends Sensor{
      * @param SonarUpDirection
      */
     public void setSonarUpDirection(Vector3f SonarUpDirection){
-        this.SonarUpDirection = SonarUpDirection;
+        variables.put("SonarUpDirection", SonarUpDirection);
+    }
+    
+        /**
+     *
+     * @param SonarStartVector
+     */
+    public Vector3f getSonarPosition(){
+        return (Vector3f)variables.get("Position");
+    }
+
+    /**
+     * 
+     * @param SonarDirection
+     */
+    public Vector3f getSonarDirection(){
+        return (Vector3f)variables.get("SonarDirection");
+    }
+
+    /**
+     *
+     * @param SonarUpDirection
+     */
+    public Vector3f getSonarUpDirection(){
+        return (Vector3f)variables.get("SonarUpDirection");
     }
 
     /**
@@ -407,7 +409,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getSonarMaxRange() {
-        return SonarMaxRange;
+       return (Float)variables.get("SonarMaxRange");
     }
 
     /**
@@ -415,7 +417,7 @@ public class Sonar extends Sensor{
      * @param SonarMaxRange
      */
     public void setSonarMaxRange(float SonarMaxRange) {
-        this.SonarMaxRange = SonarMaxRange;
+        variables.put("SonarMaxRange", SonarMaxRange);
     }
 
     /**
@@ -423,7 +425,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getSonarMinRange() {
-        return SonarMinRange;
+        return (Float)variables.get("SonarMinRange");
     }
 
     /**
@@ -431,7 +433,7 @@ public class Sonar extends Sensor{
      * @param SonarMinRange
      */
     public void setSonarMinRange(float SonarMinRange) {
-        this.SonarMinRange = SonarMinRange;
+        variables.put("SonarMinRange", SonarMinRange);
     }
 
     /**
@@ -439,7 +441,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public int getBeam_rays_resolution() {
-        return beam_ray_height_resolution;
+        return (Integer)variables.get("beam_rays_resolution");
     }
 
     /**
@@ -447,7 +449,7 @@ public class Sonar extends Sensor{
      * @param beam_rays_resolution
      */
     public void setBeam_rays_resolution(int beam_rays_resolution) {
-        this.beam_ray_height_resolution = beam_rays_resolution;
+        variables.put("beam_rays_resolution", beam_rays_resolution);
     }
 
     /**
@@ -455,15 +457,15 @@ public class Sonar extends Sensor{
      * @return
      */
     public boolean isScanning() {
-        return scanning;
+        return (Boolean)variables.get("Scanning");
     }
 
     /**
      *
      * @param scanning
      */
-    public void setScanning(boolean scanning) {
-        this.scanning = scanning;
+    public void setScanning(boolean Scanning) {
+        variables.put("Scanning", Scanning);
     }
 
     /**
@@ -471,7 +473,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getScanning_resolution() {
-        return scanning_resolution;
+        return (Float)variables.get("scanning_resolution");
     }
 
     /**
@@ -479,7 +481,7 @@ public class Sonar extends Sensor{
      * @param scanning_resolution
      */
     public void setScanning_resolution(float scanning_resolution) {
-        this.scanning_resolution = scanning_resolution;
+        variables.put("scanning_resolution", scanning_resolution);
     }
 
     /**
@@ -487,7 +489,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getSonarScanSection() {
-        return SonarScanSection;
+        return (Float)variables.get("SonarScanSection");
     }
 
     /**
@@ -495,7 +497,7 @@ public class Sonar extends Sensor{
      * @param SonarScanSection
      */
     public void setSonarScanSection(float SonarScanSection) {
-        this.SonarScanSection = SonarScanSection;
+        variables.put("SonarScanSection", SonarScanSection);
     }
 
     /**
@@ -503,7 +505,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public int getBeam_ray_height_resolution() {
-        return beam_ray_height_resolution;
+        return (Integer)variables.get("beam_ray_height_resolution");
     }
 
     /**
@@ -511,7 +513,7 @@ public class Sonar extends Sensor{
      * @param beam_ray_height_resolution
      */
     public void setBeam_ray_height_resolution(int beam_ray_height_resolution) {
-        this.beam_ray_height_resolution = beam_ray_height_resolution;
+        variables.put("beam_ray_height_resolution", beam_ray_height_resolution);
     }
 
     /**
@@ -519,7 +521,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public int getBeam_ray_width_resolution() {
-        return beam_ray_width_resolution;
+        return (Integer)variables.get("beam_ray_width_resolution");
     }
 
     /**
@@ -527,7 +529,7 @@ public class Sonar extends Sensor{
      * @param beam_ray_width_resolution
      */
     public void setBeam_ray_width_resolution(int beam_ray_width_resolution) {
-        this.beam_ray_width_resolution = beam_ray_width_resolution;
+        variables.put("beam_ray_width_resolution", beam_ray_width_resolution);
     }
 
     /**
@@ -535,7 +537,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getBeam_height() {
-        return beam_height;
+        return (Float)variables.get("beam_height");
     }
 
     /**
@@ -543,7 +545,7 @@ public class Sonar extends Sensor{
      * @param beam_height
      */
     public void setBeam_height(float beam_height) {
-        this.beam_height = beam_height;
+        variables.put("beam_height", beam_height);
     }
 
     /**
@@ -551,7 +553,7 @@ public class Sonar extends Sensor{
      * @return
      */
     public float getBeam_width() {
-        return beam_width;
+        return (Float)variables.get("beam_width");
     }
 
     /**
@@ -559,7 +561,7 @@ public class Sonar extends Sensor{
      * @param beam_width
      */
     public void setBeam_width(float beam_width) {
-        this.beam_width = beam_width;
+        variables.put("beam_width", beam_width);
     }
 
     /**
@@ -567,15 +569,15 @@ public class Sonar extends Sensor{
      * @return
      */
     public int getScanning_gain() {
-        return scanning_gain;
+        return (Integer)variables.get("ScanningGain");
     }
 
     /**
      *
      * @param scanning_gain
      */
-    public void setScanning_gain(int scanning_gain) {
-        this.scanning_gain = scanning_gain;
+    public void setScanning_gain(int ScanningGain) {
+        variables.put("ScanningGain", ScanningGain);
     }
 
     /**
@@ -615,12 +617,12 @@ public class Sonar extends Sensor{
         for (int i = 0; i < results.size(); i++) {
             float distance = results.getCollision(i).getDistance();
             //System.out.println(" d " + i + " " + distance);
-            if(distance >= SonarMaxRange){//too far away
+            if(distance >= getSonarMaxRange()){//too far away
                 //System.out.println("too far away");
                 break;
             }else if(results.getCollision(i).getContactPoint().y >= pe.getWater_height()){//forget hits over water
                 break;
-            }else if ((distance > SonarMinRange)) {
+            }else if ((distance > getSonarMinRange())) {
                 //first = results2.getCollision(i).getContactPoint();
                 Vector3f cnormal = results.getCollision(i).getContactNormal();
                 Vector3f direction_negated = direction.negate();
@@ -688,7 +690,7 @@ public class Sonar extends Sensor{
         debug_node.detachAllChildren();
         Quaternion beam_iteration_quaternion = new Quaternion();
 
-        beam_iteration_quaternion.fromAngles( 0f, scanning_iterations*(-1)*scanning_resolution, 0f);
+        beam_iteration_quaternion.fromAngles( 0f, scanning_iterations*(-1)*getScanning_resolution(), 0f);
         angle_node.setLocalRotation(beam_iteration_quaternion);
         Vector3f ray_direction = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
 
@@ -698,7 +700,7 @@ public class Sonar extends Sensor{
 
         addScanGainToArray(arr_ret,sonar_data);
 
-        if(debug){
+        if(isDebug()){
             Vector3f ray_start2 = angle_node_start.getWorldTranslation();
             Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
             Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getSonarMaxRange())));
@@ -720,7 +722,7 @@ public class Sonar extends Sensor{
     }
 
     private float getCurrentHeadPosition(){
-        return scanning_iterations*scanning_resolution;
+        return scanning_iterations*getScanning_resolution();
     }
 
     /**
@@ -732,9 +734,9 @@ public class Sonar extends Sensor{
     }
 
     private void scan_next(){
-        if(scanning){//rotate the sonar to the next position
+        if(isScanning()){//rotate the sonar to the next position
             last_head_position = getCurrentHeadPosition();
-            if(scanning_iterations*scanning_resolution < (Math.PI*2f)){
+            if(scanning_iterations*getScanning_resolution() < (Math.PI*2f)){
                 scanning_iterations++;
             }else{
                 scanning_iterations = 1;
@@ -743,14 +745,14 @@ public class Sonar extends Sensor{
     }
 
     private void addScanGainToArray(byte[] arr_ret, float[] sonar_data){
-        int sonar_array_distance =(int)(((SonarReturnDataLength)/SonarMaxRange)*sonar_data[0]);
+        int sonar_array_distance =(int)(((SonarReturnDataLength)/getSonarMaxRange())*sonar_data[0]);
         if( (arr_ret[sonar_array_distance] < 127) && sonar_data[0]!=0.0f ){//is there enough space to add?
-            int sonar_array_distance_intensity = scanning_gain;
-            if(angular_damping){
-                sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * scanning_gain * angular_factor);//angle damping
+            int sonar_array_distance_intensity = getScanning_gain();
+            if(isAngular_damping()){
+                sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * getScanning_gain() * getAngular_factor());//angle damping
             }
-            if(length_damping){
-                sonar_array_distance_intensity = (int) (sonar_array_distance_intensity * (sonar_data[0] / SonarMaxRange) * length_factor); //length damping
+            if(isLength_damping()){
+                sonar_array_distance_intensity = (int) (sonar_array_distance_intensity * (sonar_data[0] / getSonarMaxRange()) * getLength_factor()); //length damping
             }
             if(arr_ret[sonar_array_distance] <= (byte)(127-sonar_array_distance_intensity)){//genug platz für full gain
                  arr_ret[sonar_array_distance] = (byte)(arr_ret[sonar_array_distance] + (byte)sonar_array_distance_intensity);
@@ -773,20 +775,20 @@ public class Sonar extends Sensor{
         Vector3f ray_angle_axis_xz = temp2.cross(temp);
         debug_node.detachAllChildren();
 
-        float beam_height_up = beam_height/2f;
-        float beam_width_left = beam_width/2f;
-        float beam_iteration = beam_height_up/beam_ray_height_resolution;
-        float beam_iterations = beam_width_left/beam_ray_width_resolution;
+        float beam_height_up = getBeam_height()/2f;
+        float beam_width_left = getBeam_width()/2f;
+        float beam_iteration = beam_height_up/getBeam_ray_height_resolution();
+        float beam_iterations = beam_width_left/getBeam_ray_width_resolution();
 
         Matrix3f rot_matrix_y = new Matrix3f();
         Matrix3f rot_matrix_xz = new Matrix3f();
         Matrix3f rot_matrix_xyz = new Matrix3f();
 
-        for (int j = -beam_ray_width_resolution+1; j < beam_ray_width_resolution; j++) {//nach links/rechts
-            for (int i = -beam_ray_height_resolution+1; i < beam_ray_height_resolution; i++) {
+        for (int j = -getBeam_ray_width_resolution()+1; j < getBeam_ray_width_resolution(); j++) {//nach links/rechts
+            for (int i = -getBeam_ray_height_resolution()+1; i < getBeam_ray_height_resolution(); i++) {
                 //nach "oben"
 
-                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution)+(beam_iterations*j), ray_angle_axis_y);
+                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution())+(beam_iterations*j), ray_angle_axis_y);
                 rot_matrix_xz.fromAngleAxis(beam_iteration*i, ray_angle_axis_xz);
                 rot_matrix_xyz = rot_matrix_y.mult(rot_matrix_xz);
                 angle_node.setLocalRotation(rot_matrix_xyz);
@@ -795,7 +797,7 @@ public class Sonar extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(debug){
+                if(isDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getSonarMaxRange())));
@@ -833,21 +835,21 @@ public class Sonar extends Sensor{
         Vector3f ray_angle_axis_rot = temp2.cross(temp);
 
         debug_node.detachAllChildren();
-        float beam_height_up = beam_height/2f;
-        float beam_iteration = beam_height_up/beam_ray_height_resolution;
-        float beam_iterations = (float)Math.PI/beam_ray_width_resolution;
+        float beam_height_up = getBeam_height()/2f;
+        float beam_iteration = beam_height_up/getBeam_ray_height_resolution();
+        float beam_iterations = (float)Math.PI/getBeam_ray_width_resolution();
 
         Matrix3f rot_matrix_y = new Matrix3f();
         Matrix3f rot_matrix_rot = new Matrix3f();
         Matrix3f rot_matrix_xyz = new Matrix3f();
 
-        for (int j = 0; j < beam_ray_width_resolution; j++) {
-            for (int i = 1; i < beam_ray_height_resolution+1; i++) {
+        for (int j = 0; j < getBeam_ray_width_resolution(); j++) {
+            for (int i = 1; i < getBeam_ray_height_resolution()+1; i++) {
 
                 //nach "oben"
  
-                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution)+(beam_iterations*j), ray_angle_axis_y);
-                rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution)+(-beam_iteration*i), ray_angle_axis_rot);
+                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution())+(beam_iterations*j), ray_angle_axis_y);
+                rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution())+(-beam_iteration*i), ray_angle_axis_rot);
                 rot_matrix_xyz = rot_matrix_y.mult(rot_matrix_rot);
                 angle_node.setLocalRotation(rot_matrix_xyz);
 
@@ -856,7 +858,7 @@ public class Sonar extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(debug){
+                if(isDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getSonarMaxRange())));
@@ -870,8 +872,8 @@ public class Sonar extends Sensor{
 
                 //nach unten
                 
-                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution)+(beam_iterations*j), ray_angle_axis_y);
-                rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution)+(beam_iteration*i), ray_angle_axis_rot);
+                rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution())+(beam_iterations*j), ray_angle_axis_y);
+                rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution())+(beam_iteration*i), ray_angle_axis_rot);
                 rot_matrix_xyz = rot_matrix_y.mult(rot_matrix_rot);
                 angle_node.setLocalRotation(rot_matrix_xyz);
                 
@@ -881,7 +883,7 @@ public class Sonar extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(debug){
+                if(isDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getSonarMaxRange())));
@@ -897,8 +899,8 @@ public class Sonar extends Sensor{
         }
 
         //reset the rotations
-        rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution), ray_angle_axis_y);
-        rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*scanning_resolution), ray_angle_axis_rot);
+        rot_matrix_y.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution()), ray_angle_axis_y);
+        rot_matrix_rot.fromAngleAxis((scanning_iterations*(-1)*getScanning_resolution()), ray_angle_axis_rot);
         rot_matrix_xyz = rot_matrix_y.mult(rot_matrix_rot);
         angle_node.setLocalRotation(rot_matrix_xyz);
 
@@ -909,7 +911,7 @@ public class Sonar extends Sensor{
 
         addScanGainToArray(arr_ret,sonar_data);
 
-        if(debug){
+        if(isDebug()){
             Vector3f ray_direction3 = (SonarEnd.getWorldTranslation()).subtract(ray_start);
             Geometry mark7 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction3.mult(getSonarMaxRange())));
             Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

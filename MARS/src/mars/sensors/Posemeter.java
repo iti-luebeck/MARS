@@ -189,9 +189,11 @@ public class Posemeter extends Sensor{
         org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
         
         Quaternion ter_orientation = new Quaternion();
+        Quaternion ter_orientation_rueck = new Quaternion();
         //ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
         //ter_orientation.fromAngles(0f, -FastMath.HALF_PI, 0f);
-        ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
+        ter_orientation.fromAngles(-FastMath.HALF_PI, FastMath.PI, 0f);
+        ter_orientation_rueck = ter_orientation.inverse();
         float[] bla = oro.getOrientation().toAngles(null);
         //System.out.println("oroa:" + "yaw: " + bla[0] + " roll: " + bla[1] + " pitch: " + bla[2]);
         //System.out.println("oro:" + oro.getOrientation());
@@ -199,17 +201,22 @@ public class Posemeter extends Sensor{
         orientation.y = oro.getOrientation().mult(ter_orientation).getZ();//dont forget to switch y and z!!!!
         orientation.z = oro.getOrientation().mult(ter_orientation).getY();
         orientation.w = oro.getOrientation().mult(ter_orientation).getW();*/
-        /*orientation.x = oro.getOrientation().getX();
-        orientation.y = oro.getOrientation().getY();//dont forget to switch y and z!!!!
-        orientation.z = oro.getOrientation().getZ();
-        orientation.w = oro.getOrientation().getW();*/
+        /*orientation.x = ter_orientation.getX();
+        orientation.y = ter_orientation.getY();//dont forget to switch y and z!!!!
+        orientation.z = ter_orientation.getZ();
+        orientation.w = ter_orientation.getW();*/
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        jme3_quat.fromAngles(comp.getPitchRadiant(), comp.getYawRadiant(), comp.getRollRadiant());
+        //jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), comp.getPitchRadiant());
+        jme3_quat.fromAngles(0f,comp.getYawRadiant(),0f);
+        //System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
+        ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
+        float[] ff = ter_orientation.toAngles(null);
+        //System.out.println("yaw2: " + ff[1] + " pitch2: " + ff[0] + " roll2: " + ff[2]);
         //jme3_quat.fromAngles(comp.getYawRadiant(), 0f, 0f);
-        orientation.x = jme3_quat.mult(ter_orientation).getX();// switching x and z!!!!
-        orientation.y = jme3_quat.mult(ter_orientation).getY();
-        orientation.z = jme3_quat.mult(ter_orientation).getZ();
-        orientation.w = jme3_quat.mult(ter_orientation).getW();
+        orientation.x = (ter_orientation).getX();// switching x and z!!!!
+        orientation.y = (ter_orientation).getY();
+        orientation.z = (ter_orientation).getZ();
+        orientation.w = (ter_orientation).getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;
         pose.orientation = orientation;

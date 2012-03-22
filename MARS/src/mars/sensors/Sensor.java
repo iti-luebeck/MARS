@@ -8,6 +8,7 @@ package mars.sensors;
 import mars.sensors.sonar.Sonar;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
+import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -59,7 +60,6 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     protected Sensor(){
-        
     }
     
     /**
@@ -68,6 +68,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      */
     protected Sensor(SimState simstate){
         setSimState(simstate);
+        variables = new HashMap<String,Object> ();
     }
 
     /**
@@ -80,6 +81,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         this.pe = pe;
         this.assetManager = simauv.getAssetManager();
         this.rootNode = simauv.getRootNode();
+        variables = new HashMap<String,Object> ();
     }
     
     /**

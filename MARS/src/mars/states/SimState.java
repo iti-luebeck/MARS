@@ -69,6 +69,7 @@ import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
 import mars.gui.ViewManager;
+import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
@@ -423,13 +424,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
              
-             /*   VectorVisualizer serv = new VectorVisualizer();
+              /*  ImagenexSonar_852_Scanning serv = new ImagenexSonar_852_Scanning();
                 serv.setEnabled(true);
                 serv.setNodeVisibility(true);
                 serv.setPhysicalExchangerName("vec");
-                serv.setVectorVisualizerPosition(new Vector3f(0.0f, 0.0f,0.0f));
-                serv.setVectorVisualizerDirection(new Vector3f(0f, 1f, 0f));
-                JAXBContext context = JAXBContext.newInstance( VectorVisualizer.class );
+                serv.initAfterJAXB();
+                JAXBContext context = JAXBContext.newInstance( ImagenexSonar_852_Scanning.class );
                 Marshaller m = context.createMarshaller();
                 m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 m.marshal( serv, System.out );*/

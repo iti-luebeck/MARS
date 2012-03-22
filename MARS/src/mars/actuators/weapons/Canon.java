@@ -44,20 +44,14 @@ public class Canon extends Actuator implements Moveable,Keys{
 
     //motor
     private Geometry CanonStart;
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CanonStartVector = new Vector3f(0,0,0);
     private Geometry CanonEnd;
-    @XmlElement(name="CanonDirection")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f CanonDirection = Vector3f.UNIT_Z;
     
     private Vector3f local_rotation_axis = new Vector3f();
     
-    @XmlElement(name="CanonForce")
     protected float CanonForce = 10.0f;
     
-    @XmlElement(name="RecoilForce")
     protected float RecoilForce = 10.0f;
     
     private Node Rotation_Node = new Node();
@@ -95,12 +89,28 @@ public class Canon extends Actuator implements Moveable,Keys{
         super(simstate);
     }
 
+    public float getCanonForce() {
+        return (Float)variables.get("CanonForce");
+    }
+
+    public void setCanonForce(float CanonForce) {
+        variables.put("CanonForce", CanonForce);
+    }
+
+    public float getRecoilForce() {
+        return (Float)variables.get("RecoilForce");
+    }
+
+    public void setRecoilForce(float RecoilForce) {
+        variables.put("RecoilForce", RecoilForce);
+    }
+
     /**
      *
      * @param MotorStartVector
      */
-    public void setCanonPosition(Vector3f CanonStartVector){
-        this.CanonStartVector = CanonStartVector;
+    public void setCanonPosition(Vector3f Position){
+        variables.put("Position", Position);
     }
 
     /**
@@ -108,7 +118,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * @param MotorDirection
      */
     public void setCanonDirection(Vector3f CanonDirection){
-        this.CanonDirection = CanonDirection;
+        variables.put("CanonDirection", CanonDirection);
     }
 
     /**
@@ -116,23 +126,15 @@ public class Canon extends Actuator implements Moveable,Keys{
      * @return
      */
     public Vector3f getCanonDirection() {
-        return CanonDirection;
+        return (Vector3f)variables.get("CanonDirection");
     }
 
     /**
      *
      * @return
      */
-    public Vector3f getCanonStartVector() {
-        return CanonStartVector;
-    }
-
-    /**
-     *
-     * @param MotorStartVector
-     */
-    public void setCanonStartVector(Vector3f CanonStartVector) {
-        this.CanonStartVector = CanonStartVector;
+    public Vector3f getCanonPosition() {
+        return (Vector3f)variables.get("Position");
     }
 
     /**
@@ -165,13 +167,13 @@ public class Canon extends Actuator implements Moveable,Keys{
         mark_mat9.setColor("Color", ColorRGBA.Orange);
         CanonEnd.setMaterial(mark_mat9);
         //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        CanonEnd.setLocalTranslation(this.CanonDirection);
+        CanonEnd.setLocalTranslation(getCanonDirection());
         CanonEnd.updateGeometricState();
         //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(CanonEnd);
 
-        Vector3f ray_start = CanonStartVector;
-        Vector3f ray_direction = CanonDirection;
+        Vector3f ray_start = getCanonPosition();
+        Vector3f ray_direction = getCanonDirection();
         Geometry mark4 = new Geometry("Canon_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Orange);
@@ -181,7 +183,7 @@ public class Canon extends Actuator implements Moveable,Keys{
         //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
 
-        PhysicalExchanger_Node.setLocalTranslation(CanonStartVector);
+        PhysicalExchanger_Node.setLocalTranslation(getCanonPosition());
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
@@ -271,6 +273,11 @@ public class Canon extends Actuator implements Moveable,Keys{
     @Override
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position){
         
+    }
+    
+    @Override
+    public HashMap<String,String> getAllActions(){
+        return action_mapping;
     }
     
     @Override

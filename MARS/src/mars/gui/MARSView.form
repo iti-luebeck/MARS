@@ -1567,7 +1567,7 @@
       <Properties>
         <Property name="title" type="java.lang.String" resourceKey="auv_rotate_vector_dialog.title"/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[174, 214]"/>
+          <Dimension value="[174, 224]"/>
         </Property>
         <Property name="name" type="java.lang.String" value="auv_rotate_vector_dialog" noResource="true"/>
       </Properties>
@@ -2427,6 +2427,35 @@
             <Property name="name" type="java.lang.String" value="jCheckBox3" noResource="true"/>
           </Properties>
         </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPopupMenu" name="booleanPopUp">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="booleanPopUp" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpEnable">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpEnable.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpEnable" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpEnableActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpDisable">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpDisable.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpDisable" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpDisableActionPerformed"/>
+          </Events>
+        </MenuItem>
       </SubComponents>
     </Container>
   </NonVisualComponents>

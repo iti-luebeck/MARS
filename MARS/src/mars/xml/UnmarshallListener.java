@@ -5,6 +5,7 @@
 package mars.xml;
 
 import javax.xml.bind.Unmarshaller.Listener;
+import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
 import mars.simobjects.SimObject;
 
@@ -26,6 +27,9 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof SimObject){
             SimObject simob = (SimObject)target;
             simob.initAfterJAXB();
+        }else if(target instanceof Servo){
+            Servo servo = (Servo)target;
+            servo.initAfterJAXB();
         }
     }
 }

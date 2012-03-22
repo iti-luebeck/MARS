@@ -13,14 +13,11 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
 import mars.auv.Communication_Manager;
 import mars.ros.MARSNodeMain;
-import mars.xml.Vector3fAdapter;
 
 /**
  * A underwater modem class for communication between the auv's. Nothing implemented yet.
@@ -31,11 +28,7 @@ public class UnderwaterModem extends Sensor{
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
 
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f UnderwaterModemStartVector = new Vector3f(0,0,0);
-    @XmlElement(name="Direction")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
     private Vector3f UnderwaterModemDirection = new Vector3f(0,0,0);
     
     private Communication_Manager com_manager;
@@ -57,6 +50,22 @@ public class UnderwaterModem extends Sensor{
      */
     public UnderwaterModem(SimState simstate){
         super(simstate);
+    }
+
+    public Vector3f getDirection() {
+        return (Vector3f)variables.get("Direction");
+    }
+
+    public void setDirection(Vector3f Direction) {
+        variables.put("Direction", Direction);
+    }
+
+    public Vector3f getPosition() {
+        return (Vector3f)variables.get("Position");
+    }
+
+    public void setPosition(Vector3f Position) {
+        variables.put("Position", Position);
     }
     
     /**
@@ -85,7 +94,7 @@ public class UnderwaterModem extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
         UnderwaterModemStart.setMaterial(mark_mat7);
-        UnderwaterModemStart.setLocalTranslation(UnderwaterModemStartVector);
+        UnderwaterModemStart.setLocalTranslation(getPosition());
         UnderwaterModemStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemStart);
 
@@ -94,7 +103,7 @@ public class UnderwaterModem extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
         UnderwaterModemEnd.setMaterial(mark_mat9);
-        UnderwaterModemEnd.setLocalTranslation(UnderwaterModemStartVector.add(UnderwaterModemDirection));
+        UnderwaterModemEnd.setLocalTranslation(getPosition().add(getDirection()));
         UnderwaterModemEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemEnd);
 

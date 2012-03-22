@@ -7,10 +7,12 @@ package mars.sensors.sonar;
 
 import com.jme3.scene.Node;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
@@ -21,6 +23,7 @@ import mars.hardware.Imaginex;
  * Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
  * @author Thomas Tosik
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class ImagenexSonar_852_Scanning extends Sonar{
 

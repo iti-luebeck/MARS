@@ -10,6 +10,7 @@ import mars.actuators.servos.Servo;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -82,6 +83,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
         setSimState(simState);
         //this.assetManager = simstate.getAssetManager();
         this.MassCenterGeom = MassCenterGeom;
+        variables = new HashMap<String,Object> ();
         //this.rootNode = simauv.getRootNode();
     }
 
@@ -91,6 +93,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     protected Actuator(SimState simState){
         setSimState(simState);
+        variables = new HashMap<String,Object> ();
     }
     
     /**
