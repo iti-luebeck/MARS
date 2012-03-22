@@ -364,6 +364,11 @@ public class MARSView extends FrameView {
                     }else{
                         jme3_debug_auv_drag.setSelected(false);
                     }
+                    if(auv_param.isDebugWireframe()){
+                        jme3_debug_auv_wireframe.setSelected(true);
+                    }else{
+                        jme3_debug_auv_wireframe.setSelected(false);
+                    }
                     if(auv_param.isDebugCenters()){
                         jme3_debug_auv_centers.setSelected(true);
                     }else{
@@ -992,6 +997,7 @@ public class MARSView extends FrameView {
         jme3_debug_auv_buoy = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_collision = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_drag = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_wireframe = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv = new javax.swing.JMenu();
         jme3_waypoints_auv_enable = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
@@ -1937,6 +1943,15 @@ public class MARSView extends FrameView {
             }
         });
         jme3_debug_auv.add(jme3_debug_auv_drag);
+
+        jme3_debug_auv_wireframe.setText(resourceMap.getString("jme3_debug_auv_wireframe.text")); // NOI18N
+        jme3_debug_auv_wireframe.setName("jme3_debug_auv_wireframe"); // NOI18N
+        jme3_debug_auv_wireframe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_wireframeActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_wireframe);
 
         jme3_auv.add(jme3_debug_auv);
 
@@ -3844,6 +3859,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_pe_treeMouseClicked
 
+    private void jme3_debug_auv_wireframeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_wireframeActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_wireframe.isSelected();
+                    simState.debugSelectedAUV(5,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_wireframe);
+    }//GEN-LAST:event_jme3_debug_auv_wireframeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3984,6 +4013,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_collision;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_drag;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_wireframe;
     private javax.swing.JMenuItem jme3_delete_auv;
     private javax.swing.JMenu jme3_mergeview;
     private javax.swing.JMenuItem jme3_move_auv;

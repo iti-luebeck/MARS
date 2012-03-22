@@ -49,6 +49,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -1121,6 +1122,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_spatial.setName(auv_param.getModel_name());
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
+        setWireframeVisible(auv_param.isDebugWireframe());
         auv_node.attachChild(auv_spatial);
     }
     
@@ -1835,6 +1837,32 @@ public class BasicAUV implements AUV,SceneProcessor{
     
     public void setDragVisible(boolean visible){
         
+    }
+    
+    public void setWireframeVisible(boolean visible){
+        if(visible){
+            Node nodes = (Node)auv_spatial;
+            List<Spatial> children = nodes.getChildren();
+            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
+                Spatial spatial = it.next();
+                System.out.println(spatial.getName());
+                if(spatial instanceof Geometry){
+                    Geometry geom = (Geometry)spatial;
+                    geom.getMaterial().getAdditionalRenderState().setWireframe(true);
+                }
+            }
+        }else{
+            Node nodes = (Node)auv_spatial;
+            List<Spatial> children = nodes.getChildren();
+            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
+                Spatial spatial = it.next();
+                System.out.println(spatial.getName());
+                if(spatial instanceof Geometry){
+                    Geometry geom = (Geometry)spatial;
+                    geom.getMaterial().getAdditionalRenderState().setWireframe(false);
+                }
+            }
+        }
     }
     
     public void setWayPointsVisible(boolean visible){

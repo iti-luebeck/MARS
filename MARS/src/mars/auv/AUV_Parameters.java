@@ -893,6 +893,22 @@ public class AUV_Parameters implements CellEditorListener{
     public void setDebugDrag(boolean drag) {
         debug.put("drag", drag);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isDebugWireframe() {
+         return (Boolean)debug.get("wireframe");
+    }
+
+    /**
+     *
+     * @param drag
+     */
+    public void setDebugWireframe(boolean wireframe) {
+        debug.put("wireframe", wireframe);
+    }
 
     /**
      *
