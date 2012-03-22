@@ -1305,7 +1305,6 @@
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_collision">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_collision.text"/>
-                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jme3_debug_auv_collision" noResource="true"/>
               </Properties>
               <Events>

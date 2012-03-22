@@ -8,6 +8,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import mars.auv.AUV;
+import mars.simobjects.SimObject;
 
 /**
  * This class is used for storing in which state the gui controls are currently. 
@@ -19,16 +20,19 @@ import mars.auv.AUV;
 public class GuiControlState {
     private boolean move_auv = false;
     private boolean rotate_auv = false;
+    private boolean move_simob = false;
+    private boolean rotate_simob = false;
     private boolean auv_context = false;
     private boolean free = true;
     private Vector3f intersection = Vector3f.ZERO;
-    private Spatial ghost_auv;
+    private Spatial ghost_object;
     private Quaternion rotation = new Quaternion();
     private int depth_iteration = 0;
     private float depth_factor = 0.25f;
     private Vector3f contact_point = Vector3f.ZERO;
     private Vector3f contact_direction = Vector3f.ZERO;
     private AUV latestSelectedAUV = null;
+    private SimObject latestSelectedSimOb = null;
 
     public GuiControlState() {
     }
@@ -39,6 +43,14 @@ public class GuiControlState {
 
     public void setLatestSelectedAUV(AUV latestSelectedAUV) {
         this.latestSelectedAUV = latestSelectedAUV;
+    }
+    
+    public SimObject getLatestSelectedSimOb() {
+        return latestSelectedSimOb;
+    }
+
+    public void setLatestSelectedSimOb(SimObject latestSelectedSimOb) {
+        this.latestSelectedSimOb = latestSelectedSimOb;
     }
 
     public boolean isMove_auv() {
@@ -68,6 +80,34 @@ public class GuiControlState {
             setFree(true);
         }
     }
+    
+    public boolean isMove_simob() {
+        return move_simob;
+    }
+
+    public void setMove_simob(boolean move_simob) {
+        this.move_simob = move_simob;
+        if(move_simob == true){
+            setFree(false);  
+            setRotate_simob(false);
+        }else{
+            setFree(true);
+        }
+    }
+
+    public boolean isRotate_simob() {
+        return rotate_simob;
+    }
+
+    public void setRotate_simob(boolean rotate_simob) {
+        this.rotate_simob = rotate_simob;
+        if(rotate_simob == true){
+            setFree(false);   
+            setMove_simob(false);
+        }else{
+            setFree(true);
+        }
+    }
 
     public boolean isAuv_context() {
         return auv_context;
@@ -93,12 +133,12 @@ public class GuiControlState {
         this.intersection = intersection;
     }
 
-    public Spatial getGhost_auv() {
-        return ghost_auv;
+    public Spatial getGhostObject() {
+        return ghost_object;
     }
 
-    public void setGhost_auv(Spatial ghost_auv) {
-        this.ghost_auv = ghost_auv;
+    public void setGhostObject(Spatial ghost_object) {
+        this.ghost_object = ghost_object;
     }
 
     public Quaternion getRotation() {

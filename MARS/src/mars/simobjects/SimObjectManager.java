@@ -311,6 +311,17 @@ public class SimObjectManager {
         this.mars_settings = mars_settings;
     }
     
+    public SimObject getSelectedSimObject(){
+        //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
+        for ( String elem : simobs.keySet() ){
+            SimObject simob = (SimObject)simobs.get(elem);
+            if(simob.isSelected()){
+                return simob;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public String toString(){
         return "SimObjects";

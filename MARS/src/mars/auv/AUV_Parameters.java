@@ -243,14 +243,8 @@ public class AUV_Parameters implements CellEditorListener{
     
     public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
-        if(target.equals("collision")){
-           /* if( isDebugCollision() == false && physics_control != null ){
-                physics_control.detachDebugShape();
-            }else if( isDebugCollision() && physics_control != null ){
-                Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
-                debug_mat.setColor("Color", ColorRGBA.Red);
-                //physics_control.attachDebugShape(debug_mat);
-            }*/
+        if(target.equals("collision") && hashmapname.equals("Debug")){
+            auv.setCollisionVisible(isDebugCollision());
         }else if(target.equals("position") && hashmapname.equals("")){
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getPosition());

@@ -22,6 +22,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mars.CollisionType;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -54,7 +55,7 @@ public class SimObject implements CellEditorListener{
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
-    private Spatial ghost_auv_spatial;
+    private Spatial ghost_simob_spatial;
     private Node selectionNode = new Node("selectionNode");
 
     private Vector3f position = new Vector3f(0f,0f,0f);
@@ -289,6 +290,7 @@ public class SimObject implements CellEditorListener{
     public void init(){
         loadModel();
         createPhysicsNode();
+        createGhostSpatial();
         selectionNode.attachChild(spatial);
         spatial.updateGeometricState();
         selectionNode.updateGeometricState();
@@ -317,6 +319,10 @@ public class SimObject implements CellEditorListener{
             selectionNode.removeLight(ambient_light);
         }
         this.selected = selected;
+    }
+    
+    public boolean isSelected(){
+        return selected;
     }
     
     /**
@@ -683,6 +689,31 @@ public class SimObject implements CellEditorListener{
      */
     public void setSimauv(MARS_Main simauv) {
         this.simauv = simauv;
+    }
+    
+    private void createGhostSpatial(){
+        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        ghost_simob_spatial = assetManager.loadModel(getFilepath());
+        ghost_simob_spatial.setLocalScale(getScale());
+        ghost_simob_spatial.setLocalTranslation(getPosition());
+        ghost_simob_spatial.updateGeometricState();
+        ghost_simob_spatial.updateModelBound();
+        ghost_simob_spatial.setName(getName() + "_ghost");
+        ghost_simob_spatial.setUserData("simob_name", getName());
+        ghost_simob_spatial.setCullHint(CullHint.Always);
+        selectionNode.attachChild(ghost_simob_spatial);
+    }
+    
+    public Spatial getGhostSpatial(){
+        return ghost_simob_spatial;
+    }
+    
+    public void hideGhostSpatial(boolean hide){
+        if(hide){
+             ghost_simob_spatial.setCullHint(CullHint.Always);
+        }else{
+             ghost_simob_spatial.setCullHint(CullHint.Never);
+        }
     }
 
     @Override

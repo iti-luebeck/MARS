@@ -111,6 +111,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     private Vector3f volume_center_precise = new Vector3f(0,0,0);
     private Spatial auv_spatial;
+    private Spatial debugShape;
     private Node auv_node = new Node("");
     private Node selectionNode = new Node("selectionNode");
     private RigidBodyControl physics_control;
@@ -1116,15 +1117,11 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_spatial.setMaterial(mat_white);*/
         auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
         auv_spatial.updateGeometricState();
-        //BoundingBox bounds = new BoundingBox();
-        //auv_spatial.setModelBound(bounds);
         auv_spatial.updateModelBound();
         auv_spatial.setName(auv_param.getModel_name());
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_node.attachChild(auv_spatial);
-        //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
-        //System.out.println("vol bv " + auv_spatial.getWorldBound());
     }
     
     private void createGhostAUV(){
@@ -1181,11 +1178,18 @@ public class BasicAUV implements AUV,SceneProcessor{
         physics_control.setAngularFactor(auv_param.getAngular_factor());
         //physics_control.setFriction(0f);
         //physics_control.setRestitution(0.3f);
-        /*if(auv_param.isDebugCollision()){
-            Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
-            debug_mat.setColor("Color", ColorRGBA.Red);
-            physics_control.attachDebugShape(debug_mat);
-        }*/
+
+        //debug
+        Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        debug_mat.setColor("Color", ColorRGBA.Red);
+        debugShape = physics_control.createDebugShape(assetManager);
+        auv_node.attachChild(debugShape);
+        if(getAuv_param().isDebugCollision()){
+            debugShape.setCullHint(CullHint.Inherit);
+        }else{
+            debugShape.setCullHint(CullHint.Always);
+        }
+            
         auv_node.setLocalTranslation(auv_param.getPosition());
         //auv_node.rotate(auv_param.getRotation().x, auv_param.getRotation().y, auv_param.getRotation().z);
         auv_node.addControl(physics_control);
@@ -1818,8 +1822,13 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
     
     public void setCollisionVisible(boolean visible){
-        
+        if(visible){
+            debugShape.setCullHint(CullHint.Inherit);
+        }else{
+            debugShape.setCullHint(CullHint.Always);
+        }
     }
+    
     public void setBuoycancyVisible(boolean visible){
         
     }

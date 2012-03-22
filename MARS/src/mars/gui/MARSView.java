@@ -1920,7 +1920,6 @@ public class MARSView extends FrameView {
         jme3_debug_auv.add(jme3_debug_auv_buoy);
 
         jme3_debug_auv_collision.setText(resourceMap.getString("jme3_debug_auv_collision.text")); // NOI18N
-        jme3_debug_auv_collision.setEnabled(false);
         jme3_debug_auv_collision.setName("jme3_debug_auv_collision"); // NOI18N
         jme3_debug_auv_collision.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

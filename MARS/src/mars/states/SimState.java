@@ -594,6 +594,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     if(selected_auv != null){
                         rotateSelectedGhostAUV(selected_auv);
                     }
+                }else if(guiControlState.isMove_simob()){
+                    System.out.println("Mouving simob to: " + inputManager.getCursorPosition());
+                    SimObject selected_simob = simob_manager.getSelectedSimObject();
+                    if(selected_simob != null){
+                        moveSelectedGhostSimOb(selected_simob);
+                    }
                 }else{
                     pickHover();
                 }
@@ -653,7 +659,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     AUV selected_auv = auv_manager.getSelectedAUV();
                     if(selected_auv != null){
                         guiControlState.decrementDepthIteration();
-                        guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
+                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
                     }
                 }
             }else if(name.equals("depth_auv_up") && keyPressed) {
@@ -661,20 +667,29 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     AUV selected_auv = auv_manager.getSelectedAUV();
                     if(selected_auv != null){
                         guiControlState.incrementDepthIteration();
-                        guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
+                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
                     }
                 }
             }else if(name.equals("moveauv") && keyPressed) {
                 //System.out.println("moveauv");
-                guiControlState.setMove_auv(true);
+                //guiControlState.setMove_auv(true);
+                //guiControlState.setMove_simob(true);
                 mars.getFlyByCamera().setEnabled(false);
                 //System.out.println(guiControlState.isMove_auv());
                 //System.out.println(guiControlState.isFree());
                 AUV selected_auv = auv_manager.getSelectedAUV();
                 if(selected_auv != null){
-                    guiControlState.setGhost_auv(selected_auv.getGhostAUV());
-                    //guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
+                    guiControlState.setMove_auv(true);
+                    guiControlState.setGhostObject(selected_auv.getGhostAUV());
+                    //guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
                     selected_auv.hideGhostAUV(false);
+                }
+                SimObject selected_simob = simob_manager.getSelectedSimObject();
+                if(selected_simob != null){
+                    guiControlState.setMove_simob(true);
+                    guiControlState.setGhostObject(selected_simob.getGhostSpatial());
+                    //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSpatial().worldToLocal(selected_simob.getSpatial().getWorldTranslation(),null));//initial location set
+                    selected_simob.hideGhostSpatial(false);
                 }
             }else if(name.equals("moveauv") && !keyPressed) {
                 System.out.println("stop moveauv");
@@ -682,18 +697,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 mars.getFlyByCamera().setEnabled(true);
                 if(selected_auv != null){
                     selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
-                    guiControlState.getGhost_auv().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//reset ghost auv for rotation
+                    guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//reset ghost auv for rotation
                     selected_auv.hideGhostAUV(true);
+                }
+                
+                SimObject selected_simob = simob_manager.getSelectedSimObject();
+                if(selected_simob != null){
+                    selected_simob.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
+                    guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSelectionNode().worldToLocal(selected_simob.getSelectionNode().getWorldTranslation(),null));//reset ghost auv for rotation
+                    selected_simob.hideGhostSpatial(true);
                 }
                 guiControlState.setDepth_iteration(0);
                 guiControlState.setMove_auv(false);
+                guiControlState.setMove_simob(false);
             }else if(name.equals("rotateauv") && keyPressed) {
                 System.out.println("rotateauv");
                 AUV selected_auv = auv_manager.getSelectedAUV();
                 mars.getFlyByCamera().setEnabled(false);
                 if(selected_auv != null){
-                    guiControlState.setGhost_auv(selected_auv.getGhostAUV());
-                    //guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
+                    guiControlState.setGhostObject(selected_auv.getGhostAUV());
+                    //guiControlState.getGhostObject().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                     selected_auv.hideGhostAUV(false);
                 }
                 guiControlState.setRotate_auv(true);
@@ -705,7 +728,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
                     selected_auv.hideGhostAUV(true);
                 }
-                //guiControlState.getGhost_auv().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
+                //guiControlState.getGhostObject().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                 guiControlState.setRotate_auv(false);
             }
         }
@@ -718,9 +741,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
         guiControlState.setIntersection(intersection);
         //System.out.println("Intersection: " + intersection);
-        if(guiControlState.getGhost_auv() != null){
-            guiControlState.getGhost_auv().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
-            guiControlState.getGhost_auv().setLocalRotation(guiControlState.getRotation());
+        if(guiControlState.getGhostObject() != null){
+            guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
+            guiControlState.getGhostObject().setLocalRotation(guiControlState.getRotation());
+        }
+    }
+    
+    private void moveSelectedGhostSimOb(SimObject simob){
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        Vector3f intersection = Helper.getIntersectionWithPlane(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        guiControlState.setIntersection(intersection);
+        System.out.println("Intersection: " + intersection);
+        if(guiControlState.getGhostObject() != null){
+            System.out.println("simob.getSpatial().worldToLocal(intersection,null): " + simob.getSelectionNode().worldToLocal(intersection,null));
+            guiControlState.getGhostObject().setLocalTranslation(simob.getSelectionNode().worldToLocal(intersection,null));
+            //guiControlState.getGhostObject().setLocalRotation(guiControlState.getRotation());
         }
     }
     
@@ -746,11 +783,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
         
         //System.out.println("angle: " + angle);
-        if(guiControlState.getGhost_auv() != null){
+        if(guiControlState.getGhostObject() != null){
             Quaternion quat = new Quaternion();
             quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
             guiControlState.setRotation(quat);
-            guiControlState.getGhost_auv().setLocalRotation(quat);
+            guiControlState.getGhostObject().setLocalRotation(quat);
         }
     }
     
@@ -775,6 +812,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           if(auv != null){
                 auv.setSelected(true);
                 guiControlState.setLatestSelectedAUV(auv);
+                return;
             //guiControlState.setFree(false);
           }
         }else{//nothing to pickRightClick
@@ -793,7 +831,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
           if(simob != null){
                 simob.setSelected(true);
-                //guiControlState.setLatestSelectedAUV(auv);
+                guiControlState.setLatestSelectedSimOb(simob);
+                return;
             //guiControlState.setFree(false);
           }
         }else{//nothing to pickRightClick
