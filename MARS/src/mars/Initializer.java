@@ -147,7 +147,7 @@ public class Initializer {
      */
     public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager, PhysicalEnvironment physical_environment){
         this.mars = mars;
-        this.mars_settings = simstate.getSimauv_settings();
+        this.mars_settings = simstate.getMARSSettings();
         this.guiNode = mars.getGuiNode();
         this.settings = mars.getSettings();
         this.rootNode = simstate.getRootNode();

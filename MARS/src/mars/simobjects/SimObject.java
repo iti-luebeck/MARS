@@ -13,11 +13,13 @@ import com.jme3.bullet.collision.shapes.ConeCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import mars.CollisionType;
 import com.jme3.scene.Spatial;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.MARS_Main;
+import mars.MARS_Settings;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
@@ -47,6 +50,12 @@ public class SimObject implements CellEditorListener{
     private HashMap<String,Object> simob_variables;
     private HashMap<String,Object> collision;
     private XMLConfigReaderWriter xmll;
+    
+    //selection stuff aka highlightening
+    private boolean selected = false;
+    AmbientLight ambient_light = new AmbientLight();
+    private Spatial ghost_auv_spatial;
+    private Node selectionNode = new Node("selectionNode");
 
     private Vector3f position = new Vector3f(0f,0f,0f);
     private Vector3f rotation = new Vector3f(0f,0f,0f);
@@ -70,6 +79,7 @@ public class SimObject implements CellEditorListener{
     private AssetManager assetManager;
     private Spatial spatial;
     private RigidBodyControl physics_control;
+    private MARS_Settings mars_settings;
 
     /**
      * 
@@ -223,7 +233,7 @@ public class SimObject implements CellEditorListener{
         spatial = assetManager.loadModel(getFilepath());
 
         spatial.setLocalScale(getScale());
-
+        spatial.setUserData("simob_name", getName());
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
         if(!isLight()){
@@ -279,7 +289,42 @@ public class SimObject implements CellEditorListener{
     public void init(){
         loadModel();
         createPhysicsNode();
+        selectionNode.attachChild(spatial);
         spatial.updateGeometricState();
+        selectionNode.updateGeometricState();
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public MARS_Settings getMARSSettings() {
+        return mars_settings;
+    }
+
+    /**
+     *
+     */
+    public void setMARSSettings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
+    }
+    
+    public void setSelected(boolean selected){
+        if(selected && this.selected==false){
+            ambient_light.setColor(mars_settings.getSelectionColor());
+            selectionNode.addLight(ambient_light); 
+        }else if(selected == false){
+            selectionNode.removeLight(ambient_light);
+        }
+        this.selected = selected;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Node getSelectionNode() {
+        return selectionNode;
     }
 
     /**

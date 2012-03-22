@@ -238,12 +238,24 @@ public class MARSView extends FrameView {
         );
     }
     
+    public void initEnvironmentTree(final PhysicalEnvironment penv){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    pe_tree.setModel(new PhysicalEnvironmentModel(penv));
+                    pe_tree.updateUI();
+                }
+            }
+        );
+    }
+    
     public void updateTrees(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
                     auv_tree.updateUI();
                     simob_tree.updateUI();
+                    pe_tree.updateUI();
                 }
             }  
         );
@@ -882,6 +894,9 @@ public class MARSView extends FrameView {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         simob_tree = new javax.swing.JTree();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        pe_tree = new javax.swing.JTree();
         MapPanel = new javax.swing.JPanel();
         JMEPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
@@ -1113,7 +1128,7 @@ public class MARSView extends FrameView {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
         );
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSView.class);
@@ -1130,7 +1145,7 @@ public class MARSView extends FrameView {
         .getCellRenderer();
         textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);
         DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,
-            renderer, textfieldEditor2);
+            renderer2, textfieldEditor2);
         simob_tree.setCellEditor(editor2);
         simob_tree.setEditable(true);
         simob_tree.setRootVisible(false);
@@ -1150,10 +1165,46 @@ public class MARSView extends FrameView {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel4.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel4.TabConstraints.tabIcon"), jPanel4); // NOI18N
+
+        jPanel5.setName("jPanel5"); // NOI18N
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        DefaultMutableTreeNode top3 = new DefaultMutableTreeNode("PhysicalEnviroment");
+        pe_tree = new javax.swing.JTree(top3);
+        pe_tree.setCellRenderer(new MyTreeCellRenderer(this));
+        renderer3 = (DefaultTreeCellRenderer) pe_tree
+        .getCellRenderer();
+        textfieldEditor3 = new mars.gui.TextFieldCellEditor(pe_tree);
+        DefaultTreeCellEditor editor3 = new DefaultTreeCellEditor(pe_tree,
+            renderer3, textfieldEditor3);
+        pe_tree.setCellEditor(editor3);
+        pe_tree.setEditable(true);
+        pe_tree.setRootVisible(false);
+        pe_tree.setName("pe_tree"); // NOI18N
+        pe_tree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pe_treeMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(pe_tree);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel5.TabConstraints.tabIcon"), jPanel5); // NOI18N
 
         javax.swing.GroupLayout TreePanelLayout = new javax.swing.GroupLayout(TreePanel);
         TreePanel.setLayout(TreePanelLayout);
@@ -3790,6 +3841,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_booleanPopUpDisableActionPerformed
 
+    private void pe_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pe_treeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pe_treeMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3899,8 +3954,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -3959,6 +4016,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JDialog moveCameraDialog;
     private javax.swing.JDialog new_auv;
     private javax.swing.JDialog new_simob_dialog;
+    private javax.swing.JTree pe_tree;
+    public mars.gui.TextFieldCellEditor textfieldEditor3;
+    private DefaultTreeCellRenderer renderer3;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenuItem reset_auv;
     private javax.swing.JMenuItem reset_auvs;

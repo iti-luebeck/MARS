@@ -70,6 +70,7 @@ import mars.auv.example.Monsun2;
 import mars.gui.MARSView;
 import mars.gui.ViewManager;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
+import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
@@ -112,6 +113,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
+    private Node SimObNode = new Node("SimObNode");
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
@@ -238,6 +240,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             sceneReflectionNode.attachChild(SonarDetectableNode);
             sceneReflectionNode.attachChild(AUVsNode);
+            sceneReflectionNode.attachChild(SimObNode);
             rootNode.attachChild(sceneReflectionNode);
             
             initNiftyLoading();
@@ -642,7 +645,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 pickRightClick();
             }else if(name.equals("context_menue_off") && !keyPressed) {
                 System.out.println("context_menue_off");
-                //auv_manager.deselectAllAUVs();
+                //auv_manager.deselectAllSimObs();
                // view.hideAllPopupWindows();
             }else if(name.equals("depth_auv_down") && keyPressed) {
                 System.out.println("depth_auv_down");
@@ -767,7 +770,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           // The closest result is the target that the player picked:
           Geometry target = results.getClosestCollision().getGeometry();
           // Here comes the action:
-          System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+          //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           if(auv != null){
                 auv.setSelected(true);
@@ -778,6 +781,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auv_manager.deselectAllAUVs();
             //guiControlState.setFree(true);
         }
+
+        results.clear();
+         SimObNode.collideWith(ray, results);
+        // Use the results -- we rotate the selected geometry.
+        if (results.size() > 0) {
+          // The closest result is the target that the player picked:
+          Geometry target = results.getClosestCollision().getGeometry();
+          // Here comes the action:
+          //System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
+          SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
+          if(simob != null){
+                simob.setSelected(true);
+                //guiControlState.setLatestSelectedAUV(auv);
+            //guiControlState.setFree(false);
+          }
+        }else{//nothing to pickRightClick
+                simob_manager.deselectAllSimObs();
+        }
+        
+        
     }
     
     private void pickRightClick(){
@@ -913,6 +936,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setSimob_manager(simob_manager);
             view.initAUVTree(auv_manager);
             view.initSimObjectTree(simob_manager);
+            view.initEnvironmentTree(physical_environment);
             view.initPopUpMenues();
             view.allowSimInteraction();
             Future fut = mars.enqueue(new Callable() {
@@ -974,12 +998,20 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public Node getSonarDetectableNode() {
         return SonarDetectableNode;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Node getSimObNode() {
+        return SimObNode;
+    }
 
     /**
      * 
      * @return
      */
-    public MARS_Settings getSimauv_settings() {
+    public MARS_Settings getMARSSettings() {
         return mars_settings;
     }
 

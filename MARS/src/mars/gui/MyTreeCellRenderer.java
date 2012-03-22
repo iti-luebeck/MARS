@@ -26,6 +26,7 @@ import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
 import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
+import mars.xml.HashMapEntry;
 
 /**
  * Used for custom icons on nodes and leafs
@@ -90,6 +91,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"bug.png")); 
             }else if(hasher.getName().equals("Model")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"yellow_submarine.png")); 
+            }else if(hasher.getName().equals("scale")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"transform_scale.png"));
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();
@@ -137,6 +140,22 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                     }else if(hasher.getName().equals("enabled") && ((Boolean)hasher.getUserData()) == false){
                         setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"light-bulb-off.png"));
                     }*/
+                }else if(hasher.getUserData() instanceof HashMapEntry){//for physical environment
+                    if(((String)hasher.getName()).startsWith("fluid")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"draw_convolve.png"));
+                    }else if(((String)hasher.getName()).startsWith("magnetic")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"magnet (2).png"));
+                    }else if(((String)hasher.getName()).startsWith("air")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"paper_airplane.png"));
+                    }else if(((String)hasher.getName()).startsWith("pressure")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"hardware_building_oem.png"));
+                    }else if(((String)hasher.getName()).startsWith("water_current")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"weather-wind.png"));
+                    }else if(((String)hasher.getName()).startsWith("water_height")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"draw_wave.png"));
+                    }else if(((String)hasher.getName()).startsWith("gravitational")) {
+                        setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"arrow_down.png"));
+                    }
                 }
             }
         }else if(value instanceof AUV_Parameters){

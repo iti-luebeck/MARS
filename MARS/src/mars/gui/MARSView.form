@@ -138,7 +138,7 @@
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane1" alignment="0" pref="97" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane1" alignment="0" pref="79" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
@@ -193,7 +193,7 @@
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane2" alignment="0" pref="97" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" alignment="0" pref="79" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
@@ -217,7 +217,59 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor2;&#xa;private DefaultTreeCellRenderer renderer2;"/>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top2 = new DefaultMutableTreeNode(&quot;SimObjects&quot;);&#xa;simob_tree = new javax.swing.JTree(top2);&#xa;simob_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer2 = (DefaultTreeCellRenderer) simob_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);&#xa;DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,&#xa;        renderer, textfieldEditor2);&#xa;simob_tree.setCellEditor(editor2);&#xa;simob_tree.setEditable(true);&#xa;simob_tree.setRootVisible(false);"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top2 = new DefaultMutableTreeNode(&quot;SimObjects&quot;);&#xa;simob_tree = new javax.swing.JTree(top2);&#xa;simob_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer2 = (DefaultTreeCellRenderer) simob_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor2 = new mars.gui.TextFieldCellEditor(simob_tree);&#xa;DefaultTreeCellEditor editor2 = new DefaultTreeCellEditor(simob_tree,&#xa;        renderer2, textfieldEditor2);&#xa;simob_tree.setCellEditor(editor2);&#xa;simob_tree.setEditable(true);&#xa;simob_tree.setRootVisible(false);"/>
+                                      </AuxValues>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
+                            <Container class="javax.swing.JPanel" name="jPanel5">
+                              <Properties>
+                                <Property name="name" type="java.lang.String" value="jPanel5" noResource="true"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                  <JTabbedPaneConstraints tabName="Environment">
+                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel5.TabConstraints.tabTitle"/>
+                                    <Property name="tabIcon" type="javax.swing.Icon" resourceKey="jPanel5.TabConstraints.tabIcon"/>
+                                  </JTabbedPaneConstraints>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane3" alignment="0" pref="228" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane3" alignment="0" pref="79" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTree" name="pe_tree">
+                                      <Properties>
+                                        <Property name="name" type="java.lang.String" value="pe_tree" noResource="true"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pe_treeMouseClicked"/>
+                                      </Events>
+                                      <AuxValues>
+                                        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor3;&#xa;private DefaultTreeCellRenderer renderer3;"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top3 = new DefaultMutableTreeNode(&quot;PhysicalEnviroment&quot;);&#xa;pe_tree = new javax.swing.JTree(top3);&#xa;pe_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer3 = (DefaultTreeCellRenderer) pe_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor3 = new mars.gui.TextFieldCellEditor(pe_tree);&#xa;DefaultTreeCellEditor editor3 = new DefaultTreeCellEditor(pe_tree,&#xa;        renderer3, textfieldEditor3);&#xa;pe_tree.setCellEditor(editor3);&#xa;pe_tree.setEditable(true);&#xa;pe_tree.setRootVisible(false);"/>
                                       </AuxValues>
                                     </Component>
                                   </SubComponents>

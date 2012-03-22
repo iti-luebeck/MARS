@@ -365,4 +365,9 @@ public class PhysicalEnvironment implements CellEditorListener{
     public void setWater_current(Vector3f water_current) {
         environment.put("water_current", new HashMapEntry("kgm/s²", water_current));
     }
+    
+    @Override
+    public String toString(){
+        return "Environment";
+    }
 }

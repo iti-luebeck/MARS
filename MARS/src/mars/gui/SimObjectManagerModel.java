@@ -137,26 +137,7 @@ public class SimObjectManagerModel implements TreeModel{
                 i++;
             }
             return "null";
-        }/*else if(parent instanceof AUV_Parameters){
-            AUV_Parameters auv_param = (AUV_Parameters)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(auv_param.getAllVariables().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)auv_param.getAllVariables().get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return "null";
-                }
-                i++;
-            }
-            return "null";
-        }else if(parent instanceof PhysicalExchanger){
-            
-            return "null";
-        }*/else if(parent instanceof HashMap){
+        }else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
             SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
             Iterator<String> it = sortedset.iterator();
