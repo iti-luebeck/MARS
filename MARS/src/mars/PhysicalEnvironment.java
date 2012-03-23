@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -69,9 +70,11 @@ public class PhysicalEnvironment implements CellEditorListener{
     public void init(){
     }
 
+    @Deprecated
     public void editingCanceled(ChangeEvent e){
     }
 
+    @Deprecated
     public void editingStopped(ChangeEvent e){
         Object obj = e.getSource();
         if (obj instanceof TextFieldEditor) {
@@ -83,6 +86,7 @@ public class PhysicalEnvironment implements CellEditorListener{
         }
     }
 
+    @Deprecated
      private void saveValue(TextFieldEditor editor){
         HashMap<String,Object> hashmap = environment;
         String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
@@ -107,6 +111,7 @@ public class PhysicalEnvironment implements CellEditorListener{
         }
     }
 
+    @Deprecated
     private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
         Object node_obj = node.getUserObject();
@@ -129,6 +134,21 @@ public class PhysicalEnvironment implements CellEditorListener{
         }else if(obj instanceof ColorRGBA){
             hashmap.put(target, (ColorRGBA)node_obj);
             xmll.setPathElementPE(treepath, pathcount, node_obj);
+        }
+    }
+    
+    public void updateState(TreePath path){
+        System.out.println("TREEPATH: " + path);
+        if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
+            updateState(path.getLastPathComponent().toString(),"");
+        }
+    }
+    
+    public void updateState(String target, String hashmapname){
+        if(target.equals("collision") && hashmapname.equals("Debug")){
+
+        }else if(target.equals("position") && hashmapname.equals("")){
+
         }
     }
    
@@ -364,6 +384,36 @@ public class PhysicalEnvironment implements CellEditorListener{
      */
     public void setWater_current(Vector3f water_current) {
         environment.put("water_current", new HashMapEntry("kgm/s²", water_current));
+    }
+    
+    /**
+     *
+     * @param value
+     * @param hashmapname
+     * @return
+     */
+    public Object getValue(String value,String hashmapname) {
+        if(hashmapname.equals("") || hashmapname == null){
+            return (Object)environment.get(value);
+        }else{
+            HashMap<String,Object> hashmap = (HashMap<String,Object>)environment.get(hashmapname);
+            return (Object)hashmap.get(value);
+        }
+    }
+
+    /**
+     *
+     * @param value
+     * @param object
+     * @param hashmapname
+     */
+    public void setValue(String value, Object object, String hashmapname) {
+        if(hashmapname.equals("") || hashmapname == null){
+            environment.put(value, object);
+        }else{
+            HashMap<String,Object> hashmap = (HashMap<String,Object>)environment.get(hashmapname);
+            hashmap.put(value, object);
+        }
     }
     
     @Override
