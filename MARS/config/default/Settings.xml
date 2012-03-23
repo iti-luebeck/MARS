@@ -248,7 +248,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="ROS">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value>

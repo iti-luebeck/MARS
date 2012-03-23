@@ -120,7 +120,7 @@ public class Positionmeter extends Sensor{
      * @return
      */
     private Vector3f getPositionRaw(){
-        return new_position;
+        return physics_control.getPhysicsLocation();
     }
 
     /**

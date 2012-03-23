@@ -4,6 +4,7 @@
  */
 package mars.sensors;
 
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -72,6 +73,22 @@ public class Orientationmeter extends Sensor{
         new_orientation = physics_control.getPhysicsRotation();//get the new velocity
         old_orientation = new_orientation.clone();
     }
+    
+    /**
+     *
+     * @param SonarMinRange
+     */
+    public void setAddedOrientation(Vector3f addedOrientation) {
+        variables.put("addedOrientation", addedOrientation);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Vector3f getAddedOrientation() {
+        return (Vector3f)variables.get("addedOrientation");
+    }
 
     /**
      * 
@@ -98,7 +115,9 @@ public class Orientationmeter extends Sensor{
      * @return
      */
     private Quaternion getOrientationRaw(){
-        return new_orientation;
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getAddedOrientation().getX(),getAddedOrientation().getY(),getAddedOrientation().getZ());
+        return physics_control.getPhysicsRotation().mult(quat);
     }
 
     /**

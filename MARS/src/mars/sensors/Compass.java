@@ -13,18 +13,16 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
-import mars.xml.Vector3fAdapter;
 
 /**
  * This is a basic compass class.
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
+@Deprecated
 public class Compass extends Sensor{
 
     private Geometry CompassStart;
@@ -195,6 +193,7 @@ public class Compass extends Sensor{
         }
         //return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
         Vector3f plus = (pe.getMagnetic_east().cross(vec_roll)).normalize();
+        //System.out.println("plus: " + plus);
         if( plus.getX() < 0 ){//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
         }else if( plus.getX() == 0){

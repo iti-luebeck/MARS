@@ -618,7 +618,6 @@ public class MARSView extends FrameView {
     private void createNodes(DefaultMutableTreeNode top){
         createAUVSNodes(auvs_treenode);
         createSIMOBSNodes(simobs_treenode);
-        createPENodes(physical_env_treenode);
         createSettingsNodes(settings_treenode);
         auv_tree.updateUI();
     }
@@ -816,26 +815,6 @@ public class MARSView extends FrameView {
             param_treenode1.add(param_treenode2);
             simob_treenode.add(param_treenode1);
         }
-    }
-
-    @Deprecated
-    private void createPENodes(DefaultMutableTreeNode treenode){
-        PhysicalEnvironment penv = simauv_settings.getPhysical_environment();
-        textfieldEditor.addCellEditorListener(penv);
-        HashMap<String,Object> envs = penv.getAllEnvironment();
-        SortedSet<String> sortedset= new TreeSet<String>(envs.keySet());
-
-        Iterator<String> it = sortedset.iterator();
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-            mars.xml.HashMapEntry hme = (mars.xml.HashMapEntry)envs.get(elem);
-            DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(hme.getValue());
-            param_treenode1.add(param_treenode2);
-            treenode.add(param_treenode1);
-        }
-        top.add(treenode);
     }
     
     public void showpopupWindowSwitcher(final int x, final int y){
@@ -2256,22 +2235,22 @@ public class MARSView extends FrameView {
             .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel25))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(jCheckBox4, javax.swing.GroupLayout.Alignment.LEADING)))
                     .addComponent(jButton22, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                         .addComponent(jButton31)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Cancel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)))
+                        .addComponent(Cancel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
+                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel24))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .addComponent(jCheckBox4))))
                 .addContainerGap())
         );
         auv_rotate_vector_dialogLayout.setVerticalGroup(
@@ -2279,16 +2258,16 @@ public class MARSView extends FrameView {
             .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
+                    .addComponent(jLabel23)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel24))
+                    .addComponent(jLabel24)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
+                    .addComponent(jLabel25)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)

@@ -27,7 +27,7 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment implements CellEditorListener{
+public class PhysicalEnvironment{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> environment;
@@ -68,22 +68,6 @@ public class PhysicalEnvironment implements CellEditorListener{
      * You have to initialize first when you read the data in trough jaxb.
      */
     public void init(){
-    }
-
-    @Deprecated
-    public void editingCanceled(ChangeEvent e){
-    }
-
-    @Deprecated
-    public void editingStopped(ChangeEvent e){
-        Object obj = e.getSource();
-        if (obj instanceof TextFieldEditor) {
-            TextFieldEditor editor = (TextFieldEditor)obj;
-            String pe_tree = editor.getTreepath().getPathComponent(1).toString();//get the auv
-            if(pe_tree.equals("Physical Environment")){//check if we ar meant
-                saveValue(editor);
-            }
-        }
     }
 
     @Deprecated
@@ -138,7 +122,6 @@ public class PhysicalEnvironment implements CellEditorListener{
     }
     
     public void updateState(TreePath path){
-        System.out.println("TREEPATH: " + path);
         if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
             updateState(path.getLastPathComponent().toString(),"");
         }

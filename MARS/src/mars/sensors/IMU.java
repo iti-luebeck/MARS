@@ -36,6 +36,8 @@ public class IMU extends Sensor{
     Gyroscope gyro = new Gyroscope();
     @XmlElement(name="Compass")
     Compass comp = new Compass();
+    @XmlElement(name="Orientationmeter")
+    Orientationmeter oro = new Orientationmeter();
     
     ///ROS stuff
     private Publisher<org.ros.message.sensor_msgs.Imu> publisher = null;
@@ -62,9 +64,11 @@ public class IMU extends Sensor{
         acc.setPhysical_environment(pe);
         comp.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
+        oro.setPhysical_environment(pe);
         acc.setSimState(simState);
         gyro.setSimState(simState);
         comp.setSimState(simState);
+        oro.setSimState(simState);
     }
 
     /**
@@ -76,6 +80,7 @@ public class IMU extends Sensor{
         acc.setSimState(simState);
         gyro.setSimState(simState);
         comp.setSimState(simState);
+        oro.setSimState(simState);
     }
 
     /**
@@ -86,8 +91,9 @@ public class IMU extends Sensor{
         acc.init(auv_node);
         gyro.init(auv_node);
         comp.init(auv_node);
+        oro.init(auv_node);
         
-        Vector3f angax = new Vector3f();
+        /*Vector3f angax = new Vector3f();
         //jme3_quat.toAngleAxis(angax);
         Vector3f ray_start =  new Vector3f(0f, 0f, 0f);
         Vector3f ray_direction = angax;//new Vector3f(jme3_quat.getX(), jme3_quat.getY(), jme3_quat.getZ());
@@ -98,7 +104,7 @@ public class IMU extends Sensor{
         mark4.setMaterial(mark_mat4);
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
-        rootNode.attachChild(mark4);
+        rootNode.attachChild(mark4);*/
     }
 
     /**
@@ -109,6 +115,7 @@ public class IMU extends Sensor{
         acc.update(tpf);
         gyro.update(tpf);
         comp.update(tpf);
+        oro.update(tpf);
     }
     
     /**
@@ -118,6 +125,7 @@ public class IMU extends Sensor{
         acc.reset();
         gyro.reset();
         comp.reset();
+        oro.reset();
     }
     
     @Override
@@ -126,6 +134,7 @@ public class IMU extends Sensor{
         acc.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
         comp.setPhysical_environment(pe);
+        oro.setPhysical_environment(pe);
     }
     
     /**
@@ -138,6 +147,7 @@ public class IMU extends Sensor{
         acc.setSimState(simState);
         gyro.setSimState(simState);
         comp.setSimState(simState);
+        oro.setSimState(simState);
     }
     
     @Override
@@ -146,6 +156,7 @@ public class IMU extends Sensor{
         acc.setPhysicsControl(physics_control);
         gyro.setPhysicsControl(physics_control);
         comp.setPhysicsControl(physics_control);
+        oro.setPhysicsControl(physics_control);
     }
     
         /**
@@ -158,6 +169,7 @@ public class IMU extends Sensor{
         acc.setNodeVisibility(visible);
         gyro.setNodeVisibility(visible);
         comp.setNodeVisibility(visible);
+        oro.setNodeVisibility(visible);
     }
 
     /**
@@ -170,6 +182,7 @@ public class IMU extends Sensor{
         acc.setPhysicalExchangerName(name + "_accelerometer");
         gyro.setPhysicalExchangerName(name + "_gyroscope");
         comp.setPhysicalExchangerName(name + "_compass");
+        oro.setPhysicalExchangerName(name + "_orientationmeter");
     }
     
     /**
@@ -182,6 +195,7 @@ public class IMU extends Sensor{
         acc.setEnabled(enabled);
         gyro.setEnabled(enabled);
         comp.setEnabled(enabled);
+        oro.setEnabled(enabled);
     }
     
     /**
@@ -215,30 +229,27 @@ public class IMU extends Sensor{
         ang_vec.z = gyro.getAngularVelocityYAxis();
         fl.angular_velocity = ang_vec;
         Quaternion quat = new Quaternion();
-        com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), comp.getPitchRadiant());
-        //System.out.println("jme3_quat: " + jme3_quat);
+        
         com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
+        com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion();
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
+        ter_orientation_rueck = ter_orientation.inverse();
+        
+        float[] bla = oro.getOrientation().toAngles(null);
+        
+        com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
+        //jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), comp.getPitchRadiant());
+        //jme3_quat.fromAngles(0f,comp.getYawRadiant(),0f);
+        //System.out.println("jme3_quat: " + jme3_quat);
+        jme3_quat.fromAngles(-bla[0],bla[1],-bla[2]);
+        
+        ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
+        
         //jme3_quat.fromAngles(0f, 0f, comp.getPitchRadiant());
-        quat.x = jme3_quat.multLocal(ter_orientation).getX();// switching x and z!!!!
-        quat.y = jme3_quat.multLocal(ter_orientation).getY();
-        quat.z = jme3_quat.multLocal(ter_orientation).getZ();
-        quat.w = jme3_quat.multLocal(ter_orientation).getW();
-        /*quat.x = jme3_quat.getZ();// switching x and z!!!!
-        quat.y = jme3_quat.getY();
-        quat.z = jme3_quat.getX();
-        quat.w = jme3_quat.getW();*/
-        //System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
-        //System.out.println("jme3_quat_local: " + jme3_quat);
-        float[] ff = jme3_quat.toAngles(null);
-        //System.out.println("yaw_loc: " + ff[0] + "/" + ff[1] + "/" + ff[2]);
-        /*Vector3f angax = new Vector3f();
-        jme3_quat.toAngleAxis(angax);
-        System.out.println("angax: " + angax);
-        Vector3f ray_start =  new Vector3f(0f, 0f, 0f);
-        Vector3f ray_direction = angax;//new Vector3f(jme3_quat.getX(), jme3_quat.getY(), jme3_quat.getZ());
-        arrow.setArrowExtent(ray_direction.mult(1f));*/
+        quat.x = ter_orientation.getX();// switching x and z!!!!
+        quat.y = ter_orientation.getY();
+        quat.z = ter_orientation.getZ();
+        quat.w = ter_orientation.getW();
         
         fl.orientation = quat;
         this.publisher.publish(fl);

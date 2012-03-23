@@ -192,22 +192,15 @@ public class Posemeter extends Sensor{
         Quaternion ter_orientation_rueck = new Quaternion();
         //ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
         //ter_orientation.fromAngles(0f, -FastMath.HALF_PI, 0f);
-        ter_orientation.fromAngles(-FastMath.HALF_PI, FastMath.PI, 0f);
+        ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         ter_orientation_rueck = ter_orientation.inverse();
         float[] bla = oro.getOrientation().toAngles(null);
-        //System.out.println("oroa:" + "yaw: " + bla[0] + " roll: " + bla[1] + " pitch: " + bla[2]);
+        System.out.println("oroa:" + "roll: " + bla[0] + " yaw: " + bla[1] + " pitch: " + bla[2]);
         //System.out.println("oro:" + oro.getOrientation());
-        /*orientation.x = oro.getOrientation().mult(ter_orientation).getX();
-        orientation.y = oro.getOrientation().mult(ter_orientation).getZ();//dont forget to switch y and z!!!!
-        orientation.z = oro.getOrientation().mult(ter_orientation).getY();
-        orientation.w = oro.getOrientation().mult(ter_orientation).getW();*/
-        /*orientation.x = ter_orientation.getX();
-        orientation.y = ter_orientation.getY();//dont forget to switch y and z!!!!
-        orientation.z = ter_orientation.getZ();
-        orientation.w = ter_orientation.getW();*/
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        //jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), comp.getPitchRadiant());
-        jme3_quat.fromAngles(0f,comp.getYawRadiant(),0f);
+        jme3_quat.fromAngles(-bla[0],bla[1],-bla[2]);
+        //jme3_quat.fromAngles(comp.getRollRadiant(), comp.getYawRadiant(), -comp.getPitchRadiant());
+        //jme3_quat.fromAngles(comp.getRollRadiant(),(-1f)*comp.getYawRadiant(),(-1f)*comp.getPitchRadiant());
         //System.out.println("yaw: " + comp.getYawRadiant() + " pitch: " + comp.getPitchRadiant() + " roll: " + comp.getRollRadiant());
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
         float[] ff = ter_orientation.toAngles(null);

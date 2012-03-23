@@ -22,15 +22,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
-import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 

@@ -16,8 +16,6 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import mars.PhysicalEnvironment;
-import mars.auv.AUV;
-import mars.auv.AUV_Parameters;
 import mars.xml.HashMapEntry;
 
 /**
@@ -186,8 +184,8 @@ public class PhysicalEnvironmentModel implements TreeModel{
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
-        System.out.println("*** valueForPathChanged : "
-                           + path + " --> " + newValue);
+        //System.out.println("*** valueForPathChanged : "
+        //                   + path + " --> " + newValue);
         
         //save the new value
         saveValue(path, path, newValue);
