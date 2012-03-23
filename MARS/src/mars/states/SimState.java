@@ -805,8 +805,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
           // The closest result is the target that the player picked:
-          Geometry target = results.getClosestCollision().getGeometry();
-          // Here comes the action:
+          //Geometry target = results.getClosestCollision().getGeometry();
+          for (int i = 0; i < results.size(); i++) {
+              Geometry target = results.getCollision(i).getGeometry();
+              // Here comes the action:
+              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+              if((String)target.getParent().getUserData("auv_name") != null){
+                  BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
+                  if(auv != null){
+                        auv.setSelected(true);
+                        guiControlState.setLatestSelectedAUV(auv);
+                        return;
+                    //guiControlState.setFree(false);
+                  }
+              }
+          }
+            
+          /*// Here comes the action:
           //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
           if(auv != null){
@@ -814,7 +829,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 guiControlState.setLatestSelectedAUV(auv);
                 return;
             //guiControlState.setFree(false);
-          }
+          }*/
         }else{//nothing to pickRightClick
                 auv_manager.deselectAllAUVs();
             //guiControlState.setFree(true);
@@ -824,22 +839,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
          SimObNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
-          // The closest result is the target that the player picked:
-          Geometry target = results.getClosestCollision().getGeometry();
-          // Here comes the action:
-          //System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
-          SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
-          if(simob != null){
-                simob.setSelected(true);
-                guiControlState.setLatestSelectedSimOb(simob);
-                return;
-            //guiControlState.setFree(false);
-          }
+            for (int i = 0; i < results.size(); i++) {
+              Geometry target = results.getCollision(i).getGeometry();
+              // Here comes the action:
+              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+                if((String)target.getParent().getUserData("simob_name") != null){
+                    SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
+                    if(simob != null){
+                        simob.setSelected(true);
+                        guiControlState.setLatestSelectedSimOb(simob);
+                        return;
+                        //guiControlState.setFree(false);
+                    }
+                }
+            }
         }else{//nothing to pickRightClick
                 simob_manager.deselectAllSimObs();
-        }
-        
-        
+        }     
     }
     
     private void pickRightClick(){

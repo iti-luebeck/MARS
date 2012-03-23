@@ -1193,7 +1193,6 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
             
         auv_node.setLocalTranslation(auv_param.getPosition());
-        //auv_node.rotate(auv_param.getRotation().x, auv_param.getRotation().y, auv_param.getRotation().z);
         auv_node.addControl(physics_control);
         auv_node.updateGeometricState();
     }
