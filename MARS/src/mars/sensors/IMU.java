@@ -218,11 +218,7 @@ public class IMU extends Sensor{
         header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
-        Vector3 acc_vec = new Vector3();
-        acc_vec.x = acc.getAccelerationXAxis();
-        acc_vec.y = acc.getAccelerationZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
-        acc_vec.z = acc.getAccelerationYAxis();
-        fl.linear_acceleration = acc_vec;
+        
         Vector3 ang_vec = new Vector3();
         ang_vec.x = gyro.getAngularVelocityXAxis();
         ang_vec.y = gyro.getAngularVelocityZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
@@ -234,7 +230,6 @@ public class IMU extends Sensor{
         com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion();
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         ter_orientation_rueck = ter_orientation.inverse();
-        
         float[] bla = oro.getOrientation().toAngles(null);
         
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
@@ -250,6 +245,16 @@ public class IMU extends Sensor{
         quat.y = ter_orientation.getY();
         quat.z = ter_orientation.getZ();
         quat.w = ter_orientation.getW();
+        
+        //Vector3f acc_jme3_vec = new Vector3f(0f, 0f, 1f);
+        Vector3f acc_jme3_vec = acc.getAcceleration();
+        Vector3 acc_vec = new Vector3();
+        com.jme3.math.Quaternion acc_quat = oro.getOrientation().inverse();
+        Vector3f acc_jme3_vec2 = acc_quat.multLocal(acc_jme3_vec);
+        acc_vec.x = -acc_jme3_vec2.getX();
+        acc_vec.y = -acc_jme3_vec2.getZ();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
+        acc_vec.z = acc_jme3_vec2.getY();
+        fl.linear_acceleration = acc_vec;
         
         fl.orientation = quat;
         this.publisher.publish(fl);

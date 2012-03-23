@@ -810,6 +810,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
               //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+              System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
               if((String)target.getParent().getUserData("auv_name") != null){
                   BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
                   if(auv != null){
@@ -881,6 +882,21 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         AUVsNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
+            for (int i = 0; i < results.size(); i++) {
+                Geometry target = results.getCollision(i).getGeometry();
+                guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
+                guiControlState.setAuvContactDirection(dir.normalize());
+                  // Here comes the action:
+                  if((String)target.getParent().getUserData("auv_name") != null){
+                      BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
+                      if(auv != null){
+                            //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
+                            view.initPopUpMenuesForAUV(auv.getAuv_param());
+                            view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y); 
+                      }
+                  }
+            }
+        /*if (results.size() > 0) {
           // The closest result is the target that the player picked:
           Geometry target = results.getClosestCollision().getGeometry();
           guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
@@ -893,7 +909,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
             view.initPopUpMenuesForAUV(auv.getAuv_param());
             view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
-          }
+          }*/
         }else{//nothing to pickRightClick but still normal context menu for split view
             //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();
