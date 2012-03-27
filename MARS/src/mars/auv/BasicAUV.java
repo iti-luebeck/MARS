@@ -820,6 +820,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
         if(!infinityCheck(buoyancy_force_vec)){
             physics_control.applyImpulse(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
+            //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
         }else{
             System.out.println("Too much force, caused be infinity...");
         }

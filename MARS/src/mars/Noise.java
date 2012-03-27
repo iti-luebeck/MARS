@@ -14,22 +14,21 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.xml.HashMapAdapter;
 
 /**
- * In this class should be several static methods for noise. Nothing done yet.
+ * In this class should be several static methods for noises. Nothing done yet.
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class Noise {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    protected HashMap<String,Object> noise;
+    @XmlElement(name="noise")
+    protected HashMap<String,Object> noises;
     /**
      *
      */
-    @XmlElement
     protected int noise_type = 0;
     /**
      *
      */
-    @XmlElement
     protected float noise_value = 1.0f;
     /*
      *
@@ -44,7 +43,7 @@ public class Noise {
      * @return
      */
     public int getNoise_type() {
-        return (Integer)noise.get("noise_type");
+        return (Integer)noises.get("noise_type");
     }
 
     /**
@@ -52,7 +51,7 @@ public class Noise {
      * @param noise_type
      */
     public void setNoise_type(int noise_type) {
-        noise.put("noise_type", noise_type);
+        noises.put("noise_type", noise_type);
     }
 
     /**
@@ -60,7 +59,7 @@ public class Noise {
      * @return
      */
     public float getNoise_value() {
-        return (Float)noise.get("noise_value");
+        return (Float)noises.get("noise_value");
     }
 
     /**
@@ -68,7 +67,7 @@ public class Noise {
      * @param noise_value
      */
     public void setNoise_value(float noise_value) {
-        noise.put("noise_value", noise_value);
+        noises.put("noise_value", noise_value);
     }
 
     /**
@@ -94,6 +93,6 @@ public class Noise {
     }
     
     public HashMap<String,Object> getAllNoiseVariables(){
-        return noise;
+        return noises;
     }
 }

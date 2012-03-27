@@ -195,7 +195,7 @@ public class Posemeter extends Sensor{
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         ter_orientation_rueck = ter_orientation.inverse();
         float[] bla = oro.getOrientation().toAngles(null);
-        System.out.println("oroa:" + "roll: " + bla[0] + " yaw: " + bla[1] + " pitch: " + bla[2]);
+        //System.out.println("oroa:" + "roll: " + bla[0] + " yaw: " + bla[1] + " pitch: " + bla[2]);
         //System.out.println("oro:" + oro.getOrientation());
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
         jme3_quat.fromAngles(-bla[0],bla[1],-bla[2]);

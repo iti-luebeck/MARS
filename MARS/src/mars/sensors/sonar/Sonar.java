@@ -714,6 +714,9 @@ public class Sonar extends Sensor{
         if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
+        if(isFailure()){
+            arr_ret = getFailuredData(arr_ret);
+        }
 
         return arr_ret;
     }
@@ -812,6 +815,9 @@ public class Sonar extends Sensor{
 
         if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
+        }
+        if(isFailure()){
+            arr_ret = getFailuredData(arr_ret);
         }
 
         return arr_ret;
@@ -924,10 +930,34 @@ public class Sonar extends Sensor{
         if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
+        if(isFailure()){
+            arr_ret = getFailuredData(arr_ret);
+        }
 
         return arr_ret;
     }
 
+    private byte[] getFailuredData(byte[] sondat){
+            for (int i = 0; i < sondat.length; i++) {
+                if( sondat[i] > getFailureThreshold() ){//only look at interesting sonar data
+                    int positionChange = random.nextInt(getFailureDeviationPositionChange());
+                    if(positionChange == 0){//shall we do a position change?
+                        int position = (int)(random.nextGaussian()*getFailureDeviationPosition());
+                        if( ((i+position) < 0) ){// dont forget to check the boundries
+                            position = 0;
+                        }else if( ((i+position) > (sondat.length-1)) ){
+                            position = sondat.length-1;
+                        }else{
+                            position = i + position;
+                        }
+                        //System.out.println("position " + i + ": " + position);
+                        sondat[position] = (byte)sondat[i];//overwrite the data at position
+                    }
+                }
+            }
+        return sondat;
+    }
+    
     private byte[] getNoisedData(byte[] sondat){
         for (int i = 0; i < sondat.length; i++) {
             float son_max = getSonarMaxRange();
@@ -967,6 +997,70 @@ public class Sonar extends Sensor{
     public void reset(){
         debug_node.detachAllChildren();
         scanning_iterations = 0;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isFailure() {
+        return (Boolean)noises.get("failure");
+    }
+
+    /**
+     *
+     * @param noise_value
+     */
+    public void setFailure(boolean failure) {
+        noises.put("failure", failure);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public float getFailureDeviationPosition() {
+        return (Float)noises.get("failure_deviation_position");
+    }
+
+    /**
+     *
+     * @param noise_value
+     */
+    public void setFailureDeviationPosition(float failure_deviation_position) {
+        noises.put("failure_deviation_position", failure_deviation_position);
+    }
+    
+     /**
+     * 
+     * @return
+     */
+    public int getFailureDeviationPositionChange() {
+        return (Integer)noises.get("failure_deviation_position_change");
+    }
+
+    /**
+     *
+     * @param noise_value
+     */
+    public void setFailureDeviationPositionChange(int failure_deviation_position_change) {
+        noises.put("failure_deviation_position_change", failure_deviation_position_change);
+    }
+    
+         /**
+     * 
+     * @return
+     */
+    public int getFailureThreshold() {
+        return (Integer)noises.get("failure_threshold");
+    }
+
+    /**
+     *
+     * @param noise_value
+     */
+    public void setFailureThreshold(int failure_threshold) {
+        noises.put("failure_threshold", failure_threshold);
     }
     
     /**

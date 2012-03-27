@@ -250,10 +250,14 @@ public class IMU extends Sensor{
         Vector3f acc_jme3_vec = acc.getAcceleration();
         Vector3 acc_vec = new Vector3();
         com.jme3.math.Quaternion acc_quat = oro.getOrientation().inverse();
-        Vector3f acc_jme3_vec2 = acc_quat.multLocal(acc_jme3_vec);
-        acc_vec.x = -acc_jme3_vec2.getX();
+        Vector3f acc_jme3_vec2 = acc_quat.mult(acc_jme3_vec);
+        acc_vec.x = acc_jme3_vec2.getX();
         acc_vec.y = -acc_jme3_vec2.getZ();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
         acc_vec.z = acc_jme3_vec2.getY();
+        //System.out.println("acc.getAcceleration(): " + acc.getAcceleration().length());
+        /*acc_vec.x = acc.getAccelerationXAxis();
+        acc_vec.y = acc.getAccelerationZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
+        acc_vec.z = acc.getAccelerationYAxis();*/
         fl.linear_acceleration = acc_vec;
         
         fl.orientation = quat;
