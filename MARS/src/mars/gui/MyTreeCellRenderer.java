@@ -64,12 +64,22 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
             }else{
                setIcon(new javax.swing.ImageIcon(view.getClass().getResource("/mars/gui/resources/icons/yellow_submarine.png"))); 
             }
+            if(auvParams.isEnabled()){
+                setEnabled(true);
+            }else{
+                setEnabled(false);
+            }
         }else if(value instanceof SimObject){
             SimObject simob = (SimObject)value;
             if(simob.getIcon() != null && !(simob.getIcon().equals(""))){
                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+simob.getIcon())); 
             }else{
                setIcon(new javax.swing.ImageIcon(view.getClass().getResource("/mars/gui/resources/icons/box_closed.png"))); 
+            }
+            if(simob.isEnabled()){
+                setEnabled(true);
+            }else{
+                setEnabled(false);
             }
         }else if(value instanceof HashMapWrapper){
             HashMapWrapper hasher = (HashMapWrapper)value;
@@ -96,6 +106,11 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();
+                    if(pe.isEnabled()){
+                        setEnabled(true);
+                    }else{
+                        setEnabled(false);
+                    }
                     if(pe.getIcon() != null && !(pe.getIcon().equals(""))){
                         setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+pe.getIcon()));
                     }else{

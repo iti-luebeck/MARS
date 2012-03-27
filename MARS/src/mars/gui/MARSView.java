@@ -617,7 +617,6 @@ public class MARSView extends FrameView {
     @Deprecated
     private void createNodes(DefaultMutableTreeNode top){
         createAUVSNodes(auvs_treenode);
-        createSIMOBSNodes(simobs_treenode);
         createSettingsNodes(settings_treenode);
         auv_tree.updateUI();
     }
@@ -767,54 +766,6 @@ public class MARSView extends FrameView {
             actuators_treenode.add(act_treenode);
         }
         treenode.add(actuators_treenode);
-    }
-
-    @Deprecated
-    private void createSIMOBSNodes(DefaultMutableTreeNode treenode){
-        Iterator iter = simobs.iterator();
-        while(iter.hasNext() ) {
-            SimObject simob = (SimObject)iter.next();
-            textfieldEditor.addCellEditorListener(simob);
-            DefaultMutableTreeNode simob_treenode = new DefaultMutableTreeNode(simob);
-            treenode.add(simob_treenode);
-
-            HashMap<String,Object> vars = simob.getAllVariables();
-            SortedSet<String> sortedset= new TreeSet<String>(vars.keySet());
-            Iterator<String> it = sortedset.iterator();
-
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(vars.get(elem) instanceof HashMap){
-                    createHashMapNodesSettings(simob_treenode,elem,(HashMap<String,Object>)vars.get(elem));
-                }else{
-                    DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-                    DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(vars.get(elem));
-                    param_treenode1.add(param_treenode2);
-                    simob_treenode.add(param_treenode1);
-                }
-            }
-        }
-        top.add(treenode);
-    }
-
-    @Deprecated
-    private void createSIMOBNode(DefaultMutableTreeNode treenode, SimObject simob){
-        DefaultMutableTreeNode simob_treenode = new DefaultMutableTreeNode(simob);
-        treenode.add(simob_treenode);
-
-        textfieldEditor.addCellEditorListener(simob);
-        HashMap<String,Object> vars = simob.getAllVariables();
-        SortedSet<String> sortedset= new TreeSet<String>(vars.keySet());
-
-        Iterator<String> it = sortedset.iterator();
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-            DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(vars.get(elem));
-            param_treenode1.add(param_treenode2);
-            simob_treenode.add(param_treenode1);
-        }
     }
     
     public void showpopupWindowSwitcher(final int x, final int y){
@@ -1062,6 +1013,9 @@ public class MARSView extends FrameView {
         booleanPopUp = new javax.swing.JPopupMenu();
         booleanPopUpEnable = new javax.swing.JMenuItem();
         booleanPopUpDisable = new javax.swing.JMenuItem();
+        booleanPopUpSimObject = new javax.swing.JPopupMenu();
+        booleanPopUpEnable1 = new javax.swing.JMenuItem();
+        booleanPopUpDisable1 = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2806,6 +2760,26 @@ public class MARSView extends FrameView {
         });
         booleanPopUp.add(booleanPopUpDisable);
 
+        booleanPopUpSimObject.setName("booleanPopUpSimObject"); // NOI18N
+
+        booleanPopUpEnable1.setText(resourceMap.getString("booleanPopUpEnable1.text")); // NOI18N
+        booleanPopUpEnable1.setName("booleanPopUpEnable1"); // NOI18N
+        booleanPopUpEnable1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpEnable1ActionPerformed(evt);
+            }
+        });
+        booleanPopUpSimObject.add(booleanPopUpEnable1);
+
+        booleanPopUpDisable1.setText(resourceMap.getString("booleanPopUpDisable1.text")); // NOI18N
+        booleanPopUpDisable1.setName("booleanPopUpDisable1"); // NOI18N
+        booleanPopUpDisable1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpDisable1ActionPerformed(evt);
+            }
+        });
+        booleanPopUpSimObject.add(booleanPopUpDisable1);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -3056,7 +3030,7 @@ public class MARSView extends FrameView {
         }
         if(valid_values){
             simob_manager.registerSimObject(simob);
-            createSIMOBNode(simobs_treenode, simob);
+            //createSIMOBNode(simobs_treenode, simob);
             xmll.addSimObject(simob);
             auv_tree.updateUI();
             new_simob_dialog.setVisible(false);
@@ -3805,7 +3779,98 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_auv_treeMouseClicked
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
-        // TODO add your handling code here:
+        if (evt.getButton() == MouseEvent.BUTTON3) {   
+            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());         
+            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            if (selRow != -1) { 
+                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString());  
+                simob_tree.setSelectionPath(selPath);  
+                try {  
+                    if (selPath.getLastPathComponent() instanceof SimObject) {   
+                        //auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
+                    }/*else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
+                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
+                    }*/else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                         if(hashwrap.getUserData() instanceof Boolean){
+                             if((Boolean)hashwrap.getUserData()){
+                                 booleanPopUpEnable1.setVisible(false);
+                                 booleanPopUpDisable1.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable1.setVisible(true);
+                                 booleanPopUpDisable1.setVisible(false);
+                             }
+                             booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
+                         }
+                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                        if((Boolean)selPath.getLastPathComponent()){
+                                 booleanPopUpEnable1.setVisible(false);
+                                 booleanPopUpDisable1.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable1.setVisible(true);
+                                 booleanPopUpDisable1.setVisible(false);
+                             }
+                        booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }       
+                } catch (IllegalArgumentException e) {       
+                }         
+            }       
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {
+            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());      
+            if (selRow != -1) { 
+                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString()); 
+                simob_tree.setSelectionPath(selPath);  
+                try {  
+                    if (selPath.getLastPathComponent() instanceof SimObject) {   
+                        final SimObject simob = (SimObject)selPath.getLastPathComponent();
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectSimObs(null);
+                                    simState.selectSimObs(simob);
+                                }
+                                return null;
+                            }
+                        });  
+                    }else{
+                            Future simStateFuture = mars.enqueue(new Callable() {
+                                public Void call() throws Exception {
+                                    if(mars.getStateManager().getState(SimState.class) != null){
+                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                        simState.deselectSimObs(null);
+                                    }
+                                    return null;
+                                }
+                            });
+                    }        
+                } catch (IllegalArgumentException e) {
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectSimObs(null);
+                                }
+                                return null;
+                            }
+                        });
+                }         
+            }else{
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.deselectSimObs(null);
+                                }
+                                return null;
+                            }
+                        });
+            }
+        } 
     }//GEN-LAST:event_simob_treeMouseClicked
 
     private void booleanPopUpEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnableActionPerformed
@@ -3852,6 +3917,32 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         toggleJMenuCheckbox(jme3_debug_auv_wireframe);
     }//GEN-LAST:event_jme3_debug_auv_wireframeActionPerformed
 
+    private void booleanPopUpEnable1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnable1ActionPerformed
+        if (simob_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)simob_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
+                mod.valueForPathChanged(simob_tree.getSelectionPath(), true);
+            }
+        }else if(simob_tree.getLastSelectedPathComponent() instanceof Boolean){
+            SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
+            mod.valueForPathChanged(simob_tree.getSelectionPath(), true);
+        }
+    }//GEN-LAST:event_booleanPopUpEnable1ActionPerformed
+
+    private void booleanPopUpDisable1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisable1ActionPerformed
+        if (simob_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)simob_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
+                mod.valueForPathChanged(simob_tree.getSelectionPath(), false);
+            }
+        }else if(simob_tree.getLastSelectedPathComponent() instanceof Boolean){
+            SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
+            mod.valueForPathChanged(simob_tree.getSelectionPath(), false);
+        }
+    }//GEN-LAST:event_booleanPopUpDisable1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -3886,7 +3977,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private DefaultTreeCellRenderer renderer;
     private javax.swing.JPopupMenu booleanPopUp;
     private javax.swing.JMenuItem booleanPopUpDisable;
+    private javax.swing.JMenuItem booleanPopUpDisable1;
     private javax.swing.JMenuItem booleanPopUpEnable;
+    private javax.swing.JMenuItem booleanPopUpEnable1;
+    private javax.swing.JPopupMenu booleanPopUpSimObject;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;
     private javax.swing.JColorChooser color_dialog;

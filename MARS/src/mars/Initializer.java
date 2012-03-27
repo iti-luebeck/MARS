@@ -474,7 +474,6 @@ public class Initializer {
     private void setupLight(){
         DirectionalLight sun = new DirectionalLight();
         sun.setColor(mars_settings.getLight_color());
-        //sun.setColor(ColorRGBA.White.clone().multLocal(2));
         sun.setDirection(mars_settings.getLight_direction().normalize());
         rootNode.addLight(sun);
     }

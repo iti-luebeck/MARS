@@ -219,23 +219,25 @@ public class SimObjectManagerModel implements TreeModel{
         if(!(obj instanceof HashMapWrapper)){
             saveValue(originalPath,path.getParentPath(),value);
         }else{
-            /*HashMapWrapper hasher = (HashMapWrapper)obj;
+            HashMapWrapper hasher = (HashMapWrapper)obj;
             if(hasher.getUserData() instanceof LeafWrapper){
                 saveValue(originalPath,path.getParentPath(),value);
             }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
                 Object preObj = (Object)path.getParentPath().getLastPathComponent();
-                if(preObj instanceof AUV_Parameters){
-                    AUV_Parameters auv_param = (AUV_Parameters)preObj;
-                    auv_param.getAllVariables().put(hasher.getName(), value);
+                if(preObj instanceof SimObject){
+                    SimObject simob = (SimObject)preObj;
+                    simob.getAllVariables().put(hasher.getName(), value);
                     hasher.setUserData(value);
                 }else if(preObj instanceof HashMapWrapper){
                     HashMapWrapper hashwrap = (HashMapWrapper)preObj;
-                    HashMap<String,Object> hashmap = (HashMap<String,Object>)hashwrap.getUserData();
-                    hashmap.put(hasher.getName(), value);
+                    if(hashwrap.getUserData() instanceof HashMap){
+                        HashMap<String,Object> hashmap = (HashMap<String,Object>)hashwrap.getUserData();
+                        hashmap.put(hasher.getName(), value);
+                    }
                     hasher.setUserData(value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);
+                SimObject simob = (SimObject)originalPath.getPathComponent(1);
+                simob.updateState(path);
             }else if(hasher.getUserData() instanceof Vector3f){
                 Vector3f vec = (Vector3f)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -248,8 +250,8 @@ public class SimObjectManagerModel implements TreeModel{
                 }else if(preObj.getName().equals("Z")){
                     vec.setZ((Float)value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);
+                SimObject simob = (SimObject)originalPath.getPathComponent(1);
+                simob.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
                 ColorRGBA color = (ColorRGBA)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -264,9 +266,9 @@ public class SimObjectManagerModel implements TreeModel{
                 }else if(preObj.getName().equals("A")){
                     color.a = ((Float)value);
                 }
-                AUV_Parameters auvParam = (AUV_Parameters)originalPath.getPathComponent(2);
-                auvParam.updateState(path);    
-            }*/
+                SimObject simob = (SimObject)originalPath.getPathComponent(1);
+                simob.updateState(path);    
+            }
         }
     }
     

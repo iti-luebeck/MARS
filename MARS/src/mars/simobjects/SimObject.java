@@ -19,14 +19,14 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import mars.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,7 +44,7 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
-public class SimObject implements CellEditorListener{
+public class SimObject{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name="")
@@ -79,6 +79,7 @@ public class SimObject implements CellEditorListener{
     private MARS_Main simauv;
     private AssetManager assetManager;
     private Spatial spatial;
+    private Material spatialMaterial;
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
 
@@ -115,21 +116,8 @@ public class SimObject implements CellEditorListener{
     public SimObject(){
         
     }
-
-    public void editingCanceled(ChangeEvent e){
-    }
-
-    public void editingStopped(ChangeEvent e){
-        Object obj = e.getSource();
-        if (obj instanceof TextFieldEditor) {
-            TextFieldEditor editor = (TextFieldEditor)obj;
-            String sim_ob_tree = editor.getTreepath().getParentPath().getParentPath().getLastPathComponent().toString();
-            if(sim_ob_tree.equals(getName())){//check if right simobject
-                saveValue(editor);
-            }
-        }
-    }
     
+    @Deprecated
     private void saveValue(TextFieldEditor editor){
         HashMap<String,Object> hashmap = simob_variables;
         String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
@@ -148,13 +136,14 @@ public class SimObject implements CellEditorListener{
             detectType(obj,editor,target,hashmap);
         }
     }
-
+    
+    @Deprecated
     private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
         Object node_obj = node.getUserObject();
         Object[] treepath = editor.getTreepath().getPath();
         int pathcount = editor.getTreepath().getPathCount();
-        if(obj instanceof Float){
+        /*if(obj instanceof Float){
             hashmap.put(target, (Float)node_obj);
             updateState(target);
             xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
@@ -178,46 +167,42 @@ public class SimObject implements CellEditorListener{
             hashmap.put(target, (ColorRGBA)node_obj);
             updateState(target);
             xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }
+        }*/
     }
 
-    private void updateState(String target){
-        if(target.equals("debug_collision")){
-            if( isDebugCollision() == false && physics_control != null ){
-                physics_control.detachDebugShape();
-            }else if( isDebugCollision() && physics_control != null ){
-                Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
-                debug_mat.setColor("Color", ColorRGBA.Red);
-                //physics_control.attachDebugShape(debug_mat);
-            }
-        }else if(target.equals("position")){
+    public void updateState(TreePath path){
+        if(path.getPathComponent(1).equals(this)){//make sure we want to change auv params 
+            System.out.println("update tts " + path);
+            updateState(path.getLastPathComponent().toString(),"");
+        }
+    }
+    
+    public void updateState(String target, String hashmapname){
+        if(target.equals("position") && hashmapname.equals("")){
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getPosition());
-            }else{
-                spatial.setLocalTranslation(getPosition());
             }
-        }else if(target.equals("rotation")){
+        }else if(target.equals("rotation") && hashmapname.equals("")){
             if(physics_control != null ){
                 Matrix3f m_rot = new Matrix3f();
                 Quaternion q_rot = new Quaternion();
                 q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
                 m_rot.set(q_rot);
                 physics_control.setPhysicsRotation(m_rot);
-            }else{
-                spatial.rotate(getRotation().x,getRotation().y,getRotation().z);
             }
-        }else if(target.equals("scale")){
-            spatial.setLocalScale(getScale());
-        }else if(target.equals("color")){
-            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", getColor());
-            spatial.setMaterial(mat);
-        }else if(target.equals("dimensions")){
-            /*if(physics_control != null ){
-                BoxCollisionShape collisionShape = new BoxCollisionShape(getDimensions());
-                physics_control.setCollisionShape(collisionShape);
-            }*/
-        }
+        }else if(target.equals("scale") && hashmapname.equals("")){
+            getSpatial().setLocalScale(getScale());
+        }else if(target.equals("color") && hashmapname.equals("")){
+            spatialMaterial.setColor("Color", getColor());
+        }else if(target.equals("light") && hashmapname.equals("")){
+            if(!isLight()){
+                spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                spatialMaterial.setColor("Color", getColor());
+                spatial.setMaterial(spatialMaterial);
+            }else{
+                
+            }
+        }     
     }
 
     /**
@@ -238,9 +223,9 @@ public class SimObject implements CellEditorListener{
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
         if(!isLight()){
-            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", getColor());
-            spatial.setMaterial(mat);
+            spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            spatialMaterial.setColor("Color", getColor());
+            spatial.setMaterial(spatialMaterial);
         }
         spatial.updateGeometricState();
 

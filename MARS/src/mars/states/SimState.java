@@ -689,6 +689,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     guiControlState.setMove_simob(true);
                     guiControlState.setGhostObject(selected_simob.getGhostSpatial());
                     //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSpatial().worldToLocal(selected_simob.getSpatial().getWorldTranslation(),null));//initial location set
+                    guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSelectionNode().worldToLocal(guiControlState.getIntersection(),null));
                     selected_simob.hideGhostSpatial(false);
                 }
             }else if(name.equals("moveauv") && !keyPressed) {
@@ -755,7 +756,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         guiControlState.setIntersection(intersection);
         System.out.println("Intersection: " + intersection);
         if(guiControlState.getGhostObject() != null){
-            System.out.println("simob.getSpatial().worldToLocal(intersection,null): " + simob.getSelectionNode().worldToLocal(intersection,null));
+            //System.out.println("simob.getSpatial().worldToLocal(intersection,null): " + simob.getSelectionNode().worldToLocal(intersection,null));
             guiControlState.getGhostObject().setLocalTranslation(simob.getSelectionNode().worldToLocal(intersection,null));
             //guiControlState.getGhostObject().setLocalRotation(guiControlState.getRotation());
         }
@@ -810,7 +811,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
               //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
-              System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
               if((String)target.getParent().getUserData("auv_name") != null){
                   BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
                   if(auv != null){
@@ -837,14 +838,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
 
         results.clear();
-         SimObNode.collideWith(ray, results);
+        SimObNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
             for (int i = 0; i < results.size(); i++) {
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
-              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
-                if((String)target.getParent().getUserData("simob_name") != null){
+              System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
+                if((String)target.getUserData("simob_name") != null){
                     SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
                     if(simob != null){
                         simob.setSelected(true);
@@ -1337,6 +1338,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     public void deselectAUV(AUV auv){
         auv_manager.deselectAllAUVs();
+    }
+    
+    public void deselectSimObs(SimObject simob){
+        simob_manager.deselectAllSimObs();
+    }
+    
+    public void selectSimObs(SimObject simob){
+        if(simob != null){
+            if(simob.isEnabled()){
+                simob.setSelected(true);
+                guiControlState.setLatestSelectedSimOb(simob);
+            }
+        }
     }
     
     public void splitView(){
