@@ -60,6 +60,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import mars.KeyConfig;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -94,6 +95,7 @@ import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
 import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 /**
  * The application's main frame.
@@ -112,7 +114,9 @@ public class MARSView extends FrameView {
     private DefaultMutableTreeNode simobs_treenode = new DefaultMutableTreeNode(s_simob);
     private DefaultMutableTreeNode physical_env_treenode = new DefaultMutableTreeNode(s_pe);
     private DefaultMutableTreeNode settings_treenode = new DefaultMutableTreeNode(s_set);
-    private MARS_Settings simauv_settings;
+    private MARS_Settings mars_settings;
+    private KeyConfig keyConfig;
+    private PhysicalEnvironment penv;
     private ArrayList auvs = new ArrayList();
     private ArrayList simobs = new ArrayList();
     private AUV_Manager auv_manager;
@@ -263,7 +267,7 @@ public class MARSView extends FrameView {
 
     /**
      *
-     * @param simauv_settings
+     * @param mars_settings
      * @param auvs
      * @param simobs
      */
@@ -343,9 +347,17 @@ public class MARSView extends FrameView {
     }
     
     public void setMarsSettings(MARS_Settings simauv_settings){
-        this.simauv_settings = simauv_settings;
+        this.mars_settings = simauv_settings;
     }
-    
+
+    public void setKeyConfig(KeyConfig keyConfig) {
+        this.keyConfig = keyConfig;
+    }
+
+    public void setPenv(PhysicalEnvironment penv) {
+        this.penv = penv;
+    }
+   
     public void initPopUpMenues(){
     }
     
@@ -623,8 +635,8 @@ public class MARSView extends FrameView {
 
     @Deprecated
     private void createSettingsNodes(DefaultMutableTreeNode treenode){
-        textfieldEditor.addCellEditorListener(simauv_settings);
-        HashMap<String,Object> set = simauv_settings.getSettings();
+        textfieldEditor.addCellEditorListener(mars_settings);
+        HashMap<String,Object> set = mars_settings.getSettings();
 
         for ( String elem : set.keySet() ){
             if(set.get(elem) instanceof HashMap){
@@ -1228,8 +1240,8 @@ public class MARSView extends FrameView {
         jMenuItem1.setName("jMenuItem1"); // NOI18N
         jFileMenu.add(jMenuItem1);
 
+        saveconfigto.setIcon(resourceMap.getIcon("saveconfigto.icon")); // NOI18N
         saveconfigto.setText(resourceMap.getString("saveconfigto.text")); // NOI18N
-        saveconfigto.setEnabled(false);
         saveconfigto.setName("saveconfigto"); // NOI18N
         saveconfigto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1238,6 +1250,7 @@ public class MARSView extends FrameView {
         });
         jFileMenu.add(saveconfigto);
 
+        saveconfig.setIcon(resourceMap.getIcon("saveconfig.icon")); // NOI18N
         saveconfig.setText(resourceMap.getString("saveconfig.text")); // NOI18N
         saveconfig.setEnabled(false);
         saveconfig.setName("saveconfig"); // NOI18N
@@ -2892,8 +2905,7 @@ public class MARSView extends FrameView {
         save_config_FileChooser.showSaveDialog(null);
         File f = save_config_FileChooser.getSelectedFile();
         if(f != null){
-            xmll.writeXmlFile(f);
-            System.out.println(f.toString());
+            XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auv_manager, simob_manager, keyConfig, penv);
         }
     }//GEN-LAST:event_saveconfigtoActionPerformed
 

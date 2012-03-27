@@ -1002,6 +1002,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
         if(view != null && !view_init && mars_settings!=null){
             view.setMarsSettings(mars_settings);
+            view.setPenv(physical_environment);
+            view.setKeyConfig(keyconfig);
             //view.initTree(mars_settings,auvs,simobs);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);

@@ -20,11 +20,14 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import mars.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.gui.HashMapWrapper;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
@@ -82,6 +86,7 @@ public class SimObject{
     private Material spatialMaterial;
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
+    private Spatial debugShape;
 
     /**
      * 
@@ -172,8 +177,13 @@ public class SimObject{
 
     public void updateState(TreePath path){
         if(path.getPathComponent(1).equals(this)){//make sure we want to change auv params 
-            System.out.println("update tts " + path);
-            updateState(path.getLastPathComponent().toString(),"");
+            //System.out.println("update tts " + path);
+            Object obj = path.getParentPath().getLastPathComponent();
+            if(path.getParentPath().getLastPathComponent() instanceof HashMapWrapper){
+                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
+            }else{
+                updateState(path.getLastPathComponent().toString(),"");
+            }
         }
     }
     
@@ -192,7 +202,10 @@ public class SimObject{
             }
         }else if(target.equals("scale") && hashmapname.equals("")){
             getSpatial().setLocalScale(getScale());
+        }else if(target.equals("debug_collision") && hashmapname.equals("Collision")){
+            setCollisionVisible(isDebugCollision());
         }else if(target.equals("color") && hashmapname.equals("")){
+            
             spatialMaterial.setColor("Color", getColor());
         }else if(target.equals("light") && hashmapname.equals("")){
             if(!isLight()){
@@ -223,7 +236,6 @@ public class SimObject{
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
         if(!isLight()){
-            spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             spatialMaterial.setColor("Color", getColor());
             spatial.setMaterial(spatialMaterial);
         }
@@ -256,11 +268,18 @@ public class SimObject{
         physics_control = new RigidBodyControl(collisionShape, 0f);
         physics_control.setCollisionGroup(1);
         physics_control.setCollideWithGroups(1);
+        
+         //debug
+        Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        debug_mat.setColor("Color", ColorRGBA.Red);
+        debugShape = physics_control.createDebugShape(assetManager);
+        selectionNode.attachChild(debugShape);
         if(isDebugCollision()){
-            Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
-            debug_mat.setColor("Color", ColorRGBA.Red);
-            //physics_control.attachDebugShape(debug_mat);
+            debugShape.setCullHint(CullHint.Inherit);
+        }else{
+            debugShape.setCullHint(CullHint.Always);
         }
+        
         spatial.addControl(physics_control);
         spatial.updateGeometricState();
     }
@@ -279,6 +298,7 @@ public class SimObject{
         selectionNode.attachChild(spatial);
         spatial.updateGeometricState();
         selectionNode.updateGeometricState();
+        spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     }
     
     /**
@@ -698,6 +718,40 @@ public class SimObject{
              ghost_simob_spatial.setCullHint(CullHint.Always);
         }else{
              ghost_simob_spatial.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void setCollisionVisible(boolean visible){
+        if(visible){
+            debugShape.setCullHint(CullHint.Inherit);
+        }else{
+            debugShape.setCullHint(CullHint.Always);
+        }
+    }
+    
+    public void setWireframeVisible(boolean visible){
+        if(visible){
+            Node nodes = (Node)spatial;
+            List<Spatial> children = nodes.getChildren();
+            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
+                Spatial spatial2 = it.next();
+                System.out.println(spatial2.getName());
+                if(spatial2 instanceof Geometry){
+                    Geometry geom = (Geometry)spatial2;
+                    geom.getMaterial().getAdditionalRenderState().setWireframe(true);
+                }
+            }
+        }else{
+            Node nodes = (Node)spatial;
+            List<Spatial> children = nodes.getChildren();
+            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
+                Spatial spatial2 = it.next();
+                System.out.println(spatial2.getName());
+                if(spatial2 instanceof Geometry){
+                    Geometry geom = (Geometry)spatial2;
+                    geom.getMaterial().getAdditionalRenderState().setWireframe(false);
+                }
+            }
         }
     }
 

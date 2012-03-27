@@ -366,8 +366,8 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="saveconfigto">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="saveconfigto.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="saveconfigto.text"/>
-                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="saveconfigto" noResource="true"/>
               </Properties>
               <Events>
@@ -376,6 +376,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="saveconfig">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="saveconfig.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="saveconfig.text"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="saveconfig" noResource="true"/>
