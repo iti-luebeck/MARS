@@ -287,6 +287,9 @@
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
 					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_switch">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_deviation_position">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">5.0</value>
 					</entry>
@@ -423,6 +426,9 @@
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_switch">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_deviation_position">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">5.0</value>
@@ -1054,6 +1060,9 @@
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_switch">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_deviation_position">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">5.0</value>

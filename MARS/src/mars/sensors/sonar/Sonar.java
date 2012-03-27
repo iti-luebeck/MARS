@@ -951,7 +951,13 @@ public class Sonar extends Sensor{
                             position = i + position;
                         }
                         //System.out.println("position " + i + ": " + position);
-                        sondat[position] = (byte)sondat[i];//overwrite the data at position
+                        if(isFailureSwitch()){//overwrite the data at position or switch
+                            byte sondatSave = sondat[position];
+                            sondat[position] = (byte)sondat[i];
+                            sondat[i] = sondatSave;
+                        }else{
+                            sondat[position] = (byte)sondat[i];
+                        }
                     }
                 }
             }
@@ -1013,6 +1019,22 @@ public class Sonar extends Sensor{
      */
     public void setFailure(boolean failure) {
         noises.put("failure", failure);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isFailureSwitch() {
+        return (Boolean)noises.get("failure_switch");
+    }
+
+    /**
+     *
+     * @param noise_value
+     */
+    public void setFailureSwitch(boolean failure_switch) {
+        noises.put("failure_switch", failure_switch);
     }
     
     /**
