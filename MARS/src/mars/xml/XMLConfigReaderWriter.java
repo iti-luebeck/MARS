@@ -1073,7 +1073,7 @@ public class XMLConfigReaderWriter
         for (int k = 0; k < nl3.getLength(); k++) {
             Node AUVParametersNode = nl3.item(k);
             if(AUVParametersNode.getNodeName().equals("mass_auv")){
-                auv_param.setMass_auv(Float.valueOf(AUVParametersNode.getTextContent().trim()));
+                auv_param.setMass(Float.valueOf(AUVParametersNode.getTextContent().trim()));
             }else if(AUVParametersNode.getNodeName().equals("enabled")){
                 auv_param.setEnabled(Boolean.valueOf(AUVParametersNode.getTextContent().trim()));
             }else if(AUVParametersNode.getNodeName().equals("class")){

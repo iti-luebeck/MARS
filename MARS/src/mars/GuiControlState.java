@@ -4,9 +4,16 @@
  */
 package mars;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.debug.Arrow;
 import mars.auv.AUV;
 import mars.simobjects.SimObject;
 
@@ -33,8 +40,62 @@ public class GuiControlState {
     private Vector3f contact_direction = Vector3f.ZERO;
     private AUV latestSelectedAUV = null;
     private SimObject latestSelectedSimOb = null;
+    private Arrow arrow;
+    private Geometry rotateArrow;
+    private AssetManager assetManager;
+    private Node GUINode = new Node("GUI_Node");
+    private Vector3f rotateArrowVectorStart = Vector3f.ZERO;
+    private Vector3f rotateArrowVectorEnd = Vector3f.UNIT_X;
+    
+    public GuiControlState(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+    
+    public void init(){
+        arrow = new Arrow(getRotateArrowVectorEnd());
+        Vector3f ray_start = getRotateArrowVectorStart();
+        rotateArrow = new Geometry("RotateArrow", arrow);
+        Material mark_mat4 = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.White);
+        rotateArrow.setMaterial(mark_mat4);
+        rotateArrow.setLocalTranslation(ray_start);
+        rotateArrow.updateGeometricState();
+        setRotateArrowVisible(false);
+        GUINode.attachChild(rotateArrow);
+    }
+    
+    public void updateRotateArrow(){
+        rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
+        arrow.setArrowExtent(getRotateArrowVectorEnd());
+        rotateArrow.updateGeometricState();
+    }
+    
+    public void setRotateArrowVisible(boolean visible){
+        if(visible){
+            rotateArrow.setCullHint(CullHint.Inherit);
+        }else{
+            rotateArrow.setCullHint(CullHint.Always);
+        }
+    }
 
-    public GuiControlState() {
+    public Vector3f getRotateArrowVectorEnd() {
+        return rotateArrowVectorEnd;
+    }
+
+    public void setRotateArrowVectorEnd(Vector3f rotateArrowVectorEnd) {
+        this.rotateArrowVectorEnd = rotateArrowVectorEnd;
+    }
+
+    public Vector3f getRotateArrowVectorStart() {
+        return rotateArrowVectorStart;
+    }
+
+    public void setRotateArrowVectorStart(Vector3f rotateArrowVectorStart) {
+        this.rotateArrowVectorStart = rotateArrowVectorStart;
+    }
+
+    public Node getGUINode() {
+        return GUINode;
     }
 
     public AUV getLatestSelectedAUV() {

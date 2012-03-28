@@ -114,7 +114,7 @@ public class AUV_Parameters implements CellEditorListener{
         setPosition(position);
         setRotation(rotation);
         setLinear_factor(linear_factor);
-        setMass_auv(mass_auv);
+        setMass(mass_auv);
         setMaxWaypoints(maxWaypoints);
         setModelFilePath(model_filepath);
         setModel_name(model_name);
@@ -264,7 +264,7 @@ public class AUV_Parameters implements CellEditorListener{
                 CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
                 BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getDimensions());
                 compoundCollisionShape1.addChildShape(boxCollisionShape, getCentroid_center_distance());
-                RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass_auv());
+                RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass());
                 if(isDebugCollision()){
                     Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
                     debug_mat.setColor("Color", ColorRGBA.Red);
@@ -281,9 +281,15 @@ public class AUV_Parameters implements CellEditorListener{
             auv.setCentersVisible(isDebugCenters());
         }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
             auv.setWaypointsEnabled(isWaypoints_enabled());
-        }  else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
+        }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
             auv.setWayPointsVisible(isWaypoints_visible());
-        }       
+        }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
+            
+        }else if(target.equals("mass_auv") && hashmapname.equals("")){
+            if(physics_control != null ){
+                physics_control.setMass(getMass());
+            }
+        }     
     }
     
     /**
@@ -834,7 +840,7 @@ public class AUV_Parameters implements CellEditorListener{
      *
      * @return
      */
-    public float getMass_auv() {
+    public float getMass() {
         return (Float)params.get("mass_auv");
     }
 
@@ -842,7 +848,7 @@ public class AUV_Parameters implements CellEditorListener{
      *
      * @param mass_auv
      */
-    public void setMass_auv(float mass_auv) {
+    public void setMass(float mass_auv) {
         params.put("mass_auv", mass_auv);
     }
 

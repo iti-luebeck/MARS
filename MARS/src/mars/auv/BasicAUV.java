@@ -632,7 +632,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         Vector3f centroid_center = MassCenterGeom.getWorldTranslation();
         Vector3f R = centroid_center.subtract(VolumeCenterGeom.getWorldTranslation());
 
-        Vector3f torque = R.cross(new Vector3f(centroid_center.x,(-1)*physical_environment.getGravitational_acceleration()*auv_param.getMass_auv(),centroid_center.z));
+        Vector3f torque = R.cross(new Vector3f(centroid_center.x,(-1)*physical_environment.getGravitational_acceleration()*auv_param.getMass(),centroid_center.z));
 
         //check if auv is "stable"(see swim stability to this topic:http://de.wikipedia.org/wiki/Stabilit%C3%A4t_%28Schiff%29),
         //if not then it's going to be unstable and we must reverse the torque
@@ -1174,7 +1174,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 
         compoundCollisionShape1.addChildShape(collisionShape, auv_param.getCentroid_center_distance().add(auv_param.getCollisionPosition()));
 
-        physics_control = new RigidBodyControl(compoundCollisionShape1, auv_param.getMass_auv());
+        physics_control = new RigidBodyControl(compoundCollisionShape1, auv_param.getMass());
         physics_control.setCollisionGroup(1);
         physics_control.setCollideWithGroups(1);
         physics_control.setDamping(auv_param.getDamping_linear(), auv_param.getDamping_angular());

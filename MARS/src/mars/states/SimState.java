@@ -40,6 +40,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.system.NanoTimer;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -131,11 +132,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Future simStateFuture = null;
     
     //general gui stuff
-    GuiControlState guiControlState = new GuiControlState();
-    ViewManager viewManager = new ViewManager();
-    
+    private GuiControlState guiControlState;
+    private ViewManager viewManager = new ViewManager();
+        
     //map stuff
-    MapState mapState;
+    private MapState mapState;
     
     /**
      * 
@@ -378,6 +379,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      */
     private void setupGUI(){
+        guiControlState = new GuiControlState(assetManager);
+        guiControlState.init();
+        rootNode.attachChild(guiControlState.getGUINode());
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
         if(mars_settings.isFPS()){
@@ -720,8 +724,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     guiControlState.setGhostObject(selected_auv.getGhostAUV());
                     //guiControlState.getGhostObject().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                     selected_auv.hideGhostAUV(false);
+                    rotateSelectedGhostAUV(selected_auv);
                 }
                 guiControlState.setRotate_auv(true);
+                guiControlState.setRotateArrowVisible(true);
             }else if(name.equals("rotateauv") && !keyPressed) {
                 System.out.println("stop rotateauv");
                 AUV selected_auv = auv_manager.getSelectedAUV();
@@ -732,6 +738,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 }
                 //guiControlState.getGhostObject().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                 guiControlState.setRotate_auv(false);
+                guiControlState.setRotateArrowVisible(false);
             }
         }
     };
@@ -790,6 +797,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
             guiControlState.setRotation(quat);
             guiControlState.getGhostObject().setLocalRotation(quat);
+            guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
+            guiControlState.setRotateArrowVectorEnd(intersection);
+            guiControlState.updateRotateArrow();
         }
     }
     
