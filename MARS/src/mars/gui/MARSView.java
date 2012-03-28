@@ -1495,6 +1495,7 @@ public class MARSView extends FrameView {
         auv_popup_menu.add(reset_auv);
 
         delete_auv.setText(resourceMap.getString("delete_auv.text")); // NOI18N
+        delete_auv.setEnabled(false);
         delete_auv.setName("delete_auv"); // NOI18N
         delete_auv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4160,7 +4161,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.6.5";
+    private final String VERSION = "0.6.6";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

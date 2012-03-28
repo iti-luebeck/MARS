@@ -5,6 +5,8 @@
 package mars.xml;
 
 import javax.xml.bind.Unmarshaller.Listener;
+import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
 import mars.simobjects.SimObject;
@@ -30,6 +32,12 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof Servo){
             Servo servo = (Servo)target;
             servo.initAfterJAXB();
+        }else if(target instanceof MARS_Settings){
+            MARS_Settings settings = (MARS_Settings)target;
+            settings.initAfterJAXB();
+        }else if(target instanceof PhysicalEnvironment){
+            PhysicalEnvironment penv = (PhysicalEnvironment)target;
+            penv.initAfterJAXB();
         }
     }
 }

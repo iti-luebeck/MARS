@@ -5,6 +5,7 @@
 
 package mars;
 
+import com.jme3.bullet.BulletAppState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
@@ -29,7 +31,8 @@ public class PhysicalEnvironment{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> environment;
-    private XMLConfigReaderWriter xmll;
+    private BulletAppState bulletAppState;
+    
     //physics
     private float fluid_density = 998.2071f;//kg/m³
     private float air_density = 1.2041f;//kg/m³
@@ -50,9 +53,9 @@ public class PhysicalEnvironment{
      *
      * @param xmll 
      */
+    @Deprecated
     public PhysicalEnvironment(XMLConfigReaderWriter xmll) {
          environment = new HashMap<String,Object> ();
-         this.xmll = xmll;
     }
     
     /**
@@ -65,58 +68,12 @@ public class PhysicalEnvironment{
      /**
      * You have to initialize first when you read the data in trough jaxb.
      */
+    @Deprecated
     public void init(){
     }
-
-    @Deprecated
-     private void saveValue(TextFieldEditor editor){
-        HashMap<String,Object> hashmap = environment;
-        String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
-        int pathcount = editor.getTreepath().getPathCount();
-        Object[] treepath = editor.getTreepath().getPath();
-        /*System.out.println("tar: " + target);
-        System.out.println("pathc: " + pathcount);
-        for (int i = 0; i < pathcount; i++) {
-             System.out.println(treepath[i].toString());
-        }*/
+    
+    public void initAfterJAXB(){
         
-        if( environment.containsKey(target) && pathcount < 5){//no hasmap, direct save
-            Object obj = environment.get(target);
-            detectType(obj,editor,target,environment);
-        }else{//it's in another hashmap, search deeper
-            for (int i = 2; i < pathcount-2; i++) {
-                hashmap = (HashMap<String,Object>)hashmap.get(treepath[i].toString());
-            }
-            //found the corresponding hashmap
-            Object obj = hashmap.get(target);
-            detectType(obj,editor,target,hashmap);
-        }
-    }
-
-    @Deprecated
-    private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
-        Object node_obj = node.getUserObject();
-        Object[] treepath = editor.getTreepath().getPath();
-        int pathcount = editor.getTreepath().getPathCount();
-        if(obj instanceof Float){
-            hashmap.put(target, (Float)node_obj);
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }else if(obj instanceof Integer){
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }else if(obj instanceof Boolean){
-            hashmap.put(target, (Boolean)node_obj);
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }else if(obj instanceof String){
-            hashmap.put(target, (String)node_obj);
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }else if(obj instanceof Vector3f){
-            hashmap.put(target, (Vector3f)node_obj);
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }else if(obj instanceof ColorRGBA){
-            hashmap.put(target, (ColorRGBA)node_obj);
-            xmll.setPathElementPE(treepath, pathcount, node_obj);
-        }
     }
     
     public void updateState(TreePath path){
@@ -128,8 +85,8 @@ public class PhysicalEnvironment{
     public void updateState(String target, String hashmapname){
         if(target.equals("collision") && hashmapname.equals("Debug")){
 
-        }else if(target.equals("position") && hashmapname.equals("")){
-
+        }else if(target.equals("gravitational_acceleration_vector") && hashmapname.equals("")){
+            bulletAppState.getPhysicsSpace().setGravity(getGravitational_acceleration_vector());   
         }
     }
    
@@ -139,6 +96,14 @@ public class PhysicalEnvironment{
      */
     public HashMap<String,Object> getAllEnvironment(){
         return environment;
+    }
+    
+    /**
+     * 
+     * @param bulletAppState
+     */
+    public void setBulletAppState(BulletAppState bulletAppState) {
+        this.bulletAppState = bulletAppState;
     }
 
     /**

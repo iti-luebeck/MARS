@@ -404,6 +404,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
+        physical_environment.setBulletAppState(bulletAppState);
     }
 
     private void setupCams(){
@@ -422,9 +423,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         try {
              keyconfig = XML_JAXB_ConfigReaderWriter.loadKeyConfig();    
              mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-             mars_settings.init();
+             //mars_settings.init();
              physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
-             physical_environment.init();
+             //physical_environment.init();
              mars_settings.setPhysical_environment(physical_environment);
              
               /*  ImagenexSonar_852_Scanning serv = new ImagenexSonar_852_Scanning();

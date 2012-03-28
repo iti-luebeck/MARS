@@ -107,10 +107,12 @@ public class MARS_Settings implements CellEditorListener{
     private boolean debug = false;
     private float tileLength = 0.4f;
     private float tileHeigth = 12f;
+    
     /**
      *
      * @param xmll 
      */
+    @Deprecated
     public MARS_Settings(XMLConfigReaderWriter xmll){
         settings = new HashMap<String,Object> ();
         Graphics = new HashMap<String,Object> ();
@@ -173,7 +175,33 @@ public class MARS_Settings implements CellEditorListener{
     /**
      * You have to initialize first when you read the data in trough jaxb.
      */
+    @Deprecated
     public void init(){
+        Physics = (HashMap<String,Object>)settings.get("Physics");
+        Server = (HashMap<String,Object>)settings.get("Server");
+        Graphics = (HashMap<String,Object>)settings.get("Graphics");
+        Gui = (HashMap<String,Object>)settings.get("Gui");
+        Misc = (HashMap<String,Object>)settings.get("Misc");
+        RAW = (HashMap<String,Object>)Server.get("RAW");
+        ROS = (HashMap<String,Object>)Server.get("ROS");
+        Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
+        Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        Fog = (HashMap<String,Object>)Graphics.get("Fog");
+        DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
+        WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
+        ProjectedWavesWater = (HashMap<String,Object>)Graphics.get("ProjectedWavesWater");
+        Water = (HashMap<String,Object>)Graphics.get("Water");
+        PlaneWater = (HashMap<String,Object>)Graphics.get("PlaneWater");
+        SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
+        SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
+        Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
+        Light = (HashMap<String,Object>)Graphics.get("Light");
+        WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
+        CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
+        Camera = (HashMap<String,Object>)Misc.get("Camera");
+    }
+    
+    public void initAfterJAXB(){
         Physics = (HashMap<String,Object>)settings.get("Physics");
         Server = (HashMap<String,Object>)settings.get("Server");
         Graphics = (HashMap<String,Object>)settings.get("Graphics");

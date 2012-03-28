@@ -759,6 +759,7 @@
         <MenuItem class="javax.swing.JMenuItem" name="delete_auv">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="delete_auv.text"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="delete_auv" noResource="true"/>
           </Properties>
           <Events>

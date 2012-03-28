@@ -7,14 +7,17 @@ package mars.gui;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import mars.Manipulating;
 import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
@@ -47,6 +50,8 @@ public class AUVManagerModel implements TreeModel{
         }else if(node instanceof AUV_Parameters){
             return false;
         }else if(node instanceof HashMap){
+            return false;
+        }else if(node instanceof List){
             return false;
         }else if(node instanceof HashMapWrapper){
             HashMapWrapper hashmapwrap = (HashMapWrapper)node;
@@ -93,6 +98,9 @@ public class AUVManagerModel implements TreeModel{
         }else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
             return hashmap.size();
+        }else if(parent instanceof List){
+            List list = (List)parent;
+            return list.size();
         }else if(parent instanceof HashMapWrapper){
             HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
             return getChildCount(hashmapwrap.getUserData());
@@ -101,6 +109,12 @@ public class AUVManagerModel implements TreeModel{
         }else if(parent instanceof ColorRGBA){
             return 4;
         }else if(parent instanceof PhysicalExchanger){
+            if(parent instanceof Manipulating && ((PhysicalExchanger)parent).getAllActions() != null){
+                return 4;
+            }
+            if(parent instanceof Manipulating){
+                return 3;
+            }
             if(((PhysicalExchanger)parent).getAllActions() != null){
                 return 3;
             }else{
@@ -171,6 +185,9 @@ public class AUVManagerModel implements TreeModel{
                 return new HashMapWrapper(pe.getAllNoiseVariables(),"Noise");
             }else if (index == 2 && pe.getAllActions() != null){
                 return new HashMapWrapper(pe.getAllActions(),"Actions");
+            }else if (index == 3){
+                Manipulating mani = (Manipulating)pe;
+                return new HashMapWrapper(mani.getSlavesNames(),"Slaves");
             }
             return "null";
         }else if(parent instanceof HashMap){
@@ -189,6 +206,11 @@ public class AUVManagerModel implements TreeModel{
                 i++;
             }
             return "null";
+        }else if(parent instanceof List){
+            List list = (List)parent;
+            Collections.sort(list);
+            Object object = list.get(index);
+            return object.toString();
         }else if(parent instanceof Vector3f){
             Vector3f vec = (Vector3f)parent;
             if(index == 0){

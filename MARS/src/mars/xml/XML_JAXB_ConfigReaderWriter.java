@@ -267,6 +267,8 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
                 Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
                 MARS_Settings mars_settings = (MARS_Settings)u.unmarshal( file );
                 //System.out.println(simob.getName());
                 return mars_settings;
