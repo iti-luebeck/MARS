@@ -725,9 +725,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     //guiControlState.getGhostObject().setLocalRotation(selected_auv.getAUVNode().getLocalRotation());//initial rotations et
                     selected_auv.hideGhostAUV(false);
                     rotateSelectedGhostAUV(selected_auv);
+                    guiControlState.setRotateArrowVisible(true);
                 }
                 guiControlState.setRotate_auv(true);
-                guiControlState.setRotateArrowVisible(true);
             }else if(name.equals("rotateauv") && !keyPressed) {
                 System.out.println("stop rotateauv");
                 AUV selected_auv = auv_manager.getSelectedAUV();
@@ -791,12 +791,20 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             angle = diff.angleBetween(Vector3f.UNIT_X)*(-1);
         }
         
-        //System.out.println("angle: " + angle);
+        System.out.println("angle: " + angle);
         if(guiControlState.getGhostObject() != null){
             Quaternion quat = new Quaternion();
+            Quaternion gquat = new Quaternion();
+            
+            Quaternion wQuat = auv.getAUVSpatial().getWorldRotation();
+            float[] ff = wQuat.toAngles(null);
+            //System.out.println("ff: " + ff[1]);
+            float newAng = ff[1] - angle;
+            
             quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
+            gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
             guiControlState.setRotation(quat);
-            guiControlState.getGhostObject().setLocalRotation(quat);
+            guiControlState.getGhostObject().setLocalRotation(gquat);
             guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
             guiControlState.setRotateArrowVectorEnd(intersection);
             guiControlState.updateRotateArrow();
