@@ -4,6 +4,7 @@
  */
 package mars.auv;
 
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,8 @@ import mars.sensors.UnderwaterModem;
 import mars.server.MARS_Server;
 
 /**
- *
+ * This class is responsible for the underwater communication. It assures that every auv gets the messages.
+ * Also its responsible for the noise and realistic propagation of the messages.
  * @author Thomas Tosik
  */
 public class Communication_Manager {
@@ -68,7 +70,20 @@ public class Communication_Manager {
         }
     }
     
+    private void updateNoise(){
+        
+    }
+    
+    /*
+     * Seeks the underwater modems of the other auvs and send the msgs to them
+     * checks for distance and noise is also made here
+     */
     private void updateCommunication(String auv_name, String msg){
+        AUV sender = (AUV)auv_manager.getAUV(auv_name);
+        ArrayList sender_uwmo = sender.getSensorsOfClass(UnderwaterModem.class.getName());
+        UnderwaterModem senderUW = (UnderwaterModem)sender_uwmo.get(0);
+        Vector3f senderUWPos = senderUW.getWorldPosition();
+        
         HashMap<String,AUV> auvs = auv_manager.getAUVs();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -77,12 +92,18 @@ public class Communication_Manager {
                 Iterator it = uwmo.iterator();
                 while(it.hasNext()){
                     UnderwaterModem mod = (UnderwaterModem)it.next();
-                    mod.publish(msg);
+                    Vector3f modPos = mod.getWorldPosition();
+                    Vector3f distance = modPos.subtract(senderUWPos);
+                    //System.out.println(auv.getName() + " modPos: " + modPos + " dis: " + Math.abs(distance.length()));
+                    if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
+                        mod.publish(msg);
+                    }
                 }        
             }
         }    
     }
     
+    @Deprecated
     private void sendMsgs(String auv_name, String msg){
         //System.out.println("Sending msg: " + msg);
         if(raw_server != null){

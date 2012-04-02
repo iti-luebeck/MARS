@@ -52,6 +52,10 @@ public class UnderwaterModem extends Sensor{
         super(simstate);
     }
 
+    public Vector3f getWorldPosition() {
+       return UnderwaterModemStart.getWorldTranslation();
+    }
+    
     public Vector3f getDirection() {
         return (Vector3f)variables.get("Direction");
     }
@@ -66,6 +70,14 @@ public class UnderwaterModem extends Sensor{
 
     public void setPosition(Vector3f Position) {
         variables.put("Position", Position);
+    }
+    
+    public float getPropagationDistance() {
+        return (Float)variables.get("propagation_distance");
+    }
+
+    public void setPropagationDistance(float propagation_distance) {
+        variables.put("propagation_distance", propagation_distance);
     }
     
     /**
@@ -106,8 +118,9 @@ public class UnderwaterModem extends Sensor{
         UnderwaterModemEnd.setLocalTranslation(getPosition().add(getDirection()));
         UnderwaterModemEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemEnd);
-
+        
         this.auv_node = auv_node;
+        this.auv_node.attachChild(PhysicalExchanger_Node);
     }
 
     /**
