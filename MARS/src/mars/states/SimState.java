@@ -1163,13 +1163,19 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 }
                 });*/
                 auv_manager.updateAllAUVs(tpf);
+                /*Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    com_manager.update(tpf);
+                    return null;
+                }
+                });*/
                 com_manager.update(tpf);
                 //time = time + tpf;
                 //System.out.println("time: " + time);
             }            
-            if(auv_manager != null){
+            /*if(auv_manager != null){
                 com_manager.update(tpf);
-            }
+            }*/
         }
     }
 

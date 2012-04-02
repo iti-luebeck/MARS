@@ -66,7 +66,7 @@ public class GuiControlState {
     
     public void updateRotateArrow(){
         rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
-        arrow.setArrowExtent(getRotateArrowVectorEnd());
+        arrow.setArrowExtent(getRotateArrowVectorEnd().subtract(getRotateArrowVectorStart()));
         rotateArrow.updateGeometricState();
     }
     

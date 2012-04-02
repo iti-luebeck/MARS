@@ -23,6 +23,7 @@ import mars.sensors.PingDetector;
 import mars.sensors.PressureSensor;
 import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
+import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
@@ -140,6 +141,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"arrow_up.png"));
                         }else if(hasher.getUserData() instanceof Servo){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"AX-12.png"));
+                        }else if(hasher.getUserData() instanceof UnderwaterModem){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"speaker-volume.png"));
                         }
                     }
                 }else if(hasher.getUserData() instanceof ColorRGBA){
