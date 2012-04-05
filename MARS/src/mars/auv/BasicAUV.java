@@ -74,6 +74,7 @@ import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;
 import mars.auv.example.SMARTE;
+import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.sonar.Sonar;
@@ -1878,5 +1879,15 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     public void updateState(TreePath path) {
         getAuv_param().updateState(path);
+        Object obj = path.getPathComponent(3);
+        if(obj != null){
+            if( obj instanceof HashMapWrapper){
+                HashMapWrapper hasher = (HashMapWrapper)obj;
+                if(hasher.getUserData() instanceof PhysicalExchanger){
+                    PhysicalExchanger pe = (PhysicalExchanger) hasher.getUserData();
+                    pe.updateState(path);        
+                }  
+            }
+        }
     }
 }

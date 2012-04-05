@@ -11,6 +11,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -346,4 +347,6 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public void setIconDND(String dnd_icon){
         variables.put("dnd_icon",dnd_icon);
     }
+    
+    public abstract void updateState(TreePath path);
 }

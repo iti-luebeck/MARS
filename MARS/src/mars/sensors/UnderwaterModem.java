@@ -6,11 +6,16 @@
 package mars.sensors;
 
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Sphere;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
@@ -27,6 +32,9 @@ import mars.ros.MARSNodeMain;
 public class UnderwaterModem extends Sensor{
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
+    private Geometry DebugDistance;
+    private Sphere debugDistanceSphere;
+    private Material debugDistanceMat;
 
     private Vector3f UnderwaterModemStartVector = new Vector3f(0,0,0);
     private Vector3f UnderwaterModemDirection = new Vector3f(0,0,0);
@@ -80,6 +88,22 @@ public class UnderwaterModem extends Sensor{
         variables.put("propagation_distance", propagation_distance);
     }
     
+    public boolean  isDebug() {
+        return (Boolean)variables.get("debug");
+    }
+
+    public void setDebug(boolean debug) {
+        variables.put("debug", debug);
+    }
+    
+    public ColorRGBA getDebugColor() {
+        return (ColorRGBA)variables.get("debug_color");
+    }
+
+    public void setDebugColor(ColorRGBA debug_color) {
+        variables.put("debug_color", debug_color);
+    }
+    
     /**
      * 
      * @return
@@ -119,8 +143,46 @@ public class UnderwaterModem extends Sensor{
         UnderwaterModemEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemEnd);
         
+        //create debug stuff
+        debugDistanceSphere = new Sphere(16, 16, getPropagationDistance());
+        DebugDistance = new Geometry("DebugDistance", debugDistanceSphere);
+        debugDistanceMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        debugDistanceMat.setColor("Color", getDebugColor());
+        //mark_mat10.getAdditionalRenderState().setBlendMode(BlendMode.AlphaAdditive);
+        debugDistanceMat.getAdditionalRenderState().setWireframe(true);
+        //DebugDistance.setQueueBucket(Bucket.Transparent);
+        DebugDistance.setMaterial(debugDistanceMat);
+        DebugDistance.setLocalTranslation(Vector3f.ZERO);
+        DebugDistance.updateGeometricState();
+        PhysicalExchanger_Node.attachChild(DebugDistance);
+        setDebugVisible(isDebug());
+        
         this.auv_node = auv_node;
         this.auv_node.attachChild(PhysicalExchanger_Node);
+    }
+    
+    private void setDebugVisible(boolean visible){
+        if(!visible){
+            DebugDistance.setCullHint(CullHint.Always);
+        }else{
+            DebugDistance.setCullHint(CullHint.Never);
+        }
+    }
+
+    @Override
+    public void updateState(TreePath path) {
+       super.updateState(path);
+       updateState(path.getLastPathComponent().toString(),"");
+    }
+    
+    private void updateState(String target, String hashmapname){
+        if(target.equals("debug") && hashmapname.equals("")){
+            setDebugVisible(isDebug());
+        }else if(target.equals("debug_color") && hashmapname.equals("")){
+            debugDistanceMat.setColor("Color", getDebugColor());
+        }else if(target.equals("propagation_distance") && hashmapname.equals("")){
+            debugDistanceSphere.updateGeometry(16, 16, getPropagationDistance());
+        }
     }
 
     /**
