@@ -31,7 +31,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class} )
+@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class,BallastTank.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
     /*
      * 

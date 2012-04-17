@@ -69,6 +69,7 @@ import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.Manipulating;
 import mars.Moveable;
+import mars.actuators.BallastTank;
 import mars.states.SimState;
 import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
@@ -623,6 +624,8 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element instanceof Thruster){
+                element.update();
+            }else if(element instanceof BallastTank){
                 element.update();
             }
         }

@@ -29,7 +29,6 @@ import mars.Moveable;
 import mars.NoiseType;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
-import mars.xml.Vector3fAdapter;
 
 /**
  * This a basic thruster implementation that you can use for your own thrusters.
