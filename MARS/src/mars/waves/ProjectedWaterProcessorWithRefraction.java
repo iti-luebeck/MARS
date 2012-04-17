@@ -100,7 +100,7 @@ public class ProjectedWaterProcessorWithRefraction implements SceneProcessor {
     public ProjectedWaterProcessorWithRefraction(Camera cam,AssetManager manager) {
         this.manager = manager;
         mainCamera = cam;
-        manager.registerLocator("Assets/gridwaves", FileLocator.class.getName());
+        manager.registerLocator("Assets/gridwaves", FileLocator.class);
         material = new Material(manager, "ProjectedWaterWithRefraction.j3md");
         material.setVector3("binormal", new Vector3f(0.0f, 0.0f, -1.0f));
         material.setVector3("tangent", new Vector3f(1.0f, 0.0f, 0.0f));
@@ -137,7 +137,7 @@ public class ProjectedWaterProcessorWithRefraction implements SceneProcessor {
     }
 
     protected void loadTextures(AssetManager manager) {
-        manager.registerLocator("Assets/gridwaves", FileLocator.class.getName());
+        manager.registerLocator("Assets/gridwaves", FileLocator.class);
         normalTexture = (Texture2D) manager.loadTexture("normalmap3.dds");
         dudvTexture = (Texture2D) manager.loadTexture("dudvmap.png");
         foamTexture = (Texture2D) manager.loadTexture("oceanfoam.png");

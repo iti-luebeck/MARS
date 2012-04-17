@@ -74,7 +74,7 @@ public class SelectObject extends SimpleApplication implements ActionListener{
         sub_scene = new Node("sub_scene");
         nd_selection = new Node("nd_selection");
         
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
         Spatial auv_spatial = assetManager.loadModel("hanse_ambient.obj");
         //Node test = (Node)auv_spatial;
 

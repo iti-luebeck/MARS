@@ -230,7 +230,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     }
     
     public void initNifty(){
-        assetManager.registerLocator("Assets/Interface", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Interface", FileLocator.class);
         niftyDisplay = new NiftyJmeDisplay(assetManager,
                 inputManager,
                 audioRenderer,

@@ -227,7 +227,7 @@ public class SimObject{
     }
 
     private void loadModel(){
-        assetManager.registerLocator("./Assets/Models/", FileLocator.class.getName());
+        assetManager.registerLocator("./Assets/Models/", FileLocator.class);
 
         spatial = assetManager.loadModel(getFilepath());
 
@@ -697,7 +697,7 @@ public class SimObject{
     }
     
     private void createGhostSpatial(){
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
         ghost_simob_spatial = assetManager.loadModel(getFilepath());
         ghost_simob_spatial.setLocalScale(getScale());
         ghost_simob_spatial.setLocalTranslation(getPosition());

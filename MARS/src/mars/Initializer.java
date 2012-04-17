@@ -449,7 +449,7 @@ public class Initializer {
         Geometry water_plane = new Geometry("water_plane", boxshape);
         water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
         Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        assetManager.registerLocator("Assets/Textures/Water", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
         mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterfilepath()));
         mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         water_plane.setMaterial(mat_tt);
@@ -489,7 +489,7 @@ public class Initializer {
      * This creates a sky.
      */
     private void setupSkyBox(){
-        assetManager.registerLocator("Assets/Textures/Sky", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Textures/Sky", FileLocator.class);
         Spatial sky = (SkyFactory.createSky(assetManager, mars_settings.getSkyboxfilepath(), false));
         sky.setLocalScale(100);
         sceneReflectionNode.attachChild(sky);
@@ -584,7 +584,7 @@ public class Initializer {
         mm.initMesh();
         //setup material
         Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
         TextureKey key2 = new TextureKey(mars_settings.getTerrainfilepath_cm());
         key2.setGenerateMips(true);
         Texture tex2 = assetManager.loadTexture(key2);

@@ -149,7 +149,7 @@ public class TestProjectedGridWithFlatwater extends SimpleApplication {
     }
 
     private void addSkybox() {
-        assetManager.registerLocator("Assets/gridwaves/skybox", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/gridwaves/skybox", FileLocator.class);
         Texture north = assetManager.loadTexture("1.jpg");
         Texture south = assetManager.loadTexture("3.jpg");
         Texture east = assetManager.loadTexture("2.jpg");

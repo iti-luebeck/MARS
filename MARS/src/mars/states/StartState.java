@@ -107,7 +107,7 @@ public class StartState extends AbstractAppState{
             mars_node.setLocalTranslation(0f,0f,0f);
             mars_node.attachChild(hanse_node);
             
-            assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
+            assetManager.registerLocator("Assets/Images", FileLocator.class);
             Material mat_stl = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             Texture tex_ml = assetManager.loadTexture("mars_logo_12f_white.png");
             mat_stl.setTexture("ColorMap", tex_ml);
@@ -130,7 +130,7 @@ public class StartState extends AbstractAppState{
             mars_node.attachChild(cube);
             hanse_node.attachChild(nd_selection);
                     
-            assetManager.registerLocator("Assets/Images", FileLocator.class.getName());
+            assetManager.registerLocator("Assets/Images", FileLocator.class);
             Material mat_stl2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             Texture tex_ml2 = assetManager.loadTexture("japanese-airplane-doubilet.jpg");
             mat_stl2.setTexture("ColorMap", tex_ml2);
@@ -295,7 +295,7 @@ public class StartState extends AbstractAppState{
     }
     
     private void loadModel2(float scale, String model, Vector3f pos, Vector3f rot){
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
 
         Spatial auv_spatial = assetManager.loadModel(model);
         //auv_spatial.setLocalScale(scale);//0.5f
@@ -359,7 +359,7 @@ public class StartState extends AbstractAppState{
      *
      */
     private void loadModel(float scale, String model, Vector3f pos, Vector3f rot){
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
 
         Spatial auv_spatial = assetManager.loadModel(model);
         auv_spatial.setLocalScale(scale);//0.5f

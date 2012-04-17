@@ -96,7 +96,7 @@ public class FlatWaterProcessor implements SceneProcessor {
 
     public FlatWaterProcessor(AssetManager manager) {
         this.manager = manager;
-        manager.registerLocator("Assets/gridwaves", FileLocator.class.getName());
+        manager.registerLocator("Assets/gridwaves", FileLocator.class);
         material = new Material(manager, "FlatWater.j3md");
         material.setVector3("binormal", new Vector3f(0.0f, 0.0f, -1.0f));
         material.setVector3("tangent", new Vector3f(1.0f, 0.0f, 0.0f));
@@ -127,7 +127,7 @@ public class FlatWaterProcessor implements SceneProcessor {
     }
 
     protected void loadTextures(AssetManager manager) {
-        manager.registerLocator("Assets/gridwaves", FileLocator.class.getName());
+        manager.registerLocator("Assets/gridwaves", FileLocator.class);
         normalTexture = (Texture2D) manager.loadTexture("water_normalmap.dds");
         dudvTexture = (Texture2D) manager.loadTexture("dudvmap.png");
         normalTexture.setWrap(Texture.WrapMode.Repeat);

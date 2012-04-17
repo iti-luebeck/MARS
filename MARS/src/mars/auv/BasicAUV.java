@@ -1107,7 +1107,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      *
      */
     private void loadModel(){
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
 
         auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
         auv_spatial.setLocalScale(auv_param.getModel_scale());
@@ -1129,7 +1129,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
     
     private void createGhostAUV(){
-        assetManager.registerLocator("Assets/Models", FileLocator.class.getName());
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
         ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
         ghost_auv_spatial.setLocalScale(auv_param.getModel_scale());
         ghost_auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);

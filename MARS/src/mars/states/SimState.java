@@ -29,6 +29,7 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -41,6 +42,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Box;
 import com.jme3.system.NanoTimer;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
@@ -51,6 +53,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.print.attribute.standard.MediaSize.NA;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import mars.GuiControlState;
@@ -115,6 +118,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
     private Node SimObNode = new Node("SimObNode");
+    //warter currents
+    private Node currents = new Node("currents");
     
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
@@ -243,6 +248,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             sceneReflectionNode.attachChild(AUVsNode);
             sceneReflectionNode.attachChild(SimObNode);
             rootNode.attachChild(sceneReflectionNode);
+            rootNode.attachChild(currents);
             
             initNiftyLoading();
             loadXML();
@@ -292,6 +298,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             initMap();
             
             initPublicKeys();
+            
+           /*             Box box = new Box(1f, 1f, 1f);
+                        Geometry cur1 = new Geometry("BOOM2!", box);
+                        Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        mark_mat.setColor("Color", ColorRGBA.Green);
+                        cur1.setMaterial(mark_mat);
+            cur1.setLocalTranslation(Vector3f.ZERO);
+            currents.attachChild(cur1);*/
             
             /*JAXBContext context;
             try {*/
@@ -648,7 +662,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             }else if(name.equals("speedbigm") && !keyPressed) {
                 initer.getWhg().setSpeedbig(initer.getWhg().getSpeedbig()-0.1f);
             }else  if (name.equals("Shoott") && !keyPressed) {
+                /*CollisionResults results = new CollisionResults();
 
+                Ray ray_up = new Ray(new Vector3f(0f, -2f, 0f), Vector3f.UNIT_Y);
+                // 3. Collect intersections between Ray and Shootables in results list.
+                //only collide with the spatial
+                currents.collideWith(ray_up, results);
+
+                for (int i = 0; i < results.size(); i++) {
+                    Geometry geom = results.getCollision(i).getGeometry();
+                    System.out.println("contact " + i + " : " + geom.getName() + " at : " + results.getCollision(i).getContactPoint() + " normal: " + results.getCollision(i).getContactNormal());
+                }
+                */
             }else if(name.equals("reset") && !keyPressed) {
                 restartSimulation();
             }else if(name.equals("context_menue") && !keyPressed) {
