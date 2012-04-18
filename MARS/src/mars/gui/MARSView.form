@@ -328,6 +328,58 @@
                                 </Container>
                               </SubComponents>
                             </Container>
+                            <Container class="javax.swing.JPanel" name="jPanel7">
+                              <Properties>
+                                <Property name="name" type="java.lang.String" value="jPanel7" noResource="true"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                  <JTabbedPaneConstraints tabName="Keys">
+                                    <Property name="tabTitle" type="java.lang.String" resourceKey="jPanel7.TabConstraints.tabTitle"/>
+                                    <Property name="tabIcon" type="javax.swing.Icon" resourceKey="jPanel7.TabConstraints.tabIcon"/>
+                                  </JTabbedPaneConstraints>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane5" alignment="0" pref="228" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jScrollPane5" alignment="0" pref="79" max="32767" attributes="0"/>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+                                  <Properties>
+                                    <Property name="name" type="java.lang.String" value="jScrollPane5" noResource="true"/>
+                                  </Properties>
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTree" name="keys_tree">
+                                      <Properties>
+                                        <Property name="name" type="java.lang.String" value="keys_tree" noResource="true"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="keys_treeMouseClicked"/>
+                                      </Events>
+                                      <AuxValues>
+                                        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor5;&#xa;private DefaultTreeCellRenderer renderer5;"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="DefaultMutableTreeNode top5 = new DefaultMutableTreeNode(&quot;Keys&quot;);&#xa;keys_tree = new javax.swing.JTree(top5);&#xa;keys_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer5 = (DefaultTreeCellRenderer) keys_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor5 = new mars.gui.TextFieldCellEditor(keys_tree);&#xa;DefaultTreeCellEditor editor5 = new DefaultTreeCellEditor(keys_tree,&#xa;        renderer5, textfieldEditor5);&#xa;keys_tree.setCellEditor(editor5);&#xa;keys_tree.setEditable(true);&#xa;keys_tree.setRootVisible(false);"/>
+                                      </AuxValues>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
                           </SubComponents>
                         </Container>
                       </SubComponents>

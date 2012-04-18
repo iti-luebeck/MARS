@@ -837,6 +837,9 @@ public class MARSView extends FrameView {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         settings_tree = new javax.swing.JTree();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        keys_tree = new javax.swing.JTree();
         MapPanel = new javax.swing.JPanel();
         JMEPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
@@ -1191,6 +1194,42 @@ public class MARSView extends FrameView {
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel6.TabConstraints.tabIcon"), jPanel6); // NOI18N
+
+        jPanel7.setName("jPanel7"); // NOI18N
+
+        jScrollPane5.setName("jScrollPane5"); // NOI18N
+
+        DefaultMutableTreeNode top5 = new DefaultMutableTreeNode("Keys");
+        keys_tree = new javax.swing.JTree(top5);
+        keys_tree.setCellRenderer(new MyTreeCellRenderer(this));
+        renderer5 = (DefaultTreeCellRenderer) keys_tree
+        .getCellRenderer();
+        textfieldEditor5 = new mars.gui.TextFieldCellEditor(keys_tree);
+        DefaultTreeCellEditor editor5 = new DefaultTreeCellEditor(keys_tree,
+            renderer5, textfieldEditor5);
+        keys_tree.setCellEditor(editor5);
+        keys_tree.setEditable(true);
+        keys_tree.setRootVisible(false);
+        keys_tree.setName("keys_tree"); // NOI18N
+        keys_tree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                keys_treeMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(keys_tree);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel7.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel7.TabConstraints.tabIcon"), jPanel7); // NOI18N
 
         javax.swing.GroupLayout TreePanelLayout = new javax.swing.GroupLayout(TreePanel);
         TreePanel.setLayout(TreePanelLayout);
@@ -4165,6 +4204,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_booleanPopUpDisable3ActionPerformed
 
+    private void keys_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keys_treeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_keys_treeMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4285,10 +4328,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -4342,6 +4387,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu jme3_window_switcher;
     private javax.swing.JMenuItem keys;
     private javax.swing.JDialog keys_dialog;
+    private javax.swing.JTree keys_tree;
+    public mars.gui.TextFieldCellEditor textfieldEditor5;
+    private DefaultTreeCellRenderer renderer5;
     private javax.swing.JLabel lblChart;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
