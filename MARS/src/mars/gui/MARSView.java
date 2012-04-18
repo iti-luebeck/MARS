@@ -111,9 +111,6 @@ public class MARSView extends FrameView {
     private final static String s_actuators = "Actuators";
     private DefaultMutableTreeNode top;
     private DefaultMutableTreeNode auvs_treenode = new DefaultMutableTreeNode(s_auv);
-    private DefaultMutableTreeNode simobs_treenode = new DefaultMutableTreeNode(s_simob);
-    private DefaultMutableTreeNode physical_env_treenode = new DefaultMutableTreeNode(s_pe);
-    private DefaultMutableTreeNode settings_treenode = new DefaultMutableTreeNode(s_set);
     private MARS_Settings mars_settings;
     private KeyConfig keyConfig;
     private PhysicalEnvironment penv;
@@ -253,6 +250,17 @@ public class MARSView extends FrameView {
         );
     }
     
+    public void initSettingsTree(final MARS_Settings mars_settings){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    settings_tree.setModel(new MarsSettingsModel(mars_settings));
+                    settings_tree.updateUI();
+                }
+            }
+        );
+    }
+    
     public void updateTrees(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -260,6 +268,7 @@ public class MARSView extends FrameView {
                     auv_tree.updateUI();
                     simob_tree.updateUI();
                     pe_tree.updateUI();
+                    settings_tree.updateUI();
                 }
             }  
         );
@@ -629,26 +638,7 @@ public class MARSView extends FrameView {
     @Deprecated
     private void createNodes(DefaultMutableTreeNode top){
         createAUVSNodes(auvs_treenode);
-        createSettingsNodes(settings_treenode);
         auv_tree.updateUI();
-    }
-
-    @Deprecated
-    private void createSettingsNodes(DefaultMutableTreeNode treenode){
-        textfieldEditor.addCellEditorListener(mars_settings);
-        HashMap<String,Object> set = mars_settings.getSettings();
-
-        for ( String elem : set.keySet() ){
-            if(set.get(elem) instanceof HashMap){
-                createHashMapNodesSettings(settings_treenode,elem,(HashMap<String,Object>)set.get(elem));
-            }else{
-                DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-                DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(set.get(elem));
-                param_treenode1.add(param_treenode2);
-                settings_treenode.add(param_treenode1);
-            }
-        }
-        top.add(treenode);
     }
 
     @Deprecated
@@ -844,6 +834,9 @@ public class MARSView extends FrameView {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         pe_tree = new javax.swing.JTree();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        settings_tree = new javax.swing.JTree();
         MapPanel = new javax.swing.JPanel();
         JMEPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
@@ -1156,6 +1149,42 @@ public class MARSView extends FrameView {
         );
 
         jTabbedPane1.addTab(resourceMap.getString("jPanel5.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel5.TabConstraints.tabIcon"), jPanel5); // NOI18N
+
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
+
+        DefaultMutableTreeNode top4 = new DefaultMutableTreeNode("Settings");
+        settings_tree = new javax.swing.JTree(top4);
+        settings_tree.setCellRenderer(new MyTreeCellRenderer(this));
+        renderer4 = (DefaultTreeCellRenderer) settings_tree
+        .getCellRenderer();
+        textfieldEditor4 = new mars.gui.TextFieldCellEditor(settings_tree);
+        DefaultTreeCellEditor editor4 = new DefaultTreeCellEditor(settings_tree,
+            renderer4, textfieldEditor4);
+        settings_tree.setCellEditor(editor4);
+        settings_tree.setEditable(true);
+        settings_tree.setRootVisible(false);
+        settings_tree.setName("settings_tree"); // NOI18N
+        settings_tree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                settings_treeMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(settings_tree);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(resourceMap.getString("jPanel6.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel6.TabConstraints.tabIcon"), jPanel6); // NOI18N
 
         javax.swing.GroupLayout TreePanelLayout = new javax.swing.GroupLayout(TreePanel);
         TreePanel.setLayout(TreePanelLayout);
@@ -3956,6 +3985,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_booleanPopUpDisable1ActionPerformed
 
+    private void settings_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settings_treeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settings_treeMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4069,9 +4102,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -4142,6 +4177,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem saveconfig;
     private javax.swing.JMenuItem saveconfigto;
     private javax.swing.JPopupMenu sens_act_popup_menu;
+    private javax.swing.JTree settings_tree;
+    public mars.gui.TextFieldCellEditor textfieldEditor4;
+    private DefaultTreeCellRenderer renderer4;
     private javax.swing.JPopupMenu simob_popup_menu;
     private javax.swing.JTree simob_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor2;

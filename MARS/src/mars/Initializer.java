@@ -47,6 +47,7 @@ import mars.auv.AUV_Manager;
 import mars.server.MARS_Server;
 import mars.terrain.MultMesh;
 import com.jme3.font.BitmapText;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial.CullHint;
@@ -210,6 +211,7 @@ public class Initializer {
             setupDepthOfField();
         }
         setupServer();
+        setupGlow();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -469,6 +471,12 @@ public class Initializer {
      */
     private void setupFog(){
         fpp.addFilter(createFog());
+    }
+    
+    private void setupGlow(){
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        fpp.addFilter(bloom);
+        //mars.getViewPort().addProcessor(fpp);
     }
 
     private void setupLight(){

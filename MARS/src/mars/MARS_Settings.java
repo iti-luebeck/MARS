@@ -1085,4 +1085,41 @@ public class MARS_Settings implements CellEditorListener{
     public void setSelectionColor(ColorRGBA color) {
         Gui.put("selection_color", color);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isAmbientSelection() {
+        return (Boolean)Gui.get("AmbientSelection");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setAmbientSelection(boolean AmbientSelection) {
+        Gui.put("AmbientSelection", AmbientSelection);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isGlowSelection() {
+        return (Boolean)Gui.get("GlowSelection");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setGlowSelection(boolean GlowSelection) {
+        Gui.put("GlowSelection", GlowSelection);
+    }
+    
+    @Override
+    public String toString(){
+        return "MarsSettings";
+    }
 }

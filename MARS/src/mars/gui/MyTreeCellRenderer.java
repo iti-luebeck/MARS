@@ -106,6 +106,12 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"transform_scale.png"));
             }else if(hasher.getName().equals("Slaves")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"anchor.png"));
+            }else if(hasher.getName().equals("Graphics")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"television-image.png"));
+            }else if(hasher.getName().equals("Server")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"server-network.png"));
+            }else if(hasher.getName().equals("Gui")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"ui-scroll-pane-image.png"));
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();

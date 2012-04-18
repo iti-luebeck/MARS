@@ -12,6 +12,8 @@ import mars.actuators.Thruster;
 import mars.actuators.Actuator;
 import mars.sensors.Sensor;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.ModelKey;
+import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -1115,8 +1117,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
         auv_spatial.setLocalScale(auv_param.getModel_scale());
         //auv_spatial.rotate(-(float)Math.PI/4 , (float)Math.PI/4 , 0f);
-        //Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         //mat_white.setColor("Color", ColorRGBA.White);
+        //mat_white.setColor("GlowColor", ColorRGBA.Blue); 
         //auv_spatial.setMaterial(mat_white);
         /*Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
         mat_white.setColor("Color", ColorRGBA.Blue);
@@ -1785,12 +1788,38 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Override
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
-            ambient_light.setColor(mars_settings.getSelectionColor());
-            selectionNode.addLight(ambient_light); 
+            if(mars_settings.isAmbientSelection()){
+                ambient_light.setColor(mars_settings.getSelectionColor());
+                selectionNode.addLight(ambient_light); 
+            }
+            if(mars_settings.isGlowSelection()){
+                /*Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+                mat_white.setColor("GlowColor", ColorRGBA.Blue); 
+                auv_spatial.setMaterial(mat_white);*/
+                setGlowColor(ghost_auv_spatial,mars_settings.getSelectionColor());
+            }
         }else if(selected == false){
             selectionNode.removeLight(ambient_light);
+            setGlowColor(ghost_auv_spatial,ColorRGBA.Black);
         }
         this.selected = selected;
+    }
+    
+    private void setGlowColor(Spatial spatial, ColorRGBA glow){
+        if(spatial instanceof Node){
+            Node node = (Node)spatial;
+            List<Spatial> children = node.getChildren();
+            for (int i = 0; i < children.size(); i++) {
+                Spatial spatial1 = children.get(i);
+                if(spatial1 instanceof Geometry){
+                    Geometry geom = (Geometry)spatial1;
+                    Material material = geom.getMaterial();
+                    material.setColor("GlowColor", glow);
+                }else{//go deeper
+                    setGlowColor(spatial1,glow);
+                }
+            }
+        }
     }
     
     @Override
