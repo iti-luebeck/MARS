@@ -3781,6 +3781,16 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                  booleanPopUpDisable.setVisible(false);
                              }
                              booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                         }else if(hashwrap.getUserData() instanceof ColorRGBA){
+                            ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
+                            Color newColor = color_dialog.showDialog(getRootPane(),
+                                             "Choose Color for " + hashwrap.getName(),
+                                             new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                            if(newColor != null){
+                                ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
+                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                                mod.valueForPathChanged(auv_tree.getSelectionPath(), newColorRGBA);
+                            }
                          }
                     }else if (selPath.getLastPathComponent() instanceof Boolean) {
                         if((Boolean)selPath.getLastPathComponent()){
