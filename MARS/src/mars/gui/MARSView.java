@@ -1021,6 +1021,12 @@ public class MARSView extends FrameView {
         booleanPopUpSimObject = new javax.swing.JPopupMenu();
         booleanPopUpEnable1 = new javax.swing.JMenuItem();
         booleanPopUpDisable1 = new javax.swing.JMenuItem();
+        booleanPopUpEnv = new javax.swing.JPopupMenu();
+        booleanPopUpEnable2 = new javax.swing.JMenuItem();
+        booleanPopUpDisable2 = new javax.swing.JMenuItem();
+        booleanPopUpSettings = new javax.swing.JPopupMenu();
+        booleanPopUpEnable3 = new javax.swing.JMenuItem();
+        booleanPopUpDisable3 = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -2823,6 +2829,46 @@ public class MARSView extends FrameView {
         });
         booleanPopUpSimObject.add(booleanPopUpDisable1);
 
+        booleanPopUpEnv.setName("booleanPopUpEnv"); // NOI18N
+
+        booleanPopUpEnable2.setText(resourceMap.getString("booleanPopUpEnable2.text")); // NOI18N
+        booleanPopUpEnable2.setName("booleanPopUpEnable2"); // NOI18N
+        booleanPopUpEnable2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpEnable2ActionPerformed(evt);
+            }
+        });
+        booleanPopUpEnv.add(booleanPopUpEnable2);
+
+        booleanPopUpDisable2.setText(resourceMap.getString("booleanPopUpDisable2.text")); // NOI18N
+        booleanPopUpDisable2.setName("booleanPopUpDisable2"); // NOI18N
+        booleanPopUpDisable2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpDisable2ActionPerformed(evt);
+            }
+        });
+        booleanPopUpEnv.add(booleanPopUpDisable2);
+
+        booleanPopUpSettings.setName("booleanPopUpSettings"); // NOI18N
+
+        booleanPopUpEnable3.setText(resourceMap.getString("booleanPopUpEnable3.text")); // NOI18N
+        booleanPopUpEnable3.setName("booleanPopUpEnable3"); // NOI18N
+        booleanPopUpEnable3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpEnable3ActionPerformed(evt);
+            }
+        });
+        booleanPopUpSettings.add(booleanPopUpEnable3);
+
+        booleanPopUpDisable3.setText(resourceMap.getString("booleanPopUpDisable3.text")); // NOI18N
+        booleanPopUpDisable3.setName("booleanPopUpDisable3"); // NOI18N
+        booleanPopUpDisable3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                booleanPopUpDisable3ActionPerformed(evt);
+            }
+        });
+        booleanPopUpSettings.add(booleanPopUpDisable3);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -3942,7 +3988,41 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_booleanPopUpDisableActionPerformed
 
     private void pe_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pe_treeMouseClicked
-        // TODO add your handling code here:
+        if (evt.getButton() == MouseEvent.BUTTON3) {   
+            int selRow = pe_tree.getRowForLocation(evt.getX(), evt.getY());         
+            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            if (selRow != -1) { 
+                TreePath selPath = pe_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString());  
+                pe_tree.setSelectionPath(selPath);  
+                try {  
+                    if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                         if(hashwrap.getUserData() instanceof Boolean){
+                             if((Boolean)hashwrap.getUserData()){
+                                 booleanPopUpEnable2.setVisible(false);
+                                 booleanPopUpDisable2.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable2.setVisible(true);
+                                 booleanPopUpDisable2.setVisible(false);
+                             }
+                             booleanPopUpEnv.show(evt.getComponent(), evt.getX(), evt.getY());
+                         }
+                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                        if((Boolean)selPath.getLastPathComponent()){
+                                 booleanPopUpEnable2.setVisible(false);
+                                 booleanPopUpDisable2.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable2.setVisible(true);
+                                 booleanPopUpDisable2.setVisible(false);
+                             }
+                        booleanPopUpEnv.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }        
+                } catch (IllegalArgumentException e) {       
+                }         
+            }       
+        }
     }//GEN-LAST:event_pe_treeMouseClicked
 
     private void jme3_debug_auv_wireframeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_wireframeActionPerformed
@@ -3986,8 +4066,94 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_booleanPopUpDisable1ActionPerformed
 
     private void settings_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settings_treeMouseClicked
-        // TODO add your handling code here:
+        if (evt.getButton() == MouseEvent.BUTTON3) {   
+            int selRow = settings_tree.getRowForLocation(evt.getX(), evt.getY());         
+            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            if (selRow != -1) { 
+                TreePath selPath = settings_tree.getPathForLocation(evt.getX(), evt.getY());   
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString());  
+                settings_tree.setSelectionPath(selPath);  
+                try {  
+                    if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                         if(hashwrap.getUserData() instanceof Boolean){
+                             if((Boolean)hashwrap.getUserData()){
+                                 booleanPopUpEnable3.setVisible(false);
+                                 booleanPopUpDisable3.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable3.setVisible(true);
+                                 booleanPopUpDisable3.setVisible(false);
+                             }
+                             booleanPopUpSettings.show(evt.getComponent(), evt.getX(), evt.getY());
+                         }
+                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                        if((Boolean)selPath.getLastPathComponent()){
+                                 booleanPopUpEnable3.setVisible(false);
+                                 booleanPopUpDisable3.setVisible(true);
+                             }else{
+                                 booleanPopUpEnable3.setVisible(true);
+                                 booleanPopUpDisable3.setVisible(false);
+                             }
+                        booleanPopUpSettings.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }        
+                } catch (IllegalArgumentException e) {       
+                }         
+            }       
+        }
     }//GEN-LAST:event_settings_treeMouseClicked
+
+    private void booleanPopUpEnable2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnable2ActionPerformed
+        if (pe_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)pe_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
+                mod.valueForPathChanged(pe_tree.getSelectionPath(), true);
+            }
+        }else if(pe_tree.getLastSelectedPathComponent() instanceof Boolean){
+            PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
+            mod.valueForPathChanged(pe_tree.getSelectionPath(), true);
+        }
+    }//GEN-LAST:event_booleanPopUpEnable2ActionPerformed
+
+    private void booleanPopUpDisable2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisable2ActionPerformed
+        if (pe_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)pe_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
+                mod.valueForPathChanged(pe_tree.getSelectionPath(), false);
+            }
+        }else if(pe_tree.getLastSelectedPathComponent() instanceof Boolean){
+            PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
+            mod.valueForPathChanged(pe_tree.getSelectionPath(), false);
+        }
+    }//GEN-LAST:event_booleanPopUpDisable2ActionPerformed
+
+    private void booleanPopUpEnable3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnable3ActionPerformed
+        if (settings_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)settings_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
+                mod.valueForPathChanged(settings_tree.getSelectionPath(), true);
+            }
+        }else if(settings_tree.getLastSelectedPathComponent() instanceof Boolean){
+            MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
+            mod.valueForPathChanged(settings_tree.getSelectionPath(), true);
+        }
+    }//GEN-LAST:event_booleanPopUpEnable3ActionPerformed
+
+    private void booleanPopUpDisable3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisable3ActionPerformed
+        if (settings_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
+            HashMapWrapper hashwrap = (HashMapWrapper)settings_tree.getLastSelectedPathComponent();
+            if(hashwrap.getUserData() instanceof Boolean){
+                MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
+                mod.valueForPathChanged(settings_tree.getSelectionPath(), false);
+            }
+        }else if(settings_tree.getLastSelectedPathComponent() instanceof Boolean){
+            MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
+            mod.valueForPathChanged(settings_tree.getSelectionPath(), false);
+        }
+    }//GEN-LAST:event_booleanPopUpDisable3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
@@ -4024,8 +4190,14 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu booleanPopUp;
     private javax.swing.JMenuItem booleanPopUpDisable;
     private javax.swing.JMenuItem booleanPopUpDisable1;
+    private javax.swing.JMenuItem booleanPopUpDisable2;
+    private javax.swing.JMenuItem booleanPopUpDisable3;
     private javax.swing.JMenuItem booleanPopUpEnable;
     private javax.swing.JMenuItem booleanPopUpEnable1;
+    private javax.swing.JMenuItem booleanPopUpEnable2;
+    private javax.swing.JMenuItem booleanPopUpEnable3;
+    private javax.swing.JPopupMenu booleanPopUpEnv;
+    private javax.swing.JPopupMenu booleanPopUpSettings;
     private javax.swing.JPopupMenu booleanPopUpSimObject;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -33,7 +34,7 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="Settings")
 @XmlAccessorType(XmlAccessType.NONE)
-public class MARS_Settings implements CellEditorListener{
+public class MARS_Settings{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> settings;
@@ -226,21 +227,6 @@ public class MARS_Settings implements CellEditorListener{
         Camera = (HashMap<String,Object>)Misc.get("Camera");
     }
 
-    public void editingCanceled(ChangeEvent e){
-        System.out.println("canceld");
-    }
-
-    public void editingStopped(ChangeEvent e){
-        Object obj = e.getSource();
-        if (obj instanceof TextFieldEditor) {
-            TextFieldEditor editor = (TextFieldEditor)obj;
-            String settings_tree = editor.getTreepath().getPathComponent(1).toString();//get the settings
-            if(settings_tree.equals("Settings")){//check if right auv
-                saveValue(editor);
-            }
-        }
-    }
-
     private void saveValue(TextFieldEditor editor){
         HashMap<String,Object> hashmap = settings;
         String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
@@ -259,6 +245,7 @@ public class MARS_Settings implements CellEditorListener{
         }
     }
 
+    @Deprecated
     private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
         Object node_obj = node.getUserObject();
@@ -291,12 +278,25 @@ public class MARS_Settings implements CellEditorListener{
         }
     }
 
+    @Deprecated
     private void updateState(String target){
         if(target.equals("position")){
             RigidBodyControl physics_control = init.getTerrain_physics_control();
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getTerrain_position());
             }
+        }
+    }
+    
+    public void updateState(String target, String hashmapname){
+        if(target.equals("collision") && hashmapname.equals("Debug")){
+
+        }
+    }
+    
+    public void updateState(TreePath path){
+        if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
+            updateState(path.getLastPathComponent().toString(),"");
         }
     }
 

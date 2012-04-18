@@ -198,7 +198,7 @@ public class MarsSettingsModel implements TreeModel{
                            + path + " --> " + newValue);
         
         //save the new value
-        //saveValue(path, path, newValue);
+        saveValue(path, path, newValue);
         
         //dont forget to tell the listeners that something has changed
         Iterator iter = treeModelListeners.iterator();
@@ -219,11 +219,7 @@ public class MarsSettingsModel implements TreeModel{
                 saveValue(originalPath,path.getParentPath(),value);
             }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
                 Object preObj = (Object)path.getParentPath().getLastPathComponent();
-                if(preObj instanceof AUV_Parameters){
-                    AUV_Parameters auv_param = (AUV_Parameters)preObj;
-                    auv_param.getAllVariables().put(hasher.getName(), value);
-                    hasher.setUserData(value);
-                }else if(preObj instanceof HashMapWrapper){
+                if(preObj instanceof HashMapWrapper){
                     HashMapWrapper hashwrap = (HashMapWrapper)preObj;
                     if(hashwrap.getUserData() instanceof HashMap){
                         HashMap<String,Object> hashmap = (HashMap<String,Object>)hashwrap.getUserData();
@@ -234,8 +230,7 @@ public class MarsSettingsModel implements TreeModel{
                     }*///only nessecary when direct variables in PE. But now we have only hashmaps
                     hasher.setUserData(value);
                 }
-                AUV auv = (AUV)originalPath.getPathComponent(1);
-                auv.updateState(path);
+                settings.updateState(path);
             }else if(hasher.getUserData() instanceof Vector3f){
                 Vector3f vec = (Vector3f)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -248,8 +243,7 @@ public class MarsSettingsModel implements TreeModel{
                 }else if(preObj.getName().equals("Z")){
                     vec.setZ((Float)value);
                 }
-                AUV auv = (AUV)originalPath.getPathComponent(1);
-                auv.updateState(path);
+                settings.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
                 ColorRGBA color = (ColorRGBA)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -264,8 +258,7 @@ public class MarsSettingsModel implements TreeModel{
                 }else if(preObj.getName().equals("A")){
                     color.a = ((Float)value);
                 }
-                AUV auv = (AUV)originalPath.getPathComponent(1);
-                auv.updateState(path);    
+                settings.updateState(path);    
             }
         }
     }

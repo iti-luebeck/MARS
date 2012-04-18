@@ -2601,6 +2601,64 @@
         </MenuItem>
       </SubComponents>
     </Container>
+    <Container class="javax.swing.JPopupMenu" name="booleanPopUpEnv">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="booleanPopUpEnv" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpEnable2">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpEnable2.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpEnable2" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpEnable2ActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpDisable2">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpDisable2.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpDisable2" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpDisable2ActionPerformed"/>
+          </Events>
+        </MenuItem>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPopupMenu" name="booleanPopUpSettings">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="booleanPopUpSettings" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpEnable3">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpEnable3.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpEnable3" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpEnable3ActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="booleanPopUpDisable3">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="booleanPopUpDisable3.text"/>
+            <Property name="name" type="java.lang.String" value="booleanPopUpDisable3" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="booleanPopUpDisable3ActionPerformed"/>
+          </Events>
+        </MenuItem>
+      </SubComponents>
+    </Container>
   </NonVisualComponents>
   <Properties>
     <Property name="component" type="javax.swing.JComponent" editor="org.netbeans.modules.form.ComponentChooserEditor">
