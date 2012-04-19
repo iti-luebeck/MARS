@@ -46,6 +46,7 @@ public class MARS_Settings{
     private HashMap<String,Object> Physics;
     private HashMap<String,Object> Resolution;
     private HashMap<String,Object> Axis;
+    private HashMap<String,Object> FPS;
     private HashMap<String,Object> Fog;
     private HashMap<String,Object> DepthOfField;
     private HashMap<String,Object> WavesWater;
@@ -65,7 +66,7 @@ public class MARS_Settings{
     @XmlTransient
     private XMLConfigReaderWriter xmll;
     @XmlTransient
-    private Initializer init;
+    private Initializer initer;
 
     private boolean setupAxis = true;
     private boolean setupFog = false;
@@ -104,7 +105,7 @@ public class MARS_Settings{
     private PhysicalEnvironment physical_environment;
     private int framerate = 60;
     private int FrameLimit = 60;
-    private boolean FPS = true;
+    //private boolean FPS = true;
     private boolean debug = false;
     private float tileLength = 0.4f;
     private float tileHeigth = 12f;
@@ -187,6 +188,7 @@ public class MARS_Settings{
         ROS = (HashMap<String,Object>)Server.get("ROS");
         Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
         Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        FPS = (HashMap<String,Object>)Graphics.get("FPS");
         Fog = (HashMap<String,Object>)Graphics.get("Fog");
         DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
         WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
@@ -212,6 +214,7 @@ public class MARS_Settings{
         ROS = (HashMap<String,Object>)Server.get("ROS");
         Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
         Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        FPS = (HashMap<String,Object>)Graphics.get("FPS");
         Fog = (HashMap<String,Object>)Graphics.get("Fog");
         DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
         WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
@@ -281,7 +284,7 @@ public class MARS_Settings{
     @Deprecated
     private void updateState(String target){
         if(target.equals("position")){
-            RigidBodyControl physics_control = init.getTerrain_physics_control();
+            RigidBodyControl physics_control = initer.getTerrain_physics_control();
             if(physics_control != null ){
                 physics_control.setPhysicsLocation(getTerrain_position());
             }
@@ -289,23 +292,35 @@ public class MARS_Settings{
     }
     
     public void updateState(String target, String hashmapname){
-        if(target.equals("collision") && hashmapname.equals("Debug")){
-
+        if(target.equals("enabled") && hashmapname.equals("Axis")){
+            initer.hideAxis(isSetupAxis());
+        }else if(target.equals("enabled") && hashmapname.equals("FPS")){
+            initer.hideFPS(isFPS());
+        }else if(target.equals("FrameLimit") && hashmapname.equals("Graphics")){
+            initer.changeFrameLimit(getFrameLimit());
+        }else if(hashmapname.equals("Light")){
+            initer.setupLight();
+        }else if(target.equals("enabled") && hashmapname.equals("CrossHairs")){
+            initer.hideCrossHairs(isSetupCrossHairs());
         }
     }
     
     public void updateState(TreePath path){
         if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
-            updateState(path.getLastPathComponent().toString(),"");
+            if( path.getParentPath().getLastPathComponent().toString().equals("Settings")){
+                updateState(path.getLastPathComponent().toString(),"");
+            }else{
+                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
+            }
         }
     }
 
     /**
      *
-     * @param init
+     * @param initer
      */
     public void setInit(Initializer init) {
-        this.init = init;
+        this.initer = init;
     }
 
     /**
@@ -369,7 +384,7 @@ public class MARS_Settings{
      * @return
      */
     public boolean isFPS() {
-        return (Boolean)Graphics.get("FPS");
+        return (Boolean)FPS.get("enabled");
     }
 
     /**
@@ -377,7 +392,7 @@ public class MARS_Settings{
      * @param enabled
      */
     public void setFPS(boolean enabled) {
-        Graphics.put("FPS", enabled);
+        FPS.put("enabled", enabled);
     }
 
     /**

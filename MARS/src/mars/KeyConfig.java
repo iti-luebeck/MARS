@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.xml.HashMapAdapter;
 import com.jme3.input.KeyNames;
 import java.util.Map.Entry;
+import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -29,6 +30,30 @@ public class KeyConfig {
     private String auv_key_focus = "";
         
     public KeyConfig() {
+    }
+    
+    public HashMap<String,String> getKeys(){
+        return keys;
+    }
+    
+    public void initAfterJAXB(){
+        
+    }
+    
+   public void updateState(String target, String hashmapname){
+        if(target.equals("enabled") && hashmapname.equals("Axis")){
+            
+        }
+    }
+    
+    public void updateState(TreePath path){
+        if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
+            if( path.getParentPath().getLastPathComponent().toString().equals("Settings")){
+                updateState(path.getLastPathComponent().toString(),"");
+            }else{
+                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
+            }
+        }
     }
     
     public void createKeys(){

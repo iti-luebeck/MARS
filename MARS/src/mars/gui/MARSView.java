@@ -261,6 +261,17 @@ public class MARSView extends FrameView {
         );
     }
     
+    public void initKeysTree(final KeyConfig keys){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    keys_tree.setModel(new KeyConfigModel(keys));
+                    keys_tree.updateUI();
+                }
+            }
+        );
+    }
+    
     public void updateTrees(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -269,6 +280,7 @@ public class MARSView extends FrameView {
                     simob_tree.updateUI();
                     pe_tree.updateUI();
                     settings_tree.updateUI();
+                    keys_tree.updateUI();
                 }
             }  
         );
@@ -300,6 +312,8 @@ public class MARSView extends FrameView {
                     jButtonPause.setEnabled(false);
                     jButtonPlay.setEnabled(true);
                     jButtonRestart.setEnabled(true);
+                    RestartMenuItem.setEnabled(true);
+                    StartMenuItem.setEnabled(false);
                 }
             }
         );
@@ -649,9 +663,7 @@ public class MARSView extends FrameView {
             DefaultMutableTreeNode auv_treenode = new DefaultMutableTreeNode(auv);
             treenode.add(auv_treenode);
             HashMap<String,Sensor> sensors = auv.getSensors();
-            createSensorsNodes(auv_treenode,sensors);
             HashMap<String,Actuator> actuators = auv.getActuators();
-            createActuatorsNodes(auv_treenode,actuators);
             createParamNodes(auv_treenode,auv);
             PhysicalValues physical_values = auv.getPhysicalvalues();
             createPhysicalValuesNodes(auv_treenode,physical_values);
@@ -664,9 +676,7 @@ public class MARSView extends FrameView {
         DefaultMutableTreeNode auv_treenode = new DefaultMutableTreeNode(auv);
         treenode.add(auv_treenode);
         HashMap<String,Sensor> sensors = auv.getSensors();
-        createSensorsNodes(auv_treenode,sensors);
         HashMap<String,Actuator> actuators = auv.getActuators();
-        createActuatorsNodes(auv_treenode,actuators);
         createParamNodes(auv_treenode,auv);
         PhysicalValues physical_values = auv.getPhysicalvalues();
         createPhysicalValuesNodes(auv_treenode,physical_values);
@@ -745,30 +755,6 @@ public class MARSView extends FrameView {
         }
         treenode.add(param_treenode);
     }
-
-    @Deprecated
-    private void createSensorsNodes(DefaultMutableTreeNode treenode, HashMap<String,Sensor> sensors){
-        DefaultMutableTreeNode sensors_treenode = null;
-        sensors_treenode = new DefaultMutableTreeNode(s_sensors);
-        for ( String elem : sensors.keySet() ){
-            Sensor sens = (Sensor)sensors.get(elem);
-            DefaultMutableTreeNode sens_treenode = new DefaultMutableTreeNode(sens);
-            sensors_treenode.add(sens_treenode);
-        }
-        treenode.add(sensors_treenode);
-    }
-
-    @Deprecated
-    private void createActuatorsNodes(DefaultMutableTreeNode treenode, HashMap<String,Actuator> actuators){
-        DefaultMutableTreeNode actuators_treenode = null;
-        actuators_treenode = new DefaultMutableTreeNode(s_actuators);
-        for ( String elem : actuators.keySet() ){
-            Actuator act = (Actuator)actuators.get(elem);
-            DefaultMutableTreeNode act_treenode = new DefaultMutableTreeNode(act);
-            actuators_treenode.add(act_treenode);
-        }
-        treenode.add(actuators_treenode);
-    }
     
     public void showpopupWindowSwitcher(final int x, final int y){
         EventQueue.invokeLater(new Runnable(){
@@ -845,6 +831,7 @@ public class MARSView extends FrameView {
         menuBar = new javax.swing.JMenuBar();
         jFileMenu = new javax.swing.JMenu();
         StartMenuItem = new javax.swing.JMenuItem();
+        RestartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
         saveconfigto = new javax.swing.JMenuItem();
@@ -1305,6 +1292,17 @@ public class MARSView extends FrameView {
             }
         });
         jFileMenu.add(StartMenuItem);
+
+        RestartMenuItem.setIcon(resourceMap.getIcon("RestartMenuItem.icon")); // NOI18N
+        RestartMenuItem.setText(resourceMap.getString("RestartMenuItem.text")); // NOI18N
+        RestartMenuItem.setEnabled(false);
+        RestartMenuItem.setName("RestartMenuItem"); // NOI18N
+        RestartMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestartMenuItemActionPerformed(evt);
+            }
+        });
+        jFileMenu.add(RestartMenuItem);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         jFileMenu.add(jSeparator3);
@@ -4208,6 +4206,15 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_keys_treeMouseClicked
 
+    private void RestartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestartMenuItemActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                mars.restartSimState();
+                return null;
+            }
+        });
+    }//GEN-LAST:event_RestartMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4223,6 +4230,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JDialog JME_SettingsDialog;
     private javax.swing.JPanel LeftMenuePanel;
     private javax.swing.JPanel MapPanel;
+    private javax.swing.JMenuItem RestartMenuItem;
     private javax.swing.JMenu SettingsMenu;
     private javax.swing.JMenuItem StartMenuItem;
     private javax.swing.JPanel TreePanel;

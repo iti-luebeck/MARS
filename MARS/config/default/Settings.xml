@@ -141,8 +141,12 @@
                         </entry>
                     </value>
                 </entry>
-                <entry xsi:type="myHashMapEntryTypeObject" key="FPS">
-                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                <entry xsi:type="myHashMapEntryTypeHashMap" key="FPS">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        </entry>
+                    </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Light">
                     <value>

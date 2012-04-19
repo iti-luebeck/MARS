@@ -53,6 +53,8 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import mars.auv.Communication_Manager;
 import mars.server.ros.ROS_Node;
 import mars.waves.MyProjectedGrid;
@@ -72,6 +74,7 @@ public class Initializer {
     private PhysicalEnvironment physical_environment;
     private Node guiNode;
     private Node rootNode;
+    private Node axisNode = new Node("AxisNode");
     private AppSettings settings;
     private InputManager inputManager;
     private Node sceneReflectionNode;
@@ -93,6 +96,12 @@ public class Initializer {
     private int terrain_image_width = 0;
     private int terrain_image_heigth = 0;
     private byte[] terrain_byte_arrray;
+    
+    //light
+    DirectionalLight sun;
+    
+    //gui
+    BitmapText ch;
     
     //water
     private WaterFilter water;
@@ -164,6 +173,7 @@ public class Initializer {
         this.renderManager = mars.getRenderManager();
         this.bulletAppState = mars.getStateManager().getState(BulletAppState.class);
         this.mars_settings.setInit(this);
+        sun = new DirectionalLight();
         fpp = new FilterPostProcessor(assetManager);
     }
 
@@ -171,15 +181,15 @@ public class Initializer {
      * Calls this method once after you have added the MARS_Settings.
      */
     public void init(){
-        if(mars_settings.isSetupAxis()){
+        //if(mars_settings.isSetupAxis()){
             setupAxis();
-        }
+        //}
         if(mars_settings.isSetupFog()){
             setupFog();
         }
-        if(mars_settings.isSetupLight()){
+        //if(mars_settings.isSetupLight()){
             setupLight();
-        }
+        //}
         if(mars_settings.isSetupPlaneWater()){
             setupPlaneWater();
         }
@@ -204,9 +214,9 @@ public class Initializer {
         if(mars_settings.isSetupWireFrame()){
             setupWireFrame();
         }
-        if(mars_settings.isSetupCrossHairs()){
+        //if(mars_settings.isSetupCrossHairs()){
             setupCrossHairs();
-        }
+        //}
         if(mars_settings.isSetupDepthOfField()){
             setupDepthOfField();
         }
@@ -236,13 +246,14 @@ public class Initializer {
      */
     private void setupCrossHairs() {
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
+        ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+"); // crosshairs
         ch.setLocalTranslation( // center
         settings.getWidth()/2 - guiFont.getCharSet().getRenderedSize()/3*2,
         settings.getHeight()/2 + ch.getLineHeight()/2, 0);
         guiNode.attachChild(ch);
+        hideCrossHairs(mars_settings.isSetupCrossHairs());
     }
 
     /*
@@ -479,11 +490,20 @@ public class Initializer {
         //mars.getViewPort().addProcessor(fpp);
     }
 
-    private void setupLight(){
-        DirectionalLight sun = new DirectionalLight();
-        sun.setColor(mars_settings.getLight_color());
-        sun.setDirection(mars_settings.getLight_direction().normalize());
-        rootNode.addLight(sun);
+    public void setupLight(){
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        rootNode.removeLight(sun);//remove all old stuff before
+                        sun.setColor(mars_settings.getLight_color());
+                        sun.setDirection(mars_settings.getLight_direction().normalize());
+                        if(mars_settings.isSetupLight()){
+                            rootNode.addLight(sun);
+                        }else{
+                            rootNode.removeLight(sun);
+                        }
+                        return null;
+                    }
+                });
     }
 
     /*
@@ -513,7 +533,7 @@ public class Initializer {
          y_axis.setMaterial(y_axis_mat);
          y_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
          y_axis.updateGeometricState();
-         rootNode.attachChild(y_axis);
+         axisNode.attachChild(y_axis);
 
          Geometry x_axis = new Geometry("x_axis!", new Arrow(Vector3f.UNIT_X.mult(1)));
          Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -521,7 +541,7 @@ public class Initializer {
          x_axis.setMaterial(x_axis_mat);
          x_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
          x_axis.updateGeometricState();
-         rootNode.attachChild(x_axis);
+         axisNode.attachChild(x_axis);
 
          Geometry z_axis = new Geometry("z_axis", new Arrow(Vector3f.UNIT_Z.mult(1)));
          Material z_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -529,9 +549,9 @@ public class Initializer {
          z_axis.setMaterial(z_axis_mat);
          z_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
          z_axis.updateGeometricState();
-         rootNode.attachChild(z_axis);
+         axisNode.attachChild(z_axis);
         
-         //Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.6f)));
+         /*//Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.6f)));
          Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.615f)));
          Material length_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
          length_axis_mat.setColor("Color", ColorRGBA.Red);
@@ -539,7 +559,8 @@ public class Initializer {
          //length_axis.setLocalTranslation(new Vector3f(0f,-2f,0f));
          length_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
          length_axis.updateGeometricState();
-         rootNode.attachChild(length_axis);
+         axisNode.attachChild(length_axis);*/
+         rootNode.attachChild(axisNode);
          /*Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(2.87f)));
          Material length_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
          length_axis_mat.setColor("Color", ColorRGBA.Red);
@@ -548,6 +569,38 @@ public class Initializer {
          //length_axis.setLocalTranslation(new Vector3f(0f,0f,-0.615f));
          length_axis.updateGeometricState();
          rootNode.attachChild(length_axis);*/
+         hideAxis(mars_settings.isSetupAxis());
+    }
+    
+    public void hideAxis(boolean hide){
+        if(!hide){
+            axisNode.setCullHint(CullHint.Always);
+        }else{
+            axisNode.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void hideCrossHairs(boolean hide){
+        if(!hide){
+            ch.setCullHint(CullHint.Always);
+        }else{
+            ch.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void hideFPS(boolean hide){
+        if(!hide){
+            mars.setDisplayFps(false);
+            mars.setDisplayStatView(false);
+        }else{
+            mars.setDisplayFps(true);
+            mars.setDisplayStatView(true);
+        }
+    }
+    
+    public void changeFrameLimit(int framelimit){
+        mars.getSettings().setFrameRate(framelimit);
+        mars.restart();
     }
 
     private void setupTerrain(){

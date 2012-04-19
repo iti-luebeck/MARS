@@ -162,12 +162,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     @Override
     public void cleanup() {
-        rootNode.detachAllChildren();
-        mars = null;
-        assetManager = null;
-        mars_settings = null;
-        nifty_load = null;
         super.cleanup();
+        rootNode.detachAllChildren();
+        /*mars = null;
+        assetManager = null;
+        mars_settings = null;*/
+        //nifty_load = null;
     }
 
     @Override
@@ -1102,7 +1102,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setMarsSettings(mars_settings);
             view.setPenv(physical_environment);
             view.setKeyConfig(keyconfig);
-            //view.initTree(mars_settings,auvs,simobs);
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
@@ -1110,6 +1109,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.initSimObjectTree(simob_manager);
             view.initEnvironmentTree(physical_environment);
             view.initSettingsTree(mars_settings);
+            view.initKeysTree(keyconfig);
             view.initPopUpMenues();
             view.allowSimInteraction();
             Future fut = mars.enqueue(new Callable() {

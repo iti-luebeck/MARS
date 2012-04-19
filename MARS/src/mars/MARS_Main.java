@@ -352,4 +352,19 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     public FlyByCamera getFlyByCamera(){
         return advFlyCam;
     }
+    
+    public void restartSimState(){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    viewPort.detachScene(simState.getRootNode());
+                    //stateManager.detach(simState);
+                    //startSimState();
+                    stateManager.detach(startstate);
+                }
+                return null;
+            }
+        });
+    }
 }
