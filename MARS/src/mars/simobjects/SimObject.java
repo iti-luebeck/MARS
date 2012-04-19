@@ -701,6 +701,7 @@ public class SimObject{
         ghost_simob_spatial = assetManager.loadModel(getFilepath());
         ghost_simob_spatial.setLocalScale(getScale());
         ghost_simob_spatial.setLocalTranslation(getPosition());
+        ghost_simob_spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
         ghost_simob_spatial.updateGeometricState();
         ghost_simob_spatial.updateModelBound();
         ghost_simob_spatial.setName(getName() + "_ghost");
