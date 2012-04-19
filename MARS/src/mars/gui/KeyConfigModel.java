@@ -18,11 +18,6 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import mars.KeyConfig;
-import mars.Manipulating;
-import mars.PhysicalExchanger;
-import mars.auv.AUV;
-import mars.auv.AUV_Manager;
-import mars.auv.AUV_Parameters;
 
 /**
  * This is a TreeModel for the JTree

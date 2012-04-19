@@ -9,22 +9,15 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
-import mars.xml.MyHashMapEntryTypeHashMap;
-import mars.xml.MyHashMapType;
-import mars.xml.Vector3fAdapter;
 import mars.xml.XMLConfigReaderWriter;
 
 /**
@@ -302,6 +295,14 @@ public class MARS_Settings{
             initer.setupLight();
         }else if(target.equals("enabled") && hashmapname.equals("CrossHairs")){
             initer.hideCrossHairs(isSetupCrossHairs());
+        }else if(target.equals("enabled") && hashmapname.equals("PlaneWater")){
+            initer.hidePlaneWater(isSetupPlaneWater());
+        }else if(hashmapname.equals("PlaneWater")){
+            initer.setupPlaneWater();
+        }else if(target.equals("enabled") && hashmapname.equals("ProjectedWavesWater")){
+            initer.hideProjectedWavesWater(isSetupProjectedWavesWater());
+        }else if(hashmapname.equals("ProjectedWavesWater")){
+            initer.updateProjectedWavesWater();
         }
     }
     
@@ -554,6 +555,150 @@ public class MARS_Settings{
      */
     public void setSetupProjectedWavesWater(boolean enabled) {
         ProjectedWavesWater.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public int getProjectedWavesWaterOctaves() {
+        return (Integer)ProjectedWavesWater.get("Octaves");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterOctaves(int Octaves) {
+        ProjectedWavesWater.put("Octaves", Octaves);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterScaleybig() {
+        return (Float)ProjectedWavesWater.get("Scaleybig");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterScaleybig(float Scaleybig) {
+        ProjectedWavesWater.put("Scaleybig", Scaleybig);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterScaleysmall() {
+        return (Float)ProjectedWavesWater.get("Scaleysmall");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterScaleysmall(float Scaleysmall) {
+        ProjectedWavesWater.put("Scaleysmall", Scaleysmall);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterScalexbig() {
+        return (Float)ProjectedWavesWater.get("Scalexbig");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterScalexbig(float Scalexbig) {
+        ProjectedWavesWater.put("Scalexbig", Scalexbig);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterScalexsmall() {
+        return (Float)ProjectedWavesWater.get("Scalexsmall");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterScalexsmall(float Scalexsmall) {
+        ProjectedWavesWater.put("Scalexsmall", Scalexsmall);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterHeightsmall() {
+        return (Float)ProjectedWavesWater.get("Heightsmall");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterHeightsmall(float Heightsmall) {
+        ProjectedWavesWater.put("Heightsmall", Heightsmall);
+    }
+    
+            /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterHeightbig() {
+        return (Float)ProjectedWavesWater.get("Heightbig");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterHeightbig(float Heightbig) {
+        ProjectedWavesWater.put("Heightbig", Heightbig);
+    }
+    
+                /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterSpeedbig() {
+        return (Float)ProjectedWavesWater.get("Speedbig");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterSpeedbig(float Speedbig) {
+        ProjectedWavesWater.put("Speedbig", Speedbig);
+    }
+    
+                    /**
+     *
+     * @return
+     */
+    public float getProjectedWavesWaterSpeedsmall() {
+        return (Float)ProjectedWavesWater.get("Speedsmall");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setProjectedWavesWaterSpeedsmall(float Speedsmall) {
+        ProjectedWavesWater.put("Speedsmall", Speedsmall);
     }
 
     /**

@@ -106,6 +106,7 @@ public class Initializer {
     //water
     private WaterFilter water;
     private float waves_time = 0f;
+    Geometry water_plane;
     
     //projected waves water
     private MyProjectedGrid grid;
@@ -190,9 +191,9 @@ public class Initializer {
         //if(mars_settings.isSetupLight()){
             setupLight();
         //}
-        if(mars_settings.isSetupPlaneWater()){
+        //if(mars_settings.isSetupPlaneWater()){
             setupPlaneWater();
-        }
+        //}
         if(mars_settings.isSetupSimpleSkyBox()){
             setupSimpleSkyBox();
         }
@@ -208,9 +209,9 @@ public class Initializer {
         if(mars_settings.isSetupWavesWater()){
             setupWavesWater();
         }
-        if(mars_settings.isSetupProjectedWavesWater()){
+        //if(mars_settings.isSetupProjectedWavesWater()){
             setupProjectedWavesWater();
-        }
+        //}
         if(mars_settings.isSetupWireFrame()){
             setupWireFrame();
         }
@@ -365,17 +366,31 @@ public class Initializer {
         fpp.addFilter(water);
     }
     
-    private void setupProjectedWavesWater(){
+    public void setupProjectedWavesWater(){
         setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
     }
 
     private void setupgridwaves(Camera cam,ViewPort viewPort,Timer timer){
         grid = new MyProjectedGrid(timer, cam, 100, 70, 0.02f, whg);
+        updateProjectedWavesWater();
         projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
-        projectedGridGeometry.setCullHint(CullHint.Never);
+        //projectedGridGeometry.setCullHint(CullHint.Never);
         projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
         projectedGridGeometry.setLocalTranslation(0, 0, 0);
         rootNode.attachChild(projectedGridGeometry);
+        hideProjectedWavesWater(mars_settings.isSetupProjectedWavesWater());
+    }
+    
+    public void updateProjectedWavesWater(){
+        whg.setHeightbig(mars_settings.getProjectedWavesWaterHeightbig());
+        whg.setHeightsmall(mars_settings.getProjectedWavesWaterHeightsmall());
+        whg.setScalexbig(mars_settings.getProjectedWavesWaterScalexbig());
+        whg.setScalexsmall(mars_settings.getProjectedWavesWaterScalexsmall());
+        whg.setScaleybig(mars_settings.getProjectedWavesWaterScaleybig());
+        whg.setScaleysmall(mars_settings.getProjectedWavesWaterScaleysmall());
+        whg.setSpeedbig(mars_settings.getProjectedWavesWaterSpeedbig());
+        whg.setSpeedsmall(mars_settings.getProjectedWavesWaterSpeedsmall());
+        whg.setOctaves(mars_settings.getProjectedWavesWaterOctaves());
     }
     
     private Material setWaterProcessor(Camera cam, ViewPort viewPort){   
@@ -456,10 +471,10 @@ public class Initializer {
         viewPort.addProcessor(waterProcessor);
     }
 
-    private void setupPlaneWater(){
+    public void setupPlaneWater(){
         // A translucent/transparent texture, similar to a window frame.
-        Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
-        Geometry water_plane = new Geometry("water_plane", boxshape);
+        /*Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
+        water_plane = new Geometry("water_plane", boxshape);
         water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
         Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
@@ -467,7 +482,28 @@ public class Initializer {
         mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         water_plane.setMaterial(mat_tt);
         water_plane.setQueueBucket(Bucket.Transparent);
-        rootNode.attachChild(water_plane);
+        rootNode.attachChild(water_plane);*/
+        //hidePlaneWater(mars_settings.isSetupPlaneWater());
+        
+        Future fut = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(water_plane != null){
+                    water_plane.removeFromParent();
+                }
+                Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
+                water_plane = new Geometry("water_plane", boxshape);
+                water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
+                Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterfilepath()));
+                mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                water_plane.setMaterial(mat_tt);
+                water_plane.setQueueBucket(Bucket.Transparent);
+                rootNode.attachChild(water_plane);
+                hidePlaneWater(mars_settings.isSetupPlaneWater());
+                return null;
+             }
+        });
     }
 
     private FogFilter createFog(){
@@ -580,6 +616,22 @@ public class Initializer {
         }
     }
     
+    public void hidePlaneWater(boolean hide){
+        if(!hide){
+            water_plane.setCullHint(CullHint.Always);
+        }else{
+            water_plane.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void hideProjectedWavesWater(boolean hide){
+        if(!hide){
+            projectedGridGeometry.setCullHint(CullHint.Always);
+        }else{
+            projectedGridGeometry.setCullHint(CullHint.Never);
+        }
+    }
+    
     public void hideCrossHairs(boolean hide){
         if(!hide){
             ch.setCullHint(CullHint.Always);
@@ -601,6 +653,10 @@ public class Initializer {
     public void changeFrameLimit(int framelimit){
         mars.getSettings().setFrameRate(framelimit);
         mars.restart();
+    }
+    
+    public void changePlaneWater(){
+        
     }
 
     private void setupTerrain(){

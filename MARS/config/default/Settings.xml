@@ -189,6 +189,33 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Octaves">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Scaleybig">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Scaleysmall">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.02</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Scalexbig">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.03</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Scalexsmall">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.04</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Heightsmall">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.25</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Heightbig">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.01</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Speedbig">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="Speedsmall">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+                        </entry>
                     </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Terrain">
