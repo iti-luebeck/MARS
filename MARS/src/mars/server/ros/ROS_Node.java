@@ -42,8 +42,9 @@ public class ROS_Node implements Runnable {
     private AUV_Manager auv_manager;
     
     //rosjava stuff
-    private Node node;
     private MARSNodeMain marsnode;
+    NodeRunner runner;
+    private boolean running = true;
     
     /**
      * 
@@ -122,16 +123,6 @@ public class ROS_Node implements Runnable {
     /**
      * 
      * @return
-     * @deprecated
-     */
-    @Deprecated
-    public Node getNode() {
-        return node;
-    }
-    
-    /**
-     * 
-     * @return
      */
     public MARSNodeMain getMarsNode() {
         return marsnode;
@@ -141,8 +132,8 @@ public class ROS_Node implements Runnable {
      * 
      */
     public void shutdown() {
-        node.shutdown();
-        node = null;
+        runner.shutdown();
+        running = false;
     }
     
     private void init(){
@@ -174,7 +165,7 @@ public class ROS_Node implements Runnable {
         Preconditions.checkNotNull(nodeConf);
         //node = new DefaultNodeFactory().newNode("MARS", nodeConf);
         marsnode = new MARSNodeMain();
-        NodeRunner runner = DefaultNodeRunner.newDefault();
+        runner = DefaultNodeRunner.newDefault();
         runner.run(marsnode, nodeConf);        
         
         //auv_manager.setRos_node(node);
@@ -209,7 +200,7 @@ public class ROS_Node implements Runnable {
             //auv_manager.setRos_node(node);
             //auv_manager.initROSofAUVs();
 
-            while (true) {
+            while (running) {
 
                 Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
@@ -221,11 +212,11 @@ public class ROS_Node implements Runnable {
                 Thread.sleep(sleeptime);
             }
         } catch (Exception e) {
-            if (node != null) {
+           /* if (node != null) {
                 node.getLog().fatal(e);
             } else {
                 e.printStackTrace();
-            }
+            }*/
         }
         
         

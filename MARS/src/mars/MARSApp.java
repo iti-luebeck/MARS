@@ -44,7 +44,8 @@ public class MARSApp extends SingleFrameApplication {
     /**
      * At startup create and show the main frame of the application.
      */
-    @Override protected void startup() {
+    @Override 
+    protected void startup() {
         view = new MARSView(this);
         show(view);
         frame = view.getFrame();
@@ -242,6 +243,12 @@ public class MARSApp extends SingleFrameApplication {
      */
     public static MARSApp getApplication() {
         return Application.getInstance(MARSApp.class);
+    }
+
+    @Override
+    protected void shutdown() {
+        super.shutdown();
+        app.stop();
     }
 
     /**

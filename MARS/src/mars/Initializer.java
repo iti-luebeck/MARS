@@ -55,6 +55,8 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.auv.Communication_Manager;
 import mars.server.ros.ROS_Node;
 import mars.waves.MyProjectedGrid;
@@ -260,7 +262,7 @@ public class Initializer {
     /*
      * setting up the raw_server for communication with the auvs
      */
-    private void setupServer(){
+    public void setupServer(){
         if(mars_settings.isRAW_Server_enabled()){
             raw_server = new MARS_Server( mars, auv_manager, com_manager );
             raw_server.setServerPort(mars_settings.getRAW_Server_port());
@@ -275,6 +277,49 @@ public class Initializer {
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
+    }
+    
+    public void killServer(){
+        Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Killing ROS Server...", "");
+        this.getROS_Server().shutdown();
+        Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server killed!", "");
+    }
+    
+    public boolean ServerRunning(){
+        if(this.isROS_ServerReady()){
+            if(this.getROS_Server().getMarsNode() != null){
+                if(this.getROS_Server().getMarsNode().isRunning()){
+                    return true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkROSServer(){
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
+                while(!this.isROS_ServerReady()){
+                    
+                }
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server ready.", "");
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be created...", "");
+                while(this.getROS_Server().getMarsNode() == null){
+                    
+                }
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node created.", "");
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
+                while(!this.getROS_Server().getMarsNode().isExisting()){
+                    
+                }
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node exists.", "");
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
+                while(!this.getROS_Server().getMarsNode().isRunning()){
+                    
+                }
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node running.", "");
+                //server_init = true;//server running, is needed because view is sometimes null in the beginning(see update)
+                return true;
     }
     
     /**

@@ -6,6 +6,10 @@
 package mars;
 
 import com.jme3.app.FlyCamAppState;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.states.SimState;
 import mars.states.StartState;
 import com.jme3.font.BitmapFont;
@@ -37,6 +41,7 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import mars.states.MapState;
 
 
@@ -137,10 +142,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
-        if(view != null && !view_init && stateManager.getState(SimState.class) != null){
+        /*if(view != null && !view_init && stateManager.getState(SimState.class) != null){
             stateManager.getState(SimState.class).setView(view);
             view_init = true;
-        }
+        }*/
        
         /*if (load) {//we will be loading,switching appstates
             //this.setProgress(0.5f, "dfsdfsdf");
@@ -161,6 +166,34 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     @Override
     public void simpleRender(RenderManager rm) {
+    }
+
+    @Override
+    public void stop() {
+        //make sure to release ros connection
+        simStateFuture = this.enqueue(new Callable() {
+            public Boolean call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.disconnectFromServer();
+                    while(simState.getIniter().ServerRunning()){
+                        
+                    }
+                }
+                return true;
+            }
+        });
+        try {
+            //wait till ros killed
+            Object obj = simStateFuture.get(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        super.stop();
     }
     
     /**

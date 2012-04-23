@@ -94,6 +94,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     //needed for graphs
     private MARSView view;
     private boolean view_init = false;
+    private boolean server_init = false;
     
     //main settings file
     MARS_Settings mars_settings;
@@ -262,8 +263,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             com_manager.setServer(initer.getRAW_Server());
 
-            if(mars_settings.isROS_Server_enabled()){
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
+            //if(mars_settings.isROS_Server_enabled()){
+              /*  Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
                 while(!initer.isROS_ServerReady()){
                     
                 }
@@ -283,6 +284,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     
                 }
                 Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node running.", "");
+                server_init = true;//server running, is needed because view is sometimes null in the beginning(see update)*/
+                //server_init = initer.checkROSServer();
+            //}
+            if(mars_settings.isROS_Server_enabled()){
+                if(initer.checkROSServer()){//Waiting for ROS Server to be ready
+                
+                }
             }
             
             populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
@@ -291,6 +299,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             initMap();
             
             initPublicKeys();
+            
+            initView();
             
            /*             Box box = new Box(1f, 1f, 1f);
                         Geometry cur1 = new Geometry("BOOM2!", box);
@@ -369,6 +379,91 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.updateGeometricState();
         }
         super.initialize(stateManager, app);
+    }
+    
+    private void initView(){
+        //if(view != null && !view_init && mars_settings!=null){
+            view.setMarsSettings(mars_settings);
+            view.setPenv(physical_environment);
+            view.setKeyConfig(keyconfig);
+            view.setXMLL(xmll);
+            view.setAuv_manager(auv_manager);
+            view.setSimob_manager(simob_manager);
+            view.initAUVTree(auv_manager);
+            view.initSimObjectTree(simob_manager);
+            view.initEnvironmentTree(physical_environment);
+            view.initSettingsTree(mars_settings);
+            view.initKeysTree(keyconfig);
+            view.initPopUpMenues();
+            view.allowSimInteraction();
+           /* Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    view.updateTrees();
+                    return null;
+                }
+                });*/
+            view.updateTrees();
+            //auv_hanse.setView(view);
+            //auv_monsun2.setView(view);
+            //view_init = true;
+       // }
+            
+        /*if(view != null && server_init){
+            if(initer.getROS_Server().getMarsNode().isRunning()){
+                view.allowServerInteraction(true);
+                server_init = false;
+            }
+        }*/
+        if(mars_settings.isROS_Server_enabled()){
+                /*Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
+                while(!initer.isROS_ServerReady()){
+                    
+                }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server ready.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be created...", "");
+                while(initer.getROS_Server().getMarsNode() == null){
+                    
+                }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node created.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
+                while(!initer.getROS_Server().getMarsNode().isExisting()){
+                    
+                }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node exists.", "");
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
+                while(!initer.getROS_Server().getMarsNode().isRunning()){
+                    
+                }
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node running.", "");*/
+                //server_init = true;//server running, is needed because view is sometimes null in the beginning(see update)
+                //server_init = initer.checkROSServer();
+            if(initer.checkROSServer()){
+                view.allowServerInteraction(true);
+            }else{
+                view.allowServerInteraction(false);
+            }
+        }else{
+            view.allowServerInteraction(false);
+        }
+    }
+    
+    public void connectToServer(){
+        mars_settings.setROS_Server_enabled(true);
+        initer.setupServer();
+        if(initer.checkROSServer()){
+                view.allowServerInteraction(true);
+                auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
+                auv_manager.updateMARSNode();
+        }else{
+                view.allowServerInteraction(false);
+        }
+    }
+    
+    public void disconnectFromServer(){
+        mars_settings.setROS_Server_enabled(false);
+        view.enableServerInteraction(false);
+        initer.killServer();
+        view.allowServerInteraction(false);
     }
     
     private void initMap(){
@@ -1029,7 +1124,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
         }
         auv_manager.registerAUVs(auvs);
-        
+        //update the view in the next frame
+        Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    view.updateTrees();
+                    return null;
+                }
+                });
         /*Iterator iter = auvs.iterator();
         while(iter.hasNext() ) {
             AUV aaa = (AUV)iter.next();
@@ -1045,6 +1146,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private void populateSim_Object_Manager(ArrayList simobs){
         simob_manager.setBulletAppState(bulletAppState);
         simob_manager.registerSimObjects(simobs);
+        //update the view in the next frame
+        Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    view.updateTrees();
+                    return null;
+                }
+                });
     }
 
     @Override
@@ -1098,7 +1206,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if(view == null){
             System.out.println("View is NULL");
         }
-        if(view != null && !view_init && mars_settings!=null){
+        
+        /*if(view != null && !view_init && mars_settings!=null){
             view.setMarsSettings(mars_settings);
             view.setPenv(physical_environment);
             view.setKeyConfig(keyconfig);
@@ -1122,6 +1231,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //auv_monsun2.setView(view);
             view_init = true;
         }
+        
+        if(view != null && server_init){
+            if(initer.getROS_Server().getMarsNode().isRunning()){
+                view.allowServerInteraction(true);
+                server_init = false;
+            }
+        }*/
         
         //System.out.println("time: " + tpf);
         /*if(mars_settings.isSetupWavesWater()){

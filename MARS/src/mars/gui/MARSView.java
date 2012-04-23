@@ -318,6 +318,37 @@ public class MARSView extends FrameView {
             }
         );
     }
+    
+    public void allowServerInteraction(final boolean connected){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    if(connected){
+                        jButtonServerConnect.setEnabled(false);
+                        jButtonServerDisconnect.setEnabled(true);
+                    }else{
+                        jButtonServerConnect.setEnabled(true);
+                        jButtonServerDisconnect.setEnabled(false);
+                    }                    
+                }
+            }
+        );
+    }
+    
+    public void enableServerInteraction(final boolean enable){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    if(enable){
+
+                    }else{
+                        jButtonServerConnect.setEnabled(false);
+                        jButtonServerDisconnect.setEnabled(false);
+                    }                    
+                }
+            }
+        );
+    }
 
     /**
      * 
@@ -935,6 +966,10 @@ public class MARSView extends FrameView {
         jButtonPlay = new javax.swing.JButton();
         jButtonPause = new javax.swing.JButton();
         jButtonRestart = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jButtonServerConnect = new javax.swing.JButton();
+        jButtonServerDisconnect = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
         auv_move_vector_dialog = new javax.swing.JDialog();
         jButton1 = new javax.swing.JButton();
         Cancel = new javax.swing.JButton();
@@ -2090,6 +2125,42 @@ public class MARSView extends FrameView {
             }
         });
         jToolBarPlay.add(jButtonRestart);
+
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        jToolBarPlay.add(jSeparator4);
+
+        jButtonServerConnect.setIcon(resourceMap.getIcon("jButtonServerConnect.icon")); // NOI18N
+        jButtonServerConnect.setText(resourceMap.getString("jButtonServerConnect.text")); // NOI18N
+        jButtonServerConnect.setToolTipText(resourceMap.getString("jButtonServerConnect.toolTipText")); // NOI18N
+        jButtonServerConnect.setEnabled(false);
+        jButtonServerConnect.setFocusable(false);
+        jButtonServerConnect.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonServerConnect.setName("jButtonServerConnect"); // NOI18N
+        jButtonServerConnect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonServerConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonServerConnectActionPerformed(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonServerConnect);
+
+        jButtonServerDisconnect.setIcon(resourceMap.getIcon("jButtonServerDisconnect.icon")); // NOI18N
+        jButtonServerDisconnect.setText(resourceMap.getString("jButtonServerDisconnect.text")); // NOI18N
+        jButtonServerDisconnect.setToolTipText(resourceMap.getString("jButtonServerDisconnect.toolTipText")); // NOI18N
+        jButtonServerDisconnect.setEnabled(false);
+        jButtonServerDisconnect.setFocusable(false);
+        jButtonServerDisconnect.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonServerDisconnect.setName("jButtonServerDisconnect"); // NOI18N
+        jButtonServerDisconnect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonServerDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonServerDisconnectActionPerformed(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonServerDisconnect);
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        jToolBarPlay.add(jSeparator5);
 
         auv_move_vector_dialog.setTitle(resourceMap.getString("auv_move_vector_dialog.title")); // NOI18N
         auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 234));
@@ -4215,6 +4286,30 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         });
     }//GEN-LAST:event_RestartMenuItemActionPerformed
 
+    private void jButtonServerConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerConnectActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.connectToServer();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonServerConnectActionPerformed
+
+    private void jButtonServerDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerDisconnectActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.disconnectFromServer();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonServerDisconnectActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4286,6 +4381,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
+    private javax.swing.JButton jButtonServerConnect;
+    private javax.swing.JButton jButtonServerDisconnect;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -4345,6 +4442,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;

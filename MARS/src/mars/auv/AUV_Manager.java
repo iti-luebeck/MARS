@@ -189,6 +189,16 @@ public class AUV_Manager {
         this.mars_node = mars_node;
     }
     
+    public void updateMARSNode(){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled()){
+                auv.setROS_Node(getMARSNode());
+                auv.initROS();
+            }
+        }
+    }
+            
     /**
      *
      * @param tpf

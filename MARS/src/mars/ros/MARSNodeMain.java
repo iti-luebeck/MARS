@@ -44,6 +44,9 @@ public class MARSNodeMain implements NodeMain {
 
     @Override
     public void onShutdown(Node node) {
+        if(this.node.isRunning()){
+            this.node.shutdown();
+        }
     }
     
     /**
