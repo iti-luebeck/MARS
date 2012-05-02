@@ -279,6 +279,8 @@ public class AUV_Parameters implements CellEditorListener{
             auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
         }else if(target.equals("centers") && hashmapname.equals("Debug")){
             auv.setCentersVisible(isDebugCenters());
+        }else if(target.equals("bounding") && hashmapname.equals("Debug")){
+            auv.setBoundingBoxVisible(isDebugBounding());
         }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
             auv.setWaypointsEnabled(isWaypoints_enabled());
         }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
@@ -898,6 +900,22 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setDebugDrag(boolean drag) {
         debug.put("drag", drag);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public boolean isDebugBounding() {
+         return (Boolean)debug.get("bounding");
+    }
+
+    /**
+     *
+     * @param drag
+     */
+    public void setDebugBounding(boolean bounding) {
+        debug.put("bounding", bounding);
     }
     
     /**

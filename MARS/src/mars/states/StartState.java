@@ -9,6 +9,7 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -23,6 +24,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
@@ -391,5 +393,23 @@ public class StartState extends AbstractAppState{
         //hanse_node.attachChild(auv_spatial);
         //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
         //System.out.println("vol bv " + auv_spatial.getWorldBound());
+        
+        /*
+        WireBox wbx = new WireBox();
+        BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();
+        //BoundingBox bb = new BoundingBox();
+        //bb.computeFromPoints(auv_spatial.);
+        wbx.fromBoundingBox(bb);
+        Geometry boundingBox = new Geometry("TheMesh", wbx);
+        Material mat_box = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_box.setColor("m_Color", ColorRGBA.Blue);
+        boundingBox.setMaterial(mat_box);
+        boundingBox.setLocalTranslation(pos);
+        boundingBox.setLocalScale(scale);
+        boundingBox.setLocalRotation(quat4);
+        //boundingBox.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
+        boundingBox.updateModelBound();
+        boundingBox.updateGeometricState();
+        nd_selection.attachChild(boundingBox);*/
     }
 }

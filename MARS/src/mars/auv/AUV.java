@@ -305,6 +305,7 @@ public interface AUV{
     public void setWireframeVisible(boolean visible);
     public void setDragVisible(boolean visible);
     public void setWayPointsVisible(boolean visible);
+    public void setBoundingBoxVisible(boolean visible);
     public void setWaypointsEnabled(boolean enabled);
     public WayPoints getWaypoints();
     public void updateState(TreePath path);

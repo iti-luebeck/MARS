@@ -15,6 +15,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
@@ -40,6 +42,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.debug.WireBox;
 import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
@@ -121,6 +124,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Node selectionNode = new Node("selectionNode");
     private RigidBodyControl physics_control;
     private CollisionShape collisionShape;
+    private Geometry boundingBox;
 
     private Camera onCamera;
 
@@ -1125,11 +1129,28 @@ public class BasicAUV implements AUV,SceneProcessor{
         mat_white.setColor("Color", ColorRGBA.Blue);
         auv_spatial.setMaterial(mat_white);*/
         auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
-        auv_spatial.updateGeometricState();
         auv_spatial.updateModelBound();
+        auv_spatial.updateGeometricState();
         auv_spatial.setName(auv_param.getModel_name());
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
+        
+        WireBox wbx = new WireBox();
+        BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();
+        //BoundingBox bb = new BoundingBox();
+        //bb.computeFromPoints(auv_spatial.);
+        wbx.fromBoundingBox(bb);
+        boundingBox = new Geometry("TheMesh", wbx);
+        Material mat_box = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_box.setColor("m_Color", ColorRGBA.Blue);
+        boundingBox.setMaterial(mat_box);
+        boundingBox.setLocalTranslation(bb.getCenter());
+        //boundingBox.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
+        boundingBox.updateModelBound();
+        boundingBox.updateGeometricState();
+        setBoundingBoxVisible(auv_param.isDebugBounding());
+        auv_node.attachChild(boundingBox);
+                
         setWireframeVisible(auv_param.isDebugWireframe());
         auv_node.attachChild(auv_spatial);
     }
@@ -1870,6 +1891,14 @@ public class BasicAUV implements AUV,SceneProcessor{
     
     public void setDragVisible(boolean visible){
         
+    }
+    
+    public void setBoundingBoxVisible(boolean visible){
+        if(visible){
+            boundingBox.setCullHint(CullHint.Inherit);
+        }else{
+            boundingBox.setCullHint(CullHint.Always);
+        }
     }
     
     public void setWireframeVisible(boolean visible){

@@ -1518,6 +1518,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 case 3: selected_auv.getAuv_param().setDebugCollision(selected);selected_auv.setCollisionVisible(selected);break;
                 case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
                 case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
+                case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
                 default:;
             }                
         }

@@ -281,8 +281,12 @@ public class Initializer {
     
     public void killServer(){
         Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Killing ROS Server...", "");
-        this.getROS_Server().shutdown();
-        Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server killed!", "");
+        if(this.getROS_Server() != null){
+            this.getROS_Server().shutdown();
+            Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server killed!", "");
+        }else{
+            Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server not running. Cant be killed", "");
+        }
     }
     
     public boolean ServerRunning(){

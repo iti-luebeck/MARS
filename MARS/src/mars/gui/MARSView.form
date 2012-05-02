@@ -1447,6 +1447,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_wireframeActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_bounding">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_bounding.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_bounding" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_boundingActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jme3_waypoints_auv">
