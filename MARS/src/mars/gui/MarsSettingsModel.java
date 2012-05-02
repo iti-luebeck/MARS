@@ -245,20 +245,30 @@ public class MarsSettingsModel implements TreeModel{
                 }
                 settings.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
-                ColorRGBA color = (ColorRGBA)hasher.getUserData();
-                HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
-                LeafWrapper leaf = (LeafWrapper)preObj.getUserData();
-                leaf.setUserData((Float)value);
-                if(preObj.getName().equals("R")){
-                    color.r = ((Float)value);
-                }else if(preObj.getName().equals("G")){
-                    color.g = ((Float)value);
-                }else if(preObj.getName().equals("B")){
-                    color.b = ((Float)value);
-                }else if(preObj.getName().equals("A")){
-                    color.a = ((Float)value);
-                }
-                settings.updateState(path);    
+                if(!(originalPath.getLastPathComponent() instanceof Float)){//direct color or leaf?
+                    ColorRGBA color = (ColorRGBA)hasher.getUserData();
+                    ColorRGBA newColor = (ColorRGBA)value;
+                    color.r = (newColor.getRed());
+                    color.g = (newColor.getGreen());
+                    color.b = (newColor.getBlue());
+                    color.a = (newColor.getAlpha());
+                    settings.updateState(path);  
+                }else{
+                    ColorRGBA color = (ColorRGBA)hasher.getUserData();
+                    HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
+                    LeafWrapper leaf = (LeafWrapper)preObj.getUserData();
+                    leaf.setUserData((Float)value);
+                    if(preObj.getName().equals("R")){
+                        color.r = ((Float)value);
+                    }else if(preObj.getName().equals("G")){
+                        color.g = ((Float)value);
+                    }else if(preObj.getName().equals("B")){
+                        color.b = ((Float)value);
+                    }else if(preObj.getName().equals("A")){
+                        color.a = ((Float)value);
+                    }
+                    settings.updateState(path);  
+                } 
             }
         }
     }

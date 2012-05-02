@@ -314,7 +314,7 @@ public class AUVManagerModel implements TreeModel{
                 AUV auv = (AUV)originalPath.getPathComponent(1);
                 auv.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
-                if(((HashMapWrapper)originalPath.getLastPathComponent()).getUserData() instanceof ColorRGBA){//direct color or leaf?
+                if(!(originalPath.getLastPathComponent() instanceof Float)){//direct color or leaf?
                     ColorRGBA color = (ColorRGBA)hasher.getUserData();
                     ColorRGBA newColor = (ColorRGBA)value;
                     color.r = (newColor.getRed());
