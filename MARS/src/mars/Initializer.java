@@ -47,12 +47,26 @@ import mars.auv.AUV_Manager;
 import mars.server.MARS_Server;
 import mars.terrain.MultMesh;
 import com.jme3.font.BitmapText;
+import com.jme3.math.Vector4f;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
+import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.heightmap.AbstractHeightMap;
+import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.texture.Image.Format;
+import com.jme3.texture.Texture.WrapMode;
+import forester.Forester;
+import forester.grass.GrassLayer;
+import forester.grass.GrassLayer.MeshType;
+import forester.grass.GrassLoader;
+import forester.grass.algorithms.GPAUniform;
+import forester.grass.datagrids.MapGrid;
+import forester.image.DensityMap.Channel;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -62,6 +76,7 @@ import mars.server.ros.ROS_Node;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
+import mygame.MaterialSP;
 
 /**
  * With this class we initialize all the different things on the
@@ -98,6 +113,11 @@ public class Initializer {
     private int terrain_image_width = 0;
     private int terrain_image_heigth = 0;
     private byte[] terrain_byte_arrray;
+    private TerrainQuad terrain;
+    private Material mat_terrain;
+    
+    //grass
+    private Forester forester;
     
     //light
     DirectionalLight sun;
@@ -202,8 +222,14 @@ public class Initializer {
         if(mars_settings.isSetupSkyBox()){
             setupSkyBox();
         }
-        if(mars_settings.isSetupTerrain()){
+        if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
             setupTerrain();
+        }
+        if(mars_settings.isSetupTerrain() && mars_settings.isSetupAdvancedTerrain()){
+            setupAdvancedTerrain();
+        }
+        if(mars_settings.isSetupGrass()){
+            setupGrass();
         }
         if(mars_settings.isSetupWater()){
             setupWater();
@@ -707,7 +733,263 @@ public class Initializer {
     public void changePlaneWater(){
         
     }
+    
+    public void updateGrass(float tpf){
+        forester.update(tpf);
+    }
+    
+    private void setupGrass(){
+        float grassScale = 64;
+        float dirtScale = 32;
+        float roadScale = 128;
+        assetManager.registerLocator("Assets/Forester", FileLocator.class);
+        MaterialSP terrainMat = new MaterialSP(assetManager,"MatDefs/TerrainBase.j3md");
+        // First, we load up our textures and the heightmap texture for the terrain
 
+        // ALPHA map (for splat textures)
+        terrainMat.setTexture("AlphaMap", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
+
+        Vector4f texScales = new Vector4f();
+        
+        // GRASS texture
+        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
+        grass.setWrap(WrapMode.Repeat);
+        terrainMat.setTexture("TextureRed", grass);
+        texScales.x = grassScale;
+        
+        // DIRT texture
+        Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
+        dirt.setWrap(WrapMode.Repeat);
+        terrainMat.setTexture("TextureGreen", dirt);
+        texScales.y = dirtScale;
+
+        // ROCK texture
+        Texture road = assetManager.loadTexture("Textures/Terrain/splat/road.jpg");
+        road.setWrap(WrapMode.Repeat);
+        terrainMat.setTexture("TextureBlue", road);
+        texScales.z = roadScale;
+        
+        terrainMat.setVector4("TexScales", texScales);
+        
+        terrain.setMaterial(terrainMat);
+
+        // Step 1 - set up the forester. The forester is a singleton class that
+        // can be accessed statically from anywhere, but we use a reference
+        // variable here.
+        forester = Forester.getInstance();
+        forester.initialize(rootNode, mars.getCamera(), terrain, null,mars);
+        
+        // Displace the vegetation.
+        forester.getForesterNode().setLocalTranslation(terrain.getLocalTranslation());
+
+        // Step 2 - set up the grassloader. We're using a pagesize of 1026 in
+        // this demo, which is the same size as the scaled terrain. We use a
+        // resolution of 4, meaning we get a grid of 4x4 blocks of grass
+        // in total; each 256x256 units in size. Far viewing range is 300 world
+        // units, and fading range is 20.
+        GrassLoader grassLoader = forester.createGrassLoader(1026, 4, 300f, 20f);
+
+        // Step 3 - set up the mapgrid. This is where you link densitymaps with
+        // terrain tiles if you use a custom grid (not terrain grid).
+        MapGrid grasGrid = grassLoader.createMapGrid();
+        
+        // Now add a texture to the grid. We will only use one map here, and only one gridcell (0,0).
+        // The three zeros are x-coord, z-coord and density map index (starting from 0).
+        // If we wanted to index this texture as densitymap 2 in cell (43,-12) we would have
+        // written grid.addDensityMap(density,43,-12,2);
+        Texture density = terrain.getMaterial().getTextureParam("AlphaMap").getTextureValue();
+        grasGrid.addDensityMap(density, 0, 0, 0);
+
+        // Step 4 - set up a grass layer. We're gonna use the Grass.j3m material file
+        // for the grass in this layer. The texture and all other variables are already
+        // set in the material. Another alternative would have been to set them 
+        // programatically (through the GrassLayer's methods). 
+        Material grassMat = assetManager.loadMaterial("Materials/Grass/Grass.j3m");
+
+        // Two parameters - the material, and the type of grass mesh to create.
+        // Crossquads are two static quads that cross eachother at a right angle.
+        // Switching between CROSSQUADS and QUADS is straightforward, but for
+        // BILLBOARDS we need to use a different material base.
+        GrassLayer layer = grassLoader.addLayer(grassMat,MeshType.CROSSQUADS);
+
+        // Important! Link this particular grass layer with densitymap nr. 0 
+        // This is the number we used for the alphamap when we set up the mapgrid.
+        // We choose the red channel here (the grass texture channel) for density values.
+        layer.setDensityTextureData(0, Channel.Red);
+        
+        layer.setDensityMultiplier(0.8f);
+        
+        // This sets the size boundaries of the grass-quads. When generated,
+        // the quads will vary in size randomly, but sizes will never exceed these
+        // bounds. Also, aspect ratio is always preserved.
+        
+        layer.setMaxHeight(2.4f);
+        layer.setMinHeight(2.f);
+        
+        layer.setMaxWidth(2.4f);
+        layer.setMinWidth(2.f);
+        
+        // Setting a maximum slope for the grassquads, to reduce stretching. 
+        // No grass is placed in areas with a slope higher then this angle.
+        //
+        // Use a degree between 0 and 90 (it's automatically normalized to this 
+        // range). The default value is 30 degrees, so this is not really
+        // necessary here, but I set it to show how it works.
+        layer.setMaxTerrainSlope(30);
+        
+        // This is a way of discarding all densityvalues that are lower then 0.6.
+        // A threshold value is optional, but in this case it's useful to restrict
+        // grass from being planted in areas where the grass texture is only a few
+        // percent visible (dominated by other textures).
+        ((GPAUniform)layer.getPlantingAlgorithm()).setThreshold(0.6f);
+        
+        
+        // Adding another grasslayer.
+        
+        Material grassMat2 = assetManager.loadMaterial("Materials/Grass/DaisyBillboarded.j3m");
+
+        // Using billboards. Different material base but pretty much the same
+        // parameters.
+        GrassLayer layer2 = grassLoader.addLayer(grassMat2,MeshType.BILLBOARDS);
+
+        // Using the same densitymap and channel as the grass.
+        layer2.setDensityTextureData(0, Channel.Red);
+        layer2.setDensityMultiplier(0.05f);
+        
+        layer2.setMaxHeight(2.4f);
+        layer2.setMinHeight(2.f);
+        
+        layer2.setMaxWidth(2.4f);
+        layer2.setMinWidth(2.f);
+        
+        ((GPAUniform)layer2.getPlantingAlgorithm()).setThreshold(0.6f);
+        
+        // Finally...
+
+        // Swaying is checked in the material file, but we have to provide a wind
+        // direction and speed to the grassloader. The reason this is done through
+        // the grassloader and not the grasslayers is because the grassloader
+        // automatically sets the wind variable in all it's layers, ensuring that 
+        // the wind is the same for all grass-layers.
+        //
+        // The effect of the wind, such as swaying amplitude (strength), and
+        // frequency can be set for each grass type in its material file, or
+        // through the grasslayer methods.
+        grassLoader.setWind(new Vector2f(1,0));
+    }
+
+    private void setupAdvancedTerrain(){
+        /** 1. Create terrain material and load four textures into it. */
+        mat_terrain = new Material(assetManager, 
+                "Common/MatDefs/Terrain/Terrain.j3md");
+
+        /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
+        /*mat_terrain.setTexture("Alpha", assetManager.loadTexture(
+                "Textures/Terrain/splat/alphamap.png"));*/
+        assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
+        Texture alphaMapImage = assetManager.loadTexture(
+                mars_settings.getTerrainfilepath_am());
+        //alphaMapImage.getImage().setFormat(Format.);
+        mat_terrain.setTexture("Alpha", alphaMapImage);
+
+        /** 1.2) Add GRASS texture into the red layer (Tex1). */
+        /*Texture grass = assetManager.loadTexture(
+                "Textures/Terrain/splat/grass.jpg");*/
+        Texture grass = assetManager.loadTexture(
+                mars_settings.getTerrainfilepath_cm());
+        grass.setWrap(WrapMode.Repeat);
+        mat_terrain.setTexture("Tex1", grass);
+        mat_terrain.setFloat("Tex1Scale", 1f);
+
+        /** 1.3) Add DIRT texture into the green layer (Tex2) */
+        /*Texture dirt = assetManager.loadTexture(
+                "Textures/Terrain/splat/dirt.jpg");
+        dirt.setWrap(WrapMode.Repeat);
+        mat_terrain.setTexture("Tex2", dirt);
+        mat_terrain.setFloat("Tex2Scale", 32f);*/
+
+        /** 1.4) Add ROAD texture into the blue layer (Tex3) */
+        /*Texture rock = assetManager.loadTexture(
+                "Textures/Terrain/splat/road.jpg");
+        rock.setWrap(WrapMode.Repeat);
+        mat_terrain.setTexture("Tex3", rock);
+        mat_terrain.setFloat("Tex3Scale", 128f);*/
+    
+        /** 2. Create the height map */
+        /*Texture heightMapImage = assetManager.loadTexture(
+                "Textures/Terrain/splat/mountains512.png");*/
+        Texture heightMapImage = assetManager.loadTexture(
+                mars_settings.getTerrainfilepath_hm());
+        //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
+        AbstractHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
+        heightmap.load();
+        
+        /** 3. We have prepared material and heightmap. 
+         * Now we create the actual terrain:
+         * 3.1) Create a TerrainQuad and name it "my terrain".
+         * 3.2) A good value for terrain tiles is 64x64 -- so we supply 64+1=65.
+         * 3.3) We prepared a heightmap of size 512x512 -- so we supply 512+1=513.
+         * 3.4) As LOD step scale we supply Vector3f(1,1,1).
+         * 3.5) We supply the prepared heightmap itself.
+         */
+        int patchSize = mars_settings.getTerrainPatchSize()+1;
+        terrain = new TerrainQuad("advancedTerrain", patchSize, (heightmap.getSize())+1, heightmap.getHeightMap());
+
+        /** 4. We give the terrain its material, position & scale it, and attach it. */
+        terrain.setMaterial(mat_terrain);
+        terrain.setLocalTranslation(mars_settings.getTerrain_position());
+        terrain.setLocalScale(mars_settings.getTerrain_scale());
+        float[] rots = new float[3];
+        rots[0] = mars_settings.getTerrain_rotation().getX();
+        rots[1] = mars_settings.getTerrain_rotation().getY();
+        rots[2] = mars_settings.getTerrain_rotation().getZ();
+        Quaternion rot = new Quaternion(rots);
+        terrain.setLocalRotation(rot);
+        //rootNode.attachChild(terrain);
+        
+        /** 5. The LOD (level of detail) depends on were the camera is: */
+        TerrainLodControl control = new TerrainLodControl(terrain, mars.getCamera());
+        terrain.addControl(control);
+        control.setEnabled(mars_settings.isTerrainLod());
+        
+        terrain_node = new Node("terrain");
+        /*terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
+        float[] rots = new float[3];
+        rots[0] = mars_settings.getTerrain_rotation().getX();
+        rots[1] = mars_settings.getTerrain_rotation().getY();
+        rots[2] = mars_settings.getTerrain_rotation().getZ();
+        Quaternion rot = new Quaternion(rots);
+        terrain_node.setLocalRotation(rot);
+        terrain_node.setLocalScale(mars_settings.getTerrain_scale());
+        terrain_node.updateGeometricState();*/
+        
+        /** 6. Add physics: */ 
+        // We set up collision detection for the scene by creating a
+        // compound collision shape and a static RigidBodyControl with mass zero.*/
+        //Making a terrain Physics
+        //terrain_node = new Node("terrain");
+        CollisionShape terrainShape = CollisionShapeFactory.createMeshShape(terrain);
+
+        //terrain_node = new Node("terrain");
+        terrain_physics_control = new RigidBodyControl(terrainShape, 0);
+
+        /*Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        debug_mat.setColor("Color", ColorRGBA.Red);
+        Spatial createDebugShape = terrain_physics_control.createDebugShape(assetManager);
+        createDebugShape.setMaterial(debug_mat);
+        terrain_node.attachChild(createDebugShape);*/
+        terrain_physics_control.setCollisionGroup(1);
+        terrain_physics_control.setCollideWithGroups(1);
+        //terrain_physics_control.setFriction(0f);
+        //terrain_physics_control.setRestitution(1f);
+        //terrain_node.attachChild(terrain);
+        terrain.addControl(terrain_physics_control);
+
+        terrain_node.attachChild(terrain);
+        SonarDetectableNode.attachChild(terrain_node);
+        bulletAppState.getPhysicsSpace().add(terrain);
+    }
+    
     private void setupTerrain(){
         //read the gray scale map
         File file = new File("./Assets/Textures/Terrain/" + mars_settings.getTerrainfilepath_hm());
@@ -796,6 +1078,26 @@ public class Initializer {
         SonarDetectableNode.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain_node);
     }
+    
+    public void updateTerrain(){
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(terrain_node != null){
+                            terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
+                            float[] rots = new float[3];
+                            rots[0] = mars_settings.getTerrain_rotation().getX();
+                            rots[1] = mars_settings.getTerrain_rotation().getY();
+                            rots[2] = mars_settings.getTerrain_rotation().getZ();
+                            Quaternion rot = new Quaternion(rots);
+                            terrain_node.setLocalRotation(rot);
+                            terrain_node.setLocalScale(mars_settings.getTerrain_scale());
+                            //terrain_physics_control.setPhysicsLocation(mars_settings.getTerrain_position());
+                            //terrain_physics_control.setPhysicsRotation(rot);
+                        }
+                        return null;
+                    }
+        });
+    }
 
     /**
      * 
@@ -815,5 +1117,9 @@ public class Initializer {
     
     public byte[] getTerrainByteArray() {
         return terrain_byte_arrray;
+    }
+    
+    public Node getTerrainNode(){
+        return terrain_node;
     }
 }

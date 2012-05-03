@@ -49,6 +49,7 @@ public class MARS_Settings{
     private HashMap<String,Object> SkyBox;
     private HashMap<String,Object> SimpleSkyBox;
     private HashMap<String,Object> Terrain;
+    private HashMap<String,Object> Grass;
     private HashMap<String,Object> Light;
     private HashMap<String,Object> WireFrame;
     private HashMap<String,Object> CrossHairs;
@@ -127,6 +128,7 @@ public class MARS_Settings{
         SkyBox = new HashMap<String,Object> ();
         SimpleSkyBox = new HashMap<String,Object> ();
         Terrain = new HashMap<String,Object> ();
+        Grass = new HashMap<String,Object> ();
         Light = new HashMap<String,Object> ();
         WireFrame = new HashMap<String,Object> ();
         CrossHairs = new HashMap<String,Object> ();
@@ -147,6 +149,7 @@ public class MARS_Settings{
         Graphics.put("SkyBox", SkyBox);
         Graphics.put("SimpleSkyBox", SimpleSkyBox);
         Graphics.put("Terrain", Terrain);
+        Graphics.put("Grass", Grass);
         Graphics.put("Light", Light);
         Graphics.put("WireFrame", WireFrame);
         Graphics.put("CrossHairs", CrossHairs);
@@ -217,6 +220,7 @@ public class MARS_Settings{
         SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
+        Grass = (HashMap<String,Object>)Graphics.get("Grass");
         Light = (HashMap<String,Object>)Graphics.get("Light");
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
@@ -303,6 +307,11 @@ public class MARS_Settings{
             initer.hideProjectedWavesWater(isSetupProjectedWavesWater());
         }else if(hashmapname.equals("ProjectedWavesWater")){
             initer.updateProjectedWavesWater();
+        }/*else if(target.equals("position") && hashmapname.equals("Terrain")){
+            initer.getTerrainNode().setLocalTranslation(getTerrain_position());
+        }*/
+        else if(hashmapname.equals("Terrain")){
+            //initer.updateTerrain();
         }
     }
     
@@ -1085,6 +1094,22 @@ public class MARS_Settings{
     public void setSkyboxfilepath(String filepath) {
         SkyBox.put("filepath", filepath);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSetupGrass() {
+        return (Boolean)Grass.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupGrass(boolean enabled) {
+        Grass.put("enabled", enabled);
+    }
 
     /**
      *
@@ -1100,6 +1125,38 @@ public class MARS_Settings{
      */
     public void setSetupTerrain(boolean enabled) {
         Terrain.put("enabled", enabled);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public boolean isSetupAdvancedTerrain() {
+        return (Boolean)Terrain.get("advanced");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupAdvancedTerrain(boolean advanced) {
+        Terrain.put("advanced", advanced);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isTerrainLod() {
+        return (Boolean)Terrain.get("lod");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setTerrainLod(boolean lod) {
+        Terrain.put("lod", lod);
     }
 
     /**
@@ -1165,6 +1222,38 @@ public class MARS_Settings{
     public void setTerrainfilepath_hm(String filepath_heightmap) {
         Terrain.put("filepath_heightmap", filepath_heightmap);
     }
+    
+        /**
+     *
+     * @return
+     */
+    public String getTerrainfilepath_am() {
+        return (String)Terrain.get("filepath_alphamap");
+    }
+
+    /**
+     *
+     * @param filepath_alphamap
+     */
+    public void setTerrainfilepath_am(String filepath_alphamap) {
+        Terrain.put("filepath_alphamap", filepath_alphamap);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public int getTerrainPatchSize() {
+        return (Integer)Terrain.get("patchSize");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setTerrainPatchSize(int patchSize) {
+        Terrain.put("patchSize", patchSize);
+    }
 
     /**
      *
@@ -1180,6 +1269,38 @@ public class MARS_Settings{
      */
     public void setTerrain_position(Vector3f position) {
         Terrain.put("position", position);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getTerrain_scale() {
+        return (Vector3f)Terrain.get("scale");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setTerrain_scale(Vector3f scale) {
+        Terrain.put("scale", scale);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getTerrain_rotation() {
+        return (Vector3f)Terrain.get("rotation");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setTerrain_rotation(Vector3f rotation) {
+        Terrain.put("rotation", rotation);
     }
 
     /**

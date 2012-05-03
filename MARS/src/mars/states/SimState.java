@@ -1248,6 +1248,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             initer.updateProjectedWavesWater(tpf);
         }
         
+        if(mars_settings.isSetupGrass()){
+            initer.updateGrass(tpf);
+        }
+        
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
     }

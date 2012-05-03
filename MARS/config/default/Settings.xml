@@ -222,25 +222,58 @@
                     <value>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                             <value>
-<x>-30.0</x>
-<y>-2.0</y>
-<z>-15.0</z>
+								<x>0.0</x>
+								<y>-2.0</y>
+								<z>0.0</z>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
+                            <value>
+								<x>0.15625</x>
+								<y>0.01176</y>
+								<z>0.15625</z>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
+                            <value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="advanced">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="lod">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="patchSize">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">32</value>
+                        </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileLength">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.15625</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_heightmap">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_hm.jpg</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_hm.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_color">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_cm.jpg</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="filepath_alphamap">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">wakenitz_2_am.png</value>
+                        </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">85.0</value>
+                        </entry>
+                    </value>
+                </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Grass">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
                     </value>
                 </entry>
@@ -285,7 +318,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="ROS">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value>

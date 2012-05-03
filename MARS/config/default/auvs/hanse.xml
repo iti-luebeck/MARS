@@ -112,6 +112,9 @@
 					<entry xsi:type="myHashMapEntryTypeObject" key="wireframe">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="bounding">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                    </entry>
                 </value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="angular_factor">
@@ -1304,7 +1307,7 @@
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">canon</value>
@@ -1355,7 +1358,7 @@
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">servoTitan</value>
@@ -1425,7 +1428,7 @@
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">vec</value>
