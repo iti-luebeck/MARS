@@ -113,12 +113,9 @@ public class MapState extends AbstractAppState{
                 float tile_length = mars_settings.getTileLength();
                 int terx_px = tex_ml.getImage().getWidth();
                 int tery_px = tex_ml.getImage().getHeight();
-                System.out.println("ter: " + terx_px + " " + terx_px*tile_length + " " + tery_px + " " + tery_px*tile_length);
-                Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
-                System.out.println("auv_dist" + auv_dist);
+                //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
                 auvNode.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
-                System.out.println("x: " + ter_pos.x*(1f/(terx_px*tile_length)));
-                System.out.println("y: " + ter_pos.z*(1f/(tery_px*tile_length)));
                 auv_geom.updateGeometricState();
                 auvNode.attachChild(auv_geom);
                 auvsNode.attachChild(auvNode);
@@ -232,7 +229,8 @@ public class MapState extends AbstractAppState{
                     if(auv != null && auv.getAuv_param().isEnabled()){   
                         
                         Vector3f ter_pos = mars_settings.getTerrain_position();
-                        float tile_length = mars_settings.getTileLength();
+                        //float tile_length = mars_settings.getTileLength();
+                        float tile_length = mars_settings.getTerrain_scale().getX();
                         int terx_px = tex_ml.getImage().getWidth();
                         int tery_px = tex_ml.getImage().getHeight(); 
                             
@@ -250,12 +248,15 @@ public class MapState extends AbstractAppState{
                         
                         //update selection color and position
                         if(auv.isSelected()){
-                            Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
                             Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                             geom.getMaterial().setColor("Color", mars_settings.getSelectionColor());
                         }else{
-                            Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                            Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
+                            
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
                             float alpha = 0f;
                             if(auv.getAuv_param().getAlphaDepthScale() > 0f){

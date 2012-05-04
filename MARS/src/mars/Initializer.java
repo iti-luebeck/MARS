@@ -57,6 +57,7 @@ import com.jme3.system.Timer;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
+import com.jme3.terrain.heightmap.HillHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture.WrapMode;
@@ -923,6 +924,13 @@ public class Initializer {
         //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
         AbstractHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
         heightmap.load();
+        //random terrain generation
+        /*HillHeightMap heightmap2 = null;
+        try {
+            heightmap2 = new HillHeightMap(256, 1000, 50, 100, (byte) 4);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }*/
         
         /** 3. We have prepared material and heightmap. 
          * Now we create the actual terrain:
