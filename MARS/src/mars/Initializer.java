@@ -47,20 +47,28 @@ import mars.auv.AUV_Manager;
 import mars.server.MARS_Server;
 import mars.terrain.MultMesh;
 import com.jme3.font.BitmapText;
+import com.jme3.light.AmbientLight;
 import com.jme3.math.Vector4f;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.shadow.PssmShadowRenderer;
+import com.jme3.shadow.PssmShadowRenderer.CompareMode;
+import com.jme3.shadow.PssmShadowRenderer.FilterMode;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.HillHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture.WrapMode;
+import com.jme3.texture.Texture2D;
 import forester.Forester;
 import forester.grass.GrassLayer;
 import forester.grass.GrassLayer.MeshType;
@@ -73,6 +81,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.Communication_Manager;
+import mars.filter.FishEyeFilter;
 import mars.server.ros.ROS_Node;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
@@ -116,9 +125,11 @@ public class Initializer {
     private byte[] terrain_byte_arrray;
     private TerrainQuad terrain;
     private Material mat_terrain;
+    AbstractHeightMap heightmap;
     
     //grass
     private Forester forester;
+    private GrassLoader grassLoader;
     
     //light
     DirectionalLight sun;
@@ -250,8 +261,10 @@ public class Initializer {
         if(mars_settings.isSetupDepthOfField()){
             setupDepthOfField();
         }
+        setupShadow();
         setupServer();
         setupGlow();
+        //setupFishEye();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -439,7 +452,38 @@ public class Initializer {
     private void setupWavesWater(){
         water = new WaterFilter(rootNode, mars_settings.getLight_direction().normalizeLocal());
         water.setWaterHeight(water_height);
+        water.setWaveScale(0.003f);
+        water.setMaxAmplitude(0.3f);
+        water.setFoamExistence(new Vector3f(0.45f, 3, 3.0f));
+        water.setFoamIntensity(0.2f);
+        water.setFoamHardness(0.5f);
+        water.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
+        water.setUseFoam(true);
+        //water.setNormalScale(0.5f);
+        //water.setRefractionConstant(0.25f);
+        water.setRefractionStrength(0.2f);
+        //water.setFoamHardness(0.6f);
+        water.setWindDirection(new Vector2f(0f, 1f));
+        
+        //water.setUseRipples(false);
+        water.setWaterTransparency(0.2f);
+        water.setWaveScale(0.008f);
+        water.setSpeed(0.2f);
+        water.setShoreHardness(1.0f);
+        water.setRefractionConstant(0.2f);
+        water.setShininess(0.6f);
+        water.setSunScale(1.0f);
+        
         fpp.addFilter(water);
+        
+        BloomFilter bloom=new BloomFilter();
+        bloom.setExposurePower(55);
+        bloom.setBloomIntensity(1.0f);
+        fpp.addFilter(bloom);
+        
+        LightScatteringFilter lsf = new LightScatteringFilter(mars_settings.getLight_direction().mult(-300f));
+        lsf.setLightDensity(1.0f);
+        fpp.addFilter(lsf);
     }
     
     public void setupProjectedWavesWater(){
@@ -451,6 +495,7 @@ public class Initializer {
         updateProjectedWavesWater();
         projectedGridGeometry = new Geometry("Projected Grid", grid);  // create cube geometry from the shape
         //projectedGridGeometry.setCullHint(CullHint.Never);
+        //projectedGridGeometry.setQueueBucket(Bucket.Translucent);
         projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
         projectedGridGeometry.setLocalTranslation(0, 0, 0);
         rootNode.attachChild(projectedGridGeometry);
@@ -601,6 +646,11 @@ public class Initializer {
         fpp.addFilter(bloom);
         //mars.getViewPort().addProcessor(fpp);
     }
+    
+    private void setupFishEye(){
+        FishEyeFilter fisheye = new FishEyeFilter();
+        fpp.addFilter(fisheye);
+    }
 
     public void setupLight(){
         Future fut = mars.enqueue(new Callable() {
@@ -616,6 +666,9 @@ public class Initializer {
                         return null;
                     }
                 });
+       /* AmbientLight amb = new AmbientLight();
+        amb.setColor(mars_settings.getLight_color().multLocal(0.1f));
+        rootNode.addLight(amb);*/
     }
 
     /*
@@ -740,39 +793,44 @@ public class Initializer {
     }
     
     private void setupGrass(){
-        float grassScale = 64;
-        float dirtScale = 32;
-        float roadScale = 128;
+        float grassScale = 32f;
+        float dirtScale = 32f;
+        float roadScale = 32f;
+        //assetManager.registerLocator("Assets", FileLocator.class);
+        assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
         assetManager.registerLocator("Assets/Forester", FileLocator.class);
-        MaterialSP terrainMat = new MaterialSP(assetManager,"MatDefs/TerrainBase.j3md");
+        //MaterialSP terrainMat = new MaterialSP(assetManager,"MatDefs/TerrainBase.j3md");
         // First, we load up our textures and the heightmap texture for the terrain
 
         // ALPHA map (for splat textures)
-        terrainMat.setTexture("AlphaMap", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
+        //terrainMat.setTexture("AlphaMap", assetManager.loadTexture("Textures/Sea/sea_alphamap2.png"));
+        //terrainMat.setTexture("AlphaMap", assetManager.loadTexture(mars_settings.getTerrainfilepath_am()));
 
-        Vector4f texScales = new Vector4f();
+        //Vector4f texScales = new Vector4f();
         
         // GRASS texture
-        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
+        //Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
+        //Texture grass = assetManager.loadTexture(mars_settings.getTerrainfilepath_cm());
+        /*Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
         terrainMat.setTexture("TextureRed", grass);
-        texScales.x = grassScale;
+        texScales.x = grassScale;*/
         
         // DIRT texture
-        Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
+        /*Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
         dirt.setWrap(WrapMode.Repeat);
         terrainMat.setTexture("TextureGreen", dirt);
-        texScales.y = dirtScale;
+        texScales.y = dirtScale;*/
 
         // ROCK texture
-        Texture road = assetManager.loadTexture("Textures/Terrain/splat/road.jpg");
+        /*Texture road = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
         road.setWrap(WrapMode.Repeat);
         terrainMat.setTexture("TextureBlue", road);
         texScales.z = roadScale;
         
         terrainMat.setVector4("TexScales", texScales);
         
-        terrain.setMaterial(terrainMat);
+        terrain.setMaterial(terrainMat);*/
 
         // Step 1 - set up the forester. The forester is a singleton class that
         // can be accessed statically from anywhere, but we use a reference
@@ -781,14 +839,17 @@ public class Initializer {
         forester.initialize(rootNode, mars.getCamera(), terrain, null,mars);
         
         // Displace the vegetation.
-        forester.getForesterNode().setLocalTranslation(terrain.getLocalTranslation());
-
+        forester.getForesterNode().setLocalTranslation(new Vector3f(0f, -4f, 0f));
+        forester.getForesterNode().setCullHint(CullHint.Never);
+        //forester.getForesterNode().setLocalTranslation(new Vector3f(0f, -2f, 0f));
+        
         // Step 2 - set up the grassloader. We're using a pagesize of 1026 in
         // this demo, which is the same size as the scaled terrain. We use a
         // resolution of 4, meaning we get a grid of 4x4 blocks of grass
         // in total; each 256x256 units in size. Far viewing range is 300 world
-        // units, and fading range is 20.
-        GrassLoader grassLoader = forester.createGrassLoader(1026, 4, 300f, 20f);
+        // units, and fading range is 20. (heightmap.getSize()*2)+2
+        // BUGGGY LIKE HELL!!!!!!!!!!!!!!
+        grassLoader = forester.createGrassLoader(80, 8, mars_settings.getGrassFarViewingDistance(), mars_settings.getGrassFadingRange());
 
         // Step 3 - set up the mapgrid. This is where you link densitymaps with
         // terrain tiles if you use a custom grid (not terrain grid).
@@ -798,37 +859,40 @@ public class Initializer {
         // The three zeros are x-coord, z-coord and density map index (starting from 0).
         // If we wanted to index this texture as densitymap 2 in cell (43,-12) we would have
         // written grid.addDensityMap(density,43,-12,2);
-        Texture density = terrain.getMaterial().getTextureParam("AlphaMap").getTextureValue();
+        Texture density = terrain.getMaterial().getTextureParam("Alpha").getTextureValue();
         grasGrid.addDensityMap(density, 0, 0, 0);
 
         // Step 4 - set up a grass layer. We're gonna use the Grass.j3m material file
         // for the grass in this layer. The texture and all other variables are already
         // set in the material. Another alternative would have been to set them 
         // programatically (through the GrassLayer's methods). 
-        Material grassMat = assetManager.loadMaterial("Materials/Grass/Grass.j3m");
-
+        //Material grassMat = assetManager.loadMaterial("Materials/Grass/Grass.j3m");
+        Material grassMat = assetManager.loadMaterial("Materials/Grass/GreenSeaweed.j3m");
+        grassMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        
         // Two parameters - the material, and the type of grass mesh to create.
         // Crossquads are two static quads that cross eachother at a right angle.
         // Switching between CROSSQUADS and QUADS is straightforward, but for
         // BILLBOARDS we need to use a different material base.
         GrassLayer layer = grassLoader.addLayer(grassMat,MeshType.CROSSQUADS);
-
+        layer.setSwaying(true);
+        layer.setSwayingFrequency(8f);
         // Important! Link this particular grass layer with densitymap nr. 0 
         // This is the number we used for the alphamap when we set up the mapgrid.
         // We choose the red channel here (the grass texture channel) for density values.
         layer.setDensityTextureData(0, Channel.Red);
         
-        layer.setDensityMultiplier(0.8f);
+        layer.setDensityMultiplier(0.6f);
         
         // This sets the size boundaries of the grass-quads. When generated,
         // the quads will vary in size randomly, but sizes will never exceed these
         // bounds. Also, aspect ratio is always preserved.
         
-        layer.setMaxHeight(2.4f);
-        layer.setMinHeight(2.f);
+        layer.setMinHeight(0.2f);
+        layer.setMaxHeight(0.6f);
         
-        layer.setMaxWidth(2.4f);
-        layer.setMinWidth(2.f);
+        layer.setMinWidth(0.2f);
+        layer.setMaxWidth(0.6f);
         
         // Setting a maximum slope for the grassquads, to reduce stretching. 
         // No grass is placed in areas with a slope higher then this angle.
@@ -838,32 +902,60 @@ public class Initializer {
         // necessary here, but I set it to show how it works.
         layer.setMaxTerrainSlope(30);
         
+        layer.setShadowMode(ShadowMode.CastAndReceive);
+        
         // This is a way of discarding all densityvalues that are lower then 0.6.
         // A threshold value is optional, but in this case it's useful to restrict
         // grass from being planted in areas where the grass texture is only a few
         // percent visible (dominated by other textures).
-        ((GPAUniform)layer.getPlantingAlgorithm()).setThreshold(0.6f);
+        //((GPAUniform)layer.getPlantingAlgorithm()).setThreshold(0.9f);
         
         
         // Adding another grasslayer.
         
-        Material grassMat2 = assetManager.loadMaterial("Materials/Grass/DaisyBillboarded.j3m");
+        Material grassMat2 = assetManager.loadMaterial("Materials/Grass/Stalk.j3m");
 
         // Using billboards. Different material base but pretty much the same
         // parameters.
         GrassLayer layer2 = grassLoader.addLayer(grassMat2,MeshType.BILLBOARDS);
 
+        layer2.setSwaying(true);
+        layer2.setSwayingFrequency(4f);
+        
         // Using the same densitymap and channel as the grass.
         layer2.setDensityTextureData(0, Channel.Red);
-        layer2.setDensityMultiplier(0.05f);
+        layer2.setDensityMultiplier(0.4f);
         
-        layer2.setMaxHeight(2.4f);
-        layer2.setMinHeight(2.f);
+        layer2.setMinHeight(0.2f);
+        layer2.setMaxHeight(0.8f);
         
-        layer2.setMaxWidth(2.4f);
-        layer2.setMinWidth(2.f);
+        layer2.setMinWidth(0.2f);
+        layer2.setMaxWidth(0.8f);
         
-        ((GPAUniform)layer2.getPlantingAlgorithm()).setThreshold(0.6f);
+        //((GPAUniform)layer2.getPlantingAlgorithm()).setThreshold(0.6f);
+        
+         // Adding another grasslayer.
+        
+        Material grassMat3 = assetManager.loadMaterial("Materials/Grass/RedSeaweed.j3m");
+
+        // Using billboards. Different material base but pretty much the same
+        // parameters.
+        GrassLayer layer3 = grassLoader.addLayer(grassMat3,MeshType.CROSSQUADS);
+
+        layer3.setSwaying(true);
+        layer3.setSwayingFrequency(3f);
+        
+        // Using the same densitymap and channel as the grass.
+        layer3.setDensityTextureData(0, Channel.Red);
+        layer3.setDensityMultiplier(0.2f);
+        
+        layer3.setMinHeight(0.2f);
+        layer3.setMaxHeight(0.4f);
+        
+        layer3.setMinWidth(0.2f);
+        layer3.setMaxWidth(0.4f);
+        
+        //((GPAUniform)layer3.getPlantingAlgorithm()).setThreshold(0.3f);
         
         // Finally...
 
@@ -876,31 +968,40 @@ public class Initializer {
         // The effect of the wind, such as swaying amplitude (strength), and
         // frequency can be set for each grass type in its material file, or
         // through the grasslayer methods.
-        grassLoader.setWind(new Vector2f(1,0));
+        grassLoader.setWind(new Vector2f(mars_settings.getPhysical_environment().getWater_current().getX(),mars_settings.getPhysical_environment().getWater_current().getZ()));
     }
 
     private void setupAdvancedTerrain(){
         /** 1. Create terrain material and load four textures into it. */
         mat_terrain = new Material(assetManager, 
                 "Common/MatDefs/Terrain/Terrain.j3md");
-
+       /* mat_terrain = new Material(assetManager, 
+                "Common/MatDefs/Terrain/TerrainLighting.j3md");*/
+        mat_terrain.setBoolean("useTriPlanarMapping", false);
+                
         /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
         /*mat_terrain.setTexture("Alpha", assetManager.loadTexture(
                 "Textures/Terrain/splat/alphamap.png"));*/
         assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
+        //assetManager.registerLocator("Assets/Forester", FileLocator.class);
         Texture alphaMapImage = assetManager.loadTexture(
                 mars_settings.getTerrainfilepath_am());
-        //alphaMapImage.getImage().setFormat(Format.);
+        //alphaMapImage.getImage().setFormat(Format.RGBA8);
         mat_terrain.setTexture("Alpha", alphaMapImage);
+        //mat_terrain.setTexture("AlphaMap", alphaMapImage);
 
         /** 1.2) Add GRASS texture into the red layer (Tex1). */
         /*Texture grass = assetManager.loadTexture(
                 "Textures/Terrain/splat/grass.jpg");*/
         Texture grass = assetManager.loadTexture(
                 mars_settings.getTerrainfilepath_cm());
+        assetManager.registerLocator("Assets/Forester", FileLocator.class);
+        //Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
         mat_terrain.setTexture("Tex1", grass);
         mat_terrain.setFloat("Tex1Scale", 1f);
+        //mat_terrain.setTexture("DiffuseMap", grass);
+        //mat_terrain.setFloat("DiffuseMap_0_scale", 1f);
 
         /** 1.3) Add DIRT texture into the green layer (Tex2) */
         /*Texture dirt = assetManager.loadTexture(
@@ -910,11 +1011,12 @@ public class Initializer {
         mat_terrain.setFloat("Tex2Scale", 32f);*/
 
         /** 1.4) Add ROAD texture into the blue layer (Tex3) */
-        /*Texture rock = assetManager.loadTexture(
-                "Textures/Terrain/splat/road.jpg");
+        /*assetManager.registerLocator("Assets/Forester", FileLocator.class);
+        Texture rock = assetManager.loadTexture(
+                "Textures/Terrain/splat/grass.jpg");
         rock.setWrap(WrapMode.Repeat);
         mat_terrain.setTexture("Tex3", rock);
-        mat_terrain.setFloat("Tex3Scale", 128f);*/
+        mat_terrain.setFloat("Tex3Scale", 64f);*/
     
         /** 2. Create the height map */
         /*Texture heightMapImage = assetManager.loadTexture(
@@ -922,8 +1024,18 @@ public class Initializer {
         Texture heightMapImage = assetManager.loadTexture(
                 mars_settings.getTerrainfilepath_hm());
         //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
-        AbstractHeightMap heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
+        heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
+        terrain_image_heigth = heightMapImage.getImage().getHeight();
+        terrain_image_width = heightMapImage.getImage().getWidth();
         heightmap.load();
+        
+        //convert terrain for ros
+        terrain_byte_arrray = new byte[terrain_image_heigth*terrain_image_width];
+        float[] heightMap = heightmap.getHeightMap();
+        for (int i = 0; i < (terrain_image_heigth*terrain_image_width); i++) {
+            terrain_byte_arrray[i] = (byte)Math.round(((heightMap[i]*100f)/255f));
+        }
+        
         //random terrain generation
         /*HillHeightMap heightmap2 = null;
         try {
@@ -957,6 +1069,7 @@ public class Initializer {
         
         /** 5. The LOD (level of detail) depends on were the camera is: */
         TerrainLodControl control = new TerrainLodControl(terrain, mars.getCamera());
+        control.setLodCalculator(new DistanceLodCalculator(65, 2.7f));
         terrain.addControl(control);
         control.setEnabled(mars_settings.isTerrainLod());
         
@@ -992,6 +1105,9 @@ public class Initializer {
         //terrain_physics_control.setRestitution(1f);
         //terrain_node.attachChild(terrain);
         terrain.addControl(terrain_physics_control);
+        
+        //set shadwos for terrain
+        terrain.setShadowMode(ShadowMode.Receive);
 
         terrain_node.attachChild(terrain);
         SonarDetectableNode.attachChild(terrain_node);
@@ -1106,7 +1222,27 @@ public class Initializer {
                     }
         });
     }
+    
+    public void updateGrass(){
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(grassLoader != null){
+                            grassLoader.setFarViewingDistance(mars_settings.getGrassFarViewingDistance());
+                        }
+                        return null;
+                    }
+        });
+    }
 
+    private void setupShadow(){
+        PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
+        pssmRenderer.setDirection(sun.getDirection()); // light direction
+        /*pssmRenderer.setLambda(0.55f);
+        pssmRenderer.setShadowIntensity(0.6f);
+        pssmRenderer.setCompareMode(CompareMode.Software);
+        pssmRenderer.setFilterMode(FilterMode.PCF4);*/
+        viewPort.addProcessor(pssmRenderer);
+    }
     /**
      * 
      * @return

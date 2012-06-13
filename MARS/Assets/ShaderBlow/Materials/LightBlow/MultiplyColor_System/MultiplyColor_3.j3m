@@ -1,0 +1,12 @@
+Material Base : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
+        Nor_Inv_Y : false
+        Nor_Inv_X : false
+        DiffuseMap : Flip Models/LightBlow/jme_lightblow_dif.png
+        Multiply_Color : true
+        Diffuse : 0.85 0.85 1.4 1.0
+     }
+    AdditionalRenderState {
+    }
+}

@@ -1,0 +1,11 @@
+Material Impostor : forester/assets/matdefs/TreeImpostorBase.j3md {
+     MaterialParameters {
+
+        AlphaNoiseMap : Textures/noise.png
+     }
+    AdditionalRenderState {
+      Blend Off
+      FaceCull Back
+      AlphaTestFalloff 0.5
+    }
+}

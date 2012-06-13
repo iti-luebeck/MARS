@@ -239,6 +239,7 @@ public class SimObject{
             spatialMaterial.setColor("Color", getColor());
             spatial.setMaterial(spatialMaterial);
         }
+        spatial.setShadowMode(ShadowMode.CastAndReceive);
         spatial.updateGeometricState();
 
         spatial.updateModelBound();

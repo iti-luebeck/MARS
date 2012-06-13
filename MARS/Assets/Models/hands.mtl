@@ -1,0 +1,12 @@
+# Blender MTL File: 'hands.blend'
+# Material Count: 1
+newmtl SSS_skinshader
+Ns 1.960784
+Ka 0.000000 0.000000 0.000000
+Kd 0.658229 0.407105 0.269731
+Ks 0.005000 0.005000 0.005000
+Ni 1.000000
+d 1.000000
+illum 2
+
+

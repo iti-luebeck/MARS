@@ -1,0 +1,14 @@
+MaterialDef SoftParticlesDepthW
+{
+    Technique 
+    {
+        VertexShader GLSL100 :   Shaders/SoftParticles/SoftParticlesDepthW.vert
+        FragmentShader GLSL100 : Shaders/SoftParticles/SoftParticlesDepthW.frag
+
+        WorldParameters 
+        {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+        }
+    }
+}

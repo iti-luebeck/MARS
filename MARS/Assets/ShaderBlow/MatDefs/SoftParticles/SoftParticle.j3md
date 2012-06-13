@@ -1,0 +1,32 @@
+MaterialDef SoftParticle {
+
+    MaterialParameters {
+        Texture2D Texture
+        Texture2D DepthTex
+        Float Power
+    }
+
+    Technique {
+
+        VertexShader   GLSL100 : Shaders/SoftParticles/SoftParticles.vert
+        FragmentShader GLSL100 : Shaders/SoftParticles/SoftParticles.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            WorldMatrix
+            CameraPosition
+        }
+
+        RenderState {
+            Blend AlphaAdditive
+            DepthWrite Off
+        }
+
+        Defines {
+            USE_TEXTURE : Texture
+            USE_DEPTH   : DepthTex
+        }
+    }
+
+}

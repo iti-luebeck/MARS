@@ -1,0 +1,152 @@
+MaterialDef BillboardGrass {
+
+    MaterialParameters {
+
+        //Fading parameters (don't set these manually).
+        Float FadeEnd
+        Float FadeRange
+        Boolean FadeEnabled
+        
+        //Is the grass swaying or not?
+        Boolean Swaying
+        //The wind vector (determines direction and amplitude of the swaying function).
+        Vector2 Wind
+        //Combined vector for various fading data.
+        //x = The swaying frequency
+        //y = The swaying variation (how the offset varies between patches)
+        //z = Maximum swaying distance (grass beyond this distance does not move).
+        Vector3 SwayData
+        
+        //Use lighting
+        Boolean VertexLighting
+
+        //Use self shadowing
+        Boolean SelfShadowing
+        
+        //The texture
+        Texture2D ColorMap
+        //The perlin noise for stipple fading.
+        Texture2D AlphaNoiseMap
+
+        //When texture alpha is below this value, the pixel is discarded
+        Float AlphaThreshold
+        Float AlphaDiscardThreshold : 0.3
+        
+        //Used internally.
+        Int NumLights
+
+    //shadows
+         Int FilterMode
+        Boolean HardwareShadows
+
+        Texture2D ShadowMap0
+        Texture2D ShadowMap1
+        Texture2D ShadowMap2
+        Texture2D ShadowMap3
+        
+        Float ShadowIntensity
+        Vector4 Splits
+
+        Matrix4 LightViewProjectionMatrix0
+        Matrix4 LightViewProjectionMatrix1
+        Matrix4 LightViewProjectionMatrix2
+        Matrix4 LightViewProjectionMatrix3
+
+        Float PCFEdge
+    }
+
+    Technique {
+
+        LightMode SinglePass
+
+        VertexShader GLSL100:   forester/assets/shaders/grass/BillboardGrass.vert
+        FragmentShader GLSL100: forester/assets/shaders/grass/Grass.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+            CameraPosition
+            CameraLeft
+            Time
+        }
+
+        Defines {
+            SWAYING : Swaying
+            FADE_ENABLED : FadeEnabled
+            VERTEX_LIGHTING : VertexLighting
+            SELF_SHADOWING : SelfShadowing
+            NUM_LIGHTS : NumLights
+        }
+    }
+
+ Technique PreShadow {
+
+        VertexShader GLSL100 :   Common/MatDefs/Shadow/PreShadow.vert
+        FragmentShader GLSL100 : Common/MatDefs/Shadow/PreShadow.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+        }
+
+        Defines {
+            COLOR_MAP : ColorMap
+            DISCARD_ALPHA : AlphaDiscardThreshold
+        }
+
+        RenderState {
+            FaceCull Off
+            DepthTest On
+            DepthWrite On
+            PolyOffset 5 0
+            ColorWrite Off
+        }
+
+    }
+
+
+    Technique PostShadow15{
+        VertexShader GLSL150:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL150: Common/MatDefs/Shadow/PostShadowPSSM15.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+        }
+
+        RenderState {
+            Blend Modulate
+        }
+    }
+
+    Technique PostShadow{
+        VertexShader GLSL100:   Common/MatDefs/Shadow/PostShadowPSSM.vert
+        FragmentShader GLSL100: Common/MatDefs/Shadow/PostShadowPSSM.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            HARDWARE_SHADOWS : HardwareShadows
+            FILTER_MODE : FilterMode
+            PCFEDGE : PCFEdge
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            COLOR_MAP : ColorMap
+        }
+
+        RenderState {
+            Blend Modulate
+        }
+    }
+
+}

@@ -1,0 +1,16 @@
+Material My Material : forester/assets/matdefs/GrassBase.j3md {
+     MaterialParameters {
+        ColorMap : Flip Textures/grass.png
+        AlphaNoiseMap : Textures/noise.png
+        NumLights : 1
+        VertexLighting : true
+        Swaying : true
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      Blend Alpha
+      DepthTest On
+      ColorWrite On
+      DepthWrite On
+    }
+}

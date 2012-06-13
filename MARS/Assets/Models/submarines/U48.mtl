@@ -1,0 +1,17 @@
+newmtl base_material_U48UVmap_jpg
+       Ns 4
+       d 1
+       illum 2
+       Kd 0.401898 0.401898 0.401898
+       Ka 0.000000 0.000000 0.000000
+       Ks 0.401528 0.401528 0.401528
+       map_Kd U48UVmap.jpg
+
+newmtl None_U48UVmap_jpg
+       Ns 4
+       d 1
+       illum 2
+       Kd 0.800000 0.800000 0.800000
+       Ka 0.000000 0.000000 0.000000
+       Ks 0.800000 0.800000 0.800000
+       map_Kd U48UVmap.jpg

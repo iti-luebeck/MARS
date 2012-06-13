@@ -1,0 +1,11 @@
+Material Base : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
+        Nor_Inv_Y : false
+        Specular_Lighting : true
+        Shininess : 5.0
+        Specular : 1.0 1.0 1.0 1.0
+     }
+    AdditionalRenderState {
+    }
+}

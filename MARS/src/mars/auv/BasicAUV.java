@@ -43,6 +43,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.WireBox;
+import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
@@ -74,6 +75,8 @@ import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.Manipulating;
 import mars.Moveable;
+import mars.MyMTLLoader;
+import mars.MyOBJLoader;
 import mars.actuators.BallastTank;
 import mars.states.SimState;
 import mars.auv.example.Hanse;
@@ -1119,6 +1122,16 @@ public class BasicAUV implements AUV,SceneProcessor{
         assetManager.registerLocator("Assets/Models", FileLocator.class);
 
         auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
+        //assetManager.unregisterLoader(OBJLoader.class);
+        //assetManager.registerLoader(MyOBJLoader.class,"obj");
+        //auv_spatial = (Spatial)assetManager.loadAsset(new ModelKey(auv_param.getModelFilePath()));
+
+                
+        /*assetManager.registerLoader(MyMTLLoader.class);
+        int index = auv_param.getModelFilePath().lastIndexOf(".");
+        String matPath = auv_param.getModelFilePath().substring(0, index).concat(".mtl");
+        Material auv_mat = (Material)assetManager.loadAsset(matPath);*/
+        
         auv_spatial.setLocalScale(auv_param.getModel_scale());
         //auv_spatial.rotate(-(float)Math.PI/4 , (float)Math.PI/4 , 0f);
         //Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
@@ -1134,6 +1147,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_spatial.setName(auv_param.getModel_name());
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
+        auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();

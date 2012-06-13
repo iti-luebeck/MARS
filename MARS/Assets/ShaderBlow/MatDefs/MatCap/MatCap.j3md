@@ -1,0 +1,183 @@
+MaterialDef FakeParticleBlow {
+ 
+    MaterialParameters {
+
+        // Fog
+        Color FogColor
+        TextureCubeMap FogSkyBox
+
+        // Multiply Color system
+        Color Multiply_Color
+
+        // Toon System
+        Boolean Toon
+        Color EdgesColor 
+        Float EdgeSize
+        Boolean Fog_Edges
+
+
+        Texture2D DiffuseMap
+        Texture2D NormalMap
+        
+        Float NormalMapPower : 0.6
+
+        // Switch Normal Map xyz(rgb) channels
+        Boolean Nor_Inv_X
+        Boolean Nor_Inv_Y
+        Boolean Nor_Inv_Z
+        
+    }
+ 
+    Technique {
+          VertexShader GLSL100:   Shaders/MatCap/MatCap.vert
+          FragmentShader GLSL100: Shaders/MatCap/MatCap.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            
+        }
+ 
+        Defines {
+        
+            NORMALMAP : NormalMap
+            NOR_INV_X : Nor_Inv_X
+            NOR_INV_Y : Nor_Inv_Y
+            NOR_INV_Z : Nor_Inv_Z
+            MULTIPLY_COLOR : Multiply_Color
+            FOG : FogColor
+            FOG_SKY : FogSkyBox
+            TOON_EDGES : EdgesColor
+        }
+    }
+ 
+    Technique CartoonEdge {
+
+        LightMode MultiPass
+
+        VertexShader GLSL100:   Shaders/ToonBlow/ToonBlow_Edges.vert
+        FragmentShader GLSL100: Shaders/ToonBlow/ToonBlow_Edges.frag
+
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            ViewMatrix
+            CameraPosition
+            WorldMatrix
+        }
+
+        Defines {
+
+            SPHERE_MAP : SphereMap
+            FOG : FogColor
+            FOG_SKY : FogSkyBox
+            TOON_EDGES : EdgesColor
+            FOG_EDGES : Fog_Edges
+        }
+
+        RenderState {
+            FaceCull Front
+            DepthTest On
+            DepthWrite On
+        }
+    }
+
+    Technique PreShadow {
+
+        VertexShader GLSL100 :   Common/MatDefs/Shadow/PreShadow.vert
+        FragmentShader GLSL100 : Common/MatDefs/Shadow/PreShadow.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+        }
+
+        Defines {
+            DIFFUSEMAP_ALPHA : DiffuseMap
+        }
+
+        RenderState {
+            FaceCull Off
+            DepthTest On
+            DepthWrite On
+            PolyOffset 5 0
+            ColorWrite Off
+        }
+
+    }
+
+  Technique PreNormalPass {
+
+        VertexShader GLSL100 :   Common/MatDefs/SSAO/normal.vert
+        FragmentShader GLSL100 : Common/MatDefs/SSAO/normal.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            NormalMatrix
+        }
+
+        Defines {
+            DIFFUSEMAP_ALPHA : DiffuseMap
+        }
+
+        RenderState {
+
+        }
+
+    }
+
+
+    Technique FixedFunc {
+        LightMode FixedPipeline
+    }
+
+    Technique GBuf {
+
+        VertexShader GLSL100:   Common/MatDefs/Light/GBuf.vert
+        FragmentShader GLSL100: Common/MatDefs/Light/GBuf.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            WorldMatrix
+        }
+
+        Defines {
+            VERTEX_COLOR : UseVertexColor
+            MATERIAL_COLORS : UseMaterialColors
+            V_TANGENT : VTangent
+            MINNAERT  : Minnaert
+            WARDISO   : WardIso
+
+            DIFFUSEMAP : DiffuseMap
+            NORMALMAP : NormalMap
+            SPECULARMAP : SpecularMap
+            PARALLAXMAP : ParallaxMap
+        }
+    }
+
+    Technique FixedFunc {
+        LightMode FixedPipeline
+    }
+
+    Technique Glow {
+
+        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
+        FragmentShader GLSL100: Shaders/PostBlow/GlowBlow.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+
+        Defines {
+            HAS_GLOWMAP : GlowMap
+            HAS_GLOWCOLOR : GlowColor
+        }
+    } 
+
+}

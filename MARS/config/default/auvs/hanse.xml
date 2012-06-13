@@ -30,7 +30,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse/hanse_clean_v2_very_low_merge_new.obj</value><!--hanse_low.obj-->
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">hanse/hanse_clean_v2_very_low_merge_new.obj</value><!-- hanse_clean_v2_very_low_merge_new.obj hanse_low.obj-->
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">HANSE_MODEL</value>
@@ -95,7 +95,7 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Debug">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="physical_exchanger">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="drag">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
@@ -428,7 +428,7 @@
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure">
-						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
 					</entry>
 					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="failure_switch">
 						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
@@ -568,7 +568,7 @@
 						</entry>
 						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="addedOrientation">
 							<value>
-								<x>0.0</x>
+								<x>3.1415926535897932384626433832795</x>
 								<y>-1.5707963267948966192313216916398</y>
 								<z>0.0</z>
 							</value>
@@ -725,7 +725,7 @@
 						</entry>
 						<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="addedOrientation">
 							<value>
-								<x>0.0</x>
+								<x>3.1415926535897932384626433832795</x>
 								<y>-1.5707963267948966192313216916398</y>
 								<z>0.0</z>
 							</value>

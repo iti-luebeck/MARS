@@ -1,0 +1,9 @@
+Material Base : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
+        Nor_Inv_Y : false
+        Hemi_Lighting_2 : true
+     }
+    AdditionalRenderState {
+    }
+}

@@ -1,0 +1,13 @@
+Material Trunk : Common/MatDefs/Light/Lighting.j3md {
+    MaterialParameters {
+        DiffuseMap : Repeat Models/Tree/BarkColor.jpg
+        NormalMap : Repeat Models/Tree/BarkNormal.jpg
+        UseMaterialColors : true
+        Ambient : 0.8 0.8 0.8 1
+	  Diffuse : 0.8 0.8 0.8 1
+       Specular : 0 0 0 1
+        Shininess : 16
+    }
+    AdditionalRenderState {
+    }
+}

@@ -126,12 +126,21 @@ public class TerrainSender extends Sensor{
         org.ros.message.nav_msgs.MapMetaData info = new org.ros.message.nav_msgs.MapMetaData();
         info.height = initer.getTerrain_image_heigth();
         info.width = initer.getTerrain_image_width();
-        info.resolution = mars_settings.getTileLength();
+        info.resolution = mars_settings.getTerrain_scale().getX();
         
         org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
-        point.x = mars_settings.getTerrain_position().x;// - ((0.15625f*256f)/2f);
-        point.y = mars_settings.getTerrain_position().z;//dont forget to switch y and z!!!!
-        point.z = mars_settings.getTerrain_position().y;
+        if(mars_settings.isSetupAdvancedTerrain()){
+            float terScaleX = (mars_settings.getTerrain_scale().x*initer.getTerrain_image_width())/2f;
+            float terScaleZ = (mars_settings.getTerrain_scale().z*initer.getTerrain_image_width())/2f;
+            //float terScaleY = (mars_settings.getTerrain_scale().y*initer.getTerrain_image_width())/2f;
+            point.x = mars_settings.getTerrain_position().x - terScaleX;
+            point.y = mars_settings.getTerrain_position().z - terScaleZ;
+            point.z = mars_settings.getTerrain_position().y;
+        }else{
+            point.x = mars_settings.getTerrain_position().x;
+            point.y = mars_settings.getTerrain_position().z;
+            point.z = mars_settings.getTerrain_position().y;
+        }
         
         Quaternion ter_orientation = new Quaternion();
         Quaternion ter_orientation_rueck = new Quaternion();
@@ -139,13 +148,15 @@ public class TerrainSender extends Sensor{
         ter_orientation_rueck = ter_orientation.inverse();
         
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        //jme3_quat.fromAngles(0f,FastMath.PI,0f);
+        if(mars_settings.isSetupAdvancedTerrain()){
+            jme3_quat.fromAngles(FastMath.PI,FastMath.PI,-FastMath.PI);//we have to rotate it correctly because teramonkey is a little bit different in storing
+        }
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
         
         org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
         //ter_orientation.fromAngles(0f, FastMath.PI, 0f);
         orientation.x = ter_orientation.getX();
-        orientation.y = ter_orientation.getY();//dont forget to switch y and z!!!!
+        orientation.y = ter_orientation.getY();
         orientation.z = ter_orientation.getZ();
         orientation.w = ter_orientation.getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();

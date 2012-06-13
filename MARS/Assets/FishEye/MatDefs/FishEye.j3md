@@ -1,0 +1,28 @@
+MaterialDef FishEyeFilter {
+
+    MaterialParameters {
+		Int NumSamples
+        Texture2D Texture
+    }
+
+    Technique {
+        //VertexShader GLSL100:   Shaders/FishEye.vert
+		VertexShader GLSL100:   Common/MatDefs/Post/Post.vert
+        FragmentShader GLSL100: Shaders/FishEye.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+			CameraPosition
+			WorldViewMatrix
+			NormalMatrix
+			ProjectionMatrix
+        }
+		
+		Defines {
+            RESOLVE_MS : NumSamples
+        }
+    }
+
+    Technique FixedFunc {
+    }
+}

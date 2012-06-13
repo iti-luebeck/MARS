@@ -1,0 +1,12 @@
+Material My Material : MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+
+        refIndex : 0.8
+        RefMap : Flip Textures/Water32.dds
+        ChromaticAbberation : true
+        abberIndex : 0.09
+        specularIntensity : 0.59999996
+     }
+    AdditionalRenderState {
+    }
+}

@@ -312,6 +312,8 @@ public class MARS_Settings{
         }*/
         else if(hashmapname.equals("Terrain")){
             //initer.updateTerrain();
+        }else if(hashmapname.equals("Grass")){
+            initer.updateGrass();
         }
     }
     
@@ -1110,6 +1112,54 @@ public class MARS_Settings{
     public void setSetupGrass(boolean enabled) {
         Grass.put("enabled", enabled);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getGrassFarViewingDistance() {
+        return (Float)Grass.get("farViewingDistance");
+    }
+
+    /**
+     *
+     * @param tileLength
+     */
+    public void setGrassFarViewingDistance(float farViewingDistance) {
+        Grass.put("farViewingDistance", farViewingDistance);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getGrassFadingRange() {
+        return (Float)Grass.get("fadingRange");
+    }
+
+    /**
+     *
+     * @param tileLength
+     */
+    public void setGrassFadingRange(float fadingRange) {
+        Grass.put("fadingRange", fadingRange);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getGrassPagesizeResolution() {
+        return (Integer)Grass.get("pagesizeResolution");
+    }
+
+    /**
+     *
+     * @param tileLength
+     */
+    public void setGrassPagesizeResolution(int pagesizeResolution) {
+        Grass.put("pagesizeResolution", pagesizeResolution);
+    }
 
     /**
      *
@@ -1163,6 +1213,7 @@ public class MARS_Settings{
      *
      * @return
      */
+    @Deprecated
     public Float getTileLength() {
         return (Float)Terrain.get("tileLength");
     }
@@ -1171,6 +1222,7 @@ public class MARS_Settings{
      *
      * @param tileLength
      */
+    @Deprecated
     public void setTileLength(float tileLength) {
         Terrain.put("tileLength", tileLength);
     }
@@ -1179,6 +1231,7 @@ public class MARS_Settings{
      *
      * @return
      */
+    @Deprecated
     public Float getTileHeigth() {
         return (Float)Terrain.get("tileHeigth");
     }
@@ -1187,6 +1240,7 @@ public class MARS_Settings{
      *
      * @param tileHeigth
      */
+    @Deprecated
     public void setTileHeigth(float tileHeigth) {
         Terrain.put("tileHeigth", tileHeigth);
     }

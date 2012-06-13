@@ -1,0 +1,30 @@
+MaterialDef Solid Color {
+    MaterialParameters {
+        Vector4 Color
+        Texture2D ColorMap
+        
+        Vector3Array Collisions
+        FloatArray CollisionAlphas
+        
+        Float MinAlpha
+        Float MaxDistance
+        Int CollisionNum
+    }
+    Technique {
+        VertexShader GLSL100:   Shaders/ForceShield/Shield.vert
+        FragmentShader GLSL100: Shaders/ForceShield/Shield.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+        
+        Defines {
+            HAS_COLORMAP : ColorMap
+            HAS_COLOR : Color
+        }
+    }
+    Technique FixedFunc {
+    }
+    
+
+}

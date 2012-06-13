@@ -26,6 +26,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.system.AppSettings;
 import com.jme3.system.awt.AwtPanel;
 import de.lessvoid.nifty.Nifty;
@@ -98,6 +99,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     public void simpleInitApp() {
         //initNifty();
         initMapViewPort();
+        //initAssetsLoaders();
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
@@ -122,6 +124,15 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             flyCam = advFlyCam;
             stateManager.attach(flyc);
         }*/
+    }
+    
+    /*
+     * We use or own OBJLoader based on the same class here because we need a special
+     * material file (for the light blow shader) not the lighting mat.
+     */
+    private void initAssetsLoaders(){
+        assetManager.unregisterLoader(OBJLoader.class);
+        assetManager.registerLoader(MyOBJLoader.class,"obj");
     }
     
     private void initMapViewPort(){

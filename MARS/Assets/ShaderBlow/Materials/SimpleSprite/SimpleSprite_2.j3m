@@ -1,0 +1,13 @@
+Material My Material : MatDefs/SimpleSprite/SimpleSprite.j3md {
+     MaterialParameters {
+        AniTexMap : Flip Repeat Textures/SimpleSprite/SimpleSprite_2.png
+        numTilesU : 8
+        numTilesV : 4
+        Speed : 24
+        FogColor : 0.8 0.8 0.8 19.0
+     }
+    AdditionalRenderState {
+      Blend Alpha
+      Wireframe Off
+    }
+}

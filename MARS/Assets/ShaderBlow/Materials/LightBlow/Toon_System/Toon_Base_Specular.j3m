@@ -1,0 +1,17 @@
+Material toon : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip Models/ToonBlow/toon.png
+
+        Toon : true
+        Specular_Lighting : true
+        Specular : 0.6431373 0.6431373 0.47843137 1.0
+        Shininess : 1.9999999
+        EdgesColor : 0.2 1.0 0.0 1.0
+        EdgeSize : 0.01
+        FogColor : 0.8 0.8 0.8 17.0
+
+        Fog_Edges : true
+     }
+    AdditionalRenderState {
+    }
+}

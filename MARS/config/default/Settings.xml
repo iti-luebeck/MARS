@@ -170,6 +170,13 @@
                         </entry>
                     </value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Shadow">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="mode">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                        </entry>
+					</value>
+                </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="CrossHairs">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
@@ -222,9 +229,9 @@
                     <value>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                             <value>
-								<x>-7.0</x>
+								<x>-7.0</x><!-- -30.0 7.0 -->
 								<y>-2.0</y>
-								<z>0.0</z>
+								<z>0.0</z><!-- -15.0 -->
                             </value>
                         </entry>
 						<entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
@@ -274,6 +281,15 @@
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="pagesizeResolution">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="farViewingDistance">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">50.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="fadingRange">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
                         </entry>
                     </value>
                 </entry>

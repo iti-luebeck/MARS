@@ -120,12 +120,12 @@ public class StartState extends AbstractAppState{
             rootNode.addLight(al); */
             
             //shader stuff
-            /*assetManager.registerLocator("Assets/MatDefs", FileLocator.class.getName());
-            Material mat_stlr = new Material(assetManager, "RimLighting.j3md");
+            /*assetManager.registerLocator("Assets/Rim", FileLocator.class);
+            Material mat_stlr = new Material(assetManager, "MatDefs/RimLighting.j3md");
             float red = 1.0f;
             float blue = 0.0f;
             float green = 1.0f;
-            float power = 10.0f;
+            float power = 2.5f;
             mat_stlr.setColor("RimLighting", new ColorRGBA(red,blue,green,power));
             cube.setMaterial(mat_stlr);*/
             
