@@ -871,6 +871,15 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reset_auvActionPerformed"/>
           </Events>
         </MenuItem>
+        <MenuItem class="javax.swing.JCheckBoxMenuItem" name="enable_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="enable_auv.text"/>
+            <Property name="name" type="java.lang.String" value="enable_auv" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enable_auvActionPerformed"/>
+          </Events>
+        </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="delete_auv">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="delete_auv.text"/>
@@ -1518,6 +1527,15 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_reset_auvActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_enable_auv">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jme3_enable_auv.text"/>
+            <Property name="name" type="java.lang.String" value="jme3_enable_auv" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_enable_auvActionPerformed"/>
           </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jme3_delete_auv">

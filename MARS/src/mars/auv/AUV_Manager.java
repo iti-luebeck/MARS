@@ -189,6 +189,9 @@ public class AUV_Manager {
         this.mars_node = mars_node;
     }
     
+    /**
+     * 
+     */
     public void updateMARSNode(){
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -343,7 +346,7 @@ public class AUV_Manager {
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
                 auvs.put(fin_auv.getName(), fin_auv);
-                addAUVToScene(fin_auv);
+                preloadAUV(fin_auv);
                 return null;
             }
         });
@@ -359,7 +362,7 @@ public class AUV_Manager {
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
                 auvs.put(fin_auv.getName(), fin_auv);
-                addAUVToScene(fin_auv);
+                preloadAUV(fin_auv);
                 return null;
             }
         });
@@ -442,7 +445,7 @@ public class AUV_Manager {
         addAUVsToBulletAppState(bulletAppState);
     }
 
-    private void addAUVToScene(AUV auv){
+    private void preloadAUV(AUV auv){
         //if(auv.getAuv_param().isEnabled()){
             auv.setState(simstate);
             auv.setSimauv_settings(simauv_settings);
@@ -459,6 +462,11 @@ public class AUV_Manager {
         }
     }
     
+    /**
+     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the update cycle(future/get).
+     * @param auv
+     * @param enable
+     */
     public void enableAUV(AUV auv, boolean enable){
         enableAUV(auv.getName(),enable);
     }
@@ -466,16 +474,20 @@ public class AUV_Manager {
     private void enableAUV(String auv_name, boolean enable){
         AUV auv = (AUV)auvs.get(auv_name);
         if(enable){
-            initAUV(auv);
-            addAUVToNode(auv,AUVsNode);
-            addAUVToBulletAppState(auv,bulletAppState);
+            addAUVToScene(auv);
         }else{
             removeAUVFromScene(auv);
         }
     }
 
-    private void removeAUVFromScene( AUV auv){
-        bulletAppState.getPhysicsSpace().remove(auv.getSelectionNode());
+    private void addAUVToScene(AUV auv){
+        auv.addDragOffscreenView();
+        addAUVToNode(auv,AUVsNode);
+        addAUVToBulletAppState(auv,bulletAppState);
+    }
+
+    private void removeAUVFromScene(AUV auv){
+        bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
         auv.cleanupOffscreenView();
         auv.getSelectionNode().removeFromParent();
     }
@@ -615,7 +627,6 @@ public class AUV_Manager {
     
      /**
      *
-     * @param auvs
      */
     public void deselectAllAUVs(){
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
@@ -625,6 +636,10 @@ public class AUV_Manager {
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public AUV getSelectedAUV(){
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
         for ( String elem : auvs.keySet() ){

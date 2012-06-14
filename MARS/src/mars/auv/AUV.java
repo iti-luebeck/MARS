@@ -238,6 +238,7 @@ public interface AUV{
     /*
      *
      */
+    public void addDragOffscreenView();
     /**
      *
      * @return

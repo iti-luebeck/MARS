@@ -1288,13 +1288,19 @@ public class BasicAUV implements AUV,SceneProcessor{
             drag_offView.attachScene(auv_spatial);//<-- this is the bad boy when registering (modifying the thread blabla)
         }
     }
+    
+    public void addDragOffscreenView(){
+        drag_offView.attachScene(auv_spatial);
+    }
 
     /**
      *
      */
     public void cleanupOffscreenView(){
         drag_offView.detachScene(auv_spatial);
-        debug_drag_view.detachScene(auv_spatial);
+        if(debug_drag_view != null){
+            debug_drag_view.detachScene(auv_spatial);
+        }
     }
 
     /*

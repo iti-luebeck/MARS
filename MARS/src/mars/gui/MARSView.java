@@ -480,6 +480,11 @@ public class MARSView extends FrameView {
                     }else{
                         jme3_waypoints_auv_gradient.setSelected(false);
                     }
+                    if(auv_param.isEnabled()){
+                        jme3_enable_auv.setSelected(true);
+                    }else{
+                        jme3_enable_auv.setSelected(false);
+                    }
                     
                     //params
                     jme3_params_auv.removeAll();
@@ -745,6 +750,7 @@ public class MARSView extends FrameView {
         treenode.add(vars_treenode);
     }
 
+    @Deprecated
     private void createHashMapNodesParam(DefaultMutableTreeNode param_treenode, AUV_Parameters param, String hashmap_name, HashMap<String,Object> hash){
         DefaultMutableTreeNode hash_treenode = new DefaultMutableTreeNode(hashmap_name);
 
@@ -913,6 +919,7 @@ public class MARSView extends FrameView {
         auv_popup_menu = new javax.swing.JPopupMenu();
         chase_auv = new javax.swing.JMenuItem();
         reset_auv = new javax.swing.JMenuItem();
+        enable_auv = new javax.swing.JCheckBoxMenuItem();
         delete_auv = new javax.swing.JMenuItem();
         simob_popup_menu = new javax.swing.JPopupMenu();
         chase_simob = new javax.swing.JMenuItem();
@@ -977,6 +984,7 @@ public class MARSView extends FrameView {
         jme3_waypoints_auv_reset = new javax.swing.JMenuItem();
         jme3_waypoints_color = new javax.swing.JMenuItem();
         jme3_reset_auv = new javax.swing.JMenuItem();
+        jme3_enable_auv = new javax.swing.JCheckBoxMenuItem();
         jme3_delete_auv = new javax.swing.JMenuItem();
         jToolBarPlay = new javax.swing.JToolBar();
         jButtonPlay = new javax.swing.JButton();
@@ -1617,6 +1625,15 @@ public class MARSView extends FrameView {
         });
         auv_popup_menu.add(reset_auv);
 
+        enable_auv.setText(resourceMap.getString("enable_auv.text")); // NOI18N
+        enable_auv.setName("enable_auv"); // NOI18N
+        enable_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enable_auvActionPerformed(evt);
+            }
+        });
+        auv_popup_menu.add(enable_auv);
+
         delete_auv.setText(resourceMap.getString("delete_auv.text")); // NOI18N
         delete_auv.setEnabled(false);
         delete_auv.setName("delete_auv"); // NOI18N
@@ -2092,6 +2109,15 @@ public class MARSView extends FrameView {
             }
         });
         jme3_auv.add(jme3_reset_auv);
+
+        jme3_enable_auv.setText(resourceMap.getString("jme3_enable_auv.text")); // NOI18N
+        jme3_enable_auv.setName("jme3_enable_auv"); // NOI18N
+        jme3_enable_auv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_enable_auvActionPerformed(evt);
+            }
+        });
+        jme3_auv.add(jme3_enable_auv);
 
         jme3_delete_auv.setText(resourceMap.getString("jme3_delete_auv.text")); // NOI18N
         jme3_delete_auv.setEnabled(false);
@@ -3899,7 +3925,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 System.out.println(selPath.getLastPathComponent().toString());  
                 auv_tree.setSelectionPath(selPath);  
                 try {  
-                    if (selPath.getLastPathComponent() instanceof AUV) {   
+                    if (selPath.getLastPathComponent() instanceof AUV) { 
+                        AUV auv = (AUV)selPath.getLastPathComponent();
+                        enable_auv.setSelected(auv.getAuv_param().isEnabled());
                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
                     }else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
                         addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
@@ -4369,6 +4397,42 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         toggleJMenuCheckbox(jme3_debug_auv_bounding);
     }//GEN-LAST:event_jme3_debug_auv_boundingActionPerformed
 
+    private void enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enable_auvActionPerformed
+        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    if(!enable_auv.isSelected()){
+                        auv.getAuv_param().setEnabled(false);
+                        auv_manager.enableAUV(auv, false);
+                    }else{
+                        auv.getAuv_param().setEnabled(true);
+                        auv_manager.enableAUV(auv, true);
+                    }
+                }
+                updateTrees();
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(enable_auv);
+    }//GEN-LAST:event_enable_auvActionPerformed
+
+    private void jme3_enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_enable_auvActionPerformed
+        
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_enable_auv.isSelected();
+                    simState.enableSelectedAUV(selected);
+                }
+                updateTrees();
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_enable_auv);
+    }//GEN-LAST:event_jme3_enable_auvActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4420,6 +4484,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem delete_auv;
     private javax.swing.JMenuItem delete_sens_act;
     private javax.swing.JMenuItem delete_simob;
+    private javax.swing.JCheckBoxMenuItem enable_auv;
     private javax.swing.JButton floatDialog_Confirm;
     private javax.swing.JTextField floatDialog_x;
     private javax.swing.JDialog float_dialog;
@@ -4530,6 +4595,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_wireframe;
     private javax.swing.JMenuItem jme3_delete_auv;
+    private javax.swing.JCheckBoxMenuItem jme3_enable_auv;
     private javax.swing.JMenu jme3_mergeview;
     private javax.swing.JMenuItem jme3_move_auv;
     private javax.swing.JMenu jme3_params_auv;
