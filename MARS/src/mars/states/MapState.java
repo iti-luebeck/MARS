@@ -19,6 +19,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
 import com.jme3.scene.shape.Quad;
@@ -126,20 +127,23 @@ public class MapState extends AbstractAppState{
                 Iterator it = uws.iterator();
                 while (it.hasNext()) {
                     UnderwaterModem uw = (UnderwaterModem)it.next();
+                    Cylinder uw_geom_sphere = new Cylinder(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true);
+                    Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom", uw_geom_sphere);
+                    Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    uw_geom_mat.setColor("Color", uw.getDebugColor());
+
+                    //don't forget transparency for depth
+                    uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                    uw_geom.setQueueBucket(Bucket.Transparent);
+
+                    uw_geom.setMaterial(uw_geom_mat);
+                    uw_geom.setLocalTranslation(0f,0f, -0.5f);
+                    uw_geom.updateGeometricState();
+                    auvNode.attachChild(uw_geom);
                     if(uw.isDebug()){
-                        Cylinder uw_geom_sphere = new Cylinder(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true);
-                        Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom", uw_geom_sphere);
-                        Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                        uw_geom_mat.setColor("Color", uw.getDebugColor());
-
-                        //don't forget transparency for depth
-                        uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                        uw_geom.setQueueBucket(Bucket.Transparent);
-
-                        uw_geom.setMaterial(uw_geom_mat);
-                        uw_geom.setLocalTranslation(0f,0f, -0.5f);
-                        uw_geom.updateGeometricState();
-                        auvNode.attachChild(uw_geom);
+                        uw_geom.setCullHint(CullHint.Never);
+                    }else{
+                        uw_geom.setCullHint(CullHint.Always);
                     }
                 }
                 
@@ -239,19 +243,24 @@ public class MapState extends AbstractAppState{
                         Iterator it = uws.iterator();
                         while (it.hasNext()) {
                             UnderwaterModem uw = (UnderwaterModem)it.next();
+                            Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom");
                             if(uw.isDebug()){
-                                Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom");
+                                uwgeom.setCullHint(CullHint.Never);
                                 Cylinder cyl = (Cylinder)uwgeom.getMesh();
                                 cyl.updateGeometry(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true,false);
+                            }else{
+                                uwgeom.setCullHint(CullHint.Always);
                             }
                         }
                         
                         //update selection color and position
+                        Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
+                        geom.setCullHint(CullHint.Never);
                         if(auv.isSelected()){
                             //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
                             Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
-                            Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
+                            //Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                             geom.getMaterial().setColor("Color", mars_settings.getSelectionColor());
                         }else{
                             //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
@@ -263,7 +272,7 @@ public class MapState extends AbstractAppState{
                                 alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getAlphaDepthScale()))*(1f/auv.getAuv_param().getAlphaDepthScale());
                             }
                             ColorRGBA auv_geom_color = auv.getAuv_param().getMapColor();
-                            Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
+                            //Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                             geom.getMaterial().setColor("Color",  new ColorRGBA(auv_geom_color.getRed(), auv_geom_color.getGreen(), auv_geom_color.getBlue(), 1f-alpha));
                             
                             
@@ -273,6 +282,9 @@ public class MapState extends AbstractAppState{
                             java.awt.Color col = new java.awt.Color(java.awt.Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
                             col.get*/
                         }
+                    }else{//auv is disabled so dont show in on map
+                        Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
+                        geom.setCullHint(CullHint.Always);
                     }
             }
         }

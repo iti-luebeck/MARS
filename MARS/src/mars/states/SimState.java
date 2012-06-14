@@ -999,8 +999,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           for (int i = 0; i < results.size(); i++) {
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
-              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
-              //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
+              System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
               if((String)target.getParent().getUserData("auv_name") != null){
                   BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
                   if(auv != null){
@@ -1022,6 +1021,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //guiControlState.setFree(false);
           }*/
         }else{//nothing to pickRightClick
+            System.out.println("Nothing to pick!");
                 auv_manager.deselectAllAUVs();
             //guiControlState.setFree(true);
         }

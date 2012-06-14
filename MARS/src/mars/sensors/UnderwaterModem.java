@@ -162,10 +162,16 @@ public class UnderwaterModem extends Sensor{
     }
     
     private void setDebugVisible(boolean visible){
-        if(!visible){
+        /*if(!visible){
             DebugDistance.setCullHint(CullHint.Always);
         }else{
             DebugDistance.setCullHint(CullHint.Never);
+        }*/
+        //forgot future?
+        if(!visible){
+            DebugDistance.removeFromParent();
+        }else{
+            PhysicalExchanger_Node.attachChild(DebugDistance);
         }
     }
 
