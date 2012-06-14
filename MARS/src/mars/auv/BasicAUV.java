@@ -497,7 +497,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         initCenters();
         initWaypoints();
         //the offscreen for area calculating(drag) must be set
-        setupDragOffscreenView();
+        setupDragOffscreenView();//<-- buggy when deleting/deregister etc
         if(auv_param.isDebugDrag()){
             setupCam2();
         }
@@ -1284,7 +1284,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         drag_offView.setOutputFrameBuffer(drag_offBuffer);
 
         // attach the scene to the viewport to be rendered
-        drag_offView.attachScene(auv_spatial);
+        if(auv_param.isEnabled()){
+            drag_offView.attachScene(auv_spatial);//<-- this is the bad boy when registering (modifying the thread blabla)
+        }
     }
 
     /**

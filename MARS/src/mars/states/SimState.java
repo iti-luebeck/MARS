@@ -1508,6 +1508,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    public void enableAUV(AUV auv){
+        if(auv != null){
+            
+        }
+    }
+    
     public void debugSelectedAUV(int debug_mode, boolean selected){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){

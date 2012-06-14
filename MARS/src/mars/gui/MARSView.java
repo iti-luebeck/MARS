@@ -54,6 +54,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
+import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -189,6 +190,10 @@ public class MARSView extends FrameView {
             }
         });
         this.getFrame().setTitle(TITLE + " V" + VERSION);
+        
+        //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
+        ToolTipManager ttm = ToolTipManager.sharedInstance();
+        ttm.setLightWeightPopupEnabled(true);
     }
 
     /**
@@ -4586,7 +4591,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.7.0";
+    private final String VERSION = "0.7.1";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

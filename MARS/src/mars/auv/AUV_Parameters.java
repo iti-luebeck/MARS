@@ -291,7 +291,12 @@ public class AUV_Parameters implements CellEditorListener{
             if(physics_control != null ){
                 physics_control.setMass(getMass());
             }
-        }     
+        }else if(target.equals("enabled") && hashmapname.equals("")){
+            if(!isEnabled()){
+                //check if it exist before removing
+
+            }
+        }       
     }
     
     /**

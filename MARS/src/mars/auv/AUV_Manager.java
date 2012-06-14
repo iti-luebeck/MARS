@@ -443,7 +443,7 @@ public class AUV_Manager {
     }
 
     private void addAUVToScene(AUV auv){
-        if(auv.getAuv_param().isEnabled()){
+        //if(auv.getAuv_param().isEnabled()){
             auv.setState(simstate);
             auv.setSimauv_settings(simauv_settings);
             auv.setPhysical_environment(physical_environment);
@@ -451,9 +451,26 @@ public class AUV_Manager {
             //auv.setROS_Node(ros_node);
             auv.setROS_Node(mars_node);
             initAUV(auv);
+        if(auv.getAuv_param().isEnabled()){    
+            //initAUV(auv);
             //addAUVToNode(auv,sceneReflectionNode);
             addAUVToNode(auv,AUVsNode);
             addAUVToBulletAppState(auv,bulletAppState);
+        }
+    }
+    
+    public void enableAUV(AUV auv, boolean enable){
+        enableAUV(auv.getName(),enable);
+    }
+    
+    private void enableAUV(String auv_name, boolean enable){
+        AUV auv = (AUV)auvs.get(auv_name);
+        if(enable){
+            initAUV(auv);
+            addAUVToNode(auv,AUVsNode);
+            addAUVToBulletAppState(auv,bulletAppState);
+        }else{
+            removeAUVFromScene(auv);
         }
     }
 
