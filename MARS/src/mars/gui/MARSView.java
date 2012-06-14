@@ -18,6 +18,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.RenderingHints.Key;
+import java.awt.Toolkit;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -52,6 +53,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
 import javax.swing.ToolTipManager;
@@ -128,6 +130,13 @@ public class MARSView extends FrameView {
      */
     public MARSView(SingleFrameApplication app) {
         super(app);
+        
+        //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
+        ToolTipManager ttm = ToolTipManager.sharedInstance();
+        ttm.setLightWeightPopupEnabled(false);
+        
+        //the same as above, heavy/light mixin
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
         depth_series = new XYSeries("Tiefe");//zum speichern der werte
         volume_series = new XYSeries("Volumen");//zum speichern der werte
@@ -190,10 +199,6 @@ public class MARSView extends FrameView {
             }
         });
         this.getFrame().setTitle(TITLE + " V" + VERSION);
-        
-        //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
-        ToolTipManager ttm = ToolTipManager.sharedInstance();
-        ttm.setLightWeightPopupEnabled(true);
     }
 
     /**
