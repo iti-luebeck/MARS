@@ -527,15 +527,6 @@
             <Property name="name" type="java.lang.String" value="SettingsMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="JME_MenuItem">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="JME_MenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="JME_MenuItem" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JME_MenuItemActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="Camera">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="Camera.text"/>
@@ -1641,6 +1632,26 @@
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator5">
           <Properties>
             <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonCharts">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonCharts.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonCharts.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonCharts.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonCharts" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonChartsActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator6">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator6" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

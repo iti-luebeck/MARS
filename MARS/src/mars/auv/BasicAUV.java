@@ -825,7 +825,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         //System.out.println("buyo: " + buoyancy_force);
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force/mars_settings.getPhysicsFramerate(),0.0f);
-        //addValueToSeries(buoyancy_force,1);
+        addValueToSeries(buoyancy_force,1);
         //addValueToSeries(actual_vol,1);
         //addValueToSeries(actual_vol_air,2);
         //System.out.println("vol: " + actual_vol + " " + actual_vol_air + " " + buoyancy_force_vec);

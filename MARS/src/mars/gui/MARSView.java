@@ -8,6 +8,10 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.system.awt.AwtPanel;
+import info.monitorenter.gui.chart.Chart2D;
+import info.monitorenter.gui.chart.ITrace2D;
+import info.monitorenter.gui.chart.controls.LayoutFactory;
+import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import java.awt.BorderLayout;
 import mars.gui.MARSAboutBox;
 import java.awt.Canvas;
@@ -324,6 +328,7 @@ public class MARSView extends FrameView {
                     jButtonRestart.setEnabled(true);
                     RestartMenuItem.setEnabled(true);
                     StartMenuItem.setEnabled(false);
+                    jButtonCharts.setEnabled(true);
                 }
             }
         );
@@ -399,7 +404,7 @@ public class MARSView extends FrameView {
      * @param series
      */
     public void addValueToSeries(float value, int series){
-        if(series == 0){
+        /*if(series == 0){
             depth_series.add(depth_series.getItemCount()+1, value);
         }else if(series == 1){
             volume_series.add(volume_series.getItemCount()+1, value);
@@ -407,7 +412,8 @@ public class MARSView extends FrameView {
             force_series.add(force_series.getItemCount()+1, value);
         }else if(series == 3){
             torque_series.add(torque_series.getItemCount()+1, value);
-        }
+        }*/
+        trace.addPoint(((double) System.currentTimeMillis() - this.m_starttime), value);
     }
     
     public void setMarsSettings(MARS_Settings simauv_settings){
@@ -845,6 +851,90 @@ public class MARSView extends FrameView {
             jmenucheck.setSelected(false);
         }
     }
+    
+    private void createJFreeChart() {
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(depth_series);
+        dataset.addSeries(volume_series);
+        dataset.addSeries(force_series);
+        dataset.addSeries(torque_series);
+
+        //Rendering and Customization - Probably where the problem lies
+        final NumberAxis lineRangeAxis = new NumberAxis("C");
+        lineRangeAxis.setAutoRangeIncludesZero(false);
+        lineRangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
+        lineRangeAxis.setAutoRange(true);
+
+        final XYLineAndShapeRenderer lineRenderer = new XYLineAndShapeRenderer();
+        //lineRenderer.setShapesVisible(true);
+        lineRenderer.setDrawOutlines(true);
+        lineRenderer.setUseFillPaint(true);
+        lineRenderer.setSeriesFillPaint(0, Color.white);//.setFillPaint(Color.white);
+        lineRenderer.setSeriesShapesVisible(0, false);
+        lineRenderer.setSeriesFillPaint(1, Color.white);//.setFillPaint(Color.white);
+        lineRenderer.setSeriesShapesVisible(1, false);
+        lineRenderer.setSeriesFillPaint(2, Color.white);//.setFillPaint(Color.white);
+        lineRenderer.setSeriesShapesVisible(2, false);
+        lineRenderer.setSeriesFillPaint(3, Color.white);//.setFillPaint(Color.white);
+        lineRenderer.setSeriesShapesVisible(3, false);
+        final XYPlot linePlot = new XYPlot(dataset, null, lineRangeAxis, lineRenderer);
+        linePlot.setDomainGridlinesVisible(true);
+
+        final NumberAxis domainAxis = new NumberAxis("Time");
+        domainAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
+        domainAxis.setAutoRange(true);
+        //domainAxis.setRange(90, 115);
+        domainAxis.setFixedAutoRange(100d);
+        final CombinedDomainXYPlot plot = new CombinedDomainXYPlot(domainAxis);
+        plot.add(linePlot, 3);
+        plot.setGap(12);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setRangeGridlinePaint(Color.BLACK);
+        //plot.setAxisOffset(new RectangleInsets(5,5,5,5));
+        plot.setDomainGridlinePaint(Color.DARK_GRAY);
+        plot.setRangeGridlinePaint(Color.DARK_GRAY);
+
+
+        final JFreeChart chart = new JFreeChart(
+            "Depth",
+            new Font("Verdana", Font.BOLD, 17),
+            plot,
+            true
+        );
+
+/*
+        DefaultPieDataset result = new DefaultPieDataset();
+        result.setValue("Linux", 29);
+        result.setValue("Mac", 20);
+        result.setValue("Windows", 51);
+                JFreeChart chart = ChartFactory.createPieChart3D(
+            "aaaaa",  				// chart title
+            result,                // data
+            true,                   // include legend
+            true,
+            false
+        );
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+*/
+        
+        //BufferedImage image = chart.createBufferedImage(1000,500);
+
+        //JLabel lblChart = new JLabel();
+       // lblChart.setIcon(new ImageIcon(image));
+        
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(1024, 512));
+        // this.JME_SettingsDialog.setVisible(true);
+
+         ChartFrame frame1=new ChartFrame("Pie Chart",chart);
+         frame1.setVisible(true);
+         frame1.setSize(1024,512);
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -891,7 +981,6 @@ public class MARSView extends FrameView {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem ExitMenuItem = new javax.swing.JMenuItem();
         SettingsMenu = new javax.swing.JMenu();
-        JME_MenuItem = new javax.swing.JMenuItem();
         Camera = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         keys = new javax.swing.JMenuItem();
@@ -994,6 +1083,8 @@ public class MARSView extends FrameView {
         jButtonServerConnect = new javax.swing.JButton();
         jButtonServerDisconnect = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
+        jButtonCharts = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
         auv_move_vector_dialog = new javax.swing.JDialog();
         jButton1 = new javax.swing.JButton();
         Cancel = new javax.swing.JButton();
@@ -1406,15 +1497,6 @@ public class MARSView extends FrameView {
 
         SettingsMenu.setText(resourceMap.getString("SettingsMenu.text")); // NOI18N
         SettingsMenu.setName("SettingsMenu"); // NOI18N
-
-        JME_MenuItem.setText(resourceMap.getString("JME_MenuItem.text")); // NOI18N
-        JME_MenuItem.setName("JME_MenuItem"); // NOI18N
-        JME_MenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JME_MenuItemActionPerformed(evt);
-            }
-        });
-        SettingsMenu.add(JME_MenuItem);
 
         Camera.setText(resourceMap.getString("Camera.text")); // NOI18N
         Camera.setName("Camera"); // NOI18N
@@ -2212,6 +2294,24 @@ public class MARSView extends FrameView {
 
         jSeparator5.setName("jSeparator5"); // NOI18N
         jToolBarPlay.add(jSeparator5);
+
+        jButtonCharts.setIcon(resourceMap.getIcon("jButtonCharts.icon")); // NOI18N
+        jButtonCharts.setText(resourceMap.getString("jButtonCharts.text")); // NOI18N
+        jButtonCharts.setToolTipText(resourceMap.getString("jButtonCharts.toolTipText")); // NOI18N
+        jButtonCharts.setEnabled(false);
+        jButtonCharts.setFocusable(false);
+        jButtonCharts.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonCharts.setName("jButtonCharts"); // NOI18N
+        jButtonCharts.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonCharts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChartsActionPerformed(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonCharts);
+
+        jSeparator6.setName("jSeparator6"); // NOI18N
+        jToolBarPlay.add(jSeparator6);
 
         auv_move_vector_dialog.setTitle(resourceMap.getString("auv_move_vector_dialog.title")); // NOI18N
         auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(174, 234));
@@ -3034,90 +3134,6 @@ public class MARSView extends FrameView {
         setToolBar(jToolBarPlay);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void JME_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JME_MenuItemActionPerformed
-
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(depth_series);
-        dataset.addSeries(volume_series);
-        dataset.addSeries(force_series);
-        dataset.addSeries(torque_series);
-
-        //Rendering and Customization - Probably where the problem lies
-        final NumberAxis lineRangeAxis = new NumberAxis("C");
-        lineRangeAxis.setAutoRangeIncludesZero(false);
-        lineRangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
-        lineRangeAxis.setAutoRange(true);
-
-        final XYLineAndShapeRenderer lineRenderer = new XYLineAndShapeRenderer();
-        //lineRenderer.setShapesVisible(true);
-        lineRenderer.setDrawOutlines(true);
-        lineRenderer.setUseFillPaint(true);
-        lineRenderer.setSeriesFillPaint(0, Color.white);//.setFillPaint(Color.white);
-        lineRenderer.setSeriesShapesVisible(0, false);
-        lineRenderer.setSeriesFillPaint(1, Color.white);//.setFillPaint(Color.white);
-        lineRenderer.setSeriesShapesVisible(1, false);
-        lineRenderer.setSeriesFillPaint(2, Color.white);//.setFillPaint(Color.white);
-        lineRenderer.setSeriesShapesVisible(2, false);
-        lineRenderer.setSeriesFillPaint(3, Color.white);//.setFillPaint(Color.white);
-        lineRenderer.setSeriesShapesVisible(3, false);
-        final XYPlot linePlot = new XYPlot(dataset, null, lineRangeAxis, lineRenderer);
-        linePlot.setDomainGridlinesVisible(true);
-
-        final NumberAxis domainAxis = new NumberAxis("Time");
-        domainAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
-        domainAxis.setAutoRange(true);
-        //domainAxis.setRange(90, 115);
-        final CombinedDomainXYPlot plot = new CombinedDomainXYPlot(domainAxis);
-        plot.add(linePlot, 3);
-        plot.setGap(12);
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setRangeGridlinePaint(Color.BLACK);
-        //plot.setAxisOffset(new RectangleInsets(5,5,5,5));
-        plot.setDomainGridlinePaint(Color.DARK_GRAY);
-        plot.setRangeGridlinePaint(Color.DARK_GRAY);
-
-
-        final JFreeChart chart = new JFreeChart(
-            "Depth",
-            new Font("Verdana", Font.BOLD, 17),
-            plot,
-            true
-        );
-
-/*
-        DefaultPieDataset result = new DefaultPieDataset();
-        result.setValue("Linux", 29);
-        result.setValue("Mac", 20);
-        result.setValue("Windows", 51);
-                JFreeChart chart = ChartFactory.createPieChart3D(
-            "aaaaa",  				// chart title
-            result,                // data
-            true,                   // include legend
-            true,
-            false
-        );
-
-        PiePlot3D plot = (PiePlot3D) chart.getPlot();
-        plot.setStartAngle(290);
-        plot.setDirection(Rotation.CLOCKWISE);
-        plot.setForegroundAlpha(0.5f);
-*/
-        
-        //BufferedImage image = chart.createBufferedImage(1000,500);
-
-        //JLabel lblChart = new JLabel();
-       // lblChart.setIcon(new ImageIcon(image));
-        
-        ChartPanel chartPanel = new ChartPanel(chart);
-        // default size
-        chartPanel.setPreferredSize(new java.awt.Dimension(1024, 512));
-        // this.JME_SettingsDialog.setVisible(true);
-
-         ChartFrame frame1=new ChartFrame("Pie Chart",chart);
-         frame1.setVisible(true);
-         frame1.setSize(1024,512);
-    }//GEN-LAST:event_JME_MenuItemActionPerformed
-
     private void helpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpActionPerformed
         // TODO add your handling code here:
         Random rand = new Random();
@@ -3444,11 +3460,6 @@ public class MARSView extends FrameView {
         node.removeFromParent();
         auv_tree.updateUI();
     }//GEN-LAST:event_delete_simobActionPerformed
-
-    private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
-        mars.getChaseCam().setEnabled(false);
-        mars.getFlyByCamera().setEnabled(true);
-    }//GEN-LAST:event_CameraActionPerformed
 
     private void chase_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_simobActionPerformed
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
@@ -4433,6 +4444,41 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         toggleJMenuCheckbox(jme3_enable_auv);
     }//GEN-LAST:event_jme3_enable_auvActionPerformed
 
+    private void jButtonChartsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChartsActionPerformed
+        
+        //createJFreeChart();
+         
+         
+         // Create a chart:  
+        Chart2D charts = new Chart2D();
+        // Create an ITrace: 
+        trace.setColor(Color.RED);
+
+        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
+        charts.addTrace(trace);
+        
+        LayoutFactory factory = LayoutFactory.getInstance();
+        info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
+        
+        
+        // Make it visible:
+        // Create a frame. 
+        JFrame frame2 = new JFrame("MinimalDynamicChart");
+        // add the chart to the frame: 
+        //frame2.getContentPane().add(charts);
+        
+        frame2.getContentPane().add(chartpanel);
+	frame2.getContentPane().addPropertyChangeListener(chartpanel);
+        
+        frame2.setSize(400,300);
+        frame2.setVisible(true);
+         
+    }//GEN-LAST:event_jButtonChartsActionPerformed
+
+    private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
+
+        mars.getChaseCam().setEnabled(false);         mars.getFlyByCamera().setEnabled(true);     }//GEN-LAST:event_CameraActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4444,7 +4490,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton Cancel6;
     private javax.swing.JButton Cancel7;
     private javax.swing.JPanel JMEPanel1;
-    private javax.swing.JMenuItem JME_MenuItem;
     private javax.swing.JDialog JME_SettingsDialog;
     private javax.swing.JPanel LeftMenuePanel;
     private javax.swing.JPanel MapPanel;
@@ -4502,6 +4547,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButton33;
     private javax.swing.JButton jButton700;
     private javax.swing.JButton jButton701;
+    private javax.swing.JButton jButtonCharts;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
@@ -4568,6 +4614,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -4668,6 +4715,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private XYSeries volume_series;
     private XYSeries force_series;
     private XYSeries torque_series;
+    
+    // Note that dynamic charts need limited amount of values!!! 
+    private ITrace2D trace = new Trace2DLtd(200); 
+    private long m_starttime = System.currentTimeMillis();
+    
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
