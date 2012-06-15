@@ -148,7 +148,8 @@ public class MARSView extends FrameView {
         torque_series = new XYSeries("Drehmoment");//zum speichern der werte
 
         initComponents();
-
+        createChart();
+        
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -414,6 +415,7 @@ public class MARSView extends FrameView {
             torque_series.add(torque_series.getItemCount()+1, value);
         }*/
         trace.addPoint(((double) System.currentTimeMillis() - this.m_starttime), value);
+        trace2.addPoint(((double) System.currentTimeMillis() - this.m_starttime), 1f);
     }
     
     public void setMarsSettings(MARS_Settings simauv_settings){
@@ -852,6 +854,37 @@ public class MARSView extends FrameView {
         }
     }
     
+    private void createChart(){
+        //createJFreeChart();
+         
+         
+         // Create a chart:  
+        Chart2D charts = new Chart2D();
+        // Create an ITrace: 
+        trace.setColor(Color.RED);
+        trace2.setColor(Color.BLUE);
+
+        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
+        charts.addTrace(trace);
+        charts.addTrace(trace2);
+                
+        LayoutFactory factory = LayoutFactory.getInstance();
+        info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
+        
+        
+        // Make it visible:
+        // Create a frame. 
+        //JFrame frame2 = new JFrame("MinimalDynamicChart");
+        // add the chart to the frame: 
+        //frame2.getContentPane().add(charts);
+        
+        insideChartPanel.add(chartpanel);
+	insideChartPanel.addPropertyChangeListener(chartpanel);
+        insideChartPanel.validate();
+        
+        ChartFrame.setSize(400,300);
+    }
+    
     private void createJFreeChart() {
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(depth_series);
@@ -1167,6 +1200,18 @@ public class MARSView extends FrameView {
         booleanPopUpSettings = new javax.swing.JPopupMenu();
         booleanPopUpEnable3 = new javax.swing.JMenuItem();
         booleanPopUpDisable3 = new javax.swing.JMenuItem();
+        ChartFrame = new javax.swing.JFrame();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JToolBar.Separator();
+        jButton5 = new javax.swing.JButton();
+        jSeparator8 = new javax.swing.JToolBar.Separator();
+        jSplitPane3 = new javax.swing.JSplitPane();
+        insideChartPanel = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -3128,6 +3173,97 @@ public class MARSView extends FrameView {
         });
         booleanPopUpSettings.add(booleanPopUpDisable3);
 
+        ChartFrame.setTitle(resourceMap.getString("ChartFrame.title")); // NOI18N
+        ChartFrame.setName("ChartFrame"); // NOI18N
+
+        jToolBar1.setRollover(true);
+        jToolBar1.setName("jToolBar1"); // NOI18N
+
+        jButton2.setIcon(resourceMap.getIcon("jButton2.icon")); // NOI18N
+        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+        jButton2.setToolTipText(resourceMap.getString("jButton2.toolTipText")); // NOI18N
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton2);
+
+        jButton3.setIcon(resourceMap.getIcon("jButton3.icon")); // NOI18N
+        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
+        jButton3.setToolTipText(resourceMap.getString("jButton3.toolTipText")); // NOI18N
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setName("jButton3"); // NOI18N
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton3);
+
+        jButton4.setIcon(resourceMap.getIcon("jButton4.icon")); // NOI18N
+        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
+        jButton4.setToolTipText(resourceMap.getString("jButton4.toolTipText")); // NOI18N
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setName("jButton4"); // NOI18N
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton4);
+
+        jSeparator7.setName("jSeparator7"); // NOI18N
+        jToolBar1.add(jSeparator7);
+
+        jButton5.setIcon(resourceMap.getIcon("jButton5.icon")); // NOI18N
+        jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
+        jButton5.setToolTipText(resourceMap.getString("jButton5.toolTipText")); // NOI18N
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setName("jButton5"); // NOI18N
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton5);
+
+        jSeparator8.setName("jSeparator8"); // NOI18N
+        jToolBar1.add(jSeparator8);
+
+        jSplitPane3.setName("jSplitPane3"); // NOI18N
+
+        insideChartPanel.setName("insideChartPanel"); // NOI18N
+        insideChartPanel.setLayout(new javax.swing.BoxLayout(insideChartPanel, javax.swing.BoxLayout.LINE_AXIS));
+        jSplitPane3.setRightComponent(insideChartPanel);
+
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setName("jTable1"); // NOI18N
+        jScrollPane6.setViewportView(jTable1);
+
+        jSplitPane3.setLeftComponent(jScrollPane6);
+
+        javax.swing.GroupLayout ChartFrameLayout = new javax.swing.GroupLayout(ChartFrame.getContentPane());
+        ChartFrame.getContentPane().setLayout(ChartFrameLayout);
+        ChartFrameLayout.setHorizontalGroup(
+            ChartFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
+            .addGroup(ChartFrameLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ChartFrameLayout.setVerticalGroup(
+            ChartFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ChartFrameLayout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -4446,33 +4582,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
     private void jButtonChartsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChartsActionPerformed
         
-        //createJFreeChart();
-         
-         
-         // Create a chart:  
-        Chart2D charts = new Chart2D();
-        // Create an ITrace: 
-        trace.setColor(Color.RED);
-
-        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-        charts.addTrace(trace);
-        
-        LayoutFactory factory = LayoutFactory.getInstance();
-        info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
-        
-        
-        // Make it visible:
-        // Create a frame. 
-        JFrame frame2 = new JFrame("MinimalDynamicChart");
-        // add the chart to the frame: 
-        //frame2.getContentPane().add(charts);
-        
-        frame2.getContentPane().add(chartpanel);
-	frame2.getContentPane().addPropertyChangeListener(chartpanel);
-        
-        frame2.setSize(400,300);
-        frame2.setVisible(true);
-         
+        ChartFrame.setVisible(true);
+        //jButtonCharts.setEnabled(false); 
     }//GEN-LAST:event_jButtonChartsActionPerformed
 
     private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
@@ -4489,6 +4600,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton Cancel5;
     private javax.swing.JButton Cancel6;
     private javax.swing.JButton Cancel7;
+    private javax.swing.JFrame ChartFrame;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JDialog JME_SettingsDialog;
     private javax.swing.JPanel LeftMenuePanel;
@@ -4536,15 +4648,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem help;
     private javax.swing.JDialog help_dialog;
     private javax.swing.JOptionPane help_optionpane;
+    private javax.swing.JPanel insideChartPanel;
     private javax.swing.JButton intDialog_Confirm;
     private javax.swing.JTextField intDialog_x;
     private javax.swing.JDialog int_dialog;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton22;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
     private javax.swing.JButton jButton33;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton700;
     private javax.swing.JButton jButton701;
     private javax.swing.JButton jButtonCharts;
@@ -4609,15 +4726,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JToolBar.Separator jSeparator7;
+    private javax.swing.JToolBar.Separator jSeparator8;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -4630,6 +4752,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
@@ -4718,6 +4841,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     
     // Note that dynamic charts need limited amount of values!!! 
     private ITrace2D trace = new Trace2DLtd(200); 
+    private ITrace2D trace2 = new Trace2DLtd(200); 
     private long m_starttime = System.currentTimeMillis();
     
     private final Timer busyIconTimer;
