@@ -24,6 +24,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
@@ -32,6 +34,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.SizeValue;
+import java.nio.FloatBuffer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,6 +45,12 @@ import javax.xml.bind.Marshaller;
 import mars.Helper.SoundHelper;
 import mars.MARS_Main;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
+import com.amd.aparapi.Kernel;
+import com.amd.aparapi.Range;
+import com.jme3.scene.mesh.IndexBuffer;
+import com.jme3.util.BufferUtils;
+import java.util.ArrayList;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -145,10 +154,20 @@ public class StartState extends AbstractAppState{
             loadModel(0.2f,"hanse/hanse_very_high.obj",new Vector3f(4f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             loadModel(0.2f,"hanse/hanse_high.obj",new Vector3f(6f,-1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             loadModel(0.2f,"hanse/hanse_low.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-            //long old_time = System.currentTimeMillis();
-            //loadModel2(0.2f,"hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-            //long new_time = System.currentTimeMillis();
-            //System.out.println("time: " + (new_time-old_time));
+            
+            
+            /*long old_time = System.currentTimeMillis();
+            loadModel3(0.2f,"hanse/hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            long new_time = System.currentTimeMillis();
+            System.out.println("time: " + (new_time-old_time));
+            
+            old_time = System.currentTimeMillis();//hanse/hanse_clean_v2_very_low_merge_new.obj
+            loadModel2(0.2f,"hanse/hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            new_time = System.currentTimeMillis();
+            System.out.println("time2: " + (new_time-old_time));*/
+            
+            
+            
             loadModel(0.2f,"hanse/hanse_very_low.obj",new Vector3f(8f,0f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             
             loadModel(0.6f,"/Monsun2/monsun2_very_high.obj",new Vector3f(10f,0f,5f),new Vector3f(FastMath.PI/4,0f,0f));
@@ -296,6 +315,63 @@ public class StartState extends AbstractAppState{
         rootNode.addLight(sun);
     }
     
+     private void loadModel3(float scale, String model, Vector3f pos, Vector3f rot){
+        assetManager.registerLocator("Assets/Models", FileLocator.class);
+
+        Spatial auv_spatial = assetManager.loadModel(model);
+        //auv_spatial.setLocalScale(scale);//0.5f
+        //auv_spatial.rotate(-(float)Math.PI/4 , (float)Math.PI/4 , 0f);
+        //Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat_white.setColor("Color", ColorRGBA.White);
+        //auv_spatial.setMaterial(mat_white);
+        /*Material mat_white = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
+        mat_white.setColor("Color", ColorRGBA.Blue);
+        auv_spatial.setMaterial(mat_white);*/
+        //auv_spatial.setLocalTranslation(pos);
+        //Quaternion quat4 = new Quaternion().fromAngles(rot.x,rot.y,rot.z);
+        /*Quaternion quat2 = new Quaternion().fromAngleAxis((-FastMath.PI/2), new Vector3f(0f,1f,0f));
+        Quaternion quat3 = new Quaternion().fromAngleAxis((-FastMath.PI/4), new Vector3f(0f,0f,1f));*/
+        //auv_spatial.setLocalRotation(quat2.mult(quat3));
+        //auv_spatial.setLocalRotation(quat4);
+        //auv_spatial.updateGeometricState();
+        //BoundingBox bounds = new BoundingBox();
+        //auv_spatial.setModelBound(bounds);
+        //auv_spatial.updateModelBound();
+        auv_spatial.setName("HANSE");
+        hanse_node.attachChild(auv_spatial);
+
+
+                final float[] positions = getVertices(auv_spatial);
+                
+                final float[] squares = new float[auv_spatial.getTriangleCount()];
+                
+                Kernel kernel = new Kernel(){
+                    @Override public void run() {
+                        int gid = getGlobalId();
+                        int old_gid = gid;
+                        /*if( gid%9 == 0 ){
+                            //squares[gid] = positions[gid] + positions[gid+1] + positions[gid+2] + positions[gid+3] + positions[gid+4] + positions[gid+5] + positions[gid+6] + positions[gid+7] + positions[gid+8];
+                            squares[gid] = (1f/6f)*((-1f)*(positions[gid+6]*positions[gid+4]*positions[gid+2])+(positions[gid+3]*positions[gid+7]*positions[gid+2])+(positions[gid+6]*positions[gid+1]*positions[gid+5])+(-1f)*(positions[gid]*positions[gid+7]*positions[gid+5])+(-1f)*(positions[gid+3]*positions[gid+1]*positions[gid+8])+(positions[gid]*positions[gid+4]*positions[gid+8]));
+                        }*/
+                        gid = gid*9;
+                        squares[old_gid] = (1f/6f)*((-1f)*(positions[gid+6]*positions[gid+4]*positions[gid+2])+(positions[gid+3]*positions[gid+7]*positions[gid+2])+(positions[gid+6]*positions[gid+1]*positions[gid+5])+(-1f)*(positions[gid]*positions[gid+7]*positions[gid+5])+(-1f)*(positions[gid+3]*positions[gid+1]*positions[gid+8])+(positions[gid]*positions[gid+4]*positions[gid+8]));
+                     }
+                };
+                kernel.setExecutionMode(Kernel.EXECUTION_MODE.GPU); 
+                long old_time = System.currentTimeMillis();
+                kernel.execute(auv_spatial.getTriangleCount());
+                kernel.dispose();
+
+                float vol_gpu = 0f;
+                for (int i = 0; i < squares.length; i++) {
+                    vol_gpu += squares[i];
+                }
+                System.out.println("vol_gpu: " + vol_gpu);
+                long new_time = System.currentTimeMillis();
+                System.out.println("timereal: " + (new_time-old_time));
+
+    } 
+    
     private void loadModel2(float scale, String model, Vector3f pos, Vector3f rot){
         assetManager.registerLocator("Assets/Models", FileLocator.class);
 
@@ -324,37 +400,41 @@ public class StartState extends AbstractAppState{
         List<Spatial> children = nodes.getChildren();
         float volume = 0;
         int tcount = 0;
+        long old_time = System.currentTimeMillis();
         for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
             Spatial spatial = it.next();
-            System.out.println(spatial.getName());
+            //System.out.println(spatial.getName());
             if(spatial instanceof Geometry){
                 Geometry geom = (Geometry)spatial;
                 Mesh mesh = geom.getMesh();
-                System.out.println(mesh.getTriangleCount());
-                tcount = tcount + mesh.getTriangleCount();
                 for (int i = 0; i < mesh.getTriangleCount(); i++) {
+                    
+                    
                     Triangle t = new Triangle();
                     mesh.getTriangle(i, t);
+                    //System.out.println("triang" + i + ": " + t.get1() + " " + t.get2() + " " + t.get3());
                     float sign = Math.signum(t.get1().dot(t.getNormal()));
                     Vector3f a = t.get1();
                     Vector3f b = t.get2();
                     Vector3f c = t.get3();
+                    
                     //float volume_t = sign * Math.abs((1.0f/6.0f)*(-(c.x*b.y*a.z)+b.x*c.y*a.z+c.getX()*a.y*b.z-(a.x*c.y*b.z)-(b.x*a.y*c.z)+a.x*b.y*c.z));
                     //float volume_t = sign * Math.abs((1.0f/6.0f)*(-(c.getX()*b.getY()*a.getZ())+b.getX()*c.getY()*a.getZ()+c.getX()*a.getY()*b.getZ()-(a.getX()*c.getY()*b.getZ())-(b.getX()*a.getY()*c.getZ())+a.getX()*b.getY()*c.getZ()));
-                    //float volume_t = (1f/6f)*((-1)*(c.getX()*b.getY()*a.getZ())+(b.getX()*c.getY()*a.getZ())+(c.getX()*a.getY()*b.getZ())+(-1)*(a.getX()*c.getY()*b.getZ())+(-1)*(b.getX()*a.getY()*c.getZ())+(a.getX()*b.getY()*c.getZ()));
-                    float volume_t = sign * Math.abs((1.0f/6.0f)*((a.cross(b)).dot(c)));
+                    float volume_t = (1f/6f)*((-1)*(c.getX()*b.getY()*a.getZ())+(b.getX()*c.getY()*a.getZ())+(c.getX()*a.getY()*b.getZ())+(-1)*(a.getX()*c.getY()*b.getZ())+(-1)*(b.getX()*a.getY()*c.getZ())+(a.getX()*b.getY()*c.getZ()));
+                    //float volume_t = a.getX()+a.getY()+a.getZ()+b.getX()+b.getY()+b.getZ()+c.getX()+c.getY()+c.getZ();
+                            
+                    //float volume_t = sign * Math.abs((1.0f/6.0f)*((a.cross(b)).dot(c)));
                     volume = volume + volume_t;
 
-                    /*System.out.println("#" + i + ": Vec1: " + t.get1() + "Vec2: " + t.get2() + "Vec3: " + t.get3() + "Norm: " + t.getNormal());
-                    System.out.println("sign: " + sign);
-                    System.out.println("volume_t: " + volume_t);*/
+                    //System.out.println("#" + i + ": Vec1: " + t.get1() + "Vec2: " + t.get2() + "Vec3: " + t.get3() + "Norm: " + t.getNormal());
+                    //System.out.println("sign: " + sign);
+                    //System.out.println("volume_t: " + volume_t);
                 }
             }
         }
+        long new_time = System.currentTimeMillis();
+        System.out.println("timenor: " + (new_time-old_time));
         System.out.println("Volume: " + FastMath.abs(volume));
-        System.out.println("tcount: " + tcount);
-                                 //BoundingBox bb = (BoundingBox)AUVPhysicsNode.getWorldBound();
-                                 //System.out.println("vol bv " + auv_spatial.getWorldBound());
     } 
     
     /*
@@ -411,5 +491,54 @@ public class StartState extends AbstractAppState{
         boundingBox.updateModelBound();
         boundingBox.updateGeometricState();
         nd_selection.attachChild(boundingBox);*/
+    }
+    
+    private float[] getVerts(Mesh mesh){
+        float[] ret = new float[mesh.getTriangleCount()*9];
+        for (int i = 0; i < mesh.getTriangleCount(); i++) {
+                    Triangle t = new Triangle();
+                    mesh.getTriangle(i, t);
+                    ret[(i*9)] = t.get1().x;
+                    ret[(i*9)+1] = t.get1().y;
+                    ret[(i*9)+2] = t.get1().z;
+                    ret[(i*9)+3] = t.get2().x;
+                    ret[(i*9)+4] = t.get2().y;
+                    ret[(i*9)+5] = t.get2().z;
+                    ret[(i*9)+6] = t.get3().x;
+                    ret[(i*9)+7] = t.get3().y;
+                    ret[(i*9)+8] = t.get3().z;
+        }
+        return ret;
+    }
+    
+    private float[] getVertices(Spatial s) {
+ 
+        if (s instanceof Geometry) {
+            Geometry geometry = (Geometry) s;
+            return getVerts(geometry.getMesh());
+        } else if (s instanceof Node) {
+            Node n = (Node) s;
+ 
+            ArrayList<float[]> array = new ArrayList<float[]>();
+ 
+            for (Spatial ss : n.getChildren()) {
+                array.add(getVertices(ss));
+            }
+ 
+            int count = 0;
+            for (float[] vec : array) {
+                count += vec.length;
+            }
+ 
+            float[] returnn = new float[count];
+            count = -1;
+            for (float[] vec : array) {
+                for (int i = 0; i < vec.length; i++) {
+                    returnn[++count] = vec[i];
+                }
+            }
+            return returnn;
+        }
+        return new float[0];
     }
 }

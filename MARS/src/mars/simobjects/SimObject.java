@@ -228,7 +228,7 @@ public class SimObject{
 
     private void loadModel(){
         assetManager.registerLocator("./Assets/Models/", FileLocator.class);
-
+        spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         spatial = assetManager.loadModel(getFilepath());
 
         spatial.setLocalScale(getScale());
@@ -299,7 +299,6 @@ public class SimObject{
         selectionNode.attachChild(spatial);
         spatial.updateGeometricState();
         selectionNode.updateGeometricState();
-        spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     }
     
     /**

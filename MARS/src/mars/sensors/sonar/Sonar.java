@@ -1105,8 +1105,11 @@ public class Sonar extends Sensor{
         header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
-        fl.echoData = getRawSonarData();
-        fl.headPosition = getLastHeadPosition();
+        byte[] sonData = getRawSonarData();
+        float lastHeadPosition = getLastHeadPosition();
+        this.simauv.getView().initSonarData(sonData,lastHeadPosition,getScanning_resolution());
+        fl.echoData = sonData;
+        fl.headPosition = lastHeadPosition;
         fl.startGain = (byte)getScanning_gain();
         fl.range = (byte)getSonarMaxRange();
         this.publisher.publish(fl);

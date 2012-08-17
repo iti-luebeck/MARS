@@ -86,6 +86,7 @@ import mars.auv.example.SMARTE;
 import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
+import mars.sensors.PingDetector;
 import mars.sensors.sonar.Sonar;
 import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
@@ -221,9 +222,26 @@ public class BasicAUV implements AUV,SceneProcessor{
     /**
      * 
      */
-    public BasicAUV(){
+    /*public BasicAUV(){
         //set the logging
        try {
+            // Create an appending file handler
+            boolean append = true;
+            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+            // Add to the desired logger
+            Logger logger = Logger.getLogger(this.getClass().getName());
+            logger.addHandler(handler);
+        } catch (IOException e) { }
+        this.physicalvalues = new PhysicalValues();
+        selectionNode.attachChild(auv_node);
+    }*/
+    
+    public BasicAUV(){
+        
+    }
+    
+    public void initAfterJAXB(){
+        try {
             // Create an appending file handler
             boolean append = true;
             FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -265,7 +283,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      */
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
-        this.physicalvalues.setAuv_name(auv_param.getAuv_name());
+        this.physicalvalues.setAuv(this);
         this.auv_param.setAuv(this);
         buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
@@ -547,6 +565,9 @@ public class BasicAUV implements AUV,SceneProcessor{
                     ((TerrainSender)element).setIniter(initer);
                     ((TerrainSender)element).setMarsSettings(mars_settings);
                 }
+                if(element instanceof PingDetector){
+                    ((PingDetector)element).setSimObjectManager(simstate.getSimob_manager());
+                }
                 element.init(auv_node);
                 if(element instanceof Keys){
                     Keys elementKeys = (Keys)element;
@@ -703,6 +724,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         }*/
         //physics_control.applyCentralForce(drag_force_vec);
         physics_control.applyImpulse(drag_force_vec,Vector3f.ZERO);
+        physicalvalues.updateDragForce(drag_force);
     }
 
     private void updateAngularDragForces(){
@@ -719,6 +741,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         System.out.println("angular_drag_torque_scalar: " + angular_drag_torque_vec.length());
         System.out.println("==========================");*/
         physics_control.applyTorqueImpulse(angular_drag_torque_vec);
+        physicalvalues.updateDragTorque(drag_torque);
     }
 
     private void updateStaticBuyocancyForces(){
@@ -825,7 +848,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         //System.out.println("buyo: " + buoyancy_force);
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force/mars_settings.getPhysicsFramerate(),0.0f);
-        addValueToSeries(buoyancy_force,1);
+        physicalvalues.updateVolume(volume);
+        physicalvalues.updateBuoyancyForce(buoyancy_force);
+        //addValueToSeries(buoyancy_force,1);
         //addValueToSeries(actual_vol,1);
         //addValueToSeries(actual_vol_air,2);
         //System.out.println("vol: " + actual_vol + " " + actual_vol_air + " " + buoyancy_force_vec);
@@ -936,6 +961,8 @@ public class BasicAUV implements AUV,SceneProcessor{
 
             //add the water_current
             updateWaterCurrentForce();
+            
+            updatePhysicalValues();
         }else{//if not inform
             Logger.getLogger(BasicAUV.class.getName()).log(Level.WARNING, "AUV PhysicsNode is not added to the rootNode!", "");
         }
@@ -1697,31 +1724,38 @@ public class BasicAUV implements AUV,SceneProcessor{
             }
         }
     }
+    
+    public void updatePhysicalValues(){
+        physicalvalues.updateAngularVelocity(physics_control.getAngularVelocity().length());
+        physicalvalues.updateVelocity(physics_control.getLinearVelocity().length());
+        physicalvalues.updateDepth(physics_control.getPhysicsLocation().getY());
+    }
 
     /**
      *
      * @param tpf
      */
+    @Deprecated
     public void updateValues(float tpf){
-        physicalvalues.incTime(tpf);
+        /*physicalvalues.incTime(tpf);
         if(physicalvalues.getTime() >= auv_param.getPhysicalvalues_updaterate() && auv_param.getPhysicalvalues_updaterate() > 0.0f){
             physicalvalues.clearTime();
             physicalvalues.setVelocity(String.valueOf(physics_control.getLinearVelocity().length()));
-            view.updateValues(getName(),"velocity",physicalvalues.getVelocity());
+            view.updatePhysicalValues(getName(),"velocity",physicalvalues.getVelocity());
             physicalvalues.setPosition(String.valueOf(MassCenterGeom.getWorldTranslation()));
-            view.updateValues(getName(),"position",physicalvalues.getPosition());
+            view.updatePhysicalValues(getName(),"position",physicalvalues.getPosition());
             physicalvalues.setAngularVelocity(String.valueOf(physics_control.getAngularVelocity().length()));
-            view.updateValues(getName(),"angular_velocity",physicalvalues.getAngularVelocity());
+            view.updatePhysicalValues(getName(),"angular_velocity",physicalvalues.getAngularVelocity());
             physicalvalues.setVolume(String.valueOf(this.actual_vol));
-            view.updateValues(getName(),"volume",physicalvalues.getVolume());
+            view.updatePhysicalValues(getName(),"volume",physicalvalues.getVolume());
             Matrix3f matrix = Matrix3f.ZERO;
             physics_control.getPhysicsRotationMatrix(matrix);
             //physics_control.getPhysicsRotation(matrix);
             Quaternion q_rot = new Quaternion();
             q_rot.fromRotationMatrix(matrix);
             physicalvalues.setRotation(String.valueOf(new Vector3f(q_rot.getX(),q_rot.getY(),q_rot.getZ())));
-            view.updateValues(getName(),"rotation",physicalvalues.getRotation());
-        }
+            view.updatePhysicalValues(getName(),"rotation",physicalvalues.getRotation());
+        }*/
     }
 
     /*

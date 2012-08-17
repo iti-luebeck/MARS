@@ -170,7 +170,9 @@ public class ImagenexSonar_852_Echo extends Sonar{
         header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
-        fl.echoData = getRawSonarData();
+        byte[] sonData = getRawSonarData();
+        this.simauv.getView().initSonarData(sonData,0f,0f);
+        fl.echoData = sonData;
         fl.startGain = (byte)getScanning_gain();
         fl.range = (byte)getSonarMaxRange();
         this.publisher.publish(fl);

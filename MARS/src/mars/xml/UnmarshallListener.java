@@ -9,10 +9,11 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
+import mars.auv.BasicAUV;
 import mars.simobjects.SimObject;
 
 /**
- * used for getting notified when unmarshalling is done. We have to init some classes like AUVParams.
+ * used for getting notified when unmarshalling is done. We have to initAfterJAXB some classes like AUVParams.
  * @author Thomas Tosik
  */
 public class UnmarshallListener extends Listener{
@@ -25,7 +26,7 @@ public class UnmarshallListener extends Listener{
         super.afterUnmarshal(target, parent);
         if(target instanceof AUV_Parameters){
             AUV_Parameters auvParams = (AUV_Parameters)target;
-            auvParams.init();
+            auvParams.initAfterJAXB();
         }else if(target instanceof SimObject){
             SimObject simob = (SimObject)target;
             simob.initAfterJAXB();
@@ -38,6 +39,9 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof PhysicalEnvironment){
             PhysicalEnvironment penv = (PhysicalEnvironment)target;
             penv.initAfterJAXB();
+        }else if(target instanceof BasicAUV){
+            BasicAUV auv = (BasicAUV)target;
+            auv.initAfterJAXB();
         }
     }
 }

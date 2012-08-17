@@ -345,12 +345,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 /*XML_JAXB_ConfigReaderWriter.saveMARS_Settings(mars_settings);
                 
                 MARS_Settings stt = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-                stt.init();
+                stt.initAfterJAXB();
                 
                 XML_JAXB_ConfigReaderWriter.savePhysicalEnvironment(physical_environment);
                 
                 PhysicalEnvironment pee = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
-                pee.init();
+                pee.initAfterJAXB();
                 pee.getFluid_temp();*/
             
                 //XML_JAXB_ConfigReaderWriter.saveAUV(auv_monsun2);
@@ -389,6 +389,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setXMLL(xmll);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
+            //view.initCharts();
             view.initAUVTree(auv_manager);
             view.initSimObjectTree(simob_manager);
             view.initEnvironmentTree(physical_environment);
@@ -529,9 +530,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         try {
              keyconfig = XML_JAXB_ConfigReaderWriter.loadKeyConfig();    
              mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-             //mars_settings.init();
+             //mars_settings.initAfterJAXB();
              physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
-             //physical_environment.init();
+             //physical_environment.initAfterJAXB();
              mars_settings.setPhysical_environment(physical_environment);
              
               /*  ImagenexSonar_852_Scanning serv = new ImagenexSonar_852_Scanning();
@@ -599,7 +600,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
-                //bas_auv.getAuv_param().init();
+                //bas_auv.getAuv_param().initAfterJAXB();
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
              }
@@ -1123,17 +1124,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //update the view in the next frame
         Future fut = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
+                    view.initCharts();
                     view.updateTrees();
                     return null;
                 }
                 });
-        /*Iterator iter = auvs.iterator();
-        while(iter.hasNext() ) {
-            AUV aaa = (AUV)iter.next();
-            if(            aaa.getAuv_param().getAuv_name().equals("hanse2") ){
-                auv_hanse = (Hanse)aaa;
-            }
-        }*/
     }
 
     /*

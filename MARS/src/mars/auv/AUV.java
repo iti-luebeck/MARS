@@ -64,6 +64,7 @@ public interface AUV{
      *
      * @param tpf
      */
+    @Deprecated
     public void updateValues(float tpf);
     /*
      * 

@@ -6,7 +6,11 @@
 package mars.auv;
 
 import com.jme3.math.Vector3f;
+import info.monitorenter.gui.chart.ITrace2D;
+import info.monitorenter.gui.chart.traces.Trace2DLtd;
+import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -18,178 +22,115 @@ import java.util.logging.Logger;
  */
 public class PhysicalValues {
 
-    private HashMap<String,String> variables;
-    private float time = 0f;
-    private String auv_name = "";
+    private AUV auv = null;
+    private static int traceAmount = 200;
+    
+    // Note that dynamic charts need limited amount of values!!! 
+    private ITrace2D traceVolume = new Trace2DLtd(traceAmount); 
+    private ITrace2D traceVelocity = new Trace2DLtd(traceAmount); 
+    private ITrace2D traceAngularVelocity = new Trace2DLtd(traceAmount);   
+    private ITrace2D traceDepth = new Trace2DLtd(traceAmount);    
+    private ITrace2D traceBuoyancyForce = new Trace2DLtd(traceAmount); 
+    private ITrace2D traceDragForce = new Trace2DLtd(traceAmount); 
+    private ITrace2D traceDragTorque = new Trace2DLtd(traceAmount);
+    
+    //container for all the traces
+    private ArrayList<ITrace2D> traces = new ArrayList<ITrace2D>();
+    
+    //reference time start point for graphs
+    private long m_starttime = System.currentTimeMillis();
 
     /**
      *
      */
     public PhysicalValues(){
-        variables = new HashMap<String,String> ();
-        setVelocity("0.0");
-        setPosition(Vector3f.ZERO.toString());
-        setRotation(Vector3f.ZERO.toString());
-        setAngularVelocity("0.0");
-        setVolume("0.0");
-        setForce(Vector3f.ZERO.toString());
+        traceVolume.setColor(Color.red);
+        traceVelocity.setColor(Color.GREEN);
+        traceAngularVelocity.setColor(Color.ORANGE);
+        traceDepth.setColor(Color.blue);
+        traceVolume.setName("Volume");
+        traceVelocity.setName("Velocity");
+        traceAngularVelocity.setName("AngularVelocity");
+        traceDepth.setName("Depth");
+        traces.add(traceVolume);
+        traces.add(traceVelocity);
+        traces.add(traceAngularVelocity);
+        traces.add(traceDepth);
+    }
+    
+    public void updateVolume(float volume){
+        traceVolume.addPoint(((double) System.currentTimeMillis() - this.m_starttime), volume);
+    }
+    
+    public void updateVelocity(float velocity){
+        traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
+    }
+    
+    public void updateAngularVelocity(float angularVelocity){
+        traceAngularVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), angularVelocity);
+    }
+    
+    public void updateDepth(float depth){
+        traceDepth.addPoint(((double) System.currentTimeMillis() - this.m_starttime), depth);
+    }
+    
+    public void updateBuoyancyForce(float buoyancyForce){
+        //traceBuoyancyForce.addPoint(((double) System.currentTimeMillis() - this.m_starttime), buoyancyForce);
+    }
+    
+    public void updateDragForce(float dragForce){
+        //traceDragForce.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragForce);
+    }
+    
+    public void updateDragTorque(float dragTorque){
+        //traceDragTorque.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragTorque);
     }
 
-    /**
-     *
-     * @param tpf
-     */
-    public void incTime(float tpf){
-        time = time + tpf;
+    public ITrace2D getTraceVolume() {
+        return traceVolume;
     }
 
-    /**
-     *
-     */
-    public void clearTime() {
-        time = 0f;
+    public ITrace2D getTraceAngularVelocity() {
+        return traceAngularVelocity;
+    }
+
+    public ITrace2D getTraceVelocity() {
+        return traceVelocity;
+    }
+
+    public ITrace2D getTraceDepth() {
+        return traceDepth;
+    }
+
+    public ArrayList<ITrace2D> getTraces() {
+        return traces;
+    }
+
+    public ITrace2D getTraceBuoyancyForce() {
+        return traceBuoyancyForce;
+    }
+
+    public ITrace2D getTraceDragForce() {
+        return traceDragForce;
+    }
+
+    public ITrace2D getTraceDragTorque() {
+        return traceDragTorque;
     }
 
     /**
      *
      * @return
      */
-    public float getTime() {
-        return time;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public HashMap<String,String> getAllVariables(){
-        return variables;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getAuv_name() {
-        return auv_name;
+    public AUV getAuv() {
+        return auv;
     }
 
     /**
      *
      * @param auv_name
      */
-    public void setAuv_name(String auv_name) {
-        this.auv_name = auv_name;
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(auv_name + " " + this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) { }
+    public void setAuv(AUV auv) {
+        this.auv = auv;
     }
-
-    /**
-     *
-     * @return
-     */
-    public String getVelocity() {
-        return (String)variables.get("velocity");
-    }
-
-    /**
-     *
-     * @param velocity
-     */
-    public void setVelocity(String velocity) {
-        variables.put("velocity", velocity);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"velocity", velocity);
-    }
-
-        /**
-     *
-     * @return
-     */
-    public String getAngularVelocity() {
-        return (String)variables.get("angular_velocity");
-    }
-
-    /**
-     *
-     * @param angular_velocity
-     */
-    public void setAngularVelocity(String angular_velocity) {
-        variables.put("angular_velocity", angular_velocity);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"angular_velocity", angular_velocity);
-    }
-
-        /**
-     *
-     * @return
-     */
-    public String getPosition() {
-        return (String)variables.get("position");
-    }
-
-    /**
-     *
-     * @param position
-     */
-    public void setPosition(String position) {
-        variables.put("position", position);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"position", position);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getVolume() {
-        return (String)variables.get("volume");
-    }
-
-    /**
-     *
-     * @param volume 
-     */
-    public void setVolume(String volume) {
-        variables.put("volume", volume);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"volume", volume);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getForce() {
-        return (String)variables.get("force");
-    }
-
-    /**
-     *
-     * @param force 
-     */
-    public void setForce(String force) {
-        variables.put("force", force);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"force", force);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getRotation() {
-        return (String)variables.get("rotation");
-    }
-
-    /**
-     *
-     * @param rotation
-     */
-    public void setRotation(String rotation) {
-        variables.put("rotation", rotation);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO,"rotation", rotation);
-    }
-
 }

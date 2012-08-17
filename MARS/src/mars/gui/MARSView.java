@@ -11,6 +11,7 @@ import com.jme3.system.awt.AwtPanel;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.controls.LayoutFactory;
+import info.monitorenter.gui.chart.events.Chart2DActionSaveImageSingleton;
 import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import java.awt.BorderLayout;
 import mars.gui.MARSAboutBox;
@@ -96,7 +97,10 @@ import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
 import mars.auv.example.Hanse;
 import mars.auv.PhysicalValues;
+import mars.gui.sonarview.PlanarView;
+import mars.gui.sonarview.PolarView;
 import mars.sensors.Sensor;
+import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
@@ -109,19 +113,28 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
  * @author Thomas Tosik
  */
 public class MARSView extends FrameView {
-
+    @Deprecated
     private final static String s_auv = "Auvs";
+    @Deprecated
     private final static String s_simob = "Simobs";
+    @Deprecated
     private final static String s_pe = "Physical Environment";
+    @Deprecated
     private final static String s_set = "Settings";
+    @Deprecated
     private final static String s_sensors = "Sensors";
+    @Deprecated
     private final static String s_actuators = "Actuators";
+    @Deprecated
     private DefaultMutableTreeNode top;
+    @Deprecated
     private DefaultMutableTreeNode auvs_treenode = new DefaultMutableTreeNode(s_auv);
     private MARS_Settings mars_settings;
     private KeyConfig keyConfig;
     private PhysicalEnvironment penv;
+    @Deprecated
     private ArrayList auvs = new ArrayList();
+    @Deprecated
     private ArrayList simobs = new ArrayList();
     private AUV_Manager auv_manager;
     private SimObjectManager simob_manager;
@@ -230,6 +243,39 @@ public class MARSView extends FrameView {
      */
     public void setCanvasPanel(int Width, int Height){
         this.JMEPanel1.setMinimumSize(new Dimension(Width,Height));
+    }
+
+    public void initSonarData(final byte[] data, final float lastHeadPosition, final float resolution){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    if(imgP2 != null){
+                        imgP2.updateData(data, lastHeadPosition, resolution);
+                        imgP2.repaint();
+                    }
+                }
+            }
+        );
+    }
+    
+    public void initCharts(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    if(auv_manager != null){
+                        AUV auv = auv_manager.getAUV("hanse");
+                        /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
+                        auv.getPhysicalvalues().getTraceVolume().setVisible(false);*/
+                        ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
+                        Iterator iter = traces1.iterator();
+                        while(iter.hasNext()) {
+                            ITrace2D trace = (ITrace2D)iter.next();
+                            charts.addTrace(trace);
+                        }
+                    }
+                }
+            }
+        );
     }
     
     public void initAUVTree(final AUV_Manager auvManager){
@@ -404,6 +450,7 @@ public class MARSView extends FrameView {
      * @param value
      * @param series
      */
+    @Deprecated
     public void addValueToSeries(float value, int series){
         /*if(series == 0){
             depth_series.add(depth_series.getItemCount()+1, value);
@@ -669,18 +716,7 @@ public class MARSView extends FrameView {
      * @param value
      */
     public void updateValues(String auv_name, String node_search_string, String value){
-        //find auv
-        DefaultMutableTreeNode auv_node = searchNode(top,auv_name);
 
-        //find physicalvaluenode
-        DefaultMutableTreeNode values_node = searchNode(top,"Values");
-
-        //find values
-        DefaultMutableTreeNode nd = searchNode(values_node,node_search_string);
-
-        //actualize value
-        TreePath tp = new TreePath(((DefaultMutableTreeNode)nd.getChildAt(0)).getPath());
-        ((DefaultTreeModel)auv_tree.getModel()).valueForPathChanged(tp, value);
     }
 
     private DefaultMutableTreeNode searchNode(DefaultMutableTreeNode rootSearchNode, String node_search_string){
@@ -725,7 +761,7 @@ public class MARSView extends FrameView {
             HashMap<String,Actuator> actuators = auv.getActuators();
             createParamNodes(auv_treenode,auv);
             PhysicalValues physical_values = auv.getPhysicalvalues();
-            createPhysicalValuesNodes(auv_treenode,physical_values);
+            //createPhysicalValuesNodes(auv_treenode,physical_values);
         }
         top.add(treenode);
     }
@@ -738,24 +774,9 @@ public class MARSView extends FrameView {
         HashMap<String,Actuator> actuators = auv.getActuators();
         createParamNodes(auv_treenode,auv);
         PhysicalValues physical_values = auv.getPhysicalvalues();
-        createPhysicalValuesNodes(auv_treenode,physical_values);
+        //createPhysicalValuesNodes(auv_treenode,physical_values);
 
         top.add(treenode);
-    }
-
-    private void createPhysicalValuesNodes(DefaultMutableTreeNode treenode, PhysicalValues physical_values){
-        DefaultMutableTreeNode vars_treenode = null;
-        vars_treenode = new DefaultMutableTreeNode("Values");
-
-        HashMap<String,String> vars = physical_values.getAllVariables();
-
-        for ( String elem : vars.keySet() ){
-            DefaultMutableTreeNode  vars_treenode1 = new DefaultMutableTreeNode(elem);
-            DefaultMutableTreeNode vars_treenode2 = new DefaultMutableTreeNode(vars.get(elem));
-            vars_treenode1.add(vars_treenode2);
-            vars_treenode.add(vars_treenode1);
-        }
-        treenode.add(vars_treenode);
     }
 
     @Deprecated
@@ -859,14 +880,14 @@ public class MARSView extends FrameView {
          
          
          // Create a chart:  
-        Chart2D charts = new Chart2D();
+        charts = new Chart2D();
         // Create an ITrace: 
-        trace.setColor(Color.RED);
-        trace2.setColor(Color.BLUE);
+        //trace.setColor(Color.RED);
+        //trace2.setColor(Color.BLUE);
 
         // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-        charts.addTrace(trace);
-        charts.addTrace(trace2);
+        //charts.addTrace(trace);
+        //charts.addTrace(trace2);
                 
         LayoutFactory factory = LayoutFactory.getInstance();
         info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
@@ -1046,12 +1067,6 @@ public class MARSView extends FrameView {
         simob_popup_menu = new javax.swing.JPopupMenu();
         chase_simob = new javax.swing.JMenuItem();
         delete_simob = new javax.swing.JMenuItem();
-        sens_act_popup_menu = new javax.swing.JPopupMenu();
-        delete_sens_act = new javax.swing.JMenuItem();
-        addSensPopUpMenu = new javax.swing.JPopupMenu();
-        addSens = new javax.swing.JMenuItem();
-        addActPopUpMenu = new javax.swing.JPopupMenu();
-        addAct = new javax.swing.JMenuItem();
         keys_dialog = new javax.swing.JDialog();
         jLabel18 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -1202,16 +1217,19 @@ public class MARSView extends FrameView {
         booleanPopUpDisable3 = new javax.swing.JMenuItem();
         ChartFrame = new javax.swing.JFrame();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        chartButton2 = new javax.swing.JButton();
+        chartButton3 = new javax.swing.JButton();
+        chartButton4 = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JToolBar.Separator();
-        jButton5 = new javax.swing.JButton();
+        chartButton5 = new javax.swing.JButton();
         jSeparator8 = new javax.swing.JToolBar.Separator();
         jSplitPane3 = new javax.swing.JSplitPane();
         insideChartPanel = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jme3_auv_sens = new javax.swing.JPopupMenu();
+        viewSonar = new javax.swing.JMenuItem();
+        addDataToChart = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1790,39 +1808,6 @@ public class MARSView extends FrameView {
             }
         });
         simob_popup_menu.add(delete_simob);
-
-        sens_act_popup_menu.setName("sens_act_popup_menu"); // NOI18N
-
-        delete_sens_act.setText(resourceMap.getString("delete_sens_act.text")); // NOI18N
-        delete_sens_act.setName("delete_sens_act"); // NOI18N
-        delete_sens_act.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                delete_sens_actActionPerformed(evt);
-            }
-        });
-        sens_act_popup_menu.add(delete_sens_act);
-
-        addSensPopUpMenu.setName("addSensPopUpMenu"); // NOI18N
-
-        addSens.setText(resourceMap.getString("addSens.text")); // NOI18N
-        addSens.setName("addSens"); // NOI18N
-        addSens.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addSensActionPerformed(evt);
-            }
-        });
-        addSensPopUpMenu.add(addSens);
-
-        addActPopUpMenu.setName("addActPopUpMenu"); // NOI18N
-
-        addAct.setText(resourceMap.getString("addAct.text")); // NOI18N
-        addAct.setName("addAct"); // NOI18N
-        addAct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActActionPerformed(evt);
-            }
-        });
-        addActPopUpMenu.add(addAct);
 
         keys_dialog.setTitle(resourceMap.getString("keys_dialog.title")); // NOI18N
         keys_dialog.setMinimumSize(new java.awt.Dimension(953, 539));
@@ -3179,44 +3164,64 @@ public class MARSView extends FrameView {
         jToolBar1.setRollover(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
-        jButton2.setIcon(resourceMap.getIcon("jButton2.icon")); // NOI18N
-        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
-        jButton2.setToolTipText(resourceMap.getString("jButton2.toolTipText")); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setName("jButton2"); // NOI18N
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        chartButton2.setIcon(resourceMap.getIcon("chartButton2.icon")); // NOI18N
+        chartButton2.setText(resourceMap.getString("chartButton2.text")); // NOI18N
+        chartButton2.setToolTipText(resourceMap.getString("chartButton2.toolTipText")); // NOI18N
+        chartButton2.setFocusable(false);
+        chartButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chartButton2.setName("chartButton2"); // NOI18N
+        chartButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chartButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chartButton2ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(chartButton2);
 
-        jButton3.setIcon(resourceMap.getIcon("jButton3.icon")); // NOI18N
-        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
-        jButton3.setToolTipText(resourceMap.getString("jButton3.toolTipText")); // NOI18N
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setName("jButton3"); // NOI18N
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
+        chartButton3.setIcon(resourceMap.getIcon("chartButton3.icon")); // NOI18N
+        chartButton3.setText(resourceMap.getString("chartButton3.text")); // NOI18N
+        chartButton3.setToolTipText(resourceMap.getString("chartButton3.toolTipText")); // NOI18N
+        chartButton3.setFocusable(false);
+        chartButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chartButton3.setName("chartButton3"); // NOI18N
+        chartButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chartButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chartButton3ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(chartButton3);
 
-        jButton4.setIcon(resourceMap.getIcon("jButton4.icon")); // NOI18N
-        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
-        jButton4.setToolTipText(resourceMap.getString("jButton4.toolTipText")); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setName("jButton4"); // NOI18N
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        chartButton4.setIcon(resourceMap.getIcon("chartButton4.icon")); // NOI18N
+        chartButton4.setText(resourceMap.getString("chartButton4.text")); // NOI18N
+        chartButton4.setToolTipText(resourceMap.getString("chartButton4.toolTipText")); // NOI18N
+        chartButton4.setFocusable(false);
+        chartButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chartButton4.setName("chartButton4"); // NOI18N
+        chartButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chartButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chartButton4ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(chartButton4);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
         jToolBar1.add(jSeparator7);
 
-        jButton5.setIcon(resourceMap.getIcon("jButton5.icon")); // NOI18N
-        jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
-        jButton5.setToolTipText(resourceMap.getString("jButton5.toolTipText")); // NOI18N
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setName("jButton5"); // NOI18N
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        chartButton5.setIcon(resourceMap.getIcon("chartButton5.icon")); // NOI18N
+        chartButton5.setText(resourceMap.getString("chartButton5.text")); // NOI18N
+        chartButton5.setToolTipText(resourceMap.getString("chartButton5.toolTipText")); // NOI18N
+        chartButton5.setFocusable(false);
+        chartButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chartButton5.setName("chartButton5"); // NOI18N
+        chartButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chartButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chartButton5ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(chartButton5);
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         jToolBar1.add(jSeparator8);
@@ -3263,6 +3268,21 @@ public class MARSView extends FrameView {
                 .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jme3_auv_sens.setName("jme3_auv_sens"); // NOI18N
+
+        viewSonar.setText(resourceMap.getString("viewSonar.text")); // NOI18N
+        viewSonar.setName("viewSonar"); // NOI18N
+        viewSonar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewSonarActionPerformed(evt);
+            }
+        });
+        jme3_auv_sens.add(viewSonar);
+
+        addDataToChart.setText(resourceMap.getString("addDataToChart.text")); // NOI18N
+        addDataToChart.setName("addDataToChart"); // NOI18N
+        jme3_auv_sens.add(addDataToChart);
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -3604,18 +3624,6 @@ public class MARSView extends FrameView {
         mars.getChaseCam().setSpatial(simob.getSpatial());
         mars.getChaseCam().setEnabled(true);
     }//GEN-LAST:event_chase_simobActionPerformed
-
-    private void delete_sens_actActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_sens_actActionPerformed
-        System.out.println("NO EFFECT YET!!!!!!");
-    }//GEN-LAST:event_delete_sens_actActionPerformed
-
-    private void addSensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSensActionPerformed
-        System.out.println("NO EFFECT YET!!!!!!");
-    }//GEN-LAST:event_addSensActionPerformed
-
-    private void addActActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActActionPerformed
-        System.out.println("NO EFFECT YET!!!!!!");
-    }//GEN-LAST:event_addActActionPerformed
 
     private void reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvActionPerformed
         final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
@@ -4064,12 +4072,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
     private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());         
-            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString());  
+                //System.out.println(selPath.toString());         
+                //System.out.println(selPath.getLastPathComponent().toString()); 
                 auv_tree.setSelectionPath(selPath);  
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
@@ -4098,6 +4105,15 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                 ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
                                 AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
                                 mod.valueForPathChanged(auv_tree.getSelectionPath(), newColorRGBA);
+                            }
+                         }else if (hashwrap.getUserData() instanceof PhysicalExchanger) {   
+                            jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
+                            if(hashwrap.getUserData() instanceof Sonar){
+                                addDataToChart.setVisible(false);
+                                viewSonar.setVisible(true);
+                            }else{
+                                addDataToChart.setVisible(true);
+                                viewSonar.setVisible(false);
                             }
                          }
                     }else if (selPath.getLastPathComponent() instanceof Boolean) {
@@ -4590,6 +4606,38 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
         mars.getChaseCam().setEnabled(false);         mars.getFlyByCamera().setEnabled(true);     }//GEN-LAST:event_CameraActionPerformed
 
+    private void chartButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chartButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chartButton2ActionPerformed
+
+    private void chartButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chartButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chartButton3ActionPerformed
+
+    private void chartButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chartButton4ActionPerformed
+       Iterator iter = traces.iterator();
+        while(iter.hasNext() ) {
+            ITrace2D trace = (ITrace2D)iter.next();
+            trace.removeAllPoints();
+        }
+    }//GEN-LAST:event_chartButton4ActionPerformed
+
+    private void chartButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chartButton5ActionPerformed
+        Chart2DActionSaveImageSingleton.getInstance(charts, "Save image");
+    }//GEN-LAST:event_chartButton5ActionPerformed
+
+    private void viewSonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarActionPerformed
+        JFrame sonarFrame = new JFrame();
+        sonarFrame.setSize(500, 500);
+        sonarFrame.setVisible(true);
+        //imgP = new PlanarView();
+        //sonarFrame.add(imgP);
+        imgP2 = new PolarView();
+        //imgP2.paint();
+        sonarFrame.add(imgP2);
+        sonarFrame.repaint();
+    }//GEN-LAST:event_viewSonarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4610,11 +4658,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenuItem StartMenuItem;
     private javax.swing.JPanel TreePanel;
     private javax.swing.JPopupMenu addAUVPopUpMenu;
-    private javax.swing.JMenuItem addAct;
-    private javax.swing.JPopupMenu addActPopUpMenu;
+    private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JPopupMenu addSIMOBPopUpMenu;
-    private javax.swing.JMenuItem addSens;
-    private javax.swing.JPopupMenu addSensPopUpMenu;
     private javax.swing.JMenuItem add_auv;
     private javax.swing.JMenuItem add_simob;
     private javax.swing.JDialog auv_move_vector_dialog;
@@ -4635,11 +4680,14 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPopupMenu booleanPopUpEnv;
     private javax.swing.JPopupMenu booleanPopUpSettings;
     private javax.swing.JPopupMenu booleanPopUpSimObject;
+    private javax.swing.JButton chartButton2;
+    private javax.swing.JButton chartButton3;
+    private javax.swing.JButton chartButton4;
+    private javax.swing.JButton chartButton5;
     private javax.swing.JMenuItem chase_auv;
     private javax.swing.JMenuItem chase_simob;
     private javax.swing.JColorChooser color_dialog;
     private javax.swing.JMenuItem delete_auv;
-    private javax.swing.JMenuItem delete_sens_act;
     private javax.swing.JMenuItem delete_simob;
     private javax.swing.JCheckBoxMenuItem enable_auv;
     private javax.swing.JButton floatDialog_Confirm;
@@ -4653,15 +4701,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField intDialog_x;
     private javax.swing.JDialog int_dialog;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
     private javax.swing.JButton jButton33;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton700;
     private javax.swing.JButton jButton701;
     private javax.swing.JButton jButtonCharts;
@@ -4755,6 +4799,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
+    private javax.swing.JPopupMenu jme3_auv_sens;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JMenu jme3_debug_auv;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_bounding;
@@ -4809,7 +4854,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JFileChooser save_config_FileChooser;
     private javax.swing.JMenuItem saveconfig;
     private javax.swing.JMenuItem saveconfigto;
-    private javax.swing.JPopupMenu sens_act_popup_menu;
     private javax.swing.JTree settings_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor4;
     private DefaultTreeCellRenderer renderer4;
@@ -4829,6 +4873,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField vectorDialog_y;
     private javax.swing.JTextField vectorDialog_z;
     private javax.swing.JDialog vector_dialog;
+    private javax.swing.JMenuItem viewSonar;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
@@ -4842,7 +4887,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // Note that dynamic charts need limited amount of values!!! 
     private ITrace2D trace = new Trace2DLtd(200); 
     private ITrace2D trace2 = new Trace2DLtd(200); 
+    private ArrayList traces = new ArrayList<ITrace2D>();
     private long m_starttime = System.currentTimeMillis();
+    private Chart2D charts;
+    
+    PlanarView imgP;
+    PolarView imgP2;
     
     private final Timer busyIconTimer;
     private final Icon idleIcon;

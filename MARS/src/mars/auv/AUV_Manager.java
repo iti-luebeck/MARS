@@ -244,6 +244,7 @@ public class AUV_Manager {
      *
      * @param tpf
      */
+    @Deprecated
     private void updateValuesOfAUVs(float tpf){
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);

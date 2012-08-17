@@ -296,12 +296,30 @@ public class Servo extends Actuator implements Manipulating,Keys{
     }
     
     public void setDesiredAnglePosition(int desired_angle_iteration){
+        System.out.println("desired_angle_iteration: " + desired_angle_iteration);
         if(desired_angle_iteration > max_angle_iteration){
             this.desired_angle_iteration = max_angle_iteration;
         }else if(desired_angle_iteration < -max_angle_iteration){
             this.desired_angle_iteration = -max_angle_iteration;
         }else{
             this.desired_angle_iteration = desired_angle_iteration;
+        }
+    }
+    
+    public void setDesiredAnglePosition(double desired_angle){
+        if(desired_angle >= Math.PI/2f){
+            desired_angle = Math.PI/2f;
+        }else if(desired_angle <= -Math.PI/2f){
+            desired_angle = -Math.PI/2f;
+        }
+        float desired_angle_f = (float)desired_angle;
+        int desired_angle_iterations = Math.round( 1024f*((desired_angle_f+((float)Math.PI/2f))/(float)Math.PI) );
+        
+        System.out.println("desired_angle_iterations: " + desired_angle_iterations);
+        if(desired_angle_iterations >= 512){
+            setDesiredAnglePosition(Math.round(desired_angle_iterations-512));
+        }else{
+            setDesiredAnglePosition(Math.round(-(512-desired_angle_iterations)));
         }
     }
     
@@ -368,7 +386,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
             String action = (String)action_mapping.get(elem);
             final String mapping = elem;
             final Servo self = this;
-            if(action.equals("setDesiredAnglePosition")){
+            if(action.equals("setDesiredAnglePosition3")){
                     inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
@@ -384,6 +402,16 @@ public class Servo extends Actuator implements Manipulating,Keys{
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
                                 self.setDesiredAnglePosition(-300);
+                            }
+                        }
+                    };
+                    inputManager.addListener(actionListener, elem);
+            }else if(action.equals("setDesiredAnglePosition")){
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if(name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(1.5d);
                             }
                         }
                     };

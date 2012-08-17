@@ -20,10 +20,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
+import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.Vector3fAdapter;
+import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  *
@@ -41,6 +44,10 @@ public class PingDetector extends Sensor{
     private SimObjectManager simob_manager;
 
     private float detection_range = 50.0f;
+    
+    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
+    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
 
     public PingDetector(){
         super();
@@ -262,7 +269,7 @@ public class PingDetector extends Sensor{
             rootNode.attachChild(mark4);*/
 
             float yaw = getYawRadiant(pinger_vector);
-            //System.out.println("Yaw!!!! " + yaw);
+            System.out.println("Yaw!!!! " + yaw);
             return yaw;
         }
         return 0f;
@@ -296,5 +303,33 @@ public class PingDetector extends Sensor{
      */
     public void reset(){
 
+    }
+
+    public void setSimObjectManager(SimObjectManager simob_manager) {
+        this.simob_manager = simob_manager;
+    }
+
+    /**
+     * 
+     * @param ros_node
+     * @param auv_name
+     */
+    @Override
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void publish() {
+        //header.seq = 0;
+        header.frame_id = this.getRos_frame_id();
+        header.stamp = Time.fromMillis(System.currentTimeMillis());
+        //fl.header = header;
+        fl.data = (float)getPingerAngleRadiant("pingpong");
+        this.publisher.publish(fl);
     }
 }

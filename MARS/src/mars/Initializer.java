@@ -263,7 +263,7 @@ public class Initializer {
         }
         setupShadow();
         setupServer();
-        setupGlow();
+        //setupGlow();
         //setupFishEye();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
@@ -839,7 +839,7 @@ public class Initializer {
         forester.initialize(rootNode, mars.getCamera(), terrain, null,mars);
         
         // Displace the vegetation.
-        forester.getForesterNode().setLocalTranslation(new Vector3f(0f, -4f, 0f));
+        forester.getForesterNode().setLocalTranslation(new Vector3f(0f, -2f, 0f));//0,-4,0
         forester.getForesterNode().setCullHint(CullHint.Never);
         //forester.getForesterNode().setLocalTranslation(new Vector3f(0f, -2f, 0f));
         
@@ -849,7 +849,7 @@ public class Initializer {
         // in total; each 256x256 units in size. Far viewing range is 300 world
         // units, and fading range is 20. (heightmap.getSize()*2)+2
         // BUGGGY LIKE HELL!!!!!!!!!!!!!!
-        grassLoader = forester.createGrassLoader(80, 8, mars_settings.getGrassFarViewingDistance(), mars_settings.getGrassFadingRange());
+        grassLoader = forester.createGrassLoader(80, 8, mars_settings.getGrassFarViewingDistance(), mars_settings.getGrassFadingRange());//res:80
 
         // Step 3 - set up the mapgrid. This is where you link densitymaps with
         // terrain tiles if you use a custom grid (not terrain grid).
@@ -1235,13 +1235,13 @@ public class Initializer {
     }
 
     private void setupShadow(){
-        PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
-        pssmRenderer.setDirection(sun.getDirection()); // light direction
+        //PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
+        //pssmRenderer.setDirection(sun.getDirection()); // light direction
         /*pssmRenderer.setLambda(0.55f);
         pssmRenderer.setShadowIntensity(0.6f);
         pssmRenderer.setCompareMode(CompareMode.Software);
         pssmRenderer.setFilterMode(FilterMode.PCF4);*/
-        viewPort.addProcessor(pssmRenderer);
+        //viewPort.addProcessor(pssmRenderer);
     }
     /**
      * 

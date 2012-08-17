@@ -45,11 +45,20 @@ public class Dynamixel_AX12PLUS extends Servo{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final Servo self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "smart_e_msgs/servo",
+        /*ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "smart_e_msgs/servo",
           new MessageListener<org.ros.message.smart_e_msgs.servo>() {
             @Override
             public void onNewMessage(org.ros.message.smart_e_msgs.servo message) {
               self.setDesiredAnglePosition((int)message.data);
+            }
+          });*/
+        //ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Float64",
+        ros_node.newSubscriber(getPhysicalExchangerName(), "std_msgs/Float64",        
+          new MessageListener<org.ros.message.std_msgs.Float64>() {
+            @Override
+            public void onNewMessage(org.ros.message.std_msgs.Float64 message) {
+                System.out.println(getPhysicalExchangerName() + " heard: " + (double)message.data);
+              self.setDesiredAnglePosition((double)message.data);
             }
           });
     }
