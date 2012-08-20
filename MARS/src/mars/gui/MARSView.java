@@ -100,6 +100,7 @@ import mars.auv.PhysicalValues;
 import mars.gui.sonarview.PlanarView;
 import mars.gui.sonarview.PolarView;
 import mars.sensors.Sensor;
+import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -245,13 +246,20 @@ public class MARSView extends FrameView {
         this.JMEPanel1.setMinimumSize(new Dimension(Width,Height));
     }
 
-    public void initSonarData(final byte[] data, final float lastHeadPosition, final float resolution){
+    public void initSonarData(final byte[] data, final float lastHeadPosition, final Sonar son){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    if(imgP2 != null){
-                        imgP2.updateData(data, lastHeadPosition, resolution);
-                        imgP2.repaint();
+                    if(son.isScanning()){
+                        if(imgP2 != null){
+                            imgP2.updateData(data, lastHeadPosition, son.getScanning_resolution());
+                            imgP2.repaint();
+                        }
+                    }else{
+                        if(imgP != null){
+                            imgP.updateData(data);
+                            imgP.repaint();
+                        }
                     }
                 }
             }
@@ -1228,7 +1236,8 @@ public class MARSView extends FrameView {
         jScrollPane6 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jme3_auv_sens = new javax.swing.JPopupMenu();
-        viewSonar = new javax.swing.JMenuItem();
+        viewSonarPolar = new javax.swing.JMenuItem();
+        viewSonarPlanar = new javax.swing.JMenuItem();
         addDataToChart = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -3271,14 +3280,23 @@ public class MARSView extends FrameView {
 
         jme3_auv_sens.setName("jme3_auv_sens"); // NOI18N
 
-        viewSonar.setText(resourceMap.getString("viewSonar.text")); // NOI18N
-        viewSonar.setName("viewSonar"); // NOI18N
-        viewSonar.addActionListener(new java.awt.event.ActionListener() {
+        viewSonarPolar.setText(resourceMap.getString("viewSonarPolar.text")); // NOI18N
+        viewSonarPolar.setName("viewSonarPolar"); // NOI18N
+        viewSonarPolar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewSonarActionPerformed(evt);
+                viewSonarPolarActionPerformed(evt);
             }
         });
-        jme3_auv_sens.add(viewSonar);
+        jme3_auv_sens.add(viewSonarPolar);
+
+        viewSonarPlanar.setText(resourceMap.getString("viewSonarPlanar.text")); // NOI18N
+        viewSonarPlanar.setName("viewSonarPlanar"); // NOI18N
+        viewSonarPlanar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewSonarPlanarActionPerformed(evt);
+            }
+        });
+        jme3_auv_sens.add(viewSonarPlanar);
 
         addDataToChart.setText(resourceMap.getString("addDataToChart.text")); // NOI18N
         addDataToChart.setName("addDataToChart"); // NOI18N
@@ -4110,10 +4128,18 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
                             if(hashwrap.getUserData() instanceof Sonar){
                                 addDataToChart.setVisible(false);
-                                viewSonar.setVisible(true);
+                                Sonar son = (Sonar)hashwrap.getUserData();
+                                if(son.isScanning()){
+                                    viewSonarPolar.setVisible(true);
+                                    viewSonarPlanar.setVisible(false);
+                                }else{
+                                    viewSonarPolar.setVisible(false);
+                                    viewSonarPlanar.setVisible(true);
+                                }
                             }else{
                                 addDataToChart.setVisible(true);
-                                viewSonar.setVisible(false);
+                                viewSonarPolar.setVisible(false);
+                                viewSonarPlanar.setVisible(false);
                             }
                          }
                     }else if (selPath.getLastPathComponent() instanceof Boolean) {
@@ -4626,9 +4652,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         Chart2DActionSaveImageSingleton.getInstance(charts, "Save image");
     }//GEN-LAST:event_chartButton5ActionPerformed
 
-    private void viewSonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarActionPerformed
+    private void viewSonarPolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPolarActionPerformed
         JFrame sonarFrame = new JFrame();
-        sonarFrame.setSize(500, 500);
+        sonarFrame.setSize(252, 252);
         sonarFrame.setVisible(true);
         //imgP = new PlanarView();
         //sonarFrame.add(imgP);
@@ -4636,7 +4662,16 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         //imgP2.paint();
         sonarFrame.add(imgP2);
         sonarFrame.repaint();
-    }//GEN-LAST:event_viewSonarActionPerformed
+    }//GEN-LAST:event_viewSonarPolarActionPerformed
+
+    private void viewSonarPlanarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPlanarActionPerformed
+        JFrame sonarFrame = new JFrame();
+        sonarFrame.setSize(400, 252);
+        sonarFrame.setVisible(true);
+        imgP = new PlanarView();
+        sonarFrame.add(imgP);
+        sonarFrame.repaint();
+    }//GEN-LAST:event_viewSonarPlanarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
@@ -4873,11 +4908,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField vectorDialog_y;
     private javax.swing.JTextField vectorDialog_z;
     private javax.swing.JDialog vector_dialog;
-    private javax.swing.JMenuItem viewSonar;
+    private javax.swing.JMenuItem viewSonarPlanar;
+    private javax.swing.JMenuItem viewSonarPolar;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.7.1";
+    private final String VERSION = "0.7.2";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

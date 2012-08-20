@@ -33,7 +33,7 @@ public class PolarView extends JPanel{
      * 
      */
     public PolarView() {               
-        int h = 600,b = 600;
+        int h = 504,b = 504;
         offImgage = new BufferedImage( b, h, BufferedImage.TYPE_INT_RGB );
         imageGraphics = offImgage.createGraphics();
         imageGraphics.setBackground(Color.WHITE);
@@ -48,7 +48,7 @@ public class PolarView extends JPanel{
     public void updateData(byte[] data, float lastHeadPosition, float resolution){
         float umfangCount = 2f * (float)Math.PI / resolution;
         AffineTransform trans = new AffineTransform();
-        trans.setToRotation(lastHeadPosition, 300, 300);
+        trans.setToRotation(lastHeadPosition, 252, 252);
         imageGraphics.setTransform(trans);
         imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         for (int i = 0; i < data.length; i++) {
@@ -61,19 +61,19 @@ public class PolarView extends JPanel{
             }else{
                 imageGraphics.setStroke( new BasicStroke( 1 ) );
             }
-            imageGraphics.drawLine(300, 300-i, 300, 300-i-1);
+            imageGraphics.drawLine(252, 252-i, 252, 252-i-1);
         }
         drawRadarLine(data.length,lastHeadPosition,resolution);
     }
     
     private void drawRadarLine(int dataLength, float lastHeadPosition, float resolution){
         AffineTransform trans = new AffineTransform();
-        trans.setToRotation(lastHeadPosition + resolution, 300, 300);
+        trans.setToRotation(lastHeadPosition + resolution, 252, 252);
         imageGraphics.setTransform(trans);
         imageGraphics.setStroke( new BasicStroke( 1 ) );
         for (int i = 0; i < dataLength; i++) {
             imageGraphics.setColor(new java.awt.Color(0, 0, i));  
-            imageGraphics.drawLine(300, 300-i, 300, 300-i-1);
+            imageGraphics.drawLine(252, 252-i, 252, 252-i-1);
         }
     }
 

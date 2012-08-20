@@ -2907,13 +2907,22 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="viewSonar">
+        <MenuItem class="javax.swing.JMenuItem" name="viewSonarPolar">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="viewSonar.text"/>
-            <Property name="name" type="java.lang.String" value="viewSonar" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="viewSonarPolar.text"/>
+            <Property name="name" type="java.lang.String" value="viewSonarPolar" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewSonarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewSonarPolarActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="viewSonarPlanar">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="viewSonarPlanar.text"/>
+            <Property name="name" type="java.lang.String" value="viewSonarPlanar" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewSonarPlanarActionPerformed"/>
           </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="addDataToChart">

@@ -337,13 +337,13 @@
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value><!-- 141.83.88.157 -->
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterport">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">11311</value>
                         </entry>
 						<entry xsi:type="myHashMapEntryTypeObject" key="localip">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">auto</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">auto</value><!-- auto -->
                         </entry>
                     </value>
                 </entry>

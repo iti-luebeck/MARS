@@ -576,6 +576,14 @@ public class Sonar extends Sensor{
     public void setScanning_gain(int ScanningGain) {
         variables.put("ScanningGain", ScanningGain);
     }
+    
+    public ColorRGBA getDebugColor() {
+        return (ColorRGBA)variables.get("debug_color");
+    }
+
+    public void setDebugColor(ColorRGBA debug_color) {
+        variables.put("debug_color", debug_color);
+    }
 
     /**
      *
@@ -721,7 +729,7 @@ public class Sonar extends Sensor{
         return arr_ret;
     }
 
-    private float getCurrentHeadPosition(){
+    public float getCurrentHeadPosition(){
         return scanning_iterations*getScanning_resolution();
     }
 
@@ -1107,7 +1115,7 @@ public class Sonar extends Sensor{
         fl.header = header;
         byte[] sonData = getRawSonarData();
         float lastHeadPosition = getLastHeadPosition();
-        this.simauv.getView().initSonarData(sonData,lastHeadPosition,getScanning_resolution());
+        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
         fl.echoData = sonData;
         fl.headPosition = lastHeadPosition;
         fl.startGain = (byte)getScanning_gain();

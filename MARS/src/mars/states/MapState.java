@@ -13,6 +13,8 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -22,6 +24,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
+import com.jme3.scene.shape.Dome;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
@@ -33,6 +36,7 @@ import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.UnderwaterModem;
+import mars.sensors.sonar.Sonar;
 
 /**
  * This state is for updating the map in the gui.
@@ -147,6 +151,39 @@ public class MapState extends AbstractAppState{
                     }
                 }
                 
+                //adding sonar cones
+                ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                it = sons.iterator();
+                while (it.hasNext()) {
+                    Sonar son = (Sonar)it.next();
+                    float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
+                    float alpha = son.getBeam_width()/2f;
+                    float beta = FastMath.HALF_PI-alpha;
+                    float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
+                    Dome son_geom_cone = new Dome(new Vector3f(0f,-sonRange,0f), 2, 4, sonRange,true);
+                    Geometry son_geom = new Geometry(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom", son_geom_cone);
+                    Material son_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    son_geom_mat.setColor("Color", son.getDebugColor());
+
+                    //don't forget transparency for depth
+                    son_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                    son_geom.setQueueBucket(Bucket.Transparent);
+
+                    son_geom.setMaterial(son_geom_mat);
+                    son_geom.setLocalTranslation(0f,0f, -0.5f);
+                    son_geom.setLocalScale(width, 1.0f, 0.1f);
+                    Quaternion quat = new Quaternion();
+                    quat.fromAngles(0f, 0f, 0f);
+                    son_geom.setLocalRotation(quat);
+                    son_geom.updateGeometricState();
+                    auvNode.attachChild(son_geom);
+                    if(son.isDebug()){
+                        son_geom.setCullHint(CullHint.Never);
+                    }else{
+                        son_geom.setCullHint(CullHint.Always);
+                    }
+                }
+                
             }
         }
     }
@@ -253,6 +290,30 @@ public class MapState extends AbstractAppState{
                             }
                         }
                         
+                        //update roation of sonar
+                        ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                        it = sons.iterator();
+                        while (it.hasNext()) {
+                            Sonar son = (Sonar)it.next();
+                            Geometry songeom = (Geometry)node.getChild(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom");
+                            if(son.isDebug()){
+                                songeom.setCullHint(CullHint.Never);
+                                Quaternion quat = new Quaternion();
+                                quat.fromAngles(0f, 0f, -son.getCurrentHeadPosition());
+                                songeom.setLocalRotation(quat);
+                                
+                                float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
+                                float alpha = son.getBeam_width()/2f;
+                                float beta = FastMath.HALF_PI-alpha;
+                                float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
+                                songeom.setLocalScale(width, 1.0f, 0.1f);
+                                Dome dom = (Dome)songeom.getMesh();
+                                dom.updateGeometry(new Vector3f(0f,-sonRange,0f), 2, 4, sonRange,true);
+                            }else{
+                                songeom.setCullHint(CullHint.Always);
+                            }
+                        }
+                        
                         //update selection color and position
                         Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                         geom.setCullHint(CullHint.Never);
@@ -290,13 +351,6 @@ public class MapState extends AbstractAppState{
         }
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
-    }
-    
-    private void setupLight(){
-        DirectionalLight sun = new DirectionalLight();
-        sun.setColor(new ColorRGBA(1f, 1f, 1f, 0f));
-        sun.setDirection(new Vector3f(0f,-1f,0f));
-        rootNode.addLight(sun);
     }
 }
 
