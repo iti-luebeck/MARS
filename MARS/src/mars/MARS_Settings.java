@@ -39,6 +39,7 @@ public class MARS_Settings{
     private HashMap<String,Object> Physics;
     private HashMap<String,Object> Resolution;
     private HashMap<String,Object> Axis;
+    private HashMap<String,Object> Grid;
     private HashMap<String,Object> FPS;
     private HashMap<String,Object> Fog;
     private HashMap<String,Object> DepthOfField;
@@ -119,6 +120,7 @@ public class MARS_Settings{
         Physics = new HashMap<String,Object> ();
         Resolution = new HashMap<String,Object> ();
         Axis = new HashMap<String,Object> ();
+        Grid = new HashMap<String,Object> ();
         Fog = new HashMap<String,Object> ();
         DepthOfField = new HashMap<String,Object> ();
         WavesWater = new HashMap<String,Object> ();
@@ -140,6 +142,7 @@ public class MARS_Settings{
         Graphics.put("FrameLimit", FrameLimit);
         Graphics.put("FPS", FPS);
         Graphics.put("Axis", Axis);
+        Graphics.put("Gird", Grid);
         Graphics.put("Fog", Fog);
         Graphics.put("DepthOfField", DepthOfField);
         Graphics.put("WavesWater", WavesWater);
@@ -184,6 +187,7 @@ public class MARS_Settings{
         ROS = (HashMap<String,Object>)Server.get("ROS");
         Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
         Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        Grid = (HashMap<String,Object>)Graphics.get("Grid");
         FPS = (HashMap<String,Object>)Graphics.get("FPS");
         Fog = (HashMap<String,Object>)Graphics.get("Fog");
         DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
@@ -210,6 +214,7 @@ public class MARS_Settings{
         ROS = (HashMap<String,Object>)Server.get("ROS");
         Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
         Axis = (HashMap<String,Object>)Graphics.get("Axis");
+        Grid = (HashMap<String,Object>)Graphics.get("Grid");
         FPS = (HashMap<String,Object>)Graphics.get("FPS");
         Fog = (HashMap<String,Object>)Graphics.get("Fog");
         DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
@@ -314,6 +319,10 @@ public class MARS_Settings{
             //initer.updateTerrain();
         }else if(hashmapname.equals("Grass")){
             initer.updateGrass();
+        }else if(target.equals("enabled") && hashmapname.equals("Grid")){
+            initer.hideGrid(isSetupGrid());
+        }else if(hashmapname.equals("Grid")){
+            initer.setupGrid();
         }
     }
     
@@ -871,7 +880,119 @@ public class MARS_Settings{
     public void setSetupAxis(boolean enabled) {
         Axis.put("enabled", enabled);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSetupGrid() {
+        return (Boolean)Grid.get("enabled");
+    }
 
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupGrid(boolean enabled) {
+        Grid.put("enabled", enabled);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Float getGridLineDistance() {
+        return (Float)Grid.get("LineDistance");
+    }
+
+    /**
+     *
+     * @param BlurScale
+     */
+    public void setGridLineDistance(float LineDistance) {
+        Grid.put("LineDistance", LineDistance);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getSizeX() {
+        return (Integer)Grid.get("SizeX");
+    }
+
+    /**
+     *
+     * @param BlurScale
+     */
+    public void setSizeX(int SizeX) {
+        Grid.put("SizeX", SizeX);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getSizeY() {
+        return (Integer)Grid.get("SizeY");
+    }
+
+    /**
+     *
+     * @param BlurScale
+     */
+    public void setSizeY(int SizeY) {
+        Grid.put("SizeY", SizeY);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ColorRGBA getGridColor() {
+        return (ColorRGBA)Grid.get("color");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setGridColor(ColorRGBA color) {
+        Grid.put("color", color);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getGridPosition() {
+        return (Vector3f)Grid.get("position");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setGridPosition(Vector3f position) {
+        Grid.put("position", position);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Vector3f getGridRotation() {
+        return (Vector3f)Grid.get("rotation");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setGridRotation(Vector3f rotation) {
+        Grid.put("rotation", rotation);
+    }
+    
     /**
      *
      * @return

@@ -55,6 +55,7 @@ import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.debug.Grid;
 import com.jme3.shadow.PssmShadowRenderer;
 import com.jme3.shadow.PssmShadowRenderer.CompareMode;
 import com.jme3.shadow.PssmShadowRenderer.FilterMode;
@@ -102,6 +103,7 @@ public class Initializer {
     private Node guiNode;
     private Node rootNode;
     private Node axisNode = new Node("AxisNode");
+    private Node gridNode = new Node("GridNode");
     private AppSettings settings;
     private InputManager inputManager;
     private Node sceneReflectionNode;
@@ -219,6 +221,7 @@ public class Initializer {
         //if(mars_settings.isSetupAxis()){
             setupAxis();
         //}
+            setupGrid();
         if(mars_settings.isSetupFog()){
             setupFog();
         }
@@ -737,11 +740,40 @@ public class Initializer {
          hideAxis(mars_settings.isSetupAxis());
     }
     
+    public void setupGrid(){
+        Future fut = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                gridNode.detachAllChildren();
+                Geometry grid = new Geometry("wireframe grid", new Grid(mars_settings.getSizeX(), mars_settings.getSizeY(), mars_settings.getGridLineDistance()));
+                Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                mat.getAdditionalRenderState().setWireframe(true);
+                mat.setColor("Color", mars_settings.getGridColor());
+                grid.setMaterial(mat);
+                grid.center().move(mars_settings.getGridPosition());
+                Quaternion quat = new Quaternion();
+                quat.fromAngles(mars_settings.getGridRotation().x, mars_settings.getGridRotation().y, mars_settings.getGridRotation().z);
+                grid.setLocalRotation(quat);
+                gridNode.attachChild(grid);
+                rootNode.attachChild(gridNode);
+                hideGrid(mars_settings.isSetupGrid());
+                return null;
+             }
+        });
+    }
+    
     public void hideAxis(boolean hide){
         if(!hide){
             axisNode.setCullHint(CullHint.Always);
         }else{
             axisNode.setCullHint(CullHint.Never);
+        }
+    }
+    
+    public void hideGrid(boolean hide){
+        if(!hide){
+            gridNode.setCullHint(CullHint.Always);
+        }else{
+            gridNode.setCullHint(CullHint.Never);
         }
     }
     

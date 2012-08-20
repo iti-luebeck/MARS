@@ -34,6 +34,44 @@
                         </entry>
                     </value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Grid">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="LineDistance">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="SizeX">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+						</entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="SizeY">
+							<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">100</value>
+						</entry>
+						<entry xsi:type="myHashMapEntryTypeColorRGBA" key="color">
+                            <value>
+								<a>0.0</a>
+								<b>1.0</b>
+								<g>1.0</g>
+								<r>1.0</r>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="position">
+                            <value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
+                            <value>
+								<x>0.0</x>
+								<y>0.0</y>
+								<z>0.0</z>
+                            </value>
+                        </entry>
+                    </value>
+                </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="SkyBox">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
