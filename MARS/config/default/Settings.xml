@@ -37,7 +37,7 @@
 				<entry xsi:type="myHashMapEntryTypeHashMap" key="Grid">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
 						<entry xsi:type="myHashMapEntryTypeObject" key="LineDistance">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>

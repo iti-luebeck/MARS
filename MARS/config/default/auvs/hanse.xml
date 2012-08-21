@@ -12,9 +12,6 @@
                     <z>0.0</z>
                 </value>
             </entry>
-            <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_distance">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
-            </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
             </entry>
@@ -153,6 +150,22 @@
                     </entry>
                 </value>
             </entry>
+			<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Buoyancy">
+                <value>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.8</value>
+					</entry>
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_updaterate">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+					</entry>	
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_distance">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
+					</entry>	
+					<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_resolution">
+						<value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.03125</value>
+					</entry>					
+                </value>
+            </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="drag_coefficient_linear">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.45</value>
             </entry>
@@ -173,14 +186,8 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="drag_coefficient_angular">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.3</value>
             </entry>
-            <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_updaterate">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
-            </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="mass_auv">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">21.8</value><!--21.8 20.5 15.5-->
-            </entry>
-            <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.8</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">19.5</value><!--21.8 20.5 15.5-->
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="linear_factor">
                 <value>

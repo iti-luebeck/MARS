@@ -40,6 +40,7 @@ public class AUV_Parameters implements CellEditorListener{
     private HashMap<String,Object> model;
     private HashMap<String,Object> debug;
     private HashMap<String,Object> collision;
+    private HashMap<String,Object> buoyancy;
     private XMLConfigReaderWriter xmll;
     private AUV auv;
 
@@ -96,10 +97,12 @@ public class AUV_Parameters implements CellEditorListener{
         model = new HashMap<String,Object> ();
         debug = new HashMap<String,Object> ();
         collision = new HashMap<String,Object> ();
+        buoyancy = new HashMap<String,Object> ();
         params.put("Waypoints", waypoints);
         params.put("Model", model);
         params.put("Debug", debug);
         params.put("Collision", collision);
+        params.put("Buoyancy", buoyancy);
         setAngular_factor(angular_factor);
         setAuv_name(auv_name);
         setAuv_class(auv_class);
@@ -159,6 +162,7 @@ public class AUV_Parameters implements CellEditorListener{
         model = (HashMap<String,Object>)params.get("Model");
         debug = (HashMap<String,Object>)params.get("Debug");
         collision = (HashMap<String,Object>)params.get("Collision");
+        buoyancy = (HashMap<String,Object>)params.get("Buoyancy");
     }
     
     @Deprecated
@@ -528,7 +532,7 @@ public class AUV_Parameters implements CellEditorListener{
      * @return
      */
     public int getBuoyancy_updaterate() {
-        return (Integer)params.get("buoyancy_updaterate");
+        return (Integer)buoyancy.get("buoyancy_updaterate");
     }
 
     /**
@@ -536,7 +540,7 @@ public class AUV_Parameters implements CellEditorListener{
      * @param buoyancy_updaterate
      */
     public void setBuoyancy_updaterate(int buoyancy_updaterate) {
-        params.put("buoyancy_updaterate", buoyancy_updaterate);
+        buoyancy.put("buoyancy_updaterate", buoyancy_updaterate);
     }
 
     /**
@@ -544,7 +548,7 @@ public class AUV_Parameters implements CellEditorListener{
      * @return
      */
     public Float getBuoyancy_distance() {
-        return (Float)params.get("buoyancy_distance");
+        return (Float)buoyancy.get("buoyancy_distance");
     }
 
     /**
@@ -552,7 +556,7 @@ public class AUV_Parameters implements CellEditorListener{
      * @param buoyancy_distance
      */
     public void setBuoyancy_distance(float buoyancy_distance) {
-        params.put("buoyancy_distance", buoyancy_distance);
+        buoyancy.put("buoyancy_distance", buoyancy_distance);
     }
 
     /**
@@ -560,7 +564,7 @@ public class AUV_Parameters implements CellEditorListener{
      * @return
      */
     public Float getBuoyancy_scale() {
-        return (Float)params.get("buoyancy_scale");
+        return (Float)buoyancy.get("buoyancy_scale");
     }
 
     /**
@@ -568,7 +572,23 @@ public class AUV_Parameters implements CellEditorListener{
      * @param buoyancy_scale
      */
     public void setBuoyancy_scale(float buoyancy_scale) {
-        params.put("buoyancy_scale", buoyancy_scale);
+        buoyancy.put("buoyancy_scale", buoyancy_scale);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getBuoyancy_resolution() {
+        return (Float)buoyancy.get("buoyancy_resolution");
+    }
+
+    /**
+     *
+     * @param buoyancy_scale
+     */
+    public void setBuoyancy_resolution(float buoyancy_resolution) {
+        buoyancy.put("buoyancy_resolution", buoyancy_resolution);
     }
 
     /**

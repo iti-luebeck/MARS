@@ -279,9 +279,9 @@ public class MARSView extends FrameView {
                         while(iter.hasNext()) {
                             ITrace2D trace = (ITrace2D)iter.next();
                             charts.addTrace(trace);
-                            if(trace.getName().equals("Depth")){
+                            /*if(trace.getName().equals("Depth")){
                                 charts.removeTrace(trace);
-                            }
+                            }*/
                         }
                     }
                 }

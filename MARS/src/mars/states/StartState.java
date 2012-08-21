@@ -45,12 +45,12 @@ import javax.xml.bind.Marshaller;
 import mars.Helper.SoundHelper;
 import mars.MARS_Main;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
-import com.amd.aparapi.Kernel;
-import com.amd.aparapi.Range;
+//import com.amd.aparapi.Kernel;
+//import com.amd.aparapi.Range;
 import com.jme3.scene.mesh.IndexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+//import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -341,7 +341,7 @@ public class StartState extends AbstractAppState{
         hanse_node.attachChild(auv_spatial);
 
 
-                final float[] positions = getVertices(auv_spatial);
+               /* final float[] positions = getVertices(auv_spatial);
                 
                 final float[] squares = new float[auv_spatial.getTriangleCount()];
                 
@@ -349,10 +349,7 @@ public class StartState extends AbstractAppState{
                     @Override public void run() {
                         int gid = getGlobalId();
                         int old_gid = gid;
-                        /*if( gid%9 == 0 ){
-                            //squares[gid] = positions[gid] + positions[gid+1] + positions[gid+2] + positions[gid+3] + positions[gid+4] + positions[gid+5] + positions[gid+6] + positions[gid+7] + positions[gid+8];
-                            squares[gid] = (1f/6f)*((-1f)*(positions[gid+6]*positions[gid+4]*positions[gid+2])+(positions[gid+3]*positions[gid+7]*positions[gid+2])+(positions[gid+6]*positions[gid+1]*positions[gid+5])+(-1f)*(positions[gid]*positions[gid+7]*positions[gid+5])+(-1f)*(positions[gid+3]*positions[gid+1]*positions[gid+8])+(positions[gid]*positions[gid+4]*positions[gid+8]));
-                        }*/
+
                         gid = gid*9;
                         squares[old_gid] = (1f/6f)*((-1f)*(positions[gid+6]*positions[gid+4]*positions[gid+2])+(positions[gid+3]*positions[gid+7]*positions[gid+2])+(positions[gid+6]*positions[gid+1]*positions[gid+5])+(-1f)*(positions[gid]*positions[gid+7]*positions[gid+5])+(-1f)*(positions[gid+3]*positions[gid+1]*positions[gid+8])+(positions[gid]*positions[gid+4]*positions[gid+8]));
                      }
@@ -368,7 +365,7 @@ public class StartState extends AbstractAppState{
                 }
                 System.out.println("vol_gpu: " + vol_gpu);
                 long new_time = System.currentTimeMillis();
-                System.out.println("timereal: " + (new_time-old_time));
+                System.out.println("timereal: " + (new_time-old_time));*/
 
     } 
     
