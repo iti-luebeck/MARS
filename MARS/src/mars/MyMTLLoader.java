@@ -21,7 +21,7 @@ public class MyMTLLoader extends MTLLoader{
     protected void createMaterial(){
         Material material;
         
-        if (alpha < 1f && transparent && !disallowTransparency){
+        if (alpha < 1f && transparent){
             diffuse.a = alpha;
         }
         
@@ -64,7 +64,7 @@ public class MyMTLLoader extends MTLLoader{
             if (alphaMap != null)    material.setTexture("AlphaMap", alphaMap);*/
         }
         
-        if (transparent && !disallowTransparency){
+        if (transparent){
             material.setTransparent(true);
             material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
             material.getAdditionalRenderState().setAlphaTest(true);

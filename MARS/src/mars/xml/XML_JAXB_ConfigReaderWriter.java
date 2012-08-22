@@ -111,35 +111,48 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @param simob
      */
-    public static void saveSimObject(SimObject simob, File file){
+    public static String saveSimObject(SimObject simob, File file){
         try {
             JAXBContext context = JAXBContext.newInstance( SimObject.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File simfile = new File(file,simob.getName() + ".xml" );
-            m.marshal( simob, simfile );
+            if(simfile.canWrite()){
+                m.marshal( simob, simfile );
+            }else{
+                return "Can't write File: " + simfile.getAbsolutePath() + " . No Write Access";
+            }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
     /**
      * 
      * @param simobs
      */
-    public static void saveSimObjects(ArrayList simobs, File file){
+    public static String saveSimObjects(ArrayList simobs, File file){
         Iterator iter = simobs.iterator();
         while(iter.hasNext() ) {
             SimObject simob = (SimObject)iter.next();
-            saveSimObject(simob, file);
+            String failure = saveSimObject(simob, file);
+            if(failure != null){
+                return failure;
+            }
         }
+        return null;
     }
     
-    public static void saveSimObjects(HashMap<String,SimObject> simobs, File file){
+    public static String saveSimObjects(HashMap<String,SimObject> simobs, File file){
         for ( String elem : simobs.keySet() ){
             SimObject simob = (SimObject)simobs.get(elem);
-            saveSimObject(simob, file);    
+            String failure = saveSimObject(simob, file);    
+            if(failure != null){
+                return failure;
+            }
         }
+        return null;
     }
     
     /**
@@ -223,38 +236,51 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @param auv
      */
-    public static void saveAUV(BasicAUV auv, File file){
+    public static String saveAUV(BasicAUV auv, File file){
         try {
             JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             //File file = new File( "./config/default/auvs/" + auv.getName() + ".xml" );
             File auvfile = new File(file,auv.getName() + ".xml" );
-            m.marshal( auv, auvfile );
+            if(auvfile.canWrite()){
+                m.marshal( auv, auvfile );
+            }else{
+                return "Can't write File: " + auvfile.getAbsolutePath() + " . No Write Access";
+            }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
     /**
      * 
      * @param auvs
      */
-    public static void saveAUVs(ArrayList auvs, File file){
+    public static String saveAUVs(ArrayList auvs, File file){
         Iterator iter = auvs.iterator();
         while(iter.hasNext() ) {
             BasicAUV auv = (BasicAUV)iter.next();
-            saveAUV(auv, file);
+            String failure = saveAUV(auv, file);
+            if(failure != null){
+                return failure;
+            }
         }
+        return null;
     }
     
-    public static void saveAUVs(HashMap<String,AUV> auvs, File file){
+    public static String saveAUVs(HashMap<String,AUV> auvs, File file){
         for ( String elem : auvs.keySet() ){
             if(auvs.get(elem) instanceof BasicAUV){
                 BasicAUV auv = (BasicAUV)auvs.get(elem);
-                saveAUV(auv, file);    
+                String failure =  saveAUV(auv, file); 
+                if(failure != null){
+                    return failure;
+                }
             }
         }
+        return null;
     }
     
     /**
@@ -297,31 +323,64 @@ public class XML_JAXB_ConfigReaderWriter {
         }
     }
     
-    public static void saveConfiguration(File file, MARS_Settings mars_settings, AUV_Manager auvManager, SimObjectManager simObjectManager, KeyConfig keys, PhysicalEnvironment penv){
+    public static String saveConfiguration(File file, MARS_Settings mars_settings, AUV_Manager auvManager, SimObjectManager simObjectManager, KeyConfig keys, PhysicalEnvironment penv){
         //create dirs
-        file.mkdir();
+        if(file.canWrite()){
+            file.mkdir();
+        }else{
+            return "Can't create Directory: " + file.getAbsolutePath() + " . No Write Access";
+        }
         //auv dir
         File auvFile = new File(file, "auvs");
-        auvFile.mkdir();    
+        if(auvFile.canWrite()){
+            auvFile.mkdir(); 
+        }else{
+            return "Can't create Directory: " + auvFile.getAbsolutePath() + " . No Write Access";
+        }
+ 
         //simob dir
         File simobFile = new File(file, "simobjects");
-        simobFile.mkdir();
+        if(simobFile.canWrite()){
+            simobFile.mkdir(); 
+        }else{
+            return "Can't create Directory: " + simobFile.getAbsolutePath() + " . No Write Access";
+        }
 
         File settingsFile = new File(file, "Settings.xml");
-        saveMARS_Settings(mars_settings, settingsFile);
+        if(settingsFile.canWrite()){
+            saveMARS_Settings(mars_settings, settingsFile);
+        }else{
+            return "Can't write File: " + settingsFile.getAbsolutePath() + " . No Write Access";
+        }
 
         File penvFile = new File(file, "PhysicalEnvironment.xml");
-        savePhysicalEnvironment(penv, penvFile);
+        if(penvFile.canWrite()){
+            savePhysicalEnvironment(penv, penvFile);
+        }else{
+            return "Can't write File: " + penvFile.getAbsolutePath() + " . No Write Access";
+        }
         
         File keysFile = new File(file, "KeyConfig.xml");
-        saveKeyConfig(keys, keysFile);
+        if(keysFile.canWrite()){
+            saveKeyConfig(keys, keysFile);
+        }else{
+            return "Can't write File: " + keysFile.getAbsolutePath() + " . No Write Access";
+        }
+                
+        String failure = saveSimObjects(simObjectManager.getSimObjects(), simobFile);
+        if(failure != null){
+            return failure;
+        }
         
-        saveSimObjects(simObjectManager.getSimObjects(), simobFile);
+        failure = saveAUVs(auvManager.getAUVs(),auvFile);
+        if(failure != null){
+            return failure;
+        }
         
-        saveAUVs(auvManager.getAUVs(),auvFile);
+        return null;
     }
     
-        /**
+    /**
      * 
      * @return
      */

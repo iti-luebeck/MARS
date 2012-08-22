@@ -57,6 +57,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -1549,7 +1550,6 @@ public class MARSView extends FrameView {
 
         saveconfig.setIcon(resourceMap.getIcon("saveconfig.icon")); // NOI18N
         saveconfig.setText(resourceMap.getString("saveconfig.text")); // NOI18N
-        saveconfig.setEnabled(false);
         saveconfig.setName("saveconfig"); // NOI18N
         saveconfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3329,7 +3329,6 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_helpActionPerformed
 
     private void saveconfigtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigtoActionPerformed
-        // TODO add your handling code here:
         save_config_FileChooser.showSaveDialog(null);
         File f = save_config_FileChooser.getSelectedFile();
         if(f != null){
@@ -3599,7 +3598,26 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_add_auvActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
-        System.out.println("NO EFFECT YET!!!!!!!!!!!!!!!!!!!");
+        File f = new File("./config/default");
+        if(f != null){
+            String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auv_manager, simob_manager, keyConfig, penv);
+            if(failure != null){
+                JOptionPane.showMessageDialog(mainPanel,
+                failure,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(mainPanel,
+                "Could sucessfully create File. Configuration saved.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(mainPanel,
+            "Could not create File!",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_saveconfigActionPerformed
 
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed

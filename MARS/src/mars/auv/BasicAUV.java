@@ -523,7 +523,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         //calculate the volume one time exact as possible, ignore water height
         long old_time = System.currentTimeMillis();
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
-        float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
+        float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.015625f,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
         volume = vol[0];
         long new_time = System.currentTimeMillis();
         System.out.println("time: " + (new_time-old_time));
@@ -810,7 +810,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             }*/
 
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
-            float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.03125f,false);
+            float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
             actual_vol = vol[0];
             actual_vol_air = vol[1];
 
@@ -1185,7 +1185,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         wbx.fromBoundingBox(bb);
         boundingBox = new Geometry("TheMesh", wbx);
         Material mat_box = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_box.setColor("m_Color", ColorRGBA.Blue);
+        mat_box.setColor("Color", ColorRGBA.Blue);
         boundingBox.setMaterial(mat_box);
         boundingBox.setLocalTranslation(bb.getCenter());
         //boundingBox.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
@@ -1710,6 +1710,167 @@ public class BasicAUV implements AUV,SceneProcessor{
         return ret;
     }
     
+    /*
+     * Calculates the volume of the auv. Uses a ray-based approach. The rays are fired in a equidistant ciruclar pattern.
+     */
+    private float[] calculateVolumeAutoRound(Spatial auv, float resolution, boolean ignore_water_height){
+        float[] arr_ret = new float[2];
+        float calc_volume = 0.0f;
+        float calc_volume_air = 0.0f;
+        float old_volume_mass = 0.0f;
+        BoundingBox boundBox = (BoundingBox)auv.getWorldBound();
+        Vector3f centerBB = boundBox.getCenter();
+        Vector3f extBB = boundBox.getExtent(null);
+        System.out.println("centerBB: " + centerBB + " " + "extBB: " + extBB + " " + "maxBB: " + extBB.length() + "/" + extBB.lengthSquared());
+        int resolutionCounter = (int)Math.ceil(extBB.length()/resolution);
+        System.out.println("resolutionCounter: " + resolutionCounter);
+        Vector3f volume_center = new Vector3f(0f,0f,0f);
+        System.out.println("boundingBox.getWorldTranslation(): " + boundingBox.getWorldTranslation());
+        System.out.println("auv_node.getWorldTranslation(): " + auv_node.getWorldTranslation());
+        Vector3f ray_start = new Vector3f(boundingBox.getWorldTranslation().x,boundingBox.getWorldTranslation().y,boundingBox.getWorldTranslation().z);
+
+        
+        float radius = extBB.length();
+        
+        for (int i = -resolutionCounter; i < resolutionCounter; i++) {
+            float heightOfSegment = radius-Math.abs(resolution*i);
+            float alpha = 2f * (float)Math.acos(1f-(heightOfSegment/radius));
+            float chord = 2f*radius*(float)Math.sin(alpha/2f);
+            float chordStart = chord/2f;
+            //System.out.println("chordStart: " + chordStart);
+            float resolutionLengthCounter = (int)Math.rint(chord/resolution);
+            for (int j = 0; j < resolutionLengthCounter; j++) {
+                Vector3f ray_start_new = new Vector3f((float)(ray_start.x+(i*resolution)),(float)(ray_start.y)-extBB.length()-0.1f,(float)(ray_start.z+(j*resolution)-chordStart));
+                float length = 0.0f;
+                float length_air = 0.0f;
+                float volume_center_y = 0.0f;
+                float[] ret_arr = giveLengthVolumeCenterCollisionAuto(auv,ray_start_new,ignore_water_height);
+                length = ret_arr[0];
+                length_air = ret_arr[2];
+                /*if(length == Float.POSITIVE_INFINITY){
+                    System.out.println("inf: " + length);
+                }
+                if(length_air == Float.POSITIVE_INFINITY){
+                    System.out.println("inf air: " + length_air);
+                }*/
+               // System.out.println("length: " + length);
+                if( length != 0){
+                    calc_volume = calc_volume + (length*resolution*resolution);
+                    volume_center_y = ret_arr[1];
+                    //System.out.println(i + ":" + j + ":p: " + volume_center + " " + length + " " + old_volume_mass);
+                   // System.out.println(i + ":" + j + ":p: " + old_volume_mass);
+                    volume_center = calculateVolumeCentroid(volume_center,new Vector3f(ray_start_new.x,volume_center_y,ray_start_new.z),old_volume_mass,(length*resolution*resolution));
+                    //System.out.println(i + ":" + j + ":p: " + volume_center + " " + length + " " + old_volume_mass);
+                    old_volume_mass = old_volume_mass + (length*resolution*resolution);
+
+                    if(auv_param.isDebugBuoycancy()){
+                        Sphere sphere4 = new Sphere(16, 16, 0.00125f);
+                        Geometry mark4 = new Geometry("BOOM2!", sphere4);
+                        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        mark_mat4.setColor("Color", ColorRGBA.Green);
+                        mark4.setMaterial(mark_mat4);
+                        mark4.setLocalTranslation(volume_center);
+                        rootNode.attachChild(mark4);
+                    }
+                }
+                
+                if( length_air != 0){
+                    calc_volume_air = calc_volume_air + (length_air*resolution*resolution);
+                    //volume_center_y = ret_arr[1];
+                    //System.out.println(i + ":" + j + ":p: " + volume_center + " " + length + " " + old_volume_mass);
+                   // System.out.println(i + ":" + j + ":p: " + old_volume_mass);
+                    //volume_center = calculateVolumeCentroid(volume_center,new Vector3f(ray_start_new.x,volume_center_y,ray_start_new.z),old_volume_mass,(length*resolution*resolution));
+                    //System.out.println(i + ":" + j + ":p: " + volume_center + " " + length + " " + old_volume_mass);
+                    //old_volume_mass = old_volume_mass + (length*resolution*resolution);
+
+                    /*if(auv_param.isDebugBuoycancy()){
+                        Sphere sphere4 = new Sphere(16, 16, 0.00125f);
+                        Geometry mark4 = new Geometry("BOOM2!", sphere4);
+                        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        mark_mat4.setColor("Color", ColorRGBA.Green);
+                        mark4.setMaterial(mark_mat4);
+                        mark4.setLocalTranslation(volume_center);
+                        rootNode.attachChild(mark4);
+                    }*/
+                }
+
+                if(auv_param.isDebugBuoycancy()){
+                        Sphere sphere3 = new Sphere(16, 16, 0.0125f);
+                        Geometry mark3 = new Geometry("BOOM!", sphere3);
+                        Material mark_mat3 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        if(length!=0.0f){
+                            mark_mat3.setColor("Color", ColorRGBA.Red);
+                        }else{
+                            mark_mat3.setColor("Color", ColorRGBA.Blue);
+                        }
+                        mark3.setMaterial(mark_mat3);
+                        mark3.setLocalTranslation(ray_start_new);
+                        auv_node.attachChild(mark3);
+                }
+            }
+        }
+        
+  /*      final Vector3f volume_center_fin = volume_center.clone();
+        //final Vector3f volume_center_fin = Vector3f.ZERO;
+        final Vector3f volume_center_precise_fin = volume_center_precise.clone();
+        Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    Vector3f volume_center_local = new Vector3f(0f,0f,0f);
+                    auv_node.worldToLocal(volume_center_fin, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+
+                    final Vector3f in = volume_center_local.clone();
+                    VolumeCenterGeom.setLocalTranslation(in);
+                    VolumeCenterGeom.updateGeometricState();
+
+
+                    if( VolumeCenterPreciseGeom.getWorldTranslation().equals(volume_center_precise_fin) ){//save the precise only once
+
+                    VolumeCenterPreciseGeom.setLocalTranslation(in);
+                    VolumeCenterPreciseGeom.updateGeometricState();
+
+                    }
+
+                    return null;
+                }
+        });*/
+        
+        
+            Vector3f volume_center_local = new Vector3f(0f,0f,0f);
+            try {
+                auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+            } catch (Exception e) {
+                System.out.println("NPE");
+            }
+            //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+
+            //addValueToSeries( VolumeCenterPreciseGeom.getWorldTranslation().subtract(volume_center).y, 1);
+
+            final Vector3f in = volume_center_local.clone();
+            Future fut = mars.enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            VolumeCenterGeom.setLocalTranslation(in);
+                            VolumeCenterGeom.updateGeometricState();
+                            return null;
+                        }
+                        });
+
+            if( VolumeCenterPreciseGeom.getWorldTranslation().equals(this.volume_center_precise) ){//save the precise only once
+                        Future fut2 = mars.enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            VolumeCenterPreciseGeom.setLocalTranslation(in);
+                            VolumeCenterPreciseGeom.updateGeometricState();
+                            return null;
+                        }
+                        });
+            }
+         
+
+        //return calc_volume;
+        arr_ret[0] = calc_volume;
+        arr_ret[1] = calc_volume_air;
+        return arr_ret;
+    }
+    
      /*
      * Calculates the volume of the auv.
      * 
@@ -1721,6 +1882,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      *  *
      * 
      */
+    @Deprecated
     private float[] calculateVolumeAuto(Spatial auv, float resolution, boolean ignore_water_height){
         float[] arr_ret = new float[2];
         float calc_volume = 0.0f;
