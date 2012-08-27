@@ -17,7 +17,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -27,6 +31,7 @@ import mars.KeyConfig;
 import mars.Keys;
 import mars.Moveable;
 import mars.NoiseType;
+import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -195,6 +200,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
      *
      * @param speed
      */
+    @MARSPublicKeyBindingMethod(true)
     public void set_thruster_speed(int speed){
         if(getNoise_type() == NoiseType.NO_NOISE){
             MotorForce = calculateThrusterForce(speed);
@@ -212,6 +218,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
     /**
      *
      */
+    @MARSPublicKeyBindingMethod(true)
     public void thruster_forward(){
         MotorForce = MotorForce + motor_increment;
     }
@@ -219,6 +226,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
     /**
      *
      */
+    @MARSPublicKeyBindingMethod(true)
     public void thruster_back(){
         MotorForce = MotorForce - motor_increment;
     }
@@ -293,40 +301,30 @@ public class Thruster extends Actuator implements Moveable,Keys{
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){
-            String action = (String)action_mapping.get(elem);
+            final String action = (String)action_mapping.get(elem);
             final String mapping = elem;
             final Thruster self = this;
-            if(action.equals("thruster_forward")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+            
+            inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
-                                self.thruster_forward();
+                                try {
+                                    Method method = self.getClass().getMethod(action);
+                                    method.invoke(self);
+                                } catch (NoSuchMethodException ex) {
+                                    Logger.getLogger(Thruster.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SecurityException ex) {
+                                    Logger.getLogger(Thruster.class.getName()).log(Level.SEVERE, null, ex);
+                                }catch (IllegalAccessException ex) {
+                                    Logger.getLogger(Thruster.class.getName()).log(Level.SEVERE, null, ex);
+                                }catch (InvocationTargetException ex) {
+                                    Logger.getLogger(Thruster.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
                         }
                     };
-                    inputManager.addListener(actionListener, elem);
-            }else if(action.equals("thruster_back")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.thruster_back();
-                            }
-                        }
-                    };
-                    inputManager.addListener(actionListener, elem);  
-            }else if(action.equals("set_thruster_speed")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.set_thruster_speed(300);
-                            }
-                        }
-                    };
-                    inputManager.addListener(actionListener, elem);  
-            }
+            inputManager.addListener(actionListener, elem);
         }
     }
 }

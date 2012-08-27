@@ -50,6 +50,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import com.jme3.scene.mesh.IndexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
+import jme3tools.optimize.GeometryBatchFactory;
 //import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
@@ -160,11 +161,11 @@ public class StartState extends AbstractAppState{
             loadModel3(0.2f,"hanse/hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
             long new_time = System.currentTimeMillis();
             System.out.println("time: " + (new_time-old_time));
-            
-            old_time = System.currentTimeMillis();//hanse/hanse_clean_v2_very_low_merge_new.obj
-            loadModel2(0.2f,"hanse/hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
-            new_time = System.currentTimeMillis();
-            System.out.println("time2: " + (new_time-old_time));*/
+            */
+            //old_time = System.currentTimeMillis();//hanse/hanse_clean_v2_very_low_merge_new.obj
+            //loadModel2(0.2f,"hanse/hanse_very_high.obj",new Vector3f(6f,1f,5f),new Vector3f(0f,-FastMath.PI/2,-FastMath.PI/4));
+            //new_time = System.currentTimeMillis();
+            //System.out.println("time2: " + (new_time-old_time));
             
             
             
@@ -403,7 +404,7 @@ public class StartState extends AbstractAppState{
             //System.out.println(spatial.getName());
             if(spatial instanceof Geometry){
                 Geometry geom = (Geometry)spatial;
-                Mesh mesh = geom.getMesh();
+                Mesh mesh = geom.getMesh();                
                 for (int i = 0; i < mesh.getTriangleCount(); i++) {
                     
                     

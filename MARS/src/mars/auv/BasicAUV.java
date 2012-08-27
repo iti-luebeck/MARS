@@ -42,6 +42,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.control.LodControl;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.texture.Image.Format;
@@ -66,6 +67,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jme3tools.optimize.GeometryBatchFactory;
 import mars.Initializer;
 import mars.Keys;
 import mars.PhysicalEnvironment;
@@ -83,6 +85,7 @@ import mars.auv.example.Hanse;
 import mars.auv.example.Hanse2;
 import mars.auv.example.Monsun2;
 import mars.auv.example.SMARTE;
+import mars.control.SpatialLodControl;
 import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
@@ -1177,6 +1180,11 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
+        
+        //own load controler, still lacks a lot of features to be used productive
+        /*SpatialLodControl slc = new SpatialLodControl(mars.getCamera(),auv_spatial);
+        auv_spatial.addControl(slc);*/
         
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();

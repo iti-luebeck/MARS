@@ -33,7 +33,6 @@ public class MARSAboutBox extends javax.swing.JDialog {
         javax.swing.JLabel vendorLabel = new javax.swing.JLabel();
         javax.swing.JLabel appVendorLabel = new javax.swing.JLabel();
         javax.swing.JLabel homepageLabel = new javax.swing.JLabel();
-        javax.swing.JLabel appHomepageLabel = new javax.swing.JLabel();
         javax.swing.JLabel appDescLabel = new javax.swing.JLabel();
         javax.swing.JLabel imageLabel = new javax.swing.JLabel();
         javax.swing.JLabel appVendorLabel1 = new javax.swing.JLabel();
@@ -43,10 +42,9 @@ public class MARSAboutBox extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSAboutBox.class);
         setTitle(resourceMap.getString("title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(890, 256));
+        setMinimumSize(new java.awt.Dimension(690, 256));
         setModal(true);
         setName("aboutBox"); // NOI18N
-        setResizable(false);
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getActionMap(MARSAboutBox.class, this);
         closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
@@ -74,9 +72,6 @@ public class MARSAboutBox extends javax.swing.JDialog {
         homepageLabel.setText(resourceMap.getString("homepageLabel.text")); // NOI18N
         homepageLabel.setName("homepageLabel"); // NOI18N
 
-        appHomepageLabel.setText(resourceMap.getString("Application.homepage")); // NOI18N
-        appHomepageLabel.setName("appHomepageLabel"); // NOI18N
-
         appDescLabel.setText(resourceMap.getString("appDescLabel.text")); // NOI18N
         appDescLabel.setName("appDescLabel"); // NOI18N
 
@@ -103,7 +98,7 @@ public class MARSAboutBox extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
@@ -132,18 +127,13 @@ public class MARSAboutBox extends javax.swing.JDialog {
                                     .addComponent(appVersionLabel)))
                             .addComponent(appTitleLabel, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(appDescLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(appHomepageLabel))
+                        .addGap(322, 322, 322))
                     .addComponent(closeButton))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 342, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(appHomepageLabel)
-                .addContainerGap(246, Short.MAX_VALUE))
+            .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 356, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -163,7 +153,7 @@ public class MARSAboutBox extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(homepageLabel)
                             .addComponent(appVendorLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
                         .addComponent(closeButton))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()

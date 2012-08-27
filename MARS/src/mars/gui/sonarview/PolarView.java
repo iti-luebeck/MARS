@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  * This class is used to visualize SonarData (or any Data provided as an byte array) in polar view (looks like a radar view).
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class PolarView extends JPanel{
+public class PolarView extends JPanel implements SonarView{
 
     BufferedImage offImgage;
     Graphics2D imageGraphics;
@@ -28,15 +28,19 @@ public class PolarView extends JPanel{
     int fWidth;
     int fHeight;
     int[] fPixels;
+    int h = 504,b = 504;
+    private Color bgcolor = Color.BLACK;
+    private Color radarColor = Color.BLUE;
+    private Color hitColor = Color.GREEN;
     
     /**
      * 
      */
-    public PolarView() {               
-        int h = 504,b = 504;
-        offImgage = new BufferedImage( b, h, BufferedImage.TYPE_INT_RGB );
+    public PolarView() {
+        offImgage = new BufferedImage( b, h, BufferedImage.TYPE_INT_ARGB );
         imageGraphics = offImgage.createGraphics();
-        imageGraphics.setBackground(Color.WHITE);
+        imageGraphics.setBackground(bgcolor);
+        imageGraphics.clearRect(0, 0, b, h);
     }
     
     /**
@@ -53,7 +57,7 @@ public class PolarView extends JPanel{
         imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         for (int i = 0; i < data.length; i++) {
             int cast = (int)data[i] & 0xff;
-            imageGraphics.setColor(new java.awt.Color(0, cast, 0));  
+            imageGraphics.setColor(combineColors(bgcolor,hitColor,cast)); 
             float umfang = 2f * (float)Math.PI * (float)i;
             float pixelsWidth = umfang / umfangCount;
             if( pixelsWidth >= 1){
@@ -64,6 +68,15 @@ public class PolarView extends JPanel{
             imageGraphics.drawLine(252, 252-i, 252, 252-i-1);
         }
         drawRadarLine(data.length,lastHeadPosition,resolution);
+        this.repaint();
+    }
+    
+    private Color combineColors(Color base, Color add, float mask_value){
+        float masking_factor = mask_value/255.0f;
+        int blue = (int)(base.getBlue() * (1f - masking_factor) + add.getBlue() * masking_factor);
+        int red = (int)(base.getRed() * (1f - masking_factor) + add.getRed() * masking_factor);
+        int green = (int)(base.getGreen() * (1f - masking_factor) + add.getGreen() * masking_factor);
+        return new Color(red, green, blue);
     }
     
     private void drawRadarLine(int dataLength, float lastHeadPosition, float resolution){
@@ -72,7 +85,7 @@ public class PolarView extends JPanel{
         imageGraphics.setTransform(trans);
         imageGraphics.setStroke( new BasicStroke( 1 ) );
         for (int i = 0; i < dataLength; i++) {
-            imageGraphics.setColor(new java.awt.Color(0, 0, i));  
+            imageGraphics.setColor(new java.awt.Color(radarColor.getRed(), radarColor.getGreen(), radarColor.getBlue(), i));  
             imageGraphics.drawLine(252, 252-i, 252, 252-i-1);
         }
     }
@@ -80,9 +93,26 @@ public class PolarView extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         if ( offImgage != null ){
-            g.drawImage( offImgage, 0, 0, this );
+            g.drawImage( offImgage, 0, 0, this.getWidth(), getHeight(), this );
+            g.dispose();
         }
     }
+    
+    public void changeBackgroundColor(Color color){
+        bgcolor = color;
+        AffineTransform trans = new AffineTransform();
+        trans.setToRotation(0, 252, 252);
+        imageGraphics.setTransform(trans);
+        imageGraphics.setBackground(bgcolor);
+        imageGraphics.clearRect(0, 0, b, h);
+    }
+    
+    public void changeRadarLineColor(Color color){
+        radarColor = color;
+    }
 
+    public void changeHitColor(Color color){
+        hitColor = color;
+    }
 }
 

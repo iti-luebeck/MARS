@@ -45,6 +45,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import javax.swing.BoxLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.Timer;
@@ -100,6 +101,7 @@ import mars.auv.example.Hanse;
 import mars.auv.PhysicalValues;
 import mars.gui.sonarview.PlanarView;
 import mars.gui.sonarview.PolarView;
+import mars.gui.sonarview.SonarView;
 import mars.sensors.Sensor;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import mars.sensors.sonar.Sonar;
@@ -251,16 +253,9 @@ public class MARSView extends FrameView {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    if(son.isScanning()){
-                        if(imgP2 != null){
-                            imgP2.updateData(data, lastHeadPosition, son.getScanning_resolution());
-                            imgP2.repaint();
-                        }
-                    }else{
-                        if(imgP != null){
-                            imgP.updateData(data);
-                            imgP.repaint();
-                        }
+                    SonarView sonarView = (SonarView)sonarList.get(son.getPhysicalExchangerName());
+                    if(sonarView != null){
+                        sonarView.updateData(data, lastHeadPosition, son.getScanning_resolution());  
                     }
                 }
             }
@@ -918,6 +913,7 @@ public class MARSView extends FrameView {
         ChartFrame.setSize(400,400);
     }
     
+    @Deprecated
     private void createJFreeChart() {
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(depth_series);
@@ -4150,6 +4146,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             if(hashwrap.getUserData() instanceof Sonar){
                                 addDataToChart.setVisible(false);
                                 Sonar son = (Sonar)hashwrap.getUserData();
+                                lastSelectedSonar = son;
                                 if(son.isScanning()){
                                     viewSonarPolar.setVisible(true);
                                     viewSonarPlanar.setVisible(false);
@@ -4677,21 +4674,42 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         JFrame sonarFrame = new JFrame();
         sonarFrame.setSize(252, 252);
         sonarFrame.setVisible(true);
+        sonarFrame.setLayout(new BoxLayout(sonarFrame.getContentPane(), BoxLayout.Y_AXIS));
         //imgP = new PlanarView();
         //sonarFrame.add(imgP);
-        imgP2 = new PolarView();
+        final PolarView imgP2 = new PolarView();
         //imgP2.paint();
         sonarFrame.add(imgP2);
+        JButton jb = new JButton("Change Color");
+        ActionListener al = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final Color newColor = color_dialog.showDialog(
+                                             getRootPane(),
+                                             "Choose Background Color for " + "",null);
+                if(newColor != null){
+                    imgP2.changeBackgroundColor(newColor);
+                    imgP2.repaint();
+                }
+            }
+        };
+        jb.addActionListener(al);
+        sonarFrame.add(jb);
         sonarFrame.repaint();
+        if(lastSelectedSonar != null){
+            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP2);
+        }
     }//GEN-LAST:event_viewSonarPolarActionPerformed
 
     private void viewSonarPlanarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPlanarActionPerformed
         JFrame sonarFrame = new JFrame();
         sonarFrame.setSize(400, 252);
         sonarFrame.setVisible(true);
-        imgP = new PlanarView();
+        PlanarView imgP = new PlanarView();
         sonarFrame.add(imgP);
         sonarFrame.repaint();
+        if(lastSelectedSonar != null){
+            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP);
+        }
     }//GEN-LAST:event_viewSonarPlanarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -4948,8 +4966,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private long m_starttime = System.currentTimeMillis();
     private Chart2D charts;
     
-    PlanarView imgP;
-    PolarView imgP2;
+    private Sonar lastSelectedSonar;
+    private HashMap<String,SonarView> sonarList = new HashMap<String, SonarView>();
     
     private final Timer busyIconTimer;
     private final Icon idleIcon;
