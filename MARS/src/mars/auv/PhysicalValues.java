@@ -59,19 +59,19 @@ public class PhysicalValues {
     }
     
     public void updateVolume(float volume){
-        traceVolume.addPoint(((double) System.currentTimeMillis() - this.m_starttime), volume);
+        //traceVolume.addPoint(((double) System.currentTimeMillis() - this.m_starttime), volume);
     }
     
     public void updateVelocity(float velocity){
-        traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
+       // traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
     }
     
     public void updateAngularVelocity(float angularVelocity){
-        traceAngularVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), angularVelocity);
+        //traceAngularVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), angularVelocity);
     }
     
     public void updateDepth(float depth){
-        traceDepth.addPoint(((double) System.currentTimeMillis() - this.m_starttime), depth);
+        //traceDepth.addPoint(((double) System.currentTimeMillis() - this.m_starttime), depth);
     }
     
     public void updateBuoyancyForce(float buoyancyForce){

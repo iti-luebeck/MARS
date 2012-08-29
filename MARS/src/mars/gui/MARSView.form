@@ -6,6 +6,9 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="mainPanel" noResource="true"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="MARSView_mainPanel"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -163,7 +166,7 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree(top)"/>
-                                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="top = new DefaultMutableTreeNode(&quot;AUVs&quot;);&#xa;//createNodes(top);"/>
+                                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="DefaultMutableTreeNode top = new DefaultMutableTreeNode(&quot;AUVs&quot;);"/>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor;&#xa;private DefaultTreeCellRenderer renderer;"/>
                                         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="auv_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);&#xa;auv_tree.setRootVisible(false);"/>
                                       </AuxValues>
@@ -658,43 +661,6 @@
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="2"/>
           </AuxValues>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JDialog" name="JME_SettingsDialog">
-      <Properties>
-        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[400, 300]"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="JME_Settings" noResource="true"/>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
-                  <Component id="lblChart" min="-2" pref="363" max="-2" attributes="0"/>
-                  <EmptySpace pref="148" max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
-                  <Component id="lblChart" min="-2" pref="218" max="-2" attributes="0"/>
-                  <EmptySpace pref="123" max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblChart">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="lblChart.text"/>
-            <Property name="name" type="java.lang.String" value="lblChart" noResource="true"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -1694,10 +1660,6 @@
             </Property>
             <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTextField1MouseExited"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField1KeyPressed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField2">
           <Properties>
@@ -1856,10 +1818,6 @@
             </Property>
             <Property name="name" type="java.lang.String" value="jTextField4" noResource="true"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTextField4MouseExited"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField4KeyPressed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField5">
           <Properties>

@@ -8,6 +8,7 @@ package mars.Helper;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
+import java.awt.Color;
 
 /**
  * This class has various basic static methods that are used everywhere.
@@ -51,5 +52,12 @@ public class Helper {
         float t = ((planeStart.subtract(rayStart)).dot(planeNormal)/((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).dot(planeNormal));
         return rayStart.add(((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).mult(t));
     }
-
+    
+    public static Color combineColors(Color base, Color add, float mask_value){
+        float masking_factor = mask_value/255.0f;
+        int blue = (int)(base.getBlue() * (1f - masking_factor) + add.getBlue() * masking_factor);
+        int red = (int)(base.getRed() * (1f - masking_factor) + add.getRed() * masking_factor);
+        int green = (int)(base.getGreen() * (1f - masking_factor) + add.getGreen() * masking_factor);
+        return new Color(red, green, blue);
+    }
 }

@@ -283,6 +283,7 @@ public class AUV_Manager {
      * In this method the communication between the auv's through underwater modems should be done
      * @param tpf
      */
+    @Deprecated
     private void updateCommunicationOfAUVs(float tpf){
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);

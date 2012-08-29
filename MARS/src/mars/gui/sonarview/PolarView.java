@@ -14,6 +14,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.MemoryImageSource;
 import javax.swing.JPanel;
+import mars.Helper.Helper;
 
 /**
  * This class is used to visualize SonarData (or any Data provided as an byte array) in polar view (looks like a radar view).
@@ -43,6 +44,11 @@ public class PolarView extends JPanel implements SonarView{
         imageGraphics.clearRect(0, 0, b, h);
     }
     
+    @Override
+    public void repaintAll(){
+        this.repaint();
+    }
+    
     /**
      * 
      * @param data
@@ -57,7 +63,7 @@ public class PolarView extends JPanel implements SonarView{
         imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         for (int i = 0; i < data.length; i++) {
             int cast = (int)data[i] & 0xff;
-            imageGraphics.setColor(combineColors(bgcolor,hitColor,cast)); 
+            imageGraphics.setColor(Helper.combineColors(bgcolor,hitColor,cast)); 
             float umfang = 2f * (float)Math.PI * (float)i;
             float pixelsWidth = umfang / umfangCount;
             if( pixelsWidth >= 1){
@@ -69,14 +75,6 @@ public class PolarView extends JPanel implements SonarView{
         }
         drawRadarLine(data.length,lastHeadPosition,resolution);
         this.repaint();
-    }
-    
-    private Color combineColors(Color base, Color add, float mask_value){
-        float masking_factor = mask_value/255.0f;
-        int blue = (int)(base.getBlue() * (1f - masking_factor) + add.getBlue() * masking_factor);
-        int red = (int)(base.getRed() * (1f - masking_factor) + add.getRed() * masking_factor);
-        int green = (int)(base.getGreen() * (1f - masking_factor) + add.getGreen() * masking_factor);
-        return new Color(red, green, blue);
     }
     
     private void drawRadarLine(int dataLength, float lastHeadPosition, float resolution){

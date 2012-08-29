@@ -5,6 +5,7 @@
 package mars.auv;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class Communication_Manager {
 
     private final ConcurrentLinkedQueue<String> linkQueue = new ConcurrentLinkedQueue<String>();
     private final ConcurrentHashMap<String,String> hashQueue = new ConcurrentHashMap<String,String>();
+    
+    private final HashMap<String,UnderwaterModem> uws = new HashMap<String, UnderwaterModem>();
 
     private MARS_Server raw_server;
     private AUV_Manager auv_manager;
@@ -68,6 +71,7 @@ public class Communication_Manager {
                 sendMsgs(elem,s);
             }
         }
+        //updateComNet();
     }
     
     private void updateNoise(){
@@ -101,6 +105,29 @@ public class Communication_Manager {
                 }        
             }
         }    
+    }
+    
+    private void updateComNet(){
+        //update list of modems
+        HashMap<String, AUV> auvs = auv_manager.getAUVs();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName())){
+                ArrayList sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                UnderwaterModem senderUW = (UnderwaterModem)sender_uwmo.get(0);
+                uws.put(auv.getName(), senderUW);
+            }
+        }
+        
+        //filter them if dictance to great and send them to the modem for updates
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName())){
+                ArrayList sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                UnderwaterModem senderUW = (UnderwaterModem)sender_uwmo.get(0);
+                senderUW.updateComNet(uws);
+            }
+        }
     }
     
     @Deprecated

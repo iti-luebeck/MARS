@@ -14,7 +14,11 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
+import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -35,6 +39,7 @@ public class UnderwaterModem extends Sensor{
     private Geometry DebugDistance;
     private Sphere debugDistanceSphere;
     private Material debugDistanceMat;
+    private Node comNet = new Node("comNet");
 
     private Vector3f UnderwaterModemStartVector = new Vector3f(0,0,0);
     private Vector3f UnderwaterModemDirection = new Vector3f(0,0,0);
@@ -157,6 +162,8 @@ public class UnderwaterModem extends Sensor{
         PhysicalExchanger_Node.attachChild(DebugDistance);
         setDebugVisible(isDebug());
         
+        PhysicalExchanger_Node.attachChild(comNet);
+        
         this.auv_node = auv_node;
         this.auv_node.attachChild(PhysicalExchanger_Node);
     }
@@ -196,6 +203,44 @@ public class UnderwaterModem extends Sensor{
      */
     public void reset(){
 
+    }
+    
+    public void updateComNet(HashMap<String,UnderwaterModem> uws){
+        Future fut2 = simState.getMARS().enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            comNet.detachAllChildren();
+                            return null;
+                        }
+                    });
+        final Vector3f modPos = this.getWorldPosition();
+        for ( String elem : uws.keySet() ){
+            final UnderwaterModem uw = (UnderwaterModem)uws.get(elem);  
+            if(uw != this){//ignore myself
+                Vector3f distance = modPos.subtract(uw.getWorldPosition());
+                final float proDist = this.getPropagationDistance();
+                final float dis = Math.abs(distance.length());
+                if( dis <= proDist ){//ignore uws far away
+                    final Vector3f newVec = new Vector3f();
+                    comNet.worldToLocal(uw.getWorldPosition(), newVec);
+                    Future fut = simState.getMARS().enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            Geometry x_axis = new Geometry("x_axis!", new Line(Vector3f.ZERO,newVec.mult(0.5f)));
+                            Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                            ColorRGBA color = getDebugColor();
+                            color.a = 1f-(dis/proDist);
+                            x_axis_mat.setColor("Color", color);
+                            x_axis_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                            x_axis.setQueueBucket(Bucket.Transparent);
+                            x_axis.setMaterial(x_axis_mat);
+                            x_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
+                            x_axis.updateGeometricState();
+                            comNet.attachChild(x_axis);
+                            return null;
+                        }
+                    });
+                }  
+            }
+        }
     }
     
     /**

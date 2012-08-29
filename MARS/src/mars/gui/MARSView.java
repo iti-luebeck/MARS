@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.RenderingHints.Key;
 import java.awt.Toolkit;
 import org.jdesktop.application.Action;
@@ -61,9 +62,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
 import javax.swing.ToolTipManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -117,29 +120,9 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
  * @author Thomas Tosik
  */
 public class MARSView extends FrameView {
-    @Deprecated
-    private final static String s_auv = "Auvs";
-    @Deprecated
-    private final static String s_simob = "Simobs";
-    @Deprecated
-    private final static String s_pe = "Physical Environment";
-    @Deprecated
-    private final static String s_set = "Settings";
-    @Deprecated
-    private final static String s_sensors = "Sensors";
-    @Deprecated
-    private final static String s_actuators = "Actuators";
-    @Deprecated
-    private DefaultMutableTreeNode top;
-    @Deprecated
-    private DefaultMutableTreeNode auvs_treenode = new DefaultMutableTreeNode(s_auv);
     private MARS_Settings mars_settings;
     private KeyConfig keyConfig;
     private PhysicalEnvironment penv;
-    @Deprecated
-    private ArrayList auvs = new ArrayList();
-    @Deprecated
-    private ArrayList simobs = new ArrayList();
     private AUV_Manager auv_manager;
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
@@ -351,25 +334,6 @@ public class MARSView extends FrameView {
                     keys_tree.updateUI();
                 }
             }  
-        );
-    }
-
-    /**
-     *
-     * @param mars_settings
-     * @param auvs
-     * @param simobs
-     */
-    @Deprecated
-    public void initTree(MARS_Settings simauv_settings, ArrayList auvs, ArrayList simobs){
-        this.auvs = auvs;
-        this.simobs = simobs;
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    createNodes(top);
-                }
-            }
         );
     }
     
@@ -726,6 +690,7 @@ public class MARSView extends FrameView {
 
     }
 
+    @Deprecated
     private DefaultMutableTreeNode searchNode(DefaultMutableTreeNode rootSearchNode, String node_search_string){
         DefaultMutableTreeNode node = null;
         Enumeration e = rootSearchNode.breadthFirstEnumeration();
@@ -749,99 +714,6 @@ public class MARSView extends FrameView {
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         MARSApp.getApplication().show(aboutBox);
-    }
-
-    @Deprecated
-    private void createNodes(DefaultMutableTreeNode top){
-        createAUVSNodes(auvs_treenode);
-        auv_tree.updateUI();
-    }
-
-    @Deprecated
-    private void createAUVSNodes(DefaultMutableTreeNode treenode){
-        Iterator iter = auvs.iterator();
-        while(iter.hasNext() ) {
-            AUV auv = (AUV)iter.next();
-            DefaultMutableTreeNode auv_treenode = new DefaultMutableTreeNode(auv);
-            treenode.add(auv_treenode);
-            HashMap<String,Sensor> sensors = auv.getSensors();
-            HashMap<String,Actuator> actuators = auv.getActuators();
-            createParamNodes(auv_treenode,auv);
-            PhysicalValues physical_values = auv.getPhysicalvalues();
-            //createPhysicalValuesNodes(auv_treenode,physical_values);
-        }
-        top.add(treenode);
-    }
-
-    @Deprecated
-    private void createAUVNode(DefaultMutableTreeNode treenode, AUV auv){
-        DefaultMutableTreeNode auv_treenode = new DefaultMutableTreeNode(auv);
-        treenode.add(auv_treenode);
-        HashMap<String,Sensor> sensors = auv.getSensors();
-        HashMap<String,Actuator> actuators = auv.getActuators();
-        createParamNodes(auv_treenode,auv);
-        PhysicalValues physical_values = auv.getPhysicalvalues();
-        //createPhysicalValuesNodes(auv_treenode,physical_values);
-
-        top.add(treenode);
-    }
-
-    @Deprecated
-    private void createHashMapNodesParam(DefaultMutableTreeNode param_treenode, AUV_Parameters param, String hashmap_name, HashMap<String,Object> hash){
-        DefaultMutableTreeNode hash_treenode = new DefaultMutableTreeNode(hashmap_name);
-
-        for ( String elem : hash.keySet() ){
-            DefaultMutableTreeNode  vars_treenode1 = new DefaultMutableTreeNode(elem);
-            DefaultMutableTreeNode vars_treenode2 = new DefaultMutableTreeNode(hash.get(elem));
-            vars_treenode1.add(vars_treenode2);
-            hash_treenode.add(vars_treenode1);
-        }
-        param_treenode.add(hash_treenode);
-    }
-
-    @Deprecated
-    private void createHashMapNodesSettings(DefaultMutableTreeNode param_treenode, String hashmap_name, HashMap<String,Object> hash){
-        DefaultMutableTreeNode hash_treenode = new DefaultMutableTreeNode(hashmap_name);
-        SortedSet<String> sortedset= new TreeSet<String>(hash.keySet());
-
-        Iterator<String> it = sortedset.iterator();
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            if(hash.get(elem) instanceof HashMap){
-                createHashMapNodesSettings(hash_treenode,elem,(HashMap<String,Object>)hash.get(elem));
-            }else{
-                DefaultMutableTreeNode vars_treenode1 = new DefaultMutableTreeNode(elem);
-                DefaultMutableTreeNode vars_treenode2 = new DefaultMutableTreeNode(hash.get(elem));
-                vars_treenode1.add(vars_treenode2);
-                hash_treenode.add(vars_treenode1);
-            }
-        }
-        param_treenode.add(hash_treenode);
-    }
-
-    @Deprecated
-    private void createParamNodes(DefaultMutableTreeNode treenode, AUV auv){
-        AUV_Parameters param = auv.getAuv_param();
-        textfieldEditor.addCellEditorListener(param);
-        DefaultMutableTreeNode param_treenode = new DefaultMutableTreeNode("Parameters");
-
-        HashMap<String,Object> params = param.getAllVariables();
-        SortedSet<String> sortedset= new TreeSet<String>(params.keySet());
-        Iterator<String> it = sortedset.iterator();
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            if(params.get(elem) instanceof HashMap){
-                createHashMapNodesSettings(param_treenode,elem,(HashMap<String,Object>)params.get(elem));
-            }else{
-                DefaultMutableTreeNode  param_treenode1 = new DefaultMutableTreeNode(elem);
-                DefaultMutableTreeNode param_treenode2 = new DefaultMutableTreeNode(params.get(elem));
-                param_treenode1.add(param_treenode2);
-                param_treenode.add(param_treenode1);
-            }
-        }
-        treenode.add(param_treenode);
     }
     
     public void showpopupWindowSwitcher(final int x, final int y){
@@ -911,6 +783,63 @@ public class MARSView extends FrameView {
         insideChartPanel.validate();
         
         ChartFrame.setSize(400,400);
+    }
+    
+    private void addColorPanels(JPanel optionsColors, final SonarView imgP2){
+        JLabel jlChangeColor = new JLabel("Background Color:");
+        optionsColors.add(jlChangeColor);
+        JButton jb = new JButton("Change Color");
+        jb.setMaximumSize(new Dimension(300, 30));
+        ActionListener al = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final Color newColor = color_dialog.showDialog(
+                                             getRootPane(),
+                                             "Choose Background Color",null);
+                if(newColor != null){
+                    imgP2.changeBackgroundColor(newColor);
+                    imgP2.repaintAll();
+                }
+            }
+        };
+        jb.addActionListener(al);
+        optionsColors.add(jb);
+
+        
+        JLabel jlHitColor = new JLabel("Hit Color:");
+        optionsColors.add(jlHitColor);
+        JButton jbHit = new JButton("Change Color");
+        jbHit.setMaximumSize(new Dimension(300, 30));
+        ActionListener al2 = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final Color newColor = color_dialog.showDialog(
+                                             getRootPane(),
+                                             "Choose Hit Color",null);
+                if(newColor != null){
+                    imgP2.changeHitColor(newColor);
+                    imgP2.repaintAll();
+                }
+            }
+        };
+        jbHit.addActionListener(al2);
+        optionsColors.add(jbHit);
+        
+        JLabel jlRadColor = new JLabel("Radar Color:");
+        optionsColors.add(jlRadColor);
+        JButton jbRad = new JButton("Change Color");
+        jbRad.setMaximumSize(new Dimension(300, 30));
+        ActionListener al3 = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final Color newColor = color_dialog.showDialog(
+                                             getRootPane(),
+                                             "Choose Radar Line Color",null);
+                if(newColor != null){
+                    imgP2.changeRadarLineColor(newColor);
+                    imgP2.repaintAll();
+                }
+            }
+        };
+        jbRad.addActionListener(al3);
+        optionsColors.add(jbRad);
     }
     
     @Deprecated
@@ -1015,8 +944,7 @@ public class MARSView extends FrameView {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        top = new DefaultMutableTreeNode("AUVs");
-        //createNodes(top);
+        DefaultMutableTreeNode top = new DefaultMutableTreeNode("AUVs");
         auv_tree = new javax.swing.JTree(top);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -1054,8 +982,6 @@ public class MARSView extends FrameView {
         statusMessageLabel = new javax.swing.JLabel();
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
-        JME_SettingsDialog = new javax.swing.JDialog();
-        lblChart = new javax.swing.JLabel();
         addAUVPopUpMenu = new javax.swing.JPopupMenu();
         add_auv = new javax.swing.JMenuItem();
         reset_auvs = new javax.swing.JMenuItem();
@@ -1645,29 +1571,6 @@ public class MARSView extends FrameView {
                     .addComponent(statusAnimationLabel)
                     .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3))
-        );
-
-        JME_SettingsDialog.setMinimumSize(new java.awt.Dimension(400, 300));
-        JME_SettingsDialog.setName("JME_Settings"); // NOI18N
-
-        lblChart.setText(resourceMap.getString("lblChart.text")); // NOI18N
-        lblChart.setName("lblChart"); // NOI18N
-
-        javax.swing.GroupLayout JME_SettingsDialogLayout = new javax.swing.GroupLayout(JME_SettingsDialog.getContentPane());
-        JME_SettingsDialog.getContentPane().setLayout(JME_SettingsDialogLayout);
-        JME_SettingsDialogLayout.setHorizontalGroup(
-            JME_SettingsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JME_SettingsDialogLayout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(lblChart, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(148, Short.MAX_VALUE))
-        );
-        JME_SettingsDialogLayout.setVerticalGroup(
-            JME_SettingsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JME_SettingsDialogLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblChart, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         addAUVPopUpMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -2374,16 +2277,6 @@ public class MARSView extends FrameView {
         jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
         jTextField1.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
         jTextField1.setName("jTextField1"); // NOI18N
-        jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jTextField1MouseExited(evt);
-            }
-        });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
-            }
-        });
 
         jTextField2.setText(resourceMap.getString("jTextField2.text")); // NOI18N
         jTextField2.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
@@ -2489,16 +2382,6 @@ public class MARSView extends FrameView {
         jTextField4.setText(resourceMap.getString("jTextField4.text")); // NOI18N
         jTextField4.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
         jTextField4.setName("jTextField4"); // NOI18N
-        jTextField4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jTextField4MouseExited(evt);
-            }
-        });
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField4KeyPressed(evt);
-            }
-        });
 
         jTextField5.setText(resourceMap.getString("jTextField5.text")); // NOI18N
         jTextField5.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
@@ -3349,11 +3232,6 @@ public class MARSView extends FrameView {
         ParallelGroup par2 = new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false);
 
         JButton jButtona = new JButton("Create");
-        jButtona.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         while (it.hasNext()) {
             String elem = it.next();
@@ -3447,56 +3325,6 @@ public class MARSView extends FrameView {
         new_simob_dialog.setVisible(true);
         new_simob_dialog.setSize(432, 512);
     }//GEN-LAST:event_add_simobActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        boolean valid_values = true;
-        int comp_count = new_simob_dialog.getContentPane().getComponentCount();
-        SimObject simob = new SimObject(xmll);
-        for (int i = 0; i < comp_count; i++) {
-            Component comp = (Component)new_simob_dialog.getContentPane().getComponent(i);
-            if(comp instanceof MyTextField){
-                MyTextField mytext = (MyTextField)comp;
-                if(mytext.getInputVerifier().verify(mytext)){
-                    simob.setValue(mytext.getValue(), mytext.getObject(),mytext.getHashMapName());
-                }else{
-                    valid_values = false;
-                }
-            }
-        }
-        if(valid_values){
-            simob_manager.registerSimObject(simob);
-            //createSIMOBNode(simobs_treenode, simob);
-            xmll.addSimObject(simob);
-            auv_tree.updateUI();
-            new_simob_dialog.setVisible(false);
-        }
-    }
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        boolean valid_values = true;
-        int comp_count = new_auv.getContentPane().getComponentCount();
-        AUV_Parameters auv_param = new AUV_Parameters(xmll);
-        for (int i = 0; i < comp_count; i++) {
-            Component comp = (Component)new_auv.getContentPane().getComponent(i);
-            if(comp instanceof MyTextField){
-                MyTextField mytext = (MyTextField)comp;
-                if(mytext.getInputVerifier().verify(mytext)){
-                    auv_param.setValue(mytext.getValue(), mytext.getObject(), mytext.getHashMapName());
-                }else{
-                    valid_values = false;
-                }
-            }
-        }
-        if(valid_values){
-            Hanse hans2 = new Hanse();
-            hans2.setAuv_param(auv_param);
-            auv_manager.registerAUV(hans2);
-            xmll.addAUV(hans2);
-            createAUVNode(auvs_treenode, hans2);
-            auv_tree.updateUI();
-            new_auv.setVisible(false);
-        }
-    }
 
     private void add_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_auvActionPerformed
 
@@ -3921,15 +3749,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         });
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
-        }
-    }//GEN-LAST:event_jTextField1KeyPressed
-
-    private void jTextField1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseExited
-
-    }//GEN-LAST:event_jTextField1MouseExited
-
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
         Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -3958,14 +3777,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private void Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Cancel1ActionPerformed
-
-    private void jTextField4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField4MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4MouseExited
-
-    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4KeyPressed
 
     private void jButton31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton31ActionPerformed
         // TODO add your handling code here:
@@ -4149,7 +3960,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                 lastSelectedSonar = son;
                                 if(son.isScanning()){
                                     viewSonarPolar.setVisible(true);
-                                    viewSonarPlanar.setVisible(false);
+                                    viewSonarPlanar.setVisible(true);
                                 }else{
                                     viewSonarPolar.setVisible(false);
                                     viewSonarPlanar.setVisible(true);
@@ -4671,44 +4482,92 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_chartButton5ActionPerformed
 
     private void viewSonarPolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPolarActionPerformed
-        JFrame sonarFrame = new JFrame();
-        sonarFrame.setSize(252, 252);
+        JFrame sonarFrame = new JFrame("Polar View");
+        sonarFrame.setSize(2*252+300, 2*252);
         sonarFrame.setVisible(true);
-        sonarFrame.setLayout(new BoxLayout(sonarFrame.getContentPane(), BoxLayout.Y_AXIS));
-        //imgP = new PlanarView();
-        //sonarFrame.add(imgP);
-        final PolarView imgP2 = new PolarView();
-        //imgP2.paint();
-        sonarFrame.add(imgP2);
-        JButton jb = new JButton("Change Color");
-        ActionListener al = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                final Color newColor = color_dialog.showDialog(
-                                             getRootPane(),
-                                             "Choose Background Color for " + "",null);
-                if(newColor != null){
-                    imgP2.changeBackgroundColor(newColor);
-                    imgP2.repaint();
-                }
-            }
-        };
-        jb.addActionListener(al);
-        sonarFrame.add(jb);
+        sonarFrame.setLayout(new BoxLayout(sonarFrame.getContentPane(), BoxLayout.X_AXIS));
+        
+        final PolarView imgP = new PolarView();
+        sonarFrame.add(imgP);
+        
+        JPanel options = new JPanel();
+        options.setMaximumSize(new Dimension(300, 500));
+        options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
+        
+        //add Jpane for optionsColors
+        JPanel optionsColors = new JPanel();
+        optionsColors.setMaximumSize(new Dimension(300, 100));
+        GridLayout gl = new GridLayout(3,2);
+        optionsColors.setLayout(gl);
+        optionsColors.setBorder(new EmptyBorder(5, 5, 5, 5));
+        options.add(optionsColors);
+        
+        addColorPanels(optionsColors,imgP);
+        
+        
+        //add seperator
+        JSeparator optionsSep = new JSeparator();
+        options.add(optionsSep);
+        
+         //add Jpane for otherSTuff
+        JPanel optionsOther = new JPanel();
+        optionsOther.setMaximumSize(new Dimension(300, 100));
+        GridLayout gl2 = new GridLayout(2,2);
+        optionsOther.setLayout(gl2);
+        optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
+        options.add(optionsOther);
+        
+        sonarFrame.add(options);
+        
         sonarFrame.repaint();
         if(lastSelectedSonar != null){
-            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP2);
+            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP);
+            sonarFrame.setTitle("Polar View of: " + lastSelectedSonar.getPhysicalExchangerName());
         }
     }//GEN-LAST:event_viewSonarPolarActionPerformed
 
     private void viewSonarPlanarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPlanarActionPerformed
-        JFrame sonarFrame = new JFrame();
-        sonarFrame.setSize(400, 252);
+        JFrame sonarFrame = new JFrame("Planar View");
+        sonarFrame.setSize(400+300, 252);
         sonarFrame.setVisible(true);
-        PlanarView imgP = new PlanarView();
+        sonarFrame.setLayout(new BoxLayout(sonarFrame.getContentPane(), BoxLayout.X_AXIS));
+        
+        final PlanarView imgP = new PlanarView();
         sonarFrame.add(imgP);
+        
+        JPanel options = new JPanel();
+        options.setMaximumSize(new Dimension(300, 500));
+        options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
+        
+        //add Jpane for optionsColors
+        JPanel optionsColors = new JPanel();
+        optionsColors.setMaximumSize(new Dimension(300, 100));
+        GridLayout gl = new GridLayout(3,2);
+        optionsColors.setLayout(gl);
+        optionsColors.setBorder(new EmptyBorder(5, 5, 5, 5));
+        options.add(optionsColors);
+        
+        addColorPanels(optionsColors,imgP);
+        
+        
+        //add seperator
+        JSeparator optionsSep = new JSeparator();
+        options.add(optionsSep);
+        
+         //add Jpane for otherSTuff
+        JPanel optionsOther = new JPanel();
+        optionsOther.setMaximumSize(new Dimension(300, 100));
+        GridLayout gl2 = new GridLayout(2,2);
+        optionsOther.setLayout(gl2);
+        optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
+        options.add(optionsOther);
+        
+        sonarFrame.add(options);
+        
         sonarFrame.repaint();
         if(lastSelectedSonar != null){
             sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP);
+            sonarFrame.setTitle("Planar View of: " + lastSelectedSonar.getPhysicalExchangerName());
         }
     }//GEN-LAST:event_viewSonarPlanarActionPerformed
 
@@ -4724,7 +4583,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton Cancel7;
     private javax.swing.JFrame ChartFrame;
     private javax.swing.JPanel JMEPanel1;
-    private javax.swing.JDialog JME_SettingsDialog;
     private javax.swing.JPanel LeftMenuePanel;
     private javax.swing.JPanel MapPanel;
     private javax.swing.JMenuItem RestartMenuItem;
@@ -4912,7 +4770,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTree keys_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor5;
     private DefaultTreeCellRenderer renderer5;
-    private javax.swing.JLabel lblChart;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JDialog moveCameraDialog;
