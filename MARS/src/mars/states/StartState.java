@@ -147,9 +147,9 @@ public class StartState extends AbstractAppState{
             
             initParticles();
                     
-            assetManager.registerLocator("Assets/Images", FileLocator.class);
+            assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
             Material mat_stl2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            Texture tex_ml2 = assetManager.loadTexture("japanese-airplane-doubilet.jpg");
+            Texture tex_ml2 = assetManager.loadTexture("underwater_fog_dark.png");
             mat_stl2.setTexture("ColorMap", tex_ml2);
             cube2.setMaterial(mat_stl2);
             cube2.setLocalTranslation(0f, 0f, -8f);
@@ -511,8 +511,8 @@ public class StartState extends AbstractAppState{
         fire.setStartSize(0.1f);
         fire.setEndSize(0.08f);
         fire.setGravity(0, 0, 0);
-        fire.setLowLife(11f);
-        fire.setHighLife(11f);
+        fire.setLowLife(12f);
+        fire.setHighLife(12f);
         fire.setParticlesPerSec(0.6f);
         fire.setShape(new EmitterBoxShape(new Vector3f(-1f,-1f,-1f),new Vector3f(1f,1f,1f)));
         fire.getParticleInfluencer().setVelocityVariation(0.07f);
@@ -520,7 +520,7 @@ public class StartState extends AbstractAppState{
         //fire.setFacingVelocity(true);
         fire.setRandomAngle(true);
         fire.setRotateSpeed(1.0f);
-        fire.setLocalTranslation(new Vector3f(0f, -2.75f, 6f));
+        fire.setLocalTranslation(new Vector3f(0f, -2.8f, 6f));
         mars_node.attachChild(fire);
     }
     

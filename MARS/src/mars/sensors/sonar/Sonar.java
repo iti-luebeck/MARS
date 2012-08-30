@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PickHint;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
@@ -622,6 +623,15 @@ public class Sonar extends Sensor{
         for (int i = 0; i < results.size(); i++) {
             float distance = results.getCollision(i).getDistance();
             //System.out.println(" d " + i + " " + distance);
+            
+            //check if hit it pickable
+            Integer pickHint = (Integer)results.getCollision(i).getGeometry().getUserData(PickHint.PickName);
+            if(pickHint != null){
+                if(pickHint == PickHint.NoPick){
+                    continue;
+                }
+            }
+            
             if(distance >= getSonarMaxRange()){//too far away
                 //System.out.println("too far away");
                 break;
