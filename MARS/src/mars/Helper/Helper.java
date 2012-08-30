@@ -8,7 +8,11 @@ package mars.Helper;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.awt.Color;
+import java.util.List;
+import mars.PickHint;
 
 /**
  * This class has various basic static methods that are used everywhere.
@@ -59,5 +63,18 @@ public class Helper {
         int red = (int)(base.getRed() * (1f - masking_factor) + add.getRed() * masking_factor);
         int green = (int)(base.getGreen() * (1f - masking_factor) + add.getGreen() * masking_factor);
         return new Color(red, green, blue);
+    }
+    
+    public static void setNodePickUserData(Spatial spatial, int pickHint){
+        if(spatial instanceof Node){
+            Node node = (Node)spatial;
+            node.setUserData(PickHint.PickName, pickHint);
+            List<Spatial> children = node.getChildren();
+            for (Spatial spatial1 : children) {
+                setNodePickUserData(spatial1, pickHint);
+            }
+        }else{//its a spatial or geom, we dont care because it cant go deeper
+            spatial.setUserData(PickHint.PickName, pickHint);
+        }
     }
 }

@@ -19,8 +19,8 @@ public class PlanarView extends JPanel implements SonarView{
 
     Image fImage;
     MemoryImageSource mis;
-    int fWidth;
-    int fHeight;
+    int fWidth = 400;
+    int fHeight = 252;
     int[] fPixels;
     int counter = 0;
     private Color bgcolor = Color.WHITE;
@@ -31,9 +31,8 @@ public class PlanarView extends JPanel implements SonarView{
      * 
      */
     public PlanarView() {               
-        int h = 252,b = 400;
-        fWidth  = b;
-        fHeight = h;
+        fWidth  = 400;
+        fHeight = 252;
         fPixels = new int [fWidth * fHeight];
         for (int i = 0; i < fPixels.length; i++) {
             int alpha = 255;
@@ -50,6 +49,10 @@ public class PlanarView extends JPanel implements SonarView{
     @Override
     public void repaintAll(){
         this.repaint();
+    }
+    
+    public void setDataPoints(int dataPoints){
+        fWidth = dataPoints;
     }
     
     /**

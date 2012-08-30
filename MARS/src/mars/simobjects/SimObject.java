@@ -35,8 +35,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.PickHint;
 import mars.gui.HashMapWrapper;
 import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
@@ -60,7 +62,9 @@ public class SimObject{
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
     private Spatial ghost_simob_spatial;
-    private Node selectionNode = new Node("selectionNode");
+    private Node simObNode = new Node("simObNode");
+    private Node debugNode = new Node("debugNode");
+    private Node renderNode = new Node("renderNode");
 
     private Vector3f position = new Vector3f(0f,0f,0f);
     private Vector3f rotation = new Vector3f(0f,0f,0f);
@@ -245,6 +249,7 @@ public class SimObject{
         spatial.updateModelBound();
 
         spatial.setName(getName());
+        renderNode.attachChild(spatial);
     }
 
         /*
@@ -274,7 +279,7 @@ public class SimObject{
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
         debugShape = physics_control.createDebugShape(assetManager);
-        selectionNode.attachChild(debugShape);
+        debugNode.attachChild(debugShape);
         if(isDebugCollision()){
             debugShape.setCullHint(CullHint.Inherit);
         }else{
@@ -296,9 +301,11 @@ public class SimObject{
         loadModel();
         createPhysicsNode();
         createGhostSpatial();
-        selectionNode.attachChild(spatial);
+        Helper.setNodePickUserData(debugNode,PickHint.NoPick);
+        simObNode.attachChild(renderNode);
+        simObNode.attachChild(debugNode);
         spatial.updateGeometricState();
-        selectionNode.updateGeometricState();
+        simObNode.updateGeometricState();
     }
     
     /**
@@ -319,9 +326,9 @@ public class SimObject{
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
             ambient_light.setColor(mars_settings.getSelectionColor());
-            selectionNode.addLight(ambient_light); 
+            simObNode.addLight(ambient_light); 
         }else if(selected == false){
-            selectionNode.removeLight(ambient_light);
+            simObNode.removeLight(ambient_light);
         }
         this.selected = selected;
     }
@@ -334,8 +341,16 @@ public class SimObject{
      *
      * @return
      */
-    public Node getSelectionNode() {
-        return selectionNode;
+    public Node getSimObNode() {
+        return simObNode;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Node getRenderNode() {
+        return renderNode;
     }
 
     /**
@@ -707,7 +722,7 @@ public class SimObject{
         ghost_simob_spatial.setName(getName() + "_ghost");
         ghost_simob_spatial.setUserData("simob_name", getName());
         ghost_simob_spatial.setCullHint(CullHint.Always);
-        selectionNode.attachChild(ghost_simob_spatial);
+        debugNode.attachChild(ghost_simob_spatial);
     }
     
     public Spatial getGhostSpatial(){

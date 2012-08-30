@@ -32,6 +32,7 @@ public class SimObjectManager {
     private Node SonarDetectableNode;
     private Node sceneReflectionNode;
     private Node SimObNode;
+    private Node SimObPickingNode;
     private MARS_Main mars;
     private AssetManager assetManager;
     private BulletAppState bulletAppState;
@@ -61,6 +62,7 @@ public class SimObjectManager {
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.SimObNode = simstate.getSimObNode();
+        this.SimObPickingNode = simstate.getSimObPickingNode();
         this.bulletAppState = simstate.getBulletAppState();
         this.mars_settings = simstate.getMARSSettings();
     }
@@ -201,13 +203,14 @@ public class SimObjectManager {
         if(simob.isEnabled()){
             initSimObject(simob);
             addSimObjectToNode(simob,SimObNode);
+            //addSimObjectToPickingNode(simob,SimObPickingNode);
             addSimObjectToBulletAppState(simob);
         }
     }
 
     private void removeSimObjectFromScene(SimObject simob){
         bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
-        simob.getSelectionNode().removeFromParent();
+        simob.getSimObNode().removeFromParent();
     }
 
     /**
@@ -218,10 +221,21 @@ public class SimObjectManager {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
             if(simob.isEnabled()){
                 if(simob.isSonar_detectable()){
-                    SonarDetectableNode.attachChild(simob.getSelectionNode());
+                    SonarDetectableNode.attachChild(simob.getSimObNode());
                 }else{
-                    node.attachChild(simob.getSelectionNode());
+                    node.attachChild(simob.getSimObNode());
                 }
+            }
+    }
+    
+        /**
+     * We must add the auv to a special Node so that we can pick it it without interference of debug stuff.
+     * @param node
+     */
+    private void addSimObjectToPickingNode(SimObject simob, Node node){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to PickingNode: " + node.getName(), "");
+            if(simob.isEnabled()){
+                node.attachChild(simob.getRenderNode());
             }
     }
 

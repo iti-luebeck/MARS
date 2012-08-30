@@ -10,6 +10,9 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
+import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -139,8 +142,10 @@ public class StartState extends AbstractAppState{
             mat_stlr.setColor("RimLighting", new ColorRGBA(red,blue,green,power));
             cube.setMaterial(mat_stlr);*/
             
-            mars_node.attachChild(cube);
+            //mars_node.attachChild(cube);
             hanse_node.attachChild(nd_selection);
+            
+            initParticles();
                     
             assetManager.registerLocator("Assets/Images", FileLocator.class);
             Material mat_stl2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -489,6 +494,34 @@ public class StartState extends AbstractAppState{
         boundingBox.updateModelBound();
         boundingBox.updateGeometricState();
         nd_selection.attachChild(boundingBox);*/
+    }
+    
+    private void initParticles(){
+        assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
+        ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
+        Material mat_red = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");
+        //mat_red.setTexture("Texture", assetManager.loadTexture("bubble.png"));
+        mat_red.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/shockwave.png"));
+        fire.setMaterial(mat_red);
+        fire.setImagesX(1); 
+        fire.setImagesY(1); // 2x2 texture animation
+        fire.setEndColor(  new ColorRGBA(1f, 1f, 1f, 1f));   // red
+        fire.setStartColor(new ColorRGBA(1f, 1f, 1f, 0.5f)); // yellow
+        fire.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 0.15f, 0));
+        fire.setStartSize(0.1f);
+        fire.setEndSize(0.08f);
+        fire.setGravity(0, 0, 0);
+        fire.setLowLife(11f);
+        fire.setHighLife(11f);
+        fire.setParticlesPerSec(0.6f);
+        fire.setShape(new EmitterBoxShape(new Vector3f(-1f,-1f,-1f),new Vector3f(1f,1f,1f)));
+        fire.getParticleInfluencer().setVelocityVariation(0.07f);
+        fire.setGravity(0f, -0.05f, 0f);
+        //fire.setFacingVelocity(true);
+        fire.setRandomAngle(true);
+        fire.setRotateSpeed(1.0f);
+        fire.setLocalTranslation(new Vector3f(0f, -2.75f, 6f));
+        mars_node.attachChild(fire);
     }
     
     private float[] getVerts(Mesh mesh){

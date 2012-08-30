@@ -33,7 +33,9 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -4557,10 +4559,36 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
          //add Jpane for otherSTuff
         JPanel optionsOther = new JPanel();
         optionsOther.setMaximumSize(new Dimension(300, 100));
-        GridLayout gl2 = new GridLayout(2,2);
+        GridLayout gl2 = new GridLayout(1,1);
         optionsOther.setLayout(gl2);
         optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
         options.add(optionsOther);
+        
+        
+        JLabel jlDataPoints = new JLabel("Data Points:");
+        optionsOther.add(jlDataPoints);
+        final JTextField jbDataPoints = new JTextField("400");
+        jbDataPoints.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
+        jbDataPoints.setMaximumSize(new Dimension(100, 30));
+        
+        KeyListener kl = new KeyListener() {
+
+            public void keyTyped(KeyEvent e) {
+            }
+
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    imgP.setDataPoints(500);
+                }
+            }
+
+            public void keyReleased(KeyEvent e) {
+            }
+            
+        };
+        jbDataPoints.addKeyListener(kl);
+        optionsOther.add(jbDataPoints);
+        
         
         sonarFrame.add(options);
         

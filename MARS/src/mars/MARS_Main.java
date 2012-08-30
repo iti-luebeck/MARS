@@ -16,6 +16,7 @@ import com.jme3.font.BitmapFont;
 import mars.gui.MARSView;
 import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.ScreenshotAppState;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
@@ -107,6 +108,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());
         stateManager.attach(mapstate);
+        
+        //attach Screenshot AppState
+        ScreenshotAppState screenShotState = new ScreenshotAppState();
+        stateManager.attach(screenShotState);
         
         //overrirde standard flybycam      
         flyCam.setEnabled(false);

@@ -40,6 +40,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.NanoTimer;
@@ -59,6 +60,7 @@ import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.PickHint;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -112,6 +114,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Node AUVsNode = new Node("AUVNode");
     private Node SimObNode = new Node("SimObNode");
+    @Deprecated
+    private Node SimObPickingNode = new Node("SimObPickingNode");
     //warter currents
     private Node currents = new Node("currents");
     
@@ -604,7 +608,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
              }
-             simobs = XML_JAXB_ConfigReaderWriter.loadSimObjects();;
+             simobs = XML_JAXB_ConfigReaderWriter.loadSimObjects();
         } catch (Exception ex) {
             Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -810,7 +814,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     guiControlState.setMove_simob(true);
                     guiControlState.setGhostObject(selected_simob.getGhostSpatial());
                     //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSpatial().worldToLocal(selected_simob.getSpatial().getWorldTranslation(),null));//initial location set
-                    //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSelectionNode().worldToLocal(guiControlState.getIntersection(),null));
+                    //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSimObNode().worldToLocal(guiControlState.getIntersection(),null));
                     selected_simob.hideGhostSpatial(false);
                 }
             }else if(name.equals("moveauv") && !keyPressed) {
@@ -826,7 +830,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 SimObject selected_simob = simob_manager.getSelectedSimObject();
                 if(selected_simob != null){
                     selected_simob.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
-                    //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSelectionNode().worldToLocal(selected_simob.getSelectionNode().getWorldTranslation(),null));//reset ghost auv for rotation
+                    //guiControlState.getGhostObject().setLocalTranslation(selected_simob.getSimObNode().worldToLocal(selected_simob.getSimObNode().getWorldTranslation(),null));//reset ghost auv for rotation
                     selected_simob.hideGhostSpatial(true);
                 }
                 guiControlState.setDepth_iteration(0);
@@ -899,8 +903,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         guiControlState.setIntersection(intersection);
         //System.out.println("Intersection: " + intersection);
         if(guiControlState.getGhostObject() != null){
-            //System.out.println("simob.getSpatial().worldToLocal(intersection,null): " + simob.getSelectionNode().worldToLocal(intersection,null));
-            guiControlState.getGhostObject().setLocalTranslation(simob.getSelectionNode().worldToLocal(intersection,null));
+            //System.out.println("simob.getSpatial().worldToLocal(intersection,null): " + simob.getSimObNode().worldToLocal(intersection,null));
+            guiControlState.getGhostObject().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection,null));
             //guiControlState.getGhostObject().setLocalRotation(guiControlState.getRotation());
         }
     }
@@ -1011,7 +1015,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                   }
               }
           }
-            
+          //run through and nothing found that is worth to pick
+          auv_manager.deselectAllAUVs();
+          
           /*// Here comes the action:
           //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
           BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
@@ -1022,7 +1028,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //guiControlState.setFree(false);
           }*/
         }else{//nothing to pickRightClick
-            System.out.println("Nothing to pick!");
+            System.out.println("Nothing to pick auv!");
                 auv_manager.deselectAllAUVs();
             //guiControlState.setFree(true);
         }
@@ -1035,17 +1041,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
               //System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
-                if((String)target.getUserData("simob_name") != null){
-                    SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
-                    if(simob != null){
-                        simob.setSelected(true);
-                        guiControlState.setLatestSelectedSimOb(simob);
-                        return;
-                        //guiControlState.setFree(false);
+                if( ((String)target.getUserData("simob_name") != null) ){
+                    Integer pickType = (Integer)target.getUserData(PickHint.PickName);
+                    if( (pickType == null) || (pickType == PickHint.Pick) ){//only pick spatials who are pickable
+                        SimObject simob = (SimObject)simob_manager.getSimObject((String)target.getUserData("simob_name"));
+                        if(simob != null){
+                            simob.setSelected(true);
+                            guiControlState.setLatestSelectedSimOb(simob);
+                            return;
+                            //guiControlState.setFree(false);
+                        }
                     }
                 }
             }
+            //run through and nothing found that is worth to pick
+            simob_manager.deselectAllSimObs();
         }else{//nothing to pickRightClick
+            System.out.println("Nothing to pick simobs!");
                 simob_manager.deselectAllSimObs();
         }     
     }
@@ -1289,6 +1301,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public Node getSimObNode() {
         return SimObNode;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Node getSimObPickingNode() {
+        return SimObPickingNode;
     }
 
     /**

@@ -68,6 +68,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import jme3tools.optimize.GeometryBatchFactory;
+import mars.Helper.Helper;
 import mars.Initializer;
 import mars.Keys;
 import mars.PhysicalEnvironment;
@@ -79,6 +80,7 @@ import mars.Manipulating;
 import mars.Moveable;
 import mars.MyMTLLoader;
 import mars.MyOBJLoader;
+import mars.PickHint;
 import mars.actuators.BallastTank;
 import mars.states.SimState;
 import mars.auv.example.Hanse;
@@ -1200,6 +1202,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         boundingBox.updateModelBound();
         boundingBox.updateGeometricState();
         setBoundingBoxVisible(auv_param.isDebugBounding());
+        Helper.setNodePickUserData(boundingBox,PickHint.NoPick);
         auv_node.attachChild(boundingBox);
                 
         setWireframeVisible(auv_param.isDebugWireframe());
@@ -1216,6 +1219,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         ghost_auv_spatial.setName(auv_param.getModel_name() + "_ghost");
         ghost_auv_spatial.setUserData("auv_name", getName());
         ghost_auv_spatial.setCullHint(CullHint.Always);
+        Helper.setNodePickUserData(ghost_auv_spatial,PickHint.NoPick);
         auv_node.attachChild(ghost_auv_spatial);
     }
     
@@ -1265,6 +1269,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
         debugShape = physics_control.createDebugShape(assetManager);
+        Helper.setNodePickUserData(debugShape,PickHint.NoPick);
         auv_node.attachChild(debugShape);
         if(getAuv_param().isDebugCollision()){
             debugShape.setCullHint(CullHint.Inherit);
@@ -2480,6 +2485,19 @@ public class BasicAUV implements AUV,SceneProcessor{
                     pe.updateState(path);        
                 }  
             }
+        }
+    }
+    
+    private void setNodePickUserData(Spatial spatial){
+        if(spatial instanceof Node){
+            Node node = (Node)spatial;
+            node.setUserData(PickHint.PickName, PickHint.NoPick);
+            List<Spatial> children = node.getChildren();
+            for (Spatial spatial1 : children) {
+                setNodePickUserData(spatial1);
+            }
+        }else{//its a spatial or geom, we dont care because it cant go deeper
+            spatial.setUserData(PickHint.PickName, PickHint.NoPick);
         }
     }
 }
