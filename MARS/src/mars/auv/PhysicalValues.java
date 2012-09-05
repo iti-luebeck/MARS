@@ -33,6 +33,10 @@ public class PhysicalValues {
     private ITrace2D traceBuoyancyForce = new Trace2DLtd(traceAmount); 
     private ITrace2D traceDragForce = new Trace2DLtd(traceAmount); 
     private ITrace2D traceDragTorque = new Trace2DLtd(traceAmount);
+    private ITrace2D traceDragArea = new Trace2DLtd(traceAmount);
+    private ITrace2D traceVectorX = new Trace2DLtd(traceAmount);
+    private ITrace2D traceVectorY = new Trace2DLtd(traceAmount);
+    private ITrace2D traceVectorZ = new Trace2DLtd(traceAmount);
     
     //container for all the traces
     private ArrayList<ITrace2D> traces = new ArrayList<ITrace2D>();
@@ -44,7 +48,7 @@ public class PhysicalValues {
      *
      */
     public PhysicalValues(){
-        traceVolume.setColor(Color.red);
+        /*traceVolume.setColor(Color.red);
         traceVelocity.setColor(Color.GREEN);
         traceAngularVelocity.setColor(Color.ORANGE);
         traceDepth.setColor(Color.blue);
@@ -56,6 +60,29 @@ public class PhysicalValues {
         traces.add(traceVelocity);
         traces.add(traceAngularVelocity);
         traces.add(traceDepth);
+        
+        traces.add(traceBuoyancyForce);
+        traces.add(traceDragForce);
+        traces.add(traceDragTorque);
+        traces.add(traceDragArea);
+        traceBuoyancyForce.setColor(Color.BLACK);
+        traceDragForce.setColor(Color.CYAN);
+        traceDragTorque.setColor(Color.MAGENTA);
+        traceDragArea.setColor(Color.YELLOW);
+        traceBuoyancyForce.setName("BuoyancyForce");
+        traceDragForce.setName("DragForce");
+        traceDragTorque.setName("DragTorque");
+        traceDragArea.setName("DragArea");*/
+        
+        traces.add(traceVectorX);
+        traces.add(traceVectorY);
+        traces.add(traceVectorZ);
+        traceVectorX.setColor(Color.RED);
+        traceVectorY.setColor(Color.GREEN);
+        traceVectorZ.setColor(Color.BLUE);
+        traceVectorX.setName("X");
+        traceVectorY.setName("Y");
+        traceVectorZ.setName("Z");
     }
     
     public void updateVolume(float volume){
@@ -63,7 +90,7 @@ public class PhysicalValues {
     }
     
     public void updateVelocity(float velocity){
-       // traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
+        //traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
     }
     
     public void updateAngularVelocity(float angularVelocity){
@@ -84,6 +111,16 @@ public class PhysicalValues {
     
     public void updateDragTorque(float dragTorque){
         //traceDragTorque.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragTorque);
+    }
+    
+    public void updateDragArea(float dragArea){
+        //traceDragArea.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragArea);
+    }
+    
+    public void updateVector(Vector3f vec){
+        /*traceVectorX.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.x);
+        traceVectorY.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.y);
+        traceVectorZ.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.z);*/
     }
 
     public ITrace2D getTraceVolume() {
@@ -116,6 +153,10 @@ public class PhysicalValues {
 
     public ITrace2D getTraceDragTorque() {
         return traceDragTorque;
+    }
+    
+    public ITrace2D getTraceDragArea() {
+        return traceDragArea;
     }
 
     /**

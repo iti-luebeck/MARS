@@ -14,20 +14,20 @@ import mars.auv.BasicAUV;
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class Hanse2 extends BasicAUV{
+public class ASV extends BasicAUV{
     
     /**
      * 
      * @param simstate 
      */
-    public Hanse2(SimState simstate){
+    public ASV(SimState simstate){
         super(simstate);
     }
 
     /**
      *
      */
-    public Hanse2(){
+    public ASV(){
         super();
     }
 

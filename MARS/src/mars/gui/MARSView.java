@@ -252,7 +252,7 @@ public class MARSView extends FrameView {
                 @Override
                 public void run() {
                     if(auv_manager != null){
-                        AUV auv = auv_manager.getAUV("hanse");
+                        AUV auv = auv_manager.getAUV("asv");
                         /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
                         auv.getPhysicalvalues().getTraceVolume().setVisible(false);*/
                         ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
@@ -477,6 +477,11 @@ public class MARSView extends FrameView {
                         jme3_debug_auv_centers.setSelected(true);
                     }else{
                         jme3_debug_auv_centers.setSelected(false);
+                    }
+                    if(auv_param.isDebugVisualizers()){
+                        jme3_debug_auv_visualizers.setSelected(true);
+                    }else{
+                        jme3_debug_auv_visualizers.setSelected(false);
                     }
                     if(auv_param.isDebugCollision()){
                         jme3_debug_auv_collision.setSelected(true);
@@ -1044,6 +1049,7 @@ public class MARSView extends FrameView {
         jme3_params_auv = new javax.swing.JMenu();
         jme3_debug_auv = new javax.swing.JMenu();
         jme3_debug_auv_pe = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_visualizers = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_centers = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_buoy = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_collision = new javax.swing.JCheckBoxMenuItem();
@@ -2017,6 +2023,16 @@ public class MARSView extends FrameView {
             }
         });
         jme3_debug_auv.add(jme3_debug_auv_pe);
+
+        jme3_debug_auv_visualizers.setText(resourceMap.getString("jme3_debug_auv_visualizers.text")); // NOI18N
+        jme3_debug_auv_visualizers.setToolTipText(resourceMap.getString("jme3_debug_auv_visualizers.toolTipText")); // NOI18N
+        jme3_debug_auv_visualizers.setName("jme3_debug_auv_visualizers"); // NOI18N
+        jme3_debug_auv_visualizers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_visualizersActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_visualizers);
 
         jme3_debug_auv_centers.setText(resourceMap.getString("jme3_debug_auv_centers.text")); // NOI18N
         jme3_debug_auv_centers.setName("jme3_debug_auv_centers"); // NOI18N
@@ -4599,6 +4615,20 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_viewSonarPlanarActionPerformed
 
+    private void jme3_debug_auv_visualizersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_visualizersActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_visualizers.isSelected();
+                    simState.debugSelectedAUV(7,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_pe);
+    }//GEN-LAST:event_jme3_debug_auv_visualizersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4768,6 +4798,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_collision;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_drag;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_pe;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_visualizers;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_wireframe;
     private javax.swing.JMenuItem jme3_delete_auv;
     private javax.swing.JCheckBoxMenuItem jme3_enable_auv;

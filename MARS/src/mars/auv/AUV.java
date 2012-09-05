@@ -302,6 +302,7 @@ public interface AUV{
     public void hideGhostAUV(boolean hide);
     public void setCentersVisible(boolean visible);
     public void setPhysicalExchangerVisible(boolean visible);
+    public void setVisualizerVisible(boolean visible);
     public void setCollisionVisible(boolean visible);
     public void setBuoycancyVisible(boolean visible);
     public void setWireframeVisible(boolean visible);

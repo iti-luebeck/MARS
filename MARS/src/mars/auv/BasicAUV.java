@@ -82,9 +82,11 @@ import mars.MyMTLLoader;
 import mars.MyOBJLoader;
 import mars.PickHint;
 import mars.actuators.BallastTank;
+import mars.actuators.visualizer.PointVisualizer;
+import mars.actuators.visualizer.VectorVisualizer;
 import mars.states.SimState;
 import mars.auv.example.Hanse;
-import mars.auv.example.Hanse2;
+import mars.auv.example.ASV;
 import mars.auv.example.Monsun2;
 import mars.auv.example.SMARTE;
 import mars.control.SpatialLodControl;
@@ -105,7 +107,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Hanse.class, Monsun2.class, Hanse2.class, SMARTE.class} )
+@XmlSeeAlso( {Hanse.class, Monsun2.class, ASV.class, SMARTE.class} )
 public class BasicAUV implements AUV,SceneProcessor{
 
     private Geometry MassCenterGeom;
@@ -590,7 +592,11 @@ public class BasicAUV implements AUV,SceneProcessor{
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
                 element.setSimauv_settings(mars_settings);
-                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                if(element instanceof PointVisualizer || element instanceof VectorVisualizer){
+                    element.setNodeVisibility(auv_param.isDebugVisualizers());
+                }else{
+                    element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                }
                 element.setIniter(initer);
                 element.init(auv_node);
                 if(element instanceof Keys){
@@ -729,15 +735,23 @@ public class BasicAUV implements AUV,SceneProcessor{
             complete_force = complete_force.add(drag_force_vec);
         }*/
         //physics_control.applyCentralForce(drag_force_vec);
-        physics_control.applyImpulse(drag_force_vec,Vector3f.ZERO);
-        physicalvalues.updateDragForce(drag_force);
+        
+        //since the impulse vector should be in world space (http://www.bulletphysics.org/Bullet/phpBB3/viewtopic.php?p=&f=9&t=2693) we have to convert it
+        //Vector3f world_drag_force_vec = physics_control.getPhysicsLocation().add(drag_force_vec);
+        Vector3f world_drag_force_vec = new Vector3f();
+        auv_node.localToWorld(drag_force_vec, world_drag_force_vec);
+        physics_control.applyImpulse(drag_force_vec,new Vector3f(0f, 0f, 0f));
+        //physics_control.applyImpulse(drag_force_vec,physics_control.getPhysicsLocation());
+        physicalvalues.updateDragForce(drag_force/mars_settings.getPhysicsFramerate());
+        physicalvalues.updateDragArea(drag_area);
+        //physicalvalues.updateVector(physics_control.getLinearVelocity());
     }
 
     private void updateAngularDragForces(){
         Vector3f cur_ang = physics_control.getAngularVelocity();
         float angular_velocity = physics_control.getAngularVelocity().length();
         float drag_torque = (float)(auv_param.getDrag_coefficient_angular() * drag_area * 0.25f * physical_environment.getFluid_density()* Math.pow(angular_velocity, 2));
-        Vector3f drag_direction = physics_control.getAngularVelocity().normalize().negate();
+        Vector3f drag_direction = physics_control.getAngularVelocity().negate().normalize();
         Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque/mars_settings.getPhysicsFramerate());
         /*System.out.println("cur_ang: " + cur_ang);
         System.out.println("angular_velocity: " + angular_velocity);
@@ -747,7 +761,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         System.out.println("angular_drag_torque_scalar: " + angular_drag_torque_vec.length());
         System.out.println("==========================");*/
         physics_control.applyTorqueImpulse(angular_drag_torque_vec);
+        /*System.out.println("after:angular_velocity: " + physics_control.getAngularVelocity());
+        System.out.println("after:angular_velocity_length: " + physics_control.getAngularVelocity().length());*/
         physicalvalues.updateDragTorque(drag_torque);
+        physicalvalues.updateVector(cur_ang);
     }
 
     private void updateStaticBuyocancyForces(){
@@ -855,8 +872,8 @@ public class BasicAUV implements AUV,SceneProcessor{
         //System.out.println("buyo: " + buoyancy_force);
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force/mars_settings.getPhysicsFramerate(),0.0f);
-        //physicalvalues.updateVolume(volume);
-        //physicalvalues.updateBuoyancyForce(buoyancy_force);
+        physicalvalues.updateVolume(volume);
+        physicalvalues.updateBuoyancyForce(buoyancy_force);
         //addValueToSeries(buoyancy_force,1);
         //addValueToSeries(actual_vol,1);
         //addValueToSeries(actual_vol_air,2);
@@ -1262,6 +1279,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         physics_control.setCollideWithGroups(1);
         physics_control.setDamping(auv_param.getDamping_linear(), auv_param.getDamping_angular());
         physics_control.setAngularFactor(auv_param.getAngular_factor());
+        //physics_control.setApplyPhysicsLocal(true);
         //physics_control.setFriction(0f);
         //physics_control.setRestitution(0.3f);
 
@@ -2354,7 +2372,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         if(selected && this.selected==false){
             if(mars_settings.isAmbientSelection()){
                 ambient_light.setColor(mars_settings.getSelectionColor());
-                selectionNode.addLight(ambient_light); 
+                selectionNode.addLight(ambient_light);
             }
             if(mars_settings.isGlowSelection()){
                 /*Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
@@ -2397,7 +2415,19 @@ public class BasicAUV implements AUV,SceneProcessor{
         setSpatialVisible(MassCenterGeom,visible);
         setSpatialVisible(VolumeCenterPreciseGeom,visible);
     }
-    
+
+    public void setVisualizerVisible(boolean visible){
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            if(element.isEnabled()){
+                if(element instanceof PointVisualizer){
+                    element.setNodeVisibility(auv_param.isDebugVisualizers());
+                }else if(element instanceof VectorVisualizer){
+                    element.setNodeVisibility(auv_param.isDebugVisualizers());
+                }
+            }
+        }
+    }
     public void setPhysicalExchangerVisible(boolean visible){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
@@ -2407,7 +2437,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
-            if(element.isEnabled()){
+            if(element.isEnabled() && !(element instanceof PointVisualizer) && !(element instanceof VectorVisualizer)){
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
             }
         }

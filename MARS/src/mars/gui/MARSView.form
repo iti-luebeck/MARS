@@ -1305,6 +1305,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_peActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_visualizers">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_visualizers.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="jme3_debug_auv_visualizers.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="jme3_debug_auv_visualizers" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_debug_auv_visualizersActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jme3_debug_auv_centers">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jme3_debug_auv_centers.text"/>

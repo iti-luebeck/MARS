@@ -17,6 +17,15 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="filepath">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje/boje_3.obj</value>
         </entry>
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje_1.png</value>
+        </entry>
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje_1_dnd.png</value>
+        </entry>
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="sonar_detectable">
+            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+        </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Collision">
             <value>
                 <entry xsi:type="myHashMapEntryTypeVector3F" key="collision_position">
@@ -62,20 +71,11 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje_1</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="sonar_detectable">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
-        </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="pinger">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="light">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
-        </entry>
-		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje_1.png</value>
-        </entry>
-		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">boje_1_dnd.png</value>
         </entry>
     </simob_variables>
 </SimObject>

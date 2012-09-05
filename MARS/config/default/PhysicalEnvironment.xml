@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PhysicalEnvironment>
     <environment>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="fluid_viscosity" unit="mPa*s">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="mPa*s" key="fluid_viscosity">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.002</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="air_temp" unit="C°">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="C°" key="air_temp">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">20.0</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="magnetic_east" unit="m">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="m" key="magnetic_east">
             <value>
                 <x>0.0</x>
                 <y>0.0</y>
                 <z>1.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="air_density" unit="kg/m³">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="kg/m³" key="air_density">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.2041</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="water_height" unit="m">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="m" key="water_height">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="gravitational_acceleration_vector" unit="m/s²">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="m/s²" key="gravitational_acceleration_vector">
             <value>
                 <x>0.0</x>
-                <y>-9.80665</y>
+                <y>-9.80665</y><!-- -9.80665 -->
                 <z>0.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="water_current" unit="kgm/s²">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="kgm/s²" key="water_current">
             <value>
                 <x>0.0</x>
                 <y>0.0</y>
                 <z>0.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="fluid_temp" unit="C°">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="C°" key="fluid_temp">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">20.0</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="magnetic_north" unit="m">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="m" key="magnetic_north">
             <value>
                 <x>1.0</x>
                 <y>0.0</y>
                 <z>0.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="pressure_water_height" unit="mbar">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="mbar" key="pressure_water_height">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1013.25</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="magnetic_z" unit="m">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="m" key="magnetic_z">
             <value>
                 <x>0.0</x>
                 <y>1.0</y>
                 <z>0.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="fluid_salinity" unit="%">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="%" key="fluid_salinity">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">3.74</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="fluid_density" unit="kg/m³">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" unit="kg/m³" key="fluid_density">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">998.2071</value>
         </entry>
     </environment>

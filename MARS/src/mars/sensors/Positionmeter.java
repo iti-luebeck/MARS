@@ -67,7 +67,7 @@ public class Positionmeter extends Sensor{
      * @param tpf
      */
     public void update(float tpf){
-        new_position = physics_control.getPhysicsLocation();//get the new velocity
+        new_position = physics_control.getPhysicsLocation();//get the new position
         old_position = new_position.clone();
     }
 

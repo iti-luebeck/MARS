@@ -29,6 +29,7 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -1391,7 +1392,30 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
 
     public void physicsTick(PhysicsSpace ps, float tpf) {
-
+        if(/*AUVPhysicsControl != null*/false){
+            //only update physics if auv_hanse exists and when simulation is started
+            if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
+                /*Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    auv_manager.updateAllAUVs(tpf);
+                    return null;
+                }
+                });*/
+                auv_manager.updateAllAUVs(tpf);
+                /*Future fut = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    com_manager.update(tpf);
+                    return null;
+                }
+                });*/
+                com_manager.update(tpf);
+                //time = time + tpf;
+                //System.out.println("time: " + time);
+            }            
+            /*if(auv_manager != null){
+                com_manager.update(tpf);
+            }*/
+        }
     }
 
     private void initNiftyLoading(){
@@ -1434,9 +1458,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
             Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
-            Vector3f direction = guiControlState.getAuvContactDirection().mult(50f);
-            //System.out.println("POKE!");     
-            selected_auv.getPhysicsControl().applyImpulse(direction.mult(1f), rel_pos);
+            Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
+            System.out.println("POKE!");     
+            selected_auv.getPhysicsControl().applyImpulse(direction.mult(selected_auv.getAuv_param().getMass()*5f/mars_settings.getPhysicsFramerate()), rel_pos);
             
             /*Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(direction));
             Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -1547,6 +1571,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
                 case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
                 case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
+                case 7: selected_auv.getAuv_param().setDebugVisualizers(selected);selected_auv.setVisualizerVisible(selected);break;
                 default:;
             }                
         }

@@ -283,6 +283,8 @@ public class AUV_Parameters implements CellEditorListener{
             auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
         }else if(target.equals("centers") && hashmapname.equals("Debug")){
             auv.setCentersVisible(isDebugCenters());
+        }else if(target.equals("visualizer") && hashmapname.equals("Debug")){
+            auv.setVisualizerVisible(isDebugVisualizers());
         }else if(target.equals("bounding") && hashmapname.equals("Debug")){
             auv.setBoundingBoxVisible(isDebugBounding());
         }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
@@ -1005,6 +1007,22 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public void setDebugCenters(boolean centers) {
         debug.put("centers", centers);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isDebugVisualizers() {
+         return (Boolean)debug.get("visualizer");
+    }
+
+    /**
+     *
+     * @param centers 
+     */
+    public void setDebugVisualizers(boolean visualizer) {
+        debug.put("visualizer", visualizer);
     }
 
     /**

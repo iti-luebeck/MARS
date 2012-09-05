@@ -7,10 +7,10 @@ package mars.gui;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.awt.Component;
-import java.util.HashMap;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import mars.PhysicalExchanger;
+import mars.actuators.Lamp;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
@@ -149,6 +149,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"AX-12.png"));
                         }else if(hasher.getUserData() instanceof UnderwaterModem){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"speaker-volume.png"));
+                        }else if(hasher.getUserData() instanceof Lamp){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"flashlight-shine.png"));
                         }
                     }
                 }else if(hasher.getUserData() instanceof ColorRGBA){

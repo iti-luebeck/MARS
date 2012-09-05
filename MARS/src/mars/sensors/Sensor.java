@@ -28,7 +28,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,Sonar.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,Compass.class,TemperatureSensor.class,UnderwaterModem.class,Velocimeter.class,VideoCamera.class,IMU.class,Positionmeter.class,Orientationmeter.class,Posemeter.class,TerrainSender.class} )
+@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,Sonar.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,Compass.class,TemperatureSensor.class,UnderwaterModem.class,Velocimeter.class,VideoCamera.class,IMU.class,Positionmeter.class,Orientationmeter.class,Posemeter.class,TerrainSender.class,GPSReceiver.class} )
 public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /*
      * 
