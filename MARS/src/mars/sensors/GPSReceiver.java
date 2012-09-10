@@ -5,8 +5,13 @@
 package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,6 +35,9 @@ public class GPSReceiver extends Sensor{
     private Publisher<org.ros.message.sensor_msgs.NavSatFix> publisher = null;
     private org.ros.message.sensor_msgs.NavSatFix fl = new org.ros.message.sensor_msgs.NavSatFix(); 
     private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private org.ros.message.sensor_msgs.NavSatStatus NavSatStatus = new org.ros.message.sensor_msgs.NavSatStatus(); 
+    
+    private Geometry GPSReceiverGeom;
     
     /**
      * 
@@ -66,18 +74,16 @@ public class GPSReceiver extends Sensor{
         this.auv_node = auv_node;
         pos.init(auv_node);
         
-        /*Vector3f angax = new Vector3f();
-        //jme3_quat.toAngleAxis(angax);
-        Vector3f ray_start =  new Vector3f(0f, 0f, 0f);
-        Vector3f ray_direction = angax;//new Vector3f(jme3_quat.getX(), jme3_quat.getY(), jme3_quat.getZ());
-        arrow = new Arrow(ray_direction.mult(1f));
-        Geometry mark4 = new Geometry("VideoCamera_Arrow_1", arrow);
-        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat4.setColor("Color", ColorRGBA.Green);
-        mark4.setMaterial(mark_mat4);
-        mark4.setLocalTranslation(ray_start);
-        mark4.updateGeometricState();
-        rootNode.attachChild(mark4);*/
+        Sphere sphere7 = new Sphere(16, 16, 0.04f);
+        GPSReceiverGeom = new Geometry("PressureStart", sphere7);
+        Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat7.setColor("Color", ColorRGBA.White);
+        GPSReceiverGeom.setMaterial(mark_mat7);
+        GPSReceiverGeom.setLocalTranslation(getReferencePointWorld());
+        GPSReceiverGeom.updateGeometricState();
+        PhysicalExchanger_Node.attachChild(GPSReceiverGeom);
+        rootNode.attachChild(PhysicalExchanger_Node);
+        this.auv_node = auv_node;
     }
 
     /**
@@ -93,6 +99,54 @@ public class GPSReceiver extends Sensor{
      */
     public void reset(){
         pos.reset();
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getReferencePointGPS() {
+        return (Vector3f)variables.get("ReferencePointGPS");
+    }
+
+    /**
+     *
+     * @param TemperatureSensorStartVector
+     */
+    public void setReferencePointGPS(Vector3f ReferencePointGPS) {
+        variables.put("ReferencePointGPS", ReferencePointGPS);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getReferencePointWorld() {
+        return (Vector3f)variables.get("ReferencePointWorld");
+    }
+
+    /**
+     *
+     * @param TemperatureSensorStartVector
+     */
+    public void setReferencePointWorld(Vector3f ReferencePointWorld) {
+        variables.put("ReferencePointWorld", ReferencePointWorld);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getLatitudeFactor() {
+        return (Float)variables.get("LatitudeFactor");
+    }
+
+    /**
+     *
+     * @param TemperatureSensorStartVector
+     */
+    public void setLatitudeFactor(float LatitudeFactor) {
+        variables.put("LatitudeFactor", LatitudeFactor);
     }
     
     @Override
@@ -163,16 +217,25 @@ public class GPSReceiver extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
+        //header.seq = seqNr++;
         header.frame_id = this.getRos_frame_id();
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         
-
+        float longitudeFactor = getLatitudeFactor() * (float)Math.cos(getReferencePointGPS().y*(FastMath.PI/180f));
+        Vector3f diffPosition= pos.getPosition().subtract(getReferencePointWorld());
+        float latitude = (diffPosition.x/getLatitudeFactor())*(180f/FastMath.PI);
+        float longitude = (diffPosition.z/longitudeFactor)*(180f/FastMath.PI);
         
         fl.altitude = pos.getPositionY();
-        fl.latitude = pos.getPositionX();
-        fl.longitude = pos.getPositionZ(); 
+        fl.latitude = getReferencePointGPS().x + latitude;
+        fl.longitude = getReferencePointGPS().z + longitude; 
+        
+        
+        NavSatStatus.service = 1;
+        NavSatStatus.status = 0;
+        fl.status = NavSatStatus;
+                
         this.publisher.publish(fl);
     }
 }

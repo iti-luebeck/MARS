@@ -695,29 +695,29 @@ public class Initializer {
      * give us some orientation
      */
     private void setupAxis(){
-         Geometry y_axis = new Geometry("y_axis", new Arrow(Vector3f.UNIT_Y.mult(1)));
-         Material y_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         y_axis_mat.setColor("Color", ColorRGBA.Green);
-         y_axis.setMaterial(y_axis_mat);
-         y_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
-         y_axis.updateGeometricState();
-         axisNode.attachChild(y_axis);
+        Geometry y_axis = new Geometry("y_axis", new Arrow(Vector3f.UNIT_Y.mult(1)));
+        Material y_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        y_axis_mat.setColor("Color", ColorRGBA.Green);
+        y_axis.setMaterial(y_axis_mat);
+        y_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
+        y_axis.updateGeometricState();
+        axisNode.attachChild(y_axis);
 
-         Geometry x_axis = new Geometry("x_axis!", new Arrow(Vector3f.UNIT_X.mult(1)));
-         Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         x_axis_mat.setColor("Color", ColorRGBA.Blue);
-         x_axis.setMaterial(x_axis_mat);
-         x_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
-         x_axis.updateGeometricState();
-         axisNode.attachChild(x_axis);
+        Geometry x_axis = new Geometry("x_axis!", new Arrow(Vector3f.UNIT_X.mult(1)));
+        Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        x_axis_mat.setColor("Color", ColorRGBA.Blue);
+        x_axis.setMaterial(x_axis_mat);
+        x_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
+        x_axis.updateGeometricState();
+        axisNode.attachChild(x_axis);
 
-         Geometry z_axis = new Geometry("z_axis", new Arrow(Vector3f.UNIT_Z.mult(1)));
-         Material z_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         z_axis_mat.setColor("Color", ColorRGBA.Red);
-         z_axis.setMaterial(z_axis_mat);
-         z_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
-         z_axis.updateGeometricState();
-         axisNode.attachChild(z_axis);
+        Geometry z_axis = new Geometry("z_axis", new Arrow(Vector3f.UNIT_Z.mult(1)));
+        Material z_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        z_axis_mat.setColor("Color", ColorRGBA.Red);
+        z_axis.setMaterial(z_axis_mat);
+        z_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
+        z_axis.updateGeometricState();
+        axisNode.attachChild(z_axis);
         
          /*//Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.6f)));
          Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.615f)));
@@ -728,7 +728,7 @@ public class Initializer {
          length_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
          length_axis.updateGeometricState();
          axisNode.attachChild(length_axis);*/
-         rootNode.attachChild(axisNode);
+        rootNode.attachChild(axisNode);
          /*Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(2.87f)));
          Material length_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
          length_axis_mat.setColor("Color", ColorRGBA.Red);
@@ -737,7 +737,7 @@ public class Initializer {
          //length_axis.setLocalTranslation(new Vector3f(0f,0f,-0.615f));
          length_axis.updateGeometricState();
          rootNode.attachChild(length_axis);*/
-         hideAxis(mars_settings.isSetupAxis());
+        hideAxis(mars_settings.isSetupAxis());
     }
     
     public void setupGrid(){
