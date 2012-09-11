@@ -195,7 +195,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.03125</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.8</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.6</value>
                     </entry>
                 </value>
             </entry>
