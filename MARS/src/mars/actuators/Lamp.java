@@ -70,7 +70,7 @@ public class Lamp extends Actuator{
         Rotation_Node.attachChild(mark4);
         
         //add the acutal light
-        /*spotLight = new SpotLight();
+        spotLight = new SpotLight();
         spotLight.setColor(getColor());
         spotLight.setPosition(getLampPosition());
         spotLight.setDirection(Rotation_Node.localToWorld(getLampDirection(),null));
@@ -79,7 +79,8 @@ public class Lamp extends Actuator{
         spotLight.setSpotOuterAngle(getOuterAngle());
         rootNode.addLight(spotLight);
         MyLightControl lightControl = new MyLightControl(spotLight);
-        Rotation_Node.addControl(lightControl); // this spatial controls the position of this light.*/
+        lightControl.setLampEnd(LampEnd);
+        LampStart.addControl(lightControl); // this spatial controls the position of this light.
 
         PhysicalExchanger_Node.setLocalTranslation(getLampPosition());
         PhysicalExchanger_Node.attachChild(Rotation_Node);

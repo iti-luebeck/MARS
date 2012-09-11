@@ -40,6 +40,7 @@ import com.jme3.light.SpotLight;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
@@ -72,6 +73,7 @@ public class MyLightControl extends AbstractControl {
     }
     private Light light;
     private ControlDirection controlDir = ControlDirection.SpatialToLight;
+    private Geometry LampEnd = new Geometry();
 
     /**
      * Constructor used for Serialization.
@@ -109,6 +111,10 @@ public class MyLightControl extends AbstractControl {
     public void setControlDir(ControlDirection controlDir) {
         this.controlDir = controlDir;
     }
+    
+    public void setLampEnd(Geometry LampEnd){
+        this.LampEnd = LampEnd;
+    }
 
     // fields used, when inversing ControlDirection:
     @Override
@@ -138,7 +144,7 @@ public class MyLightControl extends AbstractControl {
         //TODO add code for Spot light here when it's done
         if( light instanceof SpotLight){
             ((SpotLight)light).setPosition(spatial.getWorldTranslation());                
-            //((SpotLight)light).set(spatial.getWorldRotation());
+            ((SpotLight)light).setDirection(LampEnd.getWorldTranslation().subtract(spatial.getWorldTranslation()));
         }
 
     }
