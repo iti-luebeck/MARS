@@ -17,6 +17,7 @@ import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
 import mars.sensors.Compass;
+import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
 import mars.sensors.IMU;
 import mars.sensors.PingDetector;
@@ -149,6 +150,10 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"AX-12.png"));
                         }else if(hasher.getUserData() instanceof UnderwaterModem){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"speaker-volume.png"));
+                        }else if(hasher.getUserData() instanceof Lamp){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"flashlight-shine.png"));
+                        }else if(hasher.getUserData() instanceof GPSReceiver){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"satellite.png"));
                         }else if(hasher.getUserData() instanceof Lamp){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"flashlight-shine.png"));
                         }
