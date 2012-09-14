@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.bind.annotation.XmlAccessOrder;
-import javax.xml.bind.annotation.XmlAccessorOrder;
+import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.sensors.Sensor;
 
@@ -62,6 +61,8 @@ public class MyHashMapType {
                 entry.add(new MyHashMapEntryTypeActuators(e));
             }else if(e.getValue() instanceof Sensor){
                 entry.add(new MyHashMapEntryTypeSensors(e));
+            }else if(e.getValue() instanceof Accumulator){
+                entry.add(new MyHashMapEntryTypeAccumulators(e));
             }else{
                 entry.add(new MyHashMapEntryTypeObject(e));
             }

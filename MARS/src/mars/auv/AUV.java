@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
+import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
@@ -151,6 +152,11 @@ public interface AUV{
      * @return
      */
     public HashMap<String,Sensor> getSensors();
+    /**
+     *
+     * @return
+     */
+    public HashMap<String,Accumulator> getAccumulators();
     /*
      *
      */

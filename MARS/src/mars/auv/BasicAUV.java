@@ -81,6 +81,7 @@ import mars.Moveable;
 import mars.MyMTLLoader;
 import mars.MyOBJLoader;
 import mars.PickHint;
+import mars.accumulators.Accumulator;
 import mars.actuators.BallastTank;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
@@ -185,6 +186,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name="Actuators")
     private HashMap<String,Actuator> actuators = new HashMap<String,Actuator> ();
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name="Accumulators")
+    private HashMap<String,Accumulator> accumulators = new HashMap<String,Accumulator> ();
 
     private PhysicalValues physicalvalues;
     
@@ -426,6 +430,8 @@ public class BasicAUV implements AUV,SceneProcessor{
             registerPhysicalExchanger(pex);
         }
     }
+    
+    
 
     /**
      * disable the visible debug spheres that indicates the sensors/actuators positions/directions
@@ -476,6 +482,23 @@ public class BasicAUV implements AUV,SceneProcessor{
      */
     public HashMap<String,Sensor> getSensors(){
         return sensors;
+    }
+    
+        /**
+     *
+     * @param key Which unique registered actuator do we want?
+     * @return The actuator that we asked for
+     */
+    public Accumulator getAccumulator(String key){
+        return accumulators.get(key);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public HashMap<String,Accumulator> getAccumulators(){
+        return accumulators;
     }
 
     /**
@@ -2513,7 +2536,10 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger) hasher.getUserData();
                     pe.updateState(path);        
-                }  
+                }else if(hasher.getUserData() instanceof Accumulator){
+                    Accumulator acc = (Accumulator) hasher.getUserData();
+                    acc.updateState(path);        
+                }   
             }
         }
     }

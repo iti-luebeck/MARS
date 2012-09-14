@@ -1729,13 +1729,13 @@
                         </value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="Range">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">3.0</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="InnerAngle">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.25</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="OuterAngle">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.5</value>
                     </entry>
                 </variables>
             </value>

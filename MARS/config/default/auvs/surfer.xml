@@ -127,7 +127,7 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="auv_name">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">asv</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">surfer</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="damping_angular">
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
@@ -1308,7 +1308,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/left">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="motors/up">
             <value xsi:type="seaBotixThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
@@ -1326,7 +1326,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/left</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">motors/up</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
@@ -1534,4 +1534,24 @@
             </value>
         </entry>
     </Actuators>
+	<Accumulators>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeAccumulators" key="main">
+            <value xsi:type="accumulator">
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="capacity">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="nominalVoltage">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">11.1</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="type">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                    </entry>
+                </variables>
+            </value>
+        </entry>
+    </Accumulators>
 </asv>

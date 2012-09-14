@@ -135,6 +135,7 @@ public class Initializer {
     
     //light
     DirectionalLight sun;
+    AmbientLight ambLight = new AmbientLight();
     
     //gui
     BitmapText ch;
@@ -264,7 +265,9 @@ public class Initializer {
         if(mars_settings.isSetupDepthOfField()){
             setupDepthOfField();
         }
-        setupShadow();
+        if(mars_settings.isSetupShadow()){
+            setupShadow();
+        }
         setupServer();
         //setupGlow();
         //setupFishEye();
@@ -659,12 +662,19 @@ public class Initializer {
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         rootNode.removeLight(sun);//remove all old stuff before
+                        rootNode.removeLight(ambLight);
                         sun.setColor(mars_settings.getLight_color());
                         sun.setDirection(mars_settings.getLight_direction().normalize());
+                        ambLight.setColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 0.2f));
                         if(mars_settings.isSetupLight()){
                             rootNode.addLight(sun);
                         }else{
                             rootNode.removeLight(sun);
+                        }
+                        if(mars_settings.isSetupAmbient()){
+                            rootNode.addLight(ambLight);
+                        }else{
+                            rootNode.removeLight(ambLight);
                         }
                         return null;
                     }
@@ -1005,11 +1015,12 @@ public class Initializer {
 
     private void setupAdvancedTerrain(){
         /** 1. Create terrain material and load four textures into it. */
+        /*mat_terrain = new Material(assetManager, 
+                "Common/MatDefs/Terrain/Terrain.j3md");*/
         mat_terrain = new Material(assetManager, 
-                "Common/MatDefs/Terrain/Terrain.j3md");
-       /* mat_terrain = new Material(assetManager, 
-                "Common/MatDefs/Terrain/TerrainLighting.j3md");*/
+                "Common/MatDefs/Terrain/TerrainLighting.j3md");
         mat_terrain.setBoolean("useTriPlanarMapping", false);
+        //mat_terrain.setFloat("Shininess", 0.5f);
                 
         /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
         /*mat_terrain.setTexture("Alpha", assetManager.loadTexture(
@@ -1019,8 +1030,8 @@ public class Initializer {
         Texture alphaMapImage = assetManager.loadTexture(
                 mars_settings.getTerrainfilepath_am());
         //alphaMapImage.getImage().setFormat(Format.RGBA8);
-        mat_terrain.setTexture("Alpha", alphaMapImage);
-        //mat_terrain.setTexture("AlphaMap", alphaMapImage);
+        //mat_terrain.setTexture("Alpha", alphaMapImage);
+        mat_terrain.setTexture("AlphaMap", alphaMapImage);
 
         /** 1.2) Add GRASS texture into the red layer (Tex1). */
         /*Texture grass = assetManager.loadTexture(
@@ -1030,10 +1041,10 @@ public class Initializer {
         assetManager.registerLocator("Assets/Forester", FileLocator.class);
         //Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
-        mat_terrain.setTexture("Tex1", grass);
-        mat_terrain.setFloat("Tex1Scale", 1f);
-        //mat_terrain.setTexture("DiffuseMap", grass);
-        //mat_terrain.setFloat("DiffuseMap_0_scale", 1f);
+        //mat_terrain.setTexture("Tex1", grass);
+        //mat_terrain.setFloat("Tex1Scale", 1f);
+        mat_terrain.setTexture("DiffuseMap", grass);
+        mat_terrain.setFloat("DiffuseMap_0_scale", 1f);
 
         /** 1.3) Add DIRT texture into the green layer (Tex2) */
         /*Texture dirt = assetManager.loadTexture(
@@ -1267,13 +1278,13 @@ public class Initializer {
     }
 
     private void setupShadow(){
-        //PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
-        //pssmRenderer.setDirection(sun.getDirection()); // light direction
-        /*pssmRenderer.setLambda(0.55f);
+        PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
+        pssmRenderer.setDirection(sun.getDirection()); // light direction
+        pssmRenderer.setLambda(0.55f);
         pssmRenderer.setShadowIntensity(0.6f);
         pssmRenderer.setCompareMode(CompareMode.Software);
-        pssmRenderer.setFilterMode(FilterMode.PCF4);*/
-        //viewPort.addProcessor(pssmRenderer);
+        pssmRenderer.setFilterMode(FilterMode.PCF4);
+        viewPort.addProcessor(pssmRenderer);
     }
     /**
      * 

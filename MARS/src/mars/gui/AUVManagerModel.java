@@ -19,6 +19,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import mars.Manipulating;
 import mars.PhysicalExchanger;
+import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -65,6 +66,8 @@ public class AUVManagerModel implements TreeModel{
             return false;
         }else if(node instanceof PhysicalExchanger){
             return false;
+        }else if(node instanceof Accumulator){
+            return false;
         }else if(node instanceof Float){
             return true;
         }else if(node instanceof Integer){
@@ -91,7 +94,7 @@ public class AUVManagerModel implements TreeModel{
         if(parent instanceof AUV_Manager){
             return auvManager.getAUVs().size();
         }else if(parent instanceof AUV){
-            return 3;
+            return 4;
         }else if(parent instanceof AUV_Parameters){
             AUV_Parameters auv_param = (AUV_Parameters)parent;
             return auv_param.getAllVariables().size();
@@ -120,6 +123,8 @@ public class AUVManagerModel implements TreeModel{
             }else{
                 return 2;
             }
+        }else if(parent instanceof Accumulator){
+            return 1;
         }else if(parent instanceof Float){
             return 1;
         }else if(parent instanceof Boolean){
@@ -159,6 +164,8 @@ public class AUVManagerModel implements TreeModel{
                 return new HashMapWrapper(auv.getSensors(),"Sensors");
             }else if (index == 2){
                 return new HashMapWrapper(auv.getActuators(),"Actuators");
+            }else if (index == 3){
+                return new HashMapWrapper(auv.getAccumulators(),"Accumulators");
             }
             return "null";
         }else if(parent instanceof AUV_Parameters){
@@ -188,6 +195,12 @@ public class AUVManagerModel implements TreeModel{
             }else if (index == 3){
                 Manipulating mani = (Manipulating)pe;
                 return new HashMapWrapper(mani.getSlavesNames(),"Slaves");
+            }
+            return "null";
+        }else if(parent instanceof Accumulator){
+            Accumulator acc = (Accumulator)parent;
+            if(index == 0){
+                return new HashMapWrapper(acc.getAllVariables(),"Variables");
             }
             return "null";
         }else if(parent instanceof HashMap){

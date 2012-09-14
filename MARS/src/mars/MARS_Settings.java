@@ -52,6 +52,7 @@ public class MARS_Settings{
     private HashMap<String,Object> Terrain;
     private HashMap<String,Object> Grass;
     private HashMap<String,Object> Light;
+    private HashMap<String,Object> Shadow;
     private HashMap<String,Object> WireFrame;
     private HashMap<String,Object> CrossHairs;
     private HashMap<String,Object> Misc;
@@ -132,6 +133,7 @@ public class MARS_Settings{
         Terrain = new HashMap<String,Object> ();
         Grass = new HashMap<String,Object> ();
         Light = new HashMap<String,Object> ();
+        Shadow = new HashMap<String,Object> ();
         WireFrame = new HashMap<String,Object> ();
         CrossHairs = new HashMap<String,Object> ();
         Misc = new HashMap<String,Object> ();
@@ -154,6 +156,7 @@ public class MARS_Settings{
         Graphics.put("Terrain", Terrain);
         Graphics.put("Grass", Grass);
         Graphics.put("Light", Light);
+        Graphics.put("Shadow", Shadow);
         Graphics.put("WireFrame", WireFrame);
         Graphics.put("CrossHairs", CrossHairs);
         settings.put("Server", Server);
@@ -199,6 +202,7 @@ public class MARS_Settings{
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
         Light = (HashMap<String,Object>)Graphics.get("Light");
+        Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
@@ -227,6 +231,7 @@ public class MARS_Settings{
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
         Grass = (HashMap<String,Object>)Graphics.get("Grass");
         Light = (HashMap<String,Object>)Graphics.get("Light");
+        Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
@@ -508,6 +513,22 @@ public class MARS_Settings{
      *
      * @param color
      */
+    public void setAmbientColor(ColorRGBA ambient_color) {
+        Light.put("ambient_color", ambient_color);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ColorRGBA getAmbientColor() {
+        return (ColorRGBA)Light.get("ambient_color");
+    }
+
+    /**
+     *
+     * @param color
+     */
     public void setLight_color(ColorRGBA color) {
         Light.put("color", color);
     }
@@ -543,6 +564,22 @@ public class MARS_Settings{
      */
     public void setLight_direction(Vector3f direction) {
         Light.put("direction", direction);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean isSetupShadow() {
+        return (Boolean)Shadow.get("enabled");
+    }
+
+    /**
+     *
+     * @param direction
+     */
+    public void setSetupShadow(boolean enabled) {
+        Shadow.put("enabled", enabled);
     }
 
     /**
@@ -735,6 +772,22 @@ public class MARS_Settings{
      */
     public void setSetupLight(boolean enabled) {
         Light.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSetupAmbient() {
+        return (Boolean)Light.get("ambient");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupAmbient(boolean ambient) {
+        Light.put("ambient", ambient);
     }
 
      /**

@@ -10,6 +10,7 @@ import java.awt.Component;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import mars.PhysicalExchanger;
+import mars.accumulators.Accumulator;
 import mars.actuators.Lamp;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
@@ -26,6 +27,7 @@ import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
+import mars.sensors.VoltageMeter;
 import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
 import mars.xml.HashMapEntry;
@@ -89,6 +91,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"eye.png")); 
             }else if(hasher.getName().equals("Actuators")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"hand.png")); 
+            }else if(hasher.getName().equals("Accumulators")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png")); 
             }else if(hasher.getName().equals("Noise")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"drop.png")); 
             }else if(hasher.getName().equals("Actions")){
@@ -103,6 +107,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"bug.png")); 
             }else if(hasher.getName().equals("Model")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"yellow_submarine.png")); 
+            }else if(hasher.getName().equals("Accumulator")){
+                setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png")); 
             }else if(hasher.getName().equals("scale")){
                 setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"transform_scale.png"));
             }else if(hasher.getName().equals("Slaves")){
@@ -156,8 +162,12 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"satellite.png"));
                         }else if(hasher.getUserData() instanceof Lamp){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"flashlight-shine.png"));
+                        }else if(hasher.getUserData() instanceof VoltageMeter){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
                         }
                     }
+                }else if(hasher.getUserData() instanceof Accumulator){
+                    setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
                 }else if(hasher.getUserData() instanceof ColorRGBA){
                     setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"color.png"));
                 }else if(hasher.getUserData() instanceof Vector3f){

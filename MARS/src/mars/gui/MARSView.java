@@ -255,15 +255,12 @@ public class MARSView extends FrameView {
                         AUV auv = auv_manager.getAUV("asv");
                         /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
                         auv.getPhysicalvalues().getTraceVolume().setVisible(false);*/
-                        ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
+                        /*ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
                         Iterator iter = traces1.iterator();
                         while(iter.hasNext()) {
                             ITrace2D trace = (ITrace2D)iter.next();
                             charts.addTrace(trace);
-                            /*if(trace.getName().equals("Depth")){
-                                charts.removeTrace(trace);
-                            }*/
-                        }
+                        }*/
                     }
                 }
             }

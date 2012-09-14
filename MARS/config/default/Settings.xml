@@ -89,18 +89,18 @@
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeColorRGBA" key="color">
                             <value>
-<a>0.0</a>
-<b>0.0</b>
-<g>0.0</g>
-<r>1.0</r>
+								<a>0.0</a>
+								<b>0.0</b>
+								<g>0.0</g>
+								<r>1.0</r>
                             </value>
                         </entry>
                     </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Shadow">
                     <value>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="mode">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                         </entry>
                     </value>
                 </entry>
@@ -268,17 +268,28 @@
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeColorRGBA" key="color">
                             <value>
-<a>1.0</a>
-<b>1.0</b>
-<g>1.0</g>
-<r>1.0</r>
+								<a>1.0</a>
+								<b>1.0</b>
+								<g>1.0</g>
+								<r>1.0</r>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="direction">
                             <value>
-<x>0.0</x>
-<y>-1.0</y>
-<z>0.0</z>
+								<x>0.0</x>
+								<y>-1.0</y>
+								<z>0.0</z>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="ambient">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeColorRGBA" key="ambient_color">
+                            <value>
+								<a>0.2</a>
+								<b>0.8</b>
+								<g>0.8</g>
+								<r>0.8</r>
                             </value>
                         </entry>
                     </value>
