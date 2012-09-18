@@ -351,6 +351,17 @@ public class MARSView extends FrameView {
         );
     }
     
+    public void allowPhysicsInteraction(final boolean allow){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jButtonPlay.setEnabled(!allow);
+                    jButtonPause.setEnabled(allow);
+                }
+            }
+        );
+    }
+    
     public void allowServerInteraction(final boolean connected){
         EventQueue.invokeLater(new Runnable(){
                 @Override

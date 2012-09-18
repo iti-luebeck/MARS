@@ -458,8 +458,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         initer.setupServer();
         if(initer.checkROSServer()){
                 view.allowServerInteraction(true);
-                auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
-                auv_manager.updateMARSNode();
+                //auv_manager.setMARSNodes(initer.getROS_Server().getMarsNodes());
+                //auv_manager.updateMARSNode();
         }else{
                 view.allowServerInteraction(false);
         }
@@ -1131,7 +1131,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         auv_manager.setSimauv_settings(simauv_settings);
         auv_manager.setCommunicationManager(com_manager);
         if(mars_settings.isROS_Server_enabled()){
-            auv_manager.setMARSNode(initer.getROS_Server().getMarsNode());
+            auv_manager.setMARSNodes(initer.getROS_Server().getMarsNodes());
         }
         auv_manager.registerAUVs(auvs);
         //update the view in the next frame
@@ -1434,6 +1434,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void startSimulation(){
         bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
         initial_ready = true;
+        view.allowPhysicsInteraction(true);
         System.out.println("Simulation started...");
     }
             
@@ -1441,6 +1442,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         auv_manager.clearForcesOfAUVs();
         initial_ready = false;
+        view.allowPhysicsInteraction(false);
         System.out.println("Simulation stopped...");            
     }
     
