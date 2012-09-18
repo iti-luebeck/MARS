@@ -5,6 +5,7 @@
 package mars.ros;
 
 import com.google.common.base.Preconditions;
+import javax.swing.event.EventListenerList;
 import org.ros.message.MessageListener;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
@@ -16,30 +17,13 @@ import org.ros.node.topic.Publisher;
  */
 public class MARSNodeMain implements NodeMain {
     private Node node;
+    private EventListenerList listeners = new EventListenerList();
 
     @Override
     public void onStart(Node node) {
         Preconditions.checkState(this.node == null);
         this.node = node;
-        /*try {
-            Publisher<org.ros.message.std_msgs.String> publisher =
-            node.newPublisher("chatter", "std_msgs/String");
-            int seq = 0;
-            while (true) {
-                org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
-                str.data = "Hello world! " + seq;
-                publisher.publish(str);
-                node.getLog().info("Hello, world! " + seq);
-                seq++;
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {
-        if (node != null) {
-            node.getLog().fatal(e);
-        } else {
-            e.printStackTrace();
-        }
-        }*/
+        notifyFire( new RosNodeEvent(this) );
     }
 
     @Override
@@ -47,6 +31,22 @@ public class MARSNodeMain implements NodeMain {
         if(this.node.isRunning()){
             this.node.shutdown();
         }
+    }
+    
+    public void addRosNodeListener( RosNodeListener listener )
+    {
+        listeners.add( RosNodeListener.class, listener );
+    }
+
+    public void removeRosNodeListener( RosNodeListener listener )
+    {
+        listeners.remove( RosNodeListener.class, listener );
+    }
+
+    protected synchronized void notifyFire( RosNodeEvent event )
+    {
+        for ( RosNodeListener l : listeners.getListeners( RosNodeListener.class ) )
+            l.fireEvent( event );
     }
     
     /**

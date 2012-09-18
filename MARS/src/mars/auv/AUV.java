@@ -24,6 +24,7 @@ import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
+import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
 
 /**
@@ -33,7 +34,7 @@ import mars.sensors.Sensor;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {BasicAUV.class} )
-public interface AUV{
+public interface AUV extends RosNodeListener{
 
     /**
      *
@@ -283,19 +284,6 @@ public interface AUV{
      * @param com_manager
      */
     public void setCommunicationManager(Communication_Manager com_manager);
-    /*
-     * 
-     */
-    /**
-     * 
-     * @param ros_node
-     * @deprecated
-     */
-    @Deprecated
-    public void setROS_Node(org.ros.node.Node ros_node);   
-    /*
-     * 
-     */
     /**
      * 
      * @param mars_node

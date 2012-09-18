@@ -59,27 +59,6 @@ public class SeaBotixThruster extends Thruster{
         limited_speed = ((int)Math.signum(speed))*limited_speed;
         return (Math.signum(limited_speed))*(0.00046655f * (float)Math.pow((float)Math.abs(limited_speed), 2.02039525f) );
     }
-
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
-     * @deprecated
-     */
-    @Override
-    @Deprecated
-    public void initROS(org.ros.node.Node ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        final SeaBotixThruster self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Int16",
-          new MessageListener<org.ros.message.std_msgs.Int16>() {
-            @Override
-            public void onNewMessage(org.ros.message.std_msgs.Int16 message) {
-              System.out.println("I heard: \"" + message.data + "\"");
-              self.set_thruster_speed((int)message.data);
-            }
-          });
-    }
     
     /**
      * 

@@ -42,9 +42,7 @@ public class AUV_Manager {
     private Node rootNode;
     private SimState simstate;
     private Communication_Manager com_manager;
-    @Deprecated
-    private org.ros.node.Node ros_node;
-    private MARSNodeMain mars_node;
+    private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
 
     /**
      *
@@ -156,37 +154,25 @@ public class AUV_Manager {
     /**
      * 
      * @return
-     * @deprecated
      */
-    @Deprecated
-    public org.ros.node.Node getRos_node() {
-        return ros_node;
-    }
-
-    /**
-     * 
-     * @param ros_node
-     * @deprecated
-     */
-    @Deprecated
-    public void setRos_node(org.ros.node.Node ros_node) {
-        this.ros_node = ros_node;
+    public HashMap<String,MARSNodeMain> getMARSNodes() {
+        return mars_nodes;
     }
     
     /**
      * 
      * @return
      */
-    public MARSNodeMain getMARSNode() {
-        return mars_node;
+    public MARSNodeMain getMARSNodeForAUV(String auv_name) {
+        return mars_nodes.get(auv_name);
     }
 
     /**
      * 
      * @param mars_node
      */
-    public void setMARSNode(MARSNodeMain mars_node) {
-        this.mars_node = mars_node;
+    public void setMARSNodes(HashMap<String,MARSNodeMain> mars_nodes) {
+        this.mars_nodes = mars_nodes;
     }
     
     /**
@@ -196,7 +182,7 @@ public class AUV_Manager {
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
-                auv.setROS_Node(getMARSNode());
+                auv.setROS_Node(getMARSNodeForAUV(elem));
                 auv.initROS();
             }
         }
@@ -453,8 +439,7 @@ public class AUV_Manager {
             auv.setSimauv_settings(simauv_settings);
             auv.setPhysical_environment(physical_environment);
             auv.setCommunicationManager(com_manager);
-            //auv.setROS_Node(ros_node);
-            auv.setROS_Node(mars_node);
+            auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
             initAUV(auv);
         if(auv.getAuv_param().isEnabled()){    
             //initAUV(auv);
@@ -579,52 +564,6 @@ public class AUV_Manager {
         AUV auv = (AUV)getAUV(auv_name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
         auv.init();
-    }
-    
-    /**
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    public void initROSofAUVs(){
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Initialising AUV's...", "");
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            if(auv.getAuv_param().isEnabled()){
-                final AUV fin_auv = auv;
-                Future fut = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        fin_auv.setROS_Node(ros_node);
-                        fin_auv.initROS();
-                        return null;
-                    }
-                });
-                //auv.setROS_Node(ros_node);
-                //auv.initROS();
-            }
-        }
-    }
-
-    /**
-     * 
-     * @param auv
-     * @deprecated
-     */
-    @Deprecated
-    public void initROSofAUV(AUV auv){
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Initialising AUV " + auv.getName() + "...", "");
-        if(auv.getAuv_param().isEnabled()){
-            final AUV fin_auv = auv;
-            Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    fin_auv.setROS_Node(ros_node);
-                    fin_auv.initROS();
-                    return null;
-                }
-            });
-            //auv.setROS_Node(ros_node);
-            //auv.initROS();
-        }
     }
     
      /**

@@ -320,6 +320,7 @@ public class Initializer {
             ros_server.setMaster_port(mars_settings.getROS_Server_port());
             ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
             ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
+            ros_server.init();
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }
@@ -337,12 +338,13 @@ public class Initializer {
     
     public boolean ServerRunning(){
         if(this.isROS_ServerReady()){
-            if(this.getROS_Server().getMarsNode() != null){
+            /*if(this.getROS_Server().getMarsNode() != null){
                 if(this.getROS_Server().getMarsNode().isRunning()){
                     return true;
                 }
                 return true;
-            }
+            }*/
+            return true;
         }
         return false;
     }
@@ -353,21 +355,11 @@ public class Initializer {
                     
                 }
                 Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server ready.", "");
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be created...", "");
-                while(this.getROS_Server().getMarsNode() == null){
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Nodes to be created...", "");
+                /*while(!this.getROS_Server().isInitReady()){
                     
-                }
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node created.", "");
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
-                while(!this.getROS_Server().getMarsNode().isExisting()){
-                    
-                }
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node exists.", "");
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
-                while(!this.getROS_Server().getMarsNode().isRunning()){
-                    
-                }
-                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Node running.", "");
+                }*/
+                Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "ROS Server Nodes running.", "");
                 //server_init = true;//server running, is needed because view is sometimes null in the beginning(see update)
                 return true;
     }
@@ -381,6 +373,7 @@ public class Initializer {
             ros_server.setMaster_port(mars_settings.getROS_Server_port());
             ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
             ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
+            ros_server.init();
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
         }

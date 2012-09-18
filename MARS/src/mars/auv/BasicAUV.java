@@ -93,6 +93,7 @@ import mars.auv.example.SMARTE;
 import mars.control.SpatialLodControl;
 import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
+import mars.ros.RosNodeEvent;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
 import mars.sensors.sonar.Sonar;
@@ -193,8 +194,6 @@ public class BasicAUV implements AUV,SceneProcessor{
     private PhysicalValues physicalvalues;
     
     private Communication_Manager com_manager;
-    @Deprecated
-    private org.ros.node.Node ros_node;  
     private MARSNodeMain mars_node;
     
     //selection stuff aka highlightening
@@ -346,14 +345,6 @@ public class BasicAUV implements AUV,SceneProcessor{
      */
     public void setCommunicationManager(Communication_Manager com_manager) {
         this.com_manager = com_manager;
-    }
-    
-    /**
-     * 
-     * @param ros_node
-     */
-    public void setROS_Node(org.ros.node.Node ros_node){
-        this.ros_node = ros_node;
     }
     
     /**
@@ -563,9 +554,9 @@ public class BasicAUV implements AUV,SceneProcessor{
 
         initPhysicalExchangers();
         
-        if(mars_settings.isROS_Server_enabled()){
+        /*if(mars_settings.isROS_Server_enabled()){
             initROS();
-        }
+        }*/
         auv_node.rotate(auv_param.getRotation().x, auv_param.getRotation().y, auv_param.getRotation().z);
         rotateAUV();
         auv_node.updateGeometricState();
@@ -672,14 +663,12 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
             if(element.isEnabled()){
-                //element.initROS(ros_node,auv_param.getAuv_name());
                 element.initROS(mars_node,auv_param.getAuv_name());
             }
         }
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
-                //element.initROS(ros_node,auv_param.getAuv_name());
                 element.initROS(mars_node,auv_param.getAuv_name());
             }
         }
@@ -2554,6 +2543,13 @@ public class BasicAUV implements AUV,SceneProcessor{
             }
         }else{//its a spatial or geom, we dont care because it cant go deeper
             spatial.setUserData(PickHint.PickName, PickHint.NoPick);
+        }
+    }
+    
+    public void fireEvent( RosNodeEvent e ){
+        if(getAuv_param().isEnabled()){
+                setROS_Node((MARSNodeMain)e.getSource());
+                initROS();
         }
     }
 }

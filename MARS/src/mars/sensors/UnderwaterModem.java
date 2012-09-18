@@ -247,29 +247,6 @@ public class UnderwaterModem extends Sensor{
      * 
      * @param ros_node
      * @param auv_name
-     * @deprecated
-     */
-    @Override
-    @Deprecated
-    public void initROS(org.ros.node.Node ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        final String fin_auv_name = auv_name;
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out", "std_msgs/String");  
-    
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName() + "/in", "std_msgs/String",
-          new MessageListener<org.ros.message.std_msgs.String>() {
-            @Override
-            public void onNewMessage(org.ros.message.std_msgs.String message) {
-              System.out.println(fin_auv_name + " heard: \"" + message.data + "\"");
-              com_manager.putMsg(fin_auv_name,message.data);
-            }
-          });
-    }
-    
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {

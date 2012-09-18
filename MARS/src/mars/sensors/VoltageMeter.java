@@ -108,20 +108,6 @@ public class VoltageMeter extends Sensor{
     public void reset(){
 
     }
-    
-    
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
-     * @deprecated
-     */
-    @Override
-    @Deprecated
-    public void initROS(org.ros.node.Node ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
-    }
 
     /**
      * 

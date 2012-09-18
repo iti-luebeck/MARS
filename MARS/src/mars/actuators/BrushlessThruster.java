@@ -59,27 +59,6 @@ public class BrushlessThruster extends Thruster{
      * 
      * @param ros_node
      * @param auv_name
-     * @deprecated
-     */
-    @Override
-    @Deprecated
-    public void initROS(org.ros.node.Node ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        final BrushlessThruster self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "std_msgs/Int16",
-          new MessageListener<org.ros.message.std_msgs.Int16>() {
-            @Override
-            public void onNewMessage(org.ros.message.std_msgs.Int16 message) {
-              System.out.println("I heard: \"" + message.data + "\"");
-              self.set_thruster_speed((int)message.data);
-            }
-          });
-    }
-    
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {

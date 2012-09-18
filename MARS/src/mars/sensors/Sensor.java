@@ -111,21 +111,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      */
     public void publish() {
     }
- 
-    /*public void publishUpdate() {
-        long curtime = System.currentTimeMillis();
-        if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
-            
-        }else{
-            time = curtime;
-            if(ros_node != null){
-                if(ros_node.isRunning()){
-                    publish();
-                }
-            }
-        }
-    }*/
-    
+
     /**
      * 
      */
