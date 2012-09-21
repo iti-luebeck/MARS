@@ -127,6 +127,8 @@ public class Velocimeter extends Sensor{
     @Override
     public void publish() {
         fl.data = getLinearVelocity().length();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

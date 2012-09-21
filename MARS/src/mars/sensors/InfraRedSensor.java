@@ -386,7 +386,9 @@ public class InfraRedSensor extends Sensor{
     @Override
     public void publish() {
         fl.data = getDistance();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
     
 }

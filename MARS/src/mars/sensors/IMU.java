@@ -261,6 +261,8 @@ public class IMU extends Sensor{
         fl.linear_acceleration = acc_vec;
         
         fl.orientation = quat;
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

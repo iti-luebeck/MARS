@@ -167,6 +167,8 @@ public class TerrainSender extends Sensor{
         info.map_load_time = Time.fromMillis(System.currentTimeMillis());
         fl.info = info;
         fl.data = initer.getTerrainByteArray();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }    
 }

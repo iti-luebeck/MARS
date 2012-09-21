@@ -152,6 +152,8 @@ public class Accelerometer extends Sensor{
     @Override
     public void publish() {
         fl.data = getAcceleration().length();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

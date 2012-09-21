@@ -152,7 +152,9 @@ public class Orientationmeter extends Sensor{
         quat.w = getOrientation().getW();
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.orientation = quat;
-        fl.pose = pose;      
-        this.publisher.publish(fl);
+        fl.pose = pose;     
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }    
 }

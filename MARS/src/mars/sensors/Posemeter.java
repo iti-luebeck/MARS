@@ -213,7 +213,9 @@ public class Posemeter extends Sensor{
         org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
         pose.position = point;
         pose.orientation = orientation;
-        fl.pose = pose;      
-        this.publisher.publish(fl);
+        fl.pose = pose;    
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }    
 }

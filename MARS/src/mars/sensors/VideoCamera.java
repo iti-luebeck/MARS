@@ -465,7 +465,9 @@ public class VideoCamera extends Sensor implements Moveable{
         }
         fl.data = ros_image;*/
         fl.data = this.getImage();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
     
    /**

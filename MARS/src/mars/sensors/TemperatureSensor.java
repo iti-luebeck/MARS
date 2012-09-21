@@ -168,6 +168,8 @@ public class TemperatureSensor extends Sensor{
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         fl.data = (int)(getTemperature()*10);
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

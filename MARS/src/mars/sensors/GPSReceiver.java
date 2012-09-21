@@ -235,7 +235,9 @@ public class GPSReceiver extends Sensor{
         NavSatStatus.service = 1;
         NavSatStatus.status = 0;
         fl.status = NavSatStatus;
-                
-        this.publisher.publish(fl);
+        
+        if( publisher != null ){        
+            publisher.publish(fl);
+        }
     }
 }

@@ -155,6 +155,8 @@ public class Positionmeter extends Sensor{
         point.y = getPosition().z;
         point.z = getPosition().y;
         fl.point = point;      
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

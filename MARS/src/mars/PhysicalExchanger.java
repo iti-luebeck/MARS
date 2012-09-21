@@ -347,6 +347,22 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public void setIconDND(String dnd_icon){
         variables.put("dnd_icon",dnd_icon);
     }
+
+    public String getAccumulator(){
+        return (String)variables.get("accumulator");
+    }
+    
+    public void setAccumulator(String accumulator){
+        variables.put("accumulator",accumulator);
+    }
+    
+    public Float getCurrentConsumption(){
+        return (Float)variables.get("currentConsumption");
+    }
+    
+    public void setCurrentConsumptio(float currentConsumption){
+        variables.put("currentConsumption",currentConsumption);
+    }
     
     public abstract void updateState(TreePath path);
 }

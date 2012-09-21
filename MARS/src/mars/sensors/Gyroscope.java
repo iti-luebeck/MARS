@@ -127,6 +127,8 @@ public class Gyroscope extends Sensor{
     @Override
     public void publish() {
         fl.data = getAngularVelocity().length();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

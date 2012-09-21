@@ -129,6 +129,8 @@ public class VoltageMeter extends Sensor{
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         //fl.header = header;
         fl.data = getVoltage();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

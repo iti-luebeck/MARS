@@ -56,6 +56,16 @@ public class BrushlessThruster extends Thruster{
     }
     
     /**
+     * This is the function that represents the SeaBotix measured thruster current.
+     * @param speed 
+     * @return
+     */
+    @Override
+    protected float calculateThrusterCurrent(int speed){
+        return 0.01f*Math.abs(speed)-0.22f;
+    }
+    
+    /**
      * 
      * @param ros_node
      * @param auv_name

@@ -209,6 +209,8 @@ public class PressureSensor extends Sensor{
         header.stamp = Time.fromMillis(System.currentTimeMillis());
         fl.header = header;
         fl.data = (int)getPressureMbar();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

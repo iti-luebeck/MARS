@@ -278,7 +278,9 @@ public class UnderwaterModem extends Sensor{
      */
     public void publish(String msg){
         str.data = msg;
-        this.publisher.publish(str);
+        if( publisher != null ){
+            publisher.publish(str);
+        }
     }
     
     /**

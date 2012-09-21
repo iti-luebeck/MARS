@@ -164,6 +164,8 @@ public class SalinitySensor extends Sensor{
     @Override
     public void publish() {
         fl.data = getSalinity();
-        this.publisher.publish(fl);
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

@@ -195,6 +195,15 @@ public class Thruster extends Actuator implements Moveable,Keys{
     protected float calculateThrusterForce(int speed){
         return (float)(speed)*20f;
     }
+    
+     /**
+     * This is the function that represents thruster currrent consumption.
+     * @param speed 
+     * @return
+     */
+    protected float calculateThrusterCurrent(int speed){
+        return (float)(speed)*20f;
+    }
 
     /**
      *
