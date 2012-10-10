@@ -7,6 +7,7 @@ package mars.xml;
 import javax.xml.bind.Unmarshaller.Listener;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.accumulators.Accumulator;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
@@ -42,6 +43,9 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof BasicAUV){
             BasicAUV auv = (BasicAUV)target;
             auv.initAfterJAXB();
+        }else if(target instanceof Accumulator){
+            Accumulator acc = (Accumulator)target;
+            acc.initAfterJAXB();
         }
     }
 }

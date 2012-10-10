@@ -199,6 +199,7 @@ public class AUV_Manager {
         updateCommunicationOfAUVs(tpf);
         updateWaypointsOfAUVs(tpf);
         updateValuesOfAUVs(tpf);
+        updateAccumulatorsOfAUVs(tpf);
     }
     
     /**
@@ -294,6 +295,15 @@ public class AUV_Manager {
                 }
                 });*/
                 auv.updateForces(tpf);
+            }
+        }
+    }
+    
+    private void updateAccumulatorsOfAUVs(float tpf){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled()){
+                auv.updateAccumulators(tpf);
             }
         }
     }

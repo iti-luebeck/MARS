@@ -94,6 +94,7 @@ import mars.control.SpatialLodControl;
 import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
+import mars.sensors.AmpereMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
 import mars.sensors.sonar.Sonar;
@@ -590,6 +591,9 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(element instanceof PingDetector){
                     ((PingDetector)element).setSimObjectManager(simstate.getSimob_manager());
                 }
+                if(element instanceof AmpereMeter){
+                    ((AmpereMeter)element).setAuv(this);
+                }
                 element.init(auv_node);
                 if(element instanceof Keys){
                     Keys elementKeys = (Keys)element;
@@ -1026,6 +1030,22 @@ public class BasicAUV implements AUV,SceneProcessor{
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
                 element.update(tpf);
+            }
+        }
+    }
+    
+    public void updateAccumulators(float tpf){
+        //update current consumption for the activated sensors
+        for ( String elem : sensors.keySet() ){
+            Sensor element = (Sensor)sensors.get(elem);
+            if(element.isEnabled()){
+                Accumulator acc = (Accumulator)accumulators.get(element.getAccumulator());
+                if(acc != null){ //accu exists from where we can suck energy
+                    Float currentConsumption = element.getCurrentConsumption();
+                    if(currentConsumption != null){//suck energy
+                        //acc.
+                    }
+                }
             }
         }
     }

@@ -24,7 +24,9 @@ import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
+import mars.sensors.AmpereMeter;
 import mars.sensors.Sensor;
+import mars.sensors.VoltageMeter;
 
 /**
  * This is a TreeModel for the JTree
@@ -112,6 +114,9 @@ public class AUVManagerModel implements TreeModel{
         }else if(parent instanceof ColorRGBA){
             return 4;
         }else if(parent instanceof PhysicalExchanger){
+            if(parent instanceof AmpereMeter || parent instanceof VoltageMeter){
+                return 3;
+            }
             if(parent instanceof Manipulating && ((PhysicalExchanger)parent).getAllActions() != null){
                 return 4;
             }
@@ -190,7 +195,14 @@ public class AUVManagerModel implements TreeModel{
                 return new HashMapWrapper(pe.getAllVariables(),"Variables");
             }else if (index == 1){
                 return new HashMapWrapper(pe.getAllNoiseVariables(),"Noise");
-            }else if (index == 2 && pe.getAllActions() != null){
+            }
+            
+            if (index == 2 && (parent instanceof AmpereMeter)){
+                AmpereMeter amp = (AmpereMeter)pe;
+                return new HashMapWrapper(amp.getAccumulators(),"Accumulators");
+            }
+            
+            if (index == 2 && pe.getAllActions() != null){
                 return new HashMapWrapper(pe.getAllActions(),"Actions");
             }else if (index == 3){
                 Manipulating mani = (Manipulating)pe;

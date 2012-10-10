@@ -17,6 +17,7 @@ import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
+import mars.sensors.AmpereMeter;
 import mars.sensors.Compass;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -163,6 +164,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                         }else if(hasher.getUserData() instanceof Lamp){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"flashlight-shine.png"));
                         }else if(hasher.getUserData() instanceof VoltageMeter){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
+                        }else if(hasher.getUserData() instanceof AmpereMeter){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
                         }
                     }

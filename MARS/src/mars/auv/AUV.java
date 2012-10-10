@@ -55,6 +55,12 @@ public interface AUV extends RosNodeListener{
     public void updateActuators(float tpf);
     
     /**
+     * 
+     * @param tpf
+     */
+    public void updateAccumulators(float tpf);
+    
+    /**
      *
      * @param tpf
      */
@@ -137,17 +143,11 @@ public interface AUV extends RosNodeListener{
      */
     @Override
     public String toString();
-    /*
-     *
-     */
     /**
      *
      * @return
      */
     public HashMap<String,Actuator> getActuators();
-    /*
-     *
-     */
     /**
      *
      * @return
@@ -158,17 +158,16 @@ public interface AUV extends RosNodeListener{
      * @return
      */
     public HashMap<String,Accumulator> getAccumulators();
-    /*
+    /**
      *
+     * @return
      */
+    public Accumulator getAccumulator(String key);
     /**
      *
      * @return
      */
     public AUV_Parameters getAuv_param();
-    /*
-     *
-     */
     /**
      *
      * @return

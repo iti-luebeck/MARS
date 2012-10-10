@@ -23,8 +23,16 @@ public class Accumulator {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
     
+    private float actualCurrent = 0f;
+    
     public Accumulator() {
     }
+    
+    public void initAfterJAXB(){
+        if(getCapacity() != null){
+            actualCurrent = getCapacity();
+        }
+    };
     
     public HashMap<String,Object> getAllVariables(){
         return variables;
@@ -95,5 +103,22 @@ public class Accumulator {
      */
     public Integer getType() {
         return (Integer)variables.get("type");
+    }
+    
+    private float calculateActualVoltage(float current){
+        return getNominalVoltage();
+    }
+
+    public float getActualCurrent() {
+        return actualCurrent;
+    }
+    
+    public float getActualVoltage(){
+        return calculateActualVoltage(getActualCurrent());
+    }
+    
+    @Override
+    public String toString(){
+        return "Accumulators";
     }
 }

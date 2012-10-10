@@ -18,4 +18,8 @@ public class AccumulatorType {
      *
      */
     public static final int LIPO = 1;
+    /**
+     *
+     */
+    public static final int NIMH = 2;
 }
