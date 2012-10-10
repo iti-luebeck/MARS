@@ -77,17 +77,21 @@ import forester.grass.GrassLoader;
 import forester.grass.algorithms.GPAUniform;
 import forester.grass.datagrids.MapGrid;
 import forester.image.DensityMap.Channel;
+import java.nio.ByteOrder;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.Communication_Manager;
 import mars.filter.FishEyeFilter;
+import mars.filter.LensFlareFilter;
 import mars.server.ros.ROS_Node;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
 import mygame.MaterialSP;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 
 /**
  * With this class we initialize all the different things on the
@@ -125,6 +129,7 @@ public class Initializer {
     private int terrain_image_width = 0;
     private int terrain_image_heigth = 0;
     private byte[] terrain_byte_arrray;
+    private ChannelBuffer terrainChannelBuffer;
     private TerrainQuad terrain;
     private Material mat_terrain;
     AbstractHeightMap heightmap;
@@ -271,6 +276,7 @@ public class Initializer {
         setupServer();
         //setupGlow();
         //setupFishEye();
+        //setupLensFlare();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -649,6 +655,14 @@ public class Initializer {
     private void setupFishEye(){
         FishEyeFilter fisheye = new FishEyeFilter();
         fpp.addFilter(fisheye);
+    }
+    
+    private void setupLensFlare(){
+        //LensFlareFilter lf = new LensFlareFilter("Textures/lensdirt.png"); // or null if you don't own a +1 Lens Cloth of Smiting
+        LensFlareFilter lf = new LensFlareFilter(null); // or null if you don't own a +1 Lens Cloth of Smiting
+        lf.setGhostSpacing(0.125f);
+        lf.setHaloDistance(0.48f);
+        fpp.addFilter(lf);
     }
 
     public void setupLight(){
@@ -1071,6 +1085,7 @@ public class Initializer {
         for (int i = 0; i < (terrain_image_heigth*terrain_image_width); i++) {
             terrain_byte_arrray[i] = (byte)Math.round(((heightMap[i]*100f)/255f));
         }
+        terrainChannelBuffer = ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,terrain_byte_arrray);
         
         //random terrain generation
         /*HillHeightMap heightmap2 = null;
@@ -1297,6 +1312,10 @@ public class Initializer {
     
     public byte[] getTerrainByteArray() {
         return terrain_byte_arrray;
+    }
+    
+    public ChannelBuffer getTerrainChannelBuffer() {
+        return terrainChannelBuffer;
     }
     
     public Node getTerrainNode(){
