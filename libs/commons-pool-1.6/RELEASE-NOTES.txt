@@ -1,0 +1,16 @@
+commons-pool-1.6 RELEASE NOTES
+
+This release adds support for Java 5 generics and therefore requires Java 5 for source compatibility.
+This release is binary compatible with 1.5.7.
+
+The only change in this version is:
+
+o Support Java 1.5 Generics in version 1.x.  Issue: POOL-208. 
+
+ 
+For complete information on commons-pool, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the commons-pool website:
+
+http://commons.apache.org/pool/
+
+
