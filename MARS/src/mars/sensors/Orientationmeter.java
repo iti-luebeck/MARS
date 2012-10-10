@@ -29,9 +29,9 @@ public class Orientationmeter extends Sensor{
     Quaternion old_orientation = new Quaternion();
         
     ///ROS stuff
-    private Publisher<org.ros.message.geometry_msgs.PoseStamped> publisher = null;
-    private org.ros.message.geometry_msgs.PoseStamped fl = new org.ros.message.geometry_msgs.PoseStamped ();
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<geometry_msgs.PoseStamped> publisher = null;
+    private geometry_msgs.PoseStamped fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -134,7 +134,9 @@ public class Orientationmeter extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "geometry_msgs/PoseStamped");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.PoseStamped._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -142,17 +144,35 @@ public class Orientationmeter extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        org.ros.message.geometry_msgs.Quaternion quat = new org.ros.message.geometry_msgs.Quaternion();
-        quat.x = getOrientation().getX();
-        quat.y = getOrientation().getY();
-        quat.z = getOrientation().getZ();
-        quat.w = getOrientation().getW();
-        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
-        pose.orientation = quat;
-        fl.pose = pose;     
+//        header.frame_id = this.getRos_frame_id();
+//        header.stamp = Time.fromMillis(System.currentTimeMillis());
+//        fl.header = header;
+//        org.ros.message.geometry_msgs.Quaternion quat = new org.ros.message.geometry_msgs.Quaternion();
+//        quat.x = getOrientation().getX();
+//        quat.y = getOrientation().getY();
+//        quat.z = getOrientation().getZ();
+//        quat.w = getOrientation().getW();
+//        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
+//        pose.orientation = quat;
+//        fl.pose = pose;     
+//        if( publisher != null ){
+//            publisher.publish(fl);
+//        }
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        
+        geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
+        quat.setX(getOrientation().getX());
+        quat.setY(getOrientation().getY());
+        quat.setZ(getOrientation().getZ());
+        quat.setW(getOrientation().getW());
+        
+        geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
+        pose.setOrientation(quat);
+        fl.setPose(pose);
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

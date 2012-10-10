@@ -55,8 +55,8 @@ public class InfraRedSensor extends Sensor{
     private float length_factor = 1.0f;
     
     //ROS stuff
-    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
+    private Publisher<std_msgs.Float32> publisher = null;
+    private std_msgs.Float32 fl;
     
     /**
      * 
@@ -377,7 +377,8 @@ public class InfraRedSensor extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
     }
 
     /**
@@ -385,7 +386,7 @@ public class InfraRedSensor extends Sensor{
      */
     @Override
     public void publish() {
-        fl.data = getDistance();
+        fl.setData(getDistance());
         if( publisher != null ){
             publisher.publish(fl);
         }

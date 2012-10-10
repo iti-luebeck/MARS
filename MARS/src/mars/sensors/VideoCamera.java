@@ -23,6 +23,7 @@ import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,6 +37,8 @@ import mars.Moveable;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
@@ -74,9 +77,9 @@ public class VideoCamera extends Sensor implements Moveable{
     private ByteBuffer cpuBuf;
     
     ///ROS stuff
-    private Publisher<org.ros.message.sensor_msgs.Image> publisher = null;
-    private org.ros.message.sensor_msgs.Image fl = new org.ros.message.sensor_msgs.Image(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<sensor_msgs.Image> publisher = null;
+    private sensor_msgs.Image fl;
+    private std_msgs.Header header; 
     
     //moveable stuff
     private Vector3f local_rotation_axis = new Vector3f();
@@ -364,6 +367,10 @@ public class VideoCamera extends Sensor implements Moveable{
     public byte[] getImage(){
         return updateImageContents();
     }
+    
+    public ChannelBuffer getChannelBufferImage(){
+        return ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,updateImageContents());
+    }
 
     public void update(float tpf){
         offCamera.setLocation(CameraStart.getWorldTranslation());
@@ -421,9 +428,11 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param auv_name
      */
     @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
+    public void initROS(MARSNodeMain ros_node, String auv_name) { 
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/Image");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.Image._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -431,15 +440,16 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        fl.height = getCameraHeight();
-        fl.width = getCameraWidth();
-        fl.encoding = "bgra8";
-        fl.is_bigendian = 1;
-        fl.step = getCameraWidth()*4;
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        
+        fl.setHeight(getCameraHeight());
+        fl.setWidth(getCameraWidth());
+        fl.setEncoding("bgra8");
+        fl.setIsBigendian((byte)1);
+        fl.setStep(getCameraWidth()*4);
         /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
         for (int i = 0; i < 100000; i++) {
             if(i%4!=0){
@@ -464,7 +474,8 @@ public class VideoCamera extends Sensor implements Moveable{
             }
         }
         fl.data = ros_image;*/
-        fl.data = this.getImage();
+        fl.setData(this.getChannelBufferImage());
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

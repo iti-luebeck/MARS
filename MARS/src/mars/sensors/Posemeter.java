@@ -32,9 +32,9 @@ public class Posemeter extends Sensor{
     Compass comp = new Compass();
     
     ///ROS stuff
-    private Publisher<org.ros.message.geometry_msgs.PoseStamped> publisher = null;
-    private org.ros.message.geometry_msgs.PoseStamped fl = new org.ros.message.geometry_msgs.PoseStamped(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<geometry_msgs.PoseStamped> publisher = null;
+    private geometry_msgs.PoseStamped fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -171,7 +171,9 @@ public class Posemeter extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "geometry_msgs/PoseStamped");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.PoseStamped._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -179,15 +181,17 @@ public class Posemeter extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
-        point.x = pos.getPosition().x;
-        point.y = pos.getPosition().z;//dont forget to switch y and z!!!!
-        point.z = pos.getPosition().y;
-        org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
         
+        geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
+        point.setX(pos.getPosition().x);
+        point.setY(pos.getPosition().z);//dont forget to switch y and z!!!!
+        point.setZ(pos.getPosition().y);
+        
+        geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
         Quaternion ter_orientation = new Quaternion();
         Quaternion ter_orientation_rueck = new Quaternion();
         //ter_orientation.fromAngles(FastMath.PI, -FastMath.HALF_PI, 0f);
@@ -206,14 +210,16 @@ public class Posemeter extends Sensor{
         float[] ff = ter_orientation.toAngles(null);
         //System.out.println("yaw2: " + ff[1] + " pitch2: " + ff[0] + " roll2: " + ff[2]);
         //jme3_quat.fromAngles(comp.getYawRadiant(), 0f, 0f);
-        orientation.x = (ter_orientation).getX();// switching x and z!!!!
-        orientation.y = (ter_orientation).getY();
-        orientation.z = (ter_orientation).getZ();
-        orientation.w = (ter_orientation).getW();
-        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
-        pose.position = point;
-        pose.orientation = orientation;
-        fl.pose = pose;    
+        orientation.setX((ter_orientation).getX());// switching x and z!!!!
+        orientation.setY((ter_orientation).getY());
+        orientation.setZ((ter_orientation).getZ());
+        orientation.setW((ter_orientation).getW());
+        
+        geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
+        pose.setPosition(point);
+        pose.setOrientation(orientation);
+        fl.setPose(pose);   
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

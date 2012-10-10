@@ -51,9 +51,6 @@ public class MARSApp extends SingleFrameApplication {
         frame = view.getFrame();
         assignIcon();
         String appClass = "mars.MARS_Main";
-        //createCanvas(appClass);
-        //view.addCanvas(canvas);
-        //view.addAWTMainPanel(sim_panel);
         frame.pack();
         startApp();
     }
@@ -94,57 +91,12 @@ public class MARSApp extends SingleFrameApplication {
         app.setShowSettings(false);
         app.setSettings(settings);
         app.start();
-        
-        /*Thread t = new Thread(new Runnable() {
- 
-            @Override
-            public void run() {
-                //TestPssmShadow2 t = new TestPssmShadow2();//This would be your jME app extending SimpleApplication
-                app.start();
-            }
-        });
-        t.start();*/
-        
-        /*app.createCanvas();
-
-        context = (JmeCanvasContext) app.getContext();
-        context.setSystemListener(app);
-        canvas = context.getCanvas();
-        canvas.setSize(settings.getWidth(), settings.getHeight());*/
-       /* SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                final AwtPanelsContext ctx = (AwtPanelsContext) app.getContext();
-                sim_panel = ctx.createPanel(PaintMode.Accelerated);
-                sim_panel.setPreferredSize(new Dimension(640, 480));
-                ctx.setInputSource(sim_panel);
-                
-                map_panel = ctx.createPanel(PaintMode.Accelerated);
-                map_panel.setPreferredSize(new Dimension(256, 256));
-                
-                view.addAWTMainPanel(sim_panel);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            }
-        });*/
     }
 
     /**
      *
      */
     public static void startApp(){
-        //app.startCanvas();
-/*        app.start();
-        app.enqueue(new Callable<Void>(){
-            public Void call(){
-                if (app instanceof MARS_Main){
-                    simpleApp = (MARS_Main) app;
-                    simpleApp.getFlyByCamera().setDragToRotate(true);
-                    simpleApp.setView(view);
-                }
-                return null;
-            }
-        });*/
         Thread t = new Thread(new Runnable() {
  
             @Override
@@ -176,16 +128,6 @@ public class MARSApp extends SingleFrameApplication {
                         app.setSettings(settings);
                         app.setView(view);
                         app.start();
-                        
-                        /*app.enqueue(new Callable<Void>(){
-                        public Void call(){
-                                app.getFlyByCamera().setDragToRotate(true);
-                                app.test();
-                                //sim_panel.attachTo(true, app.getViewPort());
-                                //app.setView(view);
-                                return null;
-                            }
-                        });*/
  
                         SwingUtilities.invokeLater(new Runnable(){
                             public void run(){

@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import geometry_msgs.Vector3;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -24,7 +25,7 @@ import mars.states.SimState;
 import mars.xml.ColorRGBAAdapter;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.MessageListener;
-import org.ros.message.geometry_msgs.Vector3;
+import org.ros.node.topic.Subscriber;
 
 /**
  *
@@ -192,14 +193,14 @@ public class VectorVisualizer extends Actuator{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final VectorVisualizer self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "geometry_msgs/Vector3Stamped",
-          new MessageListener<org.ros.message.geometry_msgs.Vector3Stamped>() {
-            @Override
-            public void onNewMessage(org.ros.message.geometry_msgs.Vector3Stamped message) {
-              //System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.vector + "\"");
-              Vector3 vec = (Vector3)message.vector;
-              self.updateVector(new Vector3f((float)vec.x, (float)vec.z, (float)vec.y));
-            }
-          });
+        Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), geometry_msgs.Vector3Stamped._TYPE);
+        subscriber.addMessageListener(new MessageListener<geometry_msgs.Vector3Stamped>() {
+                @Override
+                public void onNewMessage(geometry_msgs.Vector3Stamped message) {
+                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getVector() + "\"");
+                    Vector3 vec = (Vector3)message.getVector();
+                    self.updateVector(new Vector3f((float)vec.getX(), (float)vec.getZ(), (float)vec.getY()));
+                }
+        });
     }
 }

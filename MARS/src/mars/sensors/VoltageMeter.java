@@ -22,9 +22,9 @@ import org.ros.node.topic.Publisher;
 public class VoltageMeter extends Sensor{
 
     ///ROS stuff
-    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<std_msgs.Float32> publisher = null;
+    private std_msgs.Float32 fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -117,7 +117,9 @@ public class VoltageMeter extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
         
     /**
@@ -125,10 +127,11 @@ public class VoltageMeter extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        //fl.header = header;
-        fl.data = getVoltage();
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setData(getVoltage());
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

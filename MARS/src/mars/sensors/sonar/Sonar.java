@@ -109,20 +109,9 @@ public class Sonar extends Sensor{
     private int SonarReturnDataLength = 252;
     
     ///ROS stuff
-    //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
-    /**
-     * 
-     */
-    protected Publisher<org.ros.message.hanse_msgs.ScanningSonar> publisher = null;
-    /**
-     * 
-     */
-    protected org.ros.message.hanse_msgs.ScanningSonar fl = new org.ros.message.hanse_msgs.ScanningSonar(); 
-    /**
-     * 
-     */
-    protected org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+//    protected Publisher<org.ros.message.hanse_msgs.ScanningSonar> publisher = null;
+//    protected org.ros.message.hanse_msgs.ScanningSonar fl = new org.ros.message.hanse_msgs.ScanningSonar(); 
+//    protected org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
     
     /**
      * 
@@ -1110,8 +1099,8 @@ public class Sonar extends Sensor{
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/ScanningSonar");  
+//        super.initROS(ros_node, auv_name);
+//        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/ScanningSonar");  
     }
     
     /**
@@ -1120,16 +1109,16 @@ public class Sonar extends Sensor{
     @Override
     public void publish() {
         //header.seq = 0;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        byte[] sonData = getRawSonarData();
-        float lastHeadPosition = getLastHeadPosition();
-        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
-        fl.echoData = sonData;
-        fl.headPosition = lastHeadPosition;
-        fl.startGain = (byte)getScanning_gain();
-        fl.range = (byte)getSonarMaxRange();
-        this.publisher.publish(fl);
+//        header.frame_id = this.getRos_frame_id();
+//        header.stamp = Time.fromMillis(System.currentTimeMillis());
+//        fl.header = header;
+//        byte[] sonData = getRawSonarData();
+//        float lastHeadPosition = getLastHeadPosition();
+//        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
+//        fl.echoData = sonData;
+//        fl.headPosition = lastHeadPosition;
+//        fl.startGain = (byte)getScanning_gain();
+//        fl.range = (byte)getSonarMaxRange();
+//        this.publisher.publish(fl);
     }
 }

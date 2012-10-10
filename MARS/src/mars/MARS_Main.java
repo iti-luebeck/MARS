@@ -119,6 +119,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         advFlyCam.setDragToRotate(true);
         advFlyCam.setEnabled(false);
         advFlyCam.registerWithInput(inputManager);
+        //deactivate the state, solves maybe wasd problems
+        if (stateManager.getState(FlyCamAppState.class) != null) {
+            stateManager.getState(FlyCamAppState.class).setEnabled(false); 
+        }
             
        /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
         if(flycamState != null){
@@ -199,7 +203,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return true;
             }
         });
-        try {
+        /*try {
             //wait till ros killed
             Object obj = simStateFuture.get(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException ex) {
@@ -208,7 +212,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TimeoutException ex) {
             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         super.stop();
     }
     

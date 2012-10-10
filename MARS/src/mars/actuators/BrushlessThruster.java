@@ -5,11 +5,13 @@
 package mars.actuators;
 
 import com.jme3.scene.Geometry;
+import hanse_msgs.sollSpeed;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import org.ros.node.topic.Subscriber;
 
 /**
  *
@@ -74,13 +76,13 @@ public class BrushlessThruster extends Thruster{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final BrushlessThruster self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "hanse_msgs/sollSpeed",
-          new MessageListener<org.ros.message.hanse_msgs.sollSpeed>() {
-            @Override
-            public void onNewMessage(org.ros.message.hanse_msgs.sollSpeed message) {
-              System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.data + "\"");
-              self.set_thruster_speed((int)message.data);
-            }
-          });
+        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), hanse_msgs.sollSpeed._TYPE);
+        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
+                @Override
+                public void onNewMessage(hanse_msgs.sollSpeed message) {
+                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    self.set_thruster_speed((int)message.getData());
+                }
+        });
     }
 }

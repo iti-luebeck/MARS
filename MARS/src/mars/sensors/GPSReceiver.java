@@ -20,6 +20,7 @@ import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
+import sensor_msgs.NavSatFix;
 
 /**
  *
@@ -32,10 +33,10 @@ public class GPSReceiver extends Sensor{
     Positionmeter pos = new Positionmeter();
     
     ///ROS stuff
-    private Publisher<org.ros.message.sensor_msgs.NavSatFix> publisher = null;
-    private org.ros.message.sensor_msgs.NavSatFix fl = new org.ros.message.sensor_msgs.NavSatFix(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
-    private org.ros.message.sensor_msgs.NavSatStatus NavSatStatus = new org.ros.message.sensor_msgs.NavSatStatus(); 
+    private Publisher<sensor_msgs.NavSatFix> publisher = null;
+    private sensor_msgs.NavSatFix fl;
+    private sensor_msgs.NavSatStatus NavSatStatus; 
+    private std_msgs.Header header; 
     
     private Geometry GPSReceiverGeom;
     
@@ -209,7 +210,10 @@ public class GPSReceiver extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/NavSatFix");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.NavSatFix._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatFix._TYPE);
+        NavSatStatus = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatStatus._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -217,26 +221,25 @@ public class GPSReceiver extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = seqNr++;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        
+        NavSatStatus.setService((short)1);
+        NavSatStatus.setStatus((byte)0);
+        fl.setStatus(NavSatStatus);
         
         float longitudeFactor = getLatitudeFactor() * (float)Math.cos(getReferencePointGPS().y*(FastMath.PI/180f));
         Vector3f diffPosition= pos.getPosition().subtract(getReferencePointWorld());
         float latitude = (diffPosition.x/getLatitudeFactor())*(180f/FastMath.PI);
         float longitude = (diffPosition.z/longitudeFactor)*(180f/FastMath.PI);
         
-        fl.altitude = pos.getPositionY();
-        fl.latitude = getReferencePointGPS().x + latitude;
-        fl.longitude = getReferencePointGPS().z + longitude; 
+        fl.setAltitude(pos.getPositionY());
+        fl.setLatitude(getReferencePointGPS().x + latitude);
+        fl.setLongitude(getReferencePointGPS().z + longitude); 
         
-        
-        NavSatStatus.service = 1;
-        NavSatStatus.status = 0;
-        fl.status = NavSatStatus;
-        
-        if( publisher != null ){        
+        if( publisher != null ){
             publisher.publish(fl);
         }
     }

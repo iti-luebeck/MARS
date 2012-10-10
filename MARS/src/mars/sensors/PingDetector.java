@@ -45,9 +45,9 @@ public class PingDetector extends Sensor{
 
     private float detection_range = 50.0f;
     
-    private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<std_msgs.Float32> publisher = null;
+    private std_msgs.Float32 fl;
+    private std_msgs.Header header; 
 
     public PingDetector(){
         super();
@@ -269,7 +269,7 @@ public class PingDetector extends Sensor{
             rootNode.attachChild(mark4);*/
 
             float yaw = getYawRadiant(pinger_vector);
-            System.out.println("Yaw!!!! " + yaw);
+            //System.out.println("Yaw!!!! " + yaw);
             return yaw;
         }
         return 0f;
@@ -317,7 +317,9 @@ public class PingDetector extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "std_msgs/Float32");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -325,11 +327,12 @@ public class PingDetector extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        //fl.header = header;
-        fl.data = (float)getPingerAngleRadiant("pingpong");
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        
+        fl.setData((getPingerAngleRadiant("pingpong")));
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

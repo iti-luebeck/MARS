@@ -6,30 +6,45 @@ package mars.ros;
 
 import com.google.common.base.Preconditions;
 import javax.swing.event.EventListenerList;
+import org.ros.message.MessageFactory;
 import org.ros.message.MessageListener;
+import org.ros.namespace.GraphName;
+import org.ros.node.AbstractNodeMain;
+import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
-import org.ros.node.NodeMain;
+import org.ros.node.NodeConfiguration;
 import org.ros.node.topic.Publisher;
+import org.ros.node.topic.Subscriber;
 
 /**
  *
  * @author Thomas Tosik
  */
-public class MARSNodeMain implements NodeMain {
-    private Node node;
+public class MARSNodeMain extends AbstractNodeMain {
+    private ConnectedNode connectedNode;
     private EventListenerList listeners = new EventListenerList();
+    NodeConfiguration nodeConf = null;
+
+    public MARSNodeMain(NodeConfiguration nodeConf) {
+        super();
+        this.nodeConf = nodeConf;
+    }
+
+    public void onStart(Node arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     @Override
-    public void onStart(Node node) {
-        Preconditions.checkState(this.node == null);
-        this.node = node;
+    public void onStart(final ConnectedNode connectedNode) {
+        Preconditions.checkState(this.connectedNode == null);
+        this.connectedNode = connectedNode;
         notifyFire( new RosNodeEvent(this) );
     }
 
     @Override
     public void onShutdown(Node node) {
-        if(this.node.isRunning()){
-            this.node.shutdown();
+        if(node != null){
+            node.shutdown();
         }
     }
     
@@ -56,7 +71,7 @@ public class MARSNodeMain implements NodeMain {
      * @return
      */
     public Publisher newPublisher(String topic, String msg_type){
-        return node.newPublisher(topic, msg_type); 
+        return connectedNode.newPublisher(topic, msg_type); 
     }
     
     /**
@@ -65,16 +80,22 @@ public class MARSNodeMain implements NodeMain {
      * @param msg_type
      * @param msg_listener
      */
+    @Deprecated
     public void newSubscriber(String topic, String msg_type, MessageListener msg_listener){
-        node.newSubscriber(topic, msg_type, msg_listener);
+        //connectedNode.newSubscriber(topic, msg_type, msg_listener);
     }
     
-    /**
-     * 
-     * @return
-     */
-    public boolean isRunning(){
-        return node.isRunning();
+    public Subscriber newSubscriber(String topic, String msg_type){
+        return connectedNode.newSubscriber(topic, msg_type);
+    }
+    
+    public MessageFactory getMessageFactory(){
+        return connectedNode.getTopicMessageFactory();
+    }
+    
+    @Override
+    public GraphName getDefaultNodeName() {
+        return nodeConf.getNodeName();
     }
     
     /**
@@ -82,7 +103,7 @@ public class MARSNodeMain implements NodeMain {
      * @return
      */
     public boolean isExisting(){
-        if(node != null){
+        if(connectedNode != null){
             return true;
         }else{
             return false;

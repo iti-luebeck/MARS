@@ -35,9 +35,9 @@ public class TemperatureSensor extends Sensor{
     private Vector3f TemperatureSensorStartVector;
 
     ///ROS stuff
-    private Publisher<org.ros.message.hanse_msgs.temperature> publisher = null;
-    private org.ros.message.hanse_msgs.temperature fl = new org.ros.message.hanse_msgs.temperature(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<hanse_msgs.temperature> publisher = null;
+    private hanse_msgs.temperature fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -156,7 +156,9 @@ public class TemperatureSensor extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/temperature");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.temperature._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.temperature._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
         
     /**
@@ -164,10 +166,11 @@ public class TemperatureSensor extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        fl.data = (int)(getTemperature()*10);
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        fl.setData((short)(getTemperature()*10));
         if( publisher != null ){
             publisher.publish(fl);
         }

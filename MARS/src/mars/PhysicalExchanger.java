@@ -87,21 +87,13 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     protected String ros_msg_type = "";
     /*
      * 
-     */
-    /**
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    protected org.ros.node.Node ros_node = null;
-    
-    /*
-     * 
-     */
+     */    
     /**
      * 
      */
     protected MARSNodeMain mars_node = null;
+    
+    protected int rosSequenceNumber = 0;
     
     /*
      * 
@@ -205,15 +197,6 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public void initROS() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
-     */
-    public void initROS(org.ros.node.Node ros_node, String auv_name) {
-        setROS_Node(ros_node);
-    }
     
     /**
      * 
@@ -230,26 +213,6 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void setROS_MSG_Type(String ros_msg_type) {
         this.ros_msg_type = ros_msg_type;
-    }
-
-    /**
-     * 
-     * @return
-     * @deprecated
-     */
-    @Deprecated
-    public org.ros.node.Node getROS_Node() {
-        return ros_node;
-    }
-
-    /**
-     * 
-     * @param ros_node
-     * @deprecated
-     */
-    @Deprecated
-    public void setROS_Node(org.ros.node.Node ros_node) {
-        this.ros_node = ros_node;
     }
     
     /**

@@ -27,6 +27,7 @@ import org.ros.node.topic.Publisher;
 import mars.states.SimState;
 import mars.auv.Communication_Manager;
 import mars.ros.MARSNodeMain;
+import org.ros.node.topic.Subscriber;
 
 /**
  * A underwater modem class for communication between the auv's. Nothing implemented yet.
@@ -47,8 +48,8 @@ public class UnderwaterModem extends Sensor{
     private Communication_Manager com_manager;
 
     //ROS stuff
-    private Publisher<org.ros.message.std_msgs.String> publisher = null;
-    private org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String(); 
+    private Publisher<std_msgs.String> publisher = null;
+    private std_msgs.String fl;
     
     /**
      * 
@@ -250,7 +251,7 @@ public class UnderwaterModem extends Sensor{
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
+        /*super.initROS(ros_node, auv_name);
         final String fin_auv_name = auv_name;
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out", "std_msgs/String");  
     
@@ -261,7 +262,20 @@ public class UnderwaterModem extends Sensor{
               System.out.println(fin_auv_name + " heard: \"" + message.data + "\"");
               com_manager.putMsg(fin_auv_name,message.data);
             }
-          });
+          });*/
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out",std_msgs.String._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
+        
+        final String fin_auv_name = auv_name;
+        Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName() + "/in", std_msgs.String._TYPE);
+        subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
+                @Override
+                public void onNewMessage(std_msgs.String message) {
+                    System.out.println(fin_auv_name + " heard: \"" + message.getData() + "\"");
+                    com_manager.putMsg(fin_auv_name,message.getData());
+                }
+        });
     }
     
     /**
@@ -277,9 +291,9 @@ public class UnderwaterModem extends Sensor{
      * @param msg
      */
     public void publish(String msg){
-        str.data = msg;
+        fl.setData(msg);
         if( publisher != null ){
-            publisher.publish(str);
+            publisher.publish(fl);
         }
     }
     

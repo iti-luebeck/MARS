@@ -16,12 +16,6 @@ public interface ROS {
     public String ros_msg_type = "";
     /**
      * 
-     * @deprecated
-     */
-    @Deprecated
-    public org.ros.node.Node ros_node = null;
-    /**
-     * 
      */
     public MARSNodeMain mars_node = null;
     /**
@@ -47,22 +41,8 @@ public interface ROS {
     /**
      * 
      * @param ros_node
-     * @deprecated
-     */
-    @Deprecated
-    public void setROS_Node(org.ros.node.Node ros_node);
-    /**
-     * 
-     * @param ros_node
      */
     public void setROS_Node(MARSNodeMain ros_node);
-    /**
-     * 
-     * @return
-     * @deprecated
-     */
-    @Deprecated
-    public org.ros.node.Node getROS_Node();
     /**
      * 
      * @return

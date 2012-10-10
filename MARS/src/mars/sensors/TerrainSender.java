@@ -15,6 +15,7 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
@@ -31,9 +32,9 @@ public class TerrainSender extends Sensor{
     byte[] occupany_grid;
     
     ///ROS stuff
-    private Publisher<org.ros.message.nav_msgs.OccupancyGrid> publisher = null;
-    private org.ros.message.nav_msgs.OccupancyGrid fl = new org.ros.message.nav_msgs.OccupancyGrid ();
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<nav_msgs.OccupancyGrid> publisher = null;
+    private nav_msgs.OccupancyGrid fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -112,7 +113,9 @@ public class TerrainSender extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "nav_msgs/OccupancyGrid");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),nav_msgs.OccupancyGrid._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(nav_msgs.OccupancyGrid._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -120,26 +123,28 @@ public class TerrainSender extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        org.ros.message.nav_msgs.MapMetaData info = new org.ros.message.nav_msgs.MapMetaData();
-        info.height = initer.getTerrain_image_heigth();
-        info.width = initer.getTerrain_image_width();
-        info.resolution = mars_settings.getTerrain_scale().getX();
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
         
-        org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
+        nav_msgs.MapMetaData info = this.mars_node.getMessageFactory().newFromType(nav_msgs.MapMetaData._TYPE);
+        info.setHeight(initer.getTerrain_image_heigth());
+        info.setWidth(initer.getTerrain_image_width());
+        info.setResolution(mars_settings.getTerrain_scale().getX());
+        
+        geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
         if(mars_settings.isSetupAdvancedTerrain()){
             float terScaleX = (mars_settings.getTerrain_scale().x*initer.getTerrain_image_width())/2f;
             float terScaleZ = (mars_settings.getTerrain_scale().z*initer.getTerrain_image_width())/2f;
             //float terScaleY = (mars_settings.getTerrain_scale().y*initer.getTerrain_image_width())/2f;
-            point.x = mars_settings.getTerrain_position().x - terScaleX;
-            point.y = mars_settings.getTerrain_position().z - terScaleZ;
-            point.z = mars_settings.getTerrain_position().y;
+            point.setX(mars_settings.getTerrain_position().x - terScaleX);
+            point.setY(mars_settings.getTerrain_position().z - terScaleZ);
+            point.setZ(mars_settings.getTerrain_position().y);
         }else{
-            point.x = mars_settings.getTerrain_position().x;
-            point.y = mars_settings.getTerrain_position().z;
-            point.z = mars_settings.getTerrain_position().y;
+            point.setX(mars_settings.getTerrain_position().x);
+            point.setY(mars_settings.getTerrain_position().z);
+            point.setZ(mars_settings.getTerrain_position().y);
         }
         
         Quaternion ter_orientation = new Quaternion();
@@ -153,20 +158,22 @@ public class TerrainSender extends Sensor{
         }
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
         
-        org.ros.message.geometry_msgs.Quaternion orientation = new org.ros.message.geometry_msgs.Quaternion();
+        geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
         //ter_orientation.fromAngles(0f, FastMath.PI, 0f);
-        orientation.x = ter_orientation.getX();
-        orientation.y = ter_orientation.getY();
-        orientation.z = ter_orientation.getZ();
-        orientation.w = ter_orientation.getW();
-        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
-        pose.position = point;
-        pose.orientation = orientation;
+        orientation.setX(ter_orientation.getX());
+        orientation.setY(ter_orientation.getY());
+        orientation.setZ(ter_orientation.getZ());
+        orientation.setW(ter_orientation.getW());
         
-        info.origin = pose;
-        info.map_load_time = Time.fromMillis(System.currentTimeMillis());
-        fl.info = info;
-        fl.data = initer.getTerrainByteArray();
+        geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
+        pose.setPosition(point);
+        pose.setOrientation(orientation);
+        
+        info.setOrigin(pose);
+        info.setMapLoadTime(Time.fromMillis(System.currentTimeMillis()));
+        fl.setInfo(info);
+        fl.setData(initer.getTerrainChannelBuffer());
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

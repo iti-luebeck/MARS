@@ -26,9 +26,9 @@ public class Positionmeter extends Sensor{
     private Vector3f new_position = new Vector3f(0f,0f,0f);
     
     ///ROS stuff
-    private Publisher<org.ros.message.geometry_msgs.PointStamped> publisher = null;
-    private org.ros.message.geometry_msgs.PointStamped fl = new org.ros.message.geometry_msgs.PointStamped ();
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<geometry_msgs.PointStamped> publisher = null;
+    private geometry_msgs.PointStamped fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -137,9 +137,11 @@ public class Positionmeter extends Sensor{
      * @param auv_name
      */
     @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
+    public void initROS(MARSNodeMain ros_node, String auv_name) { 
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "geometry_msgs/PoseStamped");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.PoseStamped._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -147,14 +149,17 @@ public class Positionmeter extends Sensor{
      */
     @Override
     public void publish() {
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        org.ros.message.geometry_msgs.Point point = new org.ros.message.geometry_msgs.Point();
-        point.x = getPosition().x;
-        point.y = getPosition().z;
-        point.z = getPosition().y;
-        fl.point = point;      
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        
+        geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);;
+        point.setX(getPosition().x);
+        point.setY(getPosition().z);
+        point.setZ(getPosition().y);
+        fl.setPoint(point);  
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

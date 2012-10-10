@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import org.ros.message.MessageListener;
+import org.ros.node.topic.Subscriber;
 
 /**
  *
@@ -45,12 +46,13 @@ public class Modelcraft_ES07 extends Servo{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final Servo self = this;
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "smart_e_msgs/servoCam",
-          new MessageListener<org.ros.message.smart_e_msgs.servoCam>() {
-            @Override
-            public void onNewMessage(org.ros.message.smart_e_msgs.servoCam message) {
-              self.setDesiredAnglePosition((int)message.data);
-            }
-          });
+        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), smart_e_msgs.servoCam._TYPE);
+        subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
+                @Override
+                public void onNewMessage(smart_e_msgs.servoCam message) {
+                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    self.setDesiredAnglePosition((int)message.getData());
+                }
+        });
     }
 }

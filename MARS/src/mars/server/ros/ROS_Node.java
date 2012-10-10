@@ -17,7 +17,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
-import org.ros.internal.node.DefaultNodeFactory;
 //import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
@@ -25,8 +24,8 @@ import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.auv.AUV_Manager;
 import mars.ros.MARSNodeMain;
-import org.ros.node.DefaultNodeRunner;
-import org.ros.node.NodeRunner;
+import org.ros.node.DefaultNodeMainExecutor;
+import org.ros.node.NodeMainExecutor;
 
 /**
  *
@@ -46,8 +45,7 @@ public class ROS_Node implements Runnable {
     private AUV_Manager auv_manager;
     
     //rosjava stuff
-    //private NodeMainExecutor nodeMainExecutor;
-    NodeRunner runner;
+    private NodeMainExecutor nodeMainExecutor;
     private boolean running = true;
     private boolean initready = false;
     private HashMap<String,MARSNodeMain> nodes = new HashMap<String, MARSNodeMain>();
@@ -146,7 +144,7 @@ public class ROS_Node implements Runnable {
      * 
      */
     public void shutdown() {
-        runner.shutdown();
+        nodeMainExecutor.shutdown();
         running = false;
     }
     
@@ -170,9 +168,7 @@ public class ROS_Node implements Runnable {
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Node exists.", "");
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
-        while(!node.isRunning()){
 
-        }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Nodes running.", "");
     }
     
@@ -199,7 +195,7 @@ public class ROS_Node implements Runnable {
             own_ip_string = getLocal_ip();
         }
 
-        runner = DefaultNodeRunner.newDefault();
+        nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -213,10 +209,10 @@ public class ROS_Node implements Runnable {
         MARSNodeMain marsnode;
         //Preconditions.checkState(marsnode == null);
         Preconditions.checkNotNull(nodeConf);
-        marsnode = new MARSNodeMain();
+        marsnode = new MARSNodeMain(nodeConf);
         marsnode.addRosNodeListener(auv);
         nodes.put(auv.getName(), marsnode);
-        runner.run(marsnode, nodeConf);
+        nodeMainExecutor.execute(marsnode, nodeConf);
     }
     
     public synchronized boolean isInitReady(){

@@ -12,6 +12,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
+import geometry_msgs.Quaternion;
+import geometry_msgs.Vector3;
 import org.ros.node.topic.Publisher;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
@@ -20,8 +22,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import org.ros.message.Time;
-import org.ros.message.geometry_msgs.Quaternion;
-import org.ros.message.geometry_msgs.Vector3;
 
 /**
  * An internal measurment unit class. Basiclly it consist of the Accelerometer, Gyroscope and Compass class as an Mixin class.
@@ -40,9 +40,9 @@ public class IMU extends Sensor{
     Orientationmeter oro = new Orientationmeter();
     
     ///ROS stuff
-    private Publisher<org.ros.message.sensor_msgs.Imu> publisher = null;
-    private org.ros.message.sensor_msgs.Imu fl = new org.ros.message.sensor_msgs.Imu(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<sensor_msgs.Imu> publisher = null;
+    private sensor_msgs.Imu fl;
+    private std_msgs.Header header; 
     
     Arrow arrow;
     
@@ -204,9 +204,11 @@ public class IMU extends Sensor{
      * @param auv_name
      */
     @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
+    public void initROS(MARSNodeMain ros_node, String auv_name) { 
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "sensor_msgs/Imu");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.Imu._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -214,17 +216,18 @@ public class IMU extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
         
-        Vector3 ang_vec = new Vector3();
-        ang_vec.x = gyro.getAngularVelocityXAxis();
-        ang_vec.y = gyro.getAngularVelocityZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
-        ang_vec.z = gyro.getAngularVelocityYAxis();
-        fl.angular_velocity = ang_vec;
-        Quaternion quat = new Quaternion();
+        Vector3 ang_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+        ang_vec.setX(gyro.getAngularVelocityXAxis());
+        ang_vec.setY(gyro.getAngularVelocityZAxis());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
+        ang_vec.setZ(gyro.getAngularVelocityYAxis());
+        fl.setAngularVelocity(ang_vec);
+        
+        Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);;
         
         com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
         com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion();
@@ -241,26 +244,27 @@ public class IMU extends Sensor{
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
         
         //jme3_quat.fromAngles(0f, 0f, comp.getPitchRadiant());
-        quat.x = ter_orientation.getX();// switching x and z!!!!
-        quat.y = ter_orientation.getY();
-        quat.z = ter_orientation.getZ();
-        quat.w = ter_orientation.getW();
+        quat.setX(ter_orientation.getX());// switching x and z!!!!
+        quat.setY(ter_orientation.getY());
+        quat.setZ(ter_orientation.getZ());
+        quat.setW(ter_orientation.getW());
         
         //Vector3f acc_jme3_vec = new Vector3f(0f, 0f, 1f);
         Vector3f acc_jme3_vec = acc.getAcceleration();
-        Vector3 acc_vec = new Vector3();
+        Vector3 acc_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
         com.jme3.math.Quaternion acc_quat = oro.getOrientation().inverse();
         Vector3f acc_jme3_vec2 = acc_quat.mult(acc_jme3_vec);
-        acc_vec.x = acc_jme3_vec2.getX();
-        acc_vec.y = -acc_jme3_vec2.getZ();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
-        acc_vec.z = acc_jme3_vec2.getY();
+        acc_vec.setX(acc_jme3_vec2.getX());
+        acc_vec.setY(-acc_jme3_vec2.getZ());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
+        acc_vec.setZ(acc_jme3_vec2.getY());
         //System.out.println("acc.getAcceleration(): " + acc.getAcceleration().length());
         /*acc_vec.x = acc.getAccelerationXAxis();
         acc_vec.y = acc.getAccelerationZAxis();// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
         acc_vec.z = acc.getAccelerationYAxis();*/
-        fl.linear_acceleration = acc_vec;
+        fl.setLinearAcceleration(acc_vec);
         
-        fl.orientation = quat;
+        fl.setOrientation(quat);
+        
         if( publisher != null ){
             publisher.publish(fl);
         }

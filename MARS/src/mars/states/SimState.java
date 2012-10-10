@@ -402,24 +402,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.initKeysTree(keyconfig);
             view.initPopUpMenues();
             view.allowSimInteraction();
-           /* Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    view.updateTrees();
-                    return null;
-                }
-                });*/
             view.updateTrees();
-            //auv_hanse.setView(view);
-            //auv_monsun2.setView(view);
-            //view_init = true;
-       // }
-            
-        /*if(view != null && server_init){
-            if(initer.getROS_Server().getMarsNode().isRunning()){
-                view.allowServerInteraction(true);
-                server_init = false;
-            }
-        }*/
+
         if(mars_settings.isROS_Server_enabled()){
                 /*Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
                 while(!initer.isROS_ServerReady()){

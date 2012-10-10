@@ -31,11 +31,9 @@ public class Flowmeter extends Sensor{
     private Vector3f PressureSensorStartVector;
 
     ///ROS stuff
-    //private Publisher<org.ros.message.std_msgs.Float32> publisher = null;
-    //private org.ros.message.std_msgs.Float32 fl = new org.ros.message.std_msgs.Float32(); 
-    private Publisher<org.ros.message.hanse_msgs.pressure> publisher = null;
-    private org.ros.message.hanse_msgs.pressure fl = new org.ros.message.hanse_msgs.pressure(); 
-    private org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    private Publisher<hanse_msgs.pressure> publisher = null;
+    private hanse_msgs.pressure fl;
+    private std_msgs.Header header; 
     
     /**
      * 
@@ -192,7 +190,9 @@ public class Flowmeter extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/pressure");  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.pressure._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.pressure._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
     /**
@@ -200,11 +200,11 @@ public class Flowmeter extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
-        header.frame_id = this.getRos_frame_id();
-        header.stamp = Time.fromMillis(System.currentTimeMillis());
-        fl.header = header;
-        fl.data = (int)getPressureMbar();
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        fl.setData((short)getPressureMbar());
         if( publisher != null ){
             publisher.publish(fl);
         }
