@@ -56,6 +56,10 @@ public class Thruster extends Actuator implements Moveable,Keys{
     /**
      *
      */
+    protected float MotorCurrent = 0.0f;
+    /**
+     *
+     */
     protected float motor_increment = 10.0f;
     
     private Vector3f local_rotation_axis = new Vector3f();
@@ -213,14 +217,22 @@ public class Thruster extends Actuator implements Moveable,Keys{
     public void set_thruster_speed(int speed){
         if(getNoise_type() == NoiseType.NO_NOISE){
             MotorForce = calculateThrusterForce(speed);
+            MotorCurrent = calculateThrusterCurrent(speed);
         }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
             float noise = getUnifromDistributionNoise(getNoise_value());
             MotorForce = calculateThrusterForce(speed)+((float)((1f/100f)*noise));
+            MotorCurrent = calculateThrusterCurrent(speed)+((float)((1f/100f)*noise));
         }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
             float noise = getGaussianDistributionNoise(getNoise_value());
             MotorForce = calculateThrusterForce(speed)+((float)((1f/100f)*noise));
+            MotorCurrent = calculateThrusterCurrent(speed)+((float)((1f/100f)*noise));
         }else{
             MotorForce = calculateThrusterForce(speed);
+            MotorCurrent = calculateThrusterCurrent(speed);
+        }
+        
+        if(MotorCurrent < 0f){//make sure that we dont "add" capacity, we only consume(with thrusters)
+            MotorCurrent = 0f;
         }
     }
 
@@ -242,6 +254,11 @@ public class Thruster extends Actuator implements Moveable,Keys{
 
     public void reset(){
         MotorForce = 0f;
+        MotorCurrent = 0f;
+    }
+
+    public float getMotorCurrent() {
+        return MotorCurrent;
     }
     
     /**

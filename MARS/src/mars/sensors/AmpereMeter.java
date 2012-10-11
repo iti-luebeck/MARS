@@ -84,7 +84,7 @@ public class AmpereMeter extends Sensor{
      *
      * @return The exact temperature of the current auv enviroemnt in C°
      */
-    public float getAmpere(){
+    public double getAmpere(){
         if(getNoise_type() == NoiseType.NO_NOISE){
             return getAmpereRaw();
         }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
@@ -103,9 +103,9 @@ public class AmpereMeter extends Sensor{
       * @param noise The boundary for the random generator starting always from 0 to noise value
       * @return The Temperature of the current auv enviroment with a random noise from 0 to noise value in C°
      */
-    private float getAmpereRaw(){
+    private double getAmpereRaw(){
         HashMap<String, String> accus = getAccumulators();
-        float capacity = 0f;
+        double capacity = 0f;
         for ( String elem : accus.keySet() ){
             String element = (String)accus.get(elem);
             capacity = capacity + auv.getAccumulator(element).getActualCurrent();
@@ -157,7 +157,7 @@ public class AmpereMeter extends Sensor{
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setData(getAmpere());
+        fl.setData((float)getAmpere());
         
         if( publisher != null ){
             publisher.publish(fl);

@@ -83,6 +83,7 @@ import mars.MyOBJLoader;
 import mars.PickHint;
 import mars.accumulators.Accumulator;
 import mars.actuators.BallastTank;
+import mars.actuators.BrushlessThruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.states.SimState;
@@ -1043,7 +1044,30 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(acc != null){ //accu exists from where we can suck energy
                     Float currentConsumption = element.getCurrentConsumption();
                     if(currentConsumption != null){//suck energy
-                        //acc.
+                        float aH = (currentConsumption/3600f)*tpf;
+                        acc.subsractActualCurrent(aH);
+                    }
+                }
+            }
+        }
+        //update current consumption for the activated actuators and thrusters
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            if(element.isEnabled()){
+                Accumulator acc = (Accumulator)accumulators.get(element.getAccumulator());
+                if(acc != null){ //accu exists from where we can suck energy
+                    if(element instanceof Thruster){//check if thruster(curent function) or normal actuator
+                        Thruster th = (Thruster)element;
+                        float motorCurrent = th.getMotorCurrent();
+                        System.out.println("motorCurrent: " + motorCurrent);
+                        float aH = (motorCurrent/3600f)*tpf;
+                        acc.subsractActualCurrent(aH);
+                    }else{
+                        Float currentConsumption = element.getCurrentConsumption();
+                        if(currentConsumption != null){//suck energy
+                            float aH = (currentConsumption/3600f)*tpf;
+                            acc.subsractActualCurrent(aH);
+                        }
                     }
                 }
             }

@@ -64,7 +64,11 @@ public class BrushlessThruster extends Thruster{
      */
     @Override
     protected float calculateThrusterCurrent(int speed){
-        return 0.01f*Math.abs(speed)-0.22f;
+        if( Math.abs(speed) > 22){
+            return 0.01f*Math.abs(speed)-0.22f;
+        }else{
+            return 0f;
+        }
     }
     
     /**
@@ -80,7 +84,7 @@ public class BrushlessThruster extends Thruster{
         subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
                 @Override
                 public void onNewMessage(hanse_msgs.sollSpeed message) {
-                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    //System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
                     self.set_thruster_speed((int)message.getData());
                 }
         });

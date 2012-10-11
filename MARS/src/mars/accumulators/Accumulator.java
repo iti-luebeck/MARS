@@ -23,7 +23,7 @@ public class Accumulator {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
     
-    private float actualCurrent = 0f;
+    private double actualCurrent = 0f;
     
     public Accumulator() {
     }
@@ -109,12 +109,24 @@ public class Accumulator {
         return getNominalVoltage();
     }
 
-    public float getActualCurrent() {
+    public double getActualCurrent() {
         return actualCurrent;
     }
-    
+
+    public void subsractActualCurrent(float subCurrent) {
+        if( (getActualCurrent() - subCurrent) > 0f){
+            actualCurrent = actualCurrent - subCurrent;
+        }else{
+            setActualCurrent(0f);
+        }
+    }
+
+    private void setActualCurrent(float actualCurrent) {
+        this.actualCurrent = actualCurrent;
+    }
+
     public float getActualVoltage(){
-        return calculateActualVoltage(getActualCurrent());
+        return calculateActualVoltage((float)getActualCurrent());
     }
     
     @Override
