@@ -965,6 +965,12 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">50</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="currentConsumption">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.070</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Accelerometer>
                     <noise>
@@ -1231,6 +1237,37 @@
                 </variables>
             </value>
         </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="amperemeter">
+            <value xsi:type="ampereMeter">
+                <noise>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+                    </entry>
+                </noise>
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">amperemeter</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+                    </entry>
+                </variables>
+				<accumulators>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="accumulator1">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
+                </accumulators>
+            </value>
+        </entry>
 	</Sensors>
     <Actuators>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="canon">
@@ -1276,6 +1313,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="canon_shoot">
@@ -1320,6 +1360,9 @@
                             <y>0.0</y>
                             <z>1.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1383,6 +1426,9 @@
                             <y>0.0</y>
                             <z>1.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1465,6 +1511,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Slaves>canon</Slaves>
                 <Actions>
@@ -1525,6 +1574,9 @@
                             <r>1.0</r>
                         </value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
             </value>
         </entry>
@@ -1568,6 +1620,9 @@
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="Radius">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.025</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
             </value>

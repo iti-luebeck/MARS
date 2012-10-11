@@ -620,6 +620,12 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="currentConsumption">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.070</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Accelerometer>
                     <noise>
@@ -893,6 +899,37 @@
                 </variables>
             </value>
         </entry>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeSensors" key="amperemeter">
+            <value xsi:type="ampereMeter">
+                <noise>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
+                    </entry>
+                </noise>
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">/map</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">amperemeter</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+                    </entry>
+                </variables>
+				<accumulators>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="accumulator1">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
+                </accumulators>
+            </value>
+        </entry>
     </Sensors>
     <Actuators>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontRight">
@@ -931,6 +968,9 @@
                             <y>1.0</y>
                             <z>0.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -986,6 +1026,9 @@
                             <z>0.0</z>
                         </value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
@@ -1039,6 +1082,9 @@
                             <y>1.0</y>
                             <z>0.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1094,6 +1140,9 @@
                             <z>0.0</z>
                         </value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_up_net">
@@ -1147,6 +1196,9 @@
                             <y>0.0</y>
                             <z>0.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1211,6 +1263,9 @@
                             <z>0.0</z>
                         </value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="thruster_both_back">
@@ -1238,4 +1293,24 @@
             </value>
         </entry>
     </Actuators>
+	<Accumulators>
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeAccumulators" key="main">
+            <value xsi:type="accumulator">
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="capacity">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="nominalVoltage">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">11.1</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="type">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                    </entry>
+                </variables>
+            </value>
+        </entry>
+    </Accumulators>
 </monsun2>

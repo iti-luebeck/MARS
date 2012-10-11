@@ -1031,6 +1031,12 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">50</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="currentConsumption">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.070</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Accelerometer>
                     <noise>
@@ -1310,6 +1316,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="canon_shoot">
@@ -1354,6 +1363,9 @@
                             <y>1.0</y>
                             <z>0.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1408,6 +1420,9 @@
                             <y>0.0</y>
                             <z>1.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1471,6 +1486,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="volumePerSecond">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0026548E-4</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
+                    </entry>
                 </variables>
                 <Actions>
                     <entry xsi:type="myHashMapEntryTypeObject" key="fill">
@@ -1515,6 +1533,9 @@
                             <y>1.0</y>
                             <z>0.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1569,6 +1590,9 @@
                             <y>0.0</y>
                             <z>1.0</z>
                         </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Actions>
@@ -1650,6 +1674,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1000</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">main</value>
                     </entry>
                 </variables>
                 <Slaves>canon</Slaves>
