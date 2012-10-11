@@ -995,6 +995,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                   if(auv != null){
                         auv.setSelected(true);
                         guiControlState.setLatestSelectedAUV(auv);
+                        this.mars.setHoverMenuForAUV(auv,(int)inputManager.getCursorPosition().x,mars.getViewPort().getCamera().getHeight()-(int)inputManager.getCursorPosition().y);
                         return;
                     //guiControlState.setFree(false);
                   }
@@ -1002,19 +1003,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
           }
           //run through and nothing found that is worth to pick
           auv_manager.deselectAllAUVs();
-          
-          /*// Here comes the action:
-          //System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
-          BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
-          if(auv != null){
-                auv.setSelected(true);
-                guiControlState.setLatestSelectedAUV(auv);
-                return;
-            //guiControlState.setFree(false);
-          }*/
+          this.mars.setHoverMenuForAUV(false);
         }else{//nothing to pickRightClick
             System.out.println("Nothing to pick auv!");
-                auv_manager.deselectAllAUVs();
+            auv_manager.deselectAllAUVs();
+            this.mars.setHoverMenuForAUV(false);
             //guiControlState.setFree(true);
         }
 
@@ -1078,26 +1071,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                   if((String)target.getParent().getUserData("auv_name") != null){
                       BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
                       if(auv != null){
-                            //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
                             view.initPopUpMenuesForAUV(auv.getAuv_param());
                             view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y); 
                       }
                   }
             }
-        /*if (results.size() > 0) {
-          // The closest result is the target that the player picked:
-          Geometry target = results.getClosestCollision().getGeometry();
-          guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
-          guiControlState.setAuvContactDirection(dir.normalize());
-          // Here comes the action:
-          System.out.println("i choose you!, " + target.getParent().getUserData("auv_name") );
-          BasicAUV auv = (BasicAUV)auv_manager.getAUV((String)target.getParent().getUserData("auv_name"));
-          if(auv != null){
-            auv.setSelected(true);
-            //view.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,mars_settings.getResolution_Height()-(int)inputManager.getCursorPosition().y);    
-            view.initPopUpMenuesForAUV(auv.getAuv_param());
-            view.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
-          }*/
         }else{//nothing to pickRightClick but still normal context menu for split view
             //System.out.println("nothing to choose");
             auv_manager.deselectAllAUVs();

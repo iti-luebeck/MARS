@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+  <screen id="start">
+
+  </screen>
+  <screen id="hoverMenu">
+    <layer id="background" backgroundColor="#0000" childLayout="absolute-inside">
+      <panel id="hover" x="50" y="50" height="10%" width="15%" align="center" childLayout="horizontal" backgroundColor="#f008">  
+			<panel id="hover_right"  childLayout="center" backgroundColor="#0000" align="left" valign="center">  
+				<image filename="battery_charge.png" valign="center" align="center">
+				</image>
+			</panel>
+			<panel id="hover_left"  childLayout="center" backgroundColor="#0000" align="right" valign="center">  
+				<text id="hover_left_text" text="%" font="Interface/Fonts/Default.fnt" width="100%" height="100%" wrap="true" />
+			</panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

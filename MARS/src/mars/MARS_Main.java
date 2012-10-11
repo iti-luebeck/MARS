@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.states.StartState;
 import com.jme3.font.BitmapFont;
@@ -44,6 +45,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import mars.auv.AUV;
 import mars.states.MapState;
 
 
@@ -74,6 +76,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     private boolean load = false;
     private Future simStateFuture = null;
     private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
+    private AUV auv;
 
     /**
      *
@@ -98,7 +101,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     @Override
     public void simpleInitApp() {
-        //initNifty();
+        initNifty();
         initMapViewPort();
         //initAssetsLoaders();
         startstate = new StartState(assetManager);
@@ -284,6 +287,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     
     public void initNifty(){
         assetManager.registerLocator("Assets/Interface", FileLocator.class);
+        assetManager.registerLocator("Assets/Icons", FileLocator.class);
         niftyDisplay = new NiftyJmeDisplay(assetManager,
                 inputManager,
                 audioRenderer,
@@ -291,7 +295,8 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         nifty = niftyDisplay.getNifty();
  
         //nifty.fromXml("nifty_loading.xml", "start", this);
-        nifty.fromXml("nifty_loading.xml", "start");
+        //nifty.fromXml("nifty_loading.xml", "start");
+        nifty.fromXml("nifty_energy_popup.xml", "start");
  
         guiViewPort.addProcessor(niftyDisplay);
     }
@@ -307,6 +312,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void bind(Nifty nifty, Screen screen) {
         //progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
+        this.nifty = nifty;
     }
  
     // methods for Controller
@@ -322,6 +328,48 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     
     @Override
     public void init(Properties prprts, Attributes atrbts) {
+    }
+    
+    public void setHoverMenuForAUV(AUV auv, int x, int y){
+        // find old text
+        this.auv = auv;
+        nifty.gotoScreen("hoverMenu");
+        Element niftyElement = nifty.getCurrentScreen().findElementByName("hover");
+        //Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("hover");
+        // swap old with new text
+        if( niftyElement != null){
+            niftyElement.setConstraintX(new SizeValue(String.valueOf(x)));
+            niftyElement.setConstraintY(new SizeValue(String.valueOf(y)));
+            niftyElement.getParent().layoutElements();
+            
+            Element text = niftyElement.findElementByName("hover_left_text");
+            if(text!=null){
+                text.getRenderer(TextRenderer.class).setText(getAkkuForAUV());
+                text.getParent().layoutElements();
+            }
+            setHoverMenuForAUV(true);
+        }
+    }
+    
+    public String getAkkuForAUV(){
+        if(auv != null){
+            Accumulator accumulator = auv.getAccumulator("main");
+            if( accumulator != null){
+                return String.valueOf(Math.round(100f*(accumulator.getActualCurrent()/accumulator.getCapacity())))+"%";
+            }else{
+                 return "NO ACCU!";
+            }
+        }else{
+            return "NO AUV!";
+        }
+    }
+    
+    public void setHoverMenuForAUV(boolean visible){
+        if(visible){
+            nifty.gotoScreen("hoverMenu");
+        }else{
+            nifty.gotoScreen("start");
+        }
     }
  
     public void onFocus(boolean getFocus) {

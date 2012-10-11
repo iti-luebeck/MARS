@@ -1059,7 +1059,6 @@ public class BasicAUV implements AUV,SceneProcessor{
                     if(element instanceof Thruster){//check if thruster(curent function) or normal actuator
                         Thruster th = (Thruster)element;
                         float motorCurrent = th.getMotorCurrent();
-                        System.out.println("motorCurrent: " + motorCurrent);
                         float aH = (motorCurrent/3600f)*tpf;
                         acc.subsractActualCurrent(aH);
                     }else{
