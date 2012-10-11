@@ -38,6 +38,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 import java.util.Properties;
@@ -345,9 +346,24 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             Element text = niftyElement.findElementByName("hover_left_text");
             if(text!=null){
                 text.getRenderer(TextRenderer.class).setText(getAkkuForAUV());
+                
+                text.getRenderer(TextRenderer.class).setColor(new Color(1f-getAkkuValueForAUV(),getAkkuValueForAUV(), 0f, 1f));
                 text.getParent().layoutElements();
             }
             setHoverMenuForAUV(true);
+        }
+    }
+    
+    public float getAkkuValueForAUV(){
+        if(auv != null){
+            Accumulator accumulator = auv.getAccumulator("main");
+            if( accumulator != null){
+                return (Math.round(1f*(accumulator.getActualCurrent()/accumulator.getCapacity())));
+            }else{
+                 return 0f;
+            }
+        }else{
+            return 0f;
         }
     }
     
