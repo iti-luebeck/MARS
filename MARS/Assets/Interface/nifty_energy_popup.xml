@@ -6,7 +6,7 @@
   </screen>
   <screen id="hoverMenu">
     <layer id="background" backgroundColor="#0000" childLayout="absolute-inside">
-      <panel id="hover" x="50" y="50" height="10%" width="15%" align="center" childLayout="horizontal" backgroundColor="#ddd8">  
+      <panel id="hover" x="50" y="50" height="10%" width="15%" align="center" childLayout="horizontal" backgroundImage="energy_popup.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">  
 			<panel id="hover_right"  childLayout="center" backgroundColor="#0000" align="left" valign="center">  
 				<image filename="battery_charge.png" valign="center" align="center">
 				</image>

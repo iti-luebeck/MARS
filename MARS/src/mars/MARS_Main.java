@@ -48,6 +48,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import mars.auv.AUV;
 import mars.states.MapState;
+import mars.states.NiftyState;
 
 
 /**
@@ -62,6 +63,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
 
     StartState startstate;
     MapState mapstate;
+    NiftyState niftystate;
     
     ChaseCamera chaseCam;
     
@@ -77,7 +79,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     private boolean load = false;
     private Future simStateFuture = null;
     private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
-    private AUV auv;
 
     /**
      *
@@ -102,7 +103,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     @Override
     public void simpleInitApp() {
-        initNifty();
+        //initNifty();
         initMapViewPort();
         //initAssetsLoaders();
         startstate = new StartState(assetManager);
@@ -112,6 +113,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());
         stateManager.attach(mapstate);
+        
+        //nifty state
+        niftystate = new NiftyState();
+        viewPort.attachScene(niftystate.getRootNode());
+        stateManager.attach(niftystate);
         
         //attach Screenshot AppState
         ScreenshotAppState screenShotState = new ScreenshotAppState();
@@ -286,6 +292,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         this.guiFont = guiFont;
     }
     
+    @Deprecated
     public void initNifty(){
         assetManager.registerLocator("Assets/Interface", FileLocator.class);
         assetManager.registerLocator("Assets/Icons", FileLocator.class);
@@ -298,7 +305,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         //nifty.fromXml("nifty_loading.xml", "start", this);
         //nifty.fromXml("nifty_loading.xml", "start");
         nifty.fromXml("nifty_energy_popup.xml", "start");
- 
+        
+        //set logging to less spam
+        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE); 
+        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE); 
+
         guiViewPort.addProcessor(niftyDisplay);
     }
     
@@ -331,61 +342,28 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     public void init(Properties prprts, Attributes atrbts) {
     }
     
-    public void setHoverMenuForAUV(AUV auv, int x, int y){
-        // find old text
-        this.auv = auv;
-        nifty.gotoScreen("hoverMenu");
-        Element niftyElement = nifty.getCurrentScreen().findElementByName("hover");
-        //Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("hover");
-        // swap old with new text
-        if( niftyElement != null){
-            niftyElement.setConstraintX(new SizeValue(String.valueOf(x)));
-            niftyElement.setConstraintY(new SizeValue(String.valueOf(y)));
-            niftyElement.getParent().layoutElements();
-            
-            Element text = niftyElement.findElementByName("hover_left_text");
-            if(text!=null){
-                text.getRenderer(TextRenderer.class).setText(getAkkuForAUV());
-                
-                text.getRenderer(TextRenderer.class).setColor(new Color(1f-getAkkuValueForAUV(),getAkkuValueForAUV(), 0f, 1f));
-                text.getParent().layoutElements();
+    public void setHoverMenuForAUV(final AUV auv, final int x, final int y){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(NiftyState.class) != null){
+                    NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
+                    niftyState.setHoverMenuForAUV(auv, x, y);
+                }
+                return null;
             }
-            setHoverMenuForAUV(true);
-        }
+        });
     }
-    
-    public float getAkkuValueForAUV(){
-        if(auv != null){
-            Accumulator accumulator = auv.getAccumulator("main");
-            if( accumulator != null){
-                return (Math.round(1f*(accumulator.getActualCurrent()/accumulator.getCapacity())));
-            }else{
-                 return 0f;
+
+    public void setHoverMenuForAUV(final boolean visible){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(NiftyState.class) != null){
+                    NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
+                    niftyState.setHoverMenuForAUV(visible);
+                }
+                return null;
             }
-        }else{
-            return 0f;
-        }
-    }
-    
-    public String getAkkuForAUV(){
-        if(auv != null){
-            Accumulator accumulator = auv.getAccumulator("main");
-            if( accumulator != null){
-                return String.valueOf(Math.round(100f*(accumulator.getActualCurrent()/accumulator.getCapacity())))+"%";
-            }else{
-                 return "NO ACCU!";
-            }
-        }else{
-            return "NO AUV!";
-        }
-    }
-    
-    public void setHoverMenuForAUV(boolean visible){
-        if(visible){
-            nifty.gotoScreen("hoverMenu");
-        }else{
-            nifty.gotoScreen("start");
-        }
+        });
     }
  
     public void onFocus(boolean getFocus) {
