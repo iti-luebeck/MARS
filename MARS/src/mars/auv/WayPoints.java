@@ -190,6 +190,9 @@ public class WayPoints extends Node{
 
     private void createLine(String name, ColorRGBA color, Vector3f start, Vector3f end){
         Line line = new Line(start, end);
+        if(auv_param.getWayPointLineWidth() != null){
+            line.setLineWidth(auv_param.getWayPointLineWidth());
+        }
         final Geometry geom = new Geometry(name, line);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);

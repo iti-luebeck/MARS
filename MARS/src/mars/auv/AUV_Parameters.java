@@ -416,7 +416,23 @@ public class AUV_Parameters implements CellEditorListener{
     public void setAngular_factor(float angular_factor) {
         params.put("angular_factor", angular_factor);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getWayPointLineWidth() {
+         return (Float)waypoints.get("lineWidth");
+    }
 
+    /**
+     *
+     * @param maxWaypoints
+     */
+    public void setWayPointLineWidth(float lineWidth) {
+        waypoints.put("lineWidth", lineWidth);
+    }
+    
     /**
      *
      * @return
