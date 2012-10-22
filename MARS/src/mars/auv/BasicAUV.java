@@ -96,6 +96,7 @@ import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;
+import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
 import mars.sensors.sonar.Sonar;
@@ -594,6 +595,9 @@ public class BasicAUV implements AUV,SceneProcessor{
                 }
                 if(element instanceof AmpereMeter){
                     ((AmpereMeter)element).setAuv(this);
+                }
+                if(element instanceof FlowMeter){
+                    ((FlowMeter)element).setIniter(initer);//is needed for filters
                 }
                 element.init(auv_node);
                 if(element instanceof Keys){

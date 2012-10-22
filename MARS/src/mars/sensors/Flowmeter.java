@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import mars.Initializer;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
@@ -24,21 +25,23 @@ import org.ros.message.Time;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Flowmeter extends Sensor{
+public class FlowMeter extends Sensor{
 
-    private Geometry PressureSensorStart;
+    private Geometry FlowMeterStart;
 
-    private Vector3f PressureSensorStartVector;
+    private Vector3f FlowMeterStartVector;
+    
+    private Initializer initer;
 
     ///ROS stuff
-    private Publisher<hanse_msgs.pressure> publisher = null;
-    private hanse_msgs.pressure fl;
+    private Publisher<geometry_msgs.Vector3Stamped> publisher = null;
+    private geometry_msgs.Vector3Stamped fl;
     private std_msgs.Header header; 
     
     /**
      * 
      */
-    public Flowmeter(){
+    public FlowMeter(){
         super();
     }
         
@@ -47,7 +50,7 @@ public class Flowmeter extends Sensor{
      * @param simstate 
       * @param pe
      */
-    public Flowmeter(SimState simstate, PhysicalEnvironment pe){
+    public FlowMeter(SimState simstate, PhysicalEnvironment pe){
         super(simstate);
         this.pe = pe;
     }
@@ -56,7 +59,7 @@ public class Flowmeter extends Sensor{
      *
      * @param simstate 
      */
-    public Flowmeter(SimState simstate){
+    public FlowMeter(SimState simstate){
         super(simstate);
     }
 
@@ -66,13 +69,13 @@ public class Flowmeter extends Sensor{
     public void init(Node auv_node){
 
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
-        PressureSensorStart = new Geometry("PressureStart", sphere7);
+        FlowMeterStart = new Geometry("FlowMeterStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
-        PressureSensorStart.setMaterial(mark_mat7);
-        PressureSensorStart.setLocalTranslation(getPressureSensorStartVector());
-        PressureSensorStart.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(PressureSensorStart);
+        FlowMeterStart.setMaterial(mark_mat7);
+        FlowMeterStart.setLocalTranslation(getFlowMeterStartVector());
+        FlowMeterStart.updateGeometricState();
+        PhysicalExchanger_Node.attachChild(FlowMeterStart);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }
@@ -85,17 +88,19 @@ public class Flowmeter extends Sensor{
      *
      * @return The exact depth of the current auv
      */
-    public float getDepth(){
+    public Vector3f getFlowForce(){
         if(getNoise_type() == NoiseType.NO_NOISE){
-            return getRawDepth();
+            return getRawFlowForce();
         }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
             float noise = getUnifromDistributionNoise(getNoise_value());
-            return getRawDepth()+((float)((1f/100f)*noise));
+            Vector3f noised = new Vector3f(getRawFlowForce().x+((float)((1f/100f)*noise)),getRawFlowForce().y+((float)((1f/100f)*noise)),getRawFlowForce().z+((float)((1f/100f)*noise)));
+            return noised;
         }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
             float noise = getGaussianDistributionNoise(getNoise_value());
-            return getRawDepth() + ((float)((1f/100f)*noise));
+            Vector3f noised = new Vector3f(getRawFlowForce().x+((float)((1f/100f)*noise)),getRawFlowForce().y+((float)((1f/100f)*noise)),getRawFlowForce().z+((float)((1f/100f)*noise)));
+            return noised;
         }else{
-            return getRawDepth();
+            return getRawFlowForce();
         }
     }
 
@@ -103,59 +108,23 @@ public class Flowmeter extends Sensor{
      *
      * @return The depth of the current auv 
      */
-    private float getRawDepth(){
-        return PressureSensorStart.getWorldTranslation().y + Math.abs(pe.getWater_height());
-    }
-
-    /**
-     * See Pascal's law.
-     * @return The pressure that the pressure sensor measures in Bar
-     */
-    public float getPressureBar(){
-        if( getDepth() <= pe.getWater_height()){//underwater
-            return (pe.getPressure_water_height()/1000f) + (float)((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth()))/100000f);
-        }else{//air
-            return (pe.getPressure_water_height()/1000f);
-        }
-    }
-    
-    /**
-     * See Pascal's law.
-     * @return The pressure that the pressure sensor measures in mBar
-     */
-    public float getPressureMbar(){
-        if( getDepth() <= pe.getWater_height()){//underwater
-            return pe.getPressure_water_height() + (float)((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth()))/100f);
-        }else{//air
-            return (pe.getPressure_water_height());
-        }
-    }
-
-    /**
-     * See Pascal's law.
-     * @return The pressure that the pressure sensor measures in Pascal
-     */
-    public float getPressurePascal(){
-        if( getDepth() <= pe.getWater_height()){//underwater
-            return (pe.getPressure_water_height()*100f) + (float)(pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth()));
-        }else{//air
-            return (pe.getPressure_water_height()*100f);
-        }
+    private Vector3f getRawFlowForce(){
+        return Vector3f.ZERO;
     }
 
     /**
      * 
      * @return
      */
-    public Vector3f getPressureSensorStartVector() {
+    public Vector3f getFlowMeterStartVector() {
         return (Vector3f)variables.get("Position");
     }
 
     /**
      *
-     * @param PressureSensorStartVector
+     * @param FlowMeterStartVector
      */
-    public void setPressureSensorStartVector(Vector3f Position) {
+    public void setFlowMeterStartVector(Vector3f Position) {
         variables.put("Position", Position);
     }
 
@@ -174,6 +143,22 @@ public class Flowmeter extends Sensor{
     public void setPe(PhysicalEnvironment pe) {
         this.pe = pe;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Initializer getIniter() {
+        return initer;
+    }
+
+    /**
+     *
+     * @param initer
+     */
+    public void setIniter(Initializer initer) {
+        this.initer = initer;
+    }
 
     /**
      * 
@@ -190,8 +175,8 @@ public class Flowmeter extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.pressure._TYPE);  
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.pressure._TYPE);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.Vector3Stamped._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
 
@@ -204,7 +189,13 @@ public class Flowmeter extends Sensor{
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        fl.setData((short)getPressureMbar());
+        
+        geometry_msgs.Vector3 vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+        vec.setX(getFlowForce().x);
+        vec.setY(getFlowForce().z);
+        vec.setZ(getFlowForce().y);
+
+        fl.setVector(vec);
         if( publisher != null ){
             publisher.publish(fl);
         }

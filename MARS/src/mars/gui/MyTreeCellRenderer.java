@@ -19,6 +19,7 @@ import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
 import mars.sensors.AmpereMeter;
 import mars.sensors.Compass;
+import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
 import mars.sensors.IMU;
@@ -167,6 +168,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
                         }else if(hasher.getUserData() instanceof AmpereMeter){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
+                        }else if(hasher.getUserData() instanceof FlowMeter){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"breeze_small.png"));
                         }
                     }
                 }else if(hasher.getUserData() instanceof Accumulator){
