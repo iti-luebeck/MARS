@@ -938,7 +938,21 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
 
     private void updateWaterCurrentForce(){
-        physics_control.applyCentralForce(physical_environment.getWater_current());
+        //physics_control.applyCentralForce(physical_environment.getWater_current());
+        Vector3f physicsLocation = physics_control.getPhysicsLocation();
+        Vector3f terrain_scale = mars_settings.getTerrain_scale();
+        float terrain_image_width = initer.getTerrain_image_width();
+        int auv_pos_x = (int)((terrain_image_width/(terrain_image_width*terrain_scale.x))*physicsLocation.x);
+        int auv_pos_y = (int)((terrain_image_width/(terrain_image_width*terrain_scale.z))*physicsLocation.z);
+        int flowX = initer.getFlowX()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
+        int flowY = initer.getFlowY()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
+        System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);
+        
+        float scaledFlowX = (flowX/32768f)/mars_settings.getPhysicsFramerate();
+        float scaledFlowY = (flowY/32768f)/mars_settings.getPhysicsFramerate();
+        Vector3f flowForce = new Vector3f(scaledFlowX, 0f, scaledFlowY);
+        flowForce.multLocal(mars_settings.getFlowScale());
+        physics_control.applyImpulse(flowForce, Vector3f.ZERO);
     }
 
     /**

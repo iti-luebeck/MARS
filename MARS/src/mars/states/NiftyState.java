@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.accumulators.Accumulator;
 import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 
 /**
  *
@@ -41,6 +42,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
     private Node rootNode = new Node("Nifty Root Node");
     private AssetManager assetManager;
     private AUV auv;
+    private AUV_Manager auv_manager;
     
     /** custom methods */ 
 

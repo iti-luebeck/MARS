@@ -5,6 +5,7 @@
 
 package mars;
 
+import java.nio.ShortBuffer;
 import mars.states.SimState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
@@ -67,6 +68,7 @@ import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.HillHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
@@ -77,7 +79,9 @@ import forester.grass.GrassLoader;
 import forester.grass.algorithms.GPAUniform;
 import forester.grass.datagrids.MapGrid;
 import forester.image.DensityMap.Channel;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -133,6 +137,11 @@ public class Initializer {
     private TerrainQuad terrain;
     private Material mat_terrain;
     AbstractHeightMap heightmap;
+    
+    //flow
+    private int[] pixelSamplesFlowX;
+    private int[] pixelSamplesFlowY;
+    private Node flowNode;
     
     //grass
     private Forester forester;
@@ -277,6 +286,7 @@ public class Initializer {
         //setupGlow();
         //setupFishEye();
         //setupLensFlare();
+        setupFlow();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -1274,6 +1284,136 @@ public class Initializer {
         });
     }
     
+    private void setupFlow(){
+        assetManager.registerLocator("Assets/Textures/Flow", FileLocator.class);
+
+        Texture heightMapImage = assetManager.loadTexture(
+                mars_settings.getFlowfilepath_x());
+        heightMapImage.getImage().setFormat(Format.Luminance16);//fix for format problems
+        
+        int w = heightMapImage.getImage().getWidth();
+        int h = heightMapImage.getImage().getHeight();
+        pixelSamplesFlowX = new int[h * w];
+
+        pixelSamplesFlowX = load(false, false, heightMapImage.getImage());
+        
+        
+        Texture heightMapImage2 = assetManager.loadTexture(
+                mars_settings.getFlowfilepath_y());
+        heightMapImage2.getImage().setFormat(Format.Luminance16);//fix for format problems
+
+        int w2 = heightMapImage2.getImage().getWidth();
+        int h2 = heightMapImage2.getImage().getHeight();
+        pixelSamplesFlowY = new int[h2 * w2];
+        
+        pixelSamplesFlowY = load(false, false, heightMapImage2.getImage());
+
+        flowNode = new Node("flow");
+
+        //flowNode.setLocalTranslation(mars_settings.getTerrain_position());
+        flowNode.updateGeometricState();
+
+        Geometry grid = new Geometry("flow grid", new Grid(h, w, mars_settings.getTerrain_scale().x));
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", mars_settings.getGridColor());
+        grid.setMaterial(mat);
+        //grid.center().move(mars_settings.getGridPosition());
+        //Quaternion quat = new Quaternion();
+        //quat.fromAngles(mars_settings.getGridRotation().x, mars_settings.getGridRotation().y, mars_settings.getGridRotation().z);
+        //grid.setLocalRotation(quat);
+        grid.move(0f, -1f, 0f);
+        
+        //add vectors to grid
+        /*for (int i = 0; i < 250; i++) {
+            for (int j = 0; j < w; j++) {
+                Vector3f ray_start = new Vector3f(j*mars_settings.getTerrain_scale().x+(mars_settings.getTerrain_scale().x/2f), 0f, i*mars_settings.getTerrain_scale().x+(mars_settings.getTerrain_scale().x/2f));
+                float flowX = pixelSamplesFlowX[i*(h)+j];
+                float flowY = pixelSamplesFlowY[i*(h)+j];
+                Vector3f ray_direction = new Vector3f(flowX, 0f, flowY);
+                ray_direction.normalizeLocal();
+                ray_direction.multLocal(mars_settings.getTerrain_scale().x/2f);
+                Arrow arrow = new Arrow(ray_direction);
+                arrow.setLineWidth(4f);
+                Geometry ArrowGeom = new Geometry("VectorVisualizer_Arrow", arrow);
+                Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                Vector3f color = new Vector3f(flowX, 0f, flowY);
+                Vector3f colorMax = new Vector3f(32768, 0f, 32768);
+                float lengthSquaredMax = colorMax.lengthSquared();
+                float lengthSquared = color.lengthSquared();
+                ColorRGBA col = new ColorRGBA(lengthSquared/lengthSquaredMax, 1f-(lengthSquared/lengthSquaredMax), 0f, 0f);
+                mark_mat4.setColor("Color", col);
+                ArrowGeom.setMaterial(mark_mat4);
+                ArrowGeom.setLocalTranslation(ray_start);
+                ArrowGeom.updateGeometricState();
+                flowNode.attachChild(ArrowGeom);
+            }
+        }*/
+
+        
+        //flowNode.attachChild(grid);
+        rootNode.attachChild(flowNode);
+
+    }
+    
+    public int[] load(boolean flipX, boolean flipY, Image colorImage) {
+
+        int imageWidth = colorImage.getWidth();
+        int imageHeight = colorImage.getHeight();
+
+        if (imageWidth != imageHeight)
+                throw new RuntimeException("imageWidth: " + imageWidth
+                        + " != imageHeight: " + imageHeight);
+
+        ByteBuffer buf = colorImage.getData(0);
+
+        int[] heightData = new int[(imageWidth * imageHeight)];
+        
+        int index = 0;
+        if (flipY) {
+            for (int h = 0; h < imageHeight; ++h) {
+                if (flipX) {
+                    for (int w = imageWidth - 1; w >= 0; --w) {
+                        int baseIndex = (h * imageWidth)+ w;
+                        heightData[index++] = getHeightAtPostion(buf, colorImage, baseIndex);
+                    }
+                } else {
+                    for (int w = 0; w < imageWidth; ++w) {
+                        int baseIndex = (h * imageWidth)+ w;
+                        heightData[index++] = getHeightAtPostion(buf, colorImage, baseIndex);
+                    }
+                }
+            }
+        } else {
+            for (int h = imageHeight - 1; h >= 0; --h) {
+                if (flipX) {
+                    for (int w = imageWidth - 1; w >= 0; --w) {
+                        int baseIndex = (h * imageWidth)+ w;
+                        heightData[index++] = getHeightAtPostion(buf, colorImage, baseIndex);
+                    }
+                } else {
+                    for (int w = 0; w < imageWidth; ++w) {
+                        int baseIndex = (h * imageWidth)+ w;
+                        heightData[index++] = getHeightAtPostion(buf, colorImage, baseIndex);
+                    }
+                }
+            }
+        }
+
+        return heightData;
+    }
+    
+    protected int getHeightAtPostion(ByteBuffer buf, Image image, int position) {
+        switch (image.getFormat()){
+            case Luminance16:
+                ShortBuffer sbuf = buf.asShortBuffer();
+                sbuf.position( position );
+                return (sbuf.get() & 0xFFFF)-32768;
+            default:
+                throw new UnsupportedOperationException("Image format: "+image.getFormat());
+        }
+    }
+    
     public void updateGrass(){
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
@@ -1320,5 +1460,13 @@ public class Initializer {
     
     public Node getTerrainNode(){
         return terrain_node;
+    }
+    
+    public int[] getFlowX(){
+        return pixelSamplesFlowX;
+    }
+    
+    public int[] getFlowY(){
+        return pixelSamplesFlowY;
     }
 }

@@ -50,6 +50,7 @@ public class MARS_Settings{
     private HashMap<String,Object> SkyBox;
     private HashMap<String,Object> SimpleSkyBox;
     private HashMap<String,Object> Terrain;
+    private HashMap<String,Object> Flow;
     private HashMap<String,Object> Grass;
     private HashMap<String,Object> Light;
     private HashMap<String,Object> Shadow;
@@ -131,6 +132,7 @@ public class MARS_Settings{
         SkyBox = new HashMap<String,Object> ();
         SimpleSkyBox = new HashMap<String,Object> ();
         Terrain = new HashMap<String,Object> ();
+        Flow = new HashMap<String,Object> ();
         Grass = new HashMap<String,Object> ();
         Light = new HashMap<String,Object> ();
         Shadow = new HashMap<String,Object> ();
@@ -154,6 +156,7 @@ public class MARS_Settings{
         Graphics.put("SkyBox", SkyBox);
         Graphics.put("SimpleSkyBox", SimpleSkyBox);
         Graphics.put("Terrain", Terrain);
+        Graphics.put("Flow", Flow);
         Graphics.put("Grass", Grass);
         Graphics.put("Light", Light);
         Graphics.put("Shadow", Shadow);
@@ -201,6 +204,7 @@ public class MARS_Settings{
         SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
+        Flow = (HashMap<String,Object>)Graphics.get("Flow");
         Light = (HashMap<String,Object>)Graphics.get("Light");
         Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
@@ -229,6 +233,7 @@ public class MARS_Settings{
         SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
+        Flow = (HashMap<String,Object>)Graphics.get("Flow");
         Grass = (HashMap<String,Object>)Graphics.get("Grass");
         Light = (HashMap<String,Object>)Graphics.get("Light");
         Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
@@ -1529,6 +1534,54 @@ public class MARS_Settings{
      */
     public void setTerrain_rotation(Vector3f rotation) {
         Terrain.put("rotation", rotation);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getFlowfilepath_x() {
+        return (String)Flow.get("filepath_flowmap_x");
+    }
+
+    /**
+     *
+     * @param filepath_heightmap
+     */
+    public void setFlowfilepath_x(String filepath_flowmap_x) {
+        Flow.put("filepath_flowmap_x", filepath_flowmap_x);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getFlowfilepath_y() {
+        return (String)Flow.get("filepath_flowmap_y");
+    }
+
+    /**
+     *
+     * @param filepath_heightmap
+     */
+    public void setFlowfilepath_y(String filepath_flowmap_y) {
+        Flow.put("filepath_flowmap_y", filepath_flowmap_y);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getFlowScale() {
+        return (Float)Flow.get("flowScale");
+    }
+
+    /**
+     *
+     * @param filepath_heightmap
+     */
+    public void setFlowScale(float flowScale) {
+        Flow.put("flowScale", flowScale);
     }
 
     /**
