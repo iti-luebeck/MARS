@@ -956,6 +956,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         float scaledFlowY = (flowY/32768f)/mars_settings.getPhysicsFramerate();
         Vector3f flowForce = new Vector3f(scaledFlowX, 0f, scaledFlowY);
         flowForce.multLocal(mars_settings.getFlowScale());
+        initer.setFlowVector(new Vector3f((flowX/32768f), 0f, (flowY/32768f)));
         physics_control.applyImpulse(flowForce, Vector3f.ZERO);
     }
 
@@ -997,9 +998,9 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void updateForces(float tpf){
         if(auv_node.getParent().getParent().getParent().getParent().getName() != null && auv_node.getParent().getParent().getParent().getParent().getName().equals("Root Node")){//check if PhysicsNode added to rootNode
             //since bullet deactivate nodes that dont move enough we must activate it
-            if(!physics_control.isActive()){
+            /*if(!physics_control.isActive()){
                 physics_control.activate();
-            }
+            }*/
             //calculate actuator(motors) forces
             updateActuatorForces();
 
@@ -1352,6 +1353,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         physics_control.setCollideWithGroups(1);
         physics_control.setDamping(auv_param.getDamping_linear(), auv_param.getDamping_angular());
         physics_control.setAngularFactor(auv_param.getAngular_factor());
+        physics_control.setSleepingThresholds(0f, 0f);// so the physics node doesn't get deactivated
         //physics_control.setApplyPhysicsLocal(true);
         //physics_control.setFriction(0f);
         //physics_control.setRestitution(0.3f);

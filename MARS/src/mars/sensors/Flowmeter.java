@@ -109,7 +109,7 @@ public class FlowMeter extends Sensor{
      * @return The depth of the current auv 
      */
     private Vector3f getRawFlowForce(){
-        return Vector3f.ZERO;
+        return initer.getFlowVector();
     }
 
     /**

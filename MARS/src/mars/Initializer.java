@@ -142,6 +142,7 @@ public class Initializer {
     private int[] pixelSamplesFlowX;
     private int[] pixelSamplesFlowY;
     private Node flowNode;
+    private Vector3f flowVector = Vector3f.ZERO;
     
     //grass
     private Forester forester;
@@ -1468,5 +1469,13 @@ public class Initializer {
     
     public int[] getFlowY(){
         return pixelSamplesFlowY;
+    }
+    
+    public Vector3f getFlowVector(){
+        return flowVector;
+    }
+
+    public void setFlowVector(Vector3f flowVector) {
+        this.flowVector = flowVector;
     }
 }
