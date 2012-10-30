@@ -622,7 +622,23 @@ public class AUV_Parameters implements CellEditorListener{
      * @param drag_updaterate
      */
     public void setDrag_updaterate(int drag_updaterate) {
-        params.put("drag_updaterate", drag_updaterate);;
+        params.put("drag_updaterate", drag_updaterate);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public int getFlow_updaterate() {
+        return (Integer)params.get("flow_updaterate");
+    }
+
+    /**
+     *
+     * @param drag_updaterate
+     */
+    public void setFlow_updaterate(int flow_updaterate) {
+        params.put("flow_updaterate", flow_updaterate);
     }
     
     /**

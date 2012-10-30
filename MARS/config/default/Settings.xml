@@ -395,14 +395,8 @@
 						<entry xsi:type="myHashMapEntryTypeObject" key="flowScale">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">20.0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="tileLength">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.15625</value>
-                        </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">85.0</value>
-                        </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="patchSize">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">32</value>
+						<entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                         </entry>
                     </value>
                 </entry>

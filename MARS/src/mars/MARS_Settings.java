@@ -1393,24 +1393,6 @@ public class MARS_Settings{
      * @return
      */
     @Deprecated
-    public Float getTileLength() {
-        return (Float)Terrain.get("tileLength");
-    }
-
-    /**
-     *
-     * @param tileLength
-     */
-    @Deprecated
-    public void setTileLength(float tileLength) {
-        Terrain.put("tileLength", tileLength);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
     public Float getTileHeigth() {
         return (Float)Terrain.get("tileHeigth");
     }
@@ -1582,6 +1564,54 @@ public class MARS_Settings{
      */
     public void setFlowScale(float flowScale) {
         Flow.put("flowScale", flowScale);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean isSetupFlow() {
+        return (Boolean)Flow.get("enabled");
+    }
+
+    /**
+     *
+     * @param filepath_heightmap
+     */
+    public void setSetupFlow(boolean enabled) {
+        Flow.put("enabled", enabled);
+    }
+    
+           /**
+     *
+     * @return
+     */
+    public Vector3f getFlowPosition() {
+        return (Vector3f)Flow.get("position");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setFlowPosition(Vector3f position) {
+        Flow.put("position", position);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getFlowRotation() {
+        return (Vector3f)Flow.get("rotation");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setFlowRotation(Vector3f rotation) {
+        Flow.put("rotation", rotation);
     }
 
     /**

@@ -17,6 +17,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import java.io.IOException;
+import java.nio.ByteOrder;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ import mars.PickHint;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
@@ -109,9 +111,9 @@ public class Sonar extends Sensor{
     private int SonarReturnDataLength = 252;
     
     ///ROS stuff
-//    protected Publisher<org.ros.message.hanse_msgs.ScanningSonar> publisher = null;
-//    protected org.ros.message.hanse_msgs.ScanningSonar fl = new org.ros.message.hanse_msgs.ScanningSonar(); 
-//    protected org.ros.message.std_msgs.Header header = new org.ros.message.std_msgs.Header(); 
+    protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
+    protected hanse_msgs.ScanningSonar fl;
+    protected std_msgs.Header header; 
     
     /**
      * 
@@ -1099,8 +1101,10 @@ public class Sonar extends Sensor{
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
-//        super.initROS(ros_node, auv_name);
-//        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(), "hanse_msgs/ScanningSonar");  
+        super.initROS(ros_node, auv_name);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.ScanningSonar._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
     }
     
     /**
@@ -1108,17 +1112,22 @@ public class Sonar extends Sensor{
      */
     @Override
     public void publish() {
-        //header.seq = 0;
-//        header.frame_id = this.getRos_frame_id();
-//        header.stamp = Time.fromMillis(System.currentTimeMillis());
-//        fl.header = header;
-//        byte[] sonData = getRawSonarData();
-//        float lastHeadPosition = getLastHeadPosition();
-//        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
-//        fl.echoData = sonData;
-//        fl.headPosition = lastHeadPosition;
-//        fl.startGain = (byte)getScanning_gain();
-//        fl.range = (byte)getSonarMaxRange();
-//        this.publisher.publish(fl);
+       
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        
+        byte[] sonData = getRawSonarData();
+        float lastHeadPosition = getLastHeadPosition();
+        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
+        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
+        fl.setHeadPosition(lastHeadPosition);
+        fl.setStartGain((byte)getScanning_gain());
+        fl.setRange((byte)getSonarMaxRange());
+        
+        if( publisher != null ){
+            publisher.publish(fl);
+        }
     }
 }

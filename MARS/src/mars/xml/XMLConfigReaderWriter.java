@@ -1731,8 +1731,6 @@ public class XMLConfigReaderWriter
                 settings.setTerrainfilepath_cm(setup_node.getTextContent().trim());
             }else if(setup_node.getNodeName().equals("position")){
                 settings.setTerrain_position(getVector(setup_node));
-            }else if(setup_node.getNodeName().equals("tileLength")){
-                settings.setTileLength(Float.valueOf(setup_node.getTextContent().trim()));
             }else if(setup_node.getNodeName().equals("tileHeigth")){
                 settings.setTileHeigth(Float.valueOf(setup_node.getTextContent().trim()));
             }

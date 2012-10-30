@@ -146,6 +146,7 @@ public class BasicAUV implements AUV,SceneProcessor{
 
     private int buoyancy_updaterate = 5;
     private int drag_updaterate = 5;
+    private int flow_updaterate = 1;
 
     //offview
     private FrameBuffer drag_offBuffer;
@@ -300,6 +301,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         this.auv_param.setAuv(this);
         buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
+        flow_updaterate = auv_param.getFlow_updaterate();
         auv_node.setName(auv_param.getAuv_name() + "_physicnode");
     }
 
@@ -942,22 +944,29 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
 
     private void updateWaterCurrentForce(){
-        //physics_control.applyCentralForce(physical_environment.getWater_current());
-        Vector3f physicsLocation = physics_control.getPhysicsLocation();
+        if(flow_updaterate == 1){//take all flow_updaterate times new values
+            flow_updaterate = auv_param.getFlow_updaterate();
+            //physics_control.applyCentralForce(physical_environment.getWater_current());
+        /*Vector3f physicsLocation = physics_control.getPhysicsLocation();
         Vector3f terrain_scale = mars_settings.getTerrain_scale();
         float terrain_image_width = initer.getTerrain_image_width();
         int auv_pos_x = (int)((terrain_image_width/(terrain_image_width*terrain_scale.x))*physicsLocation.x);
         int auv_pos_y = (int)((terrain_image_width/(terrain_image_width*terrain_scale.z))*physicsLocation.z);
         int flowX = initer.getFlowX()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
         int flowY = initer.getFlowY()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
-        System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);
+        //System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);
         
         float scaledFlowX = (flowX/32768f)/mars_settings.getPhysicsFramerate();
         float scaledFlowY = (flowY/32768f)/mars_settings.getPhysicsFramerate();
         Vector3f flowForce = new Vector3f(scaledFlowX, 0f, scaledFlowY);
         flowForce.multLocal(mars_settings.getFlowScale());
         initer.setFlowVector(new Vector3f((flowX/32768f), 0f, (flowY/32768f)));
-        physics_control.applyImpulse(flowForce, Vector3f.ZERO);
+        physics_control.applyImpulse(flowForce, Vector3f.ZERO);*/
+        }else if(flow_updaterate == 0){
+            flow_updaterate = auv_param.getFlow_updaterate();
+        }else{
+            flow_updaterate--;
+        }
     }
 
     /**

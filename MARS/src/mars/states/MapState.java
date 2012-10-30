@@ -115,7 +115,7 @@ public class MapState extends AbstractAppState{
                 
                 auv_geom.setMaterial(auv_geom_mat);
                 Vector3f ter_pos = mars_settings.getTerrain_position();
-                float tile_length = mars_settings.getTileLength();
+                float tile_length = mars_settings.getTerrain_scale().x;
                 int terx_px = tex_ml.getImage().getWidth();
                 int tery_px = tex_ml.getImage().getHeight();
                 //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));

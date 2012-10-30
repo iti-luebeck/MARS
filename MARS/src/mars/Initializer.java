@@ -914,12 +914,13 @@ public class Initializer {
         // Step 3 - set up the mapgrid. This is where you link densitymaps with
         // terrain tiles if you use a custom grid (not terrain grid).
         MapGrid grasGrid = grassLoader.createMapGrid();
-        
         // Now add a texture to the grid. We will only use one map here, and only one gridcell (0,0).
         // The three zeros are x-coord, z-coord and density map index (starting from 0).
         // If we wanted to index this texture as densitymap 2 in cell (43,-12) we would have
         // written grid.addDensityMap(density,43,-12,2);
-        Texture density = terrain.getMaterial().getTextureParam("Alpha").getTextureValue();
+        Material material = terrain.getMaterial();
+        Texture density = terrain.getMaterial().getTextureParam("AlphaMap").getTextureValue();
+        //Texture density = terrain.getMaterial().getTextureParam("Alpha").getTextureValue();//because of lighing terrain
         grasGrid.addDensityMap(density, 0, 0, 0);
 
         // Step 4 - set up a grass layer. We're gonna use the Grass.j3m material file
@@ -962,7 +963,7 @@ public class Initializer {
         // necessary here, but I set it to show how it works.
         layer.setMaxTerrainSlope(30);
         
-        layer.setShadowMode(ShadowMode.CastAndReceive);
+        //layer.setShadowMode(ShadowMode.Receive);<-- bugged
         
         // This is a way of discarding all densityvalues that are lower then 0.6.
         // A threshold value is optional, but in this case it's useful to restrict
@@ -1056,11 +1057,11 @@ public class Initializer {
                 "Textures/Terrain/splat/grass.jpg");*/
         Texture grass = assetManager.loadTexture(
                 mars_settings.getTerrainfilepath_cm());
-        assetManager.registerLocator("Assets/Forester", FileLocator.class);
-        //Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
+       /* assetManager.registerLocator("Assets/Forester", FileLocator.class);
+        Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
         //mat_terrain.setTexture("Tex1", grass);
-        //mat_terrain.setFloat("Tex1Scale", 1f);
+        //mat_terrain.setFloat("Tex1Scale", 1f);*/
         mat_terrain.setTexture("DiffuseMap", grass);
         mat_terrain.setFloat("DiffuseMap_0_scale", 1f);
 
@@ -1070,6 +1071,11 @@ public class Initializer {
         dirt.setWrap(WrapMode.Repeat);
         mat_terrain.setTexture("Tex2", dirt);
         mat_terrain.setFloat("Tex2Scale", 32f);*/
+        /*Texture dirt = assetManager.loadTexture(
+                "Textures/Terrain/splat/grass.jpg");
+        dirt.setWrap(WrapMode.Repeat);
+        mat_terrain.setTexture("DiffuseMap_1", dirt);
+        mat_terrain.setFloat("DiffuseMap_1_scale", 64f);*/
 
         /** 1.4) Add ROAD texture into the blue layer (Tex3) */
         /*assetManager.registerLocator("Assets/Forester", FileLocator.class);
@@ -1210,7 +1216,7 @@ public class Initializer {
         Vector3f[][] vertex = new Vector3f[h][w];
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                vertex[i][j] = new Vector3f(j * mars_settings.getTileLength(), pixelSample[i][j] / mars_settings.getTileHeigth(), i * mars_settings.getTileLength());
+                vertex[i][j] = new Vector3f(j * mars_settings.getTerrain_scale().x, pixelSample[i][j] / mars_settings.getTileHeigth(), i * mars_settings.getTerrain_scale().z);
             }
         }
         //pass the vectors to the MultMesh object
