@@ -143,6 +143,8 @@ public class Initializer {
     private int[] pixelSamplesFlowY;
     private Node flowNode;
     private Vector3f flowVector = Vector3f.ZERO;
+    private int flow_image_width = 0;
+    private int flow_image_heigth = 0;
     
     //grass
     private Forester forester;
@@ -1300,6 +1302,8 @@ public class Initializer {
         
         int w = heightMapImage.getImage().getWidth();
         int h = heightMapImage.getImage().getHeight();
+        flow_image_heigth = h;
+        flow_image_width = w;
         pixelSamplesFlowX = new int[h * w];
 
         pixelSamplesFlowX = load(false, false, heightMapImage.getImage());
@@ -1475,6 +1479,14 @@ public class Initializer {
     
     public int[] getFlowY(){
         return pixelSamplesFlowY;
+    }
+    
+    public int getFlow_image_heigth() {
+        return flow_image_heigth;
+    }
+
+    public int getFlow_image_width() {
+        return flow_image_width;
     }
     
     public Vector3f getFlowVector(){

@@ -1554,7 +1554,7 @@ public class MARS_Settings{
      *
      * @return
      */
-    public Float getFlowScale() {
+    public Float getFlowForceScale() {
         return (Float)Flow.get("flowScale");
     }
 
@@ -1562,7 +1562,7 @@ public class MARS_Settings{
      *
      * @param filepath_heightmap
      */
-    public void setFlowScale(float flowScale) {
+    public void setFlowForceScale(float flowScale) {
         Flow.put("flowScale", flowScale);
     }
     
@@ -1596,6 +1596,22 @@ public class MARS_Settings{
      */
     public void setFlowPosition(Vector3f position) {
         Flow.put("position", position);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getFlowScale() {
+        return (Vector3f)Flow.get("scale");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setFlowScale(Vector3f scale) {
+        Flow.put("scale", scale);
     }
     
     /**
