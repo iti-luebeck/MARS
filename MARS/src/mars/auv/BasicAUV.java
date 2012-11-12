@@ -162,7 +162,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     ViewPort debug_drag_view;
 
     //area
-    private float frustumSize = 0.6f;
+    private float frustumSize = 0.6f;//0.6f
     private float pixel_heigth = 0.0f;
     private float pixel_width = 0.0f;
     private float pixel_area = 0.0f;
@@ -970,39 +970,7 @@ public class BasicAUV implements AUV,SceneProcessor{
                 physics_control.applyImpulse(flowForce, Vector3f.ZERO);
             }else{//out of flowmap bound. no force
                 
-            }
-            
-            /*int auv_pos_x = (int)(((float)flow_image_width/((float)flow_image_width*flow_scale.x))*physicsLocation.x);
-            int auv_pos_y = (int)(((float)flow_image_width/((float)flow_image_width*flow_scale.z))*physicsLocation.z);
-            int ref_x = (int)(((float)flow_image_width/((float)flow_image_width*flow_scale.x))*mars_settings.getFlowPosition().x);
-            int ref_y = (int)(((float)flow_image_width/((float)flow_image_width*flow_scale.z))*mars_settings.getFlowPosition().z);
-            
-            int auv_pos_ref_x = ref_x + auv_pos_x;
-            int auv_pos_ref_y = ref_y + auv_pos_y;
-            
-            int bound = flow_image_width/2;
-            
-            System.out.println("auv_pos_ref_x: " + auv_pos_ref_x + " auv_pos_ref_y: " + auv_pos_ref_y);
-            System.out.println("auv_pos_x: " + auv_pos_x + " auv_pos_y: " + auv_pos_y);
-            System.out.println("ref_x + bound: " + (ref_x + bound) + " ref_x - bound: " + (ref_x - bound));*/
-            
-            //if( (auv_pos_ref_x <= (ref_x + bound)) && (auv_pos_ref_x >= (ref_x - bound)) && (auv_pos_ref_y <= (ref_y + bound)) && (auv_pos_ref_y >= (ref_y - bound)) ){// we are in bound, so flow will be applyied
-                //System.out.println("INBOUND");
-                /*int flowX = initer.getFlowX()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
-                int flowY = initer.getFlowY()[(auv_pos_x)+(initer.getTerrain_image_width()*auv_pos_y)];
-                //System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);
-
-                float scaledFlowX = (flowX/32768f)/mars_settings.getPhysicsFramerate();
-                float scaledFlowY = (flowY/32768f)/mars_settings.getPhysicsFramerate();
-                Vector3f flowForce = new Vector3f(scaledFlowX, 0f, scaledFlowY);
-                flowForce.multLocal(mars_settings.getFlowForceScale());
-                initer.setFlowVector(new Vector3f((flowX/32768f), 0f, (flowY/32768f)));
-                physics_control.applyImpulse(flowForce, Vector3f.ZERO);*/
-            //}else{// we are out of bound, no flow apllied
-                //System.out.println("OUTBOUND");
-            //}
-            
-            
+            }            
         }else if(flow_updaterate == 0){
             flow_updaterate = auv_param.getFlow_updaterate();
         }else{
@@ -1441,6 +1409,13 @@ public class BasicAUV implements AUV,SceneProcessor{
     private void setupDragOffscreenView(){
         drag_offCamera = new Camera(offCamera_width,offCamera_height);
 
+        //calculate frusturm size so we render the maximum possible of the auv
+        BoundingBox boundBox = (BoundingBox)auv_spatial.getWorldBound();
+        Vector3f centerBB = boundBox.getCenter();
+        Vector3f extBB = boundBox.getExtent(null);
+        
+        frustumSize = (float)Math.atan(extBB.length());
+        
         // create a pre-view. a view that is rendered before the main view
         drag_offView = renderManager.createPreView("Offscreen View Area", drag_offCamera);
         drag_offView.setBackgroundColor(ColorRGBA.Green);
@@ -1454,7 +1429,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         drag_offCamera.setParallelProjection(true);
         float aspect = (float) offCamera_width / offCamera_height;
         drag_offCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        drag_offCamera.setLocation(OldCenterGeom.getWorldTranslation());
+        drag_offCamera.setLocation(centerBB);
         pixel_heigth = ((2*frustumSize)/offCamera_height);//multiplied by 2 because the frustrumsize counts from the middle
         pixel_width = ((2*(aspect * frustumSize))/offCamera_width);
         pixel_area = pixel_heigth*pixel_width;
@@ -1537,18 +1512,24 @@ public class BasicAUV implements AUV,SceneProcessor{
      * Calculates the projected area of the auv.
      */
     private float calculateArea(){
+        //center of bb ist needed for correct frustrum to apply
+        BoundingBox boundBox = (BoundingBox)auv_spatial.getWorldBound();
+        Vector3f centerBB = boundBox.getCenter();
+        
         //in wich direction are we moving? mirror the vector
-        drag_offCamera.setLocation(OldCenterGeom.getWorldTranslation());
-        drag_offCamera.lookAt( OldCenterGeom.getWorldTranslation().add(physics_control.getLinearVelocity().normalize().negate())
-                , OldCenterGeom.getWorldTranslation());
-
+        drag_offCamera.setLocation(centerBB.add(physics_control.getLinearVelocity().normalize()));
+        drag_offCamera.lookAt( centerBB
+                , Vector3f.UNIT_Y);
+        
         if(auv_param.isDebugDrag()){
-            onCamera.setLocation(OldCenterGeom.getWorldTranslation());
-            onCamera.lookAt( OldCenterGeom.getWorldTranslation().add(physics_control.getLinearVelocity().normalize().negate())
-                , OldCenterGeom.getWorldTranslation());
+            onCamera.setLocation( centerBB.add(physics_control.getLinearVelocity().normalize()) );
+            onCamera.lookAt( centerBB 
+                , Vector3f.UNIT_Y);
         }
+        
+        //System.out.println("physics_control.getLinearVelocity(): " + physics_control.getLinearVelocity());
 
-        if(physics_control.getLinearVelocity().length() != 0){//when we have no velocity then we have no water resistance than we dont need an update
+        if(physics_control.getLinearVelocity().length() != 0f){//when we have no velocity then we have no water resistance than we dont need an update
             return drag_area_temp;//updateImageContents();
         }else{
             return 0.0f;
@@ -1877,12 +1858,12 @@ public class BasicAUV implements AUV,SceneProcessor{
         BoundingBox boundBox = (BoundingBox)auv.getWorldBound();
         Vector3f centerBB = boundBox.getCenter();
         Vector3f extBB = boundBox.getExtent(null);
-        System.out.println("centerBB: " + centerBB + " " + "extBB: " + extBB + " " + "maxBB: " + extBB.length() + "/" + extBB.lengthSquared());
+        //System.out.println("centerBB: " + centerBB + " " + "extBB: " + extBB + " " + "maxBB: " + extBB.length() + "/" + extBB.lengthSquared());
         int resolutionCounter = (int)Math.ceil(extBB.length()/resolution);
-        System.out.println("resolutionCounter: " + resolutionCounter);
+        //System.out.println("resolutionCounter: " + resolutionCounter);
         Vector3f volume_center = new Vector3f(0f,0f,0f);
-        System.out.println("boundingBox.getWorldTranslation(): " + boundingBox.getWorldTranslation());
-        System.out.println("auv_node.getWorldTranslation(): " + auv_node.getWorldTranslation());
+        //System.out.println("boundingBox.getWorldTranslation(): " + boundingBox.getWorldTranslation());
+        //System.out.println("auv_node.getWorldTranslation(): " + auv_node.getWorldTranslation());
         Vector3f ray_start = new Vector3f(boundingBox.getWorldTranslation().x,boundingBox.getWorldTranslation().y,boundingBox.getWorldTranslation().z);
 
         
@@ -2485,7 +2466,6 @@ public class BasicAUV implements AUV,SceneProcessor{
     }
 
     public void postFrame(FrameBuffer out) {
-        //updateImageContents();
     }
 
     public void cleanup() {
