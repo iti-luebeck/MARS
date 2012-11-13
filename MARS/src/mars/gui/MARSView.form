@@ -168,7 +168,7 @@
                                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree(top)"/>
                                         <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="DefaultMutableTreeNode top = new DefaultMutableTreeNode(&quot;AUVs&quot;);"/>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor;&#xa;private DefaultTreeCellRenderer renderer;"/>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="auv_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);&#xa;auv_tree.setRootVisible(false);"/>
+                                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="auv_tree.setCellRenderer(new MyTreeCellRenderer(this));&#xa;renderer = (DefaultTreeCellRenderer) auv_tree&#xa;        .getCellRenderer();&#xa;textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);&#xa;DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,&#xa;        renderer, textfieldEditor);&#xa;auv_tree.setCellEditor(editor);&#xa;auv_tree.setEditable(true);&#xa;auv_tree.setRootVisible(false);&#xa;auv_tree.setTransferHandler(new AUVTransferHandler());"/>
                                       </AuxValues>
                                     </Component>
                                   </SubComponents>
@@ -422,6 +422,9 @@
                   <Dimension value="[640, 480]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JMEPanel1.setTransferHandler(new mars.gui.SimStateTransferHandler());"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
                   <JSplitPaneConstraints position="right"/>

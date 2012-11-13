@@ -1215,6 +1215,7 @@ public class MARSView extends FrameView {
         auv_tree.setCellEditor(editor);
         auv_tree.setEditable(true);
         auv_tree.setRootVisible(false);
+        auv_tree.setTransferHandler(new AUVTransferHandler());
         auv_tree.setDragEnabled(true);
         auv_tree.setName("auv_tree"); // NOI18N
         auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1424,6 +1425,7 @@ public class MARSView extends FrameView {
 
         jSplitPane1.setLeftComponent(LeftMenuePanel);
 
+        JMEPanel1.setTransferHandler(new SimStateTransferHandler());
         JMEPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         JMEPanel1.setMinimumSize(new java.awt.Dimension(640, 480));
         JMEPanel1.setName("JMEPanel1"); // NOI18N
