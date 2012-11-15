@@ -336,6 +336,17 @@ public class MARSView extends FrameView {
         );
     }
     
+    public void initDND(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    auv_tree.setTransferHandler(new AUVTransferHandler());
+                    JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars));
+                }
+            }
+        );
+    }
+    
     public void allowSimInteraction(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -397,6 +408,7 @@ public class MARSView extends FrameView {
      * 
      * @param xmll
      */
+    @Deprecated
     public void setXMLL(XMLConfigReaderWriter xmll){
         this.xmll = xmll;
     }
@@ -1215,12 +1227,14 @@ public class MARSView extends FrameView {
         auv_tree.setCellEditor(editor);
         auv_tree.setEditable(true);
         auv_tree.setRootVisible(false);
-        auv_tree.setTransferHandler(new AUVTransferHandler());
         auv_tree.setDragEnabled(true);
         auv_tree.setName("auv_tree"); // NOI18N
         auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 auv_treeMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                auv_treeMousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(auv_tree);
@@ -1425,7 +1439,6 @@ public class MARSView extends FrameView {
 
         jSplitPane1.setLeftComponent(LeftMenuePanel);
 
-        JMEPanel1.setTransferHandler(new SimStateTransferHandler());
         JMEPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         JMEPanel1.setMinimumSize(new java.awt.Dimension(640, 480));
         JMEPanel1.setName("JMEPanel1"); // NOI18N
@@ -3949,8 +3962,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
-                //System.out.println(selPath.toString());         
-                //System.out.println(selPath.getLastPathComponent().toString()); 
+                System.out.println(selPath.toString());         
+                System.out.println(selPath.getLastPathComponent().toString()); 
                 auv_tree.setSelectionPath(selPath);  
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
@@ -4638,6 +4651,16 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         });
         toggleJMenuCheckbox(jme3_debug_auv_pe);
     }//GEN-LAST:event_jme3_debug_auv_visualizersActionPerformed
+
+    private void auv_treeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMousePressed
+        if (evt.getButton() == MouseEvent.BUTTON1) {   
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
+            if (selRow != -1) { 
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                auv_tree.setSelectionPath(selPath);         
+            }       
+        }
+    }//GEN-LAST:event_auv_treeMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;

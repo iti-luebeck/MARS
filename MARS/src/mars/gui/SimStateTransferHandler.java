@@ -8,9 +8,13 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.TransferHandler;
+import mars.MARS_Main;
+import mars.states.SimState;
 
 /**
  * This TransferHandler is used to detect a drop from i.e. the auv JTree and 
@@ -19,7 +23,14 @@ import javax.swing.TransferHandler;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class SimStateTransferHandler extends TransferHandler{
-
+    
+    private MARS_Main mars;
+    
+    public SimStateTransferHandler(MARS_Main mars) {
+        super();
+        this.mars = mars;
+    }
+    
     @Override
     public boolean canImport(TransferSupport support) {
         DataFlavor[] dataFlavors = support.getDataFlavors();
@@ -42,8 +53,18 @@ public class SimStateTransferHandler extends TransferHandler{
         // Fetch the Transferable and its data
         Transferable t = support.getTransferable();
         try {
-            String data = (String)t.getTransferData(DataFlavor.stringFlavor);
-            System.out.println("data: " + data);
+            final String data = (String)t.getTransferData(DataFlavor.stringFlavor);
+            final DropLocation loc = support.getDropLocation();
+            Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(SimState.class) != null){
+                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                    simState.enableAUV(data, loc.getDropPoint());
+                                }
+                                return null;
+                            }
+                        });
+            System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
         } catch (UnsupportedFlavorException ex) {
             Logger.getLogger(SimStateTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
