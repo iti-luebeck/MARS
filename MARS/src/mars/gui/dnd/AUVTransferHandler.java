@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.dnd;
 
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
@@ -18,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
 import mars.auv.AUV;
+import mars.gui.dnd.TransferHandlerObjectType;
 
 /**
  *
@@ -61,7 +62,7 @@ public class AUVTransferHandler extends TransferHandler{
 
             public DataFlavor[] getTransferDataFlavors() {
                 DataFlavor[] dt = new DataFlavor[1];
-                dt[0] = DataFlavor.stringFlavor;
+                dt[0] = new TransferHandlerObjectDataFlavor();
                 return dt;
             }
 
@@ -74,9 +75,9 @@ public class AUVTransferHandler extends TransferHandler{
                 TreePath selPath = auvTree.getSelectionPath();   
                 if (selPath.getLastPathComponent() instanceof AUV) { 
                     AUV auv = (AUV)selPath.getLastPathComponent();                 
-                    return auv.getName();
+                    return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
                 }
-                return "";
+                return new TransferHandlerObject(TransferHandlerObjectType.AUV, "");
             }
         };
     }

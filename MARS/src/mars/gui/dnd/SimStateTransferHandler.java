@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.dnd;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -34,10 +34,10 @@ public class SimStateTransferHandler extends TransferHandler{
     @Override
     public boolean canImport(TransferSupport support) {
         DataFlavor[] dataFlavors = support.getDataFlavors();
-        for (int i = 0; i < dataFlavors.length; i++) {
+        /*for (int i = 0; i < dataFlavors.length; i++) {
             System.out.println("dataFlavors: " + dataFlavors[i]);
-        }
-        if (!support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+        }*/
+        if (!support.isDataFlavorSupported(new TransferHandlerObjectDataFlavor())) {
             return false;
         }else{
             return true;
@@ -53,13 +53,13 @@ public class SimStateTransferHandler extends TransferHandler{
         // Fetch the Transferable and its data
         Transferable t = support.getTransferable();
         try {
-            final String data = (String)t.getTransferData(DataFlavor.stringFlavor);
+            final TransferHandlerObject data = (TransferHandlerObject)t.getTransferData(new TransferHandlerObjectDataFlavor());
             final DropLocation loc = support.getDropLocation();
             Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.enableAUV(data, loc.getDropPoint());
+                                    simState.enableAUV(data.getName(), loc.getDropPoint());
                                 }
                                 return null;
                             }

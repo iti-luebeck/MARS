@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.dnd;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -34,10 +34,10 @@ public class MapStateTransferHandler extends TransferHandler{
     @Override
     public boolean canImport(TransferSupport support) {
         DataFlavor[] dataFlavors = support.getDataFlavors();
-        for (int i = 0; i < dataFlavors.length; i++) {
+        /*for (int i = 0; i < dataFlavors.length; i++) {
             System.out.println("dataFlavors: " + dataFlavors[i]);
-        }
-        if (!support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+        }*/
+        if (!support.isDataFlavorSupported(new TransferHandlerObjectDataFlavor())) {
             return false;
         }else{
             return true;
