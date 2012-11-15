@@ -1016,16 +1016,11 @@ public class MARSView extends FrameView {
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         addAUVPopUpMenu = new javax.swing.JPopupMenu();
-        add_auv = new javax.swing.JMenuItem();
         reset_auvs = new javax.swing.JMenuItem();
         help_dialog = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
         help_optionpane = new javax.swing.JOptionPane();
         save_config_FileChooser = new javax.swing.JFileChooser();
-        addSIMOBPopUpMenu = new javax.swing.JPopupMenu();
-        add_simob = new javax.swing.JMenuItem();
-        new_simob_dialog = new javax.swing.JDialog();
-        new_auv = new javax.swing.JDialog();
         auv_popup_menu = new javax.swing.JPopupMenu();
         chase_auv = new javax.swing.JMenuItem();
         reset_auv = new javax.swing.JMenuItem();
@@ -1618,15 +1613,6 @@ public class MARSView extends FrameView {
         addAUVPopUpMenu.setLightWeightPopupEnabled(false);
         addAUVPopUpMenu.setName("addAUVPopUpMenu"); // NOI18N
 
-        add_auv.setText(resourceMap.getString("add_auv.text")); // NOI18N
-        add_auv.setName("add_auv"); // NOI18N
-        add_auv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_auvActionPerformed(evt);
-            }
-        });
-        addAUVPopUpMenu.add(add_auv);
-
         reset_auvs.setText(resourceMap.getString("reset_auvs.text")); // NOI18N
         reset_auvs.setName("reset_auvs"); // NOI18N
         reset_auvs.addActionListener(new java.awt.event.ActionListener() {
@@ -1662,45 +1648,6 @@ public class MARSView extends FrameView {
         help_optionpane.setName("help_optionpane"); // NOI18N
 
         save_config_FileChooser.setName("save_config_FileChooser"); // NOI18N
-
-        addSIMOBPopUpMenu.setName("addSIMOBPopUpMenu"); // NOI18N
-
-        add_simob.setText(resourceMap.getString("add_simob.text")); // NOI18N
-        add_simob.setName("add_simob"); // NOI18N
-        add_simob.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_simobActionPerformed(evt);
-            }
-        });
-        addSIMOBPopUpMenu.add(add_simob);
-
-        new_simob_dialog.setTitle(resourceMap.getString("new_simob_dialog.title")); // NOI18N
-        new_simob_dialog.setName("new_simob_dialog"); // NOI18N
-
-        javax.swing.GroupLayout new_simob_dialogLayout = new javax.swing.GroupLayout(new_simob_dialog.getContentPane());
-        new_simob_dialog.getContentPane().setLayout(new_simob_dialogLayout);
-        new_simob_dialogLayout.setHorizontalGroup(
-            new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        new_simob_dialogLayout.setVerticalGroup(
-            new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        new_auv.setTitle(resourceMap.getString("new_auv.title")); // NOI18N
-        new_auv.setName("new_auv"); // NOI18N
-
-        javax.swing.GroupLayout new_auvLayout = new javax.swing.GroupLayout(new_auv.getContentPane());
-        new_auv.getContentPane().setLayout(new_auvLayout);
-        new_auvLayout.setHorizontalGroup(
-            new_auvLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        new_auvLayout.setVerticalGroup(
-            new_auvLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
 
         auv_popup_menu.setName("auv_popup_menu"); // NOI18N
 
@@ -3266,212 +3213,6 @@ public class MARSView extends FrameView {
         }
     }//GEN-LAST:event_saveconfigtoActionPerformed
 
-    private void add_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_simobActionPerformed
-        // TODO add your handling code here:
-        SimObject simob = new SimObject(xmll);
-        HashMap<String,Object> vars = simob.getAllVariables();
-        SortedSet<String> sortedset= new TreeSet<String>(vars.keySet());
-
-        Iterator<String> it = sortedset.iterator();
-
-        new_simob_dialog.getContentPane().removeAll();
-        javax.swing.GroupLayout new_simob_dialogLayout = new javax.swing.GroupLayout(new_simob_dialog.getContentPane());
-        new_simob_dialog.getContentPane().setLayout(new_simob_dialogLayout);
-
-        SequentialGroup seq_group = new_simob_dialogLayout.createSequentialGroup();
-        ParallelGroup par1 = new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false);
-        ParallelGroup par2 = new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false);
-
-        JButton jButtona = new JButton("Create");
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            Object obj = vars.get(elem);
-            if(obj instanceof HashMap){
-                HashMap<String,Object> hash = (HashMap<String,Object>)obj;
-                SortedSet<String> sortedset2= new TreeSet<String>(hash.keySet());
-                Iterator<String> it2 = sortedset2.iterator();
-                while (it2.hasNext()) {
-                    String elem2 = it2.next();
-                    Object obj2 = hash.get(elem2);
-                    JLabel jlab = new JLabel(elem + " " + elem2 + " :");
-                    jlab.setName("jLabel" + elem + elem2);
-                    MyTextField jtext = new MyTextField(obj2.toString(),elem2,obj2,elem);
-                    jtext.setName("jTextField" + elem + elem2);
-                    MyVerifier verifier = new MyVerifier();
-                    jtext.setInputVerifier(verifier);
-
-            par1.addComponent(jlab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-            par2.addComponent(jtext, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE);
-
-            seq_group.addContainerGap()
-            .addGroup(new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(jlab)
-            .addComponent(jtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
-            ;
-                }
-            }else{
-                JLabel jlab = new JLabel(elem + " :");
-                jlab.setName("jLabel" + elem);
-                MyTextField jtext = new MyTextField(obj.toString(),elem,obj,"");
-                jtext.setName("jTextField" + elem);
-                MyVerifier verifier = new MyVerifier();
-                jtext.setInputVerifier(verifier);
-
-            par1.addComponent(jlab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-            par2.addComponent(jtext, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE);
-
-            seq_group.addContainerGap()
-            .addGroup(new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(jlab)
-            .addComponent(jtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
-            ;
-            }
-       }
-
-       /* while (it.hasNext()) {
-            String elem = it.next();
-            JLabel jlab = new JLabel(elem + " :");
-            jlab.setName("jLabel" + elem);
-            MyTextField jtext = new MyTextField(vars.get(elem).toString(),elem,vars.get(elem),"");
-            jtext.setName("jTextField" + elem);
-            MyVerifier verifier = new MyVerifier();
-            jtext.setInputVerifier(verifier);
-
-            par1.addComponent(jlab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-            par2.addComponent(jtext, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE);
-
-            seq_group.addContainerGap()
-            .addGroup(new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(jlab)
-            .addComponent(jtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
-            ;
-
-       }*/
-
-       new_simob_dialogLayout.setHorizontalGroup(
-            new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(new_simob_dialogLayout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtona, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                        .addGroup(new_simob_dialogLayout.createSequentialGroup()
-                        .addGroup(par1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(par2)))
-            .addContainerGap())
-            );
-
-        new_simob_dialogLayout.setVerticalGroup(
-            new_simob_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(seq_group.addComponent(jButtona)
-                .addContainerGap()
-                )
-        );
-
-        new_simob_dialog.validate();
-        new_simob_dialog.setVisible(true);
-        new_simob_dialog.setSize(432, 512);
-    }//GEN-LAST:event_add_simobActionPerformed
-
-    private void add_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_auvActionPerformed
-
-        System.out.println("DEACTIVATED!");
-        /*
-        AUV_Parameters auv_param = new AUV_Parameters(xmll);
-        HashMap<String,Object> vars = auv_param.getAllVariables();
-        SortedSet<String> sortedset= new TreeSet<String>(vars.keySet());
-
-        Iterator<String> it = sortedset.iterator();
-
-        new_auv.getContentPane().removeAll();
-        javax.swing.GroupLayout new_auv_dialogLayout = new javax.swing.GroupLayout(new_auv.getContentPane());
-        new_auv.getContentPane().setLayout(new_auv_dialogLayout);
-
-        SequentialGroup seq_group = new_auv_dialogLayout.createSequentialGroup();
-        ParallelGroup par1 = new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false);
-        ParallelGroup par2 = new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false);
-
-        JButton create = new JButton("Create");
-        create.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        while (it.hasNext()) {
-            String elem = it.next();
-            Object obj = vars.get(elem);
-            if(obj instanceof HashMap){
-                HashMap<String,Object> hash = (HashMap<String,Object>)obj;
-                SortedSet<String> sortedset2= new TreeSet<String>(hash.keySet());
-                Iterator<String> it2 = sortedset2.iterator();
-                while (it2.hasNext()) {
-                    String elem2 = it2.next();
-                    Object obj2 = hash.get(elem2);
-                    JLabel jlab = new JLabel(elem + " " + elem2 + " :");
-                    jlab.setName("jLabel" + elem + elem2);
-                    MyTextField jtext = new MyTextField(obj2.toString(),elem2,obj2,elem);
-                    jtext.setName("jTextField" + elem + elem2);
-                    MyVerifier verifier = new MyVerifier();
-                    jtext.setInputVerifier(verifier);
-
-                    par1.addComponent(jlab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-                    par2.addComponent(jtext, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE);
-
-                    seq_group.addContainerGap()
-                    .addGroup(new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlab)
-                    .addComponent(jtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE);
-                }
-            }else{
-                JLabel jlab = new JLabel(elem + " :");
-                jlab.setName("jLabel" + elem);
-                MyTextField jtext = new MyTextField(obj.toString(),elem,obj,"");
-                jtext.setName("jTextField" + elem);
-                MyVerifier verifier = new MyVerifier();
-                jtext.setInputVerifier(verifier);
-
-                par1.addComponent(jlab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-                par2.addComponent(jtext, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE);
-
-                seq_group.addContainerGap()
-                .addGroup(new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jlab)
-                .addComponent(jtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE);
-            }
-       }
-
-       new_auv_dialogLayout.setHorizontalGroup(
-            new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(new_auv_dialogLayout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(create, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                        .addGroup(new_auv_dialogLayout.createSequentialGroup()
-                        .addGroup(par1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(par2)))
-            .addContainerGap())
-            );
-
-        new_auv_dialogLayout.setVerticalGroup(
-            new_auv_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(seq_group.addComponent(create)
-                .addContainerGap()
-                )
-        );
-
-        new_auv.validate();
-        new_auv.setVisible(true);
-        new_auv.setSize(432, 512);*/
-    }//GEN-LAST:event_add_auvActionPerformed
-
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
         File f = new File("./config/default");
         if(f != null){
@@ -4702,9 +4443,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel TreePanel;
     private javax.swing.JPopupMenu addAUVPopUpMenu;
     private javax.swing.JMenuItem addDataToChart;
-    private javax.swing.JPopupMenu addSIMOBPopUpMenu;
-    private javax.swing.JMenuItem add_auv;
-    private javax.swing.JMenuItem add_simob;
     private javax.swing.JDialog auv_move_vector_dialog;
     private javax.swing.JPopupMenu auv_popup_menu;
     private javax.swing.JDialog auv_rotate_vector_dialog;
@@ -4885,8 +4623,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JDialog moveCameraDialog;
-    private javax.swing.JDialog new_auv;
-    private javax.swing.JDialog new_simob_dialog;
     private javax.swing.JTree pe_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor3;
     private DefaultTreeCellRenderer renderer3;

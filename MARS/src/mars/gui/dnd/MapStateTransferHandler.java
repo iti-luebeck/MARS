@@ -64,7 +64,7 @@ public class MapStateTransferHandler extends TransferHandler{
                                 return null;
                             }
                         });
-            System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
+            //System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
         } catch (UnsupportedFlavorException ex) {
             Logger.getLogger(MapStateTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

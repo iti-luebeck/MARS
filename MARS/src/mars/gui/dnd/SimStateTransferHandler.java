@@ -59,12 +59,16 @@ public class SimStateTransferHandler extends TransferHandler{
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.enableAUV(data.getName(), loc.getDropPoint());
+                                    if(data.getType() == TransferHandlerObjectType.AUV){
+                                        simState.enableAUV(data.getName(), loc.getDropPoint());
+                                    }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
+                                        simState.enableAUV(data.getName(), loc.getDropPoint());
+                                    }
                                 }
                                 return null;
                             }
                         });
-            System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
+            //System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
         } catch (UnsupportedFlavorException ex) {
             Logger.getLogger(SimStateTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
