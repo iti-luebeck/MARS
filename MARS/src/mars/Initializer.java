@@ -57,8 +57,11 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Grid;
+import com.jme3.shadow.CompareMode;
+import com.jme3.shadow.DirectionalLightShadowFilter;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PssmShadowRenderer;
-import com.jme3.shadow.PssmShadowRenderer.CompareMode;
 import com.jme3.shadow.PssmShadowRenderer.FilterMode;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
@@ -1437,13 +1440,27 @@ public class Initializer {
     }
 
     private void setupShadow(){
-        PssmShadowRenderer pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
-        pssmRenderer.setDirection(sun.getDirection()); // light direction
-        pssmRenderer.setLambda(0.55f);
-        pssmRenderer.setShadowIntensity(0.6f);
-        pssmRenderer.setCompareMode(CompareMode.Software);
-        pssmRenderer.setFilterMode(FilterMode.PCF4);
-        viewPort.addProcessor(pssmRenderer);
+        DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
+        dlsr.setLight(sun);
+        dlsr.setLambda(0.55f);
+        dlsr.setShadowIntensity(0.6f);    
+        dlsr.setShadowCompareMode(CompareMode.Software);
+        dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+        //dlsr.displayFrustum();
+        viewPort.addProcessor(dlsr);
+
+        DirectionalLightShadowFilter dlsf = new DirectionalLightShadowFilter(assetManager, 1024, 3);
+        dlsf.setLight(sun);
+        dlsf.setLambda(0.55f);
+        dlsf.setShadowIntensity(0.6f);    
+        dlsf.setShadowCompareMode(CompareMode.Software);
+        dlsf.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+        dlsf.setEnabled(false);
+
+        FilterPostProcessor fppS = new FilterPostProcessor(assetManager);
+        fppS.addFilter(dlsf);
+
+        viewPort.addProcessor(fppS);
     }
     /**
      * 

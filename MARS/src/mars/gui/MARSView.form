@@ -214,10 +214,12 @@
                                   <SubComponents>
                                     <Component class="javax.swing.JTree" name="simob_tree">
                                       <Properties>
+                                        <Property name="dragEnabled" type="boolean" value="true"/>
                                         <Property name="name" type="java.lang.String" value="simob_tree" noResource="true"/>
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMouseClicked"/>
+                                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMousePressed"/>
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor2;&#xa;private DefaultTreeCellRenderer renderer2;"/>

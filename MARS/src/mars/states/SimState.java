@@ -478,6 +478,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         rootNode.attachChild(guiControlState.getGUINode());
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
+        mars.setStatsStateDark(false);
         if(mars_settings.isFPS()){
             mars.setDisplayFps(true);
             mars.setDisplayStatView(true);

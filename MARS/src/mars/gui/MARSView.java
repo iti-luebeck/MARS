@@ -341,7 +341,9 @@ public class MARSView extends FrameView {
                 @Override
                 public void run() {
                     auv_tree.setTransferHandler(new AUVTransferHandler());
+                    simob_tree.setTransferHandler(new SimObTransferHandler());
                     JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars));
+                    MapPanel.setTransferHandler(new MapStateTransferHandler(mars));
                 }
             }
         );
@@ -1268,10 +1270,14 @@ public class MARSView extends FrameView {
         simob_tree.setCellEditor(editor2);
         simob_tree.setEditable(true);
         simob_tree.setRootVisible(false);
+        simob_tree.setDragEnabled(true);
         simob_tree.setName("simob_tree"); // NOI18N
         simob_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 simob_treeMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                simob_treeMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(simob_tree);
@@ -4661,6 +4667,16 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             }       
         }
     }//GEN-LAST:event_auv_treeMousePressed
+
+    private void simob_treeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMousePressed
+        if (evt.getButton() == MouseEvent.BUTTON1) {   
+            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());  
+            if (selRow != -1) { 
+                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
+                simob_tree.setSelectionPath(selPath);         
+            }       
+        }
+    }//GEN-LAST:event_simob_treeMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;

@@ -17,6 +17,7 @@ import com.jme3.font.BitmapFont;
 import mars.gui.MARSView;
 import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
 import com.jme3.app.state.ScreenshotAppState;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
@@ -60,6 +61,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     //needed for graphs
     private MARSView view;
     private boolean view_init = false;
+    private boolean statsDarken = true;
 
     StartState startstate;
     MapState mapstate;
@@ -172,6 +174,13 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
+        
+        //we have to do it here because of buggy behaviour of statsState
+        if(statsDarken){
+            this.setStatsStateDark(false);
+            statsDarken = false;
+        }
+        
         /*if(view != null && !view_init && stateManager.getState(SimState.class) != null){
             stateManager.getState(SimState.class).setView(view);
             view_init = true;
@@ -446,6 +455,14 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public FlyByCamera getFlyByCamera(){
         return advFlyCam;
+    }
+    
+    public void setStatsStateDark(boolean darken){
+        //we dont want a dark underlay in the stats
+        if(stateManager.getState(StatsAppState.class) != null){
+            StatsAppState statsState = (StatsAppState)stateManager.getState(StatsAppState.class);
+            statsState.setDarkenBehind(darken);
+        }
     }
     
     public void restartSimState(){
