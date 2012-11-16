@@ -35,9 +35,13 @@ public class AUVTransferHandler extends TransferHandler{
             if( selPath != null ){// to be save of "bad" clicking
                 if (selPath.getLastPathComponent() instanceof AUV) { 
                     AUV auv = (AUV)selPath.getLastPathComponent();
-                    img = ImageIO.read(new File(".//Assets/Icons/"+auv.getAuv_param().getDNDIcon()));
+                    if(!auv.getAuv_param().getDNDIcon().equals("")){
+                        img = ImageIO.read(new File(".//Assets/Icons/"+auv.getAuv_param().getDNDIcon()));
+                    }else{// no dnd image
+                        img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
+                    }
                 }else{//default auv image?
-                    
+                    img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
                 }
             }
         } catch (IOException e) {
