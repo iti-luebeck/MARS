@@ -77,7 +77,7 @@ public class AUVTransferHandler extends TransferHandler{
                     AUV auv = (AUV)selPath.getLastPathComponent();                 
                     return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
                 }
-                return new TransferHandlerObject(TransferHandlerObjectType.AUV, "");
+                return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
             }
         };
     }

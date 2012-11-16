@@ -36,9 +36,13 @@ public class SimObTransferHandler extends TransferHandler{
             if( selPath != null ){// to be save of "bad" clicking
                 if (selPath.getLastPathComponent() instanceof SimObject) { 
                     SimObject simob = (SimObject)selPath.getLastPathComponent();
-                    img = ImageIO.read(new File(".//Assets/Icons/"+simob.getDNDIcon()));
+                    if(!simob.getDNDIcon().equals("")){
+                        img = ImageIO.read(new File(".//Assets/Icons/"+simob.getDNDIcon()));
+                    }else{// no dnd image
+                        img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
+                    }
                 }else{//default auv image?
-                    
+                    img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
                 }
             }
         } catch (IOException e) {
@@ -78,7 +82,7 @@ public class SimObTransferHandler extends TransferHandler{
                     SimObject simob = (SimObject)selPath.getLastPathComponent();                 
                     return new TransferHandlerObject(TransferHandlerObjectType.SIMOBJECT, simob.getName());
                 }
-                return new TransferHandlerObject(TransferHandlerObjectType.SIMOBJECT, "");
+                return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
             }
         };
     }

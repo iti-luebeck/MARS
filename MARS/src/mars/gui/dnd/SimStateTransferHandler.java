@@ -62,7 +62,7 @@ public class SimStateTransferHandler extends TransferHandler{
                                     if(data.getType() == TransferHandlerObjectType.AUV){
                                         simState.enableAUV(data.getName(), loc.getDropPoint());
                                     }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
-                                        simState.enableAUV(data.getName(), loc.getDropPoint());
+                                        simState.enableSIMOB(data.getName(), loc.getDropPoint());
                                     }
                                 }
                                 return null;

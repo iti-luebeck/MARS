@@ -336,6 +336,24 @@ public class SimObjectManager {
         return null;
     }
     
+   /**
+     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the update cycle(future/get).
+     * @param auv
+     * @param enable
+     */
+    public void enableSimObject(SimObject simob, boolean enable){
+        enableSimObject(simob.getName(),enable);
+    }
+    
+    private void enableSimObject(String simob_name, boolean enable){
+        SimObject simob = (SimObject)simobs.get(simob_name);
+        if(enable){
+            addSimObjectToScene(simob);
+        }else{
+            removeSimObjectFromScene(simob);
+        }
+    }
+    
     @Override
     public String toString(){
         return "SimObjects";
