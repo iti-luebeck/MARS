@@ -111,8 +111,17 @@ public class Sonar extends Sensor{
     private int SonarReturnDataLength = 252;
     
     ///ROS stuff
+    /**
+     * 
+     */
     protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
+    /**
+     * 
+     */
     protected hanse_msgs.ScanningSonar fl;
+    /**
+     * 
+     */
     protected std_msgs.Header header; 
     
     /**
@@ -243,7 +252,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param sonar_cone_type
+     * @param SonarConeType 
      */
     public void setSonar_cone_type(int SonarConeType) {
         variables.put("SonarConeType", SonarConeType);
@@ -323,7 +332,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param debug
+     * @param Debug 
      */
     public void setDebug(boolean Debug) {
         variables.put("Debug", Debug);
@@ -347,7 +356,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param SonarStartVector
+     * @param Position 
      */
     public void setSonarPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -371,7 +380,7 @@ public class Sonar extends Sensor{
     
         /**
      *
-     * @param SonarStartVector
+     * @return 
      */
     public Vector3f getSonarPosition(){
         return (Vector3f)variables.get("Position");
@@ -379,7 +388,7 @@ public class Sonar extends Sensor{
 
     /**
      * 
-     * @param SonarDirection
+     * @return 
      */
     public Vector3f getSonarDirection(){
         return (Vector3f)variables.get("SonarDirection");
@@ -387,7 +396,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param SonarUpDirection
+     * @return 
      */
     public Vector3f getSonarUpDirection(){
         return (Vector3f)variables.get("SonarUpDirection");
@@ -451,7 +460,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param scanning
+     * @param Scanning 
      */
     public void setScanning(boolean Scanning) {
         variables.put("Scanning", Scanning);
@@ -563,16 +572,24 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param scanning_gain
+     * @param ScanningGain 
      */
     public void setScanning_gain(int ScanningGain) {
         variables.put("ScanningGain", ScanningGain);
     }
     
+    /**
+     * 
+     * @return
+     */
     public ColorRGBA getDebugColor() {
         return (ColorRGBA)variables.get("debug_color");
     }
 
+    /**
+     * 
+     * @param debug_color
+     */
     public void setDebugColor(ColorRGBA debug_color) {
         variables.put("debug_color", debug_color);
     }
@@ -730,6 +747,10 @@ public class Sonar extends Sensor{
         return arr_ret;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getCurrentHeadPosition(){
         return scanning_iterations*getScanning_resolution();
     }
@@ -1024,7 +1045,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param noise_value
+     * @param failure 
      */
     public void setFailure(boolean failure) {
         noises.put("failure", failure);
@@ -1040,7 +1061,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param noise_value
+     * @param failure_switch 
      */
     public void setFailureSwitch(boolean failure_switch) {
         noises.put("failure_switch", failure_switch);
@@ -1056,7 +1077,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param noise_value
+     * @param failure_deviation_position 
      */
     public void setFailureDeviationPosition(float failure_deviation_position) {
         noises.put("failure_deviation_position", failure_deviation_position);
@@ -1072,7 +1093,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param noise_value
+     * @param failure_deviation_position_change 
      */
     public void setFailureDeviationPositionChange(int failure_deviation_position_change) {
         noises.put("failure_deviation_position_change", failure_deviation_position_change);
@@ -1088,7 +1109,7 @@ public class Sonar extends Sensor{
 
     /**
      *
-     * @param noise_value
+     * @param failure_threshold 
      */
     public void setFailureThreshold(int failure_threshold) {
         noises.put("failure_threshold", failure_threshold);

@@ -141,7 +141,7 @@ public class VideoCamera extends Sensor implements Moveable{
 
     /**
      *
-     * @param CameraStartVector
+     * @param Position 
      */
     public void setCameraStartVector(Vector3f Position) {
         variables.put("Position", Position);
@@ -368,6 +368,10 @@ public class VideoCamera extends Sensor implements Moveable{
         return updateImageContents();
     }
     
+    /**
+     * 
+     * @return
+     */
     public ChannelBuffer getChannelBufferImage(){
         return ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,updateImageContents());
     }
@@ -485,6 +489,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * Don't call this anymore. You have first to call setLocalRotationAxisPoints once at the begining of the simulation
      * @param rotation_axis
      * @param alpha
+     * @deprecated 
      */
     @Override
     @Deprecated
@@ -498,6 +503,10 @@ public class VideoCamera extends Sensor implements Moveable{
         PhysicalExchanger_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param alpha
+     */
     @Override
     public void updateRotation(float alpha){
         /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
@@ -508,6 +517,10 @@ public class VideoCamera extends Sensor implements Moveable{
         Rotation_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param world_rotation_axis_points
+     */
     @Override
     public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points){
         Vector3f WorldServoEnd = world_rotation_axis_points.getColumn(0);
@@ -534,6 +547,10 @@ public class VideoCamera extends Sensor implements Moveable{
         
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public String getSlaveName(){
         return getPhysicalExchangerName();

@@ -22,6 +22,10 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class TestAwtPanels extends SimpleApplication {
 
     private static TestAwtPanels app;
@@ -46,6 +50,10 @@ public class TestAwtPanels extends SimpleApplication {
         frame.setVisible(true);
     }
     
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args){
         Logger.getLogger("com.jme3").setLevel(Level.WARNING);
         
@@ -73,6 +81,9 @@ public class TestAwtPanels extends SimpleApplication {
         });
     }
     
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
         flyCam.setDragToRotate(true);

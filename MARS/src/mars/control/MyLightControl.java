@@ -58,6 +58,9 @@ import java.io.IOException;
  */
 public class MyLightControl extends AbstractControl {
 
+    /**
+     * 
+     */
     public static enum ControlDirection {
 
         /**
@@ -90,28 +93,49 @@ public class MyLightControl extends AbstractControl {
 
     /**
      * @param light The light to be synced.
+     * @param controlDir  
      */
     public MyLightControl(Light light, ControlDirection controlDir) {
         this.light = light;
         this.controlDir = controlDir;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Light getLight() {
         return light;
     }
 
+    /**
+     * 
+     * @param light
+     */
     public void setLight(Light light) {
         this.light = light;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ControlDirection getControlDir() {
         return controlDir;
     }
 
+    /**
+     * 
+     * @param controlDir
+     */
     public void setControlDir(ControlDirection controlDir) {
         this.controlDir = controlDir;
     }
     
+    /**
+     * 
+     * @param LampEnd
+     */
     public void setLampEnd(Geometry LampEnd){
         this.LampEnd = LampEnd;
     }
@@ -185,6 +209,11 @@ public class MyLightControl extends AbstractControl {
     }
     private static final String CONTROL_DIR_NAME = "controlDir";
 
+    /**
+     * 
+     * @param im
+     * @throws IOException
+     */
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
@@ -192,6 +221,11 @@ public class MyLightControl extends AbstractControl {
                 ControlDirection.class, ControlDirection.SpatialToLight);
     }
 
+    /**
+     * 
+     * @param ex
+     * @throws IOException
+     */
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);

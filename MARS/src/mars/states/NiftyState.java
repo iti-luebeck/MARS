@@ -49,6 +49,9 @@ public class NiftyState extends AbstractAppState implements ScreenController{
     public NiftyState() { 
     } 
     
+    /**
+     * 
+     */
     public void initNifty(){
         assetManager.registerLocator("Assets/Interface", FileLocator.class);
         assetManager.registerLocator("Assets/Icons", FileLocator.class);
@@ -67,6 +70,12 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         mars.getGuiViewPort().addProcessor(niftyDisplay);
     }
     
+    /**
+     * 
+     * @param auv
+     * @param x
+     * @param y
+     */
     public void setHoverMenuForAUV(AUV auv, int x, int y){
         // find old text
         this.auv = auv;
@@ -90,6 +99,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public float getAkkuValueForAUV(){
         if(auv != null){
             Accumulator accumulator = auv.getAccumulator("main");
@@ -103,6 +116,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getAkkuForAUV(){
         if(auv != null){
             Accumulator accumulator = auv.getAccumulator("main");
@@ -116,6 +133,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setHoverMenuForAUV(boolean visible){
         if(visible){
             nifty.gotoScreen("hoverMenu");
@@ -132,15 +153,24 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         return rootNode;
     }
 
-    /** Nifty GUI ScreenControl methods */ 
+    /** Nifty GUI ScreenControl methods
+     * @param nifty 
+     * @param screen 
+     */ 
 
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
     }
 
+    /**
+     * 
+     */
     public void onStartScreen() { }
 
+    /**
+     * 
+     */
     public void onEndScreen() { }
 
     /** jME3 AppState methods */ 

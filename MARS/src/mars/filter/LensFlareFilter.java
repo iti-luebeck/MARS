@@ -154,7 +154,7 @@ public class LensFlareFilter extends Filter{
      
     /**
      * Gets the current rgb threshold value used to create the lens flare light map.
-     * @param threshold  Default is 0.9f
+     * @return  
      */
     public float getLightMapThreshold() {
         return this.threshold;

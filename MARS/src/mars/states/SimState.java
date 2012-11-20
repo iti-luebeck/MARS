@@ -439,6 +439,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     */
     public void connectToServer(){
         mars_settings.setROS_Server_enabled(true);
         initer.setupServer();
@@ -451,6 +454,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     */
     public void disconnectFromServer(){
         mars_settings.setROS_Server_enabled(false);
         view.enableServerInteraction(false);
@@ -1249,6 +1255,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         return sceneReflectionNode;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Node getAUVsNode() {
         return AUVsNode;
     }
@@ -1272,6 +1282,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     /**
      *
      * @return
+     * @deprecated 
      */
     @Deprecated
     public Node getSimObPickingNode() {
@@ -1310,6 +1321,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         return mars;
     }
 
+    /**
+     * 
+     * @return
+     */
     public KeyConfig getKeyconfig() {
         return keyconfig;
     }
@@ -1330,6 +1345,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         this.view = view;
     }
 
+    /**
+     * 
+     * @param ps
+     * @param tpf
+     */
     public void prePhysicsTick(PhysicsSpace ps, final float tpf) {
         if(/*AUVPhysicsControl != null*/true){
             //only update physics if auv_hanse exists and when simulation is started
@@ -1357,6 +1377,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
 
+    /**
+     * 
+     * @param ps
+     * @param tpf
+     */
     public void physicsTick(PhysicsSpace ps, float tpf) {
         if(/*AUVPhysicsControl != null*/false){
             //only update physics if auv_hanse exists and when simulation is started
@@ -1397,6 +1422,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }*/
     }
     
+    /**
+     * 
+     */
     public void startSimulation(){
         bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
         initial_ready = true;
@@ -1404,6 +1432,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         System.out.println("Simulation started...");
     }
             
+    /**
+     * 
+     */
     public void pauseSimulation(){
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         auv_manager.clearForcesOfAUVs();
@@ -1412,16 +1443,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         System.out.println("Simulation stopped...");            
     }
     
+    /**
+     * 
+     */
     public void restartSimulation(){
         System.out.println("RESET!!!");
         time = 0f;
         auv_manager.resetAllAUVs();
     }
     
+    /**
+     * 
+     * @param mapState
+     */
     public void setMapState(MapState mapState) {
         this.mapState = mapState;
     }
     
+    /**
+     * 
+     */
     public void pokeSelectedAUV(){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1440,6 +1481,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param new_position
+     * @param relative
+     */
     public void moveSelectedAUV(Vector3f new_position, boolean relative){
         //System.out.println("moveSelectedAUV" + new_position);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
@@ -1455,6 +1501,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param new_rotation
+     * @param relative
+     */
     public void rotateSelectedAUV(Vector3f new_rotation, boolean relative){
         //System.out.println("rotateSelectedAUV" + new_rotation);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
@@ -1471,6 +1522,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param new_position
+     * @param relative
+     */
     public void moveCamera(Vector3f new_position, boolean relative){
         //System.out.println("moveCamera" + new_position);
         viewManager.moveCamera(new_position,relative);
@@ -1481,6 +1537,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param new_rotation
+     * @param relative
+     */
     public void rotateCamera(Vector3f new_rotation, boolean relative){
         //System.out.println("rotateCamera" + new_rotation);
         if(!relative){
@@ -1490,6 +1551,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param new_position
+     */
     public void moveSelectedGhostAUV(Vector3f new_position){
         //System.out.println("moveSelectedGhostAUV" + new_position);
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
@@ -1498,6 +1563,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     */
     public void chaseSelectedAUV(){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1507,6 +1575,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param auv
+     */
     public void chaseAUV(AUV auv){
         if(auv != null){
             mars.getFlyByCamera().setEnabled(false);
@@ -1515,6 +1587,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param enable
+     */
     public void enableSelectedAUV(boolean enable){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1528,6 +1604,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param debug_mode
+     * @param selected
+     */
     public void debugSelectedAUV(int debug_mode, boolean selected){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1545,6 +1626,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param debug_mode
+     * @param selected
+     */
     public void waypointsSelectedAUV(int debug_mode, boolean selected){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1558,6 +1644,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param newColor
+     */
     public void waypointsColorSelectedAUV(java.awt.Color newColor){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1565,6 +1655,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     */
     public void resetSelectedAUV(){
         AUV selected_auv = auv_manager.getSelectedAUV();
         if(selected_auv != null){
@@ -1572,6 +1665,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param auv
+     */
     public void selectAUV(AUV auv){
         if(auv != null){
             if(auv.getAuv_param().isEnabled()){
@@ -1581,6 +1678,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param auvName
+     * @param pos
+     */
     public void enableAUV(String auvName, Point pos){
         AUV auv = auv_manager.getAUV(auvName);
         if(auv != null){
@@ -1599,6 +1701,51 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param auvName
+     * @param pos
+     */
+    public void enableAUV(String auvName, Vector3f pos){
+        AUV auv = auv_manager.getAUV(auvName);
+        if(auv != null){
+            if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
+                auv.getAuv_param().setPosition(pos);
+                auv.getPhysicsControl().setPhysicsLocation(pos);
+            }else{
+                auv.getAuv_param().setPosition(pos);
+                auv.getAuv_param().setEnabled(true);
+                auv_manager.enableAUV(auv, true);
+                auv.getPhysicsControl().setPhysicsLocation(pos);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param simobName
+     * @param pos
+     */
+    public void enableSIMOB(String simobName, Vector3f pos){
+        SimObject simob = simob_manager.getSimObject(simobName);
+        if(simob != null){
+            if( simob.isEnabled()){//check if auf simob already enabled, then only new position
+                simob.setPosition(pos);
+                simob.getPhysicsControl().setPhysicsLocation(pos);
+            }else{
+                simob.setPosition(pos);
+                simob.setEnabled(true);
+                simob_manager.enableSimObject(simob, true);
+                simob.getPhysicsControl().setPhysicsLocation(pos);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param simobName
+     * @param pos
+     */
     public void enableSIMOB(String simobName, Point pos){
         SimObject simob = simob_manager.getSimObject(simobName);
         if(simob != null){
@@ -1617,14 +1764,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     * @param auv
+     */
     public void deselectAUV(AUV auv){
         auv_manager.deselectAllAUVs();
     }
     
+    /**
+     * 
+     * @param simob
+     */
     public void deselectSimObs(SimObject simob){
         simob_manager.deselectAllSimObs();
     }
     
+    /**
+     * 
+     * @param simob
+     */
     public void selectSimObs(SimObject simob){
         if(simob != null){
             if(simob.isEnabled()){
@@ -1634,6 +1793,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     * 
+     */
     public void splitView(){
         System.out.println("splitView");
 

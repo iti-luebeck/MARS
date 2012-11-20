@@ -25,10 +25,16 @@ public class SpatialLodControl extends AbstractControl{
     private Node node;
     private HashMap<Integer,Spatial> lods;
     
-      public SpatialLodControl(){} // empty serialization constructor
+    /**
+     * 
+     */
+    public SpatialLodControl(){} // empty serialization constructor
 
       /** Optional custom constructor with arguments that can init custom fields.
-        * Note: you cannot modify the spatial here yet! */
+       * Note: you cannot modify the spatial here yet!
+       * @param cam
+       * @param auv_spatial  
+       */
       public SpatialLodControl(Camera cam,Spatial auv_spatial){
           this.cam = cam;
           this.auv_spatial = auv_spatial;
@@ -46,7 +52,9 @@ public class SpatialLodControl extends AbstractControl{
       /** Implement your spatial's behaviour here.
         * From here you can modify the scene graph and the spatial
         * (transform them, get and set userdata, etc).
-        * This loop controls the spatial while the Control is enabled. */
+       * This loop controls the spatial while the Control is enabled.
+       * @param tpf 
+       */
       @Override
       protected void controlUpdate(float tpf){
         if((cam.getLocation().subtract(auv_spatial.getWorldTranslation())).length() > 10f ){
@@ -70,6 +78,11 @@ public class SpatialLodControl extends AbstractControl{
          /* Optional: rendering manipulation (for advanced users) */
       } 
       
+      /**
+       * 
+       * @param lod
+       * @param sp
+       */
       public void addLodSpatial(int lod, Spatial sp){
           lods.put(lod, sp);
           sp.setCullHint(Spatial.CullHint.Always);

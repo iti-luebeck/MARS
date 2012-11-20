@@ -99,7 +99,7 @@ public class TerrainSender extends Sensor{
 
     /**
      *
-     * @param initer
+     * @param mars_settings 
      */
     public void setMarsSettings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;

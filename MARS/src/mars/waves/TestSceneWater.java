@@ -48,17 +48,28 @@ import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.io.File;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class TestSceneWater extends SimpleApplication {
 
     // set default for applets
     private static boolean useHttp = true;
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
       
         TestSceneWater app = new TestSceneWater();
         app.start();
     }
 
+    /**
+     * 
+     */
     public void simpleInitApp() {
         this.flyCam.setMoveSpeed(10);
         Node mainScene=new Node();

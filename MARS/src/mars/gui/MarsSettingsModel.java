@@ -33,6 +33,10 @@ public class MarsSettingsModel implements TreeModel{
     private final MARS_Settings settings;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
+    /**
+     * 
+     * @param settings
+     */
     public MarsSettingsModel(MARS_Settings settings) {
         this.settings = settings;
     }

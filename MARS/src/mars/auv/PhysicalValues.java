@@ -85,76 +85,148 @@ public class PhysicalValues {
         traceVectorZ.setName("Z");
     }
     
+    /**
+     * 
+     * @param volume
+     */
     public void updateVolume(float volume){
         //traceVolume.addPoint(((double) System.currentTimeMillis() - this.m_starttime), volume);
     }
     
+    /**
+     * 
+     * @param velocity
+     */
     public void updateVelocity(float velocity){
         //traceVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), velocity);
     }
     
+    /**
+     * 
+     * @param angularVelocity
+     */
     public void updateAngularVelocity(float angularVelocity){
         //traceAngularVelocity.addPoint(((double) System.currentTimeMillis() - this.m_starttime), angularVelocity);
     }
     
+    /**
+     * 
+     * @param depth
+     */
     public void updateDepth(float depth){
         //traceDepth.addPoint(((double) System.currentTimeMillis() - this.m_starttime), depth);
     }
     
+    /**
+     * 
+     * @param buoyancyForce
+     */
     public void updateBuoyancyForce(float buoyancyForce){
         //traceBuoyancyForce.addPoint(((double) System.currentTimeMillis() - this.m_starttime), buoyancyForce);
     }
     
+    /**
+     * 
+     * @param dragForce
+     */
     public void updateDragForce(float dragForce){
         //traceDragForce.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragForce);
     }
     
+    /**
+     * 
+     * @param dragTorque
+     */
     public void updateDragTorque(float dragTorque){
         //traceDragTorque.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragTorque);
     }
     
+    /**
+     * 
+     * @param dragArea
+     */
     public void updateDragArea(float dragArea){
         //traceDragArea.addPoint(((double) System.currentTimeMillis() - this.m_starttime), dragArea);
     }
     
+    /**
+     * 
+     * @param vec
+     */
     public void updateVector(Vector3f vec){
         /*traceVectorX.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.x);
         traceVectorY.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.y);
         traceVectorZ.addPoint(((double) System.currentTimeMillis() - this.m_starttime), vec.z);*/
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceVolume() {
         return traceVolume;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceAngularVelocity() {
         return traceAngularVelocity;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceVelocity() {
         return traceVelocity;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceDepth() {
         return traceDepth;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<ITrace2D> getTraces() {
         return traces;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceBuoyancyForce() {
         return traceBuoyancyForce;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceDragForce() {
         return traceDragForce;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceDragTorque() {
         return traceDragTorque;
     }
     
+    /**
+     * 
+     * @return
+     */
     public ITrace2D getTraceDragArea() {
         return traceDragArea;
     }
@@ -169,7 +241,7 @@ public class PhysicalValues {
 
     /**
      *
-     * @param auv_name
+     * @param auv 
      */
     public void setAuv(AUV auv) {
         this.auv = auv;

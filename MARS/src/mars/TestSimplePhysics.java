@@ -141,12 +141,22 @@ public class TestSimplePhysics extends SimpleApplication implements PhysicsTickL
         getPhysicsSpace().add(node3);*/
     }
 
+    /**
+     * 
+     * @param space
+     * @param tpf
+     */
     public void prePhysicsTick(PhysicsSpace space, float tpf){
         if(initial_ready){
             //physicsSphere.applyCentralForce(new Vector3f(0f, 10f, 0f));
         }
     }
 
+    /**
+     * 
+     * @param space
+     * @param tpf
+     */
     public void physicsTick(PhysicsSpace space, float tpf) {
         if(initial_ready){
             //physicsSphere.applyCentralForce(new Vector3f(0f, 40f, 0f));

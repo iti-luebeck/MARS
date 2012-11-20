@@ -51,12 +51,19 @@ public class TestPostWater extends SimpleApplication {
     LowPassFilter underWaterReverbFilter = new LowPassFilter(0.5f, 0.1f);
     LowPassFilter aboveWaterAudioFilter = new LowPassFilter(1, 1);
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         TestPostWater app = new TestPostWater();
         app.setShowSettings(false);
         app.start();
     }
 
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
 
@@ -276,7 +283,11 @@ public class TestPostWater extends SimpleApplication {
     private float waterHeight = 0.0f;
     private float initialWaterHeight = 0.8f;
 private boolean uw=false;
-    @Override
+/**
+ * 
+ * @param tpf
+ */
+@Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
         //     box.updateGeometricState();

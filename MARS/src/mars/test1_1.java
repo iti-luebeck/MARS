@@ -14,8 +14,16 @@ import org.ros.address.InetAddressFactory;
 import org.ros.node.NodeConfiguration;
 //import org.ros.tutorials.pubsub.Talker;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class test1_1{
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
        //String master_uri = "http://Tosik-PC-Ubuntu:11311/"; 
        InetAddress ownIP;

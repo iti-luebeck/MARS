@@ -67,7 +67,7 @@ public class Connection extends Thread {
     /**
      * 
      * @param sockConnected
-     * @param simauv 
+     * @param mars 
      * @param auv_manager
      * @param com_manager  
      */

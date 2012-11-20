@@ -16,10 +16,19 @@ public interface Moveable {
      * 
      * @param rotation_axis
      * @param alpha
+     * @deprecated 
      */
     @Deprecated
     public void updateRotation(Vector3f rotation_axis, float alpha);
+    /**
+     * 
+     * @param alpha
+     */
     public void updateRotation(float alpha);
+    /**
+     * 
+     * @param world_rotation_axis_points
+     */
     public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points);
     /**
      * 
@@ -27,5 +36,9 @@ public interface Moveable {
      * @param new_realative_position
      */
     public void updateTranslation(Vector3f translation_axis, Vector3f new_realative_position);
+    /**
+     * 
+     * @return
+     */
     public String getSlaveName();
 }

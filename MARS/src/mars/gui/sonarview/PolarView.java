@@ -44,6 +44,9 @@ public class PolarView extends JPanel implements SonarView{
         imageGraphics.clearRect(0, 0, b, h);
     }
     
+    /**
+     * 
+     */
     @Override
     public void repaintAll(){
         this.repaint();
@@ -96,6 +99,10 @@ public class PolarView extends JPanel implements SonarView{
         }
     }
     
+    /**
+     * 
+     * @param color
+     */
     public void changeBackgroundColor(Color color){
         bgcolor = color;
         AffineTransform trans = new AffineTransform();
@@ -105,10 +112,18 @@ public class PolarView extends JPanel implements SonarView{
         imageGraphics.clearRect(0, 0, b, h);
     }
     
+    /**
+     * 
+     * @param color
+     */
     public void changeRadarLineColor(Color color){
         radarColor = color;
     }
 
+    /**
+     * 
+     * @param color
+     */
     public void changeHitColor(Color color){
         hitColor = color;
     }

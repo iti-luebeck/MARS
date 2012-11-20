@@ -19,6 +19,9 @@ import mars.xml.HashMapAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class Noise {
+    /**
+     * 
+     */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name="noise")
     protected HashMap<String,Object> noises;
@@ -92,6 +95,10 @@ public class Noise {
         return rand;
     }
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,Object> getAllNoiseVariables(){
         return noises;
     }

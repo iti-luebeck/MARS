@@ -6,14 +6,25 @@ package mars.gui;
 
 import org.jdesktop.application.Action;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class MARSAboutBox extends javax.swing.JDialog {
 
+    /**
+     * 
+     * @param parent
+     */
     public MARSAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
     }
 
+    /**
+     * 
+     */
     @Action public void closeAboutBox() {
         dispose();
     }

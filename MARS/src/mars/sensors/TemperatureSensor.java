@@ -119,7 +119,7 @@ public class TemperatureSensor extends Sensor{
 
     /**
      *
-     * @param TemperatureSensorStartVector
+     * @param Position 
      */
     public void setTemperatureSensorStartVector(Vector3f Position) {
         variables.put("Position", Position);

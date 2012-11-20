@@ -12,6 +12,10 @@ import java.util.EventListener;
  */
 public interface RosNodeListener extends EventListener
 {
-  public void fireEvent( RosNodeEvent e );
+    /**
+     * 
+     * @param e
+     */
+    public void fireEvent( RosNodeEvent e );
 }    
 

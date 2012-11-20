@@ -61,11 +61,18 @@ public class TestSimpleWater extends SimpleApplication implements ActionListener
     private Vector3f lightPos =  new Vector3f(33,12,-29);
 
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         TestSimpleWater app = new TestSimpleWater();
         app.start();
     }
 
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
         initInput();
@@ -114,6 +121,9 @@ public class TestSimpleWater extends SimpleApplication implements ActionListener
         rootNode.attachChild(lightSphere);
     }
 
+    /**
+     * 
+     */
     protected void initInput() {
         flyCam.setMoveSpeed(3);
         //init input
@@ -133,6 +143,10 @@ public class TestSimpleWater extends SimpleApplication implements ActionListener
         inputManager.addListener(this, "lightback");
     }
 
+    /**
+     * 
+     * @param tpf
+     */
     @Override
     public void simpleUpdate(float tpf) {
         fpsText.setText("Light Position: "+lightPos.toString()+" Change Light position with [U], [H], [J], [K] and [T], [G] Turn off water with [O]");

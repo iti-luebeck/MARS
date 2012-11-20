@@ -11,5 +11,10 @@ import com.jme3.input.InputManager;
  * @author Tosik
  */
 public interface  Keys {
+    /**
+     * 
+     * @param inputManager
+     * @param keyconfig
+     */
     public void addKeys(InputManager inputManager, KeyConfig keyconfig);
 }

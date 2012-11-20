@@ -254,6 +254,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         try {
             // Create an appending file handler
@@ -1332,10 +1335,18 @@ public class BasicAUV implements AUV,SceneProcessor{
         auv_node.attachChild(ghost_auv_spatial);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Spatial getGhostAUV(){
         return ghost_auv_spatial;
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideGhostAUV(boolean hide){
         if(hide){
              ghost_auv_spatial.setCullHint(CullHint.Always);
@@ -1449,6 +1460,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     */
     public void addDragOffscreenView(){
         drag_offView.attachScene(auv_spatial);
     }
@@ -2336,6 +2350,9 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     */
     public void updatePhysicalValues(){
         physicalvalues.updateAngularVelocity(physics_control.getAngularVelocity().length());
         physicalvalues.updateVelocity(physics_control.getLinearVelocity().length());
@@ -2345,6 +2362,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     /**
      *
      * @param tpf
+     * @deprecated 
      */
     @Deprecated
     public void updateValues(float tpf){
@@ -2472,6 +2490,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         
     }
     
+    /**
+     * 
+     * @param selected
+     */
     @Override
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
@@ -2509,11 +2531,19 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public boolean isSelected(){
         return selected;
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setCentersVisible(boolean visible){
         setSpatialVisible(VolumeCenterGeom,visible);
         setSpatialVisible(OldCenterGeom,visible);
@@ -2521,6 +2551,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         setSpatialVisible(VolumeCenterPreciseGeom,visible);
     }
 
+    /**
+     * 
+     * @param visible
+     */
     public void setVisualizerVisible(boolean visible){
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
@@ -2533,6 +2567,10 @@ public class BasicAUV implements AUV,SceneProcessor{
             }
         }
     }
+    /**
+     * 
+     * @param visible
+     */
     public void setPhysicalExchangerVisible(boolean visible){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
@@ -2548,22 +2586,43 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setCollisionVisible(boolean visible){
         setSpatialVisible(debugShape,visible);
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setBuoycancyVisible(boolean visible){
         
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setDragVisible(boolean visible){
         
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setBoundingBoxVisible(boolean visible){
         setSpatialVisible(boundingBox,visible);
     }
     
+    /**
+     * 
+     * @param spatial
+     * @param visible
+     */
     protected void setSpatialVisible(Spatial spatial,boolean visible){
         if(visible){
             spatial.setCullHint(CullHint.Inherit);
@@ -2572,6 +2631,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setWireframeVisible(boolean visible){
         if(visible){
             Node nodes = (Node)auv_spatial;
@@ -2598,17 +2661,33 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setWayPointsVisible(boolean visible){
         WayPoints.setWaypointVisibility(visible);
     }
     
+    /**
+     * 
+     * @param enabled
+     */
     public void setWaypointsEnabled(boolean enabled){
     }
     
+    /**
+     * 
+     * @return
+     */
     public WayPoints getWaypoints(){
         return WayPoints;
     }
 
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path) {
         getAuv_param().updateState(path);
         Object obj = path.getPathComponent(3);
@@ -2639,6 +2718,10 @@ public class BasicAUV implements AUV,SceneProcessor{
         }
     }
     
+    /**
+     * 
+     * @param e
+     */
     public void fireEvent( RosNodeEvent e ){
         if(getAuv_param().isEnabled()){
                 setROS_Node((MARSNodeMain)e.getSource());

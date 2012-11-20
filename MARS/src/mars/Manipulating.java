@@ -14,15 +14,28 @@ import java.util.ArrayList;
 public interface Manipulating {
     /**
      * 
+     * @param name 
      * @return
      */
     public Moveable getSlave(String name);
+    /**
+     * 
+     * @return
+     */
     public ArrayList getSlavesNames();
+    /**
+     * 
+     * @return
+     */
     public Matrix3f getWorldRotationAxisPoints();
     /**
      * 
      * @param slave
      */
     public void addSlave(Moveable slave);
+    /**
+     * 
+     * @param slaves
+     */
     public void addSlaves(ArrayList slaves);
 }

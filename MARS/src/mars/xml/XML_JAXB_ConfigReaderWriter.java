@@ -110,6 +110,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param simob
+     * @param file
+     * @return  
      */
     public static String saveSimObject(SimObject simob, File file){
         try {
@@ -131,6 +133,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param simobs
+     * @param file 
+     * @return  
      */
     public static String saveSimObjects(ArrayList simobs, File file){
         Iterator iter = simobs.iterator();
@@ -144,6 +148,12 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+    /**
+     * 
+     * @param simobs
+     * @param file
+     * @return
+     */
     public static String saveSimObjects(HashMap<String,SimObject> simobs, File file){
         for ( String elem : simobs.keySet() ){
             SimObject simob = (SimObject)simobs.get(elem);
@@ -235,6 +245,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param auv
+     * @param file
+     * @return  
      */
     public static String saveAUV(BasicAUV auv, File file){
         try {
@@ -257,6 +269,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param auvs
+     * @param file 
+     * @return  
      */
     public static String saveAUVs(ArrayList auvs, File file){
         Iterator iter = auvs.iterator();
@@ -270,6 +284,12 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+    /**
+     * 
+     * @param auvs
+     * @param file
+     * @return
+     */
     public static String saveAUVs(HashMap<String,AUV> auvs, File file){
         for ( String elem : auvs.keySet() ){
             if(auvs.get(elem) instanceof BasicAUV){
@@ -310,6 +330,7 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param mars_settings
+     * @param file  
      */
     public static void saveMARS_Settings(MARS_Settings mars_settings,File file){
         try {
@@ -323,6 +344,16 @@ public class XML_JAXB_ConfigReaderWriter {
         }
     }
     
+    /**
+     * 
+     * @param file
+     * @param mars_settings
+     * @param auvManager
+     * @param simObjectManager
+     * @param keys
+     * @param penv
+     * @return
+     */
     public static String saveConfiguration(File file, MARS_Settings mars_settings, AUV_Manager auvManager, SimObjectManager simObjectManager, KeyConfig keys, PhysicalEnvironment penv){
         //create dirs
         if(file.canWrite()){
@@ -406,7 +437,8 @@ public class XML_JAXB_ConfigReaderWriter {
     
     /**
      * 
-     * @param pe 
+     * @param pe
+     * @param file  
      */
     public static void savePhysicalEnvironment(PhysicalEnvironment pe, File file){
         try {
@@ -446,7 +478,8 @@ public class XML_JAXB_ConfigReaderWriter {
     
     /**
      * 
-     * @param mars_settings
+     * @param keyconfig
+     * @param file  
      */
     public static void saveKeyConfig(KeyConfig keyconfig, File file){
         try {

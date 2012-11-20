@@ -44,6 +44,11 @@ import com.jme3.water.SimpleWaterProcessor;
  */
 public class WaterUI {
     private SimpleWaterProcessor processor;
+    /**
+     * 
+     * @param inputManager
+     * @param proc
+     */
     public WaterUI(InputManager inputManager, SimpleWaterProcessor proc) {
         processor=proc;
 

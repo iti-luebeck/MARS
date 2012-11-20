@@ -17,6 +17,9 @@ import com.jme3.scene.plugins.MTLLoader;
  */
 public class MyMTLLoader extends MTLLoader{
     
+    /**
+     * 
+     */
     @Override
     protected void createMaterial(){
         Material material;

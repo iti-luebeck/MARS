@@ -19,10 +19,18 @@ import org.ros.node.topic.Subscriber;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Dynamixel_AX12PLUS extends Servo{
     
+    /**
+     * 
+     */
     public Dynamixel_AX12PLUS(){
         super();
     }
     
+    /**
+     * 
+     * @param simstate
+     * @param MassCenterGeom
+     */
     public Dynamixel_AX12PLUS(SimState simstate,Geometry MassCenterGeom) {
         super(simstate,MassCenterGeom);
         setOperatingAngle(5.235987f);
@@ -30,6 +38,10 @@ public class Dynamixel_AX12PLUS extends Servo{
         setSpeedPerDegree(0.003266f);
     }
 
+    /**
+     * 
+     * @param simstate
+     */
     public Dynamixel_AX12PLUS(SimState simstate) {
         super(simstate);
         setOperatingAngle(5.235987f);

@@ -179,6 +179,10 @@ public class SimObject{
         }*/
     }
 
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         if(path.getPathComponent(1).equals(this)){//make sure we want to change auv params 
             //System.out.println("update tts " + path);
@@ -191,6 +195,11 @@ public class SimObject{
         }
     }
     
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
     public void updateState(String target, String hashmapname){
         if(target.equals("position") && hashmapname.equals("")){
             if(physics_control != null ){
@@ -290,6 +299,9 @@ public class SimObject{
         spatial.updateGeometricState();
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         collision = (HashMap<String,Object>)simob_variables.get("Collision");
     }
@@ -318,11 +330,16 @@ public class SimObject{
 
     /**
      *
+     * @param mars_settings 
      */
     public void setMARSSettings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }
     
+    /**
+     * 
+     * @param selected
+     */
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
             ambient_light.setColor(mars_settings.getSelectionColor());
@@ -333,6 +350,10 @@ public class SimObject{
         this.selected = selected;
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean isSelected(){
         return selected;
     }
@@ -371,7 +392,7 @@ public class SimObject{
 
     /**
      *
-     * @param auv_name
+     * @param icon 
      */
     public void setIcon(String icon) {
         simob_variables.put("icon", icon);
@@ -387,7 +408,7 @@ public class SimObject{
 
     /**
      *
-     * @param auv_name
+     * @param dnd_icon 
      */
     public void setDNDIcon(String dnd_icon) {
         simob_variables.put("dnd_icon", dnd_icon);
@@ -725,10 +746,18 @@ public class SimObject{
         debugNode.attachChild(ghost_simob_spatial);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Spatial getGhostSpatial(){
         return ghost_simob_spatial;
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideGhostSpatial(boolean hide){
         if(hide){
              ghost_simob_spatial.setCullHint(CullHint.Always);
@@ -737,6 +766,10 @@ public class SimObject{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setCollisionVisible(boolean visible){
         if(visible){
             debugShape.setCullHint(CullHint.Inherit);
@@ -745,6 +778,10 @@ public class SimObject{
         }
     }
     
+    /**
+     * 
+     * @param visible
+     */
     public void setWireframeVisible(boolean visible){
         if(visible){
             Node nodes = (Node)spatial;

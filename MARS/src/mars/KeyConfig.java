@@ -29,23 +29,42 @@ public class KeyConfig {
     @XmlElement
     private String auv_key_focus = "";
         
+    /**
+     * 
+     */
     public KeyConfig() {
     }
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,String> getKeys(){
         return keys;
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         
     }
     
-   public void updateState(String target, String hashmapname){
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
+    public void updateState(String target, String hashmapname){
         if(target.equals("enabled") && hashmapname.equals("Axis")){
             
         }
     }
     
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
             if( path.getParentPath().getLastPathComponent().toString().equals("Settings")){
@@ -56,6 +75,9 @@ public class KeyConfig {
         }
     }
     
+    /**
+     * 
+     */
     public void createKeys(){
         KeyNames keynames = new KeyNames();
         keys = new HashMap<String,String>();
@@ -68,6 +90,11 @@ public class KeyConfig {
         return Integer.valueOf(keyname.substring(1, keyname.indexOf(" ")));
     }
     
+    /**
+     * 
+     * @param mapping
+     * @return
+     */
     public int getKeyNumberForMapping(String mapping){
         for (Entry<String, String> entry : keys.entrySet()) {
             if (mapping.equals(entry.getValue())) {
@@ -77,10 +104,18 @@ public class KeyConfig {
         return 255;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getAuv_key_focus() {
         return auv_key_focus;
     }
 
+    /**
+     * 
+     * @param auv_key_focus
+     */
     public void setAuv_key_focus(String auv_key_focus) {
         this.auv_key_focus = auv_key_focus;
     }

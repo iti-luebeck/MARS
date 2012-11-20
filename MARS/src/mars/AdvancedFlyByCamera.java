@@ -16,10 +16,19 @@ import com.jme3.renderer.Camera;
  */
 public class AdvancedFlyByCamera extends FlyByCamera{
     
+    /**
+     * 
+     * @param cam
+     */
     public AdvancedFlyByCamera(Camera cam){
         super(cam);
     }
     
+    /**
+     * 
+     * @param value
+     * @param axis
+     */
     @Override
     protected void rotateCamera(float value, Vector3f axis){        
         if (dragToRotate){

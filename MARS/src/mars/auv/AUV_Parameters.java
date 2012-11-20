@@ -234,6 +234,10 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
 
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         System.out.println("TREEPATH: " + path);
         if(path.getPathComponent(2).equals(this)){//make sure we want to change auv params
@@ -245,6 +249,11 @@ public class AUV_Parameters implements CellEditorListener{
         }
     }
     
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
     public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision") && hashmapname.equals("Debug")){
@@ -363,7 +372,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param auv_name
+     * @param icon 
      */
     public void setIcon(String icon) {
         params.put("icon", icon);
@@ -379,7 +388,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param auv_name
+     * @param dnd_icon 
      */
     public void setDNDIcon(String dnd_icon) {
         params.put("dnd_icon", dnd_icon);
@@ -427,7 +436,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param maxWaypoints
+     * @param lineWidth 
      */
     public void setWayPointLineWidth(float lineWidth) {
         waypoints.put("lineWidth", lineWidth);
@@ -491,7 +500,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param enabled
+     * @param gradient 
      */
     public void setWaypoints_gradient(boolean gradient) {
         waypoints.put("gradient", gradient);
@@ -603,7 +612,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param buoyancy_scale
+     * @param buoyancy_resolution 
      */
     public void setBuoyancy_resolution(float buoyancy_resolution) {
         buoyancy.put("buoyancy_resolution", buoyancy_resolution);
@@ -635,7 +644,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param drag_updaterate
+     * @param flow_updaterate 
      */
     public void setFlow_updaterate(int flow_updaterate) {
         params.put("flow_updaterate", flow_updaterate);
@@ -971,7 +980,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param drag
+     * @param bounding 
      */
     public void setDebugBounding(boolean bounding) {
         debug.put("bounding", bounding);
@@ -987,7 +996,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param drag
+     * @param wireframe 
      */
     public void setDebugWireframe(boolean wireframe) {
         debug.put("wireframe", wireframe);
@@ -1051,7 +1060,7 @@ public class AUV_Parameters implements CellEditorListener{
 
     /**
      *
-     * @param centers 
+     * @param visualizer 
      */
     public void setDebugVisualizers(boolean visualizer) {
         debug.put("visualizer", visualizer);

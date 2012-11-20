@@ -71,6 +71,7 @@ public interface AUV extends RosNodeListener{
     /**
      *
      * @param tpf
+     * @deprecated 
      */
     @Deprecated
     public void updateValues(float tpf);
@@ -120,6 +121,10 @@ public interface AUV extends RosNodeListener{
      * @return
      */
     public Node getAUVNode();
+    /**
+     * 
+     * @return
+     */
     public Node getSelectionNode();
     /**
      *
@@ -160,6 +165,7 @@ public interface AUV extends RosNodeListener{
     public HashMap<String,Accumulator> getAccumulators();
     /**
      *
+     * @param key 
      * @return
      */
     public Accumulator getAccumulator(String key);
@@ -245,6 +251,9 @@ public interface AUV extends RosNodeListener{
     /*
      *
      */
+    /**
+     * 
+     */
     public void addDragOffscreenView();
     /**
      *
@@ -289,20 +298,84 @@ public interface AUV extends RosNodeListener{
      */
     public void setROS_Node(MARSNodeMain mars_node);
     
+    /**
+     * 
+     * @param selected
+     */
     public void setSelected(boolean selected);
+    /**
+     * 
+     * @return
+     */
     public boolean isSelected();
+    /**
+     * 
+     * @return
+     */
     public Spatial getGhostAUV();
+    /**
+     * 
+     * @param hide
+     */
     public void hideGhostAUV(boolean hide);
+    /**
+     * 
+     * @param visible
+     */
     public void setCentersVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setPhysicalExchangerVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setVisualizerVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setCollisionVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setBuoycancyVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setWireframeVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setDragVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setWayPointsVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
     public void setBoundingBoxVisible(boolean visible);
+    /**
+     * 
+     * @param enabled
+     */
     public void setWaypointsEnabled(boolean enabled);
+    /**
+     * 
+     * @return
+     */
     public WayPoints getWaypoints();
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path);
 }

@@ -12,6 +12,9 @@ import java.awt.datatransfer.DataFlavor;
  */
 public class TransferHandlerObjectDataFlavor extends DataFlavor{
 
+    /**
+     * 
+     */
     public TransferHandlerObjectDataFlavor() {
         super(TransferHandlerObject.class, "TransferHandlerObject");
     }

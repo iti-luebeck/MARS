@@ -122,7 +122,7 @@ public class FlowMeter extends Sensor{
 
     /**
      *
-     * @param FlowMeterStartVector
+     * @param Position 
      */
     public void setFlowMeterStartVector(Vector3f Position) {
         variables.put("Position", Position);

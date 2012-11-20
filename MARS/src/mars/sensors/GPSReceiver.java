@@ -112,7 +112,7 @@ public class GPSReceiver extends Sensor{
 
     /**
      *
-     * @param TemperatureSensorStartVector
+     * @param ReferencePointGPS 
      */
     public void setReferencePointGPS(Vector3f ReferencePointGPS) {
         variables.put("ReferencePointGPS", ReferencePointGPS);
@@ -128,7 +128,7 @@ public class GPSReceiver extends Sensor{
 
     /**
      *
-     * @param TemperatureSensorStartVector
+     * @param ReferencePointWorld 
      */
     public void setReferencePointWorld(Vector3f ReferencePointWorld) {
         variables.put("ReferencePointWorld", ReferencePointWorld);
@@ -144,7 +144,7 @@ public class GPSReceiver extends Sensor{
 
     /**
      *
-     * @param TemperatureSensorStartVector
+     * @param LatitudeFactor 
      */
     public void setLatitudeFactor(float LatitudeFactor) {
         variables.put("LatitudeFactor", LatitudeFactor);

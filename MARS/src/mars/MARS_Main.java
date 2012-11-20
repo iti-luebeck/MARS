@@ -68,6 +68,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     NiftyState niftystate;
     
     ChaseCamera chaseCam;
+    Camera map_cam;
     
     ViewPort MapViewPort;
     
@@ -157,7 +158,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     }
     
     private void initMapViewPort(){
-        Camera map_cam = cam.clone();
+        map_cam = cam.clone();
         float aspect = (float) map_cam.getWidth() / map_cam.getHeight();
         float frustumSize = 1f;
         map_cam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
@@ -301,6 +302,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         this.guiFont = guiFont;
     }
     
+    /**
+     * 
+     * @deprecated
+     */
     @Deprecated
     public void initNifty(){
         assetManager.registerLocator("Assets/Interface", FileLocator.class);
@@ -322,14 +327,25 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         guiViewPort.addProcessor(niftyDisplay);
     }
     
+    /**
+     * 
+     */
     @Override
     public void onStartScreen() {
     }
  
+    /**
+     * 
+     */
     @Override
     public void onEndScreen() {
     }
     
+    /**
+     * 
+     * @param nifty
+     * @param screen
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         //progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
@@ -337,20 +353,44 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     }
  
     // methods for Controller
+    /**
+     * 
+     * @param inputEvent
+     * @return
+     */
     @Override
     public boolean inputEvent(final NiftyInputEvent inputEvent) {
         return false;
     }
  
+    /**
+     * 
+     * @param nifty
+     * @param screen
+     * @param elmnt
+     * @param prprts
+     * @param atrbts
+     */
     @Override
     public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
         //progressBarElement = elmnt.findElementByName("progressbar");
     }
     
+    /**
+     * 
+     * @param prprts
+     * @param atrbts
+     */
     @Override
     public void init(Properties prprts, Attributes atrbts) {
     }
     
+    /**
+     * 
+     * @param auv
+     * @param x
+     * @param y
+     */
     public void setHoverMenuForAUV(final AUV auv, final int x, final int y){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -363,6 +403,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         });
     }
 
+    /**
+     * 
+     * @param visible
+     */
     public void setHoverMenuForAUV(final boolean visible){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -375,9 +419,18 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         });
     }
  
+    /**
+     * 
+     * @param getFocus
+     */
     public void onFocus(boolean getFocus) {
     }
     
+    /**
+     * 
+     * @param progress
+     * @param loadingText
+     */
     public void setProgress(final float progress, final String loadingText) {
         //since this method is called from another thread, we enqueue the changes to the progressbar to the update loop thread
         enqueue(new Callable() {
@@ -395,6 +448,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
  
     }
     
+    /**
+     * 
+     * @param progress
+     * @param loadingText
+     */
     public void setProgressWithoutEnq(final float progress, String loadingText) {
         final int MIN_WIDTH = 32;
         int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
@@ -404,10 +462,17 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         textRenderer.setText(loadingText);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Nifty getNifty() {
         return nifty;
     }
     
+    /**
+     * 
+     */
     public void startSimulation(){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -420,6 +485,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         });
     }
     
+    /**
+     * 
+     */
     public void pauseSimulation(){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -432,6 +500,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         });
     }
         
+    /**
+     * 
+     */
     public void restartSimulation(){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -444,10 +515,18 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         });
     }
     
+    /**
+     * 
+     * @return
+     */
     public ViewPort getMapViewPort(){
         return MapViewPort;
     }
 
+    /**
+     * 
+     * @return
+     */
     public MapState getMapstate() {
         return mapstate;
     }
@@ -457,6 +536,18 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         return advFlyCam;
     }
     
+    /**
+     * 
+     * @return
+     */
+    public Camera getMapCamera(){
+        return map_cam;
+    }
+    
+    /**
+     * 
+     * @param darken
+     */
     public void setStatsStateDark(boolean darken){
         //we dont want a dark underlay in the stats
         if(stateManager.getState(StatsAppState.class) != null){
@@ -465,6 +556,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         }
     }
     
+    /**
+     * 
+     */
     public void restartSimState(){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {

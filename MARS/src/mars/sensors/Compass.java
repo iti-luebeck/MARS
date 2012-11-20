@@ -20,6 +20,7 @@ import mars.states.SimState;
 /**
  * This is a basic compass class.
  * @author Thomas Tosik
+ * @deprecated 
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @Deprecated
@@ -307,7 +308,7 @@ public class Compass extends Sensor{
 
     /**
      *
-     * @param CompassStartVector
+     * @param Position 
      */
     public void setCompassStartVector(Vector3f Position) {
         variables.put("Position", Position);

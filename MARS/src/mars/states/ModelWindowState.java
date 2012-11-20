@@ -70,10 +70,18 @@ public class ModelWindowState extends AbstractAppState{
         super.initialize(stateManager, app);
     }
     
+    /**
+     * 
+     * @param auv_manager
+     */
     public void setAuv_manager(AUV_Manager auv_manager) {
         this.auv_manager = auv_manager;
     }
     
+    /**
+     * 
+     * @param mars_settings
+     */
     public void setMars_settings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }

@@ -172,7 +172,6 @@ public class SimObjectManager {
     
     /**
      *
-     * @param auvs
      */
     public void deselectAllSimObs(){
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
@@ -320,11 +319,16 @@ public class SimObjectManager {
 
     /**
      *
+     * @param mars_settings 
      */
     public void setMARSSettings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }
     
+    /**
+     * 
+     * @return
+     */
     public SimObject getSelectedSimObject(){
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
         for ( String elem : simobs.keySet() ){
@@ -338,7 +342,7 @@ public class SimObjectManager {
     
    /**
      * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the update cycle(future/get).
-     * @param auv
+     * @param simob 
      * @param enable
      */
     public void enableSimObject(SimObject simob, boolean enable){

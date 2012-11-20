@@ -56,6 +56,8 @@ public class AUVTransferHandler extends TransferHandler{
     protected void exportDone(JComponent source, Transferable data, int action) {
         if (action == MOVE) {// "delete" it
             
+        }else if( action == COPY){
+        
         }
     }
 

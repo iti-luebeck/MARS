@@ -91,6 +91,9 @@ public class WayPoints extends Node{
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Added Waypoint at: " + waypoint.toString(), "");
     }
     
+    /**
+     * 
+     */
     public void updateGradient(){
         Future fut = simauv.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -115,6 +118,9 @@ public class WayPoints extends Node{
         });
     }
     
+    /**
+     * 
+     */
     public void updateColor(){
         Future fut = simauv.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -182,6 +188,9 @@ public class WayPoints extends Node{
         }
     }
     
+    /**
+     * 
+     */
     public void reset(){
         waypoints.clear();
         waypoints_geom.clear();

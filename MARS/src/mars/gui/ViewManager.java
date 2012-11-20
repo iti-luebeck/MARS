@@ -15,10 +15,18 @@ import com.jme3.math.Vector3f;
  */
 public class ViewManager {
     
+    /**
+     * 
+     */
     public ViewManager(){
         
     }
     
+    /**
+     * 
+     * @param new_position
+     * @param relative
+     */
     public void moveCamera(Vector3f new_position, boolean relative){
 
     }

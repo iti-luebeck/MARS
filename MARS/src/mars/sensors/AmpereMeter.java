@@ -30,6 +30,9 @@ public class AmpereMeter extends Sensor{
     private std_msgs.Float32 fl;
     private std_msgs.Header header; 
     
+    /**
+     * 
+     */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,String> accumulators;
     
@@ -76,6 +79,10 @@ public class AmpereMeter extends Sensor{
         return accumulators;
     }
 
+    /**
+     * 
+     * @param auv
+     */
     public void setAuv(AUV auv) {
         this.auv = auv;
     }

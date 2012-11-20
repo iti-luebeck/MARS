@@ -45,11 +45,19 @@ import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 import java.io.File;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class TestPostWaterLake extends SimpleApplication {
 
     // set default for applets
     private static boolean useHttp = true;
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
      
         TestPostWaterLake app = new TestPostWaterLake();
@@ -57,6 +65,9 @@ public class TestPostWaterLake extends SimpleApplication {
         app.start();
     }
 
+    /**
+     * 
+     */
     public void simpleInitApp() {
         this.flyCam.setMoveSpeed(10);
         cam.setLocation(new Vector3f(-27.0f, 1.0f, 75.0f));

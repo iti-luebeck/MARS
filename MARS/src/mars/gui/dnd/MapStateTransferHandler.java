@@ -4,6 +4,7 @@
  */
 package mars.gui.dnd;
 
+import com.jme3.math.Vector3f;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.TransferHandler;
 import mars.MARS_Main;
+import mars.states.MapState;
 import mars.states.SimState;
 
 /**
@@ -26,6 +28,10 @@ public class MapStateTransferHandler extends TransferHandler{
     
     private MARS_Main mars;
     
+    /**
+     * 
+     * @param mars
+     */
     public MapStateTransferHandler(MARS_Main mars) {
         super();
         this.mars = mars;
@@ -53,18 +59,25 @@ public class MapStateTransferHandler extends TransferHandler{
         // Fetch the Transferable and its data
         Transferable t = support.getTransferable();
         try {
-            final String data = (String)t.getTransferData(DataFlavor.stringFlavor);
+            final TransferHandlerObject data = (TransferHandlerObject)t.getTransferData(new TransferHandlerObjectDataFlavor());
             final DropLocation loc = support.getDropLocation();
             Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.enableAUV(data, loc.getDropPoint());
+                                if(mars.getStateManager().getState(MapState.class) != null){
+                                    MapState mapState = (MapState)mars.getStateManager().getState(MapState.class);
+                                    Vector3f simStatePosition = mapState.getSimStatePosition(loc.getDropPoint());
+                                    if(mars.getStateManager().getState(SimState.class) != null){
+                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                        if(data.getType() == TransferHandlerObjectType.AUV){
+                                            simState.enableAUV(data.getName(), simStatePosition );
+                                        }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
+                                            simState.enableSIMOB(data.getName(), simStatePosition);
+                                        }
+                                    }
                                 }
                                 return null;
                             }
                         });
-            //System.out.println("data: " + data + " droploc: " + loc.getDropPoint());
         } catch (UnsupportedFlavorException ex) {
             Logger.getLogger(MapStateTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

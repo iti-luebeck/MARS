@@ -50,8 +50,14 @@ public class Canon extends Actuator implements Moveable,Keys{
     
     private Vector3f local_rotation_axis = new Vector3f();
     
+    /**
+     * 
+     */
     protected float CanonForce = 10.0f;
     
+    /**
+     * 
+     */
     protected float RecoilForce = 10.0f;
     
     private Node Rotation_Node = new Node();
@@ -89,25 +95,41 @@ public class Canon extends Actuator implements Moveable,Keys{
         super(simstate);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getCanonForce() {
         return (Float)variables.get("CanonForce");
     }
 
+    /**
+     * 
+     * @param CanonForce
+     */
     public void setCanonForce(float CanonForce) {
         variables.put("CanonForce", CanonForce);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getRecoilForce() {
         return (Float)variables.get("RecoilForce");
     }
 
+    /**
+     * 
+     * @param RecoilForce
+     */
     public void setRecoilForce(float RecoilForce) {
         variables.put("RecoilForce", RecoilForce);
     }
 
     /**
      *
-     * @param MotorStartVector
+     * @param Position 
      */
     public void setCanonPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -115,7 +137,7 @@ public class Canon extends Actuator implements Moveable,Keys{
 
     /**
      *
-     * @param MotorDirection
+     * @param CanonDirection 
      */
     public void setCanonDirection(Vector3f CanonDirection){
         variables.put("CanonDirection", CanonDirection);
@@ -192,6 +214,9 @@ public class Canon extends Actuator implements Moveable,Keys{
 
     }
     
+    /**
+     * 
+     */
     public void shoot(){
         System.out.println("Shoot");
         Vector3f left = (CanonEnd.getWorldTranslation().subtract(CanonStart.getWorldTranslation())).normalize();
@@ -226,6 +251,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * Don't call this anymore. You have first to call setLocalRotationAxisPoints once at the begining of the simulation
      * @param rotation_axis
      * @param alpha
+     * @deprecated 
      */
     @Override
     @Deprecated
@@ -239,6 +265,10 @@ public class Canon extends Actuator implements Moveable,Keys{
         PhysicalExchanger_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param alpha
+     */
     @Override
     public void updateRotation(float alpha){
         /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
@@ -249,6 +279,10 @@ public class Canon extends Actuator implements Moveable,Keys{
         Rotation_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param world_rotation_axis_points
+     */
     @Override
     public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points){
         Vector3f WorldServoEnd = world_rotation_axis_points.getColumn(0);
@@ -275,16 +309,29 @@ public class Canon extends Actuator implements Moveable,Keys{
         
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public HashMap<String,String> getAllActions(){
         return action_mapping;
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public String getSlaveName(){
         return getPhysicalExchangerName();
     }
     
+    /**
+     * 
+     * @param inputManager
+     * @param keyconfig
+     */
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){

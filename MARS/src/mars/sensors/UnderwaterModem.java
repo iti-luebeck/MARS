@@ -66,46 +66,90 @@ public class UnderwaterModem extends Sensor{
         super(simstate);
     }
 
+    /**
+     * 
+     * @return
+     */
     public Vector3f getWorldPosition() {
        return UnderwaterModemStart.getWorldTranslation();
     }
     
+    /**
+     * 
+     * @return
+     */
     public Vector3f getDirection() {
         return (Vector3f)variables.get("Direction");
     }
 
+    /**
+     * 
+     * @param Direction
+     */
     public void setDirection(Vector3f Direction) {
         variables.put("Direction", Direction);
     }
 
+    /**
+     * 
+     * @return
+     */
     public Vector3f getPosition() {
         return (Vector3f)variables.get("Position");
     }
 
+    /**
+     * 
+     * @param Position
+     */
     public void setPosition(Vector3f Position) {
         variables.put("Position", Position);
     }
     
+    /**
+     * 
+     * @return
+     */
     public float getPropagationDistance() {
         return (Float)variables.get("propagation_distance");
     }
 
+    /**
+     * 
+     * @param propagation_distance
+     */
     public void setPropagationDistance(float propagation_distance) {
         variables.put("propagation_distance", propagation_distance);
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean  isDebug() {
         return (Boolean)variables.get("debug");
     }
 
+    /**
+     * 
+     * @param debug
+     */
     public void setDebug(boolean debug) {
         variables.put("debug", debug);
     }
     
+    /**
+     * 
+     * @return
+     */
     public ColorRGBA getDebugColor() {
         return (ColorRGBA)variables.get("debug_color");
     }
 
+    /**
+     * 
+     * @param debug_color
+     */
     public void setDebugColor(ColorRGBA debug_color) {
         variables.put("debug_color", debug_color);
     }
@@ -183,6 +227,10 @@ public class UnderwaterModem extends Sensor{
         }
     }
 
+    /**
+     * 
+     * @param path
+     */
     @Override
     public void updateState(TreePath path) {
        super.updateState(path);
@@ -206,6 +254,10 @@ public class UnderwaterModem extends Sensor{
 
     }
     
+    /**
+     * 
+     * @param uws
+     */
     public void updateComNet(HashMap<String,UnderwaterModem> uws){
         Future fut2 = simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {

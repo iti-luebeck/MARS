@@ -28,6 +28,10 @@ public class KeyConfigModel implements TreeModel{
     private final KeyConfig keyConfig;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
+    /**
+     * 
+     * @param keyConfig
+     */
     public KeyConfigModel(KeyConfig keyConfig) {
         this.keyConfig = keyConfig;
     }

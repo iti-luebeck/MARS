@@ -157,7 +157,7 @@ public class PressureSensor extends Sensor{
 
     /**
      *
-     * @param PressureSensorStartVector
+     * @param Position 
      */
     public void setPressureSensorStartVector(Vector3f Position) {
         variables.put("Position", Position);

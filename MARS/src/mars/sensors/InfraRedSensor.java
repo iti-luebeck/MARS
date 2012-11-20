@@ -230,7 +230,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      *
-     * @param StartVector 
+     * @param Position 
      */
     public void setPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -246,7 +246,7 @@ public class InfraRedSensor extends Sensor{
     
     /**
      *
-     * @param StartVector 
+     * @return  
      */
     public Vector3f getPosition(){
         return (Vector3f)variables.get("Position");
@@ -254,7 +254,7 @@ public class InfraRedSensor extends Sensor{
 
     /**
      * 
-     * @param Direction 
+     * @return  
      */
     public Vector3f getDirection(){
         return (Vector3f)variables.get("Direction");

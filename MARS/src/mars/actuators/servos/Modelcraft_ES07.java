@@ -19,10 +19,18 @@ import org.ros.node.topic.Subscriber;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Modelcraft_ES07 extends Servo{
     
+    /**
+     * 
+     */
     public Modelcraft_ES07(){
         super();
     }
     
+    /**
+     * 
+     * @param simstate
+     * @param MassCenterGeom
+     */
     public Modelcraft_ES07(SimState simstate,Geometry MassCenterGeom) {
         super(simstate,MassCenterGeom);
         setOperatingAngle(5.235987f);
@@ -30,6 +38,10 @@ public class Modelcraft_ES07 extends Servo{
         setSpeedPerDegree(0.003266f);
     }
 
+    /**
+     * 
+     * @param simstate
+     */
     public Modelcraft_ES07(SimState simstate) {
         super(simstate);
         setOperatingAngle(5.235987f);

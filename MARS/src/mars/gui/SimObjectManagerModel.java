@@ -27,6 +27,10 @@ public class SimObjectManagerModel implements TreeModel{
     private final SimObjectManager simobManager;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
+    /**
+     * 
+     * @param simobManager
+     */
     public SimObjectManagerModel(SimObjectManager simobManager) {
         this.simobManager = simobManager;
     }

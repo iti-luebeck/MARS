@@ -12,7 +12,11 @@ import java.util.EventObject;
  */
 public class RosNodeEvent extends EventObject
 {
-  public RosNodeEvent( Object source)
+    /**
+     * 
+     * @param source
+     */
+    public RosNodeEvent( Object source)
   {
     super( source );
   }

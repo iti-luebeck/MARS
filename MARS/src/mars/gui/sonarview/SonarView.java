@@ -11,9 +11,30 @@ import java.awt.Color;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public interface SonarView {
+    /**
+     * 
+     * @param data
+     * @param lastHeadPosition
+     * @param resolution
+     */
     public void updateData(byte[] data, float lastHeadPosition, float resolution);
+    /**
+     * 
+     * @param color
+     */
     public void changeBackgroundColor(Color color);
+    /**
+     * 
+     * @param color
+     */
     public void changeRadarLineColor(Color color);
+    /**
+     * 
+     * @param color
+     */
     public void changeHitColor(Color color);
+    /**
+     * 
+     */
     public void repaintAll();
 }

@@ -215,16 +215,25 @@ public class MARSView extends FrameView {
     /**
      *
      * @param can
+     * @deprecated 
      */
     @Deprecated
     public void addCanvas(Canvas can){
         this.JMEPanel1.add(can);
     }
     
+    /**
+     * 
+     * @param sim_panel
+     */
     public void addAWTMainPanel(AwtPanel sim_panel){
         this.JMEPanel1.add(sim_panel);
     }
     
+    /**
+     * 
+     * @param map_panel
+     */
     public void addAWTMapPanel(AwtPanel map_panel){
         this.MapPanel.add(map_panel);
     }
@@ -238,6 +247,12 @@ public class MARSView extends FrameView {
         this.JMEPanel1.setMinimumSize(new Dimension(Width,Height));
     }
 
+    /**
+     * 
+     * @param data
+     * @param lastHeadPosition
+     * @param son
+     */
     public void initSonarData(final byte[] data, final float lastHeadPosition, final Sonar son){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -251,6 +266,9 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     */
     public void initCharts(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -271,6 +289,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param auvManager
+     */
     public void initAUVTree(final AUV_Manager auvManager){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -282,6 +304,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param simobManager
+     */
     public void initSimObjectTree(final SimObjectManager simobManager){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -293,6 +319,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param penv
+     */
     public void initEnvironmentTree(final PhysicalEnvironment penv){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -304,6 +334,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param mars_settings
+     */
     public void initSettingsTree(final MARS_Settings mars_settings){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -315,6 +349,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param keys
+     */
     public void initKeysTree(final KeyConfig keys){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -326,6 +364,9 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     */
     public void updateTrees(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -340,6 +381,9 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     */
     public void initDND(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -353,6 +397,9 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     */
     public void allowSimInteraction(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -368,6 +415,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param allow
+     */
     public void allowPhysicsInteraction(final boolean allow){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -379,6 +430,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param connected
+     */
     public void allowServerInteraction(final boolean connected){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -395,6 +450,10 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param enable
+     */
     public void enableServerInteraction(final boolean enable){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -413,6 +472,7 @@ public class MARSView extends FrameView {
     /**
      * 
      * @param xmll
+     * @deprecated 
      */
     @Deprecated
     public void setXMLL(XMLConfigReaderWriter xmll){
@@ -448,6 +508,7 @@ public class MARSView extends FrameView {
      * 
      * @param value
      * @param series
+     * @deprecated 
      */
     @Deprecated
     public void addValueToSeries(float value, int series){
@@ -464,21 +525,40 @@ public class MARSView extends FrameView {
         trace2.addPoint(((double) System.currentTimeMillis() - this.m_starttime), 1f);
     }
     
+    /**
+     * 
+     * @param simauv_settings
+     */
     public void setMarsSettings(MARS_Settings simauv_settings){
         this.mars_settings = simauv_settings;
     }
 
+    /**
+     * 
+     * @param keyConfig
+     */
     public void setKeyConfig(KeyConfig keyConfig) {
         this.keyConfig = keyConfig;
     }
 
+    /**
+     * 
+     * @param penv
+     */
     public void setPenv(PhysicalEnvironment penv) {
         this.penv = penv;
     }
    
+    /**
+     * 
+     */
     public void initPopUpMenues(){
     }
     
+    /**
+     * 
+     * @param auv_param
+     */
     public void initPopUpMenuesForAUV(final AUV_Parameters auv_param){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -749,6 +829,11 @@ public class MARSView extends FrameView {
         MARSApp.getApplication().show(aboutBox);
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     */
     public void showpopupWindowSwitcher(final int x, final int y){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -759,6 +844,11 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     */
     public void showpopupAUV(final int x, final int y){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -769,6 +859,9 @@ public class MARSView extends FrameView {
         );
     }
     
+    /**
+     * 
+     */
     public void hideAllPopupWindows(){
         EventQueue.invokeLater(new Runnable(){
                 @Override

@@ -52,11 +52,26 @@ public class Helper {
         return rotation_matrix;
     }
     
+    /**
+     * 
+     * @param planeStart
+     * @param planeNormal
+     * @param rayStart
+     * @param rayDirection
+     * @return
+     */
     public static Vector3f getIntersectionWithPlane(Vector3f planeStart, Vector3f planeNormal, Vector3f rayStart, Vector3f rayDirection){
         float t = ((planeStart.subtract(rayStart)).dot(planeNormal)/((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).dot(planeNormal));
         return rayStart.add(((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).mult(t));
     }
     
+    /**
+     * 
+     * @param base
+     * @param add
+     * @param mask_value
+     * @return
+     */
     public static Color combineColors(Color base, Color add, float mask_value){
         float masking_factor = mask_value/255.0f;
         int blue = (int)(base.getBlue() * (1f - masking_factor) + add.getBlue() * masking_factor);
@@ -65,6 +80,11 @@ public class Helper {
         return new Color(red, green, blue);
     }
     
+    /**
+     * 
+     * @param spatial
+     * @param pickHint
+     */
     public static void setNodePickUserData(Spatial spatial, int pickHint){
         if(spatial instanceof Node){
             Node node = (Node)spatial;

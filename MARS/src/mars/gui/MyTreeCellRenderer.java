@@ -42,6 +42,10 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
     
     private MARSView view;
     
+    /**
+     * 
+     * @param view
+     */
     public MyTreeCellRenderer(MARSView view){
         super();
         this.view = view;

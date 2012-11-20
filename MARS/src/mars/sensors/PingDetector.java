@@ -49,13 +49,16 @@ public class PingDetector extends Sensor{
     private std_msgs.Float32 fl;
     private std_msgs.Header header; 
 
+    /**
+     * 
+     */
     public PingDetector(){
         super();
     }
         
     /**
      *
-     * @param simauv
+     * @param simstate 
      */
     public PingDetector(SimState simstate){
         super(simstate);
@@ -109,7 +112,7 @@ public class PingDetector extends Sensor{
 
     /**
      *
-     * @param PingDirectionVector
+     * @param PingDirection 
      */
     public void setPingDirectionVector(Vector3f PingDirection) {
         variables.put("PingDirection", PingDirection);
@@ -125,7 +128,7 @@ public class PingDetector extends Sensor{
 
     /**
      *
-     * @param PingStartVector
+     * @param Position 
      */
     public void setPingStartVector(Vector3f Position) {
         variables.put("Position", Position);
@@ -305,6 +308,10 @@ public class PingDetector extends Sensor{
 
     }
 
+    /**
+     * 
+     * @param simob_manager
+     */
     public void setSimObjectManager(SimObjectManager simob_manager) {
         this.simob_manager = simob_manager;
     }

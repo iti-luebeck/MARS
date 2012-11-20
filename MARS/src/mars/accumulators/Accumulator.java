@@ -20,31 +20,48 @@ import mars.xml.HashMapAdapter;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Accumulator {
 
+    /**
+     * 
+     */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
     
     private double actualCurrent = 0f;
     
+    /**
+     * 
+     */
     public Accumulator() {
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         if(getCapacity() != null){
             actualCurrent = getCapacity();
         }
     };
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,Object> getAllVariables(){
         return variables;
     }
     
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         
     }
     
     /**
      *
-     * @param physicalvalues_updaterate
+     * @param name 
      */
     public void setName(String name) {
         variables.put("name", name);
@@ -59,7 +76,7 @@ public class Accumulator {
     }
     /**
      *
-     * @param physicalvalues_updaterate
+     * @param capacity 
      */
     public void setCapacity(Float capacity) {
         variables.put("capacity", capacity);
@@ -75,7 +92,7 @@ public class Accumulator {
     
     /**
      *
-     * @param physicalvalues_updaterate
+     * @param nominalVoltage 
      */
     public void setNominalVoltage(Float nominalVoltage) {
         variables.put("nominalVoltage", nominalVoltage);
@@ -91,7 +108,7 @@ public class Accumulator {
     
     /**
      *
-     * @param physicalvalues_updaterate
+     * @param type 
      */
     public void setType(int type) {
         variables.put("type", type);
@@ -109,10 +126,18 @@ public class Accumulator {
         return getNominalVoltage();
     }
 
+    /**
+     * 
+     * @return
+     */
     public double getActualCurrent() {
         return actualCurrent;
     }
 
+    /**
+     * 
+     * @param subCurrent
+     */
     public void subsractActualCurrent(float subCurrent) {
         if( (getActualCurrent() - subCurrent) > 0f){
             actualCurrent = actualCurrent - subCurrent;
@@ -125,6 +150,10 @@ public class Accumulator {
         this.actualCurrent = actualCurrent;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getActualVoltage(){
         return calculateActualVoltage((float)getActualCurrent());
     }

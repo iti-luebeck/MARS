@@ -26,6 +26,10 @@ public class SimStateTransferHandler extends TransferHandler{
     
     private MARS_Main mars;
     
+    /**
+     * 
+     * @param mars
+     */
     public SimStateTransferHandler(MARS_Main mars) {
         super();
         this.mars = mars;

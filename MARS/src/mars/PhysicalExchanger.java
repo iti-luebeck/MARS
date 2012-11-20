@@ -37,6 +37,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public abstract void init(Node auv_node);
     
+    /**
+     * 
+     */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
 
@@ -93,6 +96,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     protected MARSNodeMain mars_node = null;
     
+    /**
+     * 
+     */
     protected int rosSequenceNumber = 0;
     
     /*
@@ -247,10 +253,18 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         variables.put("ros_publish_rate",ros_publish_rate);
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getRos_frame_id() {       
         return (String)variables.get("ros_frame_id");
     }
 
+    /**
+     * 
+     * @param ros_frame_id
+     */
     public void setRos_frame_id(String ros_frame_id) {
         //this.ros_frame_id = ros_frame_id;
         variables.put("ros_frame_id",ros_frame_id);
@@ -278,14 +292,25 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         this.pe = pe;
     }
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,Object> getAllVariables(){
         return variables;
     }
     
+    /**
+     * 
+     * @return
+     */
     public HashMap<String,String> getAllActions(){
         return null;
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
        /* variables.put("noise_type", getNoise_type());
         variables.put("noise_value", getNoise_value());
@@ -295,37 +320,73 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         variables.put("ros_frame_id", getRos_frame_id());*/
     };
     
+    /**
+     * 
+     * @return
+     */
     public String getIcon(){
         return (String)variables.get("icon");
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getIconDND(){
         return (String)variables.get("dnd_icon");
     }
     
+    /**
+     * 
+     * @param icon
+     */
     public void setIcon(String icon){
         variables.put("icon",icon);
     }
     
+    /**
+     * 
+     * @param dnd_icon
+     */
     public void setIconDND(String dnd_icon){
         variables.put("dnd_icon",dnd_icon);
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getAccumulator(){
         return (String)variables.get("accumulator");
     }
     
+    /**
+     * 
+     * @param accumulator
+     */
     public void setAccumulator(String accumulator){
         variables.put("accumulator",accumulator);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Float getCurrentConsumption(){
         return (Float)variables.get("currentConsumption");
     }
     
+    /**
+     * 
+     * @param currentConsumption
+     */
     public void setCurrentConsumptio(float currentConsumption){
         variables.put("currentConsumption",currentConsumption);
     }
     
+    /**
+     * 
+     * @param path
+     */
     public abstract void updateState(TreePath path);
 }

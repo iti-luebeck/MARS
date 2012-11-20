@@ -37,6 +37,10 @@ public class AUVManagerModel implements TreeModel{
     private final AUV_Manager auvManager;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
+    /**
+     * 
+     * @param auvManager
+     */
     public AUVManagerModel(AUV_Manager auvManager) {
         this.auvManager = auvManager;
     }

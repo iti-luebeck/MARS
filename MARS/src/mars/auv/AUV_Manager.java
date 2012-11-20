@@ -161,6 +161,7 @@ public class AUV_Manager {
     
     /**
      * 
+     * @param auv_name 
      * @return
      */
     public MARSNodeMain getMARSNodeForAUV(String auv_name) {
@@ -169,7 +170,7 @@ public class AUV_Manager {
 
     /**
      * 
-     * @param mars_node
+     * @param mars_nodes 
      */
     public void setMARSNodes(HashMap<String,MARSNodeMain> mars_nodes) {
         this.mars_nodes = mars_nodes;

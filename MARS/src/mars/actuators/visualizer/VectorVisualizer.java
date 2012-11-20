@@ -73,7 +73,7 @@ public class VectorVisualizer extends Actuator{
 
     /**
      *
-     * @param MotorStartVector
+     * @param Position 
      */
     public void setVectorVisualizerPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -81,7 +81,7 @@ public class VectorVisualizer extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param VectorVisualizerDirection 
      */
     public void setVectorVisualizerDirection(Vector3f VectorVisualizerDirection){
         variables.put("VectorVisualizerDirection", VectorVisualizerDirection);
@@ -103,10 +103,18 @@ public class VectorVisualizer extends Actuator{
         return (Vector3f)variables.get("Position");
     }
 
+    /**
+     * 
+     * @return
+     */
     public ColorRGBA getColor() {
         return (ColorRGBA)variables.get("Color");
     }
 
+    /**
+     * 
+     * @param Color
+     */
     public void setColor(ColorRGBA Color) {
         variables.put("Color", Color);
     }
@@ -171,6 +179,10 @@ public class VectorVisualizer extends Actuator{
         
     }
     
+    /**
+     * 
+     * @param vector
+     */
     public void updateVector(final Vector3f vector){
         System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + vector + "\"");
         Future fut = this.simauv.enqueue(new Callable() {

@@ -90,7 +90,13 @@ public class MyProjectedGrid extends Mesh {
     private Vector4f pointTop = new Vector4f();
     private Vector4f pointBottom = new Vector4f();
     private Vector3f realPoint = new Vector3f();
+    /**
+     * 
+     */
     public boolean freezeProjector = false;
+    /**
+     * 
+     */
     public boolean useReal = false;
     private Vector3f projectorLoc = new Vector3f();
     private Timer timer;
@@ -103,6 +109,15 @@ public class MyProjectedGrid extends Mesh {
     private float[] normBufArray;
     private float[] texBufArray;
 
+    /**
+     * 
+     * @param timer
+     * @param cam
+     * @param sizeX
+     * @param sizeY
+     * @param texureScale
+     * @param heightGenerator
+     */
     public MyProjectedGrid(Timer timer, Camera cam, int sizeX, int sizeY, float texureScale, HeightGenerator heightGenerator) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -126,18 +141,33 @@ public class MyProjectedGrid extends Mesh {
         buildNormals();
     }
 
+    /**
+     * 
+     */
     public void switchFreeze() {
         freezeProjector = !freezeProjector;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getTextureScale() {
         return textureScale;
     }
 
+    /**
+     * 
+     * @param textureScale
+     */
     public void setTextureScale(float textureScale) {
         this.textureScale = textureScale;
     }
 
+    /**
+     * 
+     * @param modelViewMatrix
+     */
     public void update(Matrix4f modelViewMatrix) {
         if (freezeProjector) {
             return;
@@ -390,6 +420,14 @@ public class MyProjectedGrid extends Mesh {
         resultVec.w = (1 - changeAmnt) * beginVec.w + changeAmnt * finalVec.w;
     }
 
+    /**
+     * 
+     * @param camheight
+     * @param screenPosition
+     * @param viewProjectionMatrix
+     * @param store
+     * @return
+     */
     public static Vector4f getWorldIntersection(float camheight, Vector2f screenPosition, Matrix4f viewProjectionMatrix, Vector4f store) {
         Vector4f origin = new Vector4f();
         Vector4f direction = new Vector4f();

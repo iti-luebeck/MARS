@@ -97,7 +97,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
 
     /**
      *
-     * @param MotorStartVector
+     * @param Position 
      */
     public void setMotorPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -257,6 +257,10 @@ public class Thruster extends Actuator implements Moveable,Keys{
         MotorCurrent = 0f;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getMotorCurrent() {
         return MotorCurrent;
     }
@@ -265,6 +269,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
      * Don't call this anymore. You have first to call setLocalRotationAxisPoints once at the begining of the simulation
      * @param rotation_axis
      * @param alpha
+     * @deprecated 
      */
     @Override
     @Deprecated
@@ -278,6 +283,10 @@ public class Thruster extends Actuator implements Moveable,Keys{
         PhysicalExchanger_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param alpha
+     */
     @Override
     public void updateRotation(float alpha){
         /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
@@ -288,6 +297,10 @@ public class Thruster extends Actuator implements Moveable,Keys{
         Rotation_Node.setLocalRotation(quat);
     }
     
+    /**
+     * 
+     * @param world_rotation_axis_points
+     */
     @Override
     public void setLocalRotationAxisPoints(Matrix3f world_rotation_axis_points){
         Vector3f WorldServoEnd = world_rotation_axis_points.getColumn(0);
@@ -314,16 +327,29 @@ public class Thruster extends Actuator implements Moveable,Keys{
         
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public String getSlaveName(){
         return getPhysicalExchangerName();
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public HashMap<String,String> getAllActions(){
         return action_mapping;
     }
     
+    /**
+     * 
+     * @param inputManager
+     * @param keyconfig
+     */
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){

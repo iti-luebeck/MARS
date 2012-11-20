@@ -76,7 +76,7 @@ public class Orientationmeter extends Sensor{
     
     /**
      *
-     * @param SonarMinRange
+     * @param addedOrientation 
      */
     public void setAddedOrientation(Vector3f addedOrientation) {
         variables.put("addedOrientation", addedOrientation);

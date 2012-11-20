@@ -59,12 +59,24 @@ public class Servo extends Actuator implements Manipulating,Keys{
     private List<String> slaves_names = new ArrayList<String>();
     private List<Moveable> slaves = new ArrayList<Moveable>();
     
+    /**
+     * 
+     */
     protected  float OperatingAngle = 5.235987f;
     
+    /**
+     * 
+     */
     protected int ServoNeutralPosition = 0;
     
+    /**
+     * 
+     */
     protected float Resolution = 0.005061f;
     
+    /**
+     * 
+     */
     protected float SpeedPerDegree = 0.003266f;
     
     private int current_angle_iteration = 0;
@@ -129,6 +141,9 @@ public class Servo extends Actuator implements Manipulating,Keys{
         } catch (IOException e) { }
     }
 
+    /**
+     * 
+     */
     @Override
     public void initAfterJAXB() {
         super.initAfterJAXB();
@@ -140,50 +155,98 @@ public class Servo extends Actuator implements Manipulating,Keys{
         SpeedPerIteration = (getResolution())*((getSpeedPerDegree())/((float)(Math.PI*2)/360f));
     }
 
+    /**
+     * 
+     * @return
+     */
     public Vector3f getServoDirection() {
         return (Vector3f)variables.get("ServoDirection");
     }
 
+    /**
+     * 
+     * @param ServoDirection
+     */
     public void setServoDirection(Vector3f ServoDirection) {
         variables.put("ServoDirection", ServoDirection);
     }
 
+    /**
+     * 
+     * @return
+     */
     public Vector3f getServoStartVector() {
         return (Vector3f)variables.get("Position");
     }
 
+    /**
+     * 
+     * @param Position
+     */
     public void setServoStartVector(Vector3f Position) {
         variables.put("Position", Position);
     }
     
+    /**
+     * 
+     * @return
+     */
     public float getOperatingAngle() {
         return (Float)variables.get("OperatingAngle");
     }
 
+    /**
+     * 
+     * @param OperatingAngle
+     */
     public void setOperatingAngle(float OperatingAngle) {
         variables.put("OperatingAngle", OperatingAngle);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getResolution() {
         return (Float)variables.get("Resolution");
     }
 
+    /**
+     * 
+     * @param Resolution
+     */
     public void setResolution(float Resolution) {
         variables.put("Resolution", Resolution);
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getServoNeutralPosition() {
         return (Integer)variables.get("ServoNeutralPosition");
     }
 
+    /**
+     * 
+     * @param ServoNeutralPosition
+     */
     public void setServoNeutralPosition(float ServoNeutralPosition) {
         variables.put("ServoNeutralPosition", ServoNeutralPosition);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getSpeedPerDegree() {
         return (Float)variables.get("SpeedPerDegree");
     }
 
+    /**
+     * 
+     * @param SpeedPerDegree
+     */
     public void setSpeedPerDegree(float SpeedPerDegree) {
         variables.put("SpeedPerDegree", SpeedPerDegree);
     }
@@ -278,6 +341,10 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public Matrix3f getWorldRotationAxisPoints(){
         return new Matrix3f().setColumn(0, ServoEnd.getWorldTranslation()).setColumn(1, ServoStart.getWorldTranslation());
@@ -295,6 +362,10 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
     
+    /**
+     * 
+     * @param desired_angle_iteration
+     */
     public void setDesiredAnglePosition(int desired_angle_iteration){
         System.out.println("desired_angle_iteration: " + desired_angle_iteration);
         if(desired_angle_iteration > max_angle_iteration){
@@ -306,6 +377,10 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
     
+    /**
+     * 
+     * @param desired_angle
+     */
     public void setDesiredAnglePosition(double desired_angle){
         if(desired_angle >= Math.PI/2f){
             desired_angle = Math.PI/2f;
@@ -323,14 +398,26 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getDesiredAnglePosition(){
         return this.desired_angle_iteration;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getCurentAnglePosition(){
         return this.current_angle_iteration;
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public HashMap<String,String> getAllActions(){
         return action_mapping;
@@ -338,6 +425,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     /**
      * 
+     * @param name 
      * @return
      */
     @Override
@@ -352,6 +440,10 @@ public class Servo extends Actuator implements Manipulating,Keys{
         return null;
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public ArrayList getSlavesNames(){
         return (ArrayList)slaves_names;
@@ -371,6 +463,10 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
     
+    /**
+     * 
+     * @param slaves
+     */
     @Override
     public void addSlaves(ArrayList slaves){
         Iterator iter = slaves.iterator();
@@ -380,6 +476,11 @@ public class Servo extends Actuator implements Manipulating,Keys{
         }
     }
         
+    /**
+     * 
+     * @param inputManager
+     * @param keyconfig
+     */
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){

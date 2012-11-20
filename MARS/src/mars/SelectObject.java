@@ -30,8 +30,16 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
  
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class SelectObject extends SimpleApplication implements ActionListener{
  
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         SelectObject app = new SelectObject();
         app.start();
@@ -42,6 +50,9 @@ public class SelectObject extends SimpleApplication implements ActionListener{
     Node scene;
     Node sub_scene;
  
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
  
@@ -130,7 +141,10 @@ public class SelectObject extends SimpleApplication implements ActionListener{
     }
     }
  
-      protected void initCrossHairs() {
+        /**
+         * 
+         */
+        protected void initCrossHairs() {
             guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
             BitmapText ch = new BitmapText(guiFont, false);
             ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
@@ -149,7 +163,11 @@ public class SelectObject extends SimpleApplication implements ActionListener{
  
           }
  
-@Override
+        /**
+         * 
+         * @param tpf
+         */
+        @Override
 public void simpleUpdate(float tpf)
 {
  

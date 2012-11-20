@@ -180,7 +180,7 @@ public class Initializer {
     /**
      *
      * @param mars
-     * @param mars_settings
+     * @param MARS_settings 
      * @param auv_manager 
      * @param com_manager 
      * @deprecated 
@@ -212,6 +212,7 @@ public class Initializer {
      * @param simstate
      * @param auv_manager
      * @param com_manager
+     * @param physical_environment  
      */
     public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager, PhysicalEnvironment physical_environment){
         this.mars = mars;
@@ -330,6 +331,9 @@ public class Initializer {
     /*
      * setting up the raw_server for communication with the auvs
      */
+    /**
+     * 
+     */
     public void setupServer(){
         if(mars_settings.isRAW_Server_enabled()){
             raw_server = new MARS_Server( mars, auv_manager, com_manager );
@@ -348,6 +352,9 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     */
     public void killServer(){
         Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Killing ROS Server...", "");
         if(this.getROS_Server() != null){
@@ -358,6 +365,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean ServerRunning(){
         if(this.isROS_ServerReady()){
             /*if(this.getROS_Server().getMarsNode() != null){
@@ -371,6 +382,10 @@ public class Initializer {
         return false;
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean checkROSServer(){
                 Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
                 while(!this.isROS_ServerReady()){
@@ -507,6 +522,9 @@ public class Initializer {
         fpp.addFilter(lsf);
     }
     
+    /**
+     * 
+     */
     public void setupProjectedWavesWater(){
         setupgridwaves(mars.getCamera(),mars.getViewPort(),mars.getTimer());
     }
@@ -523,6 +541,9 @@ public class Initializer {
         hideProjectedWavesWater(mars_settings.isSetupProjectedWavesWater());
     }
     
+    /**
+     * 
+     */
     public void updateProjectedWavesWater(){
         whg.setHeightbig(mars_settings.getProjectedWavesWaterHeightbig());
         whg.setHeightsmall(mars_settings.getProjectedWavesWaterHeightsmall());
@@ -543,10 +564,20 @@ public class Initializer {
         return waterProcessor.getMaterial();
     }
 
+    /**
+     * 
+     * @return
+     */
     public WaterHeightGenerator getWhg() {
         return whg;
     }
     
+    /**
+     * 
+     * @param x
+     * @param z
+     * @return
+     */
     public float getCurrentWaterHeight(float x, float z){
         if(mars_settings.isSetupProjectedWavesWater()){
             return whg.getHeight(x, z, mars.getTimer().getTimeInSeconds());
@@ -556,6 +587,10 @@ public class Initializer {
     }
 
     
+    /**
+     * 
+     * @param tpf
+     */
     public void updateProjectedWavesWater(float tpf){
         float[] angles = new float[3];
         mars.getCamera().getRotation().toAngles(angles);
@@ -613,6 +648,9 @@ public class Initializer {
         viewPort.addProcessor(waterProcessor);
     }
 
+    /**
+     * 
+     */
     public void setupPlaneWater(){
         // A translucent/transparent texture, similar to a window frame.
         /*Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
@@ -681,6 +719,9 @@ public class Initializer {
         fpp.addFilter(lf);
     }
 
+    /**
+     * 
+     */
     public void setupLight(){
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
@@ -773,6 +814,9 @@ public class Initializer {
         hideAxis(mars_settings.isSetupAxis());
     }
     
+    /**
+     * 
+     */
     public void setupGrid(){
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -794,6 +838,10 @@ public class Initializer {
         });
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideAxis(boolean hide){
         if(!hide){
             axisNode.setCullHint(CullHint.Always);
@@ -802,6 +850,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideGrid(boolean hide){
         if(!hide){
             gridNode.setCullHint(CullHint.Always);
@@ -810,6 +862,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hidePlaneWater(boolean hide){
         if(!hide){
             water_plane.setCullHint(CullHint.Always);
@@ -818,6 +874,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideProjectedWavesWater(boolean hide){
         if(!hide){
             projectedGridGeometry.setCullHint(CullHint.Always);
@@ -826,6 +886,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideCrossHairs(boolean hide){
         if(!hide){
             ch.setCullHint(CullHint.Always);
@@ -834,6 +898,10 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param hide
+     */
     public void hideFPS(boolean hide){
         if(!hide){
             mars.setDisplayFps(false);
@@ -844,15 +912,26 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     * @param framelimit
+     */
     public void changeFrameLimit(int framelimit){
         mars.getSettings().setFrameRate(framelimit);
         mars.restart();
     }
     
+    /**
+     * 
+     */
     public void changePlaneWater(){
         
     }
     
+    /**
+     * 
+     * @param tpf
+     */
     public void updateGrass(float tpf){
         forester.update(tpf);
     }
@@ -1276,6 +1355,9 @@ public class Initializer {
         bulletAppState.getPhysicsSpace().add(terrain_node);
     }
     
+    /**
+     * 
+     */
     public void updateTerrain(){
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
@@ -1370,6 +1452,13 @@ public class Initializer {
 
     }
     
+    /**
+     * 
+     * @param flipX
+     * @param flipY
+     * @param colorImage
+     * @return
+     */
     public int[] load(boolean flipX, boolean flipY, Image colorImage) {
 
         int imageWidth = colorImage.getWidth();
@@ -1417,6 +1506,13 @@ public class Initializer {
         return heightData;
     }
     
+    /**
+     * 
+     * @param buf
+     * @param image
+     * @param position
+     * @return
+     */
     protected int getHeightAtPostion(ByteBuffer buf, Image image, int position) {
         switch (image.getFormat()){
             case Luminance16:
@@ -1428,6 +1524,9 @@ public class Initializer {
         }
     }
     
+    /**
+     * 
+     */
     public void updateGrass(){
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
@@ -1470,46 +1569,90 @@ public class Initializer {
         return terrain_physics_control;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getTerrain_image_heigth() {
         return terrain_image_heigth;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getTerrain_image_width() {
         return terrain_image_width;
     }
     
+    /**
+     * 
+     * @return
+     */
     public byte[] getTerrainByteArray() {
         return terrain_byte_arrray;
     }
     
+    /**
+     * 
+     * @return
+     */
     public ChannelBuffer getTerrainChannelBuffer() {
         return terrainChannelBuffer;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Node getTerrainNode(){
         return terrain_node;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int[] getFlowX(){
         return pixelSamplesFlowX;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int[] getFlowY(){
         return pixelSamplesFlowY;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getFlow_image_heigth() {
         return flow_image_heigth;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getFlow_image_width() {
         return flow_image_width;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Vector3f getFlowVector(){
         return flowVector;
     }
 
+    /**
+     * 
+     * @param flowVector
+     */
     public void setFlowVector(Vector3f flowVector) {
         this.flowVector = flowVector;
     }

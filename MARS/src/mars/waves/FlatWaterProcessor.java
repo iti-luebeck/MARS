@@ -58,30 +58,105 @@ import com.jme3.water.ReflectionProcessor;
  */
 public class FlatWaterProcessor implements SceneProcessor {
 
+    /**
+     * 
+     */
     protected RenderManager rm;
+    /**
+     * 
+     */
     protected ViewPort vp;
+    /**
+     * 
+     */
     protected Spatial reflectionScene;
+    /**
+     * 
+     */
     protected ViewPort reflectionView;
+    /**
+     * 
+     */
     protected ViewPort refractionView;
+    /**
+     * 
+     */
     protected FrameBuffer reflectionBuffer;
+    /**
+     * 
+     */
     protected FrameBuffer refractionBuffer;
+    /**
+     * 
+     */
     protected Camera reflectionCam;
+    /**
+     * 
+     */
     protected Camera refractionCam;
+    /**
+     * 
+     */
     protected Texture2D reflectionTexture;
+    /**
+     * 
+     */
     protected Texture2D refractionTexture;
+    /**
+     * 
+     */
     protected Texture2D depthTexture;
+    /**
+     * 
+     */
     protected Texture2D normalTexture;
+    /**
+     * 
+     */
     protected Texture2D dudvTexture;
+    /**
+     * 
+     */
     protected int renderWidth = 512;
+    /**
+     * 
+     */
     protected int renderHeight = 512;
+    /**
+     * 
+     */
     protected Plane plane = new Plane(Vector3f.UNIT_Y, Vector3f.ZERO.dot(Vector3f.UNIT_Y));
+    /**
+     * 
+     */
     protected float speed = 0.05f;
+    /**
+     * 
+     */
     protected Ray ray = new Ray();
+    /**
+     * 
+     */
     protected Vector3f targetLocation = new Vector3f();
+    /**
+     * 
+     */
     protected AssetManager manager;
+    /**
+     * 
+     */
     protected Material material;
+    /**
+     * 
+     */
     protected float waterDepth = 1;
+    /**
+     * 
+     */
     protected float waterTransparency = 0.4f;
+    /**
+     * 
+     */
     protected boolean debug = false;
     private Picture dispRefraction;
     private Picture dispReflection;
@@ -94,6 +169,10 @@ public class FlatWaterProcessor implements SceneProcessor {
     private Vector3f vect2 = new Vector3f();
     private Vector3f vect3 = new Vector3f();
 
+    /**
+     * 
+     * @param manager
+     */
     public FlatWaterProcessor(AssetManager manager) {
         this.manager = manager;
         manager.registerLocator("Assets/gridwaves", FileLocator.class);
@@ -126,6 +205,10 @@ public class FlatWaterProcessor implements SceneProcessor {
         }
     }
 
+    /**
+     * 
+     * @param manager
+     */
     protected void loadTextures(AssetManager manager) {
         manager.registerLocator("Assets/gridwaves", FileLocator.class);
         normalTexture = (Texture2D) manager.loadTexture("water_normalmap.dds");
@@ -134,18 +217,28 @@ public class FlatWaterProcessor implements SceneProcessor {
         dudvTexture.setWrap(Texture.WrapMode.Repeat);
     }
 
+    /**
+     * 
+     */
     protected void createTextures() {
         reflectionTexture = new Texture2D(renderWidth, renderHeight, Format.RGBA8);
         refractionTexture = new Texture2D(renderWidth, renderHeight, Format.RGBA8);
         depthTexture = new Texture2D(renderWidth, renderHeight, Format.Depth);
     }
 
+    /**
+     * 
+     * @param mat
+     */
     protected void applyTextures(Material mat) {
         mat.setTexture("reflection", reflectionTexture);
         mat.setTexture("normalMap", normalTexture);
         mat.setTexture("dudvMap", dudvTexture);
     }
 
+    /**
+     * 
+     */
     protected void createPreViews() {
         reflectionCam = new Camera(renderWidth, renderHeight);
         refractionCam = new Camera(renderWidth, renderHeight);
@@ -187,14 +280,26 @@ public class FlatWaterProcessor implements SceneProcessor {
         savedTpf = tpf;
     }
 
+    /**
+     * 
+     * @param spat
+     */
     public void setReflectionScene(Spatial spat) {
         reflectionScene = spat;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Material getMaterial() {
         return material;
     }
 
+    /**
+     * 
+     * @param debug
+     */
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
@@ -256,6 +361,12 @@ public class FlatWaterProcessor implements SceneProcessor {
     }
 
     //debug only : displays maps
+    /**
+     * 
+     * @param r
+     * @param pic
+     * @param left
+     */
     protected void displayMap(Renderer r, Picture pic, int left) {
         Camera cam = vp.getCamera();
         rm.setCamera(cam, true);

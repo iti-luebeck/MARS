@@ -51,6 +51,10 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import javax.swing.*;
 
+/**
+ * 
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ */
 public class TestCanvas {
 
     private static JmeCanvasContext context;
@@ -196,6 +200,10 @@ public class TestCanvas {
         createMenu();
     }
 
+    /**
+     * 
+     * @param appClass
+     */
     public static void createCanvas(String appClass){
         AppSettings settings = new AppSettings(true);
         settings.setWidth(640);
@@ -222,6 +230,9 @@ public class TestCanvas {
         canvas.setSize(settings.getWidth(), settings.getHeight());
     }
 
+    /**
+     * 
+     */
     public static void startApp(){
         app.startCanvas();
         app.enqueue(new Callable<Void>(){
@@ -236,6 +247,10 @@ public class TestCanvas {
         
     }
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args){
         JmeFormatter formatter = new JmeFormatter();
 

@@ -187,6 +187,9 @@ public class MARSApp extends SingleFrameApplication {
         return Application.getInstance(MARSApp.class);
     }
 
+    /**
+     * 
+     */
     @Override
     protected void shutdown() {
         super.shutdown();

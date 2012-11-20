@@ -39,6 +39,9 @@ public class BallastTank extends Actuator implements Keys{
      *
      */
     protected float volumePerSecond = 0.1f;
+    /**
+     * 
+     */
     protected float maxVolume = 1.0f;
     private float desiredVolume = 0f;
     private float currentVolume = 0f;
@@ -75,14 +78,26 @@ public class BallastTank extends Actuator implements Keys{
         super(simstate);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getCurrentVolume() {
         return currentVolume;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getDesiredVolume() {
         return desiredVolume;
     }
 
+    /**
+     * 
+     * @param desiredVolume
+     */
     public void setDesiredVolume(float desiredVolume) {
         if(getMaxVolume() < desiredVolume){
             this.desiredVolume = getMaxVolume();
@@ -93,29 +108,49 @@ public class BallastTank extends Actuator implements Keys{
         }
     }
     
+    /**
+     * 
+     * @param percent
+     */
     public void setDesiredVolumePrecent(float percent){
         setDesiredVolume((percent)*getMaxVolume());
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getMaxVolume() {
         return (Float)variables.get("maxVolume");
     }
 
+    /**
+     * 
+     * @param maxVolume
+     */
     public void setMaxVolume(float maxVolume) {
         variables.put("maxVolume", maxVolume);
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getVolumePerSecond() {
         return (Float)variables.get("volumePerSecond");
     }
 
+    /**
+     * 
+     * @param volumePerSecond
+     */
     public void setVolumePerSecond(float volumePerSecond) {
         variables.put("volumePerSecond", volumePerSecond);
     }
 
     /**
      *
-     * @param BallastStartVector
+     * @param Position 
      */
     public void setBallastPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -191,11 +226,20 @@ public class BallastTank extends Actuator implements Keys{
         setDesiredVolume(0f);
     }
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public HashMap<String,String> getAllActions(){
         return action_mapping;
     }
     
+    /**
+     * 
+     * @param inputManager
+     * @param keyconfig
+     */
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){

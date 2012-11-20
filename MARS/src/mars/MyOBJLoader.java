@@ -74,30 +74,87 @@ public final class MyOBJLoader implements AssetLoader {
 
     private static final Logger logger = Logger.getLogger(MyOBJLoader.class.getName());
 
+    /**
+     * 
+     */
     protected final ArrayList<Vector3f> verts = new ArrayList<Vector3f>();
+    /**
+     * 
+     */
     protected final ArrayList<Vector2f> texCoords = new ArrayList<Vector2f>();
+    /**
+     * 
+     */
     protected final ArrayList<Vector3f> norms = new ArrayList<Vector3f>();
     
+    /**
+     * 
+     */
     protected final ArrayList<Face> faces = new ArrayList<Face>();
+    /**
+     * 
+     */
     protected final HashMap<String, ArrayList<Face>> matFaces = new HashMap<String, ArrayList<Face>>();
     
+    /**
+     * 
+     */
     protected String currentMatName;
+    /**
+     * 
+     */
     protected String currentObjectName;
 
+    /**
+     * 
+     */
     protected final HashMap<Vertex, Integer> vertIndexMap = new HashMap<Vertex, Integer>(100);
+    /**
+     * 
+     */
     protected final IntMap<Vertex> indexVertMap = new IntMap<Vertex>(100);
+    /**
+     * 
+     */
     protected int curIndex    = 0;
+    /**
+     * 
+     */
     protected int objectIndex = 0;
+    /**
+     * 
+     */
     protected int geomIndex   = 0;
 
+    /**
+     * 
+     */
     protected Scanner scan;
+    /**
+     * 
+     */
     protected ModelKey key;
+    /**
+     * 
+     */
     protected AssetManager assetManager;
+    /**
+     * 
+     */
     protected MaterialList matList;
 
+    /**
+     * 
+     */
     protected String objName;
+    /**
+     * 
+     */
     protected Node objNode;
 
+    /**
+     * 
+     */
     protected static class Vertex {
 
         Vector3f v;
@@ -136,18 +193,32 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
     
+    /**
+     * 
+     */
     protected static class Face {
         Vertex[] verticies;
     }
     
+    /**
+     * 
+     */
     protected class ObjectGroup {
         
         final String objectName;
         
+        /**
+         * 
+         * @param objectName
+         */
         public ObjectGroup(String objectName){
             this.objectName = objectName;
         }
         
+        /**
+         * 
+         * @return
+         */
         public Spatial createGeometry(){
             Node groupNode = new Node(objectName);
             
@@ -169,6 +240,9 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
 
+    /**
+     * 
+     */
     public void reset(){
         verts.clear();
         texCoords.clear();
@@ -186,6 +260,10 @@ public final class MyOBJLoader implements AssetLoader {
         scan = null;
     }
 
+    /**
+     * 
+     * @param vert
+     */
     protected void findVertexIndex(Vertex vert){
         Integer index = vertIndexMap.get(vert);
         if (index != null){
@@ -197,6 +275,11 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
 
+    /**
+     * 
+     * @param f
+     * @return
+     */
     protected Face[] quadToTriangle(Face f){
         assert f.verticies.length == 4;
 
@@ -240,6 +323,9 @@ public final class MyOBJLoader implements AssetLoader {
 
     private ArrayList<Vertex> vertList = new ArrayList<Vertex>();
 
+    /**
+     * 
+     */
     protected void readFace(){
         Face f = new Face();
         vertList.clear();
@@ -293,6 +379,10 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     protected Vector3f readVector3(){
         Vector3f v = new Vector3f();
 
@@ -303,6 +393,10 @@ public final class MyOBJLoader implements AssetLoader {
         return v;
     }
 
+    /**
+     * 
+     * @return
+     */
     protected Vector2f readVector2(){
         Vector2f v = new Vector2f();
 
@@ -322,6 +416,11 @@ public final class MyOBJLoader implements AssetLoader {
         return v;
     }
 
+    /**
+     * 
+     * @param name
+     * @throws IOException
+     */
     protected void loadMtlLib(String name) throws IOException{
         if (!name.toLowerCase().endsWith(".mtl"))
             throw new IOException("Expected .mtl file! Got: " + name);
@@ -344,6 +443,10 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     protected boolean nextStatement(){
         try {
             scan.skip(".*\r{0,1}\n");
@@ -354,6 +457,11 @@ public final class MyOBJLoader implements AssetLoader {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws IOException
+     */
     protected boolean readLine() throws IOException{
         if (!scan.hasNext()){
             return false;
@@ -396,6 +504,13 @@ public final class MyOBJLoader implements AssetLoader {
         return true;
     }
 
+    /**
+     * 
+     * @param faceList
+     * @param matName
+     * @return
+     * @throws IOException
+     */
     protected Geometry createGeometry(ArrayList<Face> faceList, String matName) throws IOException{
         if (faceList.isEmpty())
             throw new IOException("No geometry data to generate mesh");
@@ -430,6 +545,11 @@ public final class MyOBJLoader implements AssetLoader {
         return geom;
     }
 
+    /**
+     * 
+     * @param faceList
+     * @return
+     */
     protected Mesh constructMesh(ArrayList<Face> faceList){
         Mesh m = new Mesh();
         m.setMode(Mode.Triangles);

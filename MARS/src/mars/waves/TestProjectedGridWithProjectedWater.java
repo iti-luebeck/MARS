@@ -65,12 +65,19 @@ public class TestProjectedGridWithProjectedWater extends SimpleApplication {
     ProjectedWaterProcessorWithRefraction waterProcessor;
     private Vector3f lightPos = new Vector3f(33, 12, -29);
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         TestProjectedGridWithProjectedWater app = new TestProjectedGridWithProjectedWater();
         app.setShowSettings(false);
         app.start(); // start JME3
     }
 
+    /**
+     * 
+     */
     @Override
     public void simpleInitApp() {
         cam.setFrustumPerspective(45.0f, (float) settings.getWidth() / (float) settings.getHeight(), 1f, 2000f);
@@ -126,6 +133,10 @@ public class TestProjectedGridWithProjectedWater extends SimpleApplication {
         
     }
 
+    /**
+     * 
+     * @param tpf
+     */
     @Override
     public void simpleUpdate(float tpf) {
         float[] angles = new float[3];

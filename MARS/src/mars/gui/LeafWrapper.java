@@ -11,14 +11,26 @@ package mars.gui;
 public class LeafWrapper {
     private Object userData;
     
+    /**
+     * 
+     * @param userData
+     */
     public LeafWrapper(Object userData){
         this.userData = userData;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Object getUserData() {
         return userData;
     }
 
+    /**
+     * 
+     * @param userData
+     */
     public void setUserData(Object userData) {
         this.userData = userData;
     }

@@ -27,6 +27,10 @@ public class PhysicalEnvironmentModel implements TreeModel{
     private final PhysicalEnvironment penv;
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
+    /**
+     * 
+     * @param penv
+     */
     public PhysicalEnvironmentModel(PhysicalEnvironment penv) {
         this.penv = penv;
     }

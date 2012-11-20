@@ -46,11 +46,18 @@ public class PlanarView extends JPanel implements SonarView{
         fImage = createImage(mis);
     }
     
+    /**
+     * 
+     */
     @Override
     public void repaintAll(){
         this.repaint();
     }
     
+    /**
+     * 
+     * @param dataPoints
+     */
     public void setDataPoints(int dataPoints){
         fWidth = dataPoints;
     }
@@ -58,6 +65,8 @@ public class PlanarView extends JPanel implements SonarView{
     /**
      * 
      * @param data
+     * @param lastHeadPosition
+     * @param resolution  
      */
     public void updateData(byte[] data, float lastHeadPosition, float resolution){
         for (int i = 0 ; i < fHeight; i++) {
@@ -98,15 +107,27 @@ public class PlanarView extends JPanel implements SonarView{
         }
     }
     
+    /**
+     * 
+     * @param color
+     */
     public void changeBackgroundColor(Color color){
         bgcolor = color;
         
     }
     
+    /**
+     * 
+     * @param color
+     */
     public void changeRadarLineColor(Color color){
         radarColor = color;
     }
 
+    /**
+     * 
+     * @param color
+     */
     public void changeHitColor(Color color){
         hitColor = color;
     }

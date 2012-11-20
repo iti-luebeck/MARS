@@ -31,6 +31,9 @@ public class Lamp extends Actuator{
     
     private Node Rotation_Node = new Node();
     
+    /**
+     * 
+     */
     public Lamp(){
         super();
     }
@@ -101,7 +104,7 @@ public class Lamp extends Actuator{
     
         /**
      *
-     * @param MotorStartVector
+     * @param Position 
      */
     public void setLampPosition(Vector3f Position){
         variables.put("Position", Position);
@@ -109,7 +112,7 @@ public class Lamp extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param Direction 
      */
     public void setLampDirection(Vector3f Direction){
         variables.put("Direction", Direction);
@@ -141,7 +144,7 @@ public class Lamp extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param Color 
      */
     public void setColor(ColorRGBA Color){
         variables.put("Color", Color);
@@ -157,7 +160,7 @@ public class Lamp extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param Range 
      */
     public void setRange(float Range){
         variables.put("Range", Range);
@@ -173,7 +176,7 @@ public class Lamp extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param InnerAngle 
      */
     public void setInnerAngle(float InnerAngle){
         variables.put("InnerAngle", InnerAngle);
@@ -189,7 +192,7 @@ public class Lamp extends Actuator{
 
     /**
      *
-     * @param MotorDirection
+     * @param OuterAngle 
      */
     public void setOuterAngle(float OuterAngle){
         variables.put("OuterAngle", OuterAngle);

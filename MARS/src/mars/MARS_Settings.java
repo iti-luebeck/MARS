@@ -110,6 +110,7 @@ public class MARS_Settings{
     /**
      *
      * @param xmll 
+     * @deprecated 
      */
     @Deprecated
     public MARS_Settings(XMLConfigReaderWriter xmll){
@@ -181,6 +182,7 @@ public class MARS_Settings{
     
     /**
      * You have to initialize first when you read the data in trough jaxb.
+     * @deprecated 
      */
     @Deprecated
     public void init(){
@@ -212,6 +214,9 @@ public class MARS_Settings{
         Camera = (HashMap<String,Object>)Misc.get("Camera");
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         Physics = (HashMap<String,Object>)settings.get("Physics");
         Server = (HashMap<String,Object>)settings.get("Server");
@@ -303,6 +308,11 @@ public class MARS_Settings{
         }
     }
     
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
     public void updateState(String target, String hashmapname){
         if(target.equals("enabled") && hashmapname.equals("Axis")){
             initer.hideAxis(isSetupAxis());
@@ -336,6 +346,10 @@ public class MARS_Settings{
         }
     }
     
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
             if( path.getParentPath().getLastPathComponent().toString().equals("Settings")){
@@ -348,7 +362,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param initer
+     * @param init 
      */
     public void setInit(Initializer init) {
         this.initer = init;
@@ -468,7 +482,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param framerate 
+     * @param maxsubsteps 
      */
     public void setPhysicsMaxSubSteps(int maxsubsteps) {
         Physics.put("maxsubsteps", maxsubsteps);
@@ -516,7 +530,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param color
+     * @param ambient_color 
      */
     public void setAmbientColor(ColorRGBA ambient_color) {
         Light.put("ambient_color", ambient_color);
@@ -581,7 +595,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param direction
+     * @param enabled 
      */
     public void setSetupShadow(boolean enabled) {
         Shadow.put("enabled", enabled);
@@ -629,7 +643,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Octaves 
      */
     public void setProjectedWavesWaterOctaves(int Octaves) {
         ProjectedWavesWater.put("Octaves", Octaves);
@@ -645,7 +659,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Scaleybig 
      */
     public void setProjectedWavesWaterScaleybig(float Scaleybig) {
         ProjectedWavesWater.put("Scaleybig", Scaleybig);
@@ -661,7 +675,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Scaleysmall 
      */
     public void setProjectedWavesWaterScaleysmall(float Scaleysmall) {
         ProjectedWavesWater.put("Scaleysmall", Scaleysmall);
@@ -677,7 +691,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Scalexbig 
      */
     public void setProjectedWavesWaterScalexbig(float Scalexbig) {
         ProjectedWavesWater.put("Scalexbig", Scalexbig);
@@ -693,7 +707,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Scalexsmall 
      */
     public void setProjectedWavesWaterScalexsmall(float Scalexsmall) {
         ProjectedWavesWater.put("Scalexsmall", Scalexsmall);
@@ -709,7 +723,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Heightsmall 
      */
     public void setProjectedWavesWaterHeightsmall(float Heightsmall) {
         ProjectedWavesWater.put("Heightsmall", Heightsmall);
@@ -725,7 +739,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Heightbig 
      */
     public void setProjectedWavesWaterHeightbig(float Heightbig) {
         ProjectedWavesWater.put("Heightbig", Heightbig);
@@ -741,7 +755,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Speedbig 
      */
     public void setProjectedWavesWaterSpeedbig(float Speedbig) {
         ProjectedWavesWater.put("Speedbig", Speedbig);
@@ -757,7 +771,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param Speedsmall 
      */
     public void setProjectedWavesWaterSpeedsmall(float Speedsmall) {
         ProjectedWavesWater.put("Speedsmall", Speedsmall);
@@ -789,7 +803,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param ambient 
      */
     public void setSetupAmbient(boolean ambient) {
         Light.put("ambient", ambient);
@@ -901,7 +915,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param master_ip 
+     * @param localip 
      */
     public void setROS_Local_IP(String localip) {
         ROS.put("localip", localip);
@@ -965,7 +979,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param BlurScale
+     * @param LineDistance 
      */
     public void setGridLineDistance(float LineDistance) {
         Grid.put("LineDistance", LineDistance);
@@ -981,7 +995,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param BlurScale
+     * @param SizeX 
      */
     public void setSizeX(int SizeX) {
         Grid.put("SizeX", SizeX);
@@ -997,7 +1011,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param BlurScale
+     * @param SizeY 
      */
     public void setSizeY(int SizeY) {
         Grid.put("SizeY", SizeY);
@@ -1045,7 +1059,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param rotation 
      */
     public void setGridRotation(Vector3f rotation) {
         Grid.put("rotation", rotation);
@@ -1302,7 +1316,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param tileLength
+     * @param farViewingDistance 
      */
     public void setGrassFarViewingDistance(float farViewingDistance) {
         Grass.put("farViewingDistance", farViewingDistance);
@@ -1318,7 +1332,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param tileLength
+     * @param fadingRange 
      */
     public void setGrassFadingRange(float fadingRange) {
         Grass.put("fadingRange", fadingRange);
@@ -1334,7 +1348,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param tileLength
+     * @param pagesizeResolution 
      */
     public void setGrassPagesizeResolution(int pagesizeResolution) {
         Grass.put("pagesizeResolution", pagesizeResolution);
@@ -1366,7 +1380,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param advanced 
      */
     public void setSetupAdvancedTerrain(boolean advanced) {
         Terrain.put("advanced", advanced);
@@ -1382,7 +1396,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param enabled
+     * @param lod 
      */
     public void setTerrainLod(boolean lod) {
         Terrain.put("lod", lod);
@@ -1391,6 +1405,7 @@ public class MARS_Settings{
     /**
      *
      * @return
+     * @deprecated 
      */
     @Deprecated
     public Float getTileHeigth() {
@@ -1400,6 +1415,7 @@ public class MARS_Settings{
     /**
      *
      * @param tileHeigth
+     * @deprecated 
      */
     @Deprecated
     public void setTileHeigth(float tileHeigth) {
@@ -1464,7 +1480,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param patchSize 
      */
     public void setTerrainPatchSize(int patchSize) {
         Terrain.put("patchSize", patchSize);
@@ -1496,7 +1512,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param scale 
      */
     public void setTerrain_scale(Vector3f scale) {
         Terrain.put("scale", scale);
@@ -1512,7 +1528,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param rotation 
      */
     public void setTerrain_rotation(Vector3f rotation) {
         Terrain.put("rotation", rotation);
@@ -1528,7 +1544,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param filepath_heightmap
+     * @param filepath_flowmap_x 
      */
     public void setFlowfilepath_x(String filepath_flowmap_x) {
         Flow.put("filepath_flowmap_x", filepath_flowmap_x);
@@ -1544,7 +1560,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param filepath_heightmap
+     * @param filepath_flowmap_y 
      */
     public void setFlowfilepath_y(String filepath_flowmap_y) {
         Flow.put("filepath_flowmap_y", filepath_flowmap_y);
@@ -1560,7 +1576,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param filepath_heightmap
+     * @param flowScale 
      */
     public void setFlowForceScale(float flowScale) {
         Flow.put("flowScale", flowScale);
@@ -1576,7 +1592,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param filepath_heightmap
+     * @param enabled 
      */
     public void setSetupFlow(boolean enabled) {
         Flow.put("enabled", enabled);
@@ -1608,7 +1624,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param scale 
      */
     public void setFlowScale(Vector3f scale) {
         Flow.put("scale", scale);
@@ -1624,7 +1640,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param position
+     * @param rotation 
      */
     public void setFlowRotation(Vector3f rotation) {
         Flow.put("rotation", rotation);
@@ -1704,7 +1720,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param color
+     * @param AmbientSelection 
      */
     public void setAmbientSelection(boolean AmbientSelection) {
         Gui.put("AmbientSelection", AmbientSelection);
@@ -1720,7 +1736,7 @@ public class MARS_Settings{
 
     /**
      *
-     * @param color
+     * @param GlowSelection 
      */
     public void setGlowSelection(boolean GlowSelection) {
         Gui.put("GlowSelection", GlowSelection);

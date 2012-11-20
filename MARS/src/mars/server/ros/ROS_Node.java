@@ -87,10 +87,18 @@ public class ROS_Node implements Runnable {
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
     }
 
+    /**
+     * 
+     * @param local_ip
+     */
     public void setLocal_ip(String local_ip) {
         this.local_ip = local_ip;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getLocal_ip() {
         return local_ip;
     }
@@ -134,6 +142,7 @@ public class ROS_Node implements Runnable {
     
     /**
      * 
+     * @param auv 
      * @return
      */
     public MARSNodeMain getMarsNodeForAUV(String auv) {
@@ -148,6 +157,10 @@ public class ROS_Node implements Runnable {
         running = false;
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean checkNodes(){
         for ( String elem : nodes.keySet() ){
             MARSNodeMain node = (MARSNodeMain)nodes.get(elem);
@@ -172,6 +185,9 @@ public class ROS_Node implements Runnable {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Nodes running.", "");
     }
     
+    /**
+     * 
+     */
     public void init(){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Starting ROS Server...", "");
         
@@ -215,6 +231,10 @@ public class ROS_Node implements Runnable {
         nodeMainExecutor.execute(marsnode, nodeConf);
     }
     
+    /**
+     * 
+     * @return
+     */
     public synchronized boolean isInitReady(){
         return initready;
     }

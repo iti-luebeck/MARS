@@ -52,6 +52,7 @@ public class PhysicalEnvironment{
     /**
      *
      * @param xmll 
+     * @deprecated 
      */
     @Deprecated
     public PhysicalEnvironment(XMLConfigReaderWriter xmll) {
@@ -67,21 +68,34 @@ public class PhysicalEnvironment{
     
      /**
      * You have to initialize first when you read the data in trough jaxb.
+     * @deprecated 
      */
     @Deprecated
     public void init(){
     }
     
+    /**
+     * 
+     */
     public void initAfterJAXB(){
         
     }
     
+    /**
+     * 
+     * @param path
+     */
     public void updateState(TreePath path){
         if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
             updateState(path.getLastPathComponent().toString(),"");
         }
     }
     
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
     public void updateState(String target, String hashmapname){
         if(target.equals("collision") && hashmapname.equals("Debug")){
 
