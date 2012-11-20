@@ -1708,6 +1708,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public void enableAUV(String auvName, Vector3f pos){
         AUV auv = auv_manager.getAUV(auvName);
+        pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y);
         if(auv != null){
             if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
                 auv.getAuv_param().setPosition(pos);
@@ -1728,6 +1729,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public void enableSIMOB(String simobName, Vector3f pos){
         SimObject simob = simob_manager.getSimObject(simobName);
+        pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y);
         if(simob != null){
             if( simob.isEnabled()){//check if auf simob already enabled, then only new position
                 simob.setPosition(pos);
