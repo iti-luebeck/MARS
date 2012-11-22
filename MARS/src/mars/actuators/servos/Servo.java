@@ -15,6 +15,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import com.rits.cloning.Cloner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import mars.KeyConfig;
 import mars.Keys;
 import mars.Manipulating;
 import mars.Moveable;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.xml.HashMapAdapter;
@@ -139,6 +141,20 @@ public class Servo extends Actuator implements Manipulating,Keys{
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
         } catch (IOException e) { }
+    }
+    
+    public Servo(Servo servo){
+        super(servo);
+        HashMap<String, String> actionsOriginal = servo.getAllActions();
+        Cloner cloner = new Cloner();
+        action_mapping = cloner.deepClone(actionsOriginal);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Servo actuator = new Servo(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
 
     /**

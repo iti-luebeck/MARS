@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
@@ -61,6 +62,17 @@ public class AmpereMeter extends Sensor{
      */
     public AmpereMeter(SimState simstate){
         super(simstate);
+    }
+    
+    public AmpereMeter(AmpereMeter ampereMeter){
+        super(ampereMeter);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        AmpereMeter sensor = new AmpereMeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

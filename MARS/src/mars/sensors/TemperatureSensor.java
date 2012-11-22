@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
@@ -62,6 +63,17 @@ public class TemperatureSensor extends Sensor{
      */
     public TemperatureSensor(SimState simstate){
         super(simstate);
+    }
+    
+    public TemperatureSensor(TemperatureSensor sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        TemperatureSensor sensor = new TemperatureSensor(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

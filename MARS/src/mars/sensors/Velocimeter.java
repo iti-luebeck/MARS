@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
@@ -38,6 +39,17 @@ public class Velocimeter extends Sensor{
      */
     public Velocimeter(SimState simstate){
         super(simstate);
+    }
+    
+    public Velocimeter(Velocimeter sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Velocimeter sensor = new Velocimeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

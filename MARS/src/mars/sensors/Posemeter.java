@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
@@ -68,6 +69,17 @@ public class Posemeter extends Sensor{
         pos.setSimState(simState);
         oro.setSimState(simState);
         comp.setSimState(simState);
+    }
+    
+    public Posemeter(Posemeter sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Posemeter sensor = new Posemeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

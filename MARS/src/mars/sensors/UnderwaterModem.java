@@ -22,6 +22,7 @@ import java.util.concurrent.Future;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import mars.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
@@ -64,6 +65,17 @@ public class UnderwaterModem extends Sensor{
      */
     public UnderwaterModem(SimState simstate){
         super(simstate);
+    }
+    
+    public UnderwaterModem(UnderwaterModem sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        UnderwaterModem sensor = new UnderwaterModem(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

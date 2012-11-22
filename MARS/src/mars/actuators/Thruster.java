@@ -17,6 +17,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import com.rits.cloning.Cloner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import mars.KeyConfig;
 import mars.Keys;
 import mars.Moveable;
 import mars.NoiseType;
+import mars.PhysicalExchanger;
 import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -93,6 +95,20 @@ public class Thruster extends Actuator implements Moveable,Keys{
      */
     public Thruster(SimState simstate) {
         super(simstate);
+    }
+    
+    public Thruster(Thruster thruster){
+        super(thruster);
+        HashMap<String, String> actionsOriginal = thruster.getAllActions();
+        Cloner cloner = new Cloner();
+        action_mapping = cloner.deepClone(actionsOriginal);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Thruster actuator = new Thruster(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
 
     /**

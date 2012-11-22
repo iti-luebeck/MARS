@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.PickHint;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
@@ -179,6 +180,17 @@ public class Sonar extends Sensor{
 
         this.detectable = detectable;
         rootNode.attachChild(debug_node);
+    }
+    
+    public Sonar(Sonar sonar){
+        super(sonar);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Sonar sensor = new Sonar(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

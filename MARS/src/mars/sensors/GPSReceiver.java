@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
@@ -66,6 +67,17 @@ public class GPSReceiver extends Sensor{
     public GPSReceiver(SimState simstate){
         super(simstate);
         pos.setSimState(simState);
+    }
+    
+    public GPSReceiver(GPSReceiver sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        GPSReceiver sensor = new GPSReceiver(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

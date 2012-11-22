@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
@@ -38,6 +39,17 @@ public class Gyroscope extends Sensor{
      */
     public Gyroscope(SimState simstate){
         super(simstate);
+    }
+    
+    public Gyroscope(Gyroscope sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Gyroscope sensor = new Gyroscope(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

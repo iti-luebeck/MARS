@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.Moveable;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
@@ -101,6 +102,17 @@ public class VideoCamera extends Sensor implements Moveable{
         /*this.renderer = simstate.getMARS().getRenderer();
         this.renderManager = simstate.getMARS().getRenderManager();
         this.initer = simstate.getIniter();*/
+    }
+    
+    public VideoCamera(VideoCamera sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        VideoCamera sensor = new VideoCamera(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
     
     /**

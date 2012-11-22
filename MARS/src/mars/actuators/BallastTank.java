@@ -14,6 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.NoiseType;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -76,6 +78,20 @@ public class BallastTank extends Actuator implements Keys{
      */
     public BallastTank(SimState simstate) {
         super(simstate);
+    }
+    
+    public BallastTank(BallastTank ballastTank){
+        super(ballastTank);
+        HashMap<String, String> actionsOriginal = ballastTank.getAllActions();
+        Cloner cloner = new Cloner();
+        action_mapping = cloner.deepClone(actionsOriginal);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        BallastTank actuator = new BallastTank(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
 
     /**

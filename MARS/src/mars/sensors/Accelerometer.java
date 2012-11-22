@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
@@ -53,6 +54,17 @@ public class Accelerometer extends Sensor{
      */
     public Accelerometer(SimState simstate){
         super(simstate);
+    }
+    
+    public Accelerometer(Accelerometer accelerometer){
+        super(accelerometer);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Accelerometer sensor = new Accelerometer(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

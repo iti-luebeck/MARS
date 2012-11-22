@@ -12,6 +12,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -32,10 +33,10 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="Parameters")
 @XmlAccessorType(XmlAccessType.NONE)
-public class AUV_Parameters implements CellEditorListener{
+public class AUV_Parameters{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    private HashMap<String,Object> params;
+    private HashMap<String,Object> params = new HashMap<String,Object> ();
     private HashMap<String,Object> waypoints;
     private HashMap<String,Object> model;
     private HashMap<String,Object> debug;
@@ -144,7 +145,6 @@ public class AUV_Parameters implements CellEditorListener{
         setAlphaDepthScale(alpha_depth_scale);
         setIcon(icon);
         setDNDIcon(dnd_icon);
-        this.xmll = xmll;
     }
     
     /**
@@ -152,6 +152,14 @@ public class AUV_Parameters implements CellEditorListener{
      */
     public AUV_Parameters(){
         
+    }
+    
+    public AUV_Parameters copy(){
+        Cloner cloner = new Cloner();
+        cloner.dontClone(XMLConfigReaderWriter.class);
+        cloner.dontCloneInstanceOf(AUV.class); 
+        AUV_Parameters auvParamCopy = cloner.deepClone(this);
+        return auvParamCopy;
     }
     
     /**
@@ -163,75 +171,6 @@ public class AUV_Parameters implements CellEditorListener{
         debug = (HashMap<String,Object>)params.get("Debug");
         collision = (HashMap<String,Object>)params.get("Collision");
         buoyancy = (HashMap<String,Object>)params.get("Buoyancy");
-    }
-    
-    @Deprecated
-    public void editingCanceled(ChangeEvent e){
-    }
-
-    @Deprecated
-    public void editingStopped(ChangeEvent e){
-        Object obj = e.getSource();
-        if (obj instanceof TextFieldEditor) {
-            TextFieldEditor editor = (TextFieldEditor)obj;
-            String auv_name_tree = editor.getTreepath().getPathComponent(2).toString();//get the auv
-            if(auv_name_tree.equals(getAuv_name())){//check if right auv
-                saveValue(editor);
-            }
-        }
-    }
-    
-    @Deprecated
-    private void saveValue(TextFieldEditor editor){
-        HashMap<String,Object> hashmap = params;
-        String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
-        int pathcount = editor.getTreepath().getPathCount();
-        Object[] treepath = editor.getTreepath().getPath();
-        
-        if( params.containsKey(target) && pathcount < 7){//no hasmap, direct save
-            Object obj = params.get(target);
-            detectType(obj,editor,target,params);
-        }else{//it's in another hashmap, search deeper
-            for (int i = 4; i < pathcount-2; i++) {
-                hashmap = (HashMap<String,Object>)hashmap.get(treepath[i].toString());
-            }
-            //found the corresponding hashmap
-            Object obj = hashmap.get(target);
-            detectType(obj,editor,target,hashmap);
-        }
-    }
-
-    @Deprecated
-    private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
-        Object node_obj = node.getUserObject();
-        Object[] treepath = editor.getTreepath().getPath();
-        int pathcount = editor.getTreepath().getPathCount();
-        if(obj instanceof Float){
-            hashmap.put(target, (Float)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }else if(obj instanceof Integer){
-            hashmap.put(target, (Integer)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }else if(obj instanceof Boolean){
-            hashmap.put(target, (Boolean)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }else if(obj instanceof String){
-            hashmap.put(target, (String)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }else if(obj instanceof Vector3f){
-            hashmap.put(target, (Vector3f)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }else if(obj instanceof ColorRGBA){
-            hashmap.put(target, (ColorRGBA)node_obj);
-            updateState(target,"");
-            xmll.setPathElementAUV(getAuv_name(),treepath, pathcount, node_obj);
-        }
     }
 
     /**

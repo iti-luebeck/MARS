@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
@@ -56,6 +57,17 @@ public class Orientationmeter extends Sensor{
      */
     public Orientationmeter(SimState simstate){
         super(simstate);
+    }
+    
+    public Orientationmeter(Orientationmeter sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Orientationmeter sensor = new Orientationmeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

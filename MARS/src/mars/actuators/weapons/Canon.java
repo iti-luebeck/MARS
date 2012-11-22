@@ -22,6 +22,7 @@ import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.texture.Texture;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.Moveable;
+import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -93,6 +95,20 @@ public class Canon extends Actuator implements Moveable,Keys{
      */
     public Canon(SimState simstate) {
         super(simstate);
+    }
+    
+    public Canon(Canon canon){
+        super(canon);
+        HashMap<String, String> actionsOriginal = canon.getAllActions();
+        Cloner cloner = new Cloner();
+        action_mapping = cloner.deepClone(actionsOriginal);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Canon actuator = new Canon(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
 
     /**

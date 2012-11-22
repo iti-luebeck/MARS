@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
@@ -61,6 +62,17 @@ public class SalinitySensor extends Sensor{
      */
     public SalinitySensor(SimState simstate){
         super(simstate);
+    }
+    
+    public SalinitySensor(SalinitySensor sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        SalinitySensor sensor = new SalinitySensor(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

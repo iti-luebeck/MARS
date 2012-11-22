@@ -14,6 +14,7 @@ import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import mars.PhysicalExchanger;
 import mars.control.MyLightControl;
 
 /**
@@ -36,6 +37,17 @@ public class Lamp extends Actuator{
      */
     public Lamp(){
         super();
+    }
+    
+    public Lamp(Lamp lamp){
+        super(lamp);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Lamp actuator = new Lamp(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
     
     @Override

@@ -16,6 +16,7 @@ import mars.Initializer;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import org.ros.message.Time;
@@ -61,6 +62,17 @@ public class FlowMeter extends Sensor{
      */
     public FlowMeter(SimState simstate){
         super(simstate);
+    }
+    
+    public FlowMeter(FlowMeter sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        FlowMeter sensor = new FlowMeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

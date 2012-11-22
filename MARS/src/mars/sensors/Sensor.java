@@ -8,6 +8,7 @@ package mars.sensors;
 import mars.sensors.sonar.Sonar;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -83,6 +84,15 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         this.assetManager = simauv.getAssetManager();
         this.rootNode = simauv.getRootNode();
         variables = new HashMap<String,Object> ();
+    }
+    
+    public Sensor(Sensor sensor){
+        HashMap<String, Object> variablesOriginal = sensor.getAllVariables();
+        Cloner cloner = new Cloner();
+        variables = cloner.deepClone(variablesOriginal);
+        
+        HashMap<String, Object> noisevariablesOriginal = sensor.getAllNoiseVariables();
+        noises = cloner.deepClone(noisevariablesOriginal);
     }
     
     /**

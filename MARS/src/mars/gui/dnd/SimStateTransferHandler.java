@@ -37,10 +37,6 @@ public class SimStateTransferHandler extends TransferHandler{
     
     @Override
     public boolean canImport(TransferSupport support) {
-        DataFlavor[] dataFlavors = support.getDataFlavors();
-        /*for (int i = 0; i < dataFlavors.length; i++) {
-            System.out.println("dataFlavors: " + dataFlavors[i]);
-        }*/
         if (!support.isDataFlavorSupported(new TransferHandlerObjectDataFlavor())) {
             return false;
         }else{
@@ -49,7 +45,7 @@ public class SimStateTransferHandler extends TransferHandler{
     }
 
     @Override
-    public boolean importData(TransferSupport support) {
+    public boolean importData(final TransferSupport support) {
         if (!canImport(support)) {
             return false;
         }
@@ -62,11 +58,12 @@ public class SimStateTransferHandler extends TransferHandler{
             Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
+                                    //System.out.println("drop: " + support.getDropAction());
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
                                     if(data.getType() == TransferHandlerObjectType.AUV){
-                                        simState.enableAUV(data.getName(), loc.getDropPoint());
+                                        simState.enableAUV(data.getName(), loc.getDropPoint(),support.getDropAction());
                                     }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
-                                        simState.enableSIMOB(data.getName(), loc.getDropPoint());
+                                        simState.enableSIMOB(data.getName(), loc.getDropPoint(),support.getDropAction());
                                     }
                                 }
                                 return null;

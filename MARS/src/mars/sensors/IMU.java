@@ -21,6 +21,7 @@ import mars.ros.MARSNodeMain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import mars.PhysicalExchanger;
 import org.ros.message.Time;
 
 /**
@@ -81,6 +82,17 @@ public class IMU extends Sensor{
         gyro.setSimState(simState);
         comp.setSimState(simState);
         oro.setSimState(simState);
+    }
+    
+    public IMU(IMU sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        IMU sensor = new IMU(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

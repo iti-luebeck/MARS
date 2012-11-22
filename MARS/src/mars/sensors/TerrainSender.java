@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import mars.Initializer;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -59,6 +60,17 @@ public class TerrainSender extends Sensor{
      */
     public TerrainSender(SimState simstate){
         super(simstate);
+    }
+    
+    public TerrainSender(TerrainSender sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        TerrainSender sensor = new TerrainSender(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

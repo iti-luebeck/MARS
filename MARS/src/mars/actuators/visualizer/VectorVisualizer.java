@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
@@ -69,6 +70,17 @@ public class VectorVisualizer extends Actuator{
      */
     public VectorVisualizer(SimState simstate) {
         super(simstate);
+    }
+    
+    public VectorVisualizer(VectorVisualizer vectorVisualizer){
+        super(vectorVisualizer);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        VectorVisualizer actuator = new VectorVisualizer(this);
+        actuator.initAfterJAXB();
+        return actuator;
     }
 
     /**

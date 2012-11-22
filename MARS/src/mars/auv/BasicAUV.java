@@ -43,12 +43,14 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.LodControl;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.util.BufferUtils;
+import com.rits.cloning.Cloner;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -96,6 +98,7 @@ import mars.gui.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;
+import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
@@ -252,6 +255,34 @@ public class BasicAUV implements AUV,SceneProcessor{
     
     public BasicAUV(){
         
+    }
+    
+    public BasicAUV(AUV auv){
+        initAfterJAXB();
+        AUV_Parameters auvCopy = auv.getAuv_param().copy();
+        
+        //clone accumulators, since they are simple no big problem here
+        HashMap<String, Accumulator> accumulatorsOriginal = auv.getAccumulators();
+        Cloner cloner = new Cloner();
+        accumulators = cloner.deepClone(accumulatorsOriginal);
+        
+        HashMap<String, Actuator> actuatorOriginal = auv.getActuators();
+        for ( String elem : actuatorOriginal.keySet() ){
+            Actuator element = (Actuator)actuatorOriginal.get(elem);
+            PhysicalExchanger copy = element.copy();
+            registerPhysicalExchanger(copy);
+        }
+        
+        HashMap<String, Sensor> sensorsOriginal = auv.getSensors();
+        for ( String elem : sensorsOriginal.keySet() ){
+            Sensor element = (Sensor)sensorsOriginal.get(elem);
+            PhysicalExchanger copy = element.copy();
+            if(!(copy instanceof Compass)){
+                registerPhysicalExchanger(copy);
+            }
+        }
+        
+        this.setAuv_param(auvCopy);
     }
     
     /**

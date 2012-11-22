@@ -39,10 +39,6 @@ public class MapStateTransferHandler extends TransferHandler{
     
     @Override
     public boolean canImport(TransferSupport support) {
-        DataFlavor[] dataFlavors = support.getDataFlavors();
-        /*for (int i = 0; i < dataFlavors.length; i++) {
-            System.out.println("dataFlavors: " + dataFlavors[i]);
-        }*/
         if (!support.isDataFlavorSupported(new TransferHandlerObjectDataFlavor())) {
             return false;
         }else{

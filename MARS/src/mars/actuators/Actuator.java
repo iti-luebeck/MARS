@@ -10,6 +10,7 @@ import mars.actuators.servos.Servo;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -98,6 +99,15 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
         variables = new HashMap<String,Object> ();
     }
     
+    public Actuator(Actuator actuator){
+        HashMap<String, Object> variablesOriginal = actuator.getAllVariables();
+        Cloner cloner = new Cloner();
+        variables = cloner.deepClone(variablesOriginal);
+        
+        HashMap<String, Object> noisevariablesOriginal = actuator.getAllNoiseVariables();
+        noises = cloner.deepClone(noisevariablesOriginal);
+    }
+       
     /**
      * 
      * @param simState

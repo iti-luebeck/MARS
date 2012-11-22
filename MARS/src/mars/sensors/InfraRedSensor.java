@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 
@@ -107,6 +108,17 @@ public class InfraRedSensor extends Sensor{
         } catch (IOException e) { }
 
         this.detectable = detectable;
+    }
+    
+    public InfraRedSensor(InfraRedSensor sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        InfraRedSensor sensor = new InfraRedSensor(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
     
     public void init(Node auv_node) {

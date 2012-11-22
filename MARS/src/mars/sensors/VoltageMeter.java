@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
@@ -49,6 +50,17 @@ public class VoltageMeter extends Sensor{
      */
     public VoltageMeter(SimState simstate){
         super(simstate);
+    }
+    
+    public VoltageMeter(VoltageMeter sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        VoltageMeter sensor = new VoltageMeter(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

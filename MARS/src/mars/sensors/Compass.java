@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 
 /**
@@ -63,6 +64,17 @@ public class Compass extends Sensor{
      */
     public Compass(SimState simstate) {
         super(simstate);
+    }
+    
+    public Compass(Compass sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        Compass sensor = new Compass(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){

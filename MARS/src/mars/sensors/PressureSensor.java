@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.xml.Vector3fAdapter;
@@ -62,6 +63,17 @@ public class PressureSensor extends Sensor{
      */
     public PressureSensor(SimState simstate){
         super(simstate);
+    }
+    
+    public PressureSensor(PressureSensor sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        PressureSensor sensor = new PressureSensor(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

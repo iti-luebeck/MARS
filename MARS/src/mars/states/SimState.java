@@ -4,6 +4,7 @@
  */
 package mars.states;
 
+import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -11,6 +12,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
@@ -38,13 +40,17 @@ import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.NanoTimer;
+import com.jme3.texture.FrameBuffer;
+import com.rits.cloning.Cloner;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -75,6 +81,9 @@ import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
+import javax.swing.TransferHandler;
+import mars.auv.WayPoints;
+import mars.ros.MARSNodeMain;
 
 /**
  *
@@ -1679,30 +1688,40 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     /**
-     * 
+     * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      * @param auvName
      * @param pos
      */
-    public void enableAUV(String auvName, Point pos){
+    public void enableAUV(String auvName, Point pos, int dropAction){
         AUV auv = auv_manager.getAUV(auvName);
         if(auv != null){
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 0f).clone();
             Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 1f).subtractLocal(click3d);
             Vector3f intersection = Helper.getIntersectionWithPlane(new Vector3f(0f, initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y), 0f),Vector3f.UNIT_Y,click3d, dir);
-            if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
-                auv.getAuv_param().setPosition(intersection);
-                auv.getPhysicsControl().setPhysicsLocation(intersection);
+            if(dropAction == TransferHandler.COPY){
+                AUV auvCopy = new BasicAUV(auv);
+                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.setName("testtttt");
+                auvCopy.getAuv_param().setPosition(intersection);
+                auvCopy.setState(this);
+                auv_manager.registerAUV(auvCopy);
+                view.updateTrees();
             }else{
-                auv.getAuv_param().setPosition(intersection);
-                auv.getAuv_param().setEnabled(true);
-                auv_manager.enableAUV(auv, true);
-                auv.getPhysicsControl().setPhysicsLocation(intersection);
+                if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
+                    auv.getAuv_param().setPosition(intersection);
+                    auv.getPhysicsControl().setPhysicsLocation(intersection);
+                }else{
+                    auv.getAuv_param().setPosition(intersection);
+                    auv.getAuv_param().setEnabled(true);
+                    auv_manager.enableAUV(auv, true);
+                    auv.getPhysicsControl().setPhysicsLocation(intersection);
+                }
             }
         }
     }
     
     /**
-     * 
+     * Enables an AUV and sets it to the position. If already enabled then position change.
      * @param auvName
      * @param pos
      */
@@ -1723,7 +1742,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     /**
-     * 
+     * Enables an SimObject and sets it to the position. If already enabled then position change.
      * @param simobName
      * @param pos
      */
@@ -1744,11 +1763,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     /**
-     * 
+     * Enables an AUV and sets it to the position. If already enabled then position change.  The position is computed from he screen position.
      * @param simobName
      * @param pos
      */
-    public void enableSIMOB(String simobName, Point pos){
+    public void enableSIMOB(String simobName, Point pos, int dropAction){
         SimObject simob = simob_manager.getSimObject(simobName);
         if(simob != null){
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 0f).clone();

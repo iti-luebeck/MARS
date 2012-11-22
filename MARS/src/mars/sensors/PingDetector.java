@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
+import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import mars.simobjects.SimObject;
@@ -63,6 +64,17 @@ public class PingDetector extends Sensor{
     public PingDetector(SimState simstate){
         super(simstate);
         this.simob_manager = simstate.getSimob_manager();
+    }
+    
+    public PingDetector(PingDetector sensor){
+        super(sensor);
+    }
+
+    @Override
+    public PhysicalExchanger copy() {
+        PingDetector sensor = new PingDetector(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     public void update(float tpf){
