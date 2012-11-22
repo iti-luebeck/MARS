@@ -25,6 +25,7 @@ import com.jme3.scene.Node;
 import mars.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -126,59 +127,17 @@ public class SimObject{
         
     }
     
-    @Deprecated
-    private void saveValue(TextFieldEditor editor){
-        HashMap<String,Object> hashmap = simob_variables;
-        String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
-        int pathcount = editor.getTreepath().getPathCount();
-        Object[] treepath = editor.getTreepath().getPath();
-        
-        if( simob_variables.containsKey(target) && pathcount < 6){//no hasmap, direct save
-            Object obj = simob_variables.get(target);
-            detectType(obj,editor,target,simob_variables);
-        }else{//it's in another hashmap, search deeper
-            for (int i = 3; i < pathcount-2; i++) {
-                hashmap = (HashMap<String,Object>)hashmap.get(treepath[i].toString());
-            }
-            //found the corresponding hashmap
-            Object obj = hashmap.get(target);
-            detectType(obj,editor,target,hashmap);
-        }
+    public SimObject(SimObject simob){
+        HashMap<String, Object> variablesOriginal = simob.getAllVariables();
+        Cloner cloner = new Cloner();
+        simob_variables = cloner.deepClone(variablesOriginal);
     }
     
-    @Deprecated
-    private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
-        Object node_obj = node.getUserObject();
-        Object[] treepath = editor.getTreepath().getPath();
-        int pathcount = editor.getTreepath().getPathCount();
-        /*if(obj instanceof Float){
-            hashmap.put(target, (Float)node_obj);
-            updateState(target);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }else if(obj instanceof Integer){
-            hashmap.put(target, (Integer)node_obj);
-            updateState(target);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }else if(obj instanceof Boolean){
-            hashmap.put(target, (Boolean)node_obj);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-            updateState(target);
-        }else if(obj instanceof String){
-            hashmap.put(target, (String)node_obj);
-            updateState(target);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }else if(obj instanceof Vector3f){
-            hashmap.put(target, (Vector3f)node_obj);
-            updateState(target);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }else if(obj instanceof ColorRGBA){
-            hashmap.put(target, (ColorRGBA)node_obj);
-            updateState(target);
-            xmll.setPathElementSimObject(getName(), treepath, pathcount, node_obj);
-        }*/
+    public SimObject copy() {
+        SimObject simob = new SimObject(this);
+        simob.initAfterJAXB();
+        return simob;
     }
-
     /**
      * 
      * @param path

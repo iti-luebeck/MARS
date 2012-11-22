@@ -79,6 +79,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import mars.KeyConfig;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -1321,6 +1322,8 @@ public class MARSView extends FrameView {
         auv_tree.setCellEditor(editor);
         auv_tree.setEditable(true);
         auv_tree.setRootVisible(false);
+        auv_tree.getSelectionModel().setSelectionMode
+        (TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         auv_tree.setDragEnabled(true);
         auv_tree.setName("auv_tree"); // NOI18N
         auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -3806,9 +3809,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString()); 
-                auv_tree.setSelectionPath(selPath);  
+                //System.out.println(selPath.toString());         
+                //System.out.println(selPath.getLastPathComponent().toString()); 
+                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+                auv_tree.setSelectionPath(selPath); 
+                //auv_tree.setSelectionPaths(selectionPaths);
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
                         AUV auv = (AUV)selPath.getLastPathComponent();
@@ -3865,22 +3870,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                  booleanPopUpDisable.setVisible(false);
                              }
                         booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }
-                    /*if (selPath.getLastPathComponent().toString().equals(s_auv)) {   
-                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
-                    } else if (selPath.getLastPathComponent().toString().equals(s_simob)) {   
-                        addSIMOBPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());    
-                    } else if (selPath.getLastPathComponent().toString().equals(s_actuators)) {   
-                        addActPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());             
-                    } else if (selPath.getLastPathComponent().toString().equals(s_sensors)) {        
-                        addSensPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());            
-                    } else if (node.getUserObject() instanceof AUV) {                        
-                        auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());         
-                    } else if (node.getUserObject() instanceof SimObject) {                
-                        simob_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());    
-                    } else if (node.getUserObject() instanceof PhysicalExchanger) {       
-                        sens_act_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());  
-                    }   */         
+                    }      
                 } catch (IllegalArgumentException e) {       
                 }         
             }       
@@ -3937,7 +3927,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             }
                         });
             }
-        }                                        
+        }                                       
     }//GEN-LAST:event_auv_treeMouseClicked
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
@@ -4501,6 +4491,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+                /*for (int i = 0; i < selectionPaths.length; i++) {
+                    System.out.println(i + " " + selectionPaths[i]);
+                }*/
+                //auv_tree.setSelectionPaths(selectionPaths);
                 auv_tree.setSelectionPath(selPath);         
             }       
         }

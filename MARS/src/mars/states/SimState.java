@@ -1773,14 +1773,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 0f).clone();
             Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 1f).subtractLocal(click3d);
             Vector3f intersection = Helper.getIntersectionWithPlane(new Vector3f(0f, initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y), 0f),Vector3f.UNIT_Y,click3d, dir);
-            if( simob.isEnabled()){//check if auf simob already enabled, then only new position
-                simob.setPosition(intersection);
-                simob.getPhysicsControl().setPhysicsLocation(intersection);
+            if(dropAction == TransferHandler.COPY){
+                SimObject simobCopy = simob.copy();
+                simobCopy.setName("aasasasas");
+                simobCopy.setPosition(intersection);
+                simob_manager.registerSimObject(simobCopy);
+                view.updateTrees();
             }else{
-                simob.setPosition(intersection);
-                simob.setEnabled(true);
-                simob_manager.enableSimObject(simob, true);
-                simob.getPhysicsControl().setPhysicsLocation(intersection);
+                if( simob.isEnabled()){//check if auf simob already enabled, then only new position
+                    simob.setPosition(intersection);
+                    simob.getPhysicsControl().setPhysicsLocation(intersection);
+                }else{
+                    simob.setPosition(intersection);
+                    simob.setEnabled(true);
+                    simob_manager.enableSimObject(simob, true);
+                    simob.getPhysicsControl().setPhysicsLocation(intersection);
+                }
             }
         }
     }
