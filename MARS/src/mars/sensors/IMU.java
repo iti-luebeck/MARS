@@ -86,6 +86,10 @@ public class IMU extends Sensor{
     
     public IMU(IMU sensor){
         super(sensor);
+        oro = (Orientationmeter)sensor.getOrientationmeter().copy();
+        comp = (Compass)sensor.getCompass().copy();
+        gyro = (Gyroscope)sensor.getGyroscope().copy();
+        acc = (Accelerometer)sensor.getAccelerometer().copy();
     }
 
     @Override
@@ -208,6 +212,22 @@ public class IMU extends Sensor{
         gyro.setEnabled(enabled);
         comp.setEnabled(enabled);
         oro.setEnabled(enabled);
+    }
+
+    public Gyroscope getGyroscope() {
+        return gyro;
+    }
+
+    public Compass getCompass() {
+        return comp;
+    }
+
+    public Accelerometer getAccelerometer() {
+        return acc;
+    }
+
+    public Orientationmeter getOrientationmeter() {
+        return oro;
     }
     
     /**

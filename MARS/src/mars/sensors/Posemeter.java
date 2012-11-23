@@ -73,6 +73,9 @@ public class Posemeter extends Sensor{
     
     public Posemeter(Posemeter sensor){
         super(sensor);
+        oro = (Orientationmeter)sensor.getOrientationmeter().copy();
+        comp = (Compass)sensor.getCompass().copy();
+        pos = (Positionmeter)sensor.getPositionmeter().copy();
     }
 
     @Override
@@ -173,6 +176,18 @@ public class Posemeter extends Sensor{
         pos.setEnabled(enabled);
         oro.setEnabled(enabled);
         comp.setEnabled(enabled);
+    }
+
+    public Compass getCompass() {
+        return comp;
+    }
+
+    public Positionmeter getPositionmeter() {
+        return pos;
+    }
+
+    public Orientationmeter getOrientationmeter() {
+        return oro;
     }
     
     /**

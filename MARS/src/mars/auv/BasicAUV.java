@@ -277,9 +277,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensorsOriginal.keySet() ){
             Sensor element = (Sensor)sensorsOriginal.get(elem);
             PhysicalExchanger copy = element.copy();
-            if(!(copy instanceof Compass)){
-                registerPhysicalExchanger(copy);
-            }
+            registerPhysicalExchanger(copy);
         }
         
         this.setAuv_param(auvCopy);
