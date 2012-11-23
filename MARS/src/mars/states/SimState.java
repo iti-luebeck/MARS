@@ -1692,7 +1692,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param auvName
      * @param pos
      */
-    public void enableAUV(String auvName, Point pos, int dropAction){
+    public void enableAUV(String auvName, Point pos, int dropAction, String name){
         AUV auv = auv_manager.getAUV(auvName);
         if(auv != null){
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 0f).clone();
@@ -1701,7 +1701,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             if(dropAction == TransferHandler.COPY){
                 AUV auvCopy = new BasicAUV(auv);
                 auvCopy.getAuv_param().setAuv(auvCopy);
-                auvCopy.setName("testtttt");
+                auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
                 auv_manager.registerAUV(auvCopy);

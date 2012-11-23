@@ -41,4 +41,8 @@ public class MyVerifierType {
      * 
      */
     public static final int STRING = 7;
+    /**
+     * 
+     */
+    public static final int AUV = 8;
 }

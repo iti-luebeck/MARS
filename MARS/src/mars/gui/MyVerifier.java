@@ -13,14 +13,17 @@ import java.awt.event.ActionListener;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 
 /**
  * A class for checking if the input of a text field is correct.
  * @author Thomas Tosik
  */
-class MyVerifier extends InputVerifier implements ActionListener {
+public class MyVerifier extends InputVerifier implements ActionListener {
 
     private int type = MyVerifierType.NONE;
+    private AUV_Manager auvManager; 
     
     public MyVerifier(){
         super();
@@ -31,8 +34,14 @@ class MyVerifier extends InputVerifier implements ActionListener {
         this.type = type;
     }
     
+    public MyVerifier(int type,AUV_Manager auvManager){
+        super();
+        this.type = type;
+        this.auvManager = auvManager;
+    }
+    
     @Override
-   public boolean shouldYieldFocus(JComponent input) {
+    public boolean shouldYieldFocus(JComponent input) {
         boolean inputOK = verify(input);
         makeItPretty(input);
         updateObject();
@@ -202,6 +211,20 @@ class MyVerifier extends InputVerifier implements ActionListener {
                     ColorRGBA value = new ColorRGBA(r,g,b,0f);
                     mytext.setText(tmp);
                     return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid color/float).
+                    return false;
+                }
+            }else if(((MyVerifierType.AUV == type) || (MyVerifierType.ALL == type))){
+                try {
+                    String tmp = mytext.getText();
+                    AUV auv = auvManager.getAUV(tmp);
+                    if(tmp.equals("")){
+                        return false;
+                    }else if(auv == null){
+                        return true;
+                    }else{
+                        return false;
+                    }
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid color/float).
                     return false;
                 }

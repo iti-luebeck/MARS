@@ -130,7 +130,7 @@ public class MARSView extends FrameView {
     private MARS_Settings mars_settings;
     private KeyConfig keyConfig;
     private PhysicalEnvironment penv;
-    private AUV_Manager auv_manager;
+    private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
     private MARS_Main mars;
@@ -274,8 +274,8 @@ public class MARSView extends FrameView {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    if(auv_manager != null){
-                        AUV auv = auv_manager.getAUV("asv");
+                    if(auvManager != null){
+                        AUV auv = auvManager.getAUV("asv");
                         /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
                         auv.getPhysicalvalues().getTraceVolume().setVisible(false);*/
                         /*ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
@@ -391,11 +391,20 @@ public class MARSView extends FrameView {
                 public void run() {
                     auv_tree.setTransferHandler(new AUVTransferHandler());
                     simob_tree.setTransferHandler(new SimObTransferHandler());
-                    JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars));
+                    JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars,JMEPanel1));
+                    getANText().setInputVerifier(new MyVerifier( MyVerifierType.AUV,auvManager));
                     MapPanel.setTransferHandler(new MapStateTransferHandler(mars));
                 }
             }
         );
+    }
+    
+    public JDialog getAN(){
+        return auv_name;
+    }
+    
+    public JTextField getANText(){
+        return jTextField13;
     }
     
     /**
@@ -490,10 +499,10 @@ public class MARSView extends FrameView {
     
     /**
      * 
-     * @param auv_manager
+     * @param auvManager
      */
     public void setAuv_manager(AUV_Manager auv_manager) {
-        this.auv_manager = auv_manager;
+        this.auvManager = auv_manager;
     }
 
     /**
@@ -802,19 +811,6 @@ public class MARSView extends FrameView {
      */
     public void updateValues(String auv_name, String node_search_string, String value){
 
-    }
-
-    @Deprecated
-    private DefaultMutableTreeNode searchNode(DefaultMutableTreeNode rootSearchNode, String node_search_string){
-        DefaultMutableTreeNode node = null;
-        Enumeration e = rootSearchNode.breadthFirstEnumeration();
-        while (e.hasMoreElements()) {
-            node = (DefaultMutableTreeNode) e.nextElement();
-            if (node_search_string.equals(node.getUserObject().toString())) {
-                return node;
-            }
-        }
-        return null;
     }
 
     /**
@@ -1286,6 +1282,11 @@ public class MARSView extends FrameView {
         viewSonarPolar = new javax.swing.JMenuItem();
         viewSonarPlanar = new javax.swing.JMenuItem();
         addDataToChart = new javax.swing.JMenuItem();
+        auv_name = new javax.swing.JDialog();
+        jTextField13 = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -3263,6 +3264,66 @@ public class MARSView extends FrameView {
         addDataToChart.setName("addDataToChart"); // NOI18N
         jme3_auv_sens.add(addDataToChart);
 
+        auv_name.setTitle(resourceMap.getString("auv_name.title")); // NOI18N
+        auv_name.setAlwaysOnTop(true);
+        auv_name.setMinimumSize(new java.awt.Dimension(160, 76));
+        auv_name.setModal(true);
+        auv_name.setName("auv_name"); // NOI18N
+
+        jTextField13.setText(resourceMap.getString("jTextField13.text")); // NOI18N
+        jTextField13.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
+        jTextField13.setName("jTextField13"); // NOI18N
+
+        jLabel38.setText(resourceMap.getString("jLabel38.text")); // NOI18N
+        jLabel38.setName("jLabel38"); // NOI18N
+
+        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
+        jButton3.setName("jButton3"); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout auv_nameLayout = new javax.swing.GroupLayout(auv_name.getContentPane());
+        auv_name.getContentPane().setLayout(auv_nameLayout);
+        auv_nameLayout.setHorizontalGroup(
+            auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(auv_nameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(auv_nameLayout.createSequentialGroup()
+                        .addComponent(jLabel38)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField13))
+                    .addGroup(auv_nameLayout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        auv_nameLayout.setVerticalGroup(
+            auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(auv_nameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel38)
+                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -3290,14 +3351,14 @@ public class MARSView extends FrameView {
         save_config_FileChooser.showSaveDialog(null);
         File f = save_config_FileChooser.getSelectedFile();
         if(f != null){
-            XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auv_manager, simob_manager, keyConfig, penv);
+            XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
         }
     }//GEN-LAST:event_saveconfigtoActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
         File f = new File("./config/default");
         if(f != null){
-            String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auv_manager, simob_manager, keyConfig, penv);
+            String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
             if(failure != null){
                 JOptionPane.showMessageDialog(mainPanel,
                 failure,
@@ -3335,7 +3396,7 @@ public class MARSView extends FrameView {
         AUV auv = (AUV)node.getUserObject();
 
         //cleanup
-        auv_manager.deregisterAUV(auv);
+        auvManager.deregisterAUV(auv);
         xmll.deleteAUV(auv);
         node.removeFromParent();
         auv_tree.updateUI();*/
@@ -3792,7 +3853,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 TreePath[] selectionPaths = auv_tree.getSelectionPaths();
                 //auv_tree.setSelectionPath(selPath); 
                 auv_tree.setSelectionPaths(selectionPaths);
-                
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
                         AUV auv = (AUV)selPath.getLastPathComponent();
@@ -4295,10 +4355,10 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                     if(mars.getStateManager().getState(SimState.class) != null){
                         if(!enable_auv.isSelected()){
                             auv.getAuv_param().setEnabled(false);
-                            auv_manager.enableAUV(auv, false);
+                            auvManager.enableAUV(auv, false);
                         }else{
                             auv.getAuv_param().setEnabled(true);
-                            auv_manager.enableAUV(auv, true);
+                            auvManager.enableAUV(auv, true);
                         }
                     }
                     updateTrees();
@@ -4510,6 +4570,17 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_simob_treeMousePressed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        jTextField13.setText("");
+        auv_name.setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(jTextField13.getInputVerifier().verify(jTextField13)){
+            auv_name.setVisible(false);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4530,6 +4601,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel TreePanel;
     private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JDialog auv_move_vector_dialog;
+    private javax.swing.JDialog auv_name;
     private javax.swing.JPopupMenu auv_popup_menu;
     private javax.swing.JDialog auv_rotate_vector_dialog;
     private javax.swing.JTree auv_tree;
@@ -4568,7 +4640,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField intDialog_x;
     private javax.swing.JDialog int_dialog;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton22;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
@@ -4618,6 +4692,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -4655,6 +4730,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
+    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
