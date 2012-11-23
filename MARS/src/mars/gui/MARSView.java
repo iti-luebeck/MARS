@@ -1109,8 +1109,6 @@ public class MARSView extends FrameView {
         statusMessageLabel = new javax.swing.JLabel();
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
-        addAUVPopUpMenu = new javax.swing.JPopupMenu();
-        reset_auvs = new javax.swing.JMenuItem();
         help_dialog = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
         help_optionpane = new javax.swing.JOptionPane();
@@ -1704,19 +1702,6 @@ public class MARSView extends FrameView {
                     .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3))
         );
-
-        addAUVPopUpMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        addAUVPopUpMenu.setLightWeightPopupEnabled(false);
-        addAUVPopUpMenu.setName("addAUVPopUpMenu"); // NOI18N
-
-        reset_auvs.setText(resourceMap.getString("reset_auvs.text")); // NOI18N
-        reset_auvs.setName("reset_auvs"); // NOI18N
-        reset_auvs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reset_auvsActionPerformed(evt);
-            }
-        });
-        addAUVPopUpMenu.add(reset_auvs);
 
         help_dialog.setName("help_dialog"); // NOI18N
 
@@ -3377,28 +3362,21 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_chase_simobActionPerformed
 
     private void reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvActionPerformed
-        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
-        Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    auv.reset();
+        //final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+        for (int i = 0; i < selectionPaths.length; i++) {
+            TreePath treePath = selectionPaths[i];
+            final AUV auv = (AUV)treePath.getLastPathComponent();
+            Future simStateFuture = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    if(mars.getStateManager().getState(SimState.class) != null){
+                        auv.reset();
+                    }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        }
     }//GEN-LAST:event_reset_auvActionPerformed
-
-    private void reset_auvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvsActionPerformed
-        //reset
-        Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    auv_manager.resetAllAUVs();
-                }
-                return null;
-            }
-        });
-    }//GEN-LAST:event_reset_auvsActionPerformed
 
     private void keysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keysActionPerformed
         keys_dialog.validate();
@@ -3812,15 +3790,14 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 //System.out.println(selPath.toString());         
                 //System.out.println(selPath.getLastPathComponent().toString()); 
                 TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                auv_tree.setSelectionPath(selPath); 
-                //auv_tree.setSelectionPaths(selectionPaths);
+                //auv_tree.setSelectionPath(selPath); 
+                auv_tree.setSelectionPaths(selectionPaths);
+                
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
                         AUV auv = (AUV)selPath.getLastPathComponent();
                         enable_auv.setSelected(auv.getAuv_param().isEnabled());
                         auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
-                    }else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
-                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
                     }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
                          HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
                          if(hashwrap.getUserData() instanceof Boolean){
@@ -3874,54 +3851,71 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 } catch (IllegalArgumentException e) {       
                 }         
             }       
-        }else if (evt.getButton() == MouseEvent.BUTTON1) {
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());      
             if (selRow != -1) { 
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
+                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString()); 
-                auv_tree.setSelectionPath(selPath);  
-                try {  
-                    if (selPath.getLastPathComponent() instanceof AUV) {   
-                        final AUV auv = (AUV)selPath.getLastPathComponent();
-                        Future simStateFuture = mars.enqueue(new Callable() {
+                //auv_tree.setSelectionPath(selPath);  
+                auv_tree.setSelectionPaths(selectionPaths);
+                
+                //deselect all auvs before we start to selcting it clean
+                Future simStateFutureD = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectAUV(null);
-                                    simState.selectAUV(auv);
+                                    simState.deselectAllAUVs();
                                 }
                                 return null;
                             }
-                        });  
-                    }else{
+                        }); 
+                
+                for (int i = 0; i < selectionPaths.length; i++) {
+                    TreePath treePath = selectionPaths[i];
+                    try {  
+                        if (treePath.getLastPathComponent() instanceof AUV) {   
+                            final AUV auv = (AUV)treePath.getLastPathComponent();
                             Future simStateFuture = mars.enqueue(new Callable() {
                                 public Void call() throws Exception {
                                     if(mars.getStateManager().getState(SimState.class) != null){
                                         SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                        simState.deselectAUV(null);
+                                        //simState.deselectAllAUVs();
+                                        simState.selectAUV(auv);
+                                    }
+                                    return null;
+                                }
+                            });  
+                        }else{
+                                Future simStateFuture = mars.enqueue(new Callable() {
+                                    public Void call() throws Exception {
+                                        if(mars.getStateManager().getState(SimState.class) != null){
+                                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                            simState.deselectAllAUVs();
+                                        }
+                                        return null;
+                                    }
+                                });
+                        }        
+                    } catch (IllegalArgumentException e) {
+                            Future simStateFuture = mars.enqueue(new Callable() {
+                                public Void call() throws Exception {
+                                    if(mars.getStateManager().getState(SimState.class) != null){
+                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                        simState.deselectAllAUVs();
                                     }
                                     return null;
                                 }
                             });
-                    }        
-                } catch (IllegalArgumentException e) {
-                        Future simStateFuture = mars.enqueue(new Callable() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectAUV(null);
-                                }
-                                return null;
-                            }
-                        });
-                }         
+                    } 
+                }      
             }else{
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectAUV(null);
+                                    simState.deselectAllAUVs();
                                 }
                                 return null;
                             }
@@ -4291,23 +4285,28 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_jme3_debug_auv_boundingActionPerformed
 
     private void enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enable_auvActionPerformed
-        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
-        Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    if(!enable_auv.isSelected()){
-                        auv.getAuv_param().setEnabled(false);
-                        auv_manager.enableAUV(auv, false);
-                    }else{
-                        auv.getAuv_param().setEnabled(true);
-                        auv_manager.enableAUV(auv, true);
+        //final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+        for (int i = 0; i < selectionPaths.length; i++) {
+            TreePath treePath = selectionPaths[i];
+            final AUV auv = (AUV)treePath.getLastPathComponent();
+            Future simStateFuture = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    if(mars.getStateManager().getState(SimState.class) != null){
+                        if(!enable_auv.isSelected()){
+                            auv.getAuv_param().setEnabled(false);
+                            auv_manager.enableAUV(auv, false);
+                        }else{
+                            auv.getAuv_param().setEnabled(true);
+                            auv_manager.enableAUV(auv, true);
+                        }
                     }
+                    updateTrees();
+                    return null;
                 }
-                updateTrees();
-                return null;
-            }
-        });
-        toggleJMenuCheckbox(enable_auv);
+            });
+            toggleJMenuCheckbox(enable_auv);
+        }
     }//GEN-LAST:event_enable_auvActionPerformed
 
     private void jme3_enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_enable_auvActionPerformed
@@ -4495,8 +4494,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 /*for (int i = 0; i < selectionPaths.length; i++) {
                     System.out.println(i + " " + selectionPaths[i]);
                 }*/
-                //auv_tree.setSelectionPaths(selectionPaths);
-                auv_tree.setSelectionPath(selPath);         
+                auv_tree.setSelectionPaths(selectionPaths);
+                //auv_tree.setSelectionPath(selPath);         
             }       
         }
     }//GEN-LAST:event_auv_treeMousePressed
@@ -4529,7 +4528,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenu SettingsMenu;
     private javax.swing.JMenuItem StartMenuItem;
     private javax.swing.JPanel TreePanel;
-    private javax.swing.JPopupMenu addAUVPopUpMenu;
     private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JDialog auv_move_vector_dialog;
     private javax.swing.JPopupMenu auv_popup_menu;
@@ -4716,7 +4714,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private DefaultTreeCellRenderer renderer3;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenuItem reset_auv;
-    private javax.swing.JMenuItem reset_auvs;
     private javax.swing.JDialog rotateCameraDialog;
     private javax.swing.JFileChooser save_config_FileChooser;
     private javax.swing.JMenuItem saveconfig;

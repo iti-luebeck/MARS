@@ -667,30 +667,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPopupMenu" name="addAUVPopUpMenu">
-      <Properties>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Standardcursor"/>
-        </Property>
-        <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="addAUVPopUpMenu" noResource="true"/>
-      </Properties>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-        <Property name="useNullLayout" type="boolean" value="true"/>
-      </Layout>
-      <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="reset_auvs">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="reset_auvs.text"/>
-            <Property name="name" type="java.lang.String" value="reset_auvs" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reset_auvsActionPerformed"/>
-          </Events>
-        </MenuItem>
-      </SubComponents>
-    </Container>
     <Container class="javax.swing.JDialog" name="help_dialog">
       <Properties>
         <Property name="name" type="java.lang.String" value="help_dialog" noResource="true"/>

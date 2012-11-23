@@ -1797,8 +1797,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      * @param auv
      */
-    public void deselectAUV(AUV auv){
+    public void deselectAllAUVs(){
         auv_manager.deselectAllAUVs();
+    }
+    
+    /**
+     * 
+     * @param auv
+     */
+    public void deselectAUV(AUV auv){
+        auv_manager.deselectAUV(auv);
     }
     
     /**

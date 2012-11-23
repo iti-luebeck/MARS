@@ -589,6 +589,14 @@ public class AUV_Manager {
     }
     
     /**
+     *
+     */
+    public void deselectAUV(AUV auv){
+        //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
+        auv.setSelected(false);
+    }
+    
+    /**
      * 
      * @return
      */
