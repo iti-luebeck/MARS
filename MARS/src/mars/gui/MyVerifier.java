@@ -15,6 +15,8 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.simobjects.SimObject;
+import mars.simobjects.SimObjectManager;
 
 /**
  * A class for checking if the input of a text field is correct.
@@ -24,6 +26,7 @@ public class MyVerifier extends InputVerifier implements ActionListener {
 
     private int type = MyVerifierType.NONE;
     private AUV_Manager auvManager; 
+    private SimObjectManager simobManager; 
     
     public MyVerifier(){
         super();
@@ -38,6 +41,12 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         super();
         this.type = type;
         this.auvManager = auvManager;
+    }
+    
+    public MyVerifier(int type,SimObjectManager simobManager){
+        super();
+        this.type = type;
+        this.simobManager = simobManager;
     }
     
     @Override
@@ -221,6 +230,20 @@ public class MyVerifier extends InputVerifier implements ActionListener {
                     if(tmp.equals("")){
                         return false;
                     }else if(auv == null){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid color/float).
+                    return false;
+                }
+            }else if(((MyVerifierType.SIMOB == type) || (MyVerifierType.ALL == type))){
+                try {
+                    String tmp = mytext.getText();
+                    SimObject simob = simobManager.getSimObject(tmp);
+                    if(tmp.equals("")){
+                        return false;
+                    }else if(simob == null){
                         return true;
                     }else{
                         return false;

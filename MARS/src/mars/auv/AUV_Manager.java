@@ -23,6 +23,7 @@ import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.sonar.Sonar;
+import mars.states.MapState;
 
 /**
  * Creates an AUV_Manger. You register your auv's here.
@@ -457,6 +458,7 @@ public class AUV_Manager {
             //addAUVToNode(auv,sceneReflectionNode);
             addAUVToNode(auv,AUVsNode);
             addAUVToBulletAppState(auv,bulletAppState);
+            addAUVtoMap(auv);
         }
     }
     
@@ -552,6 +554,13 @@ public class AUV_Manager {
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
             bulletAppState.getPhysicsSpace().add(auv.getAUVNode());
+        }
+    }
+    
+    public void addAUVtoMap(AUV auv){
+        if(mars.getStateManager().getState(MapState.class) != null){
+            MapState mapState = (MapState)mars.getStateManager().getState(MapState.class);
+            mapState.addAUV(auv);
         }
     }
 

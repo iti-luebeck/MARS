@@ -393,7 +393,8 @@ public class MARSView extends FrameView {
                     simob_tree.setTransferHandler(new SimObTransferHandler());
                     JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars,JMEPanel1));
                     getANText().setInputVerifier(new MyVerifier( MyVerifierType.AUV,auvManager));
-                    MapPanel.setTransferHandler(new MapStateTransferHandler(mars));
+                    getSNText().setInputVerifier(new MyVerifier( MyVerifierType.SIMOB,simob_manager));
+                    MapPanel.setTransferHandler(new MapStateTransferHandler(mars,MapPanel));
                 }
             }
         );
@@ -403,8 +404,16 @@ public class MARSView extends FrameView {
         return auv_name;
     }
     
+    public JDialog getSN(){
+        return simob_name;
+    }
+    
     public JTextField getANText(){
         return jTextField13;
+    }
+    
+    public JTextField getSNText(){
+        return jTextField14;
     }
     
     /**
@@ -1287,6 +1296,11 @@ public class MARSView extends FrameView {
         jLabel38 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        simob_name = new javax.swing.JDialog();
+        jTextField14 = new javax.swing.JTextField();
+        jLabel39 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -3266,9 +3280,10 @@ public class MARSView extends FrameView {
 
         auv_name.setTitle(resourceMap.getString("auv_name.title")); // NOI18N
         auv_name.setAlwaysOnTop(true);
-        auv_name.setMinimumSize(new java.awt.Dimension(160, 76));
+        auv_name.setMinimumSize(new java.awt.Dimension(160, 100));
         auv_name.setModal(true);
         auv_name.setName("auv_name"); // NOI18N
+        auv_name.setResizable(false);
 
         jTextField13.setText(resourceMap.getString("jTextField13.text")); // NOI18N
         jTextField13.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
@@ -3321,6 +3336,66 @@ public class MARSView extends FrameView {
                 .addGroup(auv_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        simob_name.setTitle(resourceMap.getString("simob_name.title")); // NOI18N
+        simob_name.setAlwaysOnTop(true);
+        simob_name.setMinimumSize(new java.awt.Dimension(160, 100));
+        simob_name.setModal(true);
+        simob_name.setName("simob_name"); // NOI18N
+        simob_name.setResizable(false);
+
+        jTextField14.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
+        jTextField14.setName("jTextField14"); // NOI18N
+
+        jLabel39.setText(resourceMap.getString("jLabel39.text")); // NOI18N
+        jLabel39.setName("jLabel39"); // NOI18N
+
+        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
+        jButton4.setName("jButton4"); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
+        jButton5.setName("jButton5"); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout simob_nameLayout = new javax.swing.GroupLayout(simob_name.getContentPane());
+        simob_name.getContentPane().setLayout(simob_nameLayout);
+        simob_nameLayout.setHorizontalGroup(
+            simob_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(simob_nameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(simob_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(simob_nameLayout.createSequentialGroup()
+                        .addComponent(jLabel39)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField14))
+                    .addGroup(simob_nameLayout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        simob_nameLayout.setVerticalGroup(
+            simob_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(simob_nameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(simob_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel39)
+                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(simob_nameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -4581,6 +4656,17 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(jTextField14.getInputVerifier().verify(jTextField14)){
+            simob_name.setVisible(false);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        jTextField14.setText("");
+        simob_name.setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
@@ -4647,6 +4733,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
     private javax.swing.JButton jButton33;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton700;
     private javax.swing.JButton jButton701;
     private javax.swing.JButton jButtonCharts;
@@ -4693,6 +4781,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -4731,6 +4820,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
+    private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -4797,6 +4887,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTree settings_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor4;
     private DefaultTreeCellRenderer renderer4;
+    private javax.swing.JDialog simob_name;
     private javax.swing.JPopupMenu simob_popup_menu;
     private javax.swing.JTree simob_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor2;

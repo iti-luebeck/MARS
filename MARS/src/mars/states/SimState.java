@@ -308,10 +308,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 }
             }
             
+            initMap();//for mars_settings
+            
             populateAUV_Manager(auvs,physical_environment,mars_settings,com_manager,initer);
             populateSim_Object_Manager(simobs);
             
-            initMap();
+            //initMap();//for manager
             
             initPublicKeys();
             
@@ -1705,7 +1707,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
                 auv_manager.registerAUV(auvCopy);
-                view.updateTrees();
+                view.updateTrees();              
             }else{
                 if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(intersection);
@@ -1725,18 +1727,28 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param auvName
      * @param pos
      */
-    public void enableAUV(String auvName, Vector3f pos){
+    public void enableAUV(String auvName, Vector3f pos, int dropAction, String name){
         AUV auv = auv_manager.getAUV(auvName);
         pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y);
         if(auv != null){
-            if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
-                auv.getAuv_param().setPosition(pos);
-                auv.getPhysicsControl().setPhysicsLocation(pos);
+            if(dropAction == TransferHandler.COPY){
+                AUV auvCopy = new BasicAUV(auv);
+                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.setName(name);
+                auvCopy.getAuv_param().setPosition(pos);
+                auvCopy.setState(this);
+                auv_manager.registerAUV(auvCopy);
+                view.updateTrees();
             }else{
-                auv.getAuv_param().setPosition(pos);
-                auv.getAuv_param().setEnabled(true);
-                auv_manager.enableAUV(auv, true);
-                auv.getPhysicsControl().setPhysicsLocation(pos);
+                if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
+                    auv.getAuv_param().setPosition(pos);
+                    auv.getPhysicsControl().setPhysicsLocation(pos);
+                }else{
+                    auv.getAuv_param().setPosition(pos);
+                    auv.getAuv_param().setEnabled(true);
+                    auv_manager.enableAUV(auv, true);
+                    auv.getPhysicsControl().setPhysicsLocation(pos);
+                }
             }
         }
     }
@@ -1746,18 +1758,26 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param simobName
      * @param pos
      */
-    public void enableSIMOB(String simobName, Vector3f pos){
+    public void enableSIMOB(String simobName, Vector3f pos, int dropAction, String name){
         SimObject simob = simob_manager.getSimObject(simobName);
         pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y);
         if(simob != null){
-            if( simob.isEnabled()){//check if auf simob already enabled, then only new position
-                simob.setPosition(pos);
-                simob.getPhysicsControl().setPhysicsLocation(pos);
+            if(dropAction == TransferHandler.COPY){
+                SimObject simobCopy = simob.copy();
+                simobCopy.setName(name);
+                simobCopy.setPosition(pos);
+                simob_manager.registerSimObject(simobCopy);
+                view.updateTrees();
             }else{
-                simob.setPosition(pos);
-                simob.setEnabled(true);
-                simob_manager.enableSimObject(simob, true);
-                simob.getPhysicsControl().setPhysicsLocation(pos);
+                if( simob.isEnabled()){//check if auf simob already enabled, then only new position
+                    simob.setPosition(pos);
+                    simob.getPhysicsControl().setPhysicsLocation(pos);
+                }else{
+                    simob.setPosition(pos);
+                    simob.setEnabled(true);
+                    simob_manager.enableSimObject(simob, true);
+                    simob.getPhysicsControl().setPhysicsLocation(pos);
+                }
             }
         }
     }
@@ -1767,7 +1787,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param simobName
      * @param pos
      */
-    public void enableSIMOB(String simobName, Point pos, int dropAction){
+    public void enableSIMOB(String simobName, Point pos, int dropAction, String name){
         SimObject simob = simob_manager.getSimObject(simobName);
         if(simob != null){
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight()-pos.y), 0f).clone();
@@ -1775,7 +1795,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             Vector3f intersection = Helper.getIntersectionWithPlane(new Vector3f(0f, initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight()-pos.y), 0f),Vector3f.UNIT_Y,click3d, dir);
             if(dropAction == TransferHandler.COPY){
                 SimObject simobCopy = simob.copy();
-                simobCopy.setName("aasasasas");
+                simobCopy.setName(name);
                 simobCopy.setPosition(intersection);
                 simob_manager.registerSimObject(simobCopy);
                 view.updateTrees();

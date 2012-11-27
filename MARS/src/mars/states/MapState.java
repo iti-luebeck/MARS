@@ -33,6 +33,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
@@ -105,94 +107,107 @@ public class MapState extends AbstractAppState{
      */
     public void setAuv_manager(AUV_Manager auv_manager) {
         this.auv_manager = auv_manager;
-        HashMap<String, AUV> auvs = this.auv_manager.getAUVs();
+        //init();
+    }
+    
+    public void init(){
+        HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            if(auv.getAuv_param().isEnabled()){
-                Node auvNode = new Node(auv.getName());
-                
-                Sphere auv_geom_sphere = new Sphere(16, 16, 0.025f);
-                Geometry auv_geom = new Geometry(auv.getName() + "-geom", auv_geom_sphere);
-                Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                auv_geom_mat.setColor("Color", auv.getAuv_param().getMapColor());
-                
-                //don't forget transparency for depth
-                auv_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                auv_geom.setQueueBucket(Bucket.Transparent);
-                
-                auv_geom.setMaterial(auv_geom_mat);
-                Vector3f ter_pos = mars_settings.getTerrain_position();
-                float tile_length = mars_settings.getTerrain_scale().x;
-                int terx_px = tex_ml.getImage().getWidth();
-                int tery_px = tex_ml.getImage().getHeight();
-                //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
-                Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
-                auvNode.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
-                auv_geom.updateGeometricState();
-                auvNode.attachChild(auv_geom);
-                auvsNode.attachChild(auvNode);
-                auv_nodes.put(auv.getName(), auvNode);
-                
-                //adding propagation distance of underwater modems
-                ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
-                Iterator it = uws.iterator();
-                while (it.hasNext()) {
-                    UnderwaterModem uw = (UnderwaterModem)it.next();
-                    Cylinder uw_geom_sphere = new Cylinder(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true);
-                    Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom", uw_geom_sphere);
-                    Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    uw_geom_mat.setColor("Color", uw.getDebugColor());
-
-                    //don't forget transparency for depth
-                    uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                    uw_geom.setQueueBucket(Bucket.Transparent);
-
-                    uw_geom.setMaterial(uw_geom_mat);
-                    uw_geom.setLocalTranslation(0f,0f, -0.5f);
-                    uw_geom.updateGeometricState();
-                    auvNode.attachChild(uw_geom);
-                    if(uw.isDebug()){
-                        uw_geom.setCullHint(CullHint.Never);
-                    }else{
-                        uw_geom.setCullHint(CullHint.Always);
-                    }
-                }
-                
-                //adding sonar cones
-                ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
-                it = sons.iterator();
-                while (it.hasNext()) {
-                    Sonar son = (Sonar)it.next();
-                    float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
-                    float alpha = son.getBeam_width()/2f;
-                    float beta = FastMath.HALF_PI-alpha;
-                    float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
-                    Dome son_geom_cone = new Dome(new Vector3f(0f,-sonRange,0f), 2, 4, sonRange,true);
-                    Geometry son_geom = new Geometry(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom", son_geom_cone);
-                    Material son_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    son_geom_mat.setColor("Color", son.getDebugColor());
-
-                    //don't forget transparency for depth
-                    son_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                    son_geom.setQueueBucket(Bucket.Transparent);
-
-                    son_geom.setMaterial(son_geom_mat);
-                    son_geom.setLocalTranslation(0f,0f, -0.5f);
-                    son_geom.setLocalScale(width, 1.0f, 0.1f);
-                    Quaternion quat = new Quaternion();
-                    quat.fromAngles(0f, 0f, 0f);
-                    son_geom.setLocalRotation(quat);
-                    son_geom.updateGeometricState();
-                    auvNode.attachChild(son_geom);
-                    if(son.isDebug()){
-                        son_geom.setCullHint(CullHint.Never);
-                    }else{
-                        son_geom.setCullHint(CullHint.Always);
-                    }
-                }
-                
-            }
+            addAUV(auv);
         }
+    }
+    
+    public void addAUV(final AUV auv){
+        Future fut = mars.enqueue(new Callable() {
+             public Void call() throws Exception {
+                if(auv.getAuv_param().isEnabled()){
+                    Node auvNode = new Node(auv.getName());
+
+                    Sphere auv_geom_sphere = new Sphere(16, 16, 0.025f);
+                    Geometry auv_geom = new Geometry(auv.getName() + "-geom", auv_geom_sphere);
+                    Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    auv_geom_mat.setColor("Color", auv.getAuv_param().getMapColor());
+
+                    //don't forget transparency for depth
+                    auv_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                    auv_geom.setQueueBucket(Bucket.Transparent);
+
+                    auv_geom.setMaterial(auv_geom_mat);
+                    Vector3f ter_pos = mars_settings.getTerrain_position();
+                    float tile_length = mars_settings.getTerrain_scale().x;
+                    int terx_px = tex_ml.getImage().getWidth();
+                    int tery_px = tex_ml.getImage().getHeight();
+                    //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
+                    Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);
+                    auvNode.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
+                    auv_geom.updateGeometricState();
+                    auvNode.attachChild(auv_geom);
+                    auvsNode.attachChild(auvNode);
+                    auv_nodes.put(auv.getName(), auvNode);
+
+                    //adding propagation distance of underwater modems
+                    ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                    Iterator it = uws.iterator();
+                    while (it.hasNext()) {
+                        UnderwaterModem uw = (UnderwaterModem)it.next();
+                        Cylinder uw_geom_sphere = new Cylinder(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true);
+                        Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom", uw_geom_sphere);
+                        Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        uw_geom_mat.setColor("Color", uw.getDebugColor());
+
+                        //don't forget transparency for depth
+                        uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                        uw_geom.setQueueBucket(Bucket.Transparent);
+
+                        uw_geom.setMaterial(uw_geom_mat);
+                        uw_geom.setLocalTranslation(0f,0f, -0.5f);
+                        uw_geom.updateGeometricState();
+                        auvNode.attachChild(uw_geom);
+                        if(uw.isDebug()){
+                            uw_geom.setCullHint(CullHint.Never);
+                        }else{
+                            uw_geom.setCullHint(CullHint.Always);
+                        }
+                    }
+
+                    //adding sonar cones
+                    ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                    it = sons.iterator();
+                    while (it.hasNext()) {
+                        Sonar son = (Sonar)it.next();
+                        float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
+                        float alpha = son.getBeam_width()/2f;
+                        float beta = FastMath.HALF_PI-alpha;
+                        float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
+                        Dome son_geom_cone = new Dome(new Vector3f(0f,-sonRange,0f), 2, 4, sonRange,true);
+                        Geometry son_geom = new Geometry(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom", son_geom_cone);
+                        Material son_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                        son_geom_mat.setColor("Color", son.getDebugColor());
+
+                        //don't forget transparency for depth
+                        son_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                        son_geom.setQueueBucket(Bucket.Transparent);
+
+                        son_geom.setMaterial(son_geom_mat);
+                        son_geom.setLocalTranslation(0f,0f, -0.5f);
+                        son_geom.setLocalScale(width, 1.0f, 0.1f);
+                        Quaternion quat = new Quaternion();
+                        quat.fromAngles(0f, 0f, 0f);
+                        son_geom.setLocalRotation(quat);
+                        son_geom.updateGeometricState();
+                        auvNode.attachChild(son_geom);
+                        if(son.isDebug()){
+                            son_geom.setCullHint(CullHint.Never);
+                        }else{
+                            son_geom.setCullHint(CullHint.Always);
+                        }
+                    }
+
+                }
+                return null;
+            }
+        });
     }
     
     /**

@@ -34,7 +34,6 @@ public class SimStateTransferHandler extends TransferHandler{
     
     private MARS_Main mars;
     private JPanel JMEPanel1;
-    private AUV_Manager auvManager;
     
     /**
      * 
@@ -85,7 +84,7 @@ public class SimStateTransferHandler extends TransferHandler{
                                     if(data.getType() == TransferHandlerObjectType.AUV){
                                         simState.enableAUV(data.getName(), loc.getDropPoint(),support.getDropAction(),newName);
                                     }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
-                                        simState.enableSIMOB(data.getName(), loc.getDropPoint(),support.getDropAction());
+                                        simState.enableSIMOB(data.getName(), loc.getDropPoint(),support.getDropAction(),newName);
                                     }
                                 }
                                 return null;
