@@ -260,6 +260,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     public BasicAUV(AUV auv){
         initAfterJAXB();
         AUV_Parameters auvCopy = auv.getAuv_param().copy();
+        setAuv_param(auvCopy);
         
         //clone accumulators, since they are simple no big problem here
         HashMap<String, Accumulator> accumulatorsOriginal = auv.getAccumulators();
@@ -279,8 +280,6 @@ public class BasicAUV implements AUV,SceneProcessor{
             PhysicalExchanger copy = element.copy();
             registerPhysicalExchanger(copy);
         }
-        
-        this.setAuv_param(auvCopy);
     }
     
     /**

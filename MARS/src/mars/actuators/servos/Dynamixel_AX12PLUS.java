@@ -49,6 +49,17 @@ public class Dynamixel_AX12PLUS extends Servo{
         setSpeedPerDegree(0.003266f);
     }
     
+    public Dynamixel_AX12PLUS(Dynamixel_AX12PLUS servo){
+        super(servo);
+    }
+
+    @Override
+    public Dynamixel_AX12PLUS copy() {
+        Dynamixel_AX12PLUS actuator = new Dynamixel_AX12PLUS(this);
+        actuator.initAfterJAXB();
+        return actuator;
+    }
+    
         /**
      * 
      * @param ros_node

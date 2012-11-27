@@ -46,6 +46,18 @@ public class SeaBotixThruster extends Thruster{
         super(simstate);
         motor_increment = 5f;
     }
+    
+    public SeaBotixThruster(SeaBotixThruster thruster){
+        super(thruster);
+        motor_increment = 5f;
+    }
+
+    @Override
+    public SeaBotixThruster copy() {
+        SeaBotixThruster actuator = new SeaBotixThruster(this);
+        actuator.initAfterJAXB();
+        return actuator;
+    }
 
     /**
      * This is the function that represents the SeaBotix measured thruster force. It is limited to +/- 127.

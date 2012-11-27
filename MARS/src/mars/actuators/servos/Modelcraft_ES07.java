@@ -49,6 +49,17 @@ public class Modelcraft_ES07 extends Servo{
         setSpeedPerDegree(0.003266f);
     }
     
+    public Modelcraft_ES07(Modelcraft_ES07 servo){
+        super(servo);
+    }
+
+    @Override
+    public Modelcraft_ES07 copy() {
+        Modelcraft_ES07 actuator = new Modelcraft_ES07(this);
+        actuator.initAfterJAXB();
+        return actuator;
+    }
+    
         /**
      * 
      * @param ros_node

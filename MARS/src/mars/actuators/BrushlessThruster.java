@@ -46,6 +46,18 @@ public class BrushlessThruster extends Thruster{
         super(simstate);
         motor_increment = 0.6f;
     }
+    
+    public BrushlessThruster(BrushlessThruster thruster){
+        super(thruster);
+        motor_increment = 5f;
+    }
+
+    @Override
+    public BrushlessThruster copy() {
+        BrushlessThruster actuator = new BrushlessThruster(this);
+        actuator.initAfterJAXB();
+        return actuator;
+    }
 
     /**
      * This is the function that represents the SeaBotix measured thruster force.
