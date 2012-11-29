@@ -28,6 +28,23 @@ public class AUVTransferHandler extends TransferHandler{
 
     @Override
     public int getSourceActions(JComponent c) {
+        return COPY_OR_MOVE;
+    }
+
+    @Override
+    protected void exportDone(JComponent source, Transferable data, int action) {
+        if (action == MOVE) {// "delete" it
+            
+        }else if( action == COPY){
+        
+        }
+    }
+
+    @Override
+    protected Transferable createTransferable(final JComponent c) {
+        final AUVTransferHandler auvT = this;
+        
+        // we want a custom dnd image to be painted
         BufferedImage img = null;
         try {
             JTree auvTree = (JTree)c;
@@ -46,24 +63,9 @@ public class AUVTransferHandler extends TransferHandler{
             }
         } catch (IOException e) {
         }
-        
         this.setDragImage(img);
         this.setDragImageOffset(new Point(0, 0));
-        return COPY_OR_MOVE;
-    }
-
-    @Override
-    protected void exportDone(JComponent source, Transferable data, int action) {
-        if (action == MOVE) {// "delete" it
-            
-        }else if( action == COPY){
         
-        }
-    }
-
-    @Override
-    protected Transferable createTransferable(final JComponent c) {
-        final AUVTransferHandler auvT = this;
         return new Transferable() {
 
             public DataFlavor[] getTransferDataFlavors() {
