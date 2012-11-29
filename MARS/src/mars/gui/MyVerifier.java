@@ -7,6 +7,7 @@ package mars.gui;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,11 +70,22 @@ public class MyVerifier extends InputVerifier implements ActionListener {
 
     //This method checks input, but should cause no side effects.
     public boolean verify(JComponent input) {
-        return checkField(input, false);
+        boolean checkField = checkField(input, false);
+       /* if(checkField){
+            input.setBackground(Color.red);
+        }else{
+            input.setBackground(Color.red);
+        }*/
+        return checkField;
     }
 
     protected void makeItPretty(JComponent input) {
-        checkField(input, true);
+        boolean checkField = checkField(input, true);
+        if(checkField){
+            input.setBackground(Color.red);
+        }else{
+            input.setBackground(null);
+        }
     }
 
     protected boolean checkField(JComponent input, boolean changeIt) {

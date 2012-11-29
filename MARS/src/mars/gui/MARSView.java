@@ -1347,6 +1347,11 @@ public class MARSView extends FrameView {
                 auv_treeMousePressed(evt);
             }
         });
+        auv_tree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                auv_treeValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(auv_tree);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -3288,6 +3293,11 @@ public class MARSView extends FrameView {
         jTextField13.setText(resourceMap.getString("jTextField13.text")); // NOI18N
         jTextField13.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
         jTextField13.setName("jTextField13"); // NOI18N
+        jTextField13.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField13KeyPressed(evt);
+            }
+        });
 
         jLabel38.setText(resourceMap.getString("jLabel38.text")); // NOI18N
         jLabel38.setName("jLabel38"); // NOI18N
@@ -3348,6 +3358,11 @@ public class MARSView extends FrameView {
 
         jTextField14.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
         jTextField14.setName("jTextField14"); // NOI18N
+        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField14KeyPressed(evt);
+            }
+        });
 
         jLabel39.setText(resourceMap.getString("jLabel39.text")); // NOI18N
         jLabel39.setName("jLabel39"); // NOI18N
@@ -3986,7 +4001,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 } catch (IllegalArgumentException e) {       
                 }         
             }       
-        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
+        }/*else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());      
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
@@ -4056,7 +4071,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             }
                         });
             }
-        }                                       
+        }       */                                
     }//GEN-LAST:event_auv_treeMouseClicked
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
@@ -4626,10 +4641,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
                 TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+                TreePath selectionPath = auv_tree.getSelectionPath();
                 /*for (int i = 0; i < selectionPaths.length; i++) {
                     System.out.println(i + " " + selectionPaths[i]);
                 }*/
-                auv_tree.setSelectionPaths(selectionPaths);
+                //auv_tree.setSelectionPaths(selectionPaths);
                 //auv_tree.setSelectionPath(selPath);         
             }       
         }
@@ -4666,6 +4682,31 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         jTextField14.setText("");
         simob_name.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextField13KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField13KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            if(jTextField13.getInputVerifier().verify(jTextField13)){
+                auv_name.setVisible(false);
+            }else{
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+    }//GEN-LAST:event_jTextField13KeyPressed
+
+    private void jTextField14KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            if(jTextField14.getInputVerifier().verify(jTextField14)){
+                simob_name.setVisible(false);
+            }else{
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+    }//GEN-LAST:event_jTextField14KeyPressed
+
+    private void auv_treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_auv_treeValueChanged
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+    }//GEN-LAST:event_auv_treeValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
