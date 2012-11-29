@@ -163,8 +163,6 @@
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="auv_treeMouseClicked"/>
-                                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="auv_treeMousePressed"/>
-                                        <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="auv_treeValueChanged"/>
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTree(top)"/>
@@ -220,7 +218,6 @@
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMouseClicked"/>
-                                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="simob_treeMousePressed"/>
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="public mars.gui.TextFieldCellEditor textfieldEditor2;&#xa;private DefaultTreeCellRenderer renderer2;"/>

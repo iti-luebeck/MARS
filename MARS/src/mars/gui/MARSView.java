@@ -1343,14 +1343,6 @@ public class MARSView extends FrameView {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 auv_treeMouseClicked(evt);
             }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                auv_treeMousePressed(evt);
-            }
-        });
-        auv_tree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-                auv_treeValueChanged(evt);
-            }
         });
         jScrollPane1.setViewportView(auv_tree);
 
@@ -1388,9 +1380,6 @@ public class MARSView extends FrameView {
         simob_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 simob_treeMouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                simob_treeMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(simob_tree);
@@ -3940,9 +3929,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
                 //System.out.println(selPath.toString());         
                 //System.out.println(selPath.getLastPathComponent().toString()); 
-                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                //auv_tree.setSelectionPath(selPath); 
-                auv_tree.setSelectionPaths(selectionPaths);
                 try {  
                     if (selPath.getLastPathComponent() instanceof AUV) { 
                         AUV auv = (AUV)selPath.getLastPathComponent();
@@ -4001,15 +3987,13 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 } catch (IllegalArgumentException e) {       
                 }         
             }       
-        }/*else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());      
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
                 TreePath[] selectionPaths = auv_tree.getSelectionPaths();
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString()); 
-                //auv_tree.setSelectionPath(selPath);  
-                auv_tree.setSelectionPaths(selectionPaths);
                 
                 //deselect all auvs before we start to selcting it clean
                 Future simStateFutureD = mars.enqueue(new Callable() {
@@ -4071,7 +4055,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             }
                         });
             }
-        }       */                                
+        }                                       
     }//GEN-LAST:event_auv_treeMouseClicked
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
@@ -4081,8 +4065,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             if (selRow != -1) { 
                 TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
                 System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString());  
-                simob_tree.setSelectionPath(selPath);  
+                System.out.println(selPath.getLastPathComponent().toString()); 
                 try {  
                     if (selPath.getLastPathComponent() instanceof SimObject) {   
                         //auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
@@ -4129,7 +4112,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString()); 
-                simob_tree.setSelectionPath(selPath);  
                 try {  
                     if (selPath.getLastPathComponent() instanceof SimObject) {   
                         final SimObject simob = (SimObject)selPath.getLastPathComponent();
@@ -4290,8 +4272,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             if (selRow != -1) { 
                 TreePath selPath = settings_tree.getPathForLocation(evt.getX(), evt.getY());   
                 System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString());  
-                settings_tree.setSelectionPath(selPath);  
+                System.out.println(selPath.getLastPathComponent().toString());   
                 try {  
                     if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
                          HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
@@ -4635,32 +4616,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         toggleJMenuCheckbox(jme3_debug_auv_pe);
     }//GEN-LAST:event_jme3_debug_auv_visualizersActionPerformed
 
-    private void auv_treeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMousePressed
-        if (evt.getButton() == MouseEvent.BUTTON1) {   
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
-            if (selRow != -1) { 
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
-                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                TreePath selectionPath = auv_tree.getSelectionPath();
-                /*for (int i = 0; i < selectionPaths.length; i++) {
-                    System.out.println(i + " " + selectionPaths[i]);
-                }*/
-                //auv_tree.setSelectionPaths(selectionPaths);
-                //auv_tree.setSelectionPath(selPath);         
-            }       
-        }
-    }//GEN-LAST:event_auv_treeMousePressed
-
-    private void simob_treeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMousePressed
-        if (evt.getButton() == MouseEvent.BUTTON1) {   
-            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());  
-            if (selRow != -1) { 
-                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
-                simob_tree.setSelectionPath(selPath);         
-            }       
-        }
-    }//GEN-LAST:event_simob_treeMousePressed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jTextField13.setText("");
         auv_name.setVisible(false);
@@ -4702,11 +4657,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             }
         }
     }//GEN-LAST:event_jTextField14KeyPressed
-
-    private void auv_treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_auv_treeValueChanged
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-    }//GEN-LAST:event_auv_treeValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Camera;
