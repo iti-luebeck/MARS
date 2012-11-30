@@ -4,6 +4,7 @@
 
 package mars.gui;
 
+import java.util.Set;
 import mars.gui.dnd.AUVTransferHandler;
 import mars.gui.dnd.SimStateTransferHandler;
 import mars.gui.dnd.SimObTransferHandler;
@@ -44,9 +45,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -63,6 +66,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -121,6 +125,7 @@ import mars.states.SimState;
 import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  * The application's main frame.
@@ -134,6 +139,9 @@ public class MARSView extends FrameView {
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
     private MARS_Main mars;
+    
+    private ArrayList<String> auv_name_items = new ArrayList<String>();
+    private ArrayList<String> simob_name_items = new ArrayList<String>();
 
     /**
      *
@@ -299,7 +307,7 @@ public class MARSView extends FrameView {
                 @Override
                 public void run() {
                     auv_tree.setModel(new AUVManagerModel(auvManager));
-                    auv_tree.updateUI();
+                    auv_tree.updateUI();    
                 }
             }
         );
@@ -315,6 +323,8 @@ public class MARSView extends FrameView {
                 public void run() {
                     simob_tree.setModel(new SimObjectManagerModel(simobManager));
                     simob_tree.updateUI();
+                    simob_name_items.clear();
+                    simob_name_items.addAll(simobManager.getSimObjects().keySet());
                 }
             }
         );
@@ -404,8 +414,20 @@ public class MARSView extends FrameView {
         return auv_name;
     }
     
+    public void updateANAutoComplete(){
+        auv_name_items.clear();
+        auv_name_items.addAll(auvManager.getAUVs().keySet());
+        AutoCompleteDecorator.decorate(jTextField13, auv_name_items, false);
+    }
+    
     public JDialog getSN(){
         return simob_name;
+    }
+    
+    public void updateSNAutoComplete(){
+        simob_name_items.clear();
+        simob_name_items.addAll(simob_manager.getSimObjects().keySet());
+        AutoCompleteDecorator.decorate(jTextField14, simob_name_items, false);
     }
     
     public JTextField getANText(){
@@ -3347,6 +3369,7 @@ public class MARSView extends FrameView {
 
         jTextField14.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
         jTextField14.setName("jTextField14"); // NOI18N
+        AutoCompleteDecorator.decorate(jTextField14, simob_name_items, false);
         jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField14KeyPressed(evt);

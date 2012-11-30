@@ -59,32 +59,42 @@ public class SimStateTransferHandler extends TransferHandler{
         if (!canImport(support)) {
             return false;
         }
-
-        if(support.getDropAction() == TransferHandler.COPY){//we have to ask for a new name fot he copied auv
-            mars.getView().getAN().setLocationRelativeTo(JMEPanel1);
-            mars.getView().getAN().setVisible(true);
-        }
-        
-        //we are finished and catch the new name + check if ok
-        final String newName = mars.getView().getANText().getText();
-        if(newName.equals("") && support.getDropAction() == TransferHandler.COPY){//we have to check if the user pressed cancel in the dialog
-                return false;
-        }
         
         // Fetch the Transferable and its data
         Transferable t = support.getTransferable();
         try {
             final TransferHandlerObject data = (TransferHandlerObject)t.getTransferData(new TransferHandlerObjectDataFlavor());
             final DropLocation loc = support.getDropLocation();
+            
+            if(support.getDropAction() == TransferHandler.COPY){//we have to ask for a new name fot he copied auv
+                if(data.getType() == TransferHandlerObjectType.AUV){
+                    mars.getView().getAN().setLocationRelativeTo(JMEPanel1);
+                    mars.getView().updateANAutoComplete();
+                    mars.getView().getAN().setVisible(true);
+                }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
+                    mars.getView().getSN().setLocationRelativeTo(JMEPanel1);
+                    mars.getView().updateSNAutoComplete();
+                    mars.getView().getSN().setVisible(true);
+                }                    
+            }
+            //we are finished and catch the new name + check if ok
+            final String newNameA = mars.getView().getANText().getText();
+            final String newNameS = mars.getView().getSNText().getText();
+            if(newNameA.equals("") && support.getDropAction() == TransferHandler.COPY && data.getType() == TransferHandlerObjectType.AUV){//we have to check if the user pressed cancel in the dialog
+                return false;
+            }else if(newNameS.equals("") && support.getDropAction() == TransferHandler.COPY && data.getType() == TransferHandlerObjectType.SIMOBJECT){//we have to check if the user pressed cancel in the dialog
+                return false;
+            }
+            
             Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
                                     //System.out.println("drop: " + support.getDropAction());
                                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
                                     if(data.getType() == TransferHandlerObjectType.AUV){
-                                        simState.enableAUV(data.getName(), loc.getDropPoint(),support.getDropAction(),newName);
+                                        simState.enableAUV(data.getName(), loc.getDropPoint(),support.getDropAction(),newNameA);
                                     }else if(data.getType() == TransferHandlerObjectType.SIMOBJECT){
-                                        simState.enableSIMOB(data.getName(), loc.getDropPoint(),support.getDropAction(),newName);
+                                        simState.enableSIMOB(data.getName(), loc.getDropPoint(),support.getDropAction(),newNameS);
                                     }
                                 }
                                 return null;

@@ -40,10 +40,7 @@ public class AUVTransferHandler extends TransferHandler{
         }
     }
 
-    @Override
-    protected Transferable createTransferable(final JComponent c) {
-        final AUVTransferHandler auvT = this;
-        
+    private BufferedImage createDNDImage(JComponent c){
         // we want a custom dnd image to be painted
         BufferedImage img = null;
         try {
@@ -63,30 +60,43 @@ public class AUVTransferHandler extends TransferHandler{
             }
         } catch (IOException e) {
         }
+        return img;
+    }
+    
+    @Override
+    protected Transferable createTransferable(final JComponent c) {
+        final AUVTransferHandler auvT = this;
+        final JTree auvTree = (JTree)c;
+        
+        // we want a custom dnd image to be painted
+        BufferedImage img = createDNDImage(c);
         this.setDragImage(img);
         this.setDragImageOffset(new Point(0, 0));
         
-        return new Transferable() {
-
-            public DataFlavor[] getTransferDataFlavors() {
-                DataFlavor[] dt = new DataFlavor[1];
-                dt[0] = new TransferHandlerObjectDataFlavor();
-                return dt;
-            }
-
-            public boolean isDataFlavorSupported(DataFlavor flavor) {
-                return true;
-            }
-
-            public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                JTree auvTree = (JTree)c;
-                TreePath selPath = auvTree.getSelectionPath();   
-                if (selPath.getLastPathComponent() instanceof AUV) { 
-                    AUV auv = (AUV)selPath.getLastPathComponent();                 
-                    return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
+        TreePath selectionPath = auvTree.getSelectionPath();
+        if(selectionPath.getLastPathComponent() instanceof AUV){//only dnd if auvs, not a lower node
+            return new Transferable() {
+                public DataFlavor[] getTransferDataFlavors() {
+                    DataFlavor[] dt = new DataFlavor[1];
+                    dt[0] = new TransferHandlerObjectDataFlavor();
+                    return dt;
                 }
-                return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
-            }
-        };
+
+                public boolean isDataFlavorSupported(DataFlavor flavor) {
+                    return true;
+                }
+
+                public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                    TreePath selPath = auvTree.getSelectionPath();   
+                    if (selPath.getLastPathComponent() instanceof AUV) { 
+                        AUV auv = (AUV)selPath.getLastPathComponent();                 
+                        return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
+                    }
+                    return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
+                }
+            };
+        }else{
+            return null;
+        }
     }
 }
