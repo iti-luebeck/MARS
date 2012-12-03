@@ -79,8 +79,7 @@ public class SimStateTransferHandler extends TransferHandler{
                 }                    
             }
             //we are finished and catch the new name + check if ok
-            Random r = new Random();
-            final String newNameA = String.valueOf(r.nextFloat());//mars.getView().getANText().getText();
+            final String newNameA = mars.getView().getANText().getText();
             final String newNameS = mars.getView().getSNText().getText();
             if(newNameA.equals("") && support.getDropAction() == TransferHandler.COPY && data.getType() == TransferHandlerObjectType.AUV){//we have to check if the user pressed cancel in the dialog
                 return false;
