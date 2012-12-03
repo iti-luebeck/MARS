@@ -1707,7 +1707,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
                 auv_manager.registerAUV(auvCopy);
-                view.updateTrees();              
+                //we have to update the view AFTER the AUV register
+                Future simStateFutureView = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(view != null){
+                            view.updateTrees(); 
+                        }
+                        return null;
+                    }
+                });           
             }else{
                 if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(intersection);
@@ -1739,6 +1747,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auvCopy.setState(this);
                 auv_manager.registerAUV(auvCopy);
                 view.updateTrees();
+                Future simStateFutureView = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(view != null){
+                            view.updateTrees(); 
+                        }
+                        return null;
+                    }
+                }); 
             }else{
                 if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(pos);
@@ -1768,6 +1784,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 simobCopy.setPosition(pos);
                 simob_manager.registerSimObject(simobCopy);
                 view.updateTrees();
+                Future simStateFutureView = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(view != null){
+                            view.updateTrees(); 
+                        }
+                        return null;
+                    }
+                }); 
             }else{
                 if( simob.isEnabled()){//check if auf simob already enabled, then only new position
                     simob.setPosition(pos);
@@ -1799,6 +1823,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 simobCopy.setPosition(intersection);
                 simob_manager.registerSimObject(simobCopy);
                 view.updateTrees();
+                Future simStateFutureView = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(view != null){
+                            view.updateTrees(); 
+                        }
+                        return null;
+                    }
+                }); 
             }else{
                 if( simob.isEnabled()){//check if auf simob already enabled, then only new position
                     simob.setPosition(intersection);
