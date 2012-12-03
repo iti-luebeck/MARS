@@ -8,11 +8,17 @@ package mars.gui;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -28,26 +34,46 @@ public class MyVerifier extends InputVerifier implements ActionListener {
     private int type = MyVerifierType.NONE;
     private AUV_Manager auvManager; 
     private SimObjectManager simobManager; 
+    private JDialog popup;
+    private JLabel messageLabel;
+    private JLabel image;
+    private Point point;
+    private Dimension cDim;
     
     public MyVerifier(){
         super();
+        messageLabel = new JLabel("This name is already taken!");
+        image = new JLabel(new ImageIcon(".//Assets/Icons/"+"cancel.png"));
     }
     
     public MyVerifier(int type){
-        super();
+        this();
         this.type = type;
     }
     
-    public MyVerifier(int type,AUV_Manager auvManager){
-        super();
+    public MyVerifier(int type,AUV_Manager auvManager, JDialog parent){
+        this();
         this.type = type;
         this.auvManager = auvManager;
+        popup = new JDialog(parent);
+        initComponents();
     }
     
-    public MyVerifier(int type,SimObjectManager simobManager){
-        super();
+    public MyVerifier(int type,SimObjectManager simobManager, JDialog parent){
+        this();
         this.type = type;
         this.simobManager = simobManager;
+        popup = new JDialog(parent);
+        initComponents();
+    }
+    
+    private void initComponents() {
+        popup.getContentPane().setLayout(new FlowLayout());
+        popup.setUndecorated(true);
+        popup.getContentPane().setBackground(new Color(243, 255, 159));
+        popup.getContentPane().add(image);
+        popup.getContentPane().add(messageLabel);
+        popup.setFocusableWindowState(false);
     }
     
     @Override
@@ -70,25 +96,36 @@ public class MyVerifier extends InputVerifier implements ActionListener {
 
     //This method checks input, but should cause no side effects.
     public boolean verify(JComponent input) {
-        boolean checkField = checkField(input, false);
-       /* if(checkField){
-            input.setBackground(Color.red);
-        }else{
-            input.setBackground(Color.red);
-        }*/
-        return checkField;
+        boolean checkField = checkField(input);
+        if(!checkField){
+            input.setBackground(Color.PINK);
+            
+            popup.setSize(0, 0);
+            popup.setLocationRelativeTo(input);
+            point = popup.getLocation();
+            cDim = input.getSize();
+            popup.setLocation(point.x-(int)cDim.getWidth()/2,
+                point.y+(int)cDim.getHeight()/2);
+            popup.pack();
+            popup.setVisible(true);
+            
+            return false;
+        }
+        input.setBackground(Color.WHITE);
+        popup.setVisible(false);
+        return true;
     }
 
     protected void makeItPretty(JComponent input) {
-        boolean checkField = checkField(input, true);
+        boolean checkField = checkField(input);
         if(checkField){
-            input.setBackground(Color.red);
+            //input.setBackground(Color.red);
         }else{
-            input.setBackground(null);
+            //input.setBackground(null);
         }
     }
 
-    protected boolean checkField(JComponent input, boolean changeIt) {
+    protected boolean checkField(JComponent input) {
         if(input instanceof MyTextField){
             MyTextField mytext = (MyTextField)input;
             Object obj = mytext.getObject();

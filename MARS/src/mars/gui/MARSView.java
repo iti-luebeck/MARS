@@ -402,8 +402,8 @@ public class MARSView extends FrameView {
                     auv_tree.setTransferHandler(new AUVTransferHandler());
                     simob_tree.setTransferHandler(new SimObTransferHandler());
                     JMEPanel1.setTransferHandler(new SimStateTransferHandler(mars,JMEPanel1));
-                    getANText().setInputVerifier(new MyVerifier( MyVerifierType.AUV,auvManager));
-                    getSNText().setInputVerifier(new MyVerifier( MyVerifierType.SIMOB,simob_manager));
+                    getANText().setInputVerifier(new MyVerifier( MyVerifierType.AUV,auvManager,auv_name));
+                    getSNText().setInputVerifier(new MyVerifier( MyVerifierType.SIMOB,simob_manager,simob_name));
                     MapPanel.setTransferHandler(new MapStateTransferHandler(mars,MapPanel));
                 }
             }
