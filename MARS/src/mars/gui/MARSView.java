@@ -3298,6 +3298,7 @@ public class MARSView extends FrameView {
         auv_name.setAlwaysOnTop(true);
         auv_name.setMinimumSize(new java.awt.Dimension(160, 100));
         auv_name.setModal(true);
+        auv_name.setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         auv_name.setName("auv_name"); // NOI18N
         auv_name.setResizable(false);
 
@@ -4642,11 +4643,13 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jTextField13.setText("");
         auv_name.setVisible(false);
+        auv_name.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(jTextField13.getInputVerifier().verify(jTextField13)){
             auv_name.setVisible(false);
+            auv_name.dispose();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
