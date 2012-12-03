@@ -8,6 +8,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -78,7 +79,8 @@ public class SimStateTransferHandler extends TransferHandler{
                 }                    
             }
             //we are finished and catch the new name + check if ok
-            final String newNameA = mars.getView().getANText().getText();
+            Random r = new Random();
+            final String newNameA = String.valueOf(r.nextFloat());//mars.getView().getANText().getText();
             final String newNameS = mars.getView().getSNText().getText();
             if(newNameA.equals("") && support.getDropAction() == TransferHandler.COPY && data.getType() == TransferHandlerObjectType.AUV){//we have to check if the user pressed cancel in the dialog
                 return false;

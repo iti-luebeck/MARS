@@ -3297,8 +3297,7 @@ public class MARSView extends FrameView {
         auv_name.setTitle(resourceMap.getString("auv_name.title")); // NOI18N
         auv_name.setAlwaysOnTop(true);
         auv_name.setMinimumSize(new java.awt.Dimension(160, 100));
-        auv_name.setModal(true);
-        auv_name.setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        auv_name.setModalityType(java.awt.Dialog.ModalityType.MODELESS);
         auv_name.setName("auv_name"); // NOI18N
         auv_name.setResizable(false);
 
