@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import mars.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Lamp;
+import mars.actuators.Teleporter;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
@@ -174,6 +175,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"battery_charge.png"));
                         }else if(hasher.getUserData() instanceof FlowMeter){
                             setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"breeze_small.png"));
+                        }else if(hasher.getUserData() instanceof Teleporter){
+                            setIcon(new javax.swing.ImageIcon(".//Assets/Icons/"+"transform_move.png"));
                         }
                     }
                 }else if(hasher.getUserData() instanceof Accumulator){

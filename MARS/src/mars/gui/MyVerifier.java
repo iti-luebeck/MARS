@@ -79,8 +79,6 @@ public class MyVerifier extends InputVerifier implements ActionListener {
     @Override
     public boolean shouldYieldFocus(JComponent input) {
         boolean inputOK = verify(input);
-        makeItPretty(input);
-        updateObject();
 
         if (inputOK) {
             return true;
@@ -114,15 +112,6 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         input.setBackground(Color.WHITE);
         popup.setVisible(false);
         return true;
-    }
-
-    protected void makeItPretty(JComponent input) {
-        boolean checkField = checkField(input);
-        if(checkField){
-            //input.setBackground(Color.red);
-        }else{
-            //input.setBackground(null);
-        }
     }
 
     protected boolean checkField(JComponent input) {
@@ -319,7 +308,8 @@ public class MyVerifier extends InputVerifier implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         MyTextField source = (MyTextField)e.getSource();
-        shouldYieldFocus(source); //ignore return value
+        //shouldYieldFocus(source); //ignore return value
+        verify(source);
         source.selectAll();
     }
 }

@@ -426,7 +426,7 @@
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="localip">
-                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">auto</value>
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.159</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.157</value><!-- 141.83.88.157 -->
