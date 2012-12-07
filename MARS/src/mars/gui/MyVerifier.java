@@ -98,19 +98,23 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         if(!checkField){
             input.setBackground(Color.PINK);
             
-            popup.setSize(0, 0);
-            popup.setLocationRelativeTo(input);
-            point = popup.getLocation();
-            cDim = input.getSize();
-            popup.setLocation(point.x-(int)cDim.getWidth()/2,
+            if(popup != null){
+                popup.setSize(0, 0);
+                popup.setLocationRelativeTo(input);
+                point = popup.getLocation();
+                cDim = input.getSize();
+                popup.setLocation(point.x-(int)cDim.getWidth()/2,
                 point.y+(int)cDim.getHeight()/2);
-            popup.pack();
-            popup.setVisible(true);
+                popup.pack();
+                popup.setVisible(true);
+            }
             
             return false;
         }
         input.setBackground(Color.WHITE);
-        popup.setVisible(false);
+        if(popup != null){
+            popup.setVisible(false);
+        }
         return true;
     }
 
