@@ -7,10 +7,12 @@ package mars.xml;
 import javax.xml.bind.Unmarshaller.Listener;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
+import mars.sensors.Sensor;
 import mars.simobjects.SimObject;
 
 /**
@@ -34,10 +36,10 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof SimObject){
             SimObject simob = (SimObject)target;
             simob.initAfterJAXB();
-        }else if(target instanceof Servo){
+        }/*else if(target instanceof Servo){
             Servo servo = (Servo)target;
             servo.initAfterJAXB();
-        }else if(target instanceof MARS_Settings){
+        }*/else if(target instanceof MARS_Settings){
             MARS_Settings settings = (MARS_Settings)target;
             settings.initAfterJAXB();
         }else if(target instanceof PhysicalEnvironment){
@@ -49,6 +51,9 @@ public class UnmarshallListener extends Listener{
         }else if(target instanceof Accumulator){
             Accumulator acc = (Accumulator)target;
             acc.initAfterJAXB();
+        }else if(target instanceof PhysicalExchanger){
+            PhysicalExchanger pe = (PhysicalExchanger)target;
+            pe.initAfterJAXB();
         }
     }
 }

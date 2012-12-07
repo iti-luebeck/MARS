@@ -8,6 +8,8 @@ package mars;
 import mars.states.SimState;
 import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import java.util.HashMap;
@@ -18,7 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.actuators.Actuator;
+import mars.auv.AUV;
 import mars.ros.MARSNodeMain;
+import mars.ros.TF_ROS_Publisher;
 import mars.sensors.Sensor;
 import mars.xml.HashMapAdapter;
 
@@ -51,6 +55,10 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      *
      */
     protected Node auv_node;
+    /**
+     *
+     */
+    protected AUV auv;
     /**
      *
      */
@@ -104,6 +112,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     /*
      * 
      */
+    public TF_ROS_Publisher tf_pub = null;
     /**
      * 
      */
@@ -213,6 +222,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         setROS_Node(ros_node);
+        tf_pub.initROS(ros_node, auv_name);
     }
 
     /**
@@ -253,6 +263,26 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void setRos_publish_rate(int ros_publish_rate) {
         variables.put("ros_publish_rate",ros_publish_rate);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int getTFRos_publish_rate() {
+        if((Integer)variables.get("tf_ros_publish_rate") == null){
+            return 1000;
+        }else{
+            return (Integer)variables.get("tf_ros_publish_rate");
+        }
+    }
+
+    /**
+     * 
+     * @param ros_publish_rate
+     */
+    public void setTFRos_publish_rate(int tf_ros_publish_rate) {
+        variables.put("tf_ros_publish_rate",tf_ros_publish_rate);
     }
 
     /**
@@ -314,6 +344,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      */
     public void initAfterJAXB(){
+        tf_pub = new TF_ROS_Publisher(this);
        /* variables.put("noise_type", getNoise_type());
         variables.put("noise_value", getNoise_value());
         variables.put("name",getPhysicalExchangerName());
@@ -384,6 +415,22 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void setCurrentConsumptio(float currentConsumption){
         variables.put("currentConsumption",currentConsumption);
+    }
+
+    public void setAuv(AUV auv) {
+        this.auv = auv;
+    }
+
+    public AUV getAuv() {
+        return auv;
+    }
+    
+    public Vector3f getTFPosition(){
+        return Vector3f.ZERO;
+    }
+    
+    public Quaternion getTFOrientation(){
+        return Quaternion.IDENTITY;
     }
     
     /**

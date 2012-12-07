@@ -86,12 +86,20 @@ public class PressureSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         PressureSensorStart.setMaterial(mark_mat7);
-        PressureSensorStart.setLocalTranslation(getPressureSensorStartVector());
+        //PressureSensorStart.setLocalTranslation(getPressureSensorStartVector());
         PressureSensorStart.updateGeometricState();
+        PhysicalExchanger_Node.setLocalTranslation(getPressureSensorStartVector());
         PhysicalExchanger_Node.attachChild(PressureSensorStart);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }
+
+    @Override
+    public Vector3f getTFPosition() {
+        return PhysicalExchanger_Node.getLocalTranslation();
+    }
+    
+    
 
     public void update(float tpf){
 
@@ -216,6 +224,7 @@ public class PressureSensor extends Sensor{
      */
     @Override
     public void publish() {
+        super.publish();
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));

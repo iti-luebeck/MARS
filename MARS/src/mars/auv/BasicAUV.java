@@ -271,6 +271,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : actuatorOriginal.keySet() ){
             Actuator element = (Actuator)actuatorOriginal.get(elem);
             PhysicalExchanger copy = element.copy();
+            copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
         
@@ -278,6 +279,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensorsOriginal.keySet() ){
             Sensor element = (Sensor)sensorsOriginal.get(elem);
             PhysicalExchanger copy = element.copy();
+            copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
     }
@@ -603,6 +605,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
             if(element.isEnabled()){
+                element.setAuv(this);
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
@@ -643,6 +646,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         for ( String elem : actuators.keySet() ){
             Actuator element = (Actuator)actuators.get(elem);
             if(element.isEnabled()){
+                element.setAuv(this);
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);

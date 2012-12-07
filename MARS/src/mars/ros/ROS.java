@@ -17,10 +17,6 @@ public interface ROS {
     /**
      * 
      */
-    public MARSNodeMain mars_node = null;
-    /**
-     * 
-     */
     public void initROS();
     /**
      * 

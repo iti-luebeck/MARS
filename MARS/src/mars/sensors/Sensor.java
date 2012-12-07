@@ -15,11 +15,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import org.ros.node.topic.Publisher;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Main;
 import mars.ros.ROS_Publisher;
+import mars.ros.TF_ROS_Publisher;
 import mars.states.SimState;
 
 /**
@@ -29,7 +29,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,Sonar.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,Compass.class,TemperatureSensor.class,UnderwaterModem.class,Velocimeter.class,VideoCamera.class,IMU.class,Positionmeter.class,Orientationmeter.class,Posemeter.class,TerrainSender.class,GPSReceiver.class,AmpereMeter.class,VoltageMeter.class,FlowMeter.class} )
+@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,Sonar.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,Compass.class,TemperatureSensor.class,UnderwaterModem.class,Velocimeter.class,VideoCamera.class,IMU.class,Positionmeter.class,Orientationmeter.class,Posemeter.class,TerrainSender.class,GPSReceiver.class,AmpereMeter.class,VoltageMeter.class,FlowMeter.class,Transformer.class} )
 public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /*
      * 
@@ -57,6 +57,10 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     protected long time = 0;
+    /**
+     * 
+     */
+    protected long tf_time = 0;
     
     /**
      * 
@@ -124,12 +128,18 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     public void publish() {
+        if(tf_pub != null){
+            tf_pub.publishTF();
+        }
     }
 
     /**
      * 
      */
     public void publishUpdate() {
+        if(tf_pub != null){
+            tf_pub.publishTFUpdate();
+        }
         long curtime = System.currentTimeMillis();
         if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
             
