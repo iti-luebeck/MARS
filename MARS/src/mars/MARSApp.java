@@ -67,7 +67,6 @@ public class MARSApp extends SingleFrameApplication {
     public static void createCanvas(String appClass){
         try {
             MARS_Settings mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-            mars_settings.init();
             resolution_height = mars_settings.getResolution_Height();
             resolution_width = mars_settings.getResolution_Width();
             framelimit = mars_settings.getFrameLimit();
@@ -103,7 +102,6 @@ public class MARSApp extends SingleFrameApplication {
             public void run() {
                         try {
                             MARS_Settings mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-                            mars_settings.init();
                             resolution_height = mars_settings.getResolution_Height();
                             resolution_width = mars_settings.getResolution_Width();
                             framelimit = mars_settings.getFrameLimit();

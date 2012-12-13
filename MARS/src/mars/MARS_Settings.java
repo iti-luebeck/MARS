@@ -179,41 +179,7 @@ public class MARS_Settings{
     public MARS_Settings(){
         
     }
-    
-    /**
-     * You have to initialize first when you read the data in trough jaxb.
-     * @deprecated 
-     */
-    @Deprecated
-    public void init(){
-        Physics = (HashMap<String,Object>)settings.get("Physics");
-        Server = (HashMap<String,Object>)settings.get("Server");
-        Graphics = (HashMap<String,Object>)settings.get("Graphics");
-        Gui = (HashMap<String,Object>)settings.get("Gui");
-        Misc = (HashMap<String,Object>)settings.get("Misc");
-        RAW = (HashMap<String,Object>)Server.get("RAW");
-        ROS = (HashMap<String,Object>)Server.get("ROS");
-        Resolution = (HashMap<String,Object>)Graphics.get("Resolution");
-        Axis = (HashMap<String,Object>)Graphics.get("Axis");
-        Grid = (HashMap<String,Object>)Graphics.get("Grid");
-        FPS = (HashMap<String,Object>)Graphics.get("FPS");
-        Fog = (HashMap<String,Object>)Graphics.get("Fog");
-        DepthOfField = (HashMap<String,Object>)Graphics.get("DepthOfField");
-        WavesWater = (HashMap<String,Object>)Graphics.get("WavesWater");
-        ProjectedWavesWater = (HashMap<String,Object>)Graphics.get("ProjectedWavesWater");
-        Water = (HashMap<String,Object>)Graphics.get("Water");
-        PlaneWater = (HashMap<String,Object>)Graphics.get("PlaneWater");
-        SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
-        SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
-        Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
-        Flow = (HashMap<String,Object>)Graphics.get("Flow");
-        Light = (HashMap<String,Object>)Graphics.get("Light");
-        Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
-        WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
-        CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
-        Camera = (HashMap<String,Object>)Misc.get("Camera");
-    }
-    
+       
     /**
      * 
      */
