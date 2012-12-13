@@ -1125,7 +1125,6 @@ public class MARSView extends FrameView {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem ExitMenuItem = new javax.swing.JMenuItem();
         SettingsMenu = new javax.swing.JMenu();
-        Camera = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         keys = new javax.swing.JMenuItem();
         help = new javax.swing.JMenuItem();
@@ -1172,6 +1171,7 @@ public class MARSView extends FrameView {
         jme3_window_switcher = new javax.swing.JPopupMenu();
         jme3_view = new javax.swing.JMenu();
         jme3_view_chaseAUV = new javax.swing.JMenu();
+        jme3_view_flybycam = new javax.swing.JMenuItem();
         jme3_view_lookAt = new javax.swing.JMenuItem();
         jme3_view_moveCamera = new javax.swing.JMenuItem();
         jme3_view_rotateCamera = new javax.swing.JMenuItem();
@@ -1655,16 +1655,6 @@ public class MARSView extends FrameView {
 
         SettingsMenu.setText(resourceMap.getString("SettingsMenu.text")); // NOI18N
         SettingsMenu.setName("SettingsMenu"); // NOI18N
-
-        Camera.setText(resourceMap.getString("Camera.text")); // NOI18N
-        Camera.setName("Camera"); // NOI18N
-        Camera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CameraActionPerformed(evt);
-            }
-        });
-        SettingsMenu.add(Camera);
-
         menuBar.add(SettingsMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
@@ -2006,6 +1996,15 @@ public class MARSView extends FrameView {
         jme3_view_chaseAUV.setText(resourceMap.getString("jme3_view_chaseAUV.text")); // NOI18N
         jme3_view_chaseAUV.setName("jme3_view_chaseAUV"); // NOI18N
         jme3_view.add(jme3_view_chaseAUV);
+
+        jme3_view_flybycam.setText(resourceMap.getString("jme3_view_flybycam.text")); // NOI18N
+        jme3_view_flybycam.setName("jme3_view_flybycam"); // NOI18N
+        jme3_view_flybycam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_view_flybycamActionPerformed(evt);
+            }
+        });
+        jme3_view.add(jme3_view_flybycam);
 
         jme3_view_lookAt.setText(resourceMap.getString("jme3_view_lookAt.text")); // NOI18N
         jme3_view_lookAt.setName("jme3_view_lookAt"); // NOI18N
@@ -4485,10 +4484,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         //jButtonCharts.setEnabled(false); 
     }//GEN-LAST:event_jButtonChartsActionPerformed
 
-    private void CameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CameraActionPerformed
-
-        mars.getChaseCam().setEnabled(false);         mars.getFlyByCamera().setEnabled(true);     }//GEN-LAST:event_CameraActionPerformed
-
     private void chartButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chartButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chartButton2ActionPerformed
@@ -4683,8 +4678,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_jTextField14KeyPressed
 
+    private void jme3_view_flybycamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_view_flybycamActionPerformed
+        mars.getChaseCam().setEnabled(false);         
+        mars.getFlyByCamera().setEnabled(true);
+    }//GEN-LAST:event_jme3_view_flybycamActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Camera;
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
     private javax.swing.JButton Cancel2;
@@ -4872,6 +4871,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JMenu jme3_view_chaseAUV;
     private javax.swing.JMenu jme3_view_debug;
     private javax.swing.JCheckBoxMenuItem jme3_view_fixed;
+    private javax.swing.JMenuItem jme3_view_flybycam;
     private javax.swing.JMenuItem jme3_view_lookAt;
     private javax.swing.JMenuItem jme3_view_moveCamera;
     private javax.swing.JCheckBoxMenuItem jme3_view_parrallel;

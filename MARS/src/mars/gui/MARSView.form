@@ -529,17 +529,6 @@
             <Property name="text" type="java.lang.String" resourceKey="SettingsMenu.text"/>
             <Property name="name" type="java.lang.String" value="SettingsMenu" noResource="true"/>
           </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="Camera">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="Camera.text"/>
-                <Property name="name" type="java.lang.String" value="Camera" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CameraActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">
           <Properties>
@@ -1079,6 +1068,15 @@
                 <Property name="name" type="java.lang.String" value="jme3_view_chaseAUV" noResource="true"/>
               </Properties>
             </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="jme3_view_flybycam">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jme3_view_flybycam.text"/>
+                <Property name="name" type="java.lang.String" value="jme3_view_flybycam" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jme3_view_flybycamActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jme3_view_lookAt">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jme3_view_lookAt.text"/>
