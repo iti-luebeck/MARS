@@ -83,6 +83,10 @@ public interface AUV extends RosNodeListener{
      */
     public void publishSensorsOfAUV();
     /**
+     * 
+     */
+    public void publishActuatorsOfAUV();
+    /**
      *
      */
     public void clearForces();

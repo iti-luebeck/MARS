@@ -16,7 +16,6 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 

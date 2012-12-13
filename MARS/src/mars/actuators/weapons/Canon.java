@@ -23,7 +23,11 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.texture.Texture;
 import com.rits.cloning.Cloner;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +39,6 @@ import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
-import mars.xml.Vector3fAdapter;
 
 /**
  *
@@ -46,9 +49,7 @@ public class Canon extends Actuator implements Moveable,Keys{
 
     //motor
     private Geometry CanonStart;
-    private Vector3f CanonStartVector = new Vector3f(0,0,0);
     private Geometry CanonEnd;
-    private Vector3f CanonDirection = Vector3f.UNIT_Z;
     
     private Vector3f local_rotation_axis = new Vector3f();
     
@@ -144,38 +145,6 @@ public class Canon extends Actuator implements Moveable,Keys{
     }
 
     /**
-     *
-     * @param Position 
-     */
-    public void setCanonPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @param CanonDirection 
-     */
-    public void setCanonDirection(Vector3f CanonDirection){
-        variables.put("CanonDirection", CanonDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getCanonDirection() {
-        return (Vector3f)variables.get("CanonDirection");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getCanonPosition() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
@@ -194,9 +163,7 @@ public class Canon extends Actuator implements Moveable,Keys{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
         CanonStart.setMaterial(mark_mat7);
-        //MotorStart.setLocalTranslation(MotorStartVector);
         CanonStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorStart);
         Rotation_Node.attachChild(CanonStart);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
@@ -204,24 +171,23 @@ public class Canon extends Actuator implements Moveable,Keys{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);
         CanonEnd.setMaterial(mark_mat9);
-        //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        CanonEnd.setLocalTranslation(getCanonDirection());
+        CanonEnd.setLocalTranslation(Vector3f.UNIT_X);
         CanonEnd.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(CanonEnd);
 
-        Vector3f ray_start = getCanonPosition();
-        Vector3f ray_direction = getCanonDirection();
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Canon_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Orange);
         mark4.setMaterial(mark_mat4);
-        //mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
 
-        PhysicalExchanger_Node.setLocalTranslation(getCanonPosition());
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
@@ -351,20 +317,29 @@ public class Canon extends Actuator implements Moveable,Keys{
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig){
         for ( String elem : action_mapping.keySet() ){
-            String action = (String)action_mapping.get(elem);
+            final String action = (String)action_mapping.get(elem);
             final String mapping = elem;
             final Canon self = this;
-            if(action.equals("shoot")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
+            inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
                     ActionListener actionListener = new ActionListener() {
                         public void onAction(String name, boolean keyPressed, float tpf) {
                             if(name.equals(mapping) && !keyPressed) {
-                                self.shoot();
+                                try {
+                                    Method method = self.getClass().getMethod(action);
+                                    method.invoke(self);
+                                } catch (NoSuchMethodException ex) {
+                                    Logger.getLogger(Canon.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SecurityException ex) {
+                                    Logger.getLogger(Canon.class.getName()).log(Level.SEVERE, null, ex);
+                                }catch (IllegalAccessException ex) {
+                                    Logger.getLogger(Canon.class.getName()).log(Level.SEVERE, null, ex);
+                                }catch (InvocationTargetException ex) {
+                                    Logger.getLogger(Canon.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
                         }
                     };
-                    inputManager.addListener(actionListener, elem);
-            }
+            inputManager.addListener(actionListener, elem);
         }
     }    
 }

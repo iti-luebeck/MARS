@@ -23,6 +23,7 @@ import mars.MARS_Settings;
 import mars.MARS_Main;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.ros.ROS_Publisher;
 import mars.ros.ROS_Subscriber;
 import mars.states.SimState;
 
@@ -34,7 +35,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class,PointVisualizer.class,BallastTank.class,Lamp.class,Teleporter.class} )
-public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber{
+public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber,ROS_Publisher{
     /*
      * 
      */
@@ -69,6 +70,14 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      * 
      */
     private Initializer initer;
+    /**
+     * 
+     */
+    protected long time = 0;
+    /**
+     * 
+     */
+    protected long tf_time = 0;
     
     /**
      * 
@@ -182,5 +191,34 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     public void setIniter(Initializer initer) {
         this.initer = initer;
+    }
+    
+    /**
+     * 
+     */
+    public void publish() {
+        if(tf_pub != null){
+            tf_pub.publishTF();
+        }
+    }
+
+    /**
+     * 
+     */
+    public void publishUpdate() {
+        if(tf_pub != null){
+            tf_pub.publishTFUpdate();
+        }
+        long curtime = System.currentTimeMillis();
+        if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
+            
+        }else{
+            time = curtime;
+            if(mars_node != null && mars_node.isExisting()){
+                //if(mars_node.isRunning()){
+                    publish();
+                //}
+            }
+        }
     }
 }

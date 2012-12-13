@@ -156,20 +156,6 @@ public class Orientationmeter extends Sensor{
      */
     @Override
     public void publish() {
-//        header.frame_id = this.getRos_frame_id();
-//        header.stamp = Time.fromMillis(System.currentTimeMillis());
-//        fl.header = header;
-//        org.ros.message.geometry_msgs.Quaternion quat = new org.ros.message.geometry_msgs.Quaternion();
-//        quat.x = getOrientation().getX();
-//        quat.y = getOrientation().getY();
-//        quat.z = getOrientation().getZ();
-//        quat.w = getOrientation().getW();
-//        org.ros.message.geometry_msgs.Pose pose = new org.ros.message.geometry_msgs.Pose();
-//        pose.orientation = quat;
-//        fl.pose = pose;     
-//        if( publisher != null ){
-//            publisher.publish(fl);
-//        }
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));

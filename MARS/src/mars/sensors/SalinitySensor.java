@@ -6,6 +6,7 @@ package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -30,10 +31,6 @@ import mars.xml.Vector3fAdapter;
 public class SalinitySensor extends Sensor{
     
     private Geometry SalinitySensorStart;
-
-    @XmlElement(name="Position")
-    @XmlJavaTypeAdapter(Vector3fAdapter.class)
-    private Vector3f SalinitySensorStartVector;
 
     ///ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
@@ -86,9 +83,13 @@ public class SalinitySensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         SalinitySensorStart.setMaterial(mark_mat7);
-        SalinitySensorStart.setLocalTranslation(SalinitySensorStartVector);
+        //SalinitySensorStart.setLocalTranslation(SalinitySensorStartVector);
         SalinitySensorStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SalinitySensorStart);
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }
@@ -118,22 +119,6 @@ public class SalinitySensor extends Sensor{
      */
     private float getSalinityRaw(){
         return pe.getFluid_salinity();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getSalinitySensorStartVector() {
-        return SalinitySensorStartVector;
-    }
-
-    /**
-     *
-     * @param SalinitySensorStartVector 
-     */
-    public void setSalinitySensorStartVector(Vector3f SalinitySensorStartVector) {
-        this.SalinitySensorStartVector = SalinitySensorStartVector;
     }
 
     /**

@@ -405,6 +405,38 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      * @return
      */
+    public Vector3f getPosition(){
+        return (Vector3f)variables.get("Position");
+    }
+    
+    /**
+     * 
+     * @param Position
+     */
+    public void setPosition(Vector3f Position){
+        variables.put("Position",Position);
+    }
+    
+        /**
+     * 
+     * @return
+     */
+    public Vector3f getRotation(){
+        return (Vector3f)variables.get("Rotation");
+    }
+    
+    /**
+     * 
+     * @param Rotation
+     */
+    public void setRotation(Vector3f Rotation){
+        variables.put("Rotation",Rotation);
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public Float getCurrentConsumption(){
         return (Float)variables.get("currentConsumption");
     }
@@ -425,12 +457,12 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         return auv;
     }
     
-    public Vector3f getTFPosition(){
-        return Vector3f.ZERO;
+    public Vector3f getTFPosition() {
+        return PhysicalExchanger_Node.getLocalTranslation();
     }
-    
-    public Quaternion getTFOrientation(){
-        return Quaternion.IDENTITY;
+
+    public Quaternion getTFOrientation() {
+        return PhysicalExchanger_Node.getLocalRotation();
     }
     
     /**

@@ -6,6 +6,7 @@ package mars.actuators.visualizer;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -37,14 +38,9 @@ public class VectorVisualizer extends Actuator{
 
     //motor
     private Geometry VectorVisualizerStart;
-    private Vector3f VectorVisualizerStartVector = new Vector3f(0,0,0);
     private Geometry VectorVisualizerEnd;
-    private Vector3f VectorVisualizerDirection = Vector3f.UNIT_X;
-    private ColorRGBA color = new ColorRGBA();
     
     private Node Rotation_Node = new Node();
-
-    private Vector3f current = Vector3f.UNIT_Y;
     
     private Arrow arrow;
     private Geometry ArrowGeom;
@@ -84,38 +80,6 @@ public class VectorVisualizer extends Actuator{
     }
 
     /**
-     *
-     * @param Position 
-     */
-    public void setVectorVisualizerPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @param VectorVisualizerDirection 
-     */
-    public void setVectorVisualizerDirection(Vector3f VectorVisualizerDirection){
-        variables.put("VectorVisualizerDirection", VectorVisualizerDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getVectorVisualizerDirection() {
-         return (Vector3f)variables.get("VectorVisualizerDirection");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getVectorVisualizerStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
      * 
      * @return
      */
@@ -141,9 +105,7 @@ public class VectorVisualizer extends Actuator{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", getColor());
         VectorVisualizerStart.setMaterial(mark_mat7);
-        //MotorStart.setLocalTranslation(MotorStartVector);
         VectorVisualizerStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorStart);
         Rotation_Node.attachChild(VectorVisualizerStart);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
@@ -151,25 +113,24 @@ public class VectorVisualizer extends Actuator{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", getColor());
         VectorVisualizerEnd.setMaterial(mark_mat9);
-        //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        VectorVisualizerEnd.setLocalTranslation(getVectorVisualizerDirection());
+        VectorVisualizerEnd.setLocalTranslation(Vector3f.UNIT_X);
         VectorVisualizerEnd.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(VectorVisualizerEnd);
 
-        Vector3f ray_start = getVectorVisualizerStartVector();
-        Vector3f ray_direction = getVectorVisualizerDirection();
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         arrow = new Arrow(ray_direction.mult(1f));
         ArrowGeom = new Geometry("VectorVisualizer_Arrow", arrow);
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", getColor());
         ArrowGeom.setMaterial(mark_mat4);
-        //mark4.setLocalTranslation(ray_start);
         ArrowGeom.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(ArrowGeom);
         Rotation_Node.attachChild(ArrowGeom);
 
-        PhysicalExchanger_Node.setLocalTranslation(getVectorVisualizerStartVector());
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }

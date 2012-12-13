@@ -7,6 +7,7 @@ package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -32,8 +33,6 @@ import org.ros.message.Time;
 public class TemperatureSensor extends Sensor{
 
     private Geometry TemperatureSensorStart;
-
-    private Vector3f TemperatureSensorStartVector;
 
     ///ROS stuff
     private Publisher<hanse_msgs.temperature> publisher = null;
@@ -87,9 +86,13 @@ public class TemperatureSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         TemperatureSensorStart.setMaterial(mark_mat7);
-        TemperatureSensorStart.setLocalTranslation(getTemperatureSensorStartVector());
+        //TemperatureSensorStart.setLocalTranslation(getTemperatureSensorStartVector());
         TemperatureSensorStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(TemperatureSensorStart);
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }
@@ -119,22 +122,6 @@ public class TemperatureSensor extends Sensor{
      */
     private float getTemperatureRaw(){
         return pe.getFluid_temp();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getTemperatureSensorStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setTemperatureSensorStartVector(Vector3f Position) {
-        variables.put("Position", Position);
     }
 
     /**

@@ -7,7 +7,6 @@ package mars.sensors.sonar;
 
 import com.jme3.scene.Node;
 import java.io.IOException;
-import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -18,40 +17,22 @@ import mars.Helper.Helper;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 import mars.hardware.Imaginex;
-import mars.ros.MARSNodeMain;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * This is the Imaginex Sonar class. It's the sonar used in the AUV HANSE.
  * Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
- * @author Thomas Tosik
+ * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class ImagenexSonar_852_Scanning extends Sonar{
+public class TriTech extends Sonar{
 
     private int SonarReturnDataHeaderLength = 12;//265
 
-    ///ROS stuff
     /**
      * 
      */
-    protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
-    /**
-     * 
-     */
-    protected hanse_msgs.ScanningSonar fl;
-    /**
-     * 
-     */
-    protected std_msgs.Header header; 
-    
-    /**
-     * 
-     */
-    public ImagenexSonar_852_Scanning(){
+    public TriTech(){
         super();
     }
     
@@ -61,7 +42,7 @@ public class ImagenexSonar_852_Scanning extends Sonar{
      * @param detectable
      * @param pe
      */
-    public ImagenexSonar_852_Scanning(SimState simstate, Node detectable,PhysicalEnvironment pe) {
+    public TriTech(SimState simstate, Node detectable,PhysicalEnvironment pe) {
         super(simstate,detectable,pe);
         //set the logging
         try {
@@ -79,7 +60,7 @@ public class ImagenexSonar_852_Scanning extends Sonar{
      * @param simstate 
      * @param detectable
      */
-    public ImagenexSonar_852_Scanning(SimState simstate, Node detectable) {
+    public TriTech(SimState simstate, Node detectable) {
         super(simstate,detectable);
         //set the logging
         try {
@@ -160,41 +141,5 @@ public class ImagenexSonar_852_Scanning extends Sonar{
     protected float calculateStandardDeviationNoiseFunction(float x){
         return 7.50837174f*((float)Math.pow(1.02266704f, (float)Math.abs(x)) );
     }
-    
-        /**
-     * 
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.ScanningSonar._TYPE);  
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public void publish() {
-        super.publish();
-        header.setSeq(rosSequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-        
-        byte[] sonData = getRawSonarData();
-        float lastHeadPosition = getLastHeadPosition();
-        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
-        fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getSonarMaxRange());
-        
-        if( publisher != null ){
-            publisher.publish(fl);
-        }
-    }
 }
+

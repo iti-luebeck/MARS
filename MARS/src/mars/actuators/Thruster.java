@@ -48,9 +48,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
 
     //motor
     private Geometry MotorStart;
-    private Vector3f MotorStartVector = new Vector3f(0,0,0);
     private Geometry MotorEnd;
-    private Vector3f MotorDirection = Vector3f.UNIT_Z;
     /**
      *
      */
@@ -112,38 +110,6 @@ public class Thruster extends Actuator implements Moveable,Keys{
     }
 
     /**
-     *
-     * @param Position 
-     */
-    public void setMotorPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @param MotorDirection
-     */
-    public void setMotorDirection(Vector3f MotorDirection){
-        variables.put("MotorDirection", MotorDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getMotorDirection() {
-        return (Vector3f)variables.get("MotorDirection");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getMotorPosition() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
@@ -153,9 +119,7 @@ public class Thruster extends Actuator implements Moveable,Keys{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
         MotorStart.setMaterial(mark_mat7);
-        //MotorStart.setLocalTranslation(MotorStartVector);
         MotorStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorStart);
         Rotation_Node.attachChild(MotorStart);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
@@ -163,24 +127,23 @@ public class Thruster extends Actuator implements Moveable,Keys{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);
         MotorEnd.setMaterial(mark_mat9);
-        //MotorEnd.setLocalTranslation(MotorStartVector.add(this.MotorDirection));
-        MotorEnd.setLocalTranslation(getMotorDirection());
+        MotorEnd.setLocalTranslation(Vector3f.UNIT_X);
         MotorEnd.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorEnd);
         Rotation_Node.attachChild(MotorEnd);
 
-        Vector3f ray_start = getMotorPosition();
-        Vector3f ray_direction = getMotorDirection();
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Orange);
         mark4.setMaterial(mark_mat4);
-        //mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
-
-        PhysicalExchanger_Node.setLocalTranslation(getMotorPosition());
+        
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }

@@ -35,8 +35,6 @@ public class IMU extends Sensor{
     Accelerometer acc = new Accelerometer();
     @XmlElement(name="Gyroscope")
     Gyroscope gyro = new Gyroscope();
-    @XmlElement(name="Compass")
-    Compass comp = new Compass();
     @XmlElement(name="Orientationmeter")
     Orientationmeter oro = new Orientationmeter();
     
@@ -63,12 +61,10 @@ public class IMU extends Sensor{
         super(simstate);
         this.pe = pe;
         acc.setPhysical_environment(pe);
-        comp.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
         acc.setSimState(simState);
         gyro.setSimState(simState);
-        comp.setSimState(simState);
         oro.setSimState(simState);
     }
 
@@ -80,14 +76,12 @@ public class IMU extends Sensor{
         super(simstate);
         acc.setSimState(simState);
         gyro.setSimState(simState);
-        comp.setSimState(simState);
         oro.setSimState(simState);
     }
     
     public IMU(IMU sensor){
         super(sensor);
         oro = (Orientationmeter)sensor.getOrientationmeter().copy();
-        comp = (Compass)sensor.getCompass().copy();
         gyro = (Gyroscope)sensor.getGyroscope().copy();
         acc = (Accelerometer)sensor.getAccelerometer().copy();
     }
@@ -106,7 +100,6 @@ public class IMU extends Sensor{
         this.auv_node = auv_node;
         acc.init(auv_node);
         gyro.init(auv_node);
-        comp.init(auv_node);
         oro.init(auv_node);
         
         /*Vector3f angax = new Vector3f();
@@ -130,7 +123,6 @@ public class IMU extends Sensor{
     public void update(float tpf){
         acc.update(tpf);
         gyro.update(tpf);
-        comp.update(tpf);
         oro.update(tpf);
     }
     
@@ -140,7 +132,6 @@ public class IMU extends Sensor{
     public void reset(){
         acc.reset();
         gyro.reset();
-        comp.reset();
         oro.reset();
     }
     
@@ -149,7 +140,6 @@ public class IMU extends Sensor{
         super.setPhysical_environment(pe);
         acc.setPhysical_environment(pe);
         gyro.setPhysical_environment(pe);
-        comp.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
     }
     
@@ -162,7 +152,6 @@ public class IMU extends Sensor{
         super.setSimState(simState);
         acc.setSimState(simState);
         gyro.setSimState(simState);
-        comp.setSimState(simState);
         oro.setSimState(simState);
     }
     
@@ -171,7 +160,6 @@ public class IMU extends Sensor{
         super.setPhysicsControl(physics_control);
         acc.setPhysicsControl(physics_control);
         gyro.setPhysicsControl(physics_control);
-        comp.setPhysicsControl(physics_control);
         oro.setPhysicsControl(physics_control);
     }
     
@@ -184,7 +172,6 @@ public class IMU extends Sensor{
         super.setNodeVisibility(visible);
         acc.setNodeVisibility(visible);
         gyro.setNodeVisibility(visible);
-        comp.setNodeVisibility(visible);
         oro.setNodeVisibility(visible);
     }
 
@@ -197,7 +184,6 @@ public class IMU extends Sensor{
         super.setPhysicalExchangerName(name);
         acc.setPhysicalExchangerName(name + "_accelerometer");
         gyro.setPhysicalExchangerName(name + "_gyroscope");
-        comp.setPhysicalExchangerName(name + "_compass");
         oro.setPhysicalExchangerName(name + "_orientationmeter");
     }
     
@@ -210,16 +196,11 @@ public class IMU extends Sensor{
         super.setEnabled(enabled);
         acc.setEnabled(enabled);
         gyro.setEnabled(enabled);
-        comp.setEnabled(enabled);
         oro.setEnabled(enabled);
     }
 
     public Gyroscope getGyroscope() {
         return gyro;
-    }
-
-    public Compass getCompass() {
-        return comp;
     }
 
     public Accelerometer getAccelerometer() {

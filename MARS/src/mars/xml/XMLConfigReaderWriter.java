@@ -1223,9 +1223,9 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 sea.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                sea.setMotorPosition(getVector(sensor_node));
+                //sea.setMotorPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("MotorDirection")){
-                sea.setMotorDirection(getVector(sensor_node));
+                //sea.setMotorDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){
                 getNoise(sensor_node,sea);
             }
@@ -1243,9 +1243,9 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 sea.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                sea.setMotorPosition(getVector(sensor_node));
+                //sea.setMotorPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("MotorDirection")){
-                sea.setMotorDirection(getVector(sensor_node));
+                //sea.setMotorDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){
                 getNoise(sensor_node,sea);
             }
@@ -1265,9 +1265,9 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 ping.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                ping.setPingStartVector(getVector(sensor_node));
+                //ping.setPingStartVector(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("PingerDirection")){
-                ping.setPingDirectionVector(getVector(sensor_node));
+                //ping.setPingDirectionVector(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("detection_range")){
                 ping.setDetection_range(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("noise")){
@@ -1291,7 +1291,7 @@ public class XMLConfigReaderWriter
             else if(sensor_node.getNodeName().equals("enabled")){
                 press.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                press.setPressureSensorStartVector(getVector(sensor_node));
+                //press.setPressureSensorStartVector(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){
                 getNoise(sensor_node,press);
             }
@@ -1311,7 +1311,7 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 temp.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                temp.setTemperatureSensorStartVector(getVector(sensor_node));
+                //temp.setTemperatureSensorStartVector(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("noise")){
                 getNoise(sensor_node,temp);
             }
@@ -1413,7 +1413,7 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("position")){
                 infra.setPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("direction")){
-                infra.setDirection(getVector(sensor_node));
+                //infra.setDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("MaxRange")){
                 infra.setMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("MinRange")){
@@ -1441,11 +1441,11 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 son.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                son.setSonarPosition(getVector(sensor_node));
+                //son.setSonarPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarDirection")){
-                son.setSonarDirection(getVector(sensor_node));
+                //son.setSonarDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarUpDirection")){
-                son.setSonarUpDirection(getVector(sensor_node));
+                //son.setSonarUpDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarMaxRange")){
                 son.setSonarMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarMinRange")){
@@ -1483,11 +1483,11 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 son.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                son.setSonarPosition(getVector(sensor_node));
+                //son.setSonarPosition(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarDirection")){
-                son.setSonarDirection(getVector(sensor_node));
+                //son.setSonarDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarUpDirection")){
-                son.setSonarUpDirection(getVector(sensor_node));
+                //son.setSonarUpDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarMaxRange")){
                 son.setSonarMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarMinRange")){
@@ -1603,11 +1603,11 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("enabled")){
                 vid.setEnabled(Boolean.valueOf(sensor_node.getTextContent().trim()));    
             }else if(sensor_node.getNodeName().equals("position")){
-                vid.setCameraStartVector(getVector(sensor_node));
+                //vid.setCameraStartVector(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("CameraDirection")){
-                vid.setCameraDirection(getVector(sensor_node));
+                //vid.setCameraDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("CameraTopDirection")){
-                vid.setCameraTopDirection(getVector(sensor_node));
+                //vid.setCameraTopDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("CameraHeight")){
                 vid.setCameraHeight(Integer.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("CameraWidth")){

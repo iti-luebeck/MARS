@@ -216,6 +216,18 @@ public class AUV_Manager {
             }
         }
     }
+    
+    /**
+     *
+     */
+    public void publishActuatorsOfAUVs(){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            if(auv.getAuv_param().isEnabled()){
+                auv.publishActuatorsOfAUV();
+            }
+        }
+    }
 
     /**
      *

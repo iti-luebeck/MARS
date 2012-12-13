@@ -41,7 +41,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {ImagenexSonar_852_Echo.class,ImagenexSonar_852_Scanning.class} )
+@XmlSeeAlso( {ImagenexSonar_852_Echo.class,ImagenexSonar_852_Scanning.class,TriTech.class} )
 public class Sonar extends Sensor{
     /**
      *
@@ -56,10 +56,6 @@ public class Sonar extends Sensor{
      */
     protected Geometry SonarUp;
 
-
-    private Vector3f SonarStartVector = new Vector3f(0,0,0);
-    private Vector3f SonarDirection = new Vector3f(0,0,0);
-    private Vector3f SonarUpDirection = new Vector3f(0,0,0);
 
     private Node detectable;
     /**
@@ -110,21 +106,7 @@ public class Sonar extends Sensor{
     private float length_factor = 1.0f;
 
     private int SonarReturnDataLength = 252;
-    
-    ///ROS stuff
-    /**
-     * 
-     */
-    protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
-    /**
-     * 
-     */
-    protected hanse_msgs.ScanningSonar fl;
-    /**
-     * 
-     */
-    protected std_msgs.Header header; 
-    
+        
     /**
      * 
      */
@@ -203,7 +185,6 @@ public class Sonar extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
         SonarStart.setMaterial(mark_mat7);
-        SonarStart.setLocalTranslation(getSonarPosition());
         SonarStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarStart);
 
@@ -212,7 +193,7 @@ public class Sonar extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
         SonarEnd.setMaterial(mark_mat9);
-        SonarEnd.setLocalTranslation(getSonarPosition().add(getSonarDirection()));
+        SonarEnd.setLocalTranslation(Vector3f.UNIT_X);
         SonarEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarEnd);
 
@@ -221,12 +202,12 @@ public class Sonar extends Sensor{
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Blue);
         SonarUp.setMaterial(mark_mat10);
-        SonarUp.setLocalTranslation(getSonarPosition().add(getSonarUpDirection()));
+        SonarUp.setLocalTranslation(Vector3f.UNIT_Y);
         SonarUp.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarUp);
 
-        Vector3f ray_start = getSonarPosition();
-        Vector3f ray_direction = (getSonarPosition().add(getSonarDirection())).subtract(ray_start);
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(ray_direction.mult(getSonarMaxRange())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.White);
@@ -236,19 +217,28 @@ public class Sonar extends Sensor{
         PhysicalExchanger_Node.attachChild(mark4);
 
         //used for the ray in different angle
-        //angle_node_start.setLocalTranslation(SonarStartVector);
         angle_node_start.updateGeometricState();
         angle_node.attachChild(angle_node_start);
-        angle_node_end.setLocalTranslation(getSonarDirection());
+        angle_node_end.setLocalTranslation(Vector3f.UNIT_X);
         angle_node_end.updateGeometricState();
         angle_node.attachChild(angle_node_end);
-        angle_node_up.setLocalTranslation(getSonarUpDirection());
+        angle_node_up.setLocalTranslation(Vector3f.UNIT_Y);
         angle_node_up.updateGeometricState();
         angle_node.attachChild(angle_node_up);
-        angle_node.setLocalTranslation(getSonarPosition());
         angle_node.updateGeometricState();
 
-        auv_node.attachChild(angle_node);
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
+        
+        /*angle_node.setLocalTranslation(getPosition());
+        Quaternion quat2 = new Quaternion();
+        quat2.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        angle_node.setLocalRotation(quat2);*/
+        
+        //auv_node.attachChild(angle_node);
+        PhysicalExchanger_Node.attachChild(angle_node);
         auv_node.attachChild(PhysicalExchanger_Node);
         rootNode.attachChild(debug_node);
     }
@@ -364,54 +354,6 @@ public class Sonar extends Sensor{
      */
     public void setDetectable(Node detectable) {
         this.detectable = detectable;
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setSonarPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     * 
-     * @param SonarDirection
-     */
-    public void setSonarDirection(Vector3f SonarDirection){
-        variables.put("SonarDirection", SonarDirection);
-    }
-
-    /**
-     *
-     * @param SonarUpDirection
-     */
-    public void setSonarUpDirection(Vector3f SonarUpDirection){
-        variables.put("SonarUpDirection", SonarUpDirection);
-    }
-    
-        /**
-     *
-     * @return 
-     */
-    public Vector3f getSonarPosition(){
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public Vector3f getSonarDirection(){
-        return (Vector3f)variables.get("SonarDirection");
-    }
-
-    /**
-     *
-     * @return 
-     */
-    public Vector3f getSonarUpDirection(){
-        return (Vector3f)variables.get("SonarUpDirection");
     }
 
     /**
@@ -1125,42 +1067,5 @@ public class Sonar extends Sensor{
      */
     public void setFailureThreshold(int failure_threshold) {
         noises.put("failure_threshold", failure_threshold);
-    }
-    
-    /**
-     * 
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.ScanningSonar._TYPE);  
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public void publish() {
-       
-        header.setSeq(rosSequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-        
-        byte[] sonData = getRawSonarData();
-        float lastHeadPosition = getLastHeadPosition();
-        this.simauv.getView().initSonarData(sonData,lastHeadPosition,this);
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
-        fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getSonarMaxRange());
-        
-        if( publisher != null ){
-            publisher.publish(fl);
-        }
     }
 }

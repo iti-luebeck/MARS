@@ -9,6 +9,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -36,7 +37,6 @@ public class BallastTank extends Actuator implements Keys{
 
     //motor
     private Geometry BallastStart;
-    private Vector3f BallastStartVector = new Vector3f(0,0,0);
     /**
      *
      */
@@ -165,22 +165,6 @@ public class BallastTank extends Actuator implements Keys{
     }
 
     /**
-     *
-     * @param Position 
-     */
-    public void setBallastPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getBallastPosition() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
@@ -190,12 +174,13 @@ public class BallastTank extends Actuator implements Keys{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.LightGray);
         BallastStart.setMaterial(mark_mat7);
-        //MotorStart.setLocalTranslation(BallastStartVector);
         BallastStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(BallastStart);
         Rotation_Node.attachChild(BallastStart);
 
-        PhysicalExchanger_Node.setLocalTranslation(getBallastPosition());
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
     }

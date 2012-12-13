@@ -10,6 +10,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -53,9 +54,7 @@ public class Servo extends Actuator implements Manipulating,Keys{
     
     //servo
     private Geometry ServoStart;
-    private Vector3f ServoStartVector = new Vector3f(0,0,0);
     private Geometry ServoEnd;
-    private Vector3f ServoDirection = Vector3f.UNIT_Z;
     
     @XmlElement(name="Slaves")
     private List<String> slaves_names = new ArrayList<String>();
@@ -170,38 +169,6 @@ public class Servo extends Actuator implements Manipulating,Keys{
         max_angle_iteration = (int)(Math.round(((getOperatingAngle()/2)/getResolution())));
         SpeedPerIteration = (getResolution())*((getSpeedPerDegree())/((float)(Math.PI*2)/360f));
     }
-
-    /**
-     * 
-     * @return
-     */
-    public Vector3f getServoDirection() {
-        return (Vector3f)variables.get("ServoDirection");
-    }
-
-    /**
-     * 
-     * @param ServoDirection
-     */
-    public void setServoDirection(Vector3f ServoDirection) {
-        variables.put("ServoDirection", ServoDirection);
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public Vector3f getServoStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     * 
-     * @param Position
-     */
-    public void setServoStartVector(Vector3f Position) {
-        variables.put("Position", Position);
-    }
     
     /**
      * 
@@ -277,7 +244,6 @@ public class Servo extends Actuator implements Manipulating,Keys{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         ServoStart.setMaterial(mark_mat7);
-        ServoStart.setLocalTranslation(getServoStartVector());
         ServoStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoStart);
 
@@ -286,12 +252,12 @@ public class Servo extends Actuator implements Manipulating,Keys{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.White);
         ServoEnd.setMaterial(mark_mat9);
-        ServoEnd.setLocalTranslation(getServoStartVector().add(getServoDirection()));
+        ServoEnd.setLocalTranslation(Vector3f.UNIT_X);
         ServoEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoEnd);
 
-        Vector3f ray_start = getServoStartVector();
-        Vector3f ray_direction = getServoDirection();
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.White);
@@ -299,7 +265,11 @@ public class Servo extends Actuator implements Manipulating,Keys{
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
         PhysicalExchanger_Node.attachChild(mark4);
-
+        
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 

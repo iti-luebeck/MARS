@@ -6,6 +6,7 @@ package mars.actuators.visualizer;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -76,22 +77,6 @@ public class PointVisualizer extends Actuator{
     }
 
     /**
-     *
-     * @param Position 
-     */
-    public void setPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getPosition() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
      * 
      * @return
      */
@@ -133,12 +118,13 @@ public class PointVisualizer extends Actuator{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", getColor());
         VectorVisualizerStart.setMaterial(mark_mat7);
-        //MotorStart.setLocalTranslation(MotorStartVector);
         VectorVisualizerStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(MotorStart);
         Rotation_Node.attachChild(VectorVisualizerStart);
 
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         rootNode.attachChild(PhysicalExchanger_Node);
     }

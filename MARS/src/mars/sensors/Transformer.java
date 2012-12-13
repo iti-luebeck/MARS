@@ -156,14 +156,11 @@ public class Transformer extends Sensor{
         transform.setTranslation(position);
         
         geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
-        quat.setX(physics_control.getPhysicsRotation().getX());
-        quat.setY(physics_control.getPhysicsRotation().getY());
-        quat.setZ(physics_control.getPhysicsRotation().getZ());
-        quat.setW(physics_control.getPhysicsRotation().getW());
+        quat.setX(auv_node.getLocalRotation().getX());
+        quat.setY(auv_node.getLocalRotation().getY());
+        quat.setZ(auv_node.getLocalRotation().getZ());
+        quat.setW(auv_node.getLocalRotation().getW());
         transform.setRotation(quat);
-        float[] angles = new float[3];
-        //physics_control.getPhysicsRotation().toAngles(angles);
-        //System.out.println("physics_control.getPhysicsRotation(): " + angles[0] + " " + angles[1] + " " + angles[2]);
                 
         tfs.setTransform(transform);  
         

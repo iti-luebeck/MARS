@@ -9,6 +9,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -38,9 +39,6 @@ public class PingDetector extends Sensor{
 
     private Geometry PingStart;
     private Geometry PingDirection;
-
-    private Vector3f PingStartVector;
-    private Vector3f PingDirectionVector;
 
     private SimObjectManager simob_manager;
 
@@ -87,7 +85,6 @@ public class PingDetector extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.DarkGray);
         PingStart.setMaterial(mark_mat7);
-        PingStart.setLocalTranslation(getPingStartVector());
         PingStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PingStart);
 
@@ -96,12 +93,12 @@ public class PingDetector extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.DarkGray);
         PingDirection.setMaterial(mark_mat9);
-        PingDirection.setLocalTranslation(getPingStartVector().add(getPingDirectionVector()));
+        PingDirection.setLocalTranslation(Vector3f.UNIT_X);
         PingDirection.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PingDirection);
 
-        Vector3f ray_start = getPingStartVector();
-        Vector3f ray_direction = (getPingStartVector().add(getPingDirectionVector())).subtract(ray_start);
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("PingDetector_Arrow", new Arrow(ray_direction.mult(getDetection_range())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.DarkGray);
@@ -109,41 +106,14 @@ public class PingDetector extends Sensor{
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
         PhysicalExchanger_Node.attachChild(mark4);
+        
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
 
-        auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getPingDirectionVector() {
-        return (Vector3f)variables.get("PingDirection");
-    }
-
-    /**
-     *
-     * @param PingDirection 
-     */
-    public void setPingDirectionVector(Vector3f PingDirection) {
-        variables.put("PingDirection", PingDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getPingStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setPingStartVector(Vector3f Position) {
-        variables.put("Position", Position);
+        auv_node.attachChild(PhysicalExchanger_Node);
     }
 
     /**

@@ -131,54 +131,6 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @return
      */
-    public Vector3f getCameraDirection() {
-        return (Vector3f)variables.get("CameraDirection");
-    }
-
-    /**
-     *
-     * @param CameraDirection
-     */
-    public void setCameraDirection(Vector3f CameraDirection) {
-        variables.put("CameraDirection", CameraDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getCameraStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setCameraStartVector(Vector3f Position) {
-        variables.put("Position", Position);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getCameraTopDirection() {
-        return (Vector3f)variables.get("CameraTopDirection");
-    }
-
-    /**
-     *
-     * @param CameraTopDirection
-     */
-    public void setCameraTopDirection(Vector3f CameraTopDirection) {
-        variables.put("CameraTopDirection", CameraTopDirection);
-    }
-
-    /**
-     *
-     * @return
-     */
     public float getCameraAngle() {
          return (Float)variables.get("CameraAngle");
     }
@@ -229,9 +181,7 @@ public class VideoCamera extends Sensor implements Moveable{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Green);
         CameraStart.setMaterial(mark_mat7);
-        //CameraStart.setLocalTranslation(CameraStartVector);
         CameraStart.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(CameraStart);
         Rotation_Node.attachChild(CameraStart);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
@@ -239,10 +189,8 @@ public class VideoCamera extends Sensor implements Moveable{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
         CameraEnd.setMaterial(mark_mat9);
-        //CameraEnd.setLocalTranslation(CameraStartVector.add(CameraDirection));
-        CameraEnd.setLocalTranslation(getCameraDirection());
+        CameraEnd.setLocalTranslation(Vector3f.UNIT_X);
         CameraEnd.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(CameraEnd);
         Rotation_Node.attachChild(CameraEnd);
 
         Sphere sphere10 = new Sphere(16, 16, 0.025f);
@@ -250,35 +198,32 @@ public class VideoCamera extends Sensor implements Moveable{
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.DarkGray);
         CameraTop.setMaterial(mark_mat10);
-        //CameraTop.setLocalTranslation(CameraStartVector.add(CameraTopDirection));
-        CameraTop.setLocalTranslation(getCameraTopDirection());
+        CameraTop.setLocalTranslation(Vector3f.UNIT_Y);
         CameraTop.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(CameraTop);
         Rotation_Node.attachChild(CameraTop);
 
-        Vector3f ray_start = getCameraStartVector();
-        Vector3f ray_direction = getCameraDirection();
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("VideoCamera_Arrow_1", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Green);
         mark4.setMaterial(mark_mat4);
-        //mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(mark4);
         Rotation_Node.attachChild(mark4);
 
-        ray_start = getCameraStartVector();
-        ray_direction = getCameraTopDirection();
+        ray_start = Vector3f.ZERO;
+        ray_direction = Vector3f.UNIT_Y;
         Geometry mark5 = new Geometry("VideoCamera_Arrow_2", new Arrow(ray_direction.mult(1f)));
         Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat5.setColor("Color", ColorRGBA.Green);
         mark5.setMaterial(mark_mat5);
-        //mark5.setLocalTranslation(ray_start);
         mark5.updateGeometricState();
-        //PhysicalExchanger_Node.attachChild(mark5);
         Rotation_Node.attachChild(mark5);
 
-        PhysicalExchanger_Node.setLocalTranslation(getCameraStartVector());
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
@@ -302,8 +247,8 @@ public class VideoCamera extends Sensor implements Moveable{
         //float aspect = (float) CameraWidth / CameraHeight;
        // debugCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
 
-        debugCamera.setLocation(getCameraStartVector());
-        debugCamera.lookAt(getCameraStartVector(), CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation().normalize()));
+        debugCamera.setLocation(getPosition());
+        debugCamera.lookAt(getPosition(), CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation().normalize()));
 
         debugCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         //debugCamera.setViewPort(0f, 1f, 0f, 1f);
@@ -339,7 +284,7 @@ public class VideoCamera extends Sensor implements Moveable{
         float aspect = (float) getCameraWidth() / getCameraHeight();
         //offCamera.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
         offCamera.setFrustumPerspective(getCameraAngle(), 1f, 0.01f, 1000f);
-        offCamera.setLocation(getCameraStartVector());
+        offCamera.setLocation(getPosition());
         offCamera.lookAt( this.CameraEnd.getWorldTranslation()
                 , CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
 
@@ -456,6 +401,7 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public void publish() {
+        super.publish();
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));

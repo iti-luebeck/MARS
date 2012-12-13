@@ -250,6 +250,7 @@ public class ROS_Node implements Runnable {
                 Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         auv_manager.publishSensorsOfAUVs();
+                        auv_manager.publishActuatorsOfAUVs();
                         return null;
                     }
                 });

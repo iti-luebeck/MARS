@@ -29,8 +29,6 @@ public class Posemeter extends Sensor{
     Positionmeter pos = new Positionmeter();
     @XmlElement(name="Orientationmeter")
     Orientationmeter oro = new Orientationmeter();
-    @XmlElement(name="Compass")
-    Compass comp = new Compass();
     
     ///ROS stuff
     private Publisher<geometry_msgs.PoseStamped> publisher = null;
@@ -54,10 +52,8 @@ public class Posemeter extends Sensor{
         this.pe = pe;
         pos.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
-        comp.setPhysical_environment(pe);
         pos.setSimState(simState);
         oro.setSimState(simState);
-        comp.setSimState(simState);
     }
     
     /**
@@ -68,13 +64,11 @@ public class Posemeter extends Sensor{
         super(simstate);
         pos.setSimState(simState);
         oro.setSimState(simState);
-        comp.setSimState(simState);
     }
     
     public Posemeter(Posemeter sensor){
         super(sensor);
         oro = (Orientationmeter)sensor.getOrientationmeter().copy();
-        comp = (Compass)sensor.getCompass().copy();
         pos = (Positionmeter)sensor.getPositionmeter().copy();
     }
 
@@ -92,7 +86,6 @@ public class Posemeter extends Sensor{
         this.auv_node = auv_node;
         pos.init(auv_node);
         oro.init(auv_node);
-        comp.init(auv_node);
     }
 
     /**
@@ -102,7 +95,6 @@ public class Posemeter extends Sensor{
     public void update(float tpf){
         pos.update(tpf);
         oro.update(tpf);
-        comp.update(tpf);
     }
     
     /**
@@ -111,7 +103,6 @@ public class Posemeter extends Sensor{
     public void reset(){
         pos.reset();
         oro.reset();
-        comp.reset();
     }
     
     @Override
@@ -119,7 +110,6 @@ public class Posemeter extends Sensor{
         super.setPhysical_environment(pe);
         pos.setPhysical_environment(pe);
         oro.setPhysical_environment(pe);
-        comp.setPhysical_environment(pe);
     }
     
     /**
@@ -131,7 +121,6 @@ public class Posemeter extends Sensor{
         super.setSimState(simState);
         pos.setSimState(simState);
         oro.setSimState(simState);
-        comp.setSimState(simState);
     }
     
     @Override
@@ -139,7 +128,6 @@ public class Posemeter extends Sensor{
         super.setPhysicsControl(physics_control);
         pos.setPhysicsControl(physics_control);
         oro.setPhysicsControl(physics_control);
-        comp.setPhysicsControl(physics_control);
     }
     
         /**
@@ -151,7 +139,6 @@ public class Posemeter extends Sensor{
         super.setNodeVisibility(visible);
         pos.setNodeVisibility(visible);
         oro.setNodeVisibility(visible);
-        comp.setNodeVisibility(visible);
     }
 
     /**
@@ -163,7 +150,6 @@ public class Posemeter extends Sensor{
         super.setPhysicalExchangerName(name);
         pos.setPhysicalExchangerName(name + "_positionmeter");
         oro.setPhysicalExchangerName(name + "_orientationmeter");
-        comp.setPhysicalExchangerName(name + "_compass");
     }
     
     /**
@@ -175,11 +161,6 @@ public class Posemeter extends Sensor{
         super.setEnabled(enabled);
         pos.setEnabled(enabled);
         oro.setEnabled(enabled);
-        comp.setEnabled(enabled);
-    }
-
-    public Compass getCompass() {
-        return comp;
     }
 
     public Positionmeter getPositionmeter() {

@@ -92,9 +92,9 @@ public class GPSReceiver extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         GPSReceiverGeom.setMaterial(mark_mat7);
-        GPSReceiverGeom.setLocalTranslation(getReferencePointWorld());
         GPSReceiverGeom.updateGeometricState();
         PhysicalExchanger_Node.attachChild(GPSReceiverGeom);
+        PhysicalExchanger_Node.setLocalTranslation(getReferencePointWorld());
         rootNode.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }

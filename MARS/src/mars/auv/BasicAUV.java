@@ -2419,9 +2419,6 @@ public class BasicAUV implements AUV,SceneProcessor{
         }*/
     }
 
-    /*
-     * 
-     */
     /**
      * 
      */
@@ -2429,6 +2426,17 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void publishSensorsOfAUV(){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
+            element.publishUpdate();
+        }
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    public void publishActuatorsOfAUV(){
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
             element.publishUpdate();
         }
     }

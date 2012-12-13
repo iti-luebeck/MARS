@@ -104,15 +104,5 @@ public class SeaBotixThruster extends Thruster{
                     self.set_thruster_speed((int)message.getData());
                 }
         });
-//        super.initROS(ros_node, auv_name);
-//        final SeaBotixThruster self = this;
-//        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), "hanse_msgs/sollSpeed",
-//          new MessageListener<org.ros.message.hanse_msgs.sollSpeed>() {
-//            @Override
-//            public void onNewMessage(org.ros.message.hanse_msgs.sollSpeed message) {
-//              System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.data + "\"");
-//              self.set_thruster_speed((int)message.data);
-//            }
-//          });
     }
 }

@@ -9,6 +9,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
@@ -42,9 +43,6 @@ public class UnderwaterModem extends Sensor{
     private Sphere debugDistanceSphere;
     private Material debugDistanceMat;
     private Node comNet = new Node("comNet");
-
-    private Vector3f UnderwaterModemStartVector = new Vector3f(0,0,0);
-    private Vector3f UnderwaterModemDirection = new Vector3f(0,0,0);
     
     private Communication_Manager com_manager;
 
@@ -84,38 +82,6 @@ public class UnderwaterModem extends Sensor{
      */
     public Vector3f getWorldPosition() {
        return UnderwaterModemStart.getWorldTranslation();
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public Vector3f getDirection() {
-        return (Vector3f)variables.get("Direction");
-    }
-
-    /**
-     * 
-     * @param Direction
-     */
-    public void setDirection(Vector3f Direction) {
-        variables.put("Direction", Direction);
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public Vector3f getPosition() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     * 
-     * @param Position
-     */
-    public void setPosition(Vector3f Position) {
-        variables.put("Position", Position);
     }
     
     /**
@@ -192,7 +158,6 @@ public class UnderwaterModem extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
         UnderwaterModemStart.setMaterial(mark_mat7);
-        UnderwaterModemStart.setLocalTranslation(getPosition());
         UnderwaterModemStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemStart);
 
@@ -201,7 +166,7 @@ public class UnderwaterModem extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
         UnderwaterModemEnd.setMaterial(mark_mat9);
-        UnderwaterModemEnd.setLocalTranslation(getPosition().add(getDirection()));
+        UnderwaterModemEnd.setLocalTranslation(Vector3f.UNIT_X);
         UnderwaterModemEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemEnd);
         
@@ -221,6 +186,10 @@ public class UnderwaterModem extends Sensor{
         
         PhysicalExchanger_Node.attachChild(comNet);
         
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         this.auv_node = auv_node;
         this.auv_node.attachChild(PhysicalExchanger_Node);
     }

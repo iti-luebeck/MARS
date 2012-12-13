@@ -37,8 +37,6 @@ public class AmpereMeter extends Sensor{
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,String> accumulators;
     
-    private AUV auv;
-    
     /**
      * 
      */

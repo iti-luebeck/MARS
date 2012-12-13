@@ -7,6 +7,7 @@ package mars.sensors;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -41,19 +42,7 @@ public class InfraRedSensor extends Sensor{
      */
     protected Geometry End;
 
-    private Vector3f StartVector = new Vector3f(0,0,0);
-    private Vector3f Direction = new Vector3f(0,0,0);
-
     private Node detectable;
-
-    //Maximum sonar range
-    private float MaxRange = 50f;
-    private float MinRange = 0.1f;
-
-    private boolean angular_damping = false;
-    private float angular_factor = 1.0f;
-    private boolean length_damping = false;
-    private float length_factor = 1.0f;
     
     //ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
@@ -127,7 +116,6 @@ public class InfraRedSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Red);
         Start.setMaterial(mark_mat7);
-        Start.setLocalTranslation(getPosition());
         Start.updateGeometricState();
         PhysicalExchanger_Node.attachChild(Start);
 
@@ -136,12 +124,12 @@ public class InfraRedSensor extends Sensor{
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
         End.setMaterial(mark_mat9);
-        End.setLocalTranslation(getPosition().add(getDirection()));
+        End.setLocalTranslation(Vector3f.UNIT_X);
         End.updateGeometricState();
         PhysicalExchanger_Node.attachChild(End);
 
-        Vector3f ray_start = getPosition();
-        Vector3f ray_direction = (getPosition().add(getDirection())).subtract(ray_start);
+        Vector3f ray_start = Vector3f.ZERO;
+        Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Infra_Arrow", new Arrow(ray_direction.mult(getMaxRange())));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat4.setColor("Color", ColorRGBA.Red);
@@ -149,7 +137,11 @@ public class InfraRedSensor extends Sensor{
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
         PhysicalExchanger_Node.attachChild(mark4);
-
+        
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
@@ -238,38 +230,6 @@ public class InfraRedSensor extends Sensor{
      */
     public void setDetectable(Node detectable) {
         this.detectable = detectable;
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setPosition(Vector3f Position){
-        variables.put("Position", Position);
-    }
-
-    /**
-     * 
-     * @param Direction 
-     */
-    public void setDirection(Vector3f Direction){
-        variables.put("Direction", Direction);
-    }
-    
-    /**
-     *
-     * @return  
-     */
-    public Vector3f getPosition(){
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     * 
-     * @return  
-     */
-    public Vector3f getDirection(){
-        return (Vector3f)variables.get("Direction");
     }
 
     /**

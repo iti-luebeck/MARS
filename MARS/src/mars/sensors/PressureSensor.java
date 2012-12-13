@@ -7,6 +7,7 @@ package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -32,8 +33,6 @@ import org.ros.message.Time;
 public class PressureSensor extends Sensor{
 
     private Geometry PressureSensorStart;
-
-    private Vector3f PressureSensorStartVector;
 
     ///ROS stuff 
     private Publisher<hanse_msgs.pressure> publisher = null;
@@ -86,20 +85,15 @@ public class PressureSensor extends Sensor{
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
         PressureSensorStart.setMaterial(mark_mat7);
-        //PressureSensorStart.setLocalTranslation(getPressureSensorStartVector());
         PressureSensorStart.updateGeometricState();
-        PhysicalExchanger_Node.setLocalTranslation(getPressureSensorStartVector());
+        PhysicalExchanger_Node.setLocalTranslation(getPosition());
+        Quaternion quat = new Quaternion();
+        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(PressureSensorStart);
         auv_node.attachChild(PhysicalExchanger_Node);
         this.auv_node = auv_node;
     }
-
-    @Override
-    public Vector3f getTFPosition() {
-        return PhysicalExchanger_Node.getLocalTranslation();
-    }
-    
-    
 
     public void update(float tpf){
 
@@ -165,22 +159,6 @@ public class PressureSensor extends Sensor{
         }else{//air
             return (pe.getPressure_water_height()*100f);
         }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public Vector3f getPressureSensorStartVector() {
-        return (Vector3f)variables.get("Position");
-    }
-
-    /**
-     *
-     * @param Position 
-     */
-    public void setPressureSensorStartVector(Vector3f Position) {
-        variables.put("Position", Position);
     }
 
     /**
