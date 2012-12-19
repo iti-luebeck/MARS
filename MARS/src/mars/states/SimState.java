@@ -198,6 +198,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
             
+            //mars.getViewPort().setEnabled(false);
+    
+            
          /*   Matrix4f matrix = new Matrix4f(0.099684946f, 0.003476259f, 0.007129367f, -0.05035142f, -0.0035146326f, 0.099937364f, 4.1346974E-4f, -0.021245062f, -0.0071105273f, -6.6273817E-4f, 0.09974468f, -0.023290642f, 0.0f, 0.0f, 0.0f, 1.0f);
             Vector3f start = new Vector3f(1.9252679f, -49.951576f, -2.914092f); 
             Vector3f dir = new Vector3f(-0.035146322f, 0.9993737f, 0.0041346983f);
@@ -1888,7 +1891,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void splitView(){
         System.out.println("splitView");
 
-        Camera cam2 = mars.getCamera().clone();
+        /*Camera cam2 = mars.getCamera().clone();
         cam2.setViewPort(0.0f,0.5f,0.0f,1.0f);
         float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
         aspect = 2f ;
@@ -1898,7 +1901,36 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         viewPort2.attachScene(rootNode);
         
         System.out.println("cam w: " + mars.getCamera().getWidth());
-        System.out.println("cam h: " + mars.getCamera().getHeight());
+        System.out.println("cam h: " + mars.getCamera().getHeight());*/
+        
+        // Setup first view
+        mars.getCamera().setViewPort(.5f, 1f, 0f, 1f);
+        //mars.getCamera().setLocation(new Vector3f(3.3212643f, 4.484704f, 4.2812433f));
+        //mars.getCamera().setRotation(new Quaternion(-0.07680723f, 0.92299235f, -0.2564353f, -0.27645364f));
+        //mars.getViewPort().setEnabled(false);
+        
+        /*        
+        // Setup second view
+        Camera cam2 = mars.getCamera().clone();
+        cam2.setViewPort(0f, 0.5f, 0f, 0.5f);
+        cam2.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
+        cam2.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
+
+        ViewPort view2 = mars.getRenderManager().createMainView("Bottom Left", cam2);
+        view2.setClearFlags(true, true, true);
+        view2.attachScene(rootNode);
+        
+        // Setup second view
+        Camera cam3 = mars.getCamera().clone();
+        cam3.setViewPort(.5f, 1f, 0f, 0.5f);
+        cam3.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
+        cam3.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
+
+        ViewPort view3 = mars.getRenderManager().createMainView("Bottom Left2", cam3);
+        view3.setClearFlags(true, true, true);
+        view3.attachScene(rootNode);
+        */
+        
         //float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
         //mars.getCamera().resize((mars.getCamera().getWidth()/2), mars.getCamera().getHeight(), true);
         //mars.getCamera().setFrustum(-1000, 1000, -aspect * 1f, aspect * 1f, 1f, -1f);
@@ -1908,6 +1940,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //mars.getCamera().setFrustumPerspective(90f, aspect, 0.1f, 1000f);
         //mars.getCamera().set
         
-        mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
+        //mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
     }
 }

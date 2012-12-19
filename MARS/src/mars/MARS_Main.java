@@ -24,6 +24,7 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
@@ -71,6 +72,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     Camera map_cam;
     
     ViewPort MapViewPort;
+    ViewPort ViewPort2;
     
     AdvancedFlyByCamera advFlyCam;
     
@@ -111,8 +113,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         //initAssetsLoaders();
         startstate = new StartState(assetManager);
         viewPort.attachScene(startstate.getRootNode());
+        //ViewPort2.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
-        
+
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());
         stateManager.attach(mapstate);
@@ -166,6 +169,14 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         MapViewPort = renderManager.createMainView("MapView", map_cam);
         MapViewPort.setClearFlags(true, true, true);
         MapViewPort.setBackgroundColor(ColorRGBA.Black);
+        
+        /*Camera cam2 = getCamera().clone();
+        cam2.setViewPort(0f, 0.5f, 0f, 1f);
+        cam2.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
+        cam2.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
+
+        ViewPort2 = getRenderManager().createMainView("Bottom Left", cam2);
+        ViewPort2.setClearFlags(true, true, true);*/
     }
 
     /**
@@ -250,6 +261,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             public Void call() throws Exception {
                 SimState simstate = new SimState(view);
                 viewPort.attachScene(simstate.getRootNode());
+                //ViewPort2.attachScene(simstate.getRootNode());
                 simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
                 return null;
@@ -258,8 +270,12 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     }
     
     private void endStart(){
-        stateManager.getState(StartState.class).setEnabled(false);
-        //viewPort.detachScene(startstate.getRootNode());
+        Future startStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                stateManager.getState(StartState.class).setEnabled(false);
+                return null;
+            }
+        });
     }
     
     /**
@@ -521,6 +537,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     public ViewPort getMapViewPort(){
         return MapViewPort;
+    }
+    
+    public ViewPort getViewPort2(){
+        return ViewPort2;
     }
 
     /**

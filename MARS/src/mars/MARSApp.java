@@ -148,6 +148,7 @@ public class MARSApp extends SingleFrameApplication {
                                         //app.getGuiViewPort().setEnabled(true);
                                         app.getFlyByCamera().setDragToRotate(true);
                                         sim_panel.attachTo(true, app.getViewPort());
+                                        //sim_panel.attachTo(false, app.getViewPort2());
                                         sim_panel.attachTo(true, app.getGuiViewPort());
                                         map_panel.attachTo(false, app.getMapViewPort());
                                         return null;
