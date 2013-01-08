@@ -57,4 +57,20 @@ public class AdvancedFlyByCamera extends FlyByCamera{
                 cam.setAxes(q);
             }
     }
+    
+    @Override
+    public void onAction(String name, boolean value, float tpf) {
+        if (!enabled)
+            return;
+
+        if (name.equals("FLYCAM_RotateDrag") && dragToRotate){
+            canRotate = value;
+            //inputManager.setCursorVisible(!value);
+        } else if (name.equals("FLYCAM_InvertY")) {
+            // Toggle on the up.
+            if( !value ) {  
+                invertY = !invertY;
+            }
+        }        
+    }
 }

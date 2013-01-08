@@ -48,6 +48,7 @@ public class MARS_Settings{
     private HashMap<String,Object> Water;
     private HashMap<String,Object> PlaneWater;
     private HashMap<String,Object> SkyBox;
+    private HashMap<String,Object> SkyDome;
     private HashMap<String,Object> SimpleSkyBox;
     private HashMap<String,Object> Terrain;
     private HashMap<String,Object> Flow;
@@ -131,6 +132,7 @@ public class MARS_Settings{
         Water = new HashMap<String,Object> ();
         PlaneWater = new HashMap<String,Object> ();
         SkyBox = new HashMap<String,Object> ();
+        SkyDome = new HashMap<String,Object> ();
         SimpleSkyBox = new HashMap<String,Object> ();
         Terrain = new HashMap<String,Object> ();
         Flow = new HashMap<String,Object> ();
@@ -155,6 +157,7 @@ public class MARS_Settings{
         Graphics.put("Water", Water);
         Graphics.put("PlaneWater", PlaneWater);
         Graphics.put("SkyBox", SkyBox);
+        Graphics.put("SkyDome", SkyDome);
         Graphics.put("SimpleSkyBox", SimpleSkyBox);
         Graphics.put("Terrain", Terrain);
         Graphics.put("Flow", Flow);
@@ -201,7 +204,8 @@ public class MARS_Settings{
         ProjectedWavesWater = (HashMap<String,Object>)Graphics.get("ProjectedWavesWater");
         Water = (HashMap<String,Object>)Graphics.get("Water");
         PlaneWater = (HashMap<String,Object>)Graphics.get("PlaneWater");
-        SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");
+        SkyBox = (HashMap<String,Object>)Graphics.get("SkyBox");        
+        SkyDome = (HashMap<String,Object>)Graphics.get("SkyDome");
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
         Flow = (HashMap<String,Object>)Graphics.get("Flow");
@@ -1238,6 +1242,22 @@ public class MARS_Settings{
      */
     public void setSetupSkyBox(boolean enabled) {
         SkyBox.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSetupSkyDome() {
+        return (Boolean)SkyDome.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSetupSkyDome(boolean enabled) {
+        SkyDome.put("enabled", enabled);
     }
 
     /**

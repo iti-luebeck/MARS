@@ -6,6 +6,12 @@
 package mars;
 
 import com.jme3.app.FlyCamAppState;
+import com.jme3.input.event.JoyAxisEvent;
+import com.jme3.input.event.JoyButtonEvent;
+import com.jme3.input.event.KeyInputEvent;
+import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.input.event.MouseMotionEvent;
+import com.jme3.input.event.TouchEvent;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -23,6 +29,7 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
+import com.jme3.input.RawInputListener;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -57,7 +64,7 @@ import mars.states.NiftyState;
  * This is the MAIN class for JME3.
  * @author Thomas Tosik
  */
-public class MARS_Main extends SimpleApplication implements ScreenController,Controller{
+public class MARS_Main extends SimpleApplication implements ScreenController,Controller/*,RawInputListener*/{
 
     //needed for graphs
     private MARSView view;
@@ -129,16 +136,17 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         ScreenshotAppState screenShotState = new ScreenshotAppState();
         stateManager.attach(screenShotState);
         
-        //overrirde standard flybycam      
-        flyCam.setEnabled(false);
-        advFlyCam = new AdvancedFlyByCamera(cam);
-        advFlyCam.setDragToRotate(true);
-        advFlyCam.setEnabled(false);
-        advFlyCam.registerWithInput(inputManager);
         //deactivate the state, solves maybe wasd problems
         if (stateManager.getState(FlyCamAppState.class) != null) {
             stateManager.getState(FlyCamAppState.class).setEnabled(false); 
         }
+        //overrirde standard flybycam      
+        flyCam.setEnabled(false);
+        flyCam.unregisterInput();
+        advFlyCam = new AdvancedFlyByCamera(cam);
+        advFlyCam.setDragToRotate(true);
+        advFlyCam.setEnabled(false);
+        advFlyCam.registerWithInput(inputManager);
             
        /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
         if(flycamState != null){
@@ -149,7 +157,42 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             flyCam = advFlyCam;
             stateManager.attach(flyc);
         }*/
+        //this.mouseInput.setInputListener(this);
     }
+
+    /*public void onTouchEvent(TouchEvent evt) {
+        System.out.println("onTouchEvent");
+    }
+
+    public void onMouseButtonEvent(MouseButtonEvent evt) {
+        System.out.println("onMouseButtonEvent");
+        System.out.println(evt.getX() + " " + evt.getY());
+    }
+
+    public void onMouseMotionEvent(MouseMotionEvent evt) {
+        System.out.println("onMouseMotionEvent");
+        System.out.println(evt.getX() + " " + evt.getY());
+    }
+
+    public void onJoyAxisEvent(JoyAxisEvent evt) {
+        System.out.println("onJoyAxisEvent");
+    }
+
+    public void onJoyButtonEvent(JoyButtonEvent evt) {
+        System.out.println("onJoyButtonEvent");
+    }
+
+    public void onKeyEvent(KeyInputEvent evt) {
+        System.out.println("onKeyEvent");
+    }
+
+    public void endInput() {
+        System.out.println("endInput");
+    }
+
+    public void beginInput() {
+        System.out.println("beginInput");
+    }*/
     
     /*
      * We use or own OBJLoader based on the same class here because we need a special
@@ -186,7 +229,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
-        
+        System.out.println(inputManager.getCursorPosition());
         //we have to do it here because of buggy behaviour of statsState
         if(statsDarken){
             this.setStatsStateDark(false);
