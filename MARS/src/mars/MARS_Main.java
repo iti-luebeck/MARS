@@ -157,43 +157,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             flyCam = advFlyCam;
             stateManager.attach(flyc);
         }*/
-        //this.mouseInput.setInputListener(this);
     }
-
-    /*public void onTouchEvent(TouchEvent evt) {
-        System.out.println("onTouchEvent");
-    }
-
-    public void onMouseButtonEvent(MouseButtonEvent evt) {
-        System.out.println("onMouseButtonEvent");
-        System.out.println(evt.getX() + " " + evt.getY());
-    }
-
-    public void onMouseMotionEvent(MouseMotionEvent evt) {
-        System.out.println("onMouseMotionEvent");
-        System.out.println(evt.getX() + " " + evt.getY());
-    }
-
-    public void onJoyAxisEvent(JoyAxisEvent evt) {
-        System.out.println("onJoyAxisEvent");
-    }
-
-    public void onJoyButtonEvent(JoyButtonEvent evt) {
-        System.out.println("onJoyButtonEvent");
-    }
-
-    public void onKeyEvent(KeyInputEvent evt) {
-        System.out.println("onKeyEvent");
-    }
-
-    public void endInput() {
-        System.out.println("endInput");
-    }
-
-    public void beginInput() {
-        System.out.println("beginInput");
-    }*/
-    
     /*
      * We use or own OBJLoader based on the same class here because we need a special
      * material file (for the light blow shader) not the lighting mat.
@@ -229,7 +193,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
-        System.out.println(inputManager.getCursorPosition());
         //we have to do it here because of buggy behaviour of statsState
         if(statsDarken){
             this.setStatsStateDark(false);
