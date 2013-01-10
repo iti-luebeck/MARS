@@ -75,7 +75,7 @@ import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
-//import com.shaderblow.skydome.SkyDomeControl;
+import com.shaderblow.skydome.SkyDomeControl;
 import forester.Forester;
 import forester.grass.GrassLayer;
 import forester.grass.GrassLayer.MeshType;
@@ -260,9 +260,9 @@ public class Initializer {
         if(mars_settings.isSetupSkyBox()){
             setupSkyBox();
         }
-/*        if(mars_settings.isSetupSkyDome()){
+        if(mars_settings.isSetupSkyDome()){
             setupSkyDome();
-        }*/
+        }
         if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
             setupTerrain();
         }
@@ -773,7 +773,57 @@ public class Initializer {
      * This creates a dynamic sky.
      */
     private void setupSkyDome(){
+        this.assetManager.registerLocator("Assets/shaderblowlibs", FileLocator.class);
+        SkyDomeControl skyDome = new SkyDomeControl(assetManager, mars.getCamera(),
+                "TestModels/SkyDome/SkyDome.j3o",
+                "TestTextures/SkyDome/SkyNight_L.png",
+                "TestTextures/SkyDome/Moon_L.png",
+                "TestTextures/SkyDome/Clouds_L.png",
+                "TestTextures/SkyDome/Fog_Alpha.png");
+        Node sky = new Node();
+        sky.setQueueBucket(Bucket.Sky);
+        sky.addControl(skyDome);
+        sky.setCullHint(Spatial.CullHint.Never);
+        
+        // Either add a reference to the control for the existing JME fog filter or use the one I posted…
+// But… REMEMBER!  If you use JME’s… the sky dome will have fog rendered over it.
+// Sorta pointless at that point
+//        FogFilter fog = new FogFilter(ColorRGBA.Blue, 0.5f, 10f);
+//        skyDome.setFogFilter(fog, viewPort);
 
+// Set some fog colors… or not (defaults are cool)
+        /*skyDome.setFogColor(ColorRGBA.Blue);
+        skyDome.setFogNightColor(new ColorRGBA(0.5f, 0.5f, 1f, 1f));
+        skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));*/
+
+// Enable the control to modify the fog filter
+        skyDome.setControlFog(false);
+
+// Add the directional light you use for sun… or not
+        /*DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
+        sun.setColor(new ColorRGBA(1, 1, 1, 1));
+        rootNode.addLight(sun);
+        skyDome.setSun(sun);*/
+        skyDome.setSun(sun);
+        
+        /*AmbientLight al = new AmbientLight();
+        al.setColor(new ColorRGBA(0.7f,0.7f,1f,1.0f));
+        rootNode.addLight(al);  */        
+
+// Set some sunlight day/night colors… or not
+        skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
+        skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
+
+// Enable the control to modify your sunlight
+        skyDome.setControlSun(true);
+
+// Enable the control
+        skyDome.setEnabled(true);
+        skyDome.cycleNightToDay();
+        skyDome.cycleNightToDay();
+// Add the skydome to the root… or where ever
+        rootNode.attachChild(sky);
     }
 
     /*
