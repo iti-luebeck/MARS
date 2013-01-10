@@ -179,7 +179,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     @Override
     public void cleanup() {
         super.cleanup();
-        rootNode.detachAllChildren();
+        simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                mars.getRootNode().detachChild(getRootNode());
+                mars.getRootNode().updateGeometricState();
+                return null;
+            }
+        });
+        //mars.getRootNode().detachChild(getRootNode());
+        //rootNode.detachAllChildren();
         /*mars = null;
         assetManager = null;
         mars_settings = null;*/
@@ -194,6 +202,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 assetManager = mars.getAssetManager();
                 inputManager = mars.getInputManager();
                 nifty_load = mars.getNifty();
+                mars.getRootNode().attachChild(getRootNode());
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
@@ -396,7 +405,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             tt.test();*/
             //XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);
 
-            rootNode.updateGeometricState();
+            //rootNode.updateGeometricState();
         }
         super.initialize(stateManager, app);
     }
@@ -1172,6 +1181,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
+    
+    public void test(){
+        //bulletAppState.
+    }
 
     @Override
     public void update(float tpf) {
@@ -1184,53 +1197,21 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             System.out.println("View is NULL");
         }
         
-        /*if(view != null && !view_init && mars_settings!=null){
-            view.setMarsSettings(mars_settings);
-            view.setPenv(physical_environment);
-            view.setKeyConfig(keyconfig);
-            view.setXMLL(xmll);
-            view.setAuv_manager(auv_manager);
-            view.setSimob_manager(simob_manager);
-            view.initAUVTree(auv_manager);
-            view.initSimObjectTree(simob_manager);
-            view.initEnvironmentTree(physical_environment);
-            view.initSettingsTree(mars_settings);
-            view.initKeysTree(keyconfig);
-            view.initPopUpMenues();
-            view.allowSimInteraction();
-            Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    view.updateTrees();
-                    return null;
-                }
-                });
-            //auv_hanse.setView(view);
-            //auv_monsun2.setView(view);
-            view_init = true;
-        }
-        
-        if(view != null && server_init){
-            if(initer.getROS_Server().getMarsNode().isRunning()){
-                view.allowServerInteraction(true);
-                server_init = false;
-            }
-        }*/
-        
         //System.out.println("time: " + tpf);
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
 
-        if(mars_settings.isSetupProjectedWavesWater()){
+        /*if(mars_settings.isSetupProjectedWavesWater()){
             initer.updateProjectedWavesWater(tpf);
         }
         
         if(mars_settings.isSetupGrass()){
             initer.updateGrass(tpf);
-        }
+        }*/
         
-        rootNode.updateLogicalState(tpf);
-        rootNode.updateGeometricState();
+        //rootNode.updateLogicalState(tpf);
+        //rootNode.updateGeometricState();
     }
     
     /**
@@ -1353,6 +1334,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param tpf
      */
     public void prePhysicsTick(PhysicsSpace ps, final float tpf) {
+        if (!super.isEnabled()) {
+            return;
+        }
         if(/*AUVPhysicsControl != null*/true){
             //only update physics if auv_hanse exists and when simulation is started
             if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
@@ -1385,6 +1369,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param tpf
      */
     public void physicsTick(PhysicsSpace ps, float tpf) {
+        if (!super.isEnabled()) {
+            return;
+        }
+        
         if(/*AUVPhysicsControl != null*/false){
             //only update physics if auv_hanse exists and when simulation is started
             if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){

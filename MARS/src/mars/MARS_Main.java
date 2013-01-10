@@ -26,6 +26,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.ScreenshotAppState;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
@@ -64,7 +65,7 @@ import mars.states.NiftyState;
  * This is the MAIN class for JME3.
  * @author Thomas Tosik
  */
-public class MARS_Main extends SimpleApplication implements ScreenController,Controller/*,RawInputListener*/{
+public class MARS_Main extends SimpleApplication implements ScreenController,Controller{
 
     //needed for graphs
     private MARSView view;
@@ -266,7 +267,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
                 SimState simstate = new SimState(view);
-                viewPort.attachScene(simstate.getRootNode());
+                //viewPort.attachScene(simstate.getRootNode());
                 //ViewPort2.attachScene(simstate.getRootNode());
                 simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
@@ -588,12 +589,53 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     public void restartSimState(){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
+                if(stateManager.getState(BulletAppState.class) != null){
+                    BulletAppState bulletAppState = (BulletAppState)stateManager.getState(BulletAppState.class);
+                    bulletAppState.setEnabled(false);
+                    //stateManager.detach(bulletAppState);
+                }
                 if(stateManager.getState(SimState.class) != null){
                     SimState simState = (SimState)stateManager.getState(SimState.class);
-                    viewPort.detachScene(simState.getRootNode());
-                    //stateManager.detach(simState);
+                    simState.setEnabled(false);
+                    //viewPort.detachScene(simState.getRootNode());
+                    stateManager.detach(simState);
+                    //simState.cleanup();
                     //startSimState();
-                    stateManager.detach(startstate);
+                    //stateManager.detach(startstate);
+                    
+                    /*
+                     * SimState simstate = new SimState(view);
+                    viewPort.attachScene(simstate.getRootNode());
+                    //ViewPort2.attachScene(simstate.getRootNode());
+                    simstate.setMapState(mapstate);
+                    stateManager.attach(simstate);
+                    return null;
+                     */
+                }
+                return null;
+            }
+        });
+        
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.test();
+                    //simState.setEnabled(false);
+                    //viewPort.detachScene(simState.getRootNode());
+                    //stateManager.detach(simState);
+                    //simState.cleanup();
+                    //startSimState();
+                    //stateManager.detach(startstate);
+                    
+                    /*
+                     * SimState simstate = new SimState(view);
+                    viewPort.attachScene(simstate.getRootNode());
+                    //ViewPort2.attachScene(simstate.getRootNode());
+                    simstate.setMapState(mapstate);
+                    stateManager.attach(simstate);
+                    return null;
+                     */
                 }
                 return null;
             }
