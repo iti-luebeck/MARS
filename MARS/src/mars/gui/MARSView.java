@@ -4014,8 +4014,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             if (selRow != -1) { 
                 TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
                 TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString()); 
+                //System.out.println(selPath.toString());         
+                //System.out.println(selPath.getLastPathComponent().toString()); 
                 
                 //deselect all auvs before we start to selcting it clean
                 Future simStateFutureD = mars.enqueue(new Callable() {
@@ -4027,23 +4027,34 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                 return null;
                             }
                         }); 
-                
-                for (int i = 0; i < selectionPaths.length; i++) {
-                    TreePath treePath = selectionPaths[i];
-                    try {  
-                        if (treePath.getLastPathComponent() instanceof AUV) {   
-                            final AUV auv = (AUV)treePath.getLastPathComponent();
-                            Future simStateFuture = mars.enqueue(new Callable() {
-                                public Void call() throws Exception {
-                                    if(mars.getStateManager().getState(SimState.class) != null){
-                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                        //simState.deselectAllAUVs();
-                                        simState.selectAUV(auv);
+                if(selectionPaths != null){
+                    for (int i = 0; i < selectionPaths.length; i++) {
+                        TreePath treePath = selectionPaths[i];
+                        try {  
+                            if (treePath.getLastPathComponent() instanceof AUV) {   
+                                final AUV auv = (AUV)treePath.getLastPathComponent();
+                                Future simStateFuture = mars.enqueue(new Callable() {
+                                    public Void call() throws Exception {
+                                        if(mars.getStateManager().getState(SimState.class) != null){
+                                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                            //simState.deselectAllAUVs();
+                                            simState.selectAUV(auv);
+                                        }
+                                        return null;
                                     }
-                                    return null;
-                                }
-                            });  
-                        }else{
+                                });  
+                            }else{
+                                    Future simStateFuture = mars.enqueue(new Callable() {
+                                        public Void call() throws Exception {
+                                            if(mars.getStateManager().getState(SimState.class) != null){
+                                                SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                                simState.deselectAllAUVs();
+                                            }
+                                            return null;
+                                        }
+                                    });
+                            }        
+                        } catch (IllegalArgumentException e) {
                                 Future simStateFuture = mars.enqueue(new Callable() {
                                     public Void call() throws Exception {
                                         if(mars.getStateManager().getState(SimState.class) != null){
@@ -4053,19 +4064,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                                         return null;
                                     }
                                 });
-                        }        
-                    } catch (IllegalArgumentException e) {
-                            Future simStateFuture = mars.enqueue(new Callable() {
-                                public Void call() throws Exception {
-                                    if(mars.getStateManager().getState(SimState.class) != null){
-                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                        simState.deselectAllAUVs();
-                                    }
-                                    return null;
-                                }
-                            });
+                        } 
                     } 
-                }      
+                }
             }else{
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
