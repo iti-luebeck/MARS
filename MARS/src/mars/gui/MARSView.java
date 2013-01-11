@@ -458,6 +458,19 @@ public class MARSView extends FrameView {
     
     /**
      * 
+     */
+    public void allowStateInteraction(){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    StartMenuItem.setEnabled(true);
+                }
+            }
+        );
+    }
+    
+    /**
+     * 
      * @param allow
      */
     public void allowPhysicsInteraction(final boolean allow){
@@ -1594,6 +1607,7 @@ public class MARSView extends FrameView {
 
         StartMenuItem.setIcon(resourceMap.getIcon("StartMenuItem.icon")); // NOI18N
         StartMenuItem.setText(resourceMap.getString("StartMenuItem.text")); // NOI18N
+        StartMenuItem.setEnabled(false);
         StartMenuItem.setName("StartMenuItem"); // NOI18N
         StartMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

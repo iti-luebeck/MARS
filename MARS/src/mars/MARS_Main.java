@@ -131,7 +131,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         
         //nifty state
         niftystate = new NiftyState();
-        viewPort.attachScene(niftystate.getRootNode());
+        //viewPort.attachScene(niftystate.getRootNode());
         stateManager.attach(niftystate);
         
         //attach Screenshot AppState
@@ -195,16 +195,16 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
+        
         //we have to do it here because of buggy behaviour of statsState
         if(statsDarken){
             this.setStatsStateDark(false);
             statsDarken = false;
         }
-        
-        /*if(view != null && !view_init && stateManager.getState(SimState.class) != null){
-            stateManager.getState(SimState.class).setView(view);
-            view_init = true;
-        }*/
+
+        if(startstate.isInitialized() && view!=null){// little hack to allow the starting of a config only when the startstate was initialized
+            view.allowStateInteraction();
+        }
        
         /*if (load) {//we will be loading,switching appstates
             //this.setProgress(0.5f, "dfsdfsdf");

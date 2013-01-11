@@ -454,6 +454,7 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="StartMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="StartMenuItem.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="StartMenuItem" noResource="true"/>
               </Properties>
               <Events>

@@ -303,9 +303,6 @@ public class StartState extends AbstractAppState{
         cube.rotate(quat);
         
         if(hanse_node.getLocalTranslation().x <= -20f){
-            /*Vector3f out = Vector3f.ZERO;
-            hanse_node.worldToLocal(new Vector3f(0f,0f,-5f), out);
-            hanse_node.setLocalTranslation(out);*/
             hanse_node.setLocalTranslation(0f, 0f, 0f);
         }
         hanse_node.move(tpf*-0.4f, 0f, 0);
