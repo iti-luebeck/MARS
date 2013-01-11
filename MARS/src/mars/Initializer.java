@@ -301,6 +301,13 @@ public class Initializer {
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
+    
+    public void cleanup(){
+        fpp.removeAllFilters();
+        viewPort.removeProcessor(fpp);
+        viewPort.removeProcessor(waterProcessor);
+        //cleanupProjectedWavesWater();
+    }
 
     /**
      * 
@@ -566,6 +573,10 @@ public class Initializer {
         waterProcessor.setDebug(false);
         viewPort.addProcessor(waterProcessor);              
         return waterProcessor.getMaterial();
+    }
+    
+    private void cleanupProjectedWavesWater(){
+        waterProcessor.cleanup();
     }
 
     /**

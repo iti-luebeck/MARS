@@ -618,6 +618,13 @@ public class AUV_Manager {
         auv.setSelected(false);
     }
     
+    public void cleanup(){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            auv.cleanupAUV();
+        }
+    }
+    
     /**
      * 
      * @return

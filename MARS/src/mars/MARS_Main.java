@@ -120,6 +120,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         initMapViewPort();
         //initAssetsLoaders();
         startstate = new StartState(assetManager);
+        startstate.setEnabled(true);
         viewPort.attachScene(startstate.getRootNode());
         //ViewPort2.attachScene(startstate.getRootNode());
         stateManager.attach(startstate);
@@ -592,50 +593,13 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 if(stateManager.getState(BulletAppState.class) != null){
                     BulletAppState bulletAppState = (BulletAppState)stateManager.getState(BulletAppState.class);
                     bulletAppState.setEnabled(false);
-                    //stateManager.detach(bulletAppState);
+                    stateManager.detach(bulletAppState);
                 }
                 if(stateManager.getState(SimState.class) != null){
                     SimState simState = (SimState)stateManager.getState(SimState.class);
                     simState.setEnabled(false);
                     //viewPort.detachScene(simState.getRootNode());
                     stateManager.detach(simState);
-                    //simState.cleanup();
-                    //startSimState();
-                    //stateManager.detach(startstate);
-                    
-                    /*
-                     * SimState simstate = new SimState(view);
-                    viewPort.attachScene(simstate.getRootNode());
-                    //ViewPort2.attachScene(simstate.getRootNode());
-                    simstate.setMapState(mapstate);
-                    stateManager.attach(simstate);
-                    return null;
-                     */
-                }
-                return null;
-            }
-        });
-        
-        simStateFuture = this.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(stateManager.getState(SimState.class) != null){
-                    SimState simState = (SimState)stateManager.getState(SimState.class);
-                    simState.test();
-                    //simState.setEnabled(false);
-                    //viewPort.detachScene(simState.getRootNode());
-                    //stateManager.detach(simState);
-                    //simState.cleanup();
-                    //startSimState();
-                    //stateManager.detach(startstate);
-                    
-                    /*
-                     * SimState simstate = new SimState(view);
-                    viewPort.attachScene(simstate.getRootNode());
-                    //ViewPort2.attachScene(simstate.getRootNode());
-                    simstate.setMapState(mapstate);
-                    stateManager.attach(simstate);
-                    return null;
-                     */
                 }
                 return null;
             }

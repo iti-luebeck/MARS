@@ -39,7 +39,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
     private NiftyJmeDisplay niftyDisplay;
     private Screen screen;
     private MARS_Main mars;
-    private Node rootNode = new Node("Nifty Root Node");
+    private Node rootNode = new Node("NiftyState Root Node");
     private AssetManager assetManager;
     private AUV auv;
     private AUV_Manager auv_manager;
@@ -191,8 +191,8 @@ public class NiftyState extends AbstractAppState implements ScreenController{
     
     @Override
     public void cleanup() {
-        rootNode.detachAllChildren();
         super.cleanup();
+        mars.getRootNode().detachChild(getRootNode());
     }
 
     @Override

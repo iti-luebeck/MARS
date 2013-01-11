@@ -91,7 +91,7 @@ import mars.ros.MARSNodeMain;
  */
 public class SimState extends AbstractAppState implements PhysicsTickListener{
 
-    private Node rootNode = new Node("Root Node");
+    private Node rootNode = new Node("SimState Root Node");
     private AssetManager assetManager;
     private InputManager inputManager;
     private AUV_Manager auv_manager;
@@ -179,19 +179,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     @Override
     public void cleanup() {
         super.cleanup();
-        simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                mars.getRootNode().detachChild(getRootNode());
-                mars.getRootNode().updateGeometricState();
-                return null;
-            }
-        });
-        //mars.getRootNode().detachChild(getRootNode());
-        //rootNode.detachAllChildren();
-        /*mars = null;
-        assetManager = null;
-        mars_settings = null;*/
-        //nifty_load = null;
+        
+        //deattach the state root node from the main 
+        mars.getRootNode().detachChild(getRootNode());
+        
+        //cleanup the initer (viewport, filters)
+        initer.cleanup();
+        
+        //clean up all auvs (offscreen view from drag for example)
+        auv_manager.cleanup();
+        
+        //deattach the input listeners
+        inputManager.removeRawInputListener(mouseMotionListener);
+        inputManager.removeListener(actionListener);
+        
+        //clean the cameras
+        chaseCam.setEnabled(false);
+        chaseCam = null;
     }
 
     @Override
@@ -290,30 +294,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             com_manager.setServer(initer.getRAW_Server());
 
-            //if(mars_settings.isROS_Server_enabled()){
-              /*  Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
-                while(!initer.isROS_ServerReady()){
-                    
-                }
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server ready.", "");
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be created...", "");
-                while(initer.getROS_Server().getMarsNode() == null){
-                    
-                }
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node created.", "");
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
-                while(!initer.getROS_Server().getMarsNode().isExisting()){
-                    
-                }
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node exists.", "");
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server Node to be running...", "");
-                while(!initer.getROS_Server().getMarsNode().isRunning()){
-                    
-                }
-                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "ROS Server Node running.", "");
-                server_init = true;//server running, is needed because view is sometimes null in the beginning(see update)*/
-                //server_init = initer.checkROSServer();
-            //}
             if(mars_settings.isROS_Server_enabled()){
                 if(initer.checkROSServer()){//Waiting for ROS Server to be ready
                 
@@ -411,7 +391,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     private void initView(){
-        //if(view != null && !view_init && mars_settings!=null){
             view.setMarsSettings(mars_settings);
             view.setPenv(physical_environment);
             view.setKeyConfig(keyconfig);
@@ -470,8 +449,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         initer.setupServer();
         if(initer.checkROSServer()){
                 view.allowServerInteraction(true);
-                //auv_manager.setMARSNodes(initer.getROS_Server().getMarsNodes());
-                //auv_manager.updateMARSNode();
         }else{
                 view.allowServerInteraction(false);
         }
@@ -800,12 +777,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                     }
                 }
             }else if(name.equals("moveauv") && keyPressed) {
-                //System.out.println("moveauv");
-                //guiControlState.setMove_auv(true);
-                //guiControlState.setMove_simob(true);
                 mars.getFlyByCamera().setEnabled(false);
-                //System.out.println(guiControlState.isMove_auv());
-                //System.out.println(guiControlState.isFree());
                 AUV selected_auv = auv_manager.getSelectedAUV();
                 if(selected_auv != null){
                     guiControlState.setMove_auv(true);
@@ -1067,15 +1039,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //System.out.println("click2d: " + click2d);
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 0f).clone();
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 1f).subtractLocal(click3d);
-
-
-        /*Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(dir));
-        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat4.setColor("Color", ColorRGBA.White);
-        mark4.setMaterial(mark_mat4);
-        mark4.setLocalTranslation(click3d);
-        mark4.updateGeometricState();
-        rootNode.attachChild(mark4);*/
         
         // Aim the ray from the clicked spot forwards.
         Ray ray = new Ray(click3d, dir);
@@ -1169,7 +1132,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
 
     @Override
     public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+        super.setEnabled(enabled); 
+        if(!enabled){
+            rootNode.setCullHint(Spatial.CullHint.Always);
+        }else{
+            rootNode.setCullHint(Spatial.CullHint.Never);
+        }
     }
 
     @Override
@@ -1180,10 +1148,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
-    }
-    
-    public void test(){
-        //bulletAppState.
     }
 
     @Override
@@ -1202,16 +1166,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             //initer.updateWavesWater(tpf);
         }*/
 
-        /*if(mars_settings.isSetupProjectedWavesWater()){
+        if(mars_settings.isSetupProjectedWavesWater()){
             initer.updateProjectedWavesWater(tpf);
         }
         
         if(mars_settings.isSetupGrass()){
             initer.updateGrass(tpf);
-        }*/
+        }
         
-        //rootNode.updateLogicalState(tpf);
-        //rootNode.updateGeometricState();
+        rootNode.updateLogicalState(tpf);
+        rootNode.updateGeometricState();
     }
     
     /**
@@ -1372,31 +1336,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if (!super.isEnabled()) {
             return;
         }
-        
-        if(/*AUVPhysicsControl != null*/false){
-            //only update physics if auv_hanse exists and when simulation is started
-            if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
-                /*Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    auv_manager.updateAllAUVs(tpf);
-                    return null;
-                }
-                });*/
-                auv_manager.updateAllAUVs(tpf);
-                /*Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    com_manager.update(tpf);
-                    return null;
-                }
-                });*/
-                com_manager.update(tpf);
-                //time = time + tpf;
-                //System.out.println("time: " + time);
-            }            
-            /*if(auv_manager != null){
-                com_manager.update(tpf);
-            }*/
-        }
     }
 
     private void initNiftyLoading(){
@@ -1460,14 +1399,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
             System.out.println("POKE!");     
             selected_auv.getPhysicsControl().applyImpulse(direction.mult(selected_auv.getAuv_param().getMass()*5f/mars_settings.getPhysicsFramerate()), rel_pos);
-            
-            /*Geometry mark4 = new Geometry("Sonar_Arrow", new Arrow(direction));
-            Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mark_mat4.setColor("Color", ColorRGBA.White);
-            mark4.setMaterial(mark_mat4);
-            mark4.setLocalTranslation(guiControlState.getAuvContactPoint());
-            mark4.updateGeometricState();
-            rootNode.attachChild(mark4);*/
         }
     }
     

@@ -49,7 +49,7 @@ import mars.sensors.sonar.Sonar;
  */
 public class MapState extends AbstractAppState{
 
-    private Node rootNode = new Node("Root Node");
+    private Node rootNode = new Node("MapState Root Node");
     private Node auvsNode = new Node("AUVS Node");
     private AssetManager assetManager;
     private MARS_Main mars;
@@ -61,6 +61,7 @@ public class MapState extends AbstractAppState{
     Quad quad = new Quad(2f, 2f);
     Geometry map_geom = new Geometry("My Textured Box", quad);
     Texture tex_ml;
+    private Future simStateFuture;
 
     /**
      * 
@@ -80,8 +81,15 @@ public class MapState extends AbstractAppState{
     
     @Override
     public void cleanup() {
-        rootNode.detachAllChildren();
         super.cleanup();
+        //rootNode.detachAllChildren();
+        mars.getRootNode().detachChild(getRootNode());
+        /*simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                mars.getRootNode().detachChild(getRootNode());
+                return null;
+            }
+        });*/
     }
 
     @Override

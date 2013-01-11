@@ -252,6 +252,8 @@ public interface AUV extends RosNodeListener{
      *
      */
     public void cleanupOffscreenView();
+    
+    public void cleanupAUV();
     /*
      *
      */

@@ -299,6 +299,11 @@ public class BasicAUV implements AUV,SceneProcessor{
         this.physicalvalues = new PhysicalValues();
         selectionNode.attachChild(auv_node);
     }
+    
+    @Override
+    public void cleanupAUV() {
+        cleanupOffscreenView();
+    }
 
     /**
      *
@@ -1049,7 +1054,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      * @param tpf
      */
     public void updateForces(float tpf){
-        if(auv_node.getParent().getParent().getParent().getParent().getName() != null && auv_node.getParent().getParent().getParent().getParent().getName().equals("Root Node")){//check if PhysicsNode added to rootNode
+        if(auv_node.getParent().getParent().getParent().getParent().getName() != null && auv_node.getParent().getParent().getParent().getParent().getName().equals("SimState Root Node")){//check if PhysicsNode added to rootNode
             //since bullet deactivate nodes that dont move enough we must activate it
             /*if(!physics_control.isActive()){
                 physics_control.activate();
@@ -1503,9 +1508,15 @@ public class BasicAUV implements AUV,SceneProcessor{
      *
      */
     public void cleanupOffscreenView(){
-        drag_offView.detachScene(auv_spatial);
+        drag_offView.setEnabled(false);
+        drag_offView.clearProcessors();
+        drag_offView.clearScenes();
+        renderManager.removePreView(drag_offView);
         if(debug_drag_view != null){
-            debug_drag_view.detachScene(auv_spatial);
+            debug_drag_view.setEnabled(false);
+            debug_drag_view.clearProcessors();
+            debug_drag_view.clearScenes();
+            renderManager.removePreView(debug_drag_view);
         }
     }
 

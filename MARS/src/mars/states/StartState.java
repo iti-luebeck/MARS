@@ -62,7 +62,7 @@ import jme3tools.optimize.GeometryBatchFactory;
  */
 public class StartState extends AbstractAppState{
 
-    private Node rootNode = new Node("Root Node");
+    private Node rootNode = new Node("StartState Root Node");
     private AssetManager assetManager;
     private MARS_Main mars;
     
@@ -99,8 +99,8 @@ public class StartState extends AbstractAppState{
     
     @Override
     public void cleanup() {
-        rootNode.detachAllChildren();
         super.cleanup();
+        mars.getRootNode().detachChild(getRootNode());
     }
 
     @Override

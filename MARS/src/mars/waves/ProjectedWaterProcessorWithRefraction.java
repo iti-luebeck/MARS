@@ -413,6 +413,7 @@ public class ProjectedWaterProcessorWithRefraction implements SceneProcessor {
     }
 
     public void cleanup() {
+        
     }
 
     //debug only : displays maps
