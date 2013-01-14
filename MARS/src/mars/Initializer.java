@@ -157,6 +157,9 @@ public class Initializer {
     //light
     DirectionalLight sun;
     AmbientLight ambLight = new AmbientLight();
+    DirectionalLightShadowRenderer dlsr;
+    DirectionalLightShadowFilter dlsf;
+    FilterPostProcessor fppS;
     
     //gui
     BitmapText ch;
@@ -172,6 +175,9 @@ public class Initializer {
     private ProjectedWaterProcessorWithRefraction waterProcessor;
     private WaterHeightGenerator whg = new WaterHeightGenerator();
     
+    //debug
+    WireProcessor wireProcessor;
+
     //Server
     private MARS_Server raw_server;
     private Thread raw_server_thread;
@@ -302,10 +308,21 @@ public class Initializer {
         viewPort.addProcessor(fpp);
     }
     
-    public void cleanup(){
+    public void cleanup(){  
+        if(fppS != null){
+            fppS.removeAllFilters();
+            viewPort.removeProcessor(fppS);
+            viewPort.removeProcessor(dlsr);
+        }
+        
         fpp.removeAllFilters();
         viewPort.removeProcessor(fpp);
         viewPort.removeProcessor(waterProcessor);
+        
+        if(wireProcessor != null){
+        viewPort.removeProcessor(wireProcessor);
+        }
+        
         //cleanupProjectedWavesWater();
     }
 
@@ -475,7 +492,8 @@ public class Initializer {
 
     private void setupWireFrame(){
         //we want to see wireframes on all objects
-        viewPort.addProcessor(new WireProcessor(assetManager,mars_settings.getWireframecolor()));
+        new WireProcessor(assetManager,mars_settings.getWireframecolor());
+        viewPort.addProcessor(wireProcessor);
     }
 
     private DepthOfFieldFilter createDepthOfField(){
@@ -1611,7 +1629,7 @@ public class Initializer {
     }
 
     private void setupShadow(){
-        DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
+        dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
         dlsr.setLight(sun);
         dlsr.setLambda(0.55f);
         dlsr.setShadowIntensity(0.6f);    
@@ -1620,7 +1638,7 @@ public class Initializer {
         //dlsr.displayFrustum();
         viewPort.addProcessor(dlsr);
 
-        DirectionalLightShadowFilter dlsf = new DirectionalLightShadowFilter(assetManager, 1024, 3);
+        dlsf = new DirectionalLightShadowFilter(assetManager, 1024, 3);
         dlsf.setLight(sun);
         dlsf.setLambda(0.55f);
         dlsf.setShadowIntensity(0.6f);    
@@ -1628,7 +1646,7 @@ public class Initializer {
         dlsf.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
         dlsf.setEnabled(false);
 
-        FilterPostProcessor fppS = new FilterPostProcessor(assetManager);
+        fppS = new FilterPostProcessor(assetManager);
         fppS.addFilter(dlsf);
 
         viewPort.addProcessor(fppS);

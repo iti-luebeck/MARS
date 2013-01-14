@@ -623,6 +623,7 @@ public class AUV_Manager {
             AUV auv = (AUV)auvs.get(elem);
             auv.cleanupAUV();
         }
+        auvs.clear();
     }
     
     /**

@@ -59,6 +59,7 @@ public class MARS_Settings{
     private HashMap<String,Object> CrossHairs;
     private HashMap<String,Object> Misc;
     private HashMap<String,Object> Camera;
+    private HashMap<String,Object> Auto;
     //private HashMap<String,Object> FPS;
 
     @XmlTransient
@@ -143,6 +144,7 @@ public class MARS_Settings{
         CrossHairs = new HashMap<String,Object> ();
         Misc = new HashMap<String,Object> ();
         Camera = new HashMap<String,Object> ();
+        Auto = new HashMap<String,Object> ();
         //FPS = new HashMap<String,Object> ();
         settings.put("Graphics", Graphics);
         Graphics.put("Resolution", Resolution);
@@ -170,6 +172,7 @@ public class MARS_Settings{
         settings.put("Physics", Physics);
         settings.put("Misc", Misc);
         Misc.put("Camera", Camera);
+        Misc.put("Auto", Auto);
         Server.put("RAW", RAW);
         Server.put("ROS", ROS);
         settings.put("Gui", Gui);
@@ -215,6 +218,7 @@ public class MARS_Settings{
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
+        Auto = (HashMap<String,Object>)Misc.get("Auto");
     }
 
     private void saveValue(TextFieldEditor editor){
@@ -473,7 +477,39 @@ public class MARS_Settings{
     public void setFlyCamMoveSpeed(int FlyCamMoveSpeed) {
         Camera.put("FlyCamMoveSpeed", FlyCamMoveSpeed);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public String getAutoConfigName() {
+        return (String)Auto.get("config");
+    }
 
+    /**
+     *
+     * @param FlyCamMoveSpeed
+     */
+    public void setAutoConfigName(String config) {
+        Auto.put("config", config);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isAutoEnabled() {
+         return (Boolean)Auto.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setAutoEnabled(boolean enabled) {
+        Auto.put("enabled", enabled);
+    }
+    
     /**
      *
      * @return

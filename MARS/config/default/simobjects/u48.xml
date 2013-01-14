@@ -45,10 +45,10 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="type">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
                 </entry>
-                <entry xsi:type="myHashMapEntryTypeObject" key="collidable">
+                <entry xsi:type="myHashMapEntryTypeObject" key="debug_collision">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                 </entry>
-                <entry xsi:type="myHashMapEntryTypeObject" key="debug_collision">
+                <entry xsi:type="myHashMapEntryTypeObject" key="collidable">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                 </entry>
             </value>

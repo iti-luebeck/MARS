@@ -138,6 +138,7 @@ public class MARSView extends FrameView {
     private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
+    private XML_JAXB_ConfigReaderWriter XMLConfig;
     private MARS_Main mars;
     
     private ArrayList<String> auv_name_items = new ArrayList<String>();
@@ -581,10 +582,18 @@ public class MARSView extends FrameView {
     
     /**
      * 
+     * @param mars_settings
+     */
+    public void setMarsSettings(MARS_Settings mars_settings){
+        this.mars_settings = mars_settings;
+    }
+    
+    /**
+     * 
      * @param simauv_settings
      */
-    public void setMarsSettings(MARS_Settings simauv_settings){
-        this.mars_settings = simauv_settings;
+    public void setXMLConfig(XML_JAXB_ConfigReaderWriter XMLConfig){
+        this.XMLConfig = XMLConfig;
     }
 
     /**
@@ -3466,12 +3475,23 @@ public class MARSView extends FrameView {
         save_config_FileChooser.showSaveDialog(null);
         File f = save_config_FileChooser.getSelectedFile();
         if(f != null){
-            XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
+            String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
+            if(failure != null){
+                JOptionPane.showMessageDialog(mainPanel,
+                failure,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(mainPanel,
+                "Could sucessfully create File. Configuration saved.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_saveconfigtoActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
-        File f = new File("./config/default");
+        File f = new File("./config/" + XMLConfig.getConfigName());
         if(f != null){
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
             if(failure != null){

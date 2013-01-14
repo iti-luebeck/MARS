@@ -23,7 +23,7 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" unit="m/s²" key="gravitational_acceleration_vector">
             <value>
                 <x>0.0</x>
-                <y>-9.80665</y><!-- -9.80665 -->
+                <y>-9.80665</y>
                 <z>0.0</z>
             </value>
         </entry>

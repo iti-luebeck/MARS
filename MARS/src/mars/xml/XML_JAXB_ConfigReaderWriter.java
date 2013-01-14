@@ -25,23 +25,41 @@ import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 
 /**
- * This Class is responsible for reading and writing java objects to an config file
+ * This Class is responsible for reading and writing java objects to an configName file
  * as an xml file
  * @author Thomas Tosik
  */
 public class XML_JAXB_ConfigReaderWriter {
+
+    private String configName = "default";
+    
+    public XML_JAXB_ConfigReaderWriter() {
+    }
+    
+    public XML_JAXB_ConfigReaderWriter(String config) {
+        this.configName = config;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+    
     /**
      * 
      * @return
      */
-    public static ArrayList loadSimObjects(){
+    public ArrayList loadSimObjects(){
         ArrayList arrlist = new ArrayList();
         FilenameFilter filter = new FilenameFilter() {
                     public boolean accept(File dir, String s) {
                         return s.toLowerCase().endsWith( ".xml" );
                     }           
         };
-        File dir = new File("./config/default/simobjects");
+        File dir = new File("./config/" + getConfigName() + "/simobjects");
         
         if(dir.isDirectory()){
             File[] files = dir.listFiles(filter);
@@ -61,7 +79,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
-    public static SimObject loadSimObject(File file){
+    public SimObject loadSimObject(File file){
         try {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
@@ -86,9 +104,9 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param name
      * @return
      */
-    public static SimObject loadSimObject(String name){
+    public SimObject loadSimObject(String name){
         try {
-            File file = new File("./config/default/simobjects/" + name + ".xml");
+            File file = new File("./config/" + getConfigName() + "/simobjects/" + name + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -169,14 +187,14 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @return
      */
-    public static ArrayList loadAUVs(){
+    public ArrayList loadAUVs(){
         ArrayList arrlist = new ArrayList();
         FilenameFilter filter = new FilenameFilter() {
                     public boolean accept(File dir, String s) {
                         return s.toLowerCase().endsWith( ".xml" );
                     }           
         };
-        File dir = new File("./config/default/auvs");
+        File dir = new File("./config/" + getConfigName() + "/auvs");
         
         if(dir.isDirectory()){
             File[] files = dir.listFiles(filter);
@@ -196,7 +214,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
-    public static BasicAUV loadAUV(File file){
+    public BasicAUV loadAUV(File file){
         try {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
@@ -221,9 +239,9 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param name
      * @return
      */
-    public static BasicAUV loadAUV(String name){
+    public BasicAUV loadAUV(String name){
         try {
-            File file = new File("./config/default/auvs/" + name + ".xml");
+            File file = new File("./config/" + getConfigName() + "/auvs/" + name + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -307,9 +325,9 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @return
      */
-    public static MARS_Settings loadMARS_Settings(){
+    public MARS_Settings loadMARS_Settings(){
         try {
-            File file = new File("./config/default/" + "Settings" + ".xml");
+            File file = new File("./config/" + getConfigName() + "/" + "Settings" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -415,9 +433,9 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @return
      */
-    public static PhysicalEnvironment loadPhysicalEnvironment(){
+    public PhysicalEnvironment loadPhysicalEnvironment(){
         try {
-            File file = new File("./config/default/" + "PhysicalEnvironment" + ".xml");
+            File file = new File("./config/" + getConfigName() + "/" + "PhysicalEnvironment" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
                 Unmarshaller u = context.createUnmarshaller();
@@ -456,9 +474,9 @@ public class XML_JAXB_ConfigReaderWriter {
      * 
      * @return
      */
-    public static KeyConfig loadKeyConfig(){
+    public KeyConfig loadKeyConfig(){
         try {
-            File file = new File("./config/default/" + "KeyConfig" + ".xml");
+            File file = new File("./config/" + getConfigName() + "/" + "KeyConfig" + ".xml");
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
                 Unmarshaller u = context.createUnmarshaller();

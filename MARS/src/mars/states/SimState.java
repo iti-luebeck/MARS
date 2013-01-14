@@ -110,15 +110,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private boolean server_init = false;
     
     //main settings file
-    MARS_Settings mars_settings;
-    KeyConfig keyconfig;
-    PhysicalEnvironment physical_environment;
-    Initializer initer;
-    ArrayList auvs = new ArrayList();
-    ArrayList simobs = new ArrayList();
-    XMLConfigReaderWriter xmll;
+    private MARS_Settings mars_settings;
+    private KeyConfig keyconfig;
+    private PhysicalEnvironment physical_environment;
+    private Initializer initer;
+    private ArrayList auvs = new ArrayList();
+    private ArrayList simobs = new ArrayList();
+    @Deprecated
+    private XMLConfigReaderWriter xmll;
+    private XML_JAXB_ConfigReaderWriter xml;
+    private String config = "default";
     
-    ChaseCamera chaseCam;
+    private ChaseCamera chaseCam;
     
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
@@ -164,8 +167,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      * @param view
      */
-    public SimState(MARSView view) {
+    public SimState(MARSView view, String config) {
         this.view = view;
+        this.config = config;
     }
         
     /**
@@ -182,6 +186,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
         //deattach the state root node from the main 
         mars.getRootNode().detachChild(getRootNode());
+        getRootNode().detachAllChildren();
         
         //cleanup the initer (viewport, filters)
         initer.cleanup();
@@ -276,7 +281,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.attachChild(currents);
             
             initNiftyLoading();
-            loadXML();
+            loadXML(config);
             initPrivateKeys();// load custom key mappings
             setupPhysics();
             setupGUI();
@@ -395,6 +400,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setPenv(physical_environment);
             view.setKeyConfig(keyconfig);
             view.setXMLL(xmll);
+            view.setXMLConfig(xml);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
             //view.initCharts();
@@ -524,11 +530,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     /*
      *
      */
-    private void loadXML(){
+    private void loadXML(String config){
         try {
-             keyconfig = XML_JAXB_ConfigReaderWriter.loadKeyConfig();    
-             mars_settings = XML_JAXB_ConfigReaderWriter.loadMARS_Settings();
-             physical_environment = XML_JAXB_ConfigReaderWriter.loadPhysicalEnvironment();
+            xml = new XML_JAXB_ConfigReaderWriter(config);
+             keyconfig = xml.loadKeyConfig();    
+             mars_settings = xml.loadMARS_Settings();
+             physical_environment = xml.loadPhysicalEnvironment();
              mars_settings.setPhysical_environment(physical_environment);
                 
              /*Dynamixel_AX12PLUS serv = new Dynamixel_AX12PLUS();
@@ -551,7 +558,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 m.marshal( serv, System.out );*/
              
              
-             auvs = XML_JAXB_ConfigReaderWriter.loadAUVs();//xmll.getAuvs();
+             auvs = xml.loadAUVs();//xmll.getAuvs();
                 /*IMU im = new IMU();
                 im.setEnabled(true);
                 im.setNodeVisibility(false);
@@ -589,7 +596,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
                 bas_auv.setState(this);
              }
-             simobs = XML_JAXB_ConfigReaderWriter.loadSimObjects();
+             simobs = xml.loadSimObjects();
         } catch (Exception ex) {
             Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1070,10 +1077,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      /*
      *
      */
-    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings simauv_settings, Communication_Manager com_manager, Initializer initer){
+    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, Communication_Manager com_manager, Initializer initer){
         auv_manager.setBulletAppState(bulletAppState);
         auv_manager.setPhysical_environment(pe);
-        auv_manager.setSimauv_settings(simauv_settings);
+        auv_manager.setSimauv_settings(mars_settings);
         auv_manager.setCommunicationManager(com_manager);
         if(mars_settings.isROS_Server_enabled()){
             auv_manager.setMARSNodes(initer.getROS_Server().getMarsNodes());

@@ -59,6 +59,7 @@ import java.util.concurrent.TimeUnit;
 import mars.auv.AUV;
 import mars.states.MapState;
 import mars.states.NiftyState;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 
 
 /**
@@ -70,6 +71,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     //needed for graphs
     private MARSView view;
     private boolean view_init = false;
+    private boolean startstateinit = false;
     private boolean statsDarken = true;
 
     StartState startstate;
@@ -116,14 +118,19 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     @Override
     public void simpleInitApp() {
+        XML_JAXB_ConfigReaderWriter xml = new XML_JAXB_ConfigReaderWriter();
+        MARS_Settings mars_settings = xml.loadMARS_Settings();
+            
         //initNifty();
         initMapViewPort();
         //initAssetsLoaders();
         startstate = new StartState(assetManager);
         startstate.setEnabled(true);
-        viewPort.attachScene(startstate.getRootNode());
-        //ViewPort2.attachScene(startstate.getRootNode());
-        stateManager.attach(startstate);
+        if(!mars_settings.isAutoEnabled()){
+            viewPort.attachScene(startstate.getRootNode());
+            //ViewPort2.attachScene(startstate.getRootNode());
+            stateManager.attach(startstate);
+        }
 
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());
@@ -149,6 +156,12 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         advFlyCam.setDragToRotate(true);
         advFlyCam.setEnabled(false);
         advFlyCam.registerWithInput(inputManager);
+        
+        if(mars_settings.isAutoEnabled()){
+            SimState simstate = new SimState(view,mars_settings.getAutoConfigName());
+            simstate.setMapState(mapstate);
+            stateManager.attach(simstate);
+        }
             
        /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
         if(flycamState != null){
@@ -202,8 +215,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             statsDarken = false;
         }
 
-        if(startstate.isInitialized() && view!=null){// little hack to allow the starting of a config only when the startstate was initialized
+        if(startstate.isInitialized() && view!=null && startstateinit==false){// little hack to allow the starting of a config only when the startstate was initialized
             view.allowStateInteraction();
+            startstateinit = true;
         }
        
         /*if (load) {//we will be loading,switching appstates
@@ -267,7 +281,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         load = true;*/
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
-                SimState simstate = new SimState(view);
+                SimState simstate = new SimState(view,"default");
                 //viewPort.attachScene(simstate.getRootNode());
                 //ViewPort2.attachScene(simstate.getRootNode());
                 simstate.setMapState(mapstate);
@@ -594,6 +608,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                     BulletAppState bulletAppState = (BulletAppState)stateManager.getState(BulletAppState.class);
                     bulletAppState.setEnabled(false);
                     stateManager.detach(bulletAppState);
+                }
+                if(stateManager.getState(MapState.class) != null){
+                    MapState mapState = (MapState)stateManager.getState(MapState.class);
+                    mapState.setEnabled(false);
+                    //stateManager.detach(bulletAppState);
                 }
                 if(stateManager.getState(SimState.class) != null){
                     SimState simState = (SimState)stateManager.getState(SimState.class);
