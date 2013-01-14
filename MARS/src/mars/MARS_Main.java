@@ -272,7 +272,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     /**
      * 
      */
-    public void startSimState(){
+    public void startSimState(final String config){
         endStart();
         /*Element element = nifty.getScreen("loadlevel").findElementByName("loadingtext");
         textRenderer = element.getRenderer(TextRenderer.class);
@@ -281,7 +281,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         load = true;*/
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
-                SimState simstate = new SimState(view,"default");
+                SimState simstate = new SimState(view,config);
                 //viewPort.attachScene(simstate.getRootNode());
                 //ViewPort2.attachScene(simstate.getRootNode());
                 simstate.setMapState(mapstate);
@@ -622,6 +622,30 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
-        startSimState();
+        startSimState("default");
+    }
+    
+    public void loadSimState(String config){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(BulletAppState.class) != null){
+                    BulletAppState bulletAppState = (BulletAppState)stateManager.getState(BulletAppState.class);
+                    bulletAppState.setEnabled(false);
+                    stateManager.detach(bulletAppState);
+                }
+                if(stateManager.getState(MapState.class) != null){
+                    MapState mapState = (MapState)stateManager.getState(MapState.class);
+                    //mapState.setEnabled(false);
+                    mapState.clear();
+                }
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.setEnabled(false);
+                    stateManager.detach(simState);
+                }
+                return null;
+            }
+        });
+        startSimState(config);
     }
 }

@@ -1142,6 +1142,7 @@ public class MARSView extends FrameView {
         RestartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
         saveconfigto = new javax.swing.JMenuItem();
         saveconfig = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -1345,6 +1346,7 @@ public class MARSView extends FrameView {
         jLabel39 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        open_config_FileChooser = new javax.swing.JFileChooser();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1639,10 +1641,18 @@ public class MARSView extends FrameView {
         jSeparator3.setName("jSeparator3"); // NOI18N
         jFileMenu.add(jSeparator3);
 
+        jMenuItem1.setIcon(resourceMap.getIcon("jMenuItem1.icon")); // NOI18N
         jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setEnabled(false);
         jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jFileMenu.add(jMenuItem1);
+
+        jSeparator9.setName("jSeparator9"); // NOI18N
+        jFileMenu.add(jSeparator9);
 
         saveconfigto.setIcon(resourceMap.getIcon("saveconfigto.icon")); // NOI18N
         saveconfigto.setText(resourceMap.getString("saveconfigto.text")); // NOI18N
@@ -1772,6 +1782,8 @@ public class MARSView extends FrameView {
 
         help_optionpane.setName("help_optionpane"); // NOI18N
 
+        save_config_FileChooser.setCurrentDirectory(new java.io.File("C:\\."));
+        save_config_FileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         save_config_FileChooser.setName("save_config_FileChooser"); // NOI18N
 
         auv_popup_menu.setName("auv_popup_menu"); // NOI18N
@@ -3448,6 +3460,11 @@ public class MARSView extends FrameView {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        open_config_FileChooser.setCurrentDirectory(new java.io.File("C:\\."));
+        open_config_FileChooser.setDialogTitle(resourceMap.getString("open_config_FileChooser.dialogTitle")); // NOI18N
+        open_config_FileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        open_config_FileChooser.setName("open_config_FileChooser"); // NOI18N
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
@@ -3581,7 +3598,7 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_keysActionPerformed
 
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
-    mars.startSimState();
+    mars.startSimState("default");
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
     private void jButtonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPlayMouseClicked
@@ -4718,6 +4735,19 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         mars.getFlyByCamera().setEnabled(true);
     }//GEN-LAST:event_jme3_view_flybycamActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        open_config_FileChooser.showOpenDialog(null);
+        final File f = open_config_FileChooser.getSelectedFile();
+        if(f != null){
+            Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                mars.loadSimState(f.getName());
+                return null;
+            }
+            });
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
@@ -4860,6 +4890,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar.Separator jSeparator7;
     private javax.swing.JToolBar.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
@@ -4926,6 +4957,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JDialog moveCameraDialog;
+    private javax.swing.JFileChooser open_config_FileChooser;
     private javax.swing.JTree pe_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor3;
     private DefaultTreeCellRenderer renderer3;
