@@ -91,6 +91,11 @@ public class MapState extends AbstractAppState{
             }
         });*/
     }
+    
+    public void clear(){
+        auvsNode.detachAllChildren();
+        auv_nodes.clear();
+    }
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -384,7 +389,9 @@ public class MapState extends AbstractAppState{
                         }
                     }else{//auv is disabled so dont show in on map
                         Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
-                        geom.setCullHint(CullHint.Always);
+                        if(geom != null){
+                            geom.setCullHint(CullHint.Always);
+                        }
                     }
             }
         }

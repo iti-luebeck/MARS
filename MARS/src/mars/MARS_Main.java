@@ -611,17 +611,17 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 }
                 if(stateManager.getState(MapState.class) != null){
                     MapState mapState = (MapState)stateManager.getState(MapState.class);
-                    mapState.setEnabled(false);
-                    //stateManager.detach(bulletAppState);
+                    //mapState.setEnabled(false);
+                    mapState.clear();
                 }
                 if(stateManager.getState(SimState.class) != null){
                     SimState simState = (SimState)stateManager.getState(SimState.class);
                     simState.setEnabled(false);
-                    //viewPort.detachScene(simState.getRootNode());
                     stateManager.detach(simState);
                 }
                 return null;
             }
         });
+        startSimState();
     }
 }

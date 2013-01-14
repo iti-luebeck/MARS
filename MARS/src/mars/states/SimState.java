@@ -471,9 +471,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     private void initMap(){
-        mapState.loadMap(mars_settings.getTerrainfilepath_cm());
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
+                mapState.loadMap(mars_settings.getTerrainfilepath_cm());
                 mapState.setMars_settings(mars_settings);
                 mapState.setAuv_manager(auv_manager);
                 return null;
