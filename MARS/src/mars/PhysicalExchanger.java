@@ -179,6 +179,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     
     public abstract PhysicalExchanger copy();
     
+    public abstract void cleanup();
+    
     /**
      * 
      * @return

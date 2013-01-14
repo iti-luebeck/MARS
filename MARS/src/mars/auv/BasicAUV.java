@@ -303,6 +303,14 @@ public class BasicAUV implements AUV,SceneProcessor{
     @Override
     public void cleanupAUV() {
         cleanupOffscreenView();
+        for ( String elem : sensors.keySet() ){
+            Sensor element = (Sensor)sensors.get(elem);
+            element.cleanup();
+        }
+        for ( String elem : actuators.keySet() ){
+            Actuator element = (Actuator)actuators.get(elem);
+            element.cleanup();
+        }
     }
 
     /**
@@ -583,7 +591,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         if(auv_param.isDebugDrag()){
             setupCam2();
         }
-
+        
         //calculate the volume one time exact as possible, ignore water height
         long old_time = System.currentTimeMillis();
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
@@ -597,9 +605,6 @@ public class BasicAUV implements AUV,SceneProcessor{
 
         initPhysicalExchangers();
         
-        /*if(mars_settings.isROS_Server_enabled()){
-            initROS();
-        }*/
         auv_node.rotate(auv_param.getRotation().x, auv_param.getRotation().y, auv_param.getRotation().z);
         rotateAUV();
         auv_node.updateGeometricState();

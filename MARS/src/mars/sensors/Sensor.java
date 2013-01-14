@@ -124,6 +124,10 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     public void updateState(TreePath path) {
     }
     
+    @Override
+    public void cleanup() {
+    }
+    
     /**
      * 
      */

@@ -169,6 +169,10 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     public abstract void reset();
     
+    @Override
+    public void cleanup() {
+    }
+    
     /**
      * 
      * @param path

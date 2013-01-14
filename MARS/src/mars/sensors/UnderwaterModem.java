@@ -48,7 +48,9 @@ public class UnderwaterModem extends Sensor{
 
     //ROS stuff
     private Publisher<std_msgs.String> publisher = null;
+    private Publisher<std_msgs.Int8> publisherSig = null;
     private std_msgs.String fl;
+    private std_msgs.Int8 flSig;
     
     /**
      * 
@@ -298,7 +300,9 @@ public class UnderwaterModem extends Sensor{
           });*/
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out",std_msgs.String._TYPE);  
+        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/signal",std_msgs.Int8._TYPE); 
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
+        flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
         
         final String fin_auv_name = auv_name;
         Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName() + "/in", std_msgs.String._TYPE);

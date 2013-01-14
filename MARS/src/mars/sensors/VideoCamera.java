@@ -72,6 +72,7 @@ public class VideoCamera extends Sensor implements Moveable{
     private Camera offCamera;
     private Camera debugCamera;
     private ViewPort offView;
+    private ViewPort debugView;
     private FrameBuffer offBuffer;
     private float frustumSize = 3.5f;//1
 
@@ -113,6 +114,12 @@ public class VideoCamera extends Sensor implements Moveable{
         VideoCamera sensor = new VideoCamera(this);
         sensor.initAfterJAXB();
         return sensor;
+    }
+    
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        cleanupOffscreenView();
     }
     
     /**
@@ -252,12 +259,12 @@ public class VideoCamera extends Sensor implements Moveable{
 
         debugCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         //debugCamera.setViewPort(0f, 1f, 0f, 1f);
-        ViewPort view3 = renderManager.createMainView("Bottom Left2", debugCamera);
-        //initer.addFiltersToViewport(view3);
-        view3.setBackgroundColor(ColorRGBA.Gray);
+        debugView = renderManager.createMainView("Debug View" + getPhysicalExchangerName(), debugCamera);
+        //initer.addFiltersToViewport(debugView);
+        debugView.setBackgroundColor(ColorRGBA.Gray);
         //view3.setClearEnabled(true);
-        view3.setClearFlags(true, true, true);
-        view3.attachScene(rootNode);
+        debugView.setClearFlags(true, true, true);
+        debugView.attachScene(rootNode);
     }
 
     /*
@@ -267,7 +274,7 @@ public class VideoCamera extends Sensor implements Moveable{
         offCamera = new Camera(getCameraWidth(),getCameraHeight());
         //offCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         // create a pre-view. a view that is rendered before the main view
-        offView = renderManager.createPreView("Offscreen View2", offCamera);
+        offView = renderManager.createPreView("Offscreen View" + getPhysicalExchangerName(), offCamera);
         //offView.setBackgroundColor(ColorRGBA.Black);
         //offView.setClearEnabled(true);
         offView.setClearFlags(true, true, true);
@@ -301,6 +308,21 @@ public class VideoCamera extends Sensor implements Moveable{
         // attach the scene to the viewport to be rendered
         offView.attachScene(this.rootNode);
         initer.addFiltersToViewport(offView);
+    }
+    
+    public void cleanupOffscreenView(){
+        if(offView != null){
+            offView.setEnabled(false);
+            offView.clearProcessors();
+            offView.clearScenes();
+            renderManager.removePreView(offView);
+        }
+        if(debugView != null){
+            debugView.setEnabled(false);
+            debugView.clearProcessors();
+            debugView.clearScenes();
+            renderManager.removeMainView(debugView);
+        }
     }
 
     private byte[] updateImageContents(){
