@@ -942,6 +942,22 @@ public class MARS_Settings{
     public void setROS_Server_enabled(boolean enabled) {
         ROS.put("enabled", enabled);
     }
+    
+        /**
+     *
+     * @return
+     */
+    public boolean isROS_Server_publish() {
+        return (Boolean)ROS.get("publish");
+    }
+
+    /**
+     * 
+     * @param enabled 
+     */
+    public void setROS_Server_publish(boolean publish) {
+        ROS.put("publish", publish);
+    }
 
     /**
      *

@@ -370,7 +370,7 @@ public class Initializer {
             raw_server_thread.start();
         }
         if(mars_settings.isROS_Server_enabled()){
-            ros_server = new ROS_Node( mars, auv_manager );
+            ros_server = new ROS_Node( mars, auv_manager, mars_settings );
             ros_server.setMaster_port(mars_settings.getROS_Server_port());
             ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
             ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
@@ -434,7 +434,7 @@ public class Initializer {
      */
     public void setupROS_Server(){
         if(mars_settings.isROS_Server_enabled()){
-            ros_server = new ROS_Node( mars, auv_manager );
+            ros_server = new ROS_Node( mars, auv_manager, mars_settings );
             ros_server.setMaster_port(mars_settings.getROS_Server_port());
             ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
             ros_server.setLocal_ip(mars_settings.getROS_Local_IP());

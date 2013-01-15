@@ -471,6 +471,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         view.allowServerInteraction(false);
     }
     
+    public void enablePublishing(boolean enable){
+        mars_settings.setROS_Server_publish(enable);
+    }
+    
     private void initMap(){
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
@@ -1309,30 +1313,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         if (!super.isEnabled()) {
             return;
         }
-        if(/*AUVPhysicsControl != null*/true){
-            //only update physics if auv_hanse exists and when simulation is started
-            if(auv_manager != null /*&& auv_hanse != null*/ && initial_ready){
-                /*Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    auv_manager.updateAllAUVs(tpf);
-                    return null;
-                }
-                });*/
-                auv_manager.updateAllAUVs(tpf);
-                /*Future fut = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    com_manager.update(tpf);
-                    return null;
-                }
-                });*/
-                com_manager.update(tpf);
-                //time = time + tpf;
-                //System.out.println("time: " + time);
-            }            
-            /*if(auv_manager != null){
-                com_manager.update(tpf);
-            }*/
-        }
+
+        //only update physics if auv_hanse exists and when simulation is started
+        if(auv_manager != null && initial_ready){
+            auv_manager.updateAllAUVs(tpf);
+            com_manager.update(tpf);
+        }            
     }
 
     /**

@@ -1466,6 +1466,36 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonServerDisconnectActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JButton" name="jButtonServerPlay">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonServerPlay.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonServerPlay.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonServerPlay.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonServerPlay" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonServerPlayActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonServerPause">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonServerPause.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonServerPause.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonServerPause.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonServerPause" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonServerPauseActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator5">
           <Properties>
             <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>

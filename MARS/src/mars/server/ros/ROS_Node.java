@@ -22,6 +22,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
+import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
 import mars.ros.MARSNodeMain;
 import org.ros.node.DefaultNodeMainExecutor;
@@ -43,6 +44,7 @@ public class ROS_Node implements Runnable {
 
     private MARS_Main mars;
     private AUV_Manager auv_manager;
+    private MARS_Settings marsSettings;
     
     //rosjava stuff
     private NodeMainExecutor nodeMainExecutor;
@@ -55,7 +57,7 @@ public class ROS_Node implements Runnable {
      * @param mars
      * @param auv_manager
      */
-    public ROS_Node(MARS_Main mars, AUV_Manager auv_manager) {
+    public ROS_Node(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging
         try {
             // Create an appending file handler
@@ -68,6 +70,7 @@ public class ROS_Node implements Runnable {
 
         this.mars = mars;
         this.auv_manager = auv_manager;
+        this.marsSettings = marsSettings;
     }
     
     /**
@@ -249,8 +252,10 @@ public class ROS_Node implements Runnable {
 
                 Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
-                        auv_manager.publishSensorsOfAUVs();
-                        auv_manager.publishActuatorsOfAUVs();
+                        if(marsSettings.isROS_Server_publish()){
+                            auv_manager.publishSensorsOfAUVs();
+                            auv_manager.publishActuatorsOfAUVs();
+                        }
                         return null;
                     }
                 });

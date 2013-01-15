@@ -439,6 +439,9 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="publish">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+                        </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="localip">
                             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">141.83.88.159</value>
                         </entry>

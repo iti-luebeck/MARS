@@ -498,9 +498,13 @@ public class MARSView extends FrameView {
                     if(connected){
                         jButtonServerConnect.setEnabled(false);
                         jButtonServerDisconnect.setEnabled(true);
+                        jButtonServerPlay.setEnabled(false);
+                        jButtonServerPause.setEnabled(true);
                     }else{
                         jButtonServerConnect.setEnabled(true);
                         jButtonServerDisconnect.setEnabled(false);
+                        jButtonServerPlay.setEnabled(false);
+                        jButtonServerPause.setEnabled(false);
                     }                    
                 }
             }
@@ -520,6 +524,8 @@ public class MARSView extends FrameView {
                     }else{
                         jButtonServerConnect.setEnabled(false);
                         jButtonServerDisconnect.setEnabled(false);
+                        jButtonServerPlay.setEnabled(false);
+                        jButtonServerPause.setEnabled(true);
                     }                    
                 }
             }
@@ -1237,6 +1243,8 @@ public class MARSView extends FrameView {
         jSeparator4 = new javax.swing.JToolBar.Separator();
         jButtonServerConnect = new javax.swing.JButton();
         jButtonServerDisconnect = new javax.swing.JButton();
+        jButtonServerPlay = new javax.swing.JButton();
+        jButtonServerPause = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         jButtonCharts = new javax.swing.JButton();
         jSeparator6 = new javax.swing.JToolBar.Separator();
@@ -2379,6 +2387,36 @@ public class MARSView extends FrameView {
             }
         });
         jToolBarPlay.add(jButtonServerDisconnect);
+
+        jButtonServerPlay.setIcon(resourceMap.getIcon("jButtonServerPlay.icon")); // NOI18N
+        jButtonServerPlay.setText(resourceMap.getString("jButtonServerPlay.text")); // NOI18N
+        jButtonServerPlay.setToolTipText(resourceMap.getString("jButtonServerPlay.toolTipText")); // NOI18N
+        jButtonServerPlay.setEnabled(false);
+        jButtonServerPlay.setFocusable(false);
+        jButtonServerPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonServerPlay.setName("jButtonServerPlay"); // NOI18N
+        jButtonServerPlay.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonServerPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonServerPlayActionPerformed(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonServerPlay);
+
+        jButtonServerPause.setIcon(resourceMap.getIcon("jButtonServerPause.icon")); // NOI18N
+        jButtonServerPause.setText(resourceMap.getString("jButtonServerPause.text")); // NOI18N
+        jButtonServerPause.setToolTipText(resourceMap.getString("jButtonServerPause.toolTipText")); // NOI18N
+        jButtonServerPause.setEnabled(false);
+        jButtonServerPause.setFocusable(false);
+        jButtonServerPause.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonServerPause.setName("jButtonServerPause"); // NOI18N
+        jButtonServerPause.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonServerPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonServerPauseActionPerformed(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonServerPause);
 
         jSeparator5.setName("jSeparator5"); // NOI18N
         jToolBarPlay.add(jSeparator5);
@@ -4752,6 +4790,34 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
     }//GEN-LAST:event_LoadMenuItemActionPerformed
 
+    private void jButtonServerPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPlayActionPerformed
+        jButtonServerPause.setEnabled(true);
+        jButtonServerPlay.setEnabled(false);
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.enablePublishing(true);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonServerPlayActionPerformed
+
+    private void jButtonServerPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPauseActionPerformed
+        jButtonServerPause.setEnabled(false);
+        jButtonServerPlay.setEnabled(true);
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.enablePublishing(false);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonServerPauseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
@@ -4828,6 +4894,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButtonRestart;
     private javax.swing.JButton jButtonServerConnect;
     private javax.swing.JButton jButtonServerDisconnect;
+    private javax.swing.JButton jButtonServerPause;
+    private javax.swing.JButton jButtonServerPlay;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;

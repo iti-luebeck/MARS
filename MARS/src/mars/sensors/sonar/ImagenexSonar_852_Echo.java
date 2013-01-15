@@ -180,7 +180,7 @@ public class ImagenexSonar_852_Echo extends Sonar{
         fl.setHeader(header);
         
         byte[] sonData = getRawSonarData();
-        this.simauv.getView().initSonarData(sonData,0f,this);
+        this.mars.getView().initSonarData(sonData,0f,this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
         fl.setStartGain((byte)getScanning_gain());
         fl.setRange((byte)getSonarMaxRange());

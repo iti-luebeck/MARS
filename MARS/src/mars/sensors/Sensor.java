@@ -41,7 +41,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     /**
      *
      */
-    protected MARS_Main simauv;
+    protected MARS_Main mars;
     /**
      *
      */
@@ -79,14 +79,14 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
 
     /**
      *
-     * @param simauv
+     * @param mars
      * @param pe
      */
-    protected Sensor(MARS_Main simauv, PhysicalEnvironment pe){
-        this.simauv = simauv;
+    protected Sensor(MARS_Main mars, PhysicalEnvironment pe){
+        this.mars = mars;
         this.pe = pe;
-        this.assetManager = simauv.getAssetManager();
-        this.rootNode = simauv.getRootNode();
+        this.assetManager = mars.getAssetManager();
+        this.rootNode = mars.getRootNode();
         variables = new HashMap<String,Object> ();
     }
     
@@ -106,8 +106,8 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     @Override
     public void setSimState(SimState simState) {
         this.simState = simState;
-        this.simauv = this.simState.getMARS();
-        this.assetManager = this.simauv.getAssetManager();
+        this.mars = this.simState.getMARS();
+        this.assetManager = this.mars.getAssetManager();
         this.rootNode = this.simState.getRootNode();
     }
 
