@@ -122,6 +122,7 @@ import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
+import mars.xml.ConfigManager;
 import mars.xml.HashMapEntry;
 import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
@@ -138,8 +139,8 @@ public class MARSView extends FrameView {
     private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
     private XMLConfigReaderWriter xmll;
-    private XML_JAXB_ConfigReaderWriter XMLConfig;
     private MARS_Main mars;
+    private ConfigManager configManager; 
     
     private ArrayList<String> auv_name_items = new ArrayList<String>();
     private ArrayList<String> simob_name_items = new ArrayList<String>();
@@ -465,6 +466,7 @@ public class MARSView extends FrameView {
                 @Override
                 public void run() {
                     StartMenuItem.setEnabled(true);
+                    LoadMenuItem.setEnabled(true);
                 }
             }
         );
@@ -592,8 +594,8 @@ public class MARSView extends FrameView {
      * 
      * @param simauv_settings
      */
-    public void setXMLConfig(XML_JAXB_ConfigReaderWriter XMLConfig){
-        this.XMLConfig = XMLConfig;
+    public void setConfigManager(ConfigManager configManager){
+        this.configManager = configManager;
     }
 
     /**
@@ -1141,7 +1143,7 @@ public class MARSView extends FrameView {
         StartMenuItem = new javax.swing.JMenuItem();
         RestartMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        LoadMenuItem = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         saveconfigto = new javax.swing.JMenuItem();
         saveconfig = new javax.swing.JMenuItem();
@@ -1641,15 +1643,16 @@ public class MARSView extends FrameView {
         jSeparator3.setName("jSeparator3"); // NOI18N
         jFileMenu.add(jSeparator3);
 
-        jMenuItem1.setIcon(resourceMap.getIcon("jMenuItem1.icon")); // NOI18N
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        LoadMenuItem.setIcon(resourceMap.getIcon("LoadMenuItem.icon")); // NOI18N
+        LoadMenuItem.setText(resourceMap.getString("LoadMenuItem.text")); // NOI18N
+        LoadMenuItem.setEnabled(false);
+        LoadMenuItem.setName("LoadMenuItem"); // NOI18N
+        LoadMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                LoadMenuItemActionPerformed(evt);
             }
         });
-        jFileMenu.add(jMenuItem1);
+        jFileMenu.add(LoadMenuItem);
 
         jSeparator9.setName("jSeparator9"); // NOI18N
         jFileMenu.add(jSeparator9);
@@ -3508,7 +3511,7 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_saveconfigtoActionPerformed
 
     private void saveconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveconfigActionPerformed
-        File f = new File("./config/" + XMLConfig.getConfigName());
+        File f = new File("./config/" + configManager.getConfig());
         if(f != null){
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
             if(failure != null){
@@ -3598,7 +3601,7 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_keysActionPerformed
 
 private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartMenuItemActionPerformed
-    mars.startSimState("default");
+    mars.startSimState();
 }//GEN-LAST:event_StartMenuItemActionPerformed
 
     private void jButtonPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonPlayMouseClicked
@@ -4735,18 +4738,19 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         mars.getFlyByCamera().setEnabled(true);
     }//GEN-LAST:event_jme3_view_flybycamActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void LoadMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadMenuItemActionPerformed
         open_config_FileChooser.showOpenDialog(null);
         final File f = open_config_FileChooser.getSelectedFile();
         if(f != null){
             Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
-                mars.loadSimState(f.getName());
+                mars.setConfigName(f.getName());
+                mars.restartSimState();
                 return null;
             }
             });
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_LoadMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
@@ -4760,6 +4764,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JFrame ChartFrame;
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JPanel LeftMenuePanel;
+    private javax.swing.JMenuItem LoadMenuItem;
     private javax.swing.JPanel MapPanel;
     private javax.swing.JMenuItem RestartMenuItem;
     private javax.swing.JMenu SettingsMenu;
@@ -4868,7 +4873,6 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

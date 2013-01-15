@@ -84,6 +84,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import javax.swing.TransferHandler;
 import mars.auv.WayPoints;
 import mars.ros.MARSNodeMain;
+import mars.xml.ConfigManager;
 
 /**
  *
@@ -119,7 +120,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     @Deprecated
     private XMLConfigReaderWriter xmll;
     private XML_JAXB_ConfigReaderWriter xml;
-    private String config = "default";
+    private ConfigManager configManager;
     
     private ChaseCamera chaseCam;
     
@@ -167,9 +168,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      * @param view
      */
-    public SimState(MARSView view, String config) {
+    public SimState(MARSView view, ConfigManager configManager) {
         this.view = view;
-        this.config = config;
+        this.configManager = configManager;
     }
         
     /**
@@ -281,7 +282,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.attachChild(currents);
             
             initNiftyLoading();
-            loadXML(config);
+            loadXML(configManager.getConfig());
             initPrivateKeys();// load custom key mappings
             setupPhysics();
             setupGUI();
@@ -400,7 +401,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.setPenv(physical_environment);
             view.setKeyConfig(keyconfig);
             view.setXMLL(xmll);
-            view.setXMLConfig(xml);
+            view.setConfigManager(configManager);
             view.setAuv_manager(auv_manager);
             view.setSimob_manager(simob_manager);
             //view.initCharts();
