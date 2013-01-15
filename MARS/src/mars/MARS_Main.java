@@ -164,6 +164,8 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             SimState simstate = new SimState(view,configManager);
             simstate.setMapState(mapstate);
             stateManager.attach(simstate);
+        }else{
+            configManager.setConfig("default");
         }
             
        /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
