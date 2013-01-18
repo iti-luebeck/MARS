@@ -117,6 +117,10 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      */
     protected  SimState simState = null;
+    /**
+     * 
+     */
+    protected boolean rosinit = false;
     
     /**
      * 

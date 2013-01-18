@@ -166,6 +166,7 @@ public class ImagenexSonar_852_Echo extends Sonar{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.EchoSounder._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.EchoSounder._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
     
     /**

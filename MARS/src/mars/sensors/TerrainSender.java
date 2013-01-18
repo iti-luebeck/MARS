@@ -127,6 +127,7 @@ public class TerrainSender extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),nav_msgs.OccupancyGrid._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(nav_msgs.OccupancyGrid._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**

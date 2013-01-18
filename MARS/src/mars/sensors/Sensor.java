@@ -61,7 +61,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     protected long tf_time = 0;
-    
+            
     /**
      * 
      */
@@ -149,7 +149,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
             
         }else{
             time = curtime;
-            if(mars_node != null && mars_node.isExisting()){
+            if(mars_node != null && mars_node.isExisting() && rosinit){
                 //if(mars_node.isRunning()){
                     publish();
                 //}

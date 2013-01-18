@@ -416,6 +416,7 @@ public class VideoCamera extends Sensor implements Moveable{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.Image._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**

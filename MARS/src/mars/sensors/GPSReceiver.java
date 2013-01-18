@@ -226,6 +226,7 @@ public class GPSReceiver extends Sensor{
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatFix._TYPE);
         NavSatStatus = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatStatus._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**

@@ -5,12 +5,16 @@
 package mars.server.ros;
 
 import com.google.common.base.Preconditions;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -25,6 +29,10 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
 import mars.ros.MARSNodeMain;
+import mars.ros.RosNodeEvent;
+import mars.ros.RosNodeListener;
+import mars.ros.SystemTFNode;
+import org.ros.message.Time;
 import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeMainExecutor;
 
@@ -32,7 +40,7 @@ import org.ros.node.NodeMainExecutor;
  *
  * @author Thomas Tosik
  */
-public class ROS_Node implements Runnable {
+public class ROS_Node implements Runnable{
 
     private static final long sleeptime = 2;
     
@@ -51,6 +59,10 @@ public class ROS_Node implements Runnable {
     private boolean running = true;
     private boolean initready = false;
     private HashMap<String,MARSNodeMain> nodes = new HashMap<String, MARSNodeMain>();
+    private MARSNodeMain systemNode;
+    private SystemTFNode systemTFNode = new SystemTFNode();
+    
+    
     
     /**
      * 
@@ -215,6 +227,7 @@ public class ROS_Node implements Runnable {
         }
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
+        createSystemNode(own_ip_string,muri);
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -222,18 +235,36 @@ public class ROS_Node implements Runnable {
         }
     }
     
+    /*
+     * Used for ros->jme tf (doesn't fit into auvs, doenst make sense)
+     */
+    private void createSystemNode(String own_ip_string, java.net.URI muri){
+        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
+        nodeConf.setNodeName("MARS_System");
+        //Preconditions.checkState(systemNode == null);
+        Preconditions.checkNotNull(nodeConf);
+        systemNode = new MARSNodeMain(nodeConf);
+        systemTFNode.setSystemNode(systemNode);
+        systemNode.addRosNodeListener(systemTFNode);
+        nodeMainExecutor.execute(systemNode, nodeConf);
+    }
+    
     private void createNode(AUV auv, String own_ip_string, java.net.URI muri){
         NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
         nodeConf.setNodeName("MARS" + "/" + auv.getName());
         MARSNodeMain marsnode;
-        //Preconditions.checkState(marsnode == null);
+        //Preconditions.checkState(systemNode == null);
         Preconditions.checkNotNull(nodeConf);
         marsnode = new MARSNodeMain(nodeConf);
         marsnode.addRosNodeListener(auv);
         nodes.put(auv.getName(), marsnode);
         nodeMainExecutor.execute(marsnode, nodeConf);
     }
-    
+
+    public MARSNodeMain getSystemNode() {
+        return systemNode;
+    }
+
     /**
      * 
      * @return
@@ -241,7 +272,7 @@ public class ROS_Node implements Runnable {
     public synchronized boolean isInitReady(){
         return initready;
     }
-
+    
     @Override
     public void run() {
         //init();
@@ -255,6 +286,9 @@ public class ROS_Node implements Runnable {
                         if(marsSettings.isROS_Server_publish()){
                             auv_manager.publishSensorsOfAUVs();
                             auv_manager.publishActuatorsOfAUVs();
+                            if(systemNode != null){
+                                systemTFNode.publishSystemTF();
+                            }
                         }
                         return null;
                     }

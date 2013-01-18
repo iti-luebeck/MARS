@@ -222,6 +222,7 @@ public class IMU extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.Imu._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**

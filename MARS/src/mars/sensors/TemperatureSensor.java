@@ -158,6 +158,7 @@ public class TemperatureSensor extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.temperature._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.temperature._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
         
     /**

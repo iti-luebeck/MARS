@@ -313,6 +313,7 @@ public class UnderwaterModem extends Sensor{
                     com_manager.putMsg(fin_auv_name,message.getData());
                 }
         });
+        this.rosinit = true;
     }
     
     /**

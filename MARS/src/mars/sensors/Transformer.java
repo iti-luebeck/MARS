@@ -135,6 +135,7 @@ public class Transformer extends Sensor{
         tfs2 = this.mars_node.getMessageFactory().newFromType(geometry_msgs.TransformStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         header2 = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**
@@ -169,7 +170,7 @@ public class Transformer extends Sensor{
 
         
         //root
-        header2.setSeq(rosSequenceNumber++);
+        /*header2.setSeq(rosSequenceNumber++);
         header2.setFrameId("ros");
         header2.setStamp(Time.fromMillis(System.currentTimeMillis()));
         tfs2.setHeader(header2);
@@ -193,11 +194,11 @@ public class Transformer extends Sensor{
                 
         tfs2.setTransform(transform2);  
         
-        tfs2.setChildFrameId("jme3");
+        tfs2.setChildFrameId("jme3");*/
         
         List<geometry_msgs.TransformStamped> tfl = new ArrayList<geometry_msgs.TransformStamped>();
         tfl.add(tfs);
-        tfl.add(tfs2);
+        //tfl.add(tfs2);
         
         fl.setTransforms(tfl);
         

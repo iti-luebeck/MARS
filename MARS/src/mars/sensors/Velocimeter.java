@@ -132,6 +132,7 @@ public class Velocimeter extends Sensor{
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
+        this.rosinit = true;
     }
 
     /**

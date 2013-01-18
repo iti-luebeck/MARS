@@ -195,6 +195,7 @@ public class PressureSensor extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.pressure._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.pressure._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
 
     /**

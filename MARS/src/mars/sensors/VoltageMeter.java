@@ -132,6 +132,7 @@ public class VoltageMeter extends Sensor{
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+        this.rosinit = true;
     }
         
     /**
