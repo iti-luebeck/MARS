@@ -1011,6 +1011,10 @@ public class Initializer {
         mars.restart();
     }
     
+    public void changeSpeed(float speed){
+        mars.setSpeed(speed);
+    }
+    
     /**
      * 
      */

@@ -1431,6 +1431,56 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonRestartMouseClicked"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator10">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jSeparator10" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonFastBackward">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFastBackward.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonFastBackward.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonFastBackward.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonFastBackward" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonFastBackwardMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonDefaultSpeed">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonDefaultSpeed.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonDefaultSpeed.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonDefaultSpeed.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonDefaultSpeed" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonDefaultSpeedMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonFastForward">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonFastForward.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="jButtonFastForward.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonFastForward.toolTipText"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="jButtonFastForward" noResource="true"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonFastForwardMouseClicked"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator4">
           <Properties>
             <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>

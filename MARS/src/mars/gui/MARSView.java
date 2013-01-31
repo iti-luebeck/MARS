@@ -453,6 +453,9 @@ public class MARSView extends FrameView {
                     RestartMenuItem.setEnabled(true);
                     StartMenuItem.setEnabled(false);
                     jButtonCharts.setEnabled(true);
+                    jButtonFastBackward.setEnabled(true);
+                    jButtonFastForward.setEnabled(true);
+                    jButtonDefaultSpeed.setEnabled(true);
                 }
             }
         );
@@ -1240,6 +1243,10 @@ public class MARSView extends FrameView {
         jButtonPlay = new javax.swing.JButton();
         jButtonPause = new javax.swing.JButton();
         jButtonRestart = new javax.swing.JButton();
+        jSeparator10 = new javax.swing.JToolBar.Separator();
+        jButtonFastBackward = new javax.swing.JButton();
+        jButtonDefaultSpeed = new javax.swing.JButton();
+        jButtonFastForward = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         jButtonServerConnect = new javax.swing.JButton();
         jButtonServerDisconnect = new javax.swing.JButton();
@@ -2354,6 +2361,54 @@ public class MARSView extends FrameView {
             }
         });
         jToolBarPlay.add(jButtonRestart);
+
+        jSeparator10.setName("jSeparator10"); // NOI18N
+        jToolBarPlay.add(jSeparator10);
+
+        jButtonFastBackward.setIcon(resourceMap.getIcon("jButtonFastBackward.icon")); // NOI18N
+        jButtonFastBackward.setText(resourceMap.getString("jButtonFastBackward.text")); // NOI18N
+        jButtonFastBackward.setToolTipText(resourceMap.getString("jButtonFastBackward.toolTipText")); // NOI18N
+        jButtonFastBackward.setEnabled(false);
+        jButtonFastBackward.setFocusable(false);
+        jButtonFastBackward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFastBackward.setName("jButtonFastBackward"); // NOI18N
+        jButtonFastBackward.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonFastBackward.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonFastBackwardMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonFastBackward);
+
+        jButtonDefaultSpeed.setIcon(resourceMap.getIcon("jButtonDefaultSpeed.icon")); // NOI18N
+        jButtonDefaultSpeed.setText(resourceMap.getString("jButtonDefaultSpeed.text")); // NOI18N
+        jButtonDefaultSpeed.setToolTipText(resourceMap.getString("jButtonDefaultSpeed.toolTipText")); // NOI18N
+        jButtonDefaultSpeed.setEnabled(false);
+        jButtonDefaultSpeed.setFocusable(false);
+        jButtonDefaultSpeed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDefaultSpeed.setName("jButtonDefaultSpeed"); // NOI18N
+        jButtonDefaultSpeed.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDefaultSpeed.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDefaultSpeedMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonDefaultSpeed);
+
+        jButtonFastForward.setIcon(resourceMap.getIcon("jButtonFastForward.icon")); // NOI18N
+        jButtonFastForward.setText(resourceMap.getString("jButtonFastForward.text")); // NOI18N
+        jButtonFastForward.setToolTipText(resourceMap.getString("jButtonFastForward.toolTipText")); // NOI18N
+        jButtonFastForward.setEnabled(false);
+        jButtonFastForward.setFocusable(false);
+        jButtonFastForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFastForward.setName("jButtonFastForward"); // NOI18N
+        jButtonFastForward.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonFastForward.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonFastForwardMouseClicked(evt);
+            }
+        });
+        jToolBarPlay.add(jButtonFastForward);
 
         jSeparator4.setName("jSeparator4"); // NOI18N
         jToolBarPlay.add(jSeparator4);
@@ -4818,6 +4873,24 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         });
     }//GEN-LAST:event_jButtonServerPauseActionPerformed
 
+    private void jButtonFastForwardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFastForwardMouseClicked
+       if(jButtonFastForward.isEnabled()){
+            mars.speedUpSimulation();
+        }
+    }//GEN-LAST:event_jButtonFastForwardMouseClicked
+
+    private void jButtonFastBackwardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFastBackwardMouseClicked
+        if(jButtonFastForward.isEnabled()){
+            mars.speedDownSimulation();
+        }
+    }//GEN-LAST:event_jButtonFastBackwardMouseClicked
+
+    private void jButtonDefaultSpeedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDefaultSpeedMouseClicked
+        if(jButtonDefaultSpeed.isEnabled()){
+            mars.defaultSpeedSimulation();
+        }
+    }//GEN-LAST:event_jButtonDefaultSpeedMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
@@ -4889,6 +4962,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButton700;
     private javax.swing.JButton jButton701;
     private javax.swing.JButton jButtonCharts;
+    private javax.swing.JButton jButtonDefaultSpeed;
+    private javax.swing.JButton jButtonFastBackward;
+    private javax.swing.JButton jButtonFastForward;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
@@ -4955,6 +5031,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;

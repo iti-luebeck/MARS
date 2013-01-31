@@ -98,12 +98,24 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
     private Future simStateFuture = null;
     private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
 
+    private float[] speeds = new float[8];
+    private int speedsCount = 3;//default speed
+    
+
     /**
      *
      */
     public MARS_Main() {
         super();
         //Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+        speeds[0] = 0.25f;
+        speeds[1] = 0.5f;
+        speeds[2] = 0.75f;
+        speeds[3] = 1f;
+        speeds[4] = 1.5f;
+        speeds[5] = 2.0f;
+        speeds[6] = 3.0f;
+        speeds[7] = 4.0f;
     }
 
     
@@ -526,6 +538,62 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
+    }
+    
+    /**
+     * 
+     */
+    public void speedUpSimulation(){
+        if(speedsCount < speeds.length-1){
+            speedsCount++;
+            speed = speeds[speedsCount];
+            simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.getMARSSettings().setPhysicsSpeed(speed);
+                }
+                return null;
+            }
+            });
+        }
+    }
+    
+        /**
+     * 
+     */
+    public void speedDownSimulation(){
+        if(speedsCount > 0){
+            speedsCount--;
+            speed = speeds[speedsCount];
+            simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.getMARSSettings().setPhysicsSpeed(speed);
+                }
+                return null;
+            }
+        });
+        }
+    }
+    
+    public void defaultSpeedSimulation(){
+        speedsCount = 3;
+        speed = speeds[speedsCount];
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(SimState.class) != null){
+                    SimState simState = (SimState)stateManager.getState(SimState.class);
+                    simState.getMARSSettings().setPhysicsSpeed(speed);
+                }
+                return null;
+            }
+        });
+    }
+    
+    public void setSpeed(float speed){
+        this.speed = speed;
     }
     
     /**

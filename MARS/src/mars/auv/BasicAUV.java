@@ -1577,6 +1577,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         //center of bb ist needed for correct frustrum to apply
         BoundingBox boundBox = (BoundingBox)auv_spatial.getWorldBound();
         Vector3f centerBB = boundBox.getCenter();
+        float waterheight = initer.getCurrentWaterHeight(centerBB.x, centerBB.z);
         
         //in wich direction are we moving? mirror the vector
         drag_offCamera.setLocation(centerBB.add(physics_control.getLinearVelocity().normalize()));
@@ -1585,6 +1586,7 @@ public class BasicAUV implements AUV,SceneProcessor{
         
         if(auv_param.isDebugDrag()){
             onCamera.setLocation( centerBB.add(physics_control.getLinearVelocity().normalize()) );
+            //onCamera.setLocation( centerBB.add(Vector3f.UNIT_X) );
             onCamera.lookAt( centerBB 
                 , Vector3f.UNIT_Y);
         }

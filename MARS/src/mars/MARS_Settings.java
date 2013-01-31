@@ -317,6 +317,8 @@ public class MARS_Settings{
             initer.hideGrid(isSetupGrid());
         }else if(hashmapname.equals("Grid")){
             initer.setupGrid();
+        }else if(target.equals("speed") && hashmapname.equals("Physics")){
+            initer.changeSpeed(getPhysicsSpeed());
         }
     }
     
@@ -460,6 +462,22 @@ public class MARS_Settings{
      */
     public void setPhysicsMaxSubSteps(int maxsubsteps) {
         Physics.put("maxsubsteps", maxsubsteps);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public float getPhysicsSpeed() {
+        return (Float)Physics.get("speed");
+    }
+
+    /**
+     *
+     * @param speed 
+     */
+    public void setPhysicsSpeed(float speed) {
+        Physics.put("speed", speed);
     }
 
     /**

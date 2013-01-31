@@ -10,7 +10,10 @@
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">60</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="maxsubsteps">
-                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
+                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">32</value>
+                </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="speed">
+                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">1.0</value>
                 </entry>
             </value>
         </entry>
