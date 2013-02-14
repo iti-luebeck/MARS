@@ -73,6 +73,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.Renderer;
 import javax.swing.ToolTipManager;
@@ -456,6 +457,15 @@ public class MARSView extends FrameView {
                     jButtonFastBackward.setEnabled(true);
                     jButtonFastForward.setEnabled(true);
                     jButtonDefaultSpeed.setEnabled(true);
+                    jButtonLogLoad.setEnabled(true);
+                    jButtonLogPause.setEnabled(true);
+                    jButtonLogPlay.setEnabled(true);
+                    jButtonLogRecord.setEnabled(true);
+                    jButtonLogSave.setEnabled(true);
+                    jSliderLogTime.setEnabled(true);
+                    jButtonLogForward.setEnabled(true);
+                    jButtonLogRewind.setEnabled(true);
+                    jButtonLogStop.setEnabled(true);
                 }
             }
         );
@@ -534,6 +544,37 @@ public class MARSView extends FrameView {
             }
         );
     }
+    
+    public void initTimeline(final int timeStep){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jSliderLogTime.setMaximum(timeStep);                  
+                }
+            }
+        );
+    }
+    
+    public void setTimeline(final int timeStep){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jSliderLogTime.setValue(timeStep);                  
+                }
+            }
+        );
+    }
+    
+    public void setTimelineTime(final float time){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jTextFieldLogTime.setText("" + time);               
+                }
+            }
+        );
+    }
+    
 
     /**
      * 
@@ -1364,6 +1405,24 @@ public class MARSView extends FrameView {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         open_config_FileChooser = new javax.swing.JFileChooser();
+        LogPlay = new javax.swing.JPanel();
+        jSeparator11 = new javax.swing.JSeparator();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButtonLogPlay = new javax.swing.JButton();
+        jButtonLogPause = new javax.swing.JButton();
+        jButtonLogRewind = new javax.swing.JButton();
+        jButtonLogForward = new javax.swing.JButton();
+        jSeparator14 = new javax.swing.JToolBar.Separator();
+        jButtonLogRecord = new javax.swing.JButton();
+        jButtonLogStop = new javax.swing.JButton();
+        jSeparator15 = new javax.swing.JToolBar.Separator();
+        jButtonLogLoad = new javax.swing.JButton();
+        jButtonLogSave = new javax.swing.JButton();
+        jSeparator12 = new javax.swing.JToolBar.Separator();
+        jSliderLogTime = new javax.swing.JSlider();
+        jSeparator13 = new javax.swing.JToolBar.Separator();
+        jLabel40 = new javax.swing.JLabel();
+        jTextFieldLogTime = new javax.swing.JTextField();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -1605,7 +1664,7 @@ public class MARSView extends FrameView {
         );
         LeftMenuePanelLayout.setVerticalGroup(
             LeftMenuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(LeftMenuePanel);
@@ -1625,7 +1684,7 @@ public class MARSView extends FrameView {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -1742,11 +1801,14 @@ public class MARSView extends FrameView {
 
         statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
 
+        statusMessageLabel.setEnabled(false);
         statusMessageLabel.setName("statusMessageLabel"); // NOI18N
 
         statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        statusAnimationLabel.setEnabled(false);
         statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
 
+        progressBar.setEnabled(false);
         progressBar.setName("progressBar"); // NOI18N
 
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
@@ -3561,9 +3623,190 @@ public class MARSView extends FrameView {
         open_config_FileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         open_config_FileChooser.setName("open_config_FileChooser"); // NOI18N
 
+        LogPlay.setName("LogPlay"); // NOI18N
+
+        jSeparator11.setName("jSeparator11"); // NOI18N
+
+        jToolBar2.setRollover(true);
+        jToolBar2.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        jToolBar2.setName("jToolBar2"); // NOI18N
+
+        jButtonLogPlay.setIcon(resourceMap.getIcon("jButtonLogPlay.icon")); // NOI18N
+        jButtonLogPlay.setText(resourceMap.getString("jButtonLogPlay.text")); // NOI18N
+        jButtonLogPlay.setToolTipText(resourceMap.getString("jButtonLogPlay.toolTipText")); // NOI18N
+        jButtonLogPlay.setEnabled(false);
+        jButtonLogPlay.setFocusable(false);
+        jButtonLogPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogPlay.setName("jButtonLogPlay"); // NOI18N
+        jButtonLogPlay.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogPlayMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogPlay);
+
+        jButtonLogPause.setIcon(resourceMap.getIcon("jButtonLogPause.icon")); // NOI18N
+        jButtonLogPause.setText(resourceMap.getString("jButtonLogPause.text")); // NOI18N
+        jButtonLogPause.setToolTipText(resourceMap.getString("jButtonLogPause.toolTipText")); // NOI18N
+        jButtonLogPause.setEnabled(false);
+        jButtonLogPause.setFocusable(false);
+        jButtonLogPause.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogPause.setName("jButtonLogPause"); // NOI18N
+        jButtonLogPause.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogPause.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogPauseMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogPause);
+
+        jButtonLogRewind.setIcon(resourceMap.getIcon("jButtonLogRewind.icon")); // NOI18N
+        jButtonLogRewind.setText(resourceMap.getString("jButtonLogRewind.text")); // NOI18N
+        jButtonLogRewind.setToolTipText(resourceMap.getString("jButtonLogRewind.toolTipText")); // NOI18N
+        jButtonLogRewind.setEnabled(false);
+        jButtonLogRewind.setFocusable(false);
+        jButtonLogRewind.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogRewind.setName("jButtonLogRewind"); // NOI18N
+        jButtonLogRewind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogRewind.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogRewindMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogRewind);
+
+        jButtonLogForward.setIcon(resourceMap.getIcon("jButtonLogForward.icon")); // NOI18N
+        jButtonLogForward.setText(resourceMap.getString("jButtonLogForward.text")); // NOI18N
+        jButtonLogForward.setToolTipText(resourceMap.getString("jButtonLogForward.toolTipText")); // NOI18N
+        jButtonLogForward.setEnabled(false);
+        jButtonLogForward.setFocusable(false);
+        jButtonLogForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogForward.setName("jButtonLogForward"); // NOI18N
+        jButtonLogForward.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogForward.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogForwardMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogForward);
+
+        jSeparator14.setName("jSeparator14"); // NOI18N
+        jToolBar2.add(jSeparator14);
+
+        jButtonLogRecord.setIcon(resourceMap.getIcon("jButtonLogRecord.icon")); // NOI18N
+        jButtonLogRecord.setText(resourceMap.getString("jButtonLogRecord.text")); // NOI18N
+        jButtonLogRecord.setToolTipText(resourceMap.getString("jButtonLogRecord.toolTipText")); // NOI18N
+        jButtonLogRecord.setEnabled(false);
+        jButtonLogRecord.setFocusable(false);
+        jButtonLogRecord.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogRecord.setName("jButtonLogRecord"); // NOI18N
+        jButtonLogRecord.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogRecordMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogRecord);
+
+        jButtonLogStop.setIcon(resourceMap.getIcon("jButtonLogStop.icon")); // NOI18N
+        jButtonLogStop.setText(resourceMap.getString("jButtonLogStop.text")); // NOI18N
+        jButtonLogStop.setToolTipText(resourceMap.getString("jButtonLogStop.toolTipText")); // NOI18N
+        jButtonLogStop.setEnabled(false);
+        jButtonLogStop.setFocusable(false);
+        jButtonLogStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogStop.setName("jButtonLogStop"); // NOI18N
+        jButtonLogStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogStop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogStopMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogStop);
+
+        jSeparator15.setName("jSeparator15"); // NOI18N
+        jToolBar2.add(jSeparator15);
+
+        jButtonLogLoad.setIcon(resourceMap.getIcon("jButtonLogLoad.icon")); // NOI18N
+        jButtonLogLoad.setText(resourceMap.getString("jButtonLogLoad.text")); // NOI18N
+        jButtonLogLoad.setToolTipText(resourceMap.getString("jButtonLogLoad.toolTipText")); // NOI18N
+        jButtonLogLoad.setEnabled(false);
+        jButtonLogLoad.setFocusable(false);
+        jButtonLogLoad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogLoad.setName("jButtonLogLoad"); // NOI18N
+        jButtonLogLoad.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogLoad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogLoadMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogLoad);
+
+        jButtonLogSave.setIcon(resourceMap.getIcon("jButtonLogSave.icon")); // NOI18N
+        jButtonLogSave.setText(resourceMap.getString("jButtonLogSave.text")); // NOI18N
+        jButtonLogSave.setToolTipText(resourceMap.getString("jButtonLogSave.toolTipText")); // NOI18N
+        jButtonLogSave.setEnabled(false);
+        jButtonLogSave.setFocusable(false);
+        jButtonLogSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonLogSave.setName("jButtonLogSave"); // NOI18N
+        jButtonLogSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonLogSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogSaveMouseClicked(evt);
+            }
+        });
+        jToolBar2.add(jButtonLogSave);
+
+        jSeparator12.setName("jSeparator12"); // NOI18N
+        jToolBar2.add(jSeparator12);
+
+        jSliderLogTime.setValue(0);
+        jSliderLogTime.setEnabled(false);
+        jSliderLogTime.setMinimumSize(new java.awt.Dimension(480, 23));
+        jSliderLogTime.setName("jSliderLogTime"); // NOI18N
+        jSliderLogTime.setPreferredSize(new java.awt.Dimension(400, 23));
+        jSliderLogTime.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jSliderLogTimeMouseReleased(evt);
+            }
+        });
+        jToolBar2.add(jSliderLogTime);
+
+        jSeparator13.setName("jSeparator13"); // NOI18N
+        jToolBar2.add(jSeparator13);
+
+        jLabel40.setText(resourceMap.getString("jLabel40.text")); // NOI18N
+        jLabel40.setName("jLabel40"); // NOI18N
+        jToolBar2.add(jLabel40);
+
+        jTextFieldLogTime.setEditable(false);
+        jTextFieldLogTime.setText(resourceMap.getString("jTextFieldLogTime.text")); // NOI18N
+        jTextFieldLogTime.setMaximumSize(new java.awt.Dimension(100, 26));
+        jTextFieldLogTime.setMinimumSize(new java.awt.Dimension(100, 26));
+        jTextFieldLogTime.setName("jTextFieldLogTime"); // NOI18N
+        jTextFieldLogTime.setPreferredSize(new java.awt.Dimension(100, 26));
+        jToolBar2.add(jTextFieldLogTime);
+
+        javax.swing.GroupLayout LogPlayLayout = new javax.swing.GroupLayout(LogPlay);
+        LogPlay.setLayout(LogPlayLayout);
+        LogPlayLayout.setHorizontalGroup(
+            LogPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
+        );
+        LogPlayLayout.setVerticalGroup(
+            LogPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogPlayLayout.createSequentialGroup()
+                .addComponent(jSeparator11, javax.swing.GroupLayout.DEFAULT_SIZE, 2, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jToolBar2.getAccessibleContext().setAccessibleName(resourceMap.getString("jToolBar2.AccessibleContext.accessibleName")); // NOI18N
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
-        setStatusBar(statusPanel);
+        setStatusBar(LogPlay);
         setToolBar(jToolBarPlay);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -4886,10 +5129,96 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_jButtonFastBackwardMouseClicked
 
     private void jButtonDefaultSpeedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDefaultSpeedMouseClicked
-        if(jButtonDefaultSpeed.isEnabled()){
-            mars.defaultSpeedSimulation();
+
+        if (jButtonDefaultSpeed.isEnabled()) {             mars.defaultSpeedSimulation();         }     }//GEN-LAST:event_jButtonDefaultSpeedMouseClicked
+
+    private void jButtonLogPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogPlayMouseClicked
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.playRecording();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonLogPlayMouseClicked
+
+    private void jButtonLogPauseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogPauseMouseClicked
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.pauseRecording();
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonLogPauseMouseClicked
+
+    private void jButtonLogLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogLoadMouseClicked
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.loadRecording(null);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonLogLoadMouseClicked
+
+    private void jButtonLogSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogSaveMouseClicked
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.saveRecording(null);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonLogSaveMouseClicked
+
+    private void jButtonLogRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogRecordMouseClicked
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.enableRecording(true);
+                }
+                return null;
+            }
+        });
+    }//GEN-LAST:event_jButtonLogRecordMouseClicked
+
+    private void jSliderLogTimeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSliderLogTimeMouseReleased
+        JSlider source = (JSlider)evt.getSource();
+        if (!source.getValueIsAdjusting()) {
+            final int step = source.getValue();
+            Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.setRecord(step);
+                }
+                return null;
+            }
+            });
         }
-    }//GEN-LAST:event_jButtonDefaultSpeedMouseClicked
+    }//GEN-LAST:event_jSliderLogTimeMouseReleased
+
+    private void jButtonLogRewindMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogRewindMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonLogRewindMouseClicked
+
+    private void jButtonLogForwardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogForwardMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonLogForwardMouseClicked
+
+    private void jButtonLogStopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogStopMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonLogStopMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
@@ -4904,6 +5233,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JPanel JMEPanel1;
     private javax.swing.JPanel LeftMenuePanel;
     private javax.swing.JMenuItem LoadMenuItem;
+    private javax.swing.JPanel LogPlay;
     private javax.swing.JPanel MapPanel;
     private javax.swing.JMenuItem RestartMenuItem;
     private javax.swing.JMenu SettingsMenu;
@@ -4965,6 +5295,14 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButtonDefaultSpeed;
     private javax.swing.JButton jButtonFastBackward;
     private javax.swing.JButton jButtonFastForward;
+    private javax.swing.JButton jButtonLogForward;
+    private javax.swing.JButton jButtonLogLoad;
+    private javax.swing.JButton jButtonLogPause;
+    private javax.swing.JButton jButtonLogPlay;
+    private javax.swing.JButton jButtonLogRecord;
+    private javax.swing.JButton jButtonLogRewind;
+    private javax.swing.JButton jButtonLogSave;
+    private javax.swing.JButton jButtonLogStop;
     private javax.swing.JButton jButtonPause;
     private javax.swing.JButton jButtonPlay;
     private javax.swing.JButton jButtonRestart;
@@ -5012,6 +5350,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -5032,6 +5371,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator10;
+    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JToolBar.Separator jSeparator12;
+    private javax.swing.JToolBar.Separator jSeparator13;
+    private javax.swing.JToolBar.Separator jSeparator14;
+    private javax.swing.JToolBar.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
@@ -5040,6 +5384,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JToolBar.Separator jSeparator7;
     private javax.swing.JToolBar.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
+    private javax.swing.JSlider jSliderLogTime;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
@@ -5059,7 +5404,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField jTextFieldLogTime;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBarPlay;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JPopupMenu jme3_auv_sens;

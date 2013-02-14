@@ -36,6 +36,13 @@
                         </entry>
                     </value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Record">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                        </entry>
+                    </value>
+                </entry>
             </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Gui">

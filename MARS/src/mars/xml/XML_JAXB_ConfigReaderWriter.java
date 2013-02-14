@@ -18,6 +18,7 @@ import javax.xml.bind.Unmarshaller;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.recorder.Recording;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -84,11 +85,9 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
-                //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
                 SimObject simob = (SimObject)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return simob;
             }else{
                 return null;
@@ -110,11 +109,9 @@ public class XML_JAXB_ConfigReaderWriter {
             if(file.exists()){
                 JAXBContext context = JAXBContext.newInstance( SimObject.class );
                 Unmarshaller u = context.createUnmarshaller();
-                //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
                 SimObject simob = (SimObject)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return simob;
             }else{
                 return null;
@@ -137,6 +134,7 @@ public class XML_JAXB_ConfigReaderWriter {
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File simfile = new File(file,simob.getName() + ".xml" );
+            simfile.setWritable(true);
             if(simfile.canWrite()){
                 m.marshal( simob, simfile );
             }else{
@@ -221,9 +219,7 @@ public class XML_JAXB_ConfigReaderWriter {
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
-                //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 BasicAUV auv = (BasicAUV)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return auv;
             }else{
                 return null;
@@ -247,9 +243,7 @@ public class XML_JAXB_ConfigReaderWriter {
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
-                //u.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
                 BasicAUV auv = (BasicAUV)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return auv;
             }else{
                 return null;
@@ -271,8 +265,8 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            //File file = new File( "./config/default/auvs/" + auv.getName() + ".xml" );
             File auvfile = new File(file,auv.getName() + ".xml" );
+            auvfile.setWritable(true);
             if(auvfile.canWrite()){
                 m.marshal( auv, auvfile );
             }else{
@@ -334,7 +328,6 @@ public class XML_JAXB_ConfigReaderWriter {
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
                 MARS_Settings mars_settings = (MARS_Settings)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return mars_settings;
             }else{
                 return null;
@@ -355,7 +348,6 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            //File file = new File( "./config/default/" + "Settings" + ".xml" );
             m.marshal( mars_settings, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -374,6 +366,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static String saveConfiguration(File file, MARS_Settings mars_settings, AUV_Manager auvManager, SimObjectManager simObjectManager, KeyConfig keys, PhysicalEnvironment penv){
         //create dirs
+        file.setWritable(true);
         if(file.canWrite()){
             file.mkdir();
         }else{
@@ -381,6 +374,7 @@ public class XML_JAXB_ConfigReaderWriter {
         }
         //auv dir
         File auvFile = new File(file, "auvs");
+        auvFile.setWritable(true);
         if(auvFile.canWrite()){
             auvFile.mkdir(); 
         }else{
@@ -389,6 +383,7 @@ public class XML_JAXB_ConfigReaderWriter {
  
         //simob dir
         File simobFile = new File(file, "simobjects");
+        simobFile.setWritable(true);
         if(simobFile.canWrite()){
             simobFile.mkdir(); 
         }else{
@@ -396,6 +391,7 @@ public class XML_JAXB_ConfigReaderWriter {
         }
 
         File settingsFile = new File(file, "Settings.xml");
+        settingsFile.setWritable(true);
         if(settingsFile.canWrite()){
             saveMARS_Settings(mars_settings, settingsFile);
         }else{
@@ -403,6 +399,7 @@ public class XML_JAXB_ConfigReaderWriter {
         }
 
         File penvFile = new File(file, "PhysicalEnvironment.xml");
+        penvFile.setWritable(true);
         if(penvFile.canWrite()){
             savePhysicalEnvironment(penv, penvFile);
         }else{
@@ -410,6 +407,7 @@ public class XML_JAXB_ConfigReaderWriter {
         }
         
         File keysFile = new File(file, "KeyConfig.xml");
+        keysFile.setWritable(true);
         if(keysFile.canWrite()){
             saveKeyConfig(keys, keysFile);
         }else{
@@ -442,7 +440,6 @@ public class XML_JAXB_ConfigReaderWriter {
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
                 PhysicalEnvironment pe = (PhysicalEnvironment)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return pe;
             }else{
                 return null;
@@ -463,7 +460,6 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            //File file = new File( "./config/default/" + "PhysicalEnvironment" + ".xml" );
             m.marshal( pe, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -483,7 +479,6 @@ public class XML_JAXB_ConfigReaderWriter {
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
                 KeyConfig keyconfig = (KeyConfig)u.unmarshal( file );
-                //System.out.println(simob.getName());
                 return keyconfig;
             }else{
                 return null;
@@ -504,10 +499,48 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            //File file = new File( "./config/default/" + "KeyConfig" + ".xml" );
             m.marshal( keyconfig, file );
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public String saveRecording(Recording rec, File file){
+        try {
+            JAXBContext context = JAXBContext.newInstance( Recording.class );
+            Marshaller m = context.createMarshaller();
+            m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+            File recfile = new File("./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
+            //File recfile = new File(file,"./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
+            if(recfile.canWrite()){
+                m.marshal( rec, recfile );
+            }else{
+                recfile.setWritable(true);
+                m.marshal( rec, recfile );
+                return "Can't write File: " + recfile.getAbsolutePath() + " . No Write Access";
+            }
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public Recording loadRecording(File file){
+        try {
+            File file2 = new File("./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
+            if(file2.exists()){
+                JAXBContext context = JAXBContext.newInstance( Recording.class );
+                Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
+                Recording recorder = (Recording)u.unmarshal( file2 );
+                return recorder;
+            }else{
+                return null;
+            }
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

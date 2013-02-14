@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.recorder.RecordManager;
+import mars.recorder.Recording;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
@@ -44,6 +46,7 @@ public class AUV_Manager {
     private Node rootNode;
     private SimState simstate;
     private Communication_Manager com_manager;
+    private RecordManager recManager;
     private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
 
     /**
@@ -128,6 +131,10 @@ public class AUV_Manager {
         this.com_manager = com_manager;
     }
 
+    public void setRecManager(RecordManager recManager) {
+        this.recManager = recManager;
+    }
+
     /**
      *
      * @return
@@ -203,6 +210,7 @@ public class AUV_Manager {
         updateWaypointsOfAUVs(tpf);
         updateValuesOfAUVs(tpf);
         updateAccumulatorsOfAUVs(tpf);
+        updateRecord(tpf);
     }
     
     /**
@@ -319,6 +327,19 @@ public class AUV_Manager {
             AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
                 auv.updateAccumulators(tpf);
+            }
+        }
+    }
+    
+    private void updateRecord(float tpf){
+        if(recManager != null){
+            if(recManager.isEnabled()){
+                for ( String elem : auvs.keySet() ){
+                    AUV auv = (AUV)auvs.get(elem);
+                    if(auv.getAuv_param().isEnabled()){
+                        recManager.update(auv);
+                    }
+                }
             }
         }
     }
