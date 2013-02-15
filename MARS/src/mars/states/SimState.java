@@ -289,6 +289,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.attachChild(currents);
             
             initNiftyLoading();
+            startNiftyState();
             loadXML(configManager.getConfig());
             initPrivateKeys();// load custom key mappings
             setupPhysics();
@@ -1838,6 +1839,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 simob.setSelected(true);
                 guiControlState.setLatestSelectedSimOb(simob);
             }
+        }
+    }
+    
+    public void startNiftyState(){
+        if (mars.getStateManager().getState(NiftyState.class) != null) {
+            mars.getStateManager().getState(NiftyState.class).show(); 
         }
     }
     

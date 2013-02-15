@@ -17,6 +17,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
@@ -61,7 +62,11 @@ public class NiftyState extends AbstractAppState implements ScreenController{
                 mars.getGuiViewPort());
         nifty = niftyDisplay.getNifty();
  
-        nifty.fromXml("nifty_energy_popup.xml", "start");
+        nifty.fromXml("nifty_energy_popup.xml", "hoverMenu");
+        
+        //hide main panel because niftyys effect/event system sucks!
+        setHoverMenuForAUV(false);
+        setSpeedMenu(false);
         
         //set logging to less spam
         Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE); 
@@ -77,11 +82,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
      * @param y
      */
     public void setHoverMenuForAUV(AUV auv, int x, int y){
-        // find old text
+         // find old text
         this.auv = auv;
-        nifty.gotoScreen("hoverMenu");
-        Element niftyElement = nifty.getCurrentScreen().findElementByName("hover");
-        //Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("hover");
+
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("hover");
         // swap old with new text
         if( niftyElement != null){
             niftyElement.setConstraintX(new SizeValue(String.valueOf(x+5)));
@@ -138,11 +142,64 @@ public class NiftyState extends AbstractAppState implements ScreenController{
      * @param visible
      */
     public void setHoverMenuForAUV(boolean visible){
-        if(visible){
-            nifty.gotoScreen("hoverMenu");
-        }else{
-            nifty.gotoScreen("start");
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("hover");
+        if( niftyElement != null){
+            if(visible){
+                niftyElement.showWithoutEffects();
+            }else{
+                niftyElement.hideWithoutEffect();
+            }
         }
+    }
+    
+    public void setSpeedMenu(boolean visible){
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("speed");
+        if( niftyElement != null){
+            if(visible){
+                niftyElement.show();
+                Element niftyElement2 = nifty.getScreen("hoverMenu").findElementByName("speed_background");
+                if( niftyElement2 != null){
+                    niftyElement2.startEffect(EffectEventId.onCustom, null, "fadeIn");
+                }
+            }else{
+                niftyElement.hide();
+            }
+        }
+    }
+    
+    public void setSpeedUp(boolean visible){
+
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("speed");
+        
+        // swap old with new text
+        if( niftyElement != null){
+            niftyElement.setConstraintX(new SizeValue(String.valueOf(0+5)));
+            niftyElement.setConstraintY(new SizeValue(String.valueOf(0+10)));
+            niftyElement.getParent().layoutElements();
+            
+            Element text = niftyElement.findElementByName("speed_left_text");
+            if(text!=null){
+                text.getRenderer(TextRenderer.class).setText(String.valueOf(mars.getSpeed()));
+                
+                text.getRenderer(TextRenderer.class).setColor(new Color(1f,1f, 1f, 1f));
+                text.getParent().layoutElements();
+            }
+            setSpeedMenu(true);
+        }
+    }
+    
+    public void show(){
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("background");
+        if(niftyElement != null){
+            niftyElement.show();
+        }
+        setHoverMenuForAUV(false);
+        
+        Element niftyElement2 = nifty.getScreen("hoverMenu").findElementByName("speed_background");
+        if(niftyElement2 != null){
+            niftyElement2.show();
+        }
+        setSpeedMenu(false);
     }
     
     /**

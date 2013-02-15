@@ -473,6 +473,18 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             }
         });
     }
+    
+    public void setSpeedMenu(final boolean visible){
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(stateManager.getState(NiftyState.class) != null){
+                    NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
+                    niftyState.setSpeedUp(visible);
+                }
+                return null;
+            }
+        });
+    }
  
     /**
      * 
@@ -557,6 +569,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             }
             });
         }
+        setSpeedMenu(true);
     }
     
         /**
@@ -576,6 +589,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             }
         });
         }
+        setSpeedMenu(true);
     }
     
     public void defaultSpeedSimulation(){
@@ -590,12 +604,18 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
+        setSpeedMenu(true);
     }
     
     public void setSpeed(float speed){
         this.speed = speed;
+        setSpeedMenu(true);
     }
-    
+
+    public float getSpeed() {
+        return speed;
+    }
+
     /**
      * 
      */
