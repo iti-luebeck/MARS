@@ -6,6 +6,7 @@ package mars.xml;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -266,6 +267,11 @@ public class XML_JAXB_ConfigReaderWriter {
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File auvfile = new File(file,auv.getName() + ".xml" );
+            try {//linux dont likes it when files isn't created first. canWrite gives always false.
+                auvfile.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
             auvfile.setWritable(true);
             if(auvfile.canWrite()){
                 m.marshal( auv, auvfile );
