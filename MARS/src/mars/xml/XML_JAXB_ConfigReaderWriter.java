@@ -4,9 +4,14 @@
  */
 package mars.xml;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -136,9 +141,12 @@ public class XML_JAXB_ConfigReaderWriter {
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File simfile = new File(file,simob.getName() + ".xml" );
             simfile.setWritable(true);
-            if(simfile.canWrite()){
-                m.marshal( simob, simfile );
-            }else{
+            Path toPath = simfile.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( simob, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
                 return "Can't write File: " + simfile.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
@@ -267,15 +275,13 @@ public class XML_JAXB_ConfigReaderWriter {
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File auvfile = new File(file,auv.getName() + ".xml" );
-            try {//linux dont likes it when files isn't created first. canWrite gives always false.
-                auvfile.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
             auvfile.setWritable(true);
-            if(auvfile.canWrite()){
-                m.marshal( auv, auvfile );
-            }else{
+            Path toPath = auvfile.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( auv, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
                 return "Can't write File: " + auvfile.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
@@ -354,7 +360,15 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            m.marshal( mars_settings, file );
+            file.setWritable(true);
+            Path toPath = file.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( mars_settings, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
+                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -372,30 +386,49 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static String saveConfiguration(File file, MARS_Settings mars_settings, AUV_Manager auvManager, SimObjectManager simObjectManager, KeyConfig keys, PhysicalEnvironment penv){
         //create dirs
-        file.setWritable(true);
-        if(file.canWrite()){
-            file.mkdir();
-        }else{
+        Path toPath = file.toPath();
+        if(!Files.exists(toPath)){
+            try {
+                Files.createDirectory(toPath);
+            } catch (IOException ex) {
+                return "Can't create Directory: " + file.getAbsolutePath();
+            } catch (SecurityException ex){
+                return "Can't create Directory: " + file.getAbsolutePath() + " . No Write Access";
+            }
+        }else if(!Files.isWritable(toPath)){
             return "Can't create Directory: " + file.getAbsolutePath() + " . No Write Access";
         }
+        
         //auv dir
         File auvFile = new File(file, "auvs");
-        auvFile.setWritable(true);
-        if(auvFile.canWrite()){
-            auvFile.mkdir(); 
-        }else{
+        Path auvPath = auvFile.toPath();
+        if(!Files.exists(auvPath)){
+            try {
+                Files.createDirectory(auvPath);
+            } catch (IOException ex) {
+                return "Can't create Directory: " + auvFile.getAbsolutePath();
+            } catch (SecurityException ex){
+                return "Can't create Directory: " + auvFile.getAbsolutePath() + " . No Write Access";
+            }
+        }else if(!Files.isWritable(auvPath)){
             return "Can't create Directory: " + auvFile.getAbsolutePath() + " . No Write Access";
         }
  
         //simob dir
         File simobFile = new File(file, "simobjects");
-        simobFile.setWritable(true);
-        if(simobFile.canWrite()){
-            simobFile.mkdir(); 
-        }else{
+        Path simobPath = simobFile.toPath();
+        if(!Files.exists(simobPath)){
+            try {
+                Files.createDirectory(simobPath);
+            } catch (IOException ex) {
+                return "Can't create Directory: " + simobFile.getAbsolutePath();
+            } catch (SecurityException ex){
+                return "Can't create Directory: " + simobFile.getAbsolutePath() + " . No Write Access";
+            }
+        }else if(!Files.isWritable(auvPath)){
             return "Can't create Directory: " + simobFile.getAbsolutePath() + " . No Write Access";
         }
-
+        
         File settingsFile = new File(file, "Settings.xml");
         settingsFile.setWritable(true);
         if(settingsFile.canWrite()){
@@ -466,7 +499,15 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            m.marshal( pe, file );
+            file.setWritable(true);
+            Path toPath = file.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( pe, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
+                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -505,7 +546,15 @@ public class XML_JAXB_ConfigReaderWriter {
             JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
             Marshaller m = context.createMarshaller();
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
-            m.marshal( keyconfig, file );
+            file.setWritable(true);
+            Path toPath = file.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( keyconfig, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
+                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -518,11 +567,13 @@ public class XML_JAXB_ConfigReaderWriter {
             m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
             File recfile = new File("./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
             //File recfile = new File(file,"./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
-            if(recfile.canWrite()){
-                m.marshal( rec, recfile );
-            }else{
-                recfile.setWritable(true);
-                m.marshal( rec, recfile );
+            recfile.setWritable(true);
+            Path toPath = recfile.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, Charset.defaultCharset());
+                m.marshal( rec, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
                 return "Can't write File: " + recfile.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
