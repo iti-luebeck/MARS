@@ -5,6 +5,7 @@
 package mars.sensors;
 
 import com.jme3.scene.Node;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -64,6 +65,11 @@ public class AmpereMeter extends Sensor{
     
     public AmpereMeter(AmpereMeter ampereMeter){
         super(ampereMeter);
+        
+        //dont forget to clone accus hashmap
+        HashMap<String, String> accumulatorsOriginal = ampereMeter.getAccumulators();
+        Cloner cloner = new Cloner();
+        accumulators = cloner.deepClone(accumulatorsOriginal);
     }
 
     @Override
