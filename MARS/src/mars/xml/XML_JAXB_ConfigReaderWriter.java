@@ -355,7 +355,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param mars_settings
      * @param file  
      */
-    public static void saveMARS_Settings(MARS_Settings mars_settings,File file){
+    public static String saveMARS_Settings(MARS_Settings mars_settings,File file){
         try {
             JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
             Marshaller m = context.createMarshaller();
@@ -367,11 +367,12 @@ public class XML_JAXB_ConfigReaderWriter {
                 m.marshal( mars_settings, newBufferedWriter );
                 newBufferedWriter.flush();
             } catch (IOException ex) {
-                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+                return "Can't write File: " + file.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
     /**
@@ -430,30 +431,26 @@ public class XML_JAXB_ConfigReaderWriter {
         }
         
         File settingsFile = new File(file, "Settings.xml");
-        settingsFile.setWritable(true);
-        if(settingsFile.canWrite()){
-            saveMARS_Settings(mars_settings, settingsFile);
-        }else{
-            return "Can't write File: " + settingsFile.getAbsolutePath() + " . No Write Access";
+        String failure = saveMARS_Settings(mars_settings, settingsFile);
+        if(failure != null){
+            return failure;
         }
 
         File penvFile = new File(file, "PhysicalEnvironment.xml");
         penvFile.setWritable(true);
-        if(penvFile.canWrite()){
-            savePhysicalEnvironment(penv, penvFile);
-        }else{
-            return "Can't write File: " + penvFile.getAbsolutePath() + " . No Write Access";
+        failure = savePhysicalEnvironment(penv, penvFile);
+        if(failure != null){
+            return failure;
         }
         
         File keysFile = new File(file, "KeyConfig.xml");
         keysFile.setWritable(true);
-        if(keysFile.canWrite()){
-            saveKeyConfig(keys, keysFile);
-        }else{
-            return "Can't write File: " + keysFile.getAbsolutePath() + " . No Write Access";
+        failure = saveKeyConfig(keys, keysFile);
+        if(failure != null){
+            return failure;
         }
                 
-        String failure = saveSimObjects(simObjectManager.getSimObjects(), simobFile);
+        failure = saveSimObjects(simObjectManager.getSimObjects(), simobFile);
         if(failure != null){
             return failure;
         }
@@ -494,7 +491,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param pe
      * @param file  
      */
-    public static void savePhysicalEnvironment(PhysicalEnvironment pe, File file){
+    public static String savePhysicalEnvironment(PhysicalEnvironment pe, File file){
         try {
             JAXBContext context = JAXBContext.newInstance( PhysicalEnvironment.class );
             Marshaller m = context.createMarshaller();
@@ -506,11 +503,12 @@ public class XML_JAXB_ConfigReaderWriter {
                 m.marshal( pe, newBufferedWriter );
                 newBufferedWriter.flush();
             } catch (IOException ex) {
-                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+                return "Can't write File: " + file.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
         /**
@@ -541,7 +539,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param keyconfig
      * @param file  
      */
-    public static void saveKeyConfig(KeyConfig keyconfig, File file){
+    public static String saveKeyConfig(KeyConfig keyconfig, File file){
         try {
             JAXBContext context = JAXBContext.newInstance( KeyConfig.class );
             Marshaller m = context.createMarshaller();
@@ -553,11 +551,12 @@ public class XML_JAXB_ConfigReaderWriter {
                 m.marshal( keyconfig, newBufferedWriter );
                 newBufferedWriter.flush();
             } catch (IOException ex) {
-                Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+                return "Can't write File: " + file.getAbsolutePath() + " . No Write Access";
             }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
     public String saveRecording(Recording rec, File file){
