@@ -100,7 +100,7 @@
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Buoyancy">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_distance">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.0</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.04</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_updaterate">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
@@ -166,7 +166,7 @@
                 <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="flow_updaterate">
-                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
             </entry>
             <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Collision">
                 <value>
@@ -810,7 +810,7 @@
         </entry>
     </Sensors>
     <Actuators>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontRight">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterRight">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
@@ -828,7 +828,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterFrontRight</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterRight</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
@@ -924,7 +924,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontLeft">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterLeft">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
@@ -942,7 +942,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterFrontLeft</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterLeft</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
@@ -1038,7 +1038,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterLeft">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontLeft">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
@@ -1056,7 +1056,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterLeft</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterFrontLeft</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
@@ -1104,7 +1104,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterRight">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontRight">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
@@ -1122,7 +1122,7 @@
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterRight</value>
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">thrusterFrontRight</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
