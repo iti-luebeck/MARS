@@ -64,6 +64,8 @@ public class MarsSettingsModel implements TreeModel{
             return false;
         }else if(node instanceof Float){
             return true;
+        }else if(node instanceof Double){
+            return true;
         }else if(node instanceof Integer){
             return true;
         }else if(node instanceof Boolean){
@@ -101,6 +103,8 @@ public class MarsSettingsModel implements TreeModel{
         }else if(parent instanceof ColorRGBA){
             return 4;
         }else if(parent instanceof Float){
+            return 1;
+        }else if(parent instanceof Double){
             return 1;
         }else if(parent instanceof Boolean){
             return 1;
@@ -182,6 +186,8 @@ public class MarsSettingsModel implements TreeModel{
             return getChild(leafWrapper.getUserData(), index); 
         }else if(parent instanceof Float){
             return (Float)parent;
+        }else if(parent instanceof Double){
+            return (Double)parent;
         }else if(parent instanceof Boolean){
             return (Boolean)parent;
         }else if(parent instanceof Integer){
@@ -221,7 +227,7 @@ public class MarsSettingsModel implements TreeModel{
             HashMapWrapper hasher = (HashMapWrapper)obj;
             if(hasher.getUserData() instanceof LeafWrapper){
                 saveValue(originalPath,path.getParentPath(),value);
-            }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
+            }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Double || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
                 Object preObj = (Object)path.getParentPath().getLastPathComponent();
                 if(preObj instanceof HashMapWrapper){
                     HashMapWrapper hashwrap = (HashMapWrapper)preObj;

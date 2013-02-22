@@ -156,7 +156,7 @@ public class AmpereMeter extends Sensor{
      * 
      */
     public void reset(){
-
+        
     }
 
     /**

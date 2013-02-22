@@ -132,6 +132,16 @@ public class MyVerifier extends InputVerifier implements ActionListener {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
                     return false;
                 }
+            }else if(obj instanceof Double && ((MyVerifierType.DOUBLE == type) || (MyVerifierType.ALL == type)) ){
+                try {
+                    String tmp = mytext.getText();
+                    double value = Double.valueOf(tmp);
+                    mytext.setText(tmp);
+                    mytext.setObject(value);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
+                    return false;
+                }
             }else if(obj instanceof Integer && ((MyVerifierType.VECTOR3F == type) || (MyVerifierType.ALL == type))){
                 try {
                     String tmp = mytext.getText();
@@ -203,6 +213,15 @@ public class MyVerifier extends InputVerifier implements ActionListener {
                 try {
                     String tmp = mytext.getText();
                     float value = Float.valueOf(tmp);
+                    mytext.setText(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
+                    return false;
+                }
+            }else if(((MyVerifierType.DOUBLE == type) || (MyVerifierType.ALL == type)) ){
+                try {
+                    String tmp = mytext.getText();
+                    Double value = Double.valueOf(tmp);
                     mytext.setText(tmp);
                     return true;
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).

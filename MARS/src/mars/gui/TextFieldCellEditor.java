@@ -61,6 +61,8 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
                     //returnValue = true;
                 }else if ((node != null) && (node instanceof Float)) {
                     return true;
+                }else if ((node != null) && (node instanceof Double)) {
+                    return true;
                 }else if ((node != null) && (node instanceof Integer)) {
                     return true;
                 }else if ((node != null) && (node instanceof Boolean)) {

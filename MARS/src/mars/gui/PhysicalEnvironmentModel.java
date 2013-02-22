@@ -56,6 +56,8 @@ public class PhysicalEnvironmentModel implements TreeModel{
             return false;
         }else if(node instanceof Float){
             return true;
+        }else if(node instanceof Double){
+            return true;
         }else if(node instanceof Integer){
             return true;
         }else if(node instanceof Boolean){
@@ -93,6 +95,8 @@ public class PhysicalEnvironmentModel implements TreeModel{
         }else if(parent instanceof ColorRGBA){
             return 4;
         }else if(parent instanceof Float){
+            return 1;
+        }else if(parent instanceof Double){
             return 1;
         }else if(parent instanceof Boolean){
             return 1;
@@ -172,6 +176,8 @@ public class PhysicalEnvironmentModel implements TreeModel{
             return getChild(leafWrapper.getUserData(), index); 
         }else if(parent instanceof Float){
             return (Float)parent;
+        }else if(parent instanceof Double){
+            return (Double)parent;
         }else if(parent instanceof Boolean){
             return (Boolean)parent;
         }else if(parent instanceof Integer){
@@ -226,7 +232,7 @@ public class PhysicalEnvironmentModel implements TreeModel{
                         vec.setZ((Float)value);
                     }
                     penv.updateState(path);
-                }else if(hashent.getValue() instanceof Float || hashent.getValue() instanceof Integer || hashent.getValue() instanceof String || hashent.getValue() instanceof Boolean){
+                }else if(hashent.getValue() instanceof Float || hashent.getValue() instanceof Double || hashent.getValue() instanceof Integer || hashent.getValue() instanceof String || hashent.getValue() instanceof Boolean){
                     hashent.setValue(value);
                     penv.updateState(path);
                 }

@@ -1126,6 +1126,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="capacity">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">10.0</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="actualCurrent">
+                        <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:double">10.0</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="nominalVoltage">
                         <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">11.1</value>
                     </entry>

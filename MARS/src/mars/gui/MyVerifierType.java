@@ -49,4 +49,8 @@ public class MyVerifierType {
      * 
      */
     public static final int SIMOB = 9;
+    /**
+     * 
+     */
+    public static final int DOUBLE = 10;
 }

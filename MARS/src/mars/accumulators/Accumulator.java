@@ -26,8 +26,6 @@ public class Accumulator {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     protected HashMap<String,Object> variables;
     
-    private double actualCurrent = 0f;
-    
     /**
      * 
      */
@@ -39,7 +37,7 @@ public class Accumulator {
      */
     public void initAfterJAXB(){
         if(getCapacity() != null){
-            actualCurrent = getCapacity();
+            setActualCurrent(getCapacity());
         }
     };
     
@@ -49,6 +47,10 @@ public class Accumulator {
      */
     public HashMap<String,Object> getAllVariables(){
         return variables;
+    }
+    
+    public void reset(){
+        setActualCurrent(getCapacity());
     }
     
     /**
@@ -130,8 +132,8 @@ public class Accumulator {
      * 
      * @return
      */
-    public double getActualCurrent() {
-        return actualCurrent;
+    public Double getActualCurrent() {
+        return (Double)variables.get("actualCurrent");
     }
 
     /**
@@ -140,14 +142,15 @@ public class Accumulator {
      */
     public void subsractActualCurrent(float subCurrent) {
         if( (getActualCurrent() - subCurrent) > 0f){
-            actualCurrent = actualCurrent - subCurrent;
+            setActualCurrent(getActualCurrent() - subCurrent);
+            //actualCurrent = actualCurrent - subCurrent;
         }else{
             setActualCurrent(0f);
         }
     }
 
-    private void setActualCurrent(float actualCurrent) {
-        this.actualCurrent = actualCurrent;
+    private void setActualCurrent(double actualCurrent) {
+        variables.put("actualCurrent", actualCurrent);
     }
 
     /**
@@ -155,7 +158,7 @@ public class Accumulator {
      * @return
      */
     public float getActualVoltage(){
-        return calculateActualVoltage((float)getActualCurrent());
+        return calculateActualVoltage(getActualCurrent().floatValue());
     }
     
     @Override

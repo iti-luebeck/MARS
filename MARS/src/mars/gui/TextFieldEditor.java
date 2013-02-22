@@ -122,6 +122,14 @@ public class TextFieldEditor extends JTextField implements CellEditor {
                 } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
                     return false;
                 }
+            }else if(obj instanceof Double){
+                try {
+                    String tmp = getText();
+                    value = Double.valueOf(tmp);
+                    return true;
+                } catch (Exception e) {//Something went wrong (most likely we don't have a valid float).
+                    return false;
+                }
             }else if(obj instanceof Integer){
                 try {
                     String tmp = getText();
