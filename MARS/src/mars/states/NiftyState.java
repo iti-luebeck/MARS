@@ -99,6 +99,13 @@ public class NiftyState extends AbstractAppState implements ScreenController{
                 text.getRenderer(TextRenderer.class).setColor(new Color(1f-getAkkuValueForAUV(),getAkkuValueForAUV(), 0f, 1f));
                 text.getParent().layoutElements();
             }
+            text = niftyElement.findElementByName("hover_left_text_name");
+            if(text!=null){
+                text.getRenderer(TextRenderer.class).setText(auv.getName());
+                
+                //text.getRenderer(TextRenderer.class).setColor(new Color(1f-getAkkuValueForAUV(),getAkkuValueForAUV(), 0f, 1f));
+                text.getParent().layoutElements();
+            }
             setHoverMenuForAUV(true);
         }
     }
