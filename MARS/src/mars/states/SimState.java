@@ -12,6 +12,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
@@ -58,6 +60,7 @@ import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -1366,6 +1369,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             return;
         }
         
+        /*AUV auv = auvManager.getAUV("hanse");
+        if(auv != null){
+            GhostControl ghostControl = auv.getGhostControl();
+            if(ghostControl != null){
+                    List<PhysicsCollisionObject> overlappingObjects = ghostControl.getOverlappingObjects();
+                    for (PhysicsCollisionObject physicsCollisionObject : overlappingObjects) {
+                        System.out.println(physicsCollisionObject.toString());
+                    }
+                    System.out.println("ghostControl.getOverlappingCount(): " + ghostControl.getOverlappingCount());
+            }
+        }*/
+    
         if(recordManager != null){
             recordManager.update(tpf);
         }

@@ -17,12 +17,14 @@ import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingVolume;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
 import com.jme3.bullet.collision.shapes.CylinderCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
@@ -80,6 +82,7 @@ import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.Manipulating;
 import mars.Moveable;
+import mars.MyCustomGhostControl;
 import mars.MyMTLLoader;
 import mars.MyOBJLoader;
 import mars.PickHint;
@@ -142,6 +145,8 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Node auv_node = new Node("");
     private Node selectionNode = new Node("selectionNode");
     private RigidBodyControl physics_control;
+    private MyCustomGhostControl ghostControl;
+    private ColorRGBA ghostColor = new ColorRGBA();
     private CollisionShape collisionShape;
     private Geometry boundingBox;
 
@@ -1038,6 +1043,7 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void reset(){
         resetAllActuators();
         resetAllSensors();
+        resetAllAccumulators();
         clearForces();
         physics_control.setPhysicsLocation(auv_param.getPosition());
         rotateAUV();
@@ -1086,6 +1092,7 @@ public class BasicAUV implements AUV,SceneProcessor{
             updateWaterCurrentForce();
             
             updatePhysicalValues();
+            
         }else{//if not inform
             Logger.getLogger(BasicAUV.class.getName()).log(Level.WARNING, "AUV PhysicsNode is not added to the rootNode!", "");
         }
@@ -1201,6 +1208,14 @@ public class BasicAUV implements AUV,SceneProcessor{
     public void setPhysicsControl(RigidBodyControl physics_control) {
         this.physics_control = physics_control;
         auv_node.addControl(physics_control);
+    }
+
+    public MyCustomGhostControl getGhostControl() {
+        return ghostControl;
+    }
+    
+    private ColorRGBA getGhostColor(){
+        return ghostColor;
     }
 
     /**
@@ -1375,6 +1390,17 @@ public class BasicAUV implements AUV,SceneProcessor{
         ghost_auv_spatial.setCullHint(CullHint.Always);
         Helper.setNodePickUserData(ghost_auv_spatial,PickHint.NoPick);
         auv_node.attachChild(ghost_auv_spatial);
+        
+        //add ghost collision to the "ghost" object so we can get collision results
+        BoundingBox ghostBound = (BoundingBox)ghost_auv_spatial.getWorldBound();
+        ghostControl = new MyCustomGhostControl(new BoxCollisionShape(ghostBound.getExtent(null)));
+        ghostControl.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+        ghostControl.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
+
+        ghost_auv_spatial.addControl(ghostControl);
+        
+        /*Spatial debugShape2 = ghostControl.createDebugShape(assetManager);
+        auv_node.attachChild(debugShape2);*/
     }
     
     /**
@@ -1420,8 +1446,8 @@ public class BasicAUV implements AUV,SceneProcessor{
         compoundCollisionShape1.addChildShape(collisionShape, auv_param.getCentroid_center_distance().add(auv_param.getCollisionPosition()));
 
         physics_control = new RigidBodyControl(compoundCollisionShape1, auv_param.getMass());
-        physics_control.setCollisionGroup(1);
-        physics_control.setCollideWithGroups(1);
+        physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
         physics_control.setDamping(auv_param.getDamping_linear(), auv_param.getDamping_angular());
         physics_control.setAngularFactor(auv_param.getAngular_factor());
         physics_control.setSleepingThresholds(0f, 0f);// so the physics node doesn't get deactivated
@@ -2482,6 +2508,13 @@ public class BasicAUV implements AUV,SceneProcessor{
     private void resetAllSensors(){
         for ( String elem : sensors.keySet() ){
             Sensor element = (Sensor)sensors.get(elem);
+            element.reset();
+        }
+    }
+    
+    private void resetAllAccumulators(){
+        for ( String elem : accumulators.keySet() ){
+            Accumulator element = (Accumulator)accumulators.get(elem);
             element.reset();
         }
     }

@@ -1766,6 +1766,22 @@ public class MARS_Settings{
         Gui.put("selection_color", color);
     }
     
+        /**
+     *
+     * @return
+     */
+    public ColorRGBA getCollisionColor() {
+        return (ColorRGBA)Gui.get("collision_color");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public void setCollisionColor(ColorRGBA color) {
+        Gui.put("collision_color", color);
+    }
+    
     /**
      *
      * @return

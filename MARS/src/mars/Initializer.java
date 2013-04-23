@@ -11,6 +11,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
@@ -1345,8 +1346,10 @@ public class Initializer {
         Spatial createDebugShape = terrain_physics_control.createDebugShape(assetManager);
         createDebugShape.setMaterial(debug_mat);
         terrain_node.attachChild(createDebugShape);*/
-        terrain_physics_control.setCollisionGroup(1);
-        terrain_physics_control.setCollideWithGroups(1);
+        
+        
+        terrain_physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
         //terrain_physics_control.setFriction(0f);
         //terrain_physics_control.setRestitution(1f);
         //terrain_node.attachChild(terrain);
@@ -1354,10 +1357,11 @@ public class Initializer {
         
         //set shadwos for terrain
         terrain.setShadowMode(ShadowMode.Receive);
-
+        
         terrain_node.attachChild(terrain);
         SonarDetectableNode.attachChild(terrain_node);
-        bulletAppState.getPhysicsSpace().add(terrain);
+        //bulletAppState.getPhysicsSpace().add(terrain);
+        bulletAppState.getPhysicsSpace().add(terrain_physics_control);
     }
     
     private void setupTerrain(){

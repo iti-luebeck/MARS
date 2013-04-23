@@ -7,6 +7,7 @@ package mars.auv;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
+import mars.MyCustomGhostControl;
 import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.actuators.Actuator;
@@ -115,6 +117,7 @@ public interface AUV extends RosNodeListener{
     /*
      *
      */
+    public MyCustomGhostControl getGhostControl();
     /**
      *
      * @param physics_control

@@ -446,6 +446,13 @@ public class AUV_Manager {
             }
         });
     }
+    
+    public void deregisterAUVNoFuture( AUV auv ){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
+        final AUV fin_auv = auv;
+        removeAUVFromScene(fin_auv);
+         auvs.remove(fin_auv.getName());
+    }
 
     /**
      *
@@ -577,6 +584,12 @@ public class AUV_Manager {
     public void addAUVToBulletAppState(AUV auv,BulletAppState bulletAppState){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV " + auv.getName() + " to BulletAppState...", "");
         bulletAppState.getPhysicsSpace().add(auv.getAUVNode());
+        if(auv.getGhostControl() != null){
+            //bulletAppState.getPhysicsSpace().add(auv.getGhostControl());
+            bulletAppState.getPhysicsSpace().add(auv.getGhostAUV());
+            bulletAppState.getPhysicsSpace().addCollisionListener(auv.getGhostControl());
+            bulletAppState.getPhysicsSpace().addTickListener(auv.getGhostControl());
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.PhysicalEnvironment;
+import mars.sensors.ModemMessage;
 import mars.states.SimState;
 import mars.sensors.UnderwaterModem;
 import mars.server.MARS_Server;
@@ -24,9 +25,8 @@ import mars.server.MARS_Server;
  */
 public class Communication_Manager {
 
-    private final ConcurrentLinkedQueue<String> linkQueue = new ConcurrentLinkedQueue<String>();
-    private final ConcurrentHashMap<String,String> hashQueue = new ConcurrentHashMap<String,String>();
-    
+    private ConcurrentLinkedQueue<ModemMessage> msgQueue = new ConcurrentLinkedQueue<ModemMessage>();
+
     private final HashMap<String,UnderwaterModem> uws = new HashMap<String, UnderwaterModem>();
 
     private MARS_Server raw_server;
@@ -56,20 +56,11 @@ public class Communication_Manager {
      * @param tpf
      */
     public void update(float tpf){
-        //System.out.println("Time for Communicatin update!");
-        /*String s = linkQueue.poll();
-        //System.out.println("MSG pulled: " + s);
-        do {
-            if (s == null) break;
-            updateCommunication(s);
-            sendMsgs(s);
-        } while (((s = linkQueue.poll()) != null));*/
-        for ( String elem : hashQueue.keySet() ){
-            String s = (String)hashQueue.remove(elem);
-            if(s != null){
-                updateCommunication(elem,s);
-                sendMsgs(elem,s);
-            }
+        ModemMessage peek = msgQueue.peek();
+        if(peek != null){
+            ModemMessage poll = msgQueue.poll();
+            updateCommunication(poll.getAuvName(),poll.getMsg());
+            sendMsgs(poll.getAuvName(),poll.getMsg());
         }
         //updateComNet();
     }
@@ -144,7 +135,7 @@ public class Communication_Manager {
      * @param msg
      */
     public synchronized void putMsg(String auv_name,String msg){
-        //System.out.println("Added msg to bag: " + msg);
-        hashQueue.put(auv_name, msg);
+        msgQueue.offer(new ModemMessage(auv_name, msg));
+        System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
     }    
 }

@@ -238,7 +238,7 @@ public class UnderwaterModem extends Sensor{
     }
     
     /**
-     * 
+     * some eye candy, you can see the communication net
      * @param uws
      */
     public void updateComNet(HashMap<String,UnderwaterModem> uws){
@@ -309,7 +309,7 @@ public class UnderwaterModem extends Sensor{
         subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
                 @Override
                 public void onNewMessage(std_msgs.String message) {
-                    System.out.println(fin_auv_name + " heard: \"" + message.getData() + "\"");
+                    System.out.println(fin_auv_name + " should send: \"" + message.getData() + "\"");
                     com_manager.putMsg(fin_auv_name,message.getData());
                 }
         });
@@ -331,6 +331,7 @@ public class UnderwaterModem extends Sensor{
     public void publish(String msg){
         fl.setData(msg);
         if( publisher != null ){
+            System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
             publisher.publish(fl);
         }
     }

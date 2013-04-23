@@ -387,6 +387,8 @@ public class MapState extends AbstractAppState{
                             java.awt.Color col = new java.awt.Color(java.awt.Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
                             col.get*/
                         }
+                    }else if(auv == null){//auv doesnt exist anymore
+                        
                     }else{//auv is disabled so dont show in on map
                         Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                         if(geom != null){

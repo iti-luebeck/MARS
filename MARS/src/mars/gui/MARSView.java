@@ -1896,7 +1896,6 @@ public class MARSView extends FrameView {
         auv_popup_menu.add(enable_auv);
 
         delete_auv.setText(resourceMap.getString("delete_auv.text")); // NOI18N
-        delete_auv.setEnabled(false);
         delete_auv.setName("delete_auv"); // NOI18N
         delete_auv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3883,15 +3882,30 @@ public class MARSView extends FrameView {
     }//GEN-LAST:event_chase_auvActionPerformed
 
     private void delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_auvActionPerformed
-       /* DefaultMutableTreeNode node = (DefaultMutableTreeNode)auv_tree.getLastSelectedPathComponent();
-        AUV auv = (AUV)node.getUserObject();
-
-        //cleanup
-        auvManager.deregisterAUV(auv);
-        xmll.deleteAUV(auv);
-        node.removeFromParent();
-        auv_tree.updateUI();*/
-        System.out.println("NOT IMPLEMENTED YET!");
+        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
+        
+        //Custom button text
+        Object[] options = {"Yes",
+                    "No"};
+        int delete = JOptionPane.showOptionDialog(this.getRootPane(),
+        "Are you sure you want to delete the auv: " + auv.getName(),
+        "AUV deletion",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[1]);
+        if(delete == 0){
+            Future simStateFuture = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                        if(mars.getStateManager().getState(SimState.class) != null){
+                            auvManager.deregisterAUVNoFuture(auv);
+                        }
+                    updateTrees();
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_delete_auvActionPerformed
 
     private void delete_simobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_simobActionPerformed
