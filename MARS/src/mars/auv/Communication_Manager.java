@@ -137,6 +137,6 @@ public class Communication_Manager {
      */
     public synchronized void putMsg(String auv_name,String msg){
         msgQueue.offer(new ModemMessage(auv_name, msg));
-        //System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
+        System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
     }    
 }

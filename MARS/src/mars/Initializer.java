@@ -14,6 +14,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
@@ -950,6 +951,16 @@ public class Initializer {
             gridNode.setCullHint(CullHint.Always);
         }else{
             gridNode.setCullHint(CullHint.Never);
+        }
+    }
+    
+    /**
+     * 
+     * @param hide
+     */
+    public void showPhysicsDebug(boolean hide){
+        if (mars.getStateManager().getState(BulletAppState.class) != null) {
+            mars.getStateManager().getState(BulletAppState.class).setDebugEnabled(hide);
         }
     }
     

@@ -15,6 +15,7 @@ import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
@@ -88,6 +89,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import javax.swing.TransferHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import mars.MyDebugAppStateFilter;
 import mars.auv.WayPoints;
 import mars.recorder.RecordControl;
 import mars.recorder.RecordManager;
@@ -119,6 +121,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private MARSView view;
     private boolean view_init = false;
     private boolean server_init = false;
+    private boolean debugFilter = false;
     
     //main settings file
     private MARS_Settings mars_settings;
@@ -560,6 +563,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
         bulletAppState.getPhysicsSpace().setMaxSubSteps(mars_settings.getPhysicsMaxSubSteps());
+        
+        //setting Filter in the DebugState so we can show specific collision boxes
+        /*if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
+            mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
+        }*/ //doesnt work here because DebugAppState suuuuuucks
+        
         if(mars_settings.isPhysicsDebug()){
             bulletAppState.setDebugEnabled(true);
         }
@@ -1383,6 +1392,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
         if(recordManager != null){
             recordManager.update(tpf);
+        }
+        
+        //setting Filter in the DebugState so we can show specific collision boxes
+        if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
+            if(!debugFilter){
+                mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter(mars_settings,auvManager)); 
+                debugFilter = true;
+            }
         }
 
         //only update physics if auv_hanse exists and when simulation is started

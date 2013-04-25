@@ -128,7 +128,6 @@ public class BasicAUV implements AUV,SceneProcessor{
     private Vector3f volume_center_precise = new Vector3f(0,0,0);
     private Spatial auv_spatial;
     private Spatial debugShape;
-    private DebugShapeFactory debugFactory = new DebugShapeFactory();
     private Node auv_node = new Node("");
     private Node selectionNode = new Node("selectionNode");
     private RigidBodyControl physics_control;

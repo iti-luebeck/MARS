@@ -319,6 +319,8 @@ public class MARS_Settings{
             initer.setupGrid();
         }else if(target.equals("speed") && hashmapname.equals("Physics")){
             initer.changeSpeed(getPhysicsSpeed());
+        }else if(target.equals("debug") && hashmapname.equals("Physics")){
+            initer.showPhysicsDebug(isPhysicsDebug());
         }
     }
     
