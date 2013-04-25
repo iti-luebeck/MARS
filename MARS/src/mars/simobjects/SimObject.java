@@ -246,13 +246,13 @@ public class SimObject{
          //debug
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
-        debugShape = physics_control.createDebugShape(assetManager);
+        /*debugShape = physics_control.createDebugShape(assetManager);
         debugNode.attachChild(debugShape);
         if(isDebugCollision()){
             debugShape.setCullHint(CullHint.Inherit);
         }else{
             debugShape.setCullHint(CullHint.Always);
-        }
+        }*/
         
         spatial.addControl(physics_control);
         spatial.updateGeometricState();

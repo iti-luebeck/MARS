@@ -69,7 +69,7 @@ public class AdvancedFlyByCamera extends FlyByCamera{
         } else if (name.equals("FLYCAM_InvertY")) {
             // Toggle on the up.
             if( !value ) {  
-                invertY = !invertY;
+                this.invertY = !this.invertY;
             }
         }        
     }

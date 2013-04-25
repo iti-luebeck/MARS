@@ -309,7 +309,7 @@ public class UnderwaterModem extends Sensor{
         subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
                 @Override
                 public void onNewMessage(std_msgs.String message) {
-                    System.out.println(fin_auv_name + " should send: \"" + message.getData() + "\"");
+                    //System.out.println(fin_auv_name + "sends: \"" + message.getData() + "\"");
                     com_manager.putMsg(fin_auv_name,message.getData());
                 }
         });
@@ -331,7 +331,7 @@ public class UnderwaterModem extends Sensor{
     public void publish(String msg){
         fl.setData(msg);
         if( publisher != null ){
-            System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
+            //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
             publisher.publish(fl);
         }
     }

@@ -4,7 +4,7 @@
  */
 package mars.states;
 
-import com.bulletphysics.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;//bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -561,7 +561,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //set the physis world parameters
         bulletAppState.getPhysicsSpace().setMaxSubSteps(mars_settings.getPhysicsMaxSubSteps());
         if(mars_settings.isPhysicsDebug()){
-            bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+            bulletAppState.setDebugEnabled(true);
         }
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());

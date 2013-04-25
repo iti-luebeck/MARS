@@ -56,6 +56,7 @@ public class Communication_Manager {
      * @param tpf
      */
     public void update(float tpf){
+        //System.out.println("Time to communicate: " + tpf);
         ModemMessage peek = msgQueue.peek();
         if(peek != null){
             ModemMessage poll = msgQueue.poll();
@@ -136,6 +137,6 @@ public class Communication_Manager {
      */
     public synchronized void putMsg(String auv_name,String msg){
         msgQueue.offer(new ModemMessage(auv_name, msg));
-        System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
+        //System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
     }    
 }
