@@ -52,43 +52,6 @@ public class ImagenexSonar_852_Echo extends Sonar{
     public ImagenexSonar_852_Echo(){
         super();
     }
-        
-    /**
-     *
-     * @param simstate 
-     * @param detectable
-     * @param pe
-     */
-    public ImagenexSonar_852_Echo(SimState simstate, Node detectable,PhysicalEnvironment pe) {
-        super(simstate,detectable,pe);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) { }
-    }
-
-    /**
-     *
-     * @param simstate 
-     * @param detectable
-     */
-    public ImagenexSonar_852_Echo(SimState simstate, Node detectable) {
-        super(simstate,detectable);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) { }
-    }
 
     /**
      *
@@ -103,7 +66,7 @@ public class ImagenexSonar_852_Echo extends Sonar{
      * @return
      */
     public int getSonarReturnDataTotalLength() {
-        return super.getSonarReturnDataLength()+SonarReturnDataHeaderLength+1;//+1 is the termination byte
+        return super.getReturnDataLength()+SonarReturnDataHeaderLength+1;//+1 is the termination byte
     }
     
     @Override
@@ -112,7 +75,7 @@ public class ImagenexSonar_852_Echo extends Sonar{
         byte[] end = new byte[1];
 
         //build the header for the imaginex sonar
-        byte[] imaginex_bytes_2 = Imaginex.imaginexByteConverterDataLength(super.getSonarReturnDataLength());
+        byte[] imaginex_bytes_2 = Imaginex.imaginexByteConverterDataLength(super.getReturnDataLength());
         header[5] = 0;
         header[6] = 0;
         header[7] = 50;
@@ -132,8 +95,8 @@ public class ImagenexSonar_852_Echo extends Sonar{
     }
 
     @Override
-    public byte[] getSonarData(){
-        return encapsulateWithHeaderTail(super.getSonarData());
+    public byte[] getData(){
+        return encapsulateWithHeaderTail(super.getData());
     }
     
     /**
@@ -141,8 +104,8 @@ public class ImagenexSonar_852_Echo extends Sonar{
      * @return
      */
     @Override
-    public byte[] getRawSonarData(){
-        return super.getSonarData();
+    public byte[] getRawData(){
+        return super.getData();
     }
 
     @Override
@@ -180,11 +143,11 @@ public class ImagenexSonar_852_Echo extends Sonar{
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
         
-        byte[] sonData = getRawSonarData();
+        byte[] sonData = getRawData();
         this.mars.getView().initSonarData(sonData,0f,this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
         fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getSonarMaxRange());
+        fl.setRange((byte)getMaxRange());
         
         if( publisher != null ){
             publisher.publish(fl);

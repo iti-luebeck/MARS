@@ -984,11 +984,11 @@ public class XMLConfigReaderWriter
                 Compass comp = getCompass(SensorsNode);
                 sensors.add(comp);
             }else if(SensorsNode.getNodeName().equals("ImagenexSonar360")){
-                ImagenexSonar_852_Scanning son = getImaginexSonarScanning(SensorsNode);
-                sensors.add(son);
+                //ImagenexSonar_852_Scanning son = getImaginexSonarScanning(SensorsNode);
+                //sensors.add(son);
             }else if(SensorsNode.getNodeName().equals("ImagenexSonarEcho")){
-                ImagenexSonar_852_Echo son = getImaginexSonarEcho(SensorsNode);
-                sensors.add(son);
+                //ImagenexSonar_852_Echo son = getImaginexSonarEcho(SensorsNode);
+                //sensors.add(son);
             }else if(SensorsNode.getNodeName().equals("VideoCamera")){
                 VideoCamera vid = getVideoCamera(SensorsNode);
                 sensors.add(vid);
@@ -1428,7 +1428,7 @@ public class XMLConfigReaderWriter
         }
         return infra;
     }
-        
+    /*    
     private ImagenexSonar_852_Scanning getImaginexSonarScanning(Node node){
         ImagenexSonar_852_Scanning son = new ImagenexSonar_852_Scanning(simstate,(com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));
         NodeList nodelist = node.getChildNodes();
@@ -1447,9 +1447,9 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("SonarUpDirection")){
                 //son.setSonarUpDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarMaxRange")){
-                son.setSonarMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
+                son.setMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarMinRange")){
-                son.setSonarMinRange(Float.valueOf(sensor_node.getTextContent().trim()));
+                son.setMinRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarCone")){
                 getSonarCone(sensor_node,son);
             }else if(sensor_node.getNodeName().equals("Scanning_resolution")){
@@ -1489,9 +1489,9 @@ public class XMLConfigReaderWriter
             }else if(sensor_node.getNodeName().equals("SonarUpDirection")){
                 //son.setSonarUpDirection(getVector(sensor_node));
             }else if(sensor_node.getNodeName().equals("SonarMaxRange")){
-                son.setSonarMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
+                son.setMaxRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarMinRange")){
-                son.setSonarMinRange(Float.valueOf(sensor_node.getTextContent().trim()));
+                son.setMinRange(Float.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("SonarCone")){
                 getSonarCone(sensor_node,son);
             }else if(sensor_node.getNodeName().equals("Scanning_resolution")){
@@ -1512,13 +1512,13 @@ public class XMLConfigReaderWriter
         }
         return son;
     }
-
+    */
     private void getSonarCone(Node node, Sonar son){
         NodeList nodelist = node.getChildNodes();
         for (int i = 0; i < nodelist.getLength(); i++) {
             Node sensor_node = nodelist.item(i);
             if(sensor_node.getNodeName().equals("SonarConeType")){
-                son.setSonar_cone_type(Integer.valueOf(sensor_node.getTextContent().trim()));
+                son.setConeType(Integer.valueOf(sensor_node.getTextContent().trim()));
             }else if(sensor_node.getNodeName().equals("beam_height")){
                 son.setBeam_height((float)((Float.valueOf(sensor_node.getTextContent().trim()))*(Math.PI/180f)));
             }else if(sensor_node.getNodeName().equals("beam_width")){

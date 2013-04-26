@@ -189,7 +189,7 @@ public class MapState extends AbstractAppState{
                     it = sons.iterator();
                     while (it.hasNext()) {
                         Sonar son = (Sonar)it.next();
-                        float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
+                        float sonRange = son.getMaxRange()*(2f/(terx_px*tile_length));
                         float alpha = son.getBeam_width()/2f;
                         float beta = FastMath.HALF_PI-alpha;
                         float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
@@ -345,7 +345,7 @@ public class MapState extends AbstractAppState{
                                 quat.fromAngles(0f, 0f, -son.getCurrentHeadPosition());
                                 songeom.setLocalRotation(quat);
                                 
-                                float sonRange = son.getSonarMaxRange()*(2f/(terx_px*tile_length));
+                                float sonRange = son.getMaxRange()*(2f/(terx_px*tile_length));
                                 float alpha = son.getBeam_width()/2f;
                                 float beta = FastMath.HALF_PI-alpha;
                                 float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;

@@ -9,7 +9,7 @@ package mars.sensors.sonar;
  *
  * @author Thomas Tosik
  */
-public class SonarConeType {
+public class ConeType {
     /**
      *
      */

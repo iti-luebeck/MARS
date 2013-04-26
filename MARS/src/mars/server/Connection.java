@@ -197,7 +197,7 @@ public class Connection extends Thread {
                 //we must synchronize with the opengl trender thread
                 Future fut = mars.enqueue(new Callable() {
                     public byte[] call() throws Exception {
-                        return son.getSonarData();
+                        return son.getData();
                     }
                 });
 
@@ -224,7 +224,7 @@ public class Connection extends Thread {
                 //we must synchronize with the opengl trender thread
                 Future fut = mars.enqueue(new Callable() {
                     public byte[] call() throws Exception {
-                        return son.getSonarData();
+                        return son.getData();
                     }
                 });
 
