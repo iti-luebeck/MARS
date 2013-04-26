@@ -1479,7 +1479,7 @@ public class MARSView extends FrameView {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
         );
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getResourceMap(MARSView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(MARSView.class);
         jTabbedPane1.addTab(resourceMap.getString("jPanel3.TabConstraints.tabTitle"), resourceMap.getIcon("jPanel3.TabConstraints.tabIcon"), jPanel3); // NOI18N
 
         jPanel4.setName("jPanel4"); // NOI18N
@@ -1754,7 +1754,7 @@ public class MARSView extends FrameView {
         jSeparator1.setName("jSeparator1"); // NOI18N
         jFileMenu.add(jSeparator1);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(mars.MARSApp.class).getContext().getActionMap(MARSView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(MARSView.class, this);
         ExitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         ExitMenuItem.setIcon(resourceMap.getIcon("ExitMenuItem.icon")); // NOI18N
         ExitMenuItem.setText(resourceMap.getString("ExitMenuItem.text")); // NOI18N
@@ -2366,7 +2366,6 @@ public class MARSView extends FrameView {
         jme3_auv.add(jme3_enable_auv);
 
         jme3_delete_auv.setText(resourceMap.getString("jme3_delete_auv.text")); // NOI18N
-        jme3_delete_auv.setEnabled(false);
         jme3_delete_auv.setName("jme3_delete_auv"); // NOI18N
         jme3_delete_auv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4143,7 +4142,31 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }//GEN-LAST:event_jme3_reset_auvActionPerformed
 
     private void jme3_delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_delete_auvActionPerformed
-        // TODO add your handling code here:
+        final AUV auv = (AUV)auvManager.getSelectedAUV();
+
+        //Custom button text
+        Object[] options = {"Yes",
+                    "No"};
+        int delete = JOptionPane.showOptionDialog(this.getRootPane(),
+        "Are you sure you want to delete the auv: " + auv.getName(),
+        "AUV deletion",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[1]);
+        if(delete == 0){
+            Future simStateFuture = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                        if(mars.getStateManager().getState(SimState.class) != null){
+                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                            auvManager.deregisterAUVNoFuture(auv);
+                        }
+                    updateTrees();
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_jme3_delete_auvActionPerformed
 
     private void jme3_waypoints_colorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_colorActionPerformed

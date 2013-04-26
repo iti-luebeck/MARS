@@ -1371,7 +1371,6 @@
         <MenuItem class="javax.swing.JMenuItem" name="jme3_delete_auv">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jme3_delete_auv.text"/>
-            <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="jme3_delete_auv" noResource="true"/>
           </Properties>
           <Events>
