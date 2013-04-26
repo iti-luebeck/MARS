@@ -10,9 +10,11 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -414,6 +416,14 @@ public class XML_JAXB_ConfigReaderWriter {
         }else if(!Files.isWritable(auvPath)){
             return "Can't create Directory: " + auvFile.getAbsolutePath() + " . No Write Access";
         }
+        
+        //cleanup auv directory
+        try {
+            EnumSet<FileVisitOption> opts = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
+            Files.walkFileTree(auvPath, opts, 1, new XMLFileWalker());//ignore anything deeper
+        } catch (IOException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
  
         //simob dir
         File simobFile = new File(file, "simobjects");
@@ -455,6 +465,7 @@ public class XML_JAXB_ConfigReaderWriter {
             return failure;
         }
         
+        //clear the folder first
         failure = saveAUVs(auvManager.getAUVs(),auvFile);
         if(failure != null){
             return failure;
