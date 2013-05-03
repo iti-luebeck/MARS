@@ -15,7 +15,7 @@ import mars.Helper.Helper;
  * This class is used to visualize SonarData (or any Data provided as an byte array) in planar view (2d).
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class PlanarView extends JPanel implements SonarView{
+public class PlanarView extends JPanel implements RayBasedSensorView{
 
     Image fImage;
     MemoryImageSource mis;

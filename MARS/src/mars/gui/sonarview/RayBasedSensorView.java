@@ -10,7 +10,7 @@ import java.awt.Color;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public interface SonarView {
+public interface RayBasedSensorView {
     /**
      * 
      * @param data

@@ -91,6 +91,7 @@ import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
+import mars.sensors.RayBasedSensor;
 import mars.sensors.sonar.Sonar;
 import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
@@ -620,8 +621,8 @@ public class BasicAUV implements AUV,SceneProcessor{
                 if(element instanceof InfraRedSensor){
                     ((InfraRedSensor)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
                 }  
-                if(element instanceof Sonar){
-                    ((Sonar)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
+                if(element instanceof RayBasedSensor){
+                    ((RayBasedSensor)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
                 } 
                 if(element instanceof TerrainSender){
                     ((TerrainSender)element).setIniter(initer);

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SimObject>
     <simob_variables>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="position">
+        <entry xsi:type="myHashMapEntryTypeVector3F" key="position" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <x>0.0</x>
                 <y>-2.0</y>
                 <z>15.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="enabled" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="scale">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="scale" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.1</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="filepath">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">pipe/pipe__gate_5meter.obj</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="filepath" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">pipe/pipe__gate_5meter.obj</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate.png</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="icon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">testgate.png</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate_dnd.png</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="dnd_icon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">testgate_dnd.png</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="sonar_detectable">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">true</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="sonar_detectable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Collision">
+        <entry xsi:type="myHashMapEntryTypeHashMap" key="Collision" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <entry xsi:type="myHashMapEntryTypeVector3F" key="collision_position">
                     <value>
@@ -43,17 +43,17 @@
                     </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="type">
-                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
-                </entry>
-                <entry xsi:type="myHashMapEntryTypeObject" key="collidable">
-                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                    <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="debug_collision">
-                    <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                </entry>
+                <entry xsi:type="myHashMapEntryTypeObject" key="collidable">
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                 </entry>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeColorRGBA" key="color">
+        <entry xsi:type="myHashMapEntryTypeColorRGBA" key="color" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <a>0.0</a>
                 <b>0.0</b>
@@ -61,21 +61,21 @@
                 <r>0.0</r>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeVector3F" key="rotation">
+        <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <x>1.5707964</x>
                 <y>0.0</y>
                 <z>0.0</z>
             </value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">testgate</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="pinger">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="pinger" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="light">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
+        <entry xsi:type="myHashMapEntryTypeObject" key="light" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
         </entry>
     </simob_variables>
 </SimObject>

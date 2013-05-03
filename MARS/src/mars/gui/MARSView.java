@@ -116,7 +116,8 @@ import mars.auv.example.Hanse;
 import mars.auv.PhysicalValues;
 import mars.gui.sonarview.PlanarView;
 import mars.gui.sonarview.PolarView;
-import mars.gui.sonarview.SonarView;
+import mars.gui.sonarview.RayBasedSensorView;
+import mars.sensors.RayBasedSensor;
 import mars.sensors.Sensor;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import mars.sensors.sonar.Sonar;
@@ -265,11 +266,11 @@ public class MARSView extends FrameView {
      * @param lastHeadPosition
      * @param son
      */
-    public void initSonarData(final byte[] data, final float lastHeadPosition, final Sonar son){
+    public void initRayBasedData(final byte[] data, final float lastHeadPosition, final RayBasedSensor son){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    SonarView sonarView = (SonarView)sonarList.get(son.getPhysicalExchangerName());
+                    RayBasedSensorView sonarView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
                     if(sonarView != null){
                         sonarView.updateData(data, lastHeadPosition, son.getScanning_resolution());  
                     }
@@ -1013,7 +1014,7 @@ public class MARSView extends FrameView {
         ChartFrame.setSize(400,400);
     }
     
-    private void addColorPanels(JPanel optionsColors, final SonarView imgP2){
+    private void addColorPanels(JPanel optionsColors, final RayBasedSensorView imgP2){
         JLabel jlChangeColor = new JLabel("Background Color:");
         optionsColors.add(jlChangeColor);
         JButton jb = new JButton("Change Color");
@@ -4406,11 +4407,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             }
                          }else if (hashwrap.getUserData() instanceof PhysicalExchanger) {   
                             jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
-                            if(hashwrap.getUserData() instanceof Sonar){
+                            if(hashwrap.getUserData() instanceof RayBasedSensor){
                                 addDataToChart.setVisible(false);
-                                Sonar son = (Sonar)hashwrap.getUserData();
-                                lastSelectedSonar = son;
-                                if(son.isScanning()){
+                                RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
+                                lastSelectedRayBasedSensor = rays;
+                                if(rays.isScanning()){
                                     viewSonarPolar.setVisible(true);
                                     viewSonarPlanar.setVisible(true);
                                 }else{
@@ -4971,9 +4972,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         sonarFrame.add(options);
         
         sonarFrame.repaint();
-        if(lastSelectedSonar != null){
-            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP);
-            sonarFrame.setTitle("Polar View of: " + lastSelectedSonar.getPhysicalExchangerName());
+        if(lastSelectedRayBasedSensor != null){
+            rayBasedSensorList.put(lastSelectedRayBasedSensor.getPhysicalExchangerName(), imgP);
+            sonarFrame.setTitle("Polar View of: " + lastSelectedRayBasedSensor.getPhysicalExchangerName());
         }
     }//GEN-LAST:event_viewSonarPolarActionPerformed
 
@@ -5042,9 +5043,9 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         sonarFrame.add(options);
         
         sonarFrame.repaint();
-        if(lastSelectedSonar != null){
-            sonarList.put(lastSelectedSonar.getPhysicalExchangerName(), imgP);
-            sonarFrame.setTitle("Planar View of: " + lastSelectedSonar.getPhysicalExchangerName());
+        if(lastSelectedRayBasedSensor != null){
+            rayBasedSensorList.put(lastSelectedRayBasedSensor.getPhysicalExchangerName(), imgP);
+            sonarFrame.setTitle("Planar View of: " + lastSelectedRayBasedSensor.getPhysicalExchangerName());
         }
     }//GEN-LAST:event_viewSonarPlanarActionPerformed
 
@@ -5539,8 +5540,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private long m_starttime = System.currentTimeMillis();
     private Chart2D charts;
     
-    private Sonar lastSelectedSonar;
-    private HashMap<String,SonarView> sonarList = new HashMap<String, SonarView>();
+    private RayBasedSensor lastSelectedRayBasedSensor;
+    private HashMap<String,RayBasedSensorView> rayBasedSensorList = new HashMap<String, RayBasedSensorView>();
     
     private final Timer busyIconTimer;
     private final Icon idleIcon;

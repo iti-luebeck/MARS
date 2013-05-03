@@ -20,7 +20,7 @@ import mars.Helper.Helper;
  * This class is used to visualize SonarData (or any Data provided as an byte array) in polar view (looks like a radar view).
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class PolarView extends JPanel implements SonarView{
+public class PolarView extends JPanel implements RayBasedSensorView{
 
     BufferedImage offImgage;
     Graphics2D imageGraphics;

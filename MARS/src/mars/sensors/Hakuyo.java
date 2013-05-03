@@ -6,6 +6,8 @@ package mars.sensors;
 
 import com.jme3.scene.Node;
 import java.io.IOException;
+import java.nio.ByteOrder;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -14,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import mars.PhysicalEnvironment;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
@@ -81,13 +84,18 @@ public class Hakuyo extends LaserScanner{
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
         
-        byte[] sonData = getRawData();
+        /*byte[] sonData = getRawData();
         float lastHeadPosition = getLastHeadPosition();
-        /*this.mars.getView().initSonarData(sonData,lastHeadPosition,this);
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
-        fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getSonarMaxRange());*/
+        this.mars.getView().initRayBasedData(sonData,lastHeadPosition,this);*/
+        fl.setAngleIncrement(getScanning_resolution());
+        fl.setRangeMax(getMaxRange());
+        fl.setRangeMin(getMinRange());
+        fl.setScanTime(getRos_publish_rate()/1000f);
+        //fl.setTimeIncrement();
+        fl.setAngleMax(getScanningAngleMax());
+        fl.setAngleMin(getScanningAngleMin());
+        
+        fl.setRanges(getInstantData());
         
         if( publisher != null ){
             publisher.publish(fl);

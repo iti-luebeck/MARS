@@ -415,6 +415,22 @@ public class RayBasedSensor extends Sensor{
     public void setScanning(boolean Scanning) {
         variables.put("Scanning", Scanning);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isScanInstant() {
+        return (Boolean)variables.get("ScanInstant");
+    }
+
+    /**
+     *
+     * @param Scanning 
+     */
+    public void setScanInstant(boolean ScanInstant) {
+        variables.put("ScanInstant", ScanInstant);
+    }
 
     /**
      *
@@ -446,6 +462,38 @@ public class RayBasedSensor extends Sensor{
      */
     public void setScanSection(float SonarScanSection) {
         variables.put("SonarScanSection", SonarScanSection);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getScanningAngleMax() {
+       return (Float)variables.get("scanning_angle_max");
+    }
+
+    /**
+     *
+     * @param SonarMaxRange
+     */
+    public void setScanningAngleMax(float scanning_angle_max) {
+        variables.put("scanning_angle_max", scanning_angle_max);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public float getScanningAngleMin() {
+       return (Float)variables.get("scanning_angle_min");
+    }
+
+    /**
+     *
+     * @param SonarMaxRange
+     */
+    public void setScanningAngleMin(float scanning_angle_min) {
+        variables.put("scanning_angle_min", scanning_angle_min);
     }
 
     /**
@@ -655,6 +703,22 @@ public class RayBasedSensor extends Sensor{
     public byte[] getRawData(){
         return getData();
     }
+    
+    /**
+     * 
+     * @return
+     */
+    public float[] getRawInstantData(){
+        return null;//getInstantData();
+    }
+    
+    public float[] getInstantData(){
+        if(getConeType() == ConeType.ONE_RAY){
+            return getOneRayInstantData();
+        }else{
+            return getOneRayInstantData();
+        }
+    }
 
     /**
      * This method is used to encapsulate the raw sonar data with header and 
@@ -665,6 +729,62 @@ public class RayBasedSensor extends Sensor{
      */
     protected byte[] encapsulateWithHeaderTail(byte[] sondat){
         return sondat;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private float[] getOneRayInstantData(){
+        int size = (int)Math.ceil((Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin()))/getScanning_resolution());
+        float[] rayData = new float[size];
+        for (int i = 0; i < rayData.length; i++) {
+            rayData[i] = getOneRayDataFloat()[0];            
+        }
+        return rayData;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private float[] getOneRayDataFloat(){
+        Vector3f ray_start = this.SonarStart.getWorldTranslation();
+        debug_node.detachAllChildren();
+        Quaternion beam_iteration_quaternion = new Quaternion();
+
+        beam_iteration_quaternion.fromAngles( 0f, scanning_iterations*(-1)*getScanning_resolution(), 0f);
+        angle_node.setLocalRotation(beam_iteration_quaternion);
+        Vector3f ray_direction = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
+
+        float[] sonar_data = getRawRayData(ray_start, ray_direction);
+
+        byte[] arr_ret = new byte[ReturnDataLength];
+
+        addScanGainToArray(arr_ret,sonar_data);
+
+        if(isDebug()){
+            Vector3f ray_start2 = angle_node_start.getWorldTranslation();
+            Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
+            Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
+            Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mark_mat5.setColor("Color", ColorRGBA.Red);
+            mark5.setMaterial(mark_mat5);
+            mark5.setLocalTranslation(ray_start2);
+            mark5.updateGeometricState();
+            debug_node.attachChild(mark5);
+        }
+
+        scan_next();
+
+        if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
+            arr_ret = getNoisedData(arr_ret);
+        }
+        if(isFailure()){
+            arr_ret = getFailuredData(arr_ret);
+        }
+
+        return sonar_data;
     }
 
     /**
@@ -729,7 +849,11 @@ public class RayBasedSensor extends Sensor{
     private void scan_next(){
         if(isScanning()){//rotate the sonar to the next position
             last_head_position = getCurrentHeadPosition();
-            if(scanning_iterations*getScanning_resolution() < (Math.PI*2f)){
+            float angle = (float)Math.PI*2f;
+            if((Float)getScanningAngleMax() != null){
+                angle = Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin());
+            }
+            if(scanning_iterations*getScanning_resolution() < angle){
                 scanning_iterations++;
             }else{
                 scanning_iterations = 1;

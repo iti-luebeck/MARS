@@ -74,7 +74,7 @@ public class LaserScanner extends RayBasedSensor{
         if(distance >= getMaxRange()){//too far away
             //System.out.println("too far away");
             return null;
-        }else if(results.getCollision(i).getContactPoint().y >= pe.getWater_height()){//forget hits over water
+        }else if(results.getCollision(i).getContactPoint().y <= pe.getWater_height()){//forget hits under water
             return null;
         }else if ((distance > getMinRange())) {
             //first = results2.getCollision(i).getContactPoint();
