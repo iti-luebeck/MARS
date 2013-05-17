@@ -502,6 +502,22 @@ public class MARS_Settings{
      *
      * @return
      */
+    public float getChaseCamZoomSensitivity() {
+        return (Float)Camera.get("ChaseCamZoomSensitivity");
+    }
+
+    /**
+     *
+     * @param speed 
+     */
+    public void setChaseCamZoomSensitivity(float ChaseCamZoomSensitivity) {
+        Camera.put("ChaseCamZoomSensitivity", ChaseCamZoomSensitivity);
+    }
+    
+    /**
+     *
+     * @return
+     */
     public String getAutoConfigName() {
         return (String)Auto.get("config");
     }

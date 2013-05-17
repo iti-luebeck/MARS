@@ -583,7 +583,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mars.getFlyByCamera().setEnabled(true);
         chaseCam = new ChaseCamera(mars.getCamera(),rootNode,inputManager);
         chaseCam.setInvertVerticalAxis(true);
-        chaseCam.setZoomSensitivity(0.1f);
+        chaseCam.setZoomSensitivity(mars_settings.getChaseCamZoomSensitivity());
         chaseCam.setEnabled(false);
     }
     
