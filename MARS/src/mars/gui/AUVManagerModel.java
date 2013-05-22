@@ -89,15 +89,155 @@ public class AUVManagerModel implements TreeModel{
         }            
     }
 
+    @Override
     public Object getRoot() {
         return auvManager;
     }
 
+    @Override
     public int getIndexOfChild(Object parent, Object child) {
-        System.out.println(parent + "/" + child);
-        return 1;
+        System.out.println("getIndexOfChild: " + parent + "/" + child);
+        if(parent == null || child == null){
+            return -1;
+        }else{
+            if(parent instanceof AUV){
+                AUV auv = (AUV)parent;
+                if(child == auv.getAuv_param()){
+                    return 0;
+                }else if(child instanceof HashMapWrapper){
+                    HashMapWrapper hChild = (HashMapWrapper)child;
+                    if(hChild.getName().equals("Sensors")){
+                        return 1;
+                    }else if(hChild.getName().equals("Actuators")){
+                        return 2;
+                    }else if(hChild.getName().equals("Accumulators")){
+                        return 3;
+                    }else{
+                        return -1;
+                    }
+                }else{
+                    return -1;
+                } 
+            }else if(parent instanceof AUV_Parameters){
+                AUV_Parameters auv_param = (AUV_Parameters)parent;
+                if(child instanceof HashMapWrapper){
+                    HashMapWrapper hChild = (HashMapWrapper)child;
+                    SortedSet<String> sortedset= new TreeSet<String>(auv_param.getAllVariables().keySet());
+                    Iterator<String> it = sortedset.iterator();
+                    int i = 0;
+                    while (it.hasNext()) {
+                        String elem = it.next();
+                        if(elem.equals(hChild.getName())){
+                            return i;
+                        }
+                        i++;
+                    }
+                    return -1;
+                }else{
+                    return -1;
+                }
+            }else if(parent instanceof PhysicalExchanger){
+                PhysicalExchanger pe = (PhysicalExchanger)parent;
+                if(child instanceof HashMapWrapper){
+                    HashMapWrapper hChild = (HashMapWrapper)child;
+                    SortedSet<String> sortedset= new TreeSet<String>(pe.getAllVariables().keySet());
+                    Iterator<String> it = sortedset.iterator();
+                    int i = 0;
+                    while (it.hasNext()) {
+                        String elem = it.next();
+                        if(elem.equals(hChild.getName())){
+                            return i;
+                        }
+                        i++;
+                    }
+                    return -1;
+                }else{
+                    return -1;
+                }
+            }else if(parent instanceof Accumulator){
+                Accumulator acc = (Accumulator)parent;
+                if(child instanceof HashMapWrapper){
+                    HashMapWrapper hChild = (HashMapWrapper)child;
+                    SortedSet<String> sortedset= new TreeSet<String>(acc.getAllVariables().keySet());
+                    Iterator<String> it = sortedset.iterator();
+                    int i = 0;
+                    while (it.hasNext()) {
+                        String elem = it.next();
+                        if(elem.equals(hChild.getName())){
+                            return i;
+                        }
+                        i++;
+                    }
+                    return -1;
+                }else{
+                    return -1;
+                }
+            }else if(parent instanceof HashMapWrapper){
+                HashMapWrapper hasher = (HashMapWrapper)parent;
+                if(child instanceof HashMapWrapper){
+                    HashMapWrapper hChild = (HashMapWrapper)child;
+                    if(hChild.getName().equals("Variables")){
+                        return 0;
+                    }else if(hChild.getName().equals("Noise")){
+                        return 1;
+                    }else if(hChild.getName().equals("Accumulators")){
+                        return 2;
+                    }else if(hChild.getName().equals("Actions")){
+                        return 2;
+                    }else if(hChild.getName().equals("Slaves")){
+                        return 3;
+                    }else{
+                        if(hasher.getUserData() instanceof HashMap){
+                            HashMap<String, Object> hashmap = (HashMap<String, Object>)hasher.getUserData();
+                            SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
+                            Iterator<String> it = sortedset.iterator();
+                            int i = 0;
+                            while (it.hasNext()) {
+                                String elem = it.next();
+                                if(elem.equals(hChild.getName())){
+                                    return i;
+                                }
+                                i++;
+                            }
+                            return -1;
+                        }else if(hasher.getUserData() instanceof Vector3f){
+                            Vector3f vec = (Vector3f)hasher.getUserData();
+                            if(hChild.getName().equals("X")){
+                                return 0;
+                            }else if(hChild.getName().equals("Y")){
+                                return 1;
+                            }else if(hChild.getName().equals("Z")){
+                                return 2;
+                            }else{
+                                return -1;
+                            }
+                        }else if(hasher.getUserData() instanceof ColorRGBA){
+                            ColorRGBA color = (ColorRGBA)hasher.getUserData();
+                            if(hChild.getName().equals("R")){
+                                return 0;
+                            }else if(hChild.getName().equals("G")){
+                                return 1;
+                            }else if(hChild.getName().equals("B")){
+                                return 2;
+                            }else if(hChild.getName().equals("A")){
+                                return 3;
+                            }else{
+                                return -1;
+                            }
+                        }else{
+                            return -1;
+                        }
+                    }
+                }else{
+                    return -1;
+                } 
+            }else{
+                return -1;
+            }
+        }
     }
 
+    @Override
     public int getChildCount(Object parent) {
         if(parent instanceof AUV_Manager){
             return auvManager.getAUVs().size();
@@ -164,11 +304,11 @@ public class AUVManagerModel implements TreeModel{
                     AUV auv = (AUV)auvManager.getAUVs().get(elem);
                     return auv;
                 }else if(i > index){
-                    return "null";
+                    return null;
                 }
                 i++;
             }
-            return "null";
+            return null;
         }else if(parent instanceof AUV){
             AUV auv = (AUV)parent;
             if(index == 0){
@@ -180,7 +320,7 @@ public class AUVManagerModel implements TreeModel{
             }else if (index == 3){
                 return new HashMapWrapper(auv.getAccumulators(),"Accumulators");
             }
-            return "null";
+            return null;
         }else if(parent instanceof AUV_Parameters){
             AUV_Parameters auv_param = (AUV_Parameters)parent;
             SortedSet<String> sortedset= new TreeSet<String>(auv_param.getAllVariables().keySet());
@@ -192,11 +332,11 @@ public class AUVManagerModel implements TreeModel{
                     Object obj = (Object)auv_param.getAllVariables().get(elem);
                     return new HashMapWrapper(obj,elem);
                 }else if(i > index){
-                    return "null";
+                    return null;
                 }
                 i++;
             }
-            return "null";
+            return null;
         }else if(parent instanceof PhysicalExchanger){
             PhysicalExchanger pe = (PhysicalExchanger)parent;
             if(index == 0){
@@ -216,13 +356,13 @@ public class AUVManagerModel implements TreeModel{
                 Manipulating mani = (Manipulating)pe;
                 return new HashMapWrapper(mani.getSlavesNames(),"Slaves");
             }
-            return "null";
+            return null;
         }else if(parent instanceof Accumulator){
             Accumulator acc = (Accumulator)parent;
             if(index == 0){
                 return new HashMapWrapper(acc.getAllVariables(),"Variables");
             }
-            return "null";
+            return null;
         }else if(parent instanceof HashMap){
             HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
             SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
@@ -234,11 +374,11 @@ public class AUVManagerModel implements TreeModel{
                     Object obj = (Object)hashmap.get(elem);
                     return new HashMapWrapper(obj,elem);
                 }else if(i > index){
-                    return "null";
+                    return null;
                 }
                 i++;
             }
-            return "null";
+            return null;
         }else if(parent instanceof List){
             List list = (List)parent;
             Collections.sort(list);
@@ -253,7 +393,7 @@ public class AUVManagerModel implements TreeModel{
             }else if (index == 2){
                 return new HashMapWrapper(new LeafWrapper(vec.getZ()),"Z");
             }
-            return "null";
+            return null;
         }else if(parent instanceof ColorRGBA){
             ColorRGBA color = (ColorRGBA)parent;
             if(index == 0){
@@ -265,7 +405,7 @@ public class AUVManagerModel implements TreeModel{
             }else if (index == 3){
                 return new HashMapWrapper(new LeafWrapper(color.getAlpha()),"A");
             }
-            return "null";
+            return null;
         }else if(parent instanceof HashMapWrapper){
             HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
             return getChild(hashmapwrap.getUserData(), index); 
@@ -283,7 +423,7 @@ public class AUVManagerModel implements TreeModel{
         }else if(parent instanceof String){
             return (String)parent;
         }else{
-            return "test: " + index;
+            return null;
         }
     }
 

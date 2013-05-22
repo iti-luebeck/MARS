@@ -13,6 +13,7 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.system.awt.AwtPanel;
+import com.sun.corba.se.spi.orbutil.fsm.Input;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.controls.LayoutFactory;
@@ -37,6 +38,7 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -270,9 +272,28 @@ public class MARSView extends FrameView {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    RayBasedSensorView sonarView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
-                    if(sonarView != null){
-                        sonarView.updateData(data, lastHeadPosition, son.getScanning_resolution());  
+                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
+                    if(rayBasedSensorView != null){
+                        rayBasedSensorView.updateData(data, lastHeadPosition, son.getScanning_resolution());  
+                    }
+                }
+            }
+        );
+    }
+    
+        /**
+     * 
+     * @param data
+     * @param lastHeadPosition
+     * @param son
+     */
+    public void initRayBasedData(final float[] data, final float lastHeadPosition, final RayBasedSensor son){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
+                    if(rayBasedSensorView != null){
+                        rayBasedSensorView.updateInstantData(data, lastHeadPosition, son.getScanning_resolution());  
                     }
                 }
             }
@@ -1462,6 +1483,14 @@ public class MARSView extends FrameView {
         (TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         auv_tree.setDragEnabled(true);
         auv_tree.setName("auv_tree"); // NOI18N
+        auv_tree.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                auv_treeTreeWillCollapse(evt);
+            }
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                auv_treeTreeWillExpand(evt);
+            }
+        });
         auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 auv_treeMouseClicked(evt);
@@ -4496,6 +4525,37 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                     } 
                 }
             }else{
+                //expand/collapse all implementation
+                if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+                    if(ExpandedPath != null){
+                        treeExpand = false;
+                        auv_tree.expandPath(ExpandedPath);
+                        Object lastPathComponent = ExpandedPath.getLastPathComponent();
+                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
+                        for (int i = 0; i < childCount; i++) {
+                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
+                            TreePath pathByAddingChild = ExpandedPath.pathByAddingChild(child);
+                            auv_tree.expandPath(pathByAddingChild);
+                        }
+                        ExpandedPath = null;
+                        treeExpand = true;
+                    }
+                    /*if(CollapsedPath != null){
+                        treeCollapse = false;
+                        
+                        Object lastPathComponent = CollapsedPath.getLastPathComponent();
+                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
+                        for (int i = 0; i < childCount; i++) {
+                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
+                            TreePath pathByAddingChild = CollapsedPath.pathByAddingChild(child);
+                            auv_tree.collapsePath(pathByAddingChild);
+                        }
+                        auv_tree.collapsePath(CollapsedPath);//clean up
+                        CollapsedPath = null;
+                        treeCollapse = true;
+                    }*/
+                }
+                //clear the selected auvs
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(SimState.class) != null){
@@ -5258,6 +5318,18 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonLogStopMouseClicked
 
+    private void auv_treeTreeWillExpand(javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillExpand
+        if(treeExpand){
+            ExpandedPath = evt.getPath();
+        }
+    }//GEN-LAST:event_auv_treeTreeWillExpand
+
+    private void auv_treeTreeWillCollapse(javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillCollapse
+        /*if(treeCollapse){
+            CollapsedPath = evt.getPath();
+        }*/
+    }//GEN-LAST:event_auv_treeTreeWillCollapse
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
@@ -5547,6 +5619,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-
+    
+    //jtree stuff
+    private boolean treeExpand = true;
+    private boolean treeCollapse = true;
+    private TreePath ExpandedPath = null;
+    private TreePath CollapsedPath = null;
+    
     private JDialog aboutBox;
 }

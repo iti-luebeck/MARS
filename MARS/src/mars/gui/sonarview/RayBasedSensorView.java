@@ -20,6 +20,13 @@ public interface RayBasedSensorView {
     public void updateData(byte[] data, float lastHeadPosition, float resolution);
     /**
      * 
+     * @param data
+     * @param lastHeadPosition
+     * @param resolution
+     */
+    public void updateInstantData(float[] data, float lastHeadPosition, float resolution);
+    /**
+     * 
      * @param color
      */
     public void changeBackgroundColor(Color color);

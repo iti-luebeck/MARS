@@ -162,6 +162,8 @@
                                         <Property name="name" type="java.lang.String" value="auv_tree" noResource="true"/>
                                       </Properties>
                                       <Events>
+                                        <EventHandler event="treeWillCollapse" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="auv_treeTreeWillCollapse"/>
+                                        <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="auv_treeTreeWillExpand"/>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="auv_treeMouseClicked"/>
                                       </Events>
                                       <AuxValues>

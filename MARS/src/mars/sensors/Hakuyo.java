@@ -84,9 +84,9 @@ public class Hakuyo extends LaserScanner{
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
         
-        /*byte[] sonData = getRawData();
+        float[] instantData = getInstantData();
         float lastHeadPosition = getLastHeadPosition();
-        this.mars.getView().initRayBasedData(sonData,lastHeadPosition,this);*/
+        this.mars.getView().initRayBasedData(instantData,lastHeadPosition,this);
         fl.setAngleIncrement(getScanning_resolution());
         fl.setRangeMax(getMaxRange());
         fl.setRangeMin(getMinRange());
@@ -95,7 +95,7 @@ public class Hakuyo extends LaserScanner{
         fl.setAngleMax(getScanningAngleMax());
         fl.setAngleMin(getScanningAngleMin());
         
-        fl.setRanges(getInstantData());
+        fl.setRanges(instantData);
         
         if( publisher != null ){
             publisher.publish(fl);

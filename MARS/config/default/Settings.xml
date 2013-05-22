@@ -25,7 +25,7 @@
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">10</value>
                         </entry>
 						<entry xsi:type="myHashMapEntryTypeObject" key="ChaseCamZoomSensitivity">
-                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.1</value>
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.5</value>
                         </entry>
                     </value>
                 </entry>

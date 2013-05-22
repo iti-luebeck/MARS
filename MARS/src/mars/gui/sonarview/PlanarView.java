@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.MemoryImageSource;
+import java.util.Arrays;
 import javax.swing.JPanel;
 import mars.Helper.Helper;
 
@@ -68,6 +69,7 @@ public class PlanarView extends JPanel implements RayBasedSensorView{
      * @param lastHeadPosition
      * @param resolution  
      */
+    @Override
     public void updateData(byte[] data, float lastHeadPosition, float resolution){
         for (int i = 0 ; i < fHeight; i++) {
             Color newC = Helper.combineColors(bgcolor, hitColor, (float)data[i]);
@@ -81,6 +83,23 @@ public class PlanarView extends JPanel implements RayBasedSensorView{
        }
        drawRadarLine();
        this.repaint();
+    }
+    
+    @Override
+    public void updateInstantData(float[] data, float lastHeadPosition, float resolution){
+        
+        Arrays.fill(fPixels, (bgcolor.getAlpha() << 24) |  (bgcolor.getRed() << 16)  |  (bgcolor.getGreen() << 8 ) | bgcolor.getBlue());//clr array
+        
+        for (int i = 0; i < data.length; i++) {
+            int position = (int)((data[i]/4f)*fHeight);
+            if(i < fWidth){
+                Color newC = Helper.combineColors(bgcolor, hitColor, 255);
+                fPixels[position*fWidth+i] = (newC.getAlpha() << 24) |  (newC.getRed() << 16)  |  (newC.getGreen() << 8 ) | newC.getBlue();
+            }
+        }
+        mis.newPixels(0, 0, fWidth, fHeight);
+        
+        this.repaint();    
     }
     
     private void drawRadarLine(){

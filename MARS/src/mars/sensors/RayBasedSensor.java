@@ -738,6 +738,9 @@ public class RayBasedSensor extends Sensor{
     private float[] getOneRayInstantData(){
         int size = (int)Math.ceil((Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin()))/getScanning_resolution());
         float[] rayData = new float[size];
+        if(isDebug()){
+            debug_node.detachAllChildren();
+        }
         for (int i = 0; i < rayData.length; i++) {
             rayData[i] = getOneRayDataFloat()[0];            
         }
@@ -750,10 +753,15 @@ public class RayBasedSensor extends Sensor{
      */
     private float[] getOneRayDataFloat(){
         Vector3f ray_start = this.SonarStart.getWorldTranslation();
-        debug_node.detachAllChildren();
+        /*if(isDebug()){
+            debug_node.detachAllChildren();
+        }*/
         Quaternion beam_iteration_quaternion = new Quaternion();
 
-        beam_iteration_quaternion.fromAngles( 0f, scanning_iterations*(-1)*getScanning_resolution(), 0f);
+        int scanningSize = (int)Math.ceil((Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin()))/getScanning_resolution());
+        int scanningMiddle = scanningSize/2;
+        beam_iteration_quaternion.fromAngles( 0f, (scanning_iterations-scanningMiddle)*(-1)*getScanning_resolution(), 0f);
+        
         angle_node.setLocalRotation(beam_iteration_quaternion);
         Vector3f ray_direction = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
 
@@ -793,7 +801,9 @@ public class RayBasedSensor extends Sensor{
      */
     private byte[] getOneRayData(){
         Vector3f ray_start = this.SonarStart.getWorldTranslation();
-        debug_node.detachAllChildren();
+        if(isDebug()){
+            debug_node.detachAllChildren();
+        }
         Quaternion beam_iteration_quaternion = new Quaternion();
 
         beam_iteration_quaternion.fromAngles( 0f, scanning_iterations*(-1)*getScanning_resolution(), 0f);

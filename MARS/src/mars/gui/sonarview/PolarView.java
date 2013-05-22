@@ -80,6 +80,10 @@ public class PolarView extends JPanel implements RayBasedSensorView{
         this.repaint();
     }
     
+    public void updateInstantData(float[] data, float lastHeadPosition, float resolution){
+        
+    }
+    
     private void drawRadarLine(int dataLength, float lastHeadPosition, float resolution){
         AffineTransform trans = new AffineTransform();
         trans.setToRotation(lastHeadPosition + resolution, 252, 252);
