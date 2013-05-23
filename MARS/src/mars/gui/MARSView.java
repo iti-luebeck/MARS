@@ -4432,7 +4432,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                             if(newColor != null){
                                 ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
                                 AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                mod.valueForPathChanged(auv_tree.getSelectionPath(), newColorRGBA);
+                                mod.valueForPathChanged(selPath, newColorRGBA);
                             }
                          }else if (hashwrap.getUserData() instanceof PhysicalExchanger) {   
                             jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
