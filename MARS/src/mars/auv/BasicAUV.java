@@ -619,10 +619,10 @@ public class BasicAUV implements AUV,SceneProcessor{
                     ((UnderwaterModem)element).setCommunicationManager(com_manager);//is needed for filters
                 }
                 if(element instanceof InfraRedSensor){
-                    ((InfraRedSensor)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
+                    ((InfraRedSensor)element).setDetectable(simstate.getSonarDetectableNode());//is needed for filters
                 }  
                 if(element instanceof RayBasedSensor){
-                    ((RayBasedSensor)element).setDetectable((com.jme3.scene.Node)mars.getRootNode().getChild("terrain"));//is needed for filters
+                    ((RayBasedSensor)element).setDetectable(simstate.getSonarDetectableNode());//is needed for filters
                 } 
                 if(element instanceof TerrainSender){
                     ((TerrainSender)element).setIniter(initer);
