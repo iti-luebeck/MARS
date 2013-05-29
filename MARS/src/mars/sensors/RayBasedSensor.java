@@ -87,7 +87,7 @@ public class RayBasedSensor extends Sensor{
     private boolean Scanning = false;
 
     private float scanning_resolution = (float)(3f*(Math.PI/180f));//(float)Math.PI/4f;// when it's a scanning sonar this value defines the scanning resolution (in radiant)
-    private int scanning_iterations = 0;
+    private int scanning_iterations = 1;
     private float last_head_position = 0f;
 
     private int ScanningGain = 50;
@@ -763,6 +763,7 @@ public class RayBasedSensor extends Sensor{
 
         int scanningSize = (int)Math.ceil((Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin()))/getScanning_resolution());
         int scanningMiddle = scanningSize/2;
+        float test = (scanning_iterations-scanningMiddle)*(-1)*getScanning_resolution();
         beam_iteration_quaternion.fromAngles( 0f, (scanning_iterations-scanningMiddle)*(-1)*getScanning_resolution(), 0f);
         
         angle_node.setLocalRotation(beam_iteration_quaternion);
