@@ -645,6 +645,9 @@ public class RayBasedSensor extends Sensor{
 
         CollisionResults results = new CollisionResults();
         float[] arr_ret = new float[2];
+        //default value when nothing hit (-1f)
+        arr_ret[0] = -1f;
+        arr_ret[1] = -1f;
         Vector3f first = Vector3f.ZERO;
         Vector3f ray_start = start;
         Vector3f ray_direction = direction;
@@ -872,19 +875,21 @@ public class RayBasedSensor extends Sensor{
     }
 
     private void addScanGainToArray(byte[] arr_ret, float[] sonar_data){
-        int sonar_array_distance =(int)(((ReturnDataLength)/getMaxRange())*sonar_data[0]);
-        if( (arr_ret[sonar_array_distance] < 127) && sonar_data[0]!=0.0f ){//is there enough space to add?
-            int sonar_array_distance_intensity = getScanning_gain();
-            if(isAngular_damping()){
-                sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * getScanning_gain() * getAngular_factor());//angle damping
-            }
-            if(isLength_damping()){
-                sonar_array_distance_intensity = (int) (sonar_array_distance_intensity * (sonar_data[0] / getMaxRange()) * getLength_factor()); //length damping
-            }
-            if(arr_ret[sonar_array_distance] <= (byte)(127-sonar_array_distance_intensity)){//genug platz für full gain
-                 arr_ret[sonar_array_distance] = (byte)(arr_ret[sonar_array_distance] + (byte)sonar_array_distance_intensity);
-            }else{
-                arr_ret[sonar_array_distance] = (byte)(127);
+        if(sonar_data[0] != -1f || sonar_data[1] != -1f){
+            int sonar_array_distance =(int)(((ReturnDataLength)/getMaxRange())*sonar_data[0]);
+            if( (arr_ret[sonar_array_distance] < 127) && sonar_data[0]!=0.0f ){//is there enough space to add?
+                int sonar_array_distance_intensity = getScanning_gain();
+                if(isAngular_damping()){
+                    sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * getScanning_gain() * getAngular_factor());//angle damping
+                }
+                if(isLength_damping()){
+                    sonar_array_distance_intensity = (int) (sonar_array_distance_intensity * (sonar_data[0] / getMaxRange()) * getLength_factor()); //length damping
+                }
+                if(arr_ret[sonar_array_distance] <= (byte)(127-sonar_array_distance_intensity)){//genug platz für full gain
+                     arr_ret[sonar_array_distance] = (byte)(arr_ret[sonar_array_distance] + (byte)sonar_array_distance_intensity);
+                }else{
+                    arr_ret[sonar_array_distance] = (byte)(127);
+                }
             }
         }
     }
