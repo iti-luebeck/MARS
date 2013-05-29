@@ -6,14 +6,10 @@ package mars.gui;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import mars.PhysicalEnvironment;
 import mars.xml.HashMapEntry;
@@ -22,10 +18,9 @@ import mars.xml.HashMapEntry;
  *
  * @author Thomas Tosik
  */
-public class PhysicalEnvironmentModel implements TreeModel{
+public class PhysicalEnvironmentModel extends GenericTreeModel{
 
     private final PhysicalEnvironment penv;
-    private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
             
     /**
      * 
@@ -35,82 +30,26 @@ public class PhysicalEnvironmentModel implements TreeModel{
         this.penv = penv;
     }
 
-    public void removeTreeModelListener(TreeModelListener l) {
-        treeModelListeners.remove(l);
-    }
-
-    public boolean isLeaf(Object node) {
-        if(node instanceof PhysicalEnvironment){
-            return false;
-        }else if(node instanceof HashMap){
-            return false;
-        }else if(node instanceof HashMapWrapper){
-            HashMapWrapper hashmapwrap = (HashMapWrapper)node;
-            //return isLeaf(hashmapwrap.getUserData());
-            return false;
-        }else if(node instanceof Vector3f){
-            return false;
-        }else if(node instanceof ColorRGBA){
-            return false;
-        }else if(node instanceof LeafWrapper){
-            return false;
-        }else if(node instanceof Float){
-            return true;
-        }else if(node instanceof Double){
-            return true;
-        }else if(node instanceof Integer){
-            return true;
-        }else if(node instanceof Boolean){
-            return true;
-        }else if(node instanceof String){
-            return true;
-        }else{
-            return true;
-        }            
-    }
-
+    @Override
     public Object getRoot() {
         return penv;
     }
 
-    public int getIndexOfChild(Object parent, Object child) {
-        System.out.println(parent + "/" + child);
-        return 1;
-    }
-
+    @Override
     public int getChildCount(Object parent) {
-        if(parent instanceof PhysicalEnvironment){
-            return penv.getAllEnvironment().size();
-        }else if(parent instanceof HashMap){
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
-            return hashmap.size();
-        }else if(parent instanceof HashMapWrapper){
-            HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
-            if(hashmapwrap.getUserData() instanceof HashMapEntry){
-                return getChildCount(((HashMapEntry)hashmapwrap.getUserData()).getValue());
+        int childCount = super.getChildCount(parent);
+        if(childCount == 0){
+            if(parent instanceof PhysicalEnvironment){
+                return penv.getAllEnvironment().size();
+            }else{
+                return childCount;
             }
-            return getChildCount(hashmapwrap.getUserData());
-        }else if(parent instanceof Vector3f){
-            return 3;
-        }else if(parent instanceof ColorRGBA){
-            return 4;
-        }else if(parent instanceof Float){
-            return 1;
-        }else if(parent instanceof Double){
-            return 1;
-        }else if(parent instanceof Boolean){
-            return 1;
-        }else if(parent instanceof Integer){
-            return 1;
-        }else if(parent instanceof LeafWrapper){
-            return 1;
-        }else if(parent instanceof String){
-            return 1;
         }else{
-            return 0;
+            return childCount;
         }
     }
 
+    @Override
     public Object getChild(Object parent, int index) {
         if(parent instanceof PhysicalEnvironment){
             SortedSet<String> sortedset= new TreeSet<String>(penv.getAllEnvironment().keySet());
@@ -188,28 +127,9 @@ public class PhysicalEnvironmentModel implements TreeModel{
             return "test: " + index;
         }
     }
-
-    public void addTreeModelListener(TreeModelListener l) {
-        treeModelListeners.add(l);
-    }
-
-    public void valueForPathChanged(TreePath path, Object newValue) {
-        //System.out.println("*** valueForPathChanged : "
-        //                   + path + " --> " + newValue);
-        
-        //save the new value
-        saveValue(path, path, newValue);
-        
-        //dont forget to tell the listeners that something has changed
-        Iterator iter = treeModelListeners.iterator();
-        while(iter.hasNext() ) {
-            TreeModelListener treeModelListener = (TreeModelListener)iter.next();
-            treeModelListener.treeNodesChanged(new TreeModelEvent(this, path));
-            treeModelListener.treeStructureChanged(new TreeModelEvent(this, path));
-        }
-    }
     
-    private void saveValue(TreePath originalPath, TreePath path, Object value){
+    @Override
+    protected void saveValue(TreePath originalPath, TreePath path, Object value){
         Object obj = path.getLastPathComponent();
         if(!(obj instanceof HashMapWrapper)){
             saveValue(originalPath,path.getParentPath(),value);

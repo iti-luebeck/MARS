@@ -1445,6 +1445,12 @@ public class MARSView extends FrameView {
         jSeparator13 = new javax.swing.JToolBar.Separator();
         jLabel40 = new javax.swing.JLabel();
         jTextFieldLogTime = new javax.swing.JTextField();
+        forceValuePopUp = new javax.swing.JPopupMenu();
+        forceValuePopUpForce = new javax.swing.JMenuItem();
+        forceValuePopUpAUV = new javax.swing.JMenu();
+        forceValuePopUpAll = new javax.swing.JMenuItem();
+        forceValuePopUpClass = new javax.swing.JMenu();
+        forceValuePopUpAllClass = new javax.swing.JMenuItem();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -3832,6 +3838,40 @@ public class MARSView extends FrameView {
 
         jToolBar2.getAccessibleContext().setAccessibleName(resourceMap.getString("jToolBar2.AccessibleContext.accessibleName")); // NOI18N
 
+        forceValuePopUp.setName("forceValuePopUp"); // NOI18N
+
+        forceValuePopUpForce.setText(resourceMap.getString("forceValuePopUpForce.text")); // NOI18N
+        forceValuePopUpForce.setName("forceValuePopUpForce"); // NOI18N
+        forceValuePopUpForce.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forceValuePopUpForceActionPerformed(evt);
+            }
+        });
+        forceValuePopUp.add(forceValuePopUpForce);
+
+        forceValuePopUpAUV.setText(resourceMap.getString("forceValuePopUpAUV.text")); // NOI18N
+        forceValuePopUpAUV.setName("forceValuePopUpAUV"); // NOI18N
+
+        forceValuePopUpAll.setText(resourceMap.getString("forceValuePopUpAll.text")); // NOI18N
+        forceValuePopUpAll.setName("forceValuePopUpAll"); // NOI18N
+        forceValuePopUpAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forceValuePopUpAllActionPerformed(evt);
+            }
+        });
+        forceValuePopUpAUV.add(forceValuePopUpAll);
+
+        forceValuePopUp.add(forceValuePopUpAUV);
+
+        forceValuePopUpClass.setText(resourceMap.getString("forceValuePopUpClass.text")); // NOI18N
+        forceValuePopUpClass.setName("forceValuePopUpClass"); // NOI18N
+
+        forceValuePopUpAllClass.setText(resourceMap.getString("forceValuePopUpAllClass.text")); // NOI18N
+        forceValuePopUpAllClass.setName("forceValuePopUpAllClass"); // NOI18N
+        forceValuePopUpClass.add(forceValuePopUpAllClass);
+
+        forceValuePopUp.add(forceValuePopUpClass);
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(LogPlay);
@@ -4405,64 +4445,72 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         if (evt.getButton() == MouseEvent.BUTTON3) {   
             int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
             if (selRow != -1) { 
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());   
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
+                auv_tree.setSelectionPath(selPath);
                 //System.out.println(selPath.toString());         
                 //System.out.println(selPath.getLastPathComponent().toString()); 
                 try {  
-                    if (selPath.getLastPathComponent() instanceof AUV) { 
-                        AUV auv = (AUV)selPath.getLastPathComponent();
-                        enable_auv.setSelected(auv.getAuv_param().isEnabled());
-                        auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
-                    }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                         if(hashwrap.getUserData() instanceof Boolean){
-                             if((Boolean)hashwrap.getUserData()){
-                                 booleanPopUpEnable.setVisible(false);
-                                 booleanPopUpDisable.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable.setVisible(true);
-                                 booleanPopUpDisable.setVisible(false);
-                             }
-                             booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                         }else if(hashwrap.getUserData() instanceof ColorRGBA){
-                            ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
-                            Color newColor = color_dialog.showDialog(getRootPane(),
-                                             "Choose Color for " + hashwrap.getName(),
-                                             new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                            if(newColor != null){
-                                ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
-                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                mod.valueForPathChanged(selPath, newColorRGBA);
-                            }
-                         }else if (hashwrap.getUserData() instanceof PhysicalExchanger) {   
-                            jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
-                            if(hashwrap.getUserData() instanceof RayBasedSensor){
-                                addDataToChart.setVisible(false);
-                                RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
-                                lastSelectedRayBasedSensor = rays;
-                                if(rays.isScanning()){
-                                    viewSonarPolar.setVisible(true);
-                                    viewSonarPlanar.setVisible(true);
-                                }else{
-                                    viewSonarPolar.setVisible(false);
-                                    viewSonarPlanar.setVisible(true);
+                    if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {// ctrl key used (force value)
+                        //dont forget to clean and populate this popup with auvs
+                        
+                        //show it
+                        forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }else{
+                        if (selPath.getLastPathComponent() instanceof AUV) { 
+                            AUV auv = (AUV)selPath.getLastPathComponent();
+                            enable_auv.setSelected(auv.getAuv_param().isEnabled());
+                            auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
+                        }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                             HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                             if(hashwrap.getUserData() instanceof Boolean){
+                                 if((Boolean)hashwrap.getUserData()){
+                                     booleanPopUpEnable.setVisible(false);
+                                     booleanPopUpDisable.setVisible(true);
+                                 }else{
+                                     booleanPopUpEnable.setVisible(true);
+                                     booleanPopUpDisable.setVisible(false);
+                                 }
+                                 booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                             }else if(hashwrap.getUserData() instanceof ColorRGBA){
+                                ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
+                                Color newColor = color_dialog.showDialog(getRootPane(),
+                                                 "Choose Color for " + hashwrap.getName(),
+                                                 new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                                if(newColor != null){
+                                    ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
+                                    AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                                    mod.valueForPathChanged(selPath, newColorRGBA);
                                 }
-                            }else{
-                                addDataToChart.setVisible(true);
-                                viewSonarPolar.setVisible(false);
-                                viewSonarPlanar.setVisible(false);
-                            }
-                         }
-                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                        if((Boolean)selPath.getLastPathComponent()){
-                                 booleanPopUpEnable.setVisible(false);
-                                 booleanPopUpDisable.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable.setVisible(true);
-                                 booleanPopUpDisable.setVisible(false);
+                             }else if (hashwrap.getUserData() instanceof PhysicalExchanger) {   
+                                jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
+                                if(hashwrap.getUserData() instanceof RayBasedSensor){
+                                    addDataToChart.setVisible(false);
+                                    RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
+                                    lastSelectedRayBasedSensor = rays;
+                                    if(rays.isScanning()){
+                                        viewSonarPolar.setVisible(true);
+                                        viewSonarPlanar.setVisible(true);
+                                    }else{
+                                        viewSonarPolar.setVisible(false);
+                                        viewSonarPlanar.setVisible(true);
+                                    }
+                                }else{
+                                    addDataToChart.setVisible(true);
+                                    viewSonarPolar.setVisible(false);
+                                    viewSonarPlanar.setVisible(false);
+                                }
                              }
-                        booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }      
+                        }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                            if((Boolean)selPath.getLastPathComponent()){
+                                     booleanPopUpEnable.setVisible(false);
+                                     booleanPopUpDisable.setVisible(true);
+                                 }else{
+                                     booleanPopUpEnable.setVisible(true);
+                                     booleanPopUpDisable.setVisible(false);
+                                 }
+                            booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }   
+                    }
                 } catch (IllegalArgumentException e) {       
                 }         
             }       
@@ -5330,6 +5378,29 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }*/
     }//GEN-LAST:event_auv_treeTreeWillCollapse
 
+    private void forceValuePopUpForceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpForceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_forceValuePopUpForceActionPerformed
+
+    private void forceValuePopUpAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpAllActionPerformed
+        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+        HashMap<String, AUV> auvs = auvManager.getAUVs();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            Object pathComponent = selectionPath.getPathComponent(1);
+            if(auv != selectionPath.getPathComponent(1)){ //not myself
+                Object[] path = selectionPath.getPath();
+                path[1] = auv;
+                path[2] = auv.getAuv_param();
+                //mod.get
+                TreePath newPath = new TreePath(path);
+                mod.valueForPathChanged(newPath, lastSelectedPathComponent);
+            }
+        }
+    }//GEN-LAST:event_forceValuePopUpAllActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
     private javax.swing.JButton Cancel1;
@@ -5382,6 +5453,12 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton floatDialog_Confirm;
     private javax.swing.JTextField floatDialog_x;
     private javax.swing.JDialog float_dialog;
+    private javax.swing.JPopupMenu forceValuePopUp;
+    private javax.swing.JMenu forceValuePopUpAUV;
+    private javax.swing.JMenuItem forceValuePopUpAll;
+    private javax.swing.JMenuItem forceValuePopUpAllClass;
+    private javax.swing.JMenu forceValuePopUpClass;
+    private javax.swing.JMenuItem forceValuePopUpForce;
     private javax.swing.JMenuItem help;
     private javax.swing.JDialog help_dialog;
     private javax.swing.JOptionPane help_optionpane;
