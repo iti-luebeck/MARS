@@ -4623,6 +4623,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
             if (selRow != -1) { 
                 TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
+                simob_tree.setSelectionPath(selPath);
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString()); 
                 try {  
@@ -5389,16 +5390,24 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         HashMap<String, AUV> auvs = auvManager.getAUVs();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            Object pathComponent = selectionPath.getPathComponent(1);
-            if(auv != selectionPath.getPathComponent(1)){ //not myself
+            AUV oauv = (AUV)selectionPath.getPathComponent(1);
+            if(auv != oauv){ //not myself
                 Object[] path = selectionPath.getPath();
-                path[1] = auv;
+                
+                
+                path[3] = mod.getChild(auv.getAuv_param(), mod.getIndexOfChild(oauv.getAuv_param(), selectionPath.getPath()[3]));
+                path[4] = mod.getChild(path[3], mod.getIndexOfChild(selectionPath.getPath()[3], selectionPath.getPath()[4]));
+                path[5] = mod.getChild(path[4], mod.getIndexOfChild(selectionPath.getPath()[4], selectionPath.getPath()[5]));
+                 
                 path[2] = auv.getAuv_param();
-                //mod.get
+                path[1] = auv;
+                
                 TreePath newPath = new TreePath(path);
                 mod.valueForPathChanged(newPath, lastSelectedPathComponent);
+                //auv_tree.updateUI();
             }
         }
+        auv_tree.updateUI();
     }//GEN-LAST:event_forceValuePopUpAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.states.SimState;
@@ -29,10 +30,11 @@ import mars.states.SimState;
 public class SimObjectManager {
     //auv HashMap to store and load auv's
     private HashMap<String,SimObject> simobs = new HashMap<String,SimObject> ();
+    @Deprecated
     private Node SonarDetectableNode;
+    private Collider RayDetectable;
     private Node sceneReflectionNode;
     private Node SimObNode;
-    private Node SimObPickingNode;
     private MARS_Main mars;
     private AssetManager assetManager;
     private BulletAppState bulletAppState;
@@ -60,9 +62,9 @@ public class SimObjectManager {
         this.rootNode = simstate.getRootNode();
         this.assetManager = simstate.getAssetManager();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
+        this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.SimObNode = simstate.getSimObNode();
-        this.SimObPickingNode = simstate.getSimObPickingNode();
         this.bulletAppState = simstate.getBulletAppState();
         this.mars_settings = simstate.getMARSSettings();
     }
@@ -220,10 +222,9 @@ public class SimObjectManager {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
             if(simob.isEnabled()){
                 if(simob.isSonar_detectable()){
-                    SonarDetectableNode.attachChild(simob.getSimObNode());
-                }else{
-                    node.attachChild(simob.getSimObNode());
+                    RayDetectable.attachChild(simob.getSimObNode());
                 }
+                node.attachChild(simob.getSimObNode());
             }
     }
     

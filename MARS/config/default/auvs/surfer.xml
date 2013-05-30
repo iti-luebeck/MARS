@@ -166,7 +166,7 @@
                 <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.1</value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeObject" key="flow_updaterate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeHashMap" key="Collision" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value>

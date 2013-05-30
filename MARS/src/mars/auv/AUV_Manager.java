@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.Collider;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
@@ -36,7 +37,9 @@ public class AUV_Manager {
 
     //auv HashMap to store and load auv's
     private HashMap<String,AUV> auvs = new HashMap<String,AUV> ();
+    @Deprecated
     private Node SonarDetectableNode;
+    private Collider RayDetectable;
     private Node sceneReflectionNode;
     private Node AUVsNode;
     private MARS_Main mars;
@@ -69,6 +72,7 @@ public class AUV_Manager {
         this.mars = simstate.getMARS();
         this.rootNode = simstate.getRootNode();
         this.SonarDetectableNode = simstate.getSonarDetectableNode();
+        this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.AUVsNode = simstate.getAUVsNode();
         this.bulletAppState = simstate.getBulletAppState();
@@ -541,7 +545,8 @@ public class AUV_Manager {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
 
         node.attachChild(auv.getSelectionNode());
-
+        
+        /*
         ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
         Iterator iter = sons.iterator();
         while(iter.hasNext() ) {
@@ -554,7 +559,7 @@ public class AUV_Manager {
         while(iter2.hasNext() ) {
             InfraRedSensor infra = (InfraRedSensor)iter2.next();
             infra.setDetectable(SonarDetectableNode);
-        }
+        }*/
     }
 
     /**
@@ -567,12 +572,13 @@ public class AUV_Manager {
             AUV auv = (AUV)auvs.get(elem);
             node.attachChild(auv.getSelectionNode());
 
+            /*
             ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
             Iterator iter = sons.iterator();
             while(iter.hasNext() ) {
                 Sonar son = (Sonar)iter.next();
                 son.setDetectable(SonarDetectableNode);
-            }
+            }*/
         }
     }
 

@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import mars.Collider;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
@@ -42,7 +43,9 @@ public class InfraRedSensor extends Sensor{
      */
     protected Geometry End;
 
+    @Deprecated
     private Node detectable;
+    private Collider RayDetectable;
     
     //ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
@@ -76,6 +79,7 @@ public class InfraRedSensor extends Sensor{
         } catch (IOException e) { }
 
         this.detectable = detectable;
+        this.RayDetectable = simstate.getCollider();
         this.pe = pe;
     }
 
@@ -97,6 +101,7 @@ public class InfraRedSensor extends Sensor{
         } catch (IOException e) { }
 
         this.detectable = detectable;
+        this.RayDetectable = simstate.getCollider();
     }
     
     public InfraRedSensor(InfraRedSensor sensor){
@@ -220,6 +225,7 @@ public class InfraRedSensor extends Sensor{
      *
      * @return
      */
+    @Deprecated
     public Node getDetectable() {
         return detectable;
     }
@@ -228,8 +234,25 @@ public class InfraRedSensor extends Sensor{
      * 
      * @param detectable
      */
+    @Deprecated
     public void setDetectable(Node detectable) {
         this.detectable = detectable;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Collider getCollider() {
+        return RayDetectable;
+    }
+
+    /**
+     * 
+     * @param detectable
+     */
+    public void setCollider(Collider RayDetectable) {
+        this.RayDetectable = RayDetectable;
     }
 
     /**
@@ -293,7 +316,7 @@ public class InfraRedSensor extends Sensor{
     }
     
      private float[] getRawRayData(Vector3f start, Vector3f direction){
-        if(detectable == null){
+        if(RayDetectable == null){
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "No detectable Node/Object added...", "");
             return new float[2];
         }
@@ -307,7 +330,7 @@ public class InfraRedSensor extends Sensor{
 
         Ray ray = new Ray(ray_start, ray_direction);
 
-        detectable.collideWith(ray, results);
+        RayDetectable.collideWith(ray, results);
         //System.out.println(results2.size());
         for (int i = 0; i < results.size(); i++) {
             float distance = results.getCollision(i).getDistance();

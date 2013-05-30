@@ -89,6 +89,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import javax.swing.TransferHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import mars.Collider;
 import mars.MyDebugAppStateFilter;
 import mars.auv.WayPoints;
 import mars.recorder.RecordControl;
@@ -139,11 +140,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
+    @Deprecated
     private Node SonarDetectableNode = new Node("SonarDetectableNode");
+    private Collider RayDetectable = new Collider();
     private Node AUVsNode = new Node("AUVNode");
     private Node SimObNode = new Node("SimObNode");
-    @Deprecated
-    private Node SimObPickingNode = new Node("SimObPickingNode");
     //warter currents
     private Node currents = new Node("currents");
     
@@ -288,7 +289,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         mark8.updateGeometricState();
         rootNode.attachChild(mark8);*/
             
-            sceneReflectionNode.attachChild(SonarDetectableNode);
+            //sceneReflectionNode.attachChild(SonarDetectableNode);
             sceneReflectionNode.attachChild(AUVsNode);
             sceneReflectionNode.attachChild(SimObNode);
             rootNode.attachChild(sceneReflectionNode);
@@ -1285,11 +1286,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public Node getAUVsNode() {
         return AUVsNode;
     }
-
-    /**
-     *
-     * @return
-     */
+  
+    @Deprecated
     public Node getSonarDetectableNode() {
         return SonarDetectableNode;
     }
@@ -1298,18 +1296,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      *
      * @return
      */
-    public Node getSimObNode() {
-        return SimObNode;
+    public Collider getCollider() {
+        return RayDetectable;
     }
     
     /**
      *
      * @return
-     * @deprecated 
      */
-    @Deprecated
-    public Node getSimObPickingNode() {
-        return SimObPickingNode;
+    public Node getSimObNode() {
+        return SimObNode;
     }
 
     /**

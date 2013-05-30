@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import mars.Collider;
 import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
@@ -50,8 +51,9 @@ public class RayBasedSensor extends Sensor{
      */
     protected Geometry SonarUp;
 
-
+    @Deprecated
     private Node detectable;
+    private Collider RayDetectable;
     /**
      *
      */
@@ -134,6 +136,7 @@ public class RayBasedSensor extends Sensor{
         } catch (IOException e) { }
 
         this.detectable = detectable;
+        this.RayDetectable = simstate.getCollider();
         this.pe = pe;
         rootNode.attachChild(debug_node);
     }
@@ -155,6 +158,7 @@ public class RayBasedSensor extends Sensor{
         } catch (IOException e) { }
 
         this.detectable = detectable;
+        this.RayDetectable = simstate.getCollider();
         rootNode.attachChild(debug_node);
     }
     
@@ -340,6 +344,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
+    @Deprecated
     public Node getDetectable() {
         return detectable;
     }
@@ -348,8 +353,25 @@ public class RayBasedSensor extends Sensor{
      * 
      * @param detectable
      */
+    @Deprecated
     public void setDetectable(Node detectable) {
         this.detectable = detectable;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Collider getCollider() {
+        return RayDetectable;
+    }
+
+    /**
+     * 
+     * @param detectable
+     */
+    public void setCollider(Collider RayDetectable) {
+        this.RayDetectable = RayDetectable;
     }
 
     /**
@@ -638,7 +660,7 @@ public class RayBasedSensor extends Sensor{
     }
 
     protected float[] getRawRayData(Vector3f start, Vector3f direction){
-        if(detectable == null){
+        if(RayDetectable == null){
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "No detectable Node/Object added...", "");
             return new float[2];
         }
@@ -656,7 +678,7 @@ public class RayBasedSensor extends Sensor{
 
         Ray ray = new Ray(ray_start, ray_direction);
 
-        detectable.collideWith(ray, results);
+        RayDetectable.collideWith(ray, results);
         //System.out.println(results2.size());
         for (int i = 0; i < results.size(); i++) {
             float distance = results.getCollision(i).getDistance();
