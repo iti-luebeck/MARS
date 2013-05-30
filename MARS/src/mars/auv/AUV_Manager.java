@@ -533,6 +533,7 @@ public class AUV_Manager {
 
     private void removeAUVFromScene(AUV auv){
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
+        RayDetectable.detachChild(auv.getSelectionNode());
         auv.cleanupOffscreenView();
         auv.getSelectionNode().removeFromParent();
     }
@@ -543,23 +544,10 @@ public class AUV_Manager {
      */
     private void addAUVToNode(AUV auv, Node node){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
-
-        node.attachChild(auv.getSelectionNode());
-        
-        /*
-        ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
-        Iterator iter = sons.iterator();
-        while(iter.hasNext() ) {
-            Sonar son = (Sonar)iter.next();
-            son.setDetectable(SonarDetectableNode);
+        if(auv.getAuv_param().isRayDetectable()){
+            RayDetectable.attachChild(auv.getSelectionNode());
         }
-        
-        ArrayList infras = auv.getSensorsOfClass(InfraRedSensor.class.getName());
-        Iterator iter2 = infras.iterator();
-        while(iter2.hasNext() ) {
-            InfraRedSensor infra = (InfraRedSensor)iter2.next();
-            infra.setDetectable(SonarDetectableNode);
-        }*/
+        node.attachChild(auv.getSelectionNode());
     }
 
     /**
@@ -570,15 +558,7 @@ public class AUV_Manager {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            node.attachChild(auv.getSelectionNode());
-
-            /*
-            ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
-            Iterator iter = sons.iterator();
-            while(iter.hasNext() ) {
-                Sonar son = (Sonar)iter.next();
-                son.setDetectable(SonarDetectableNode);
-            }*/
+            addAUVToNode(auv,node);
         }
     }
 

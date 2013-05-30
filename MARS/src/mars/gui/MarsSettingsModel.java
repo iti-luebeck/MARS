@@ -6,10 +6,8 @@ package mars.gui;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.tree.TreePath;
@@ -52,82 +50,28 @@ public class MarsSettingsModel extends GenericTreeModel{
 
     @Override
     public Object getChild(Object parent, int index) {
-        if(parent instanceof MARS_Settings){
-            SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)settings.getSettings().get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return null;
+        Object child = super.getChild(parent,index);
+        if(child == null){
+            if(parent instanceof MARS_Settings){
+                SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());
+                Iterator<String> it = sortedset.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    String elem = it.next();
+                    if(i == index){
+                        Object obj = (Object)settings.getSettings().get(elem);
+                        return new HashMapWrapper(obj,elem);
+                    }else if(i > index){
+                        return null;
+                    }
+                    i++;
                 }
-                i++;
+                return null;
+            }else{
+                return child;
             }
-            return null;
-        }else if(parent instanceof HashMap){
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)hashmap.get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return null;
-                }
-                i++;
-            }
-            return null;
-        }else if(parent instanceof List){
-            List list = (List)parent;
-            Collections.sort(list);
-            Object object = list.get(index);
-            return object.toString();
-        }else if(parent instanceof Vector3f){
-            Vector3f vec = (Vector3f)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(vec.getX()),"X");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(vec.getY()),"Y");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(vec.getZ()),"Z");
-            }
-            return null;
-        }else if(parent instanceof ColorRGBA){
-            ColorRGBA color = (ColorRGBA)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(color.getRed()),"R");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(color.getGreen()),"G");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(color.getBlue()),"B");
-            }else if (index == 3){
-                return new HashMapWrapper(new LeafWrapper(color.getAlpha()),"A");
-            }
-            return null;
-        }else if(parent instanceof HashMapWrapper){
-            HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
-            return getChild(hashmapwrap.getUserData(), index); 
-        }else if(parent instanceof LeafWrapper){
-            LeafWrapper leafWrapper = (LeafWrapper)parent;
-            return getChild(leafWrapper.getUserData(), index); 
-        }else if(parent instanceof Float){
-            return (Float)parent;
-        }else if(parent instanceof Double){
-            return (Double)parent;
-        }else if(parent instanceof Boolean){
-            return (Boolean)parent;
-        }else if(parent instanceof Integer){
-            return (Integer)parent;
-        }else if(parent instanceof String){
-            return (String)parent;
         }else{
-            return null;
+            return child;
         }
     }
     

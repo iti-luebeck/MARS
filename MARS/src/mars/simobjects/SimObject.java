@@ -441,6 +441,7 @@ public class SimObject{
      *
      * @return
      */
+    @Deprecated
     public boolean isSonar_detectable() {
         return (Boolean)simob_variables.get("sonar_detectable");
     }
@@ -449,8 +450,25 @@ public class SimObject{
      *
      * @param sonar_detectable
      */
+    @Deprecated
     public void setSonar_detectable(boolean sonar_detectable) {
         simob_variables.put("sonar_detectable", sonar_detectable);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isRayDetectable() {
+        return (Boolean)simob_variables.get("ray_detectable");
+    }
+
+    /**
+     *
+     * @param sonar_detectable
+     */
+    public void setRayDetectable(boolean ray_detectable) {
+        simob_variables.put("ray_detectable", ray_detectable);
     }
 
     /**

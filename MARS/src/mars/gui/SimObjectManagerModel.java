@@ -51,93 +51,28 @@ public class SimObjectManagerModel extends GenericTreeModel{
 
     @Override
     public Object getChild(Object parent, int index) {
-        if(parent instanceof SimObjectManager){
-            SortedSet<String> sortedset= new TreeSet<String>(simobManager.getSimObjects().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    SimObject simob = (SimObject)simobManager.getSimObjects().get(elem);
-                    return simob;
-                }else if(i > index){
-                    return "null";
+        Object child = super.getChild(parent,index);
+        if(child == null){
+            if(parent instanceof SimObjectManager){
+                SortedSet<String> sortedset= new TreeSet<String>(simobManager.getSimObjects().keySet());
+                Iterator<String> it = sortedset.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    String elem = it.next();
+                    if(i == index){
+                        SimObject simob = (SimObject)simobManager.getSimObjects().get(elem);
+                        return simob;
+                    }else if(i > index){
+                        return null;
+                    }
+                    i++;
                 }
-                i++;
+                return null;
+            }else{
+                return child;
             }
-            return "null";
-        }else if(parent instanceof SimObject){
-            SimObject simob = (SimObject)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(simob.getAllVariables().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)simob.getAllVariables().get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return "null";
-                }
-                i++;
-            }
-            return "null";
-        }else if(parent instanceof HashMap){
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)hashmap.get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return "null";
-                }
-                i++;
-            }
-            return "null";
-        }else if(parent instanceof Vector3f){
-            Vector3f vec = (Vector3f)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(vec.getX()),"X");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(vec.getY()),"Y");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(vec.getZ()),"Z");
-            }
-            return "null";
-        }else if(parent instanceof ColorRGBA){
-            ColorRGBA color = (ColorRGBA)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(color.getRed()),"R");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(color.getGreen()),"G");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(color.getBlue()),"B");
-            }else if (index == 3){
-                return new HashMapWrapper(new LeafWrapper(color.getAlpha()),"A");
-            }
-            return "null";
-        }else if(parent instanceof HashMapWrapper){
-            HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
-            return getChild(hashmapwrap.getUserData(), index); 
-        }else if(parent instanceof LeafWrapper){
-            LeafWrapper leafWrapper = (LeafWrapper)parent;
-            return getChild(leafWrapper.getUserData(), index); 
-        }else if(parent instanceof Float){
-            return (Float)parent;
-        }else if(parent instanceof Double){
-            return (Double)parent;
-        }else if(parent instanceof Boolean){
-            return (Boolean)parent;
-        }else if(parent instanceof Integer){
-            return (Integer)parent;
-        }else if(parent instanceof String){
-            return (String)parent;
         }else{
-            return "test: " + index;
+            return child;
         }
     }
     

@@ -211,6 +211,7 @@ public class SimObjectManager {
 
     private void removeSimObjectFromScene(SimObject simob){
         bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
+        RayDetectable.detachChild(simob.getSpatial());
         simob.getSimObNode().removeFromParent();
     }
 
@@ -221,7 +222,7 @@ public class SimObjectManager {
     private void addSimObjectToNode(SimObject simob, Node node){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
             if(simob.isEnabled()){
-                if(simob.isSonar_detectable()){
+                if(simob.isRayDetectable()){
                     RayDetectable.attachChild(simob.getSimObNode());
                 }
                 node.attachChild(simob.getSimObNode());
@@ -250,7 +251,7 @@ public class SimObjectManager {
             SimObject simob = (SimObject)simobs.get(elem);
             if(simob.isEnabled()){
                 final Spatial final_spatial = simob.getSpatial();
-                if(simob.isSonar_detectable()){
+                if(simob.isRayDetectable()){
                     Future fut = mars.enqueue(new Callable() {
                         public Void call() throws Exception {
                             SonarDetectableNode.attachChild(final_spatial);

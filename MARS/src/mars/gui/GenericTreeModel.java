@@ -305,22 +305,7 @@ public class GenericTreeModel implements TreeModel{
 
     @Override
     public Object getChild(Object parent, int index) {
-        /*if(parent instanceof AUV_Manager){
-            SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    AUV auv = (AUV)auvManager.getAUVs().get(elem);
-                    return auv;
-                }else if(i > index){
-                    return null;
-                }
-                i++;
-            }
-            return null;
-        }else if(parent instanceof AUV){
+        if(parent instanceof AUV){
             AUV auv = (AUV)parent;
             if(index == 0){
                 return auv.getAuv_param();
@@ -330,6 +315,22 @@ public class GenericTreeModel implements TreeModel{
                 return new HashMapWrapper(auv.getActuators(),"Actuators");
             }else if (index == 3){
                 return new HashMapWrapper(auv.getAccumulators(),"Accumulators");
+            }
+            return null;
+        }else if(parent instanceof SimObject){
+            SimObject simob = (SimObject)parent;
+            SortedSet<String> sortedset= new TreeSet<String>(simob.getAllVariables().keySet());
+            Iterator<String> it = sortedset.iterator();
+            int i = 0;
+            while (it.hasNext()) {
+                String elem = it.next();
+                if(i == index){
+                    Object obj = (Object)simob.getAllVariables().get(elem);
+                    return new HashMapWrapper(obj,elem);
+                }else if(i > index){
+                    return null;
+                }
+                i++;
             }
             return null;
         }else if(parent instanceof AUV_Parameters){
@@ -420,6 +421,9 @@ public class GenericTreeModel implements TreeModel{
         }else if(parent instanceof HashMapWrapper){
             HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
             return getChild(hashmapwrap.getUserData(), index); 
+        }else if(parent instanceof HashMapEntry){
+            HashMapEntry hashent = (HashMapEntry)parent;
+            return getChild(hashent.getValue(), index); 
         }else if(parent instanceof LeafWrapper){
             LeafWrapper leafWrapper = (LeafWrapper)parent;
             return getChild(leafWrapper.getUserData(), index); 
@@ -435,7 +439,7 @@ public class GenericTreeModel implements TreeModel{
             return (String)parent;
         }else{
             return null;
-        }*/return null;
+        }
     }
 
     @Override

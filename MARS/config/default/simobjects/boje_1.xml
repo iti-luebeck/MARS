@@ -23,7 +23,7 @@
         <entry xsi:type="myHashMapEntryTypeObject" key="dnd_icon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">boje_1_dnd.png</value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeObject" key="sonar_detectable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeObject" key="ray_detectable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
         </entry>
         <entry xsi:type="myHashMapEntryTypeHashMap" key="Collision" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -37,16 +37,16 @@
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeVector3F" key="dimensions">
                     <value>
-                        <x>1.0</x>
-                        <y>1.0</y>
-                        <z>1.0</z>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
                     </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="type">
                     <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="collidable">
-                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="debug_collision">
                     <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>

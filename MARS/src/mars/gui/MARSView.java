@@ -4752,7 +4752,8 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             int selRow = pe_tree.getRowForLocation(evt.getX(), evt.getY());         
             //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
             if (selRow != -1) { 
-                TreePath selPath = pe_tree.getPathForLocation(evt.getX(), evt.getY());   
+                TreePath selPath = pe_tree.getPathForLocation(evt.getX(), evt.getY()); 
+                pe_tree.setSelectionPath(selPath);
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString());  
                 pe_tree.setSelectionPath(selPath);  
@@ -4831,6 +4832,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
             if (selRow != -1) { 
                 TreePath selPath = settings_tree.getPathForLocation(evt.getX(), evt.getY());   
+                settings_tree.setSelectionPath(selPath);
                 System.out.println(selPath.toString());         
                 System.out.println(selPath.getLastPathComponent().toString());   
                 try {  

@@ -6,27 +6,14 @@ package mars.gui;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import mars.Manipulating;
-import mars.PhysicalExchanger;
-import mars.accumulators.Accumulator;
-import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
-import mars.sensors.AmpereMeter;
-import mars.sensors.Sensor;
-import mars.sensors.VoltageMeter;
 
 /**
  * This is a TreeModel for the JTree
@@ -65,136 +52,28 @@ public class AUVManagerModel extends GenericTreeModel{
 
     @Override
     public Object getChild(Object parent, int index) {
-        if(parent instanceof AUV_Manager){
-            SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    AUV auv = (AUV)auvManager.getAUVs().get(elem);
-                    return auv;
-                }else if(i > index){
-                    return null;
+        Object child = super.getChild(parent,index);
+        if(child == null){
+            if(parent instanceof AUV_Manager){
+                SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
+                Iterator<String> it = sortedset.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    String elem = it.next();
+                    if(i == index){
+                        AUV auv = (AUV)auvManager.getAUVs().get(elem);
+                        return auv;
+                    }else if(i > index){
+                        return null;
+                    }
+                    i++;
                 }
-                i++;
+                return null;
+            }else{
+                return child;
             }
-            return null;
-        }else if(parent instanceof AUV){
-            AUV auv = (AUV)parent;
-            if(index == 0){
-                return auv.getAuv_param();
-            }else if (index == 1){
-                return new HashMapWrapper(auv.getSensors(),"Sensors");
-            }else if (index == 2){
-                return new HashMapWrapper(auv.getActuators(),"Actuators");
-            }else if (index == 3){
-                return new HashMapWrapper(auv.getAccumulators(),"Accumulators");
-            }
-            return null;
-        }else if(parent instanceof AUV_Parameters){
-            AUV_Parameters auv_param = (AUV_Parameters)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(auv_param.getAllVariables().keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)auv_param.getAllVariables().get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return null;
-                }
-                i++;
-            }
-            return null;
-        }else if(parent instanceof PhysicalExchanger){
-            PhysicalExchanger pe = (PhysicalExchanger)parent;
-            if(index == 0){
-                return new HashMapWrapper(pe.getAllVariables(),"Variables");
-            }else if (index == 1){
-                return new HashMapWrapper(pe.getAllNoiseVariables(),"Noise");
-            }
-            
-            if (index == 2 && (parent instanceof AmpereMeter)){
-                AmpereMeter amp = (AmpereMeter)pe;
-                return new HashMapWrapper(amp.getAccumulators(),"Accumulators");
-            }
-            
-            if (index == 2 && pe.getAllActions() != null){
-                return new HashMapWrapper(pe.getAllActions(),"Actions");
-            }else if (index == 3){
-                Manipulating mani = (Manipulating)pe;
-                return new HashMapWrapper(mani.getSlavesNames(),"Slaves");
-            }
-            return null;
-        }else if(parent instanceof Accumulator){
-            Accumulator acc = (Accumulator)parent;
-            if(index == 0){
-                return new HashMapWrapper(acc.getAllVariables(),"Variables");
-            }
-            return null;
-        }else if(parent instanceof HashMap){
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)parent;
-            SortedSet<String> sortedset= new TreeSet<String>(hashmap.keySet());
-            Iterator<String> it = sortedset.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                String elem = it.next();
-                if(i == index){
-                    Object obj = (Object)hashmap.get(elem);
-                    return new HashMapWrapper(obj,elem);
-                }else if(i > index){
-                    return null;
-                }
-                i++;
-            }
-            return null;
-        }else if(parent instanceof List){
-            List list = (List)parent;
-            Collections.sort(list);
-            Object object = list.get(index);
-            return object.toString();
-        }else if(parent instanceof Vector3f){
-            Vector3f vec = (Vector3f)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(vec.getX()),"X");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(vec.getY()),"Y");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(vec.getZ()),"Z");
-            }
-            return null;
-        }else if(parent instanceof ColorRGBA){
-            ColorRGBA color = (ColorRGBA)parent;
-            if(index == 0){
-                return new HashMapWrapper(new LeafWrapper(color.getRed()),"R");
-            }else if (index == 1){
-                return new HashMapWrapper(new LeafWrapper(color.getGreen()),"G");
-            }else if (index == 2){
-                return new HashMapWrapper(new LeafWrapper(color.getBlue()),"B");
-            }else if (index == 3){
-                return new HashMapWrapper(new LeafWrapper(color.getAlpha()),"A");
-            }
-            return null;
-        }else if(parent instanceof HashMapWrapper){
-            HashMapWrapper hashmapwrap = (HashMapWrapper)parent;
-            return getChild(hashmapwrap.getUserData(), index); 
-        }else if(parent instanceof LeafWrapper){
-            LeafWrapper leafWrapper = (LeafWrapper)parent;
-            return getChild(leafWrapper.getUserData(), index); 
-        }else if(parent instanceof Float){
-            return (Float)parent;
-        }else if(parent instanceof Double){
-            return (Double)parent;
-        }else if(parent instanceof Boolean){
-            return (Boolean)parent;
-        }else if(parent instanceof Integer){
-            return (Integer)parent;
-        }else if(parent instanceof String){
-            return (String)parent;
         }else{
-            return null;
+            return child;
         }
     }
     

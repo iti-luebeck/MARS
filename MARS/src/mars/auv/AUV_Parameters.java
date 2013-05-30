@@ -476,6 +476,22 @@ public class AUV_Parameters{
     public void setWaypoints_visible(boolean visiblity) {
         waypoints.put("visiblity", visiblity);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isRayDetectable() {
+        return (Boolean)params.get("ray_detectable");
+    }
+
+    /**
+     *
+     * @param sonar_detectable
+     */
+    public void setRayDetectable(boolean ray_detectable) {
+        params.put("ray_detectable", ray_detectable);
+    }
 
         /**
      *
