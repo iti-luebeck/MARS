@@ -25,6 +25,7 @@ import mars.MyCustomGhostControl;
 import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.actuators.Actuator;
+import mars.gui.UpdateState;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
@@ -36,7 +37,7 @@ import mars.sensors.Sensor;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {BasicAUV.class} )
-public interface AUV extends RosNodeListener{
+public interface AUV extends RosNodeListener,UpdateState{
 
     /**
      *
@@ -386,5 +387,6 @@ public interface AUV extends RosNodeListener{
      * 
      * @param path
      */
+    @Override
     public void updateState(TreePath path);
 }

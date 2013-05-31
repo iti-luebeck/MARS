@@ -18,16 +18,18 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.tree.TreePath;
 import mars.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.gui.UpdateState;
 import mars.states.SimState;
 
 /**
  * This manager manages the SimObjects. He intialises them...
  * @author Thomas Tosik
  */
-public class SimObjectManager {
+public class SimObjectManager implements UpdateState{
     //auv HashMap to store and load auv's
     private HashMap<String,SimObject> simobs = new HashMap<String,SimObject> ();
     @Deprecated
@@ -363,5 +365,11 @@ public class SimObjectManager {
     @Override
     public String toString(){
         return "SimObjects";
+    }
+
+    @Override
+    public void updateState(TreePath path) {
+        SimObject simob = (SimObject)path.getPathComponent(1);
+        simob.updateState(path);
     }
 }

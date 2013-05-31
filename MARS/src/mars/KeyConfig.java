@@ -14,6 +14,7 @@ import com.jme3.input.KeyNames;
 import java.util.Map.Entry;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlElement;
+import mars.gui.UpdateState;
 
 /**
  * This class stores the mapping between the keyboard input and an action that you want to perform with a class that extends the KEYS interface.
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlRootElement(name="KeyConfig")
 @XmlAccessorType(XmlAccessType.NONE)
-public class KeyConfig {
+public class KeyConfig implements UpdateState{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,String> keys;

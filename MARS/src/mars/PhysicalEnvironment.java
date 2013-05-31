@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.gui.UpdateState;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
@@ -27,7 +28,7 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment{
+public class PhysicalEnvironment implements UpdateState{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> environment;

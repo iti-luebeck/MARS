@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.TextFieldEditor;
+import mars.gui.UpdateState;
 import mars.xml.HashMapAdapter;
 import mars.xml.XMLConfigReaderWriter;
 
@@ -27,7 +28,7 @@ import mars.xml.XMLConfigReaderWriter;
  */
 @XmlRootElement(name="Settings")
 @XmlAccessorType(XmlAccessType.NONE)
-public class MARS_Settings{
+public class MARS_Settings implements UpdateState{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> settings;

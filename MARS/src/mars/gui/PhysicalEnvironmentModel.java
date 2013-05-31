@@ -73,7 +73,7 @@ public class PhysicalEnvironmentModel extends GenericTreeModel{
             return child;
         }
     }
-    
+   /* 
     @Override
     protected void saveValue(TreePath originalPath, TreePath path, Object value){
         Object obj = path.getLastPathComponent();
@@ -104,5 +104,5 @@ public class PhysicalEnvironmentModel extends GenericTreeModel{
                 }
             }
         }
-    }    
+    }   */ 
 }

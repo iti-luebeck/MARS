@@ -17,10 +17,12 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.tree.TreePath;
 import mars.Collider;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.gui.UpdateState;
 import mars.recorder.RecordManager;
 import mars.recorder.Recording;
 import mars.states.SimState;
@@ -33,7 +35,7 @@ import mars.states.MapState;
  * Creates an AUV_Manger. You register your auv's here.
  * @author Thomas Tosik
  */
-public class AUV_Manager {
+public class AUV_Manager implements UpdateState{
 
     //auv HashMap to store and load auv's
     private HashMap<String,AUV> auvs = new HashMap<String,AUV> ();
@@ -665,4 +667,10 @@ public class AUV_Manager {
     public String toString(){
         return "AUVs";
     }
+
+    @Override
+    public void updateState(TreePath path) {
+        AUV auv = (AUV)path.getPathComponent(1);
+        auv.updateState(path);
+    } 
 }

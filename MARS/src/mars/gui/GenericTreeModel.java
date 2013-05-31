@@ -478,6 +478,10 @@ public class GenericTreeModel implements TreeModel{
                     AUV_Parameters auv_param = (AUV_Parameters)preObj;
                     auv_param.getAllVariables().put(hasher.getName(), value);
                     hasher.setUserData(value);
+                }else if(preObj instanceof SimObject){
+                    SimObject simob = (SimObject)preObj;
+                    simob.getAllVariables().put(hasher.getName(), value);
+                    hasher.setUserData(value);
                 }else if(preObj instanceof HashMapWrapper){
                     HashMapWrapper hashwrap = (HashMapWrapper)preObj;
                     if(hashwrap.getUserData() instanceof HashMap){
@@ -489,8 +493,8 @@ public class GenericTreeModel implements TreeModel{
                     }*///only nessecary when direct variables in PE. But now we have only hashmaps
                     hasher.setUserData(value);
                 }
-                AUV auv = (AUV)originalPath.getPathComponent(1);
-                auv.updateState(path);
+                UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                us.updateState(path);
             }else if(hasher.getUserData() instanceof Vector3f){
                 Vector3f vec = (Vector3f)hasher.getUserData();
                 HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -503,8 +507,8 @@ public class GenericTreeModel implements TreeModel{
                 }else if(preObj.getName().equals("Z")){
                     vec.setZ((Float)value);
                 }
-                AUV auv = (AUV)originalPath.getPathComponent(1);
-                auv.updateState(path);
+                UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                us.updateState(path);
             }else if(hasher.getUserData() instanceof ColorRGBA){
                 if(!(originalPath.getLastPathComponent() instanceof Float)){//direct color or leaf?
                     ColorRGBA color = (ColorRGBA)hasher.getUserData();
@@ -513,8 +517,8 @@ public class GenericTreeModel implements TreeModel{
                     color.g = (newColor.getGreen());
                     color.b = (newColor.getBlue());
                     color.a = (newColor.getAlpha());
-                    AUV auv = (AUV)originalPath.getPathComponent(1);
-                    auv.updateState(path);   
+                    UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                us.updateState(path);   
                 }else{
                     ColorRGBA color = (ColorRGBA)hasher.getUserData();
                     HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
@@ -529,9 +533,30 @@ public class GenericTreeModel implements TreeModel{
                     }else if(preObj.getName().equals("A")){
                         color.a = ((Float)value);
                     }
-                    AUV auv = (AUV)originalPath.getPathComponent(1);
-                    auv.updateState(path);   
+                    UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                    us.updateState(path);  
                 }    
+            }else if(hasher.getUserData() instanceof HashMapEntry){
+                HashMapEntry hashent = (HashMapEntry)hasher.getUserData();
+                if(hashent.getValue() instanceof Vector3f){
+                    Vector3f vec = (Vector3f)hashent.getValue();
+                    HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
+                    LeafWrapper leaf = (LeafWrapper)preObj.getUserData();
+                    leaf.setUserData((Float)value);
+                    if(preObj.getName().equals("X")){
+                        vec.setX((Float)value);
+                    }else if(preObj.getName().equals("Y")){
+                        vec.setY((Float)value);
+                    }else if(preObj.getName().equals("Z")){
+                        vec.setZ((Float)value);
+                    }
+                    UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                    us.updateState(path);
+                }else if(hashent.getValue() instanceof Float || hashent.getValue() instanceof Double || hashent.getValue() instanceof Integer || hashent.getValue() instanceof String || hashent.getValue() instanceof Boolean){
+                    hashent.setValue(value);
+                    UpdateState us = (UpdateState)originalPath.getPathComponent(0);
+                    us.updateState(path);
+                }
             }
         }
     }

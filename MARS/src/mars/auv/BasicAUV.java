@@ -2754,6 +2754,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      * 
      * @param enabled
      */
+    @Override
     public void setWaypointsEnabled(boolean enabled){
     }
     
@@ -2761,6 +2762,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      * 
      * @return
      */
+    @Override
     public WayPoints getWaypoints(){
         return WayPoints;
     }
@@ -2769,6 +2771,7 @@ public class BasicAUV implements AUV,SceneProcessor{
      * 
      * @param path
      */
+    @Override
     public void updateState(TreePath path) {
         getAuv_param().updateState(path);
         Object obj = path.getPathComponent(3);
