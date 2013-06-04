@@ -123,6 +123,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private boolean view_init = false;
     private boolean server_init = false;
     private boolean debugFilter = false;
+    private boolean init = false;
     
     //main settings file
     private MARS_Settings mars_settings;
@@ -333,6 +334,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             initPublicKeys();
             
             initView();
+            
+            init = true;
             
            /*             Box box = new Box(1f, 1f, 1f);
                         Geometry cur1 = new Geometry("BOOM2!", box);
@@ -1369,6 +1372,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param ps
      * @param tpf
      */
+    @Override
     public void prePhysicsTick(PhysicsSpace ps, final float tpf) {
         if (!super.isEnabled()) {
             return;
@@ -1392,7 +1396,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         
         //setting Filter in the DebugState so we can show specific collision boxes
         if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
-            if(!debugFilter){
+            if(!debugFilter && init){
                 mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter(mars_settings,auvManager)); 
                 debugFilter = true;
             }

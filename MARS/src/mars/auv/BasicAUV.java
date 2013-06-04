@@ -63,6 +63,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.Keys;
@@ -1448,14 +1449,12 @@ public class BasicAUV implements AUV,SceneProcessor{
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
 
-       /* debugShape = physics_control.createDebugShape(assetManager);
-        Helper.setNodePickUserData(debugShape,PickHint.NoPick);
-        auv_node.attachChild(debugShape);
+        
         if(getAuv_param().isDebugCollision()){
-            debugShape.setCullHint(CullHint.Inherit);
+            Helper.setNodeUserData(auv_node,DebugHint.DebugName,DebugHint.Debug);
         }else{
-            debugShape.setCullHint(CullHint.Always);
-        }*/
+            Helper.setNodeUserData(auv_node,DebugHint.DebugName,DebugHint.NoDebug);
+        }
             
         auv_node.setLocalTranslation(auv_param.getPosition());
         auv_node.addControl(physics_control);
@@ -2672,7 +2671,11 @@ public class BasicAUV implements AUV,SceneProcessor{
      * @param visible
      */
     public void setCollisionVisible(boolean visible){
-        setSpatialVisible(debugShape,visible);
+        if(visible){
+            Helper.setNodeUserData(auv_node,DebugHint.DebugName,DebugHint.Debug);
+        }else{
+            Helper.setNodeUserData(auv_node,DebugHint.DebugName,DebugHint.NoDebug);
+        }
     }
     
     /**

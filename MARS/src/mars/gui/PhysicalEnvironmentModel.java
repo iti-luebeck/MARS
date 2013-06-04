@@ -73,36 +73,4 @@ public class PhysicalEnvironmentModel extends GenericTreeModel{
             return child;
         }
     }
-   /* 
-    @Override
-    protected void saveValue(TreePath originalPath, TreePath path, Object value){
-        Object obj = path.getLastPathComponent();
-        if(!(obj instanceof HashMapWrapper)){
-            saveValue(originalPath,path.getParentPath(),value);
-        }else{
-            HashMapWrapper hasher = (HashMapWrapper)obj;
-            if(hasher.getUserData() instanceof LeafWrapper){
-                saveValue(originalPath,path.getParentPath(),value);
-            }else if(hasher.getUserData() instanceof HashMapEntry){
-                HashMapEntry hashent = (HashMapEntry)hasher.getUserData();
-                if(hashent.getValue() instanceof Vector3f){
-                    Vector3f vec = (Vector3f)hashent.getValue();
-                    HashMapWrapper preObj = (HashMapWrapper)originalPath.getParentPath().getLastPathComponent();
-                    LeafWrapper leaf = (LeafWrapper)preObj.getUserData();
-                    leaf.setUserData((Float)value);
-                    if(preObj.getName().equals("X")){
-                        vec.setX((Float)value);
-                    }else if(preObj.getName().equals("Y")){
-                        vec.setY((Float)value);
-                    }else if(preObj.getName().equals("Z")){
-                        vec.setZ((Float)value);
-                    }
-                    penv.updateState(path);
-                }else if(hashent.getValue() instanceof Float || hashent.getValue() instanceof Double || hashent.getValue() instanceof Integer || hashent.getValue() instanceof String || hashent.getValue() instanceof Boolean){
-                    hashent.setValue(value);
-                    penv.updateState(path);
-                }
-            }
-        }
-    }   */ 
 }

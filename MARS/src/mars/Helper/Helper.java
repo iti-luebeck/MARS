@@ -97,4 +97,17 @@ public class Helper {
             spatial.setUserData(PickHint.PickName, pickHint);
         }
     }
+    
+    public static void setNodeUserData(Spatial spatial, String name, int hint){
+        if(spatial instanceof Node){
+            Node node = (Node)spatial;
+            node.setUserData(name, hint);
+            List<Spatial> children = node.getChildren();
+            for (Spatial spatial1 : children) {
+                setNodeUserData(spatial1, name, hint);
+            }
+        }else{//its a spatial or geom, we dont care because it cant go deeper
+            spatial.setUserData(name, hint);
+        }
+    }
 }
