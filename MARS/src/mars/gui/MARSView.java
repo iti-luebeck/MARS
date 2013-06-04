@@ -4492,9 +4492,11 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 try {  
                     if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {// ctrl key used (force value)
                         //dont forget to clean and populate this popup with auvs
-                        
-                        //show it
-                        forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        //initPopUpMenues(auvManager);
+                        //show it only when deep enough for value
+                        if(selPath.getLastPathComponent() instanceof Boolean || selPath.getLastPathComponent() instanceof Float || selPath.getLastPathComponent() instanceof Double || selPath.getLastPathComponent() instanceof String || selPath.getLastPathComponent() instanceof Integer){
+                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }
                     }else{
                         if (selPath.getLastPathComponent() instanceof AUV) { 
                             AUV auv = (AUV)selPath.getLastPathComponent();
@@ -5434,19 +5436,42 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             AUV auv = (AUV)auvs.get(elem);
             AUV oauv = (AUV)selectionPath.getPathComponent(1);
             if(auv != oauv){ //not myself
+                boolean match = true;
                 Object[] path = selectionPath.getPath();
+                Object[] newpath = selectionPath.getPath();
                 
+                newpath[1] = auv;
                 
-                path[3] = mod.getChild(auv.getAuv_param(), mod.getIndexOfChild(oauv.getAuv_param(), selectionPath.getPath()[3]));
-                path[4] = mod.getChild(path[3], mod.getIndexOfChild(selectionPath.getPath()[3], selectionPath.getPath()[4]));
-                path[5] = mod.getChild(path[4], mod.getIndexOfChild(selectionPath.getPath()[4], selectionPath.getPath()[5]));
-                 
-                path[2] = auv.getAuv_param();
-                path[1] = auv;
+                for (int i = 2; i < path.length; i++) {//build the new path together
+                    Object object = path[i];
+                    int index = mod.getIndexOfChild(selectionPath.getPath()[i-1], selectionPath.getPath()[i]);
+                    Object child = mod.getChild(newpath[i-1], index);
+                    if(index != -1 || child != null){//we have to check if we get valid index and child
+                        //now we have to check if the elements of the paths match, when they dont than we abort
+                        if(child instanceof HashMapWrapper && selectionPath.getPath()[i] instanceof HashMapWrapper){//same type in tree?
+                            HashMapWrapper hash = (HashMapWrapper)child;
+                            HashMapWrapper hash2 = (HashMapWrapper)selectionPath.getPath()[i];
+                            if(hash.getName().equals(hash2.getName())){
+                                newpath[i] = child;
+                            }else{
+                                match = false;
+                                break;
+                            }                        
+                        }else if(child instanceof AUV_Parameters && selectionPath.getPath()[i] instanceof AUV_Parameters){//same type in tree?
+                            newpath[i] = child;                      
+                        }else if(child instanceof Boolean || child instanceof Float || child instanceof Double || child instanceof String || child instanceof Integer){//primitive type, always ok because no name
+                            newpath[i] = child;
+                        }else{//unknown tree type
+                            match = false;
+                            break;
+                        }
+                    }
+                }
                 
-                TreePath newPath = new TreePath(path);
-                mod.valueForPathChanged(newPath, lastSelectedPathComponent);
-                //auv_tree.updateUI();
+                if(match){//only when we have mathing paths we set the values
+                    TreePath newPath = new TreePath(newpath);
+                    mod.valueForPathChanged(newPath, lastSelectedPathComponent);
+                }
             }
         }
         auv_tree.updateUI();
