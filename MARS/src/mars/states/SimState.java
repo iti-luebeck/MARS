@@ -430,7 +430,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             view.initEnvironmentTree(physical_environment);
             view.initSettingsTree(mars_settings);
             view.initKeysTree(keyconfig);
-            view.initPopUpMenues();
+            view.initPopUpMenues(auvManager);
             view.initDND();
             view.allowSimInteraction();
             view.updateTrees();
@@ -1164,6 +1164,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 public Void call() throws Exception {
                     view.initCharts();
                     view.updateTrees();
+                    view.initPopUpMenues(auvManager);
                     return null;
                 }
                 });

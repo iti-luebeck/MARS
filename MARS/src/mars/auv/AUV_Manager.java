@@ -104,6 +104,22 @@ public class AUV_Manager implements UpdateState{
     public HashMap<String,AUV> getAUVs(){
         return auvs;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Class<? extends AUV>> getAUVClasses(){
+        ArrayList<Class<? extends AUV>> ret = new ArrayList<Class<? extends AUV>>();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            Class<? extends AUV> aClass = auv.getClass();
+            if(!ret.contains(aClass)){
+                ret.add(aClass);
+            }
+        }
+        return ret;
+    }
 
     /**
      *

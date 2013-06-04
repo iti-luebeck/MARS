@@ -155,7 +155,7 @@
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="collision">
-                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
                 </value>
             </entry>

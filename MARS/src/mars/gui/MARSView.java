@@ -87,6 +87,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import mars.Helper.ClassComparator;
 import mars.KeyConfig;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -689,7 +690,38 @@ public class MARSView extends FrameView {
     /**
      * 
      */
-    public void initPopUpMenues(){
+    public void initPopUpMenues(final AUV_Manager auvManager){
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    //add all auvs to force value
+                    SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
+                    Iterator<String> it = sortedset.iterator();
+                    int i = 0;
+                    while (it.hasNext()) {
+                        String elem = it.next();
+                        AUV auv = (AUV)auvManager.getAUVs().get(elem);
+                        final JMenuItem jcm = new JMenuItem(auv.getName());
+                        //listener for changes
+                        jcm.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                
+                            }
+                        });
+                        forceValuePopUpAUV.add(jcm);
+                    }
+                    
+                    //add all classes to force value
+                    ArrayList<Class<? extends AUV>> AUVClasses = auvManager.getAUVClasses();
+                    java.util.Collections.sort(AUVClasses,new ClassComparator());
+                    Iterator<Class<? extends AUV>> it2 = AUVClasses.iterator();
+                    while (it2.hasNext()) {
+                        Class<? extends AUV> elem = (Class<? extends AUV>)it2.next();
+                        
+                    }
+                }
+            }
+        );
     }
     
     /**
