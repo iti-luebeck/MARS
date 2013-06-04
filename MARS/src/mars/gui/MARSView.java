@@ -717,7 +717,15 @@ public class MARSView extends FrameView {
                     Iterator<Class<? extends AUV>> it2 = AUVClasses.iterator();
                     while (it2.hasNext()) {
                         Class<? extends AUV> elem = (Class<? extends AUV>)it2.next();
-                        
+                        int ai = elem.getName().lastIndexOf(".");
+                        final JMenuItem jcm = new JMenuItem(elem.getName().substring(ai+1));
+                        //listener for changes
+                        jcm.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                
+                            }
+                        });
+                        forceValuePopUpClass.add(jcm);
                     }
                 }
             }
