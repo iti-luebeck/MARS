@@ -120,6 +120,38 @@ public class AUV_Manager implements UpdateState{
         }
         return ret;
     }
+    
+    /**
+     *
+     * @param classNameString 
+     * @return
+     */
+    public ArrayList getAUVsOfClass(String classNameString){
+        ArrayList ret = new ArrayList();        
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            try {
+                if (Class.forName(classNameString).isInstance(auv)) {
+                    ret.add(auv);
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return ret;
+    }
+    
+    public boolean hasAUVsOfClass(String classNameString){
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            try {
+                return (Class.forName(classNameString).isInstance(auv));
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
 
     /**
      *

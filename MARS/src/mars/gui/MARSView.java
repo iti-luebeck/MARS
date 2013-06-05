@@ -700,12 +700,18 @@ public class MARSView extends FrameView {
                     int i = 0;
                     while (it.hasNext()) {
                         String elem = it.next();
-                        AUV auv = (AUV)auvManager.getAUVs().get(elem);
+                        final AUV auv = (AUV)auvManager.getAUVs().get(elem);
+                        final Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+                        final TreePath selectionPath = auv_tree.getSelectionPath();
+                        final AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
                         final JMenuItem jcm = new JMenuItem(auv.getName());
                         //listener for changes
                         jcm.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                
+                                Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+                                TreePath selectionPath = auv_tree.getSelectionPath();
+                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
                             }
                         });
                         forceValuePopUpAUV.add(jcm);
@@ -717,12 +723,20 @@ public class MARSView extends FrameView {
                     Iterator<Class<? extends AUV>> it2 = AUVClasses.iterator();
                     while (it2.hasNext()) {
                         Class<? extends AUV> elem = (Class<? extends AUV>)it2.next();
+                        final String className = elem.getName();
                         int ai = elem.getName().lastIndexOf(".");
                         final JMenuItem jcm = new JMenuItem(elem.getName().substring(ai+1));
                         //listener for changes
                         jcm.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                
+                                Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+                                TreePath selectionPath = auv_tree.getSelectionPath();
+                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                                ArrayList aUVsOfClass = auvManager.getAUVsOfClass(className);
+                                Iterator<AUV> it = aUVsOfClass.iterator();
+                                while (it.hasNext()) {
+                                    setValueForAUVinModel(selectionPath, lastSelectedPathComponent, it.next(), mod);
+                                }
                             }
                         });
                         forceValuePopUpClass.add(jcm);
@@ -1041,6 +1055,45 @@ public class MARSView extends FrameView {
             jmenucheck.setSelected(true);
         }else{
             jmenucheck.setSelected(false);
+        }
+    }
+    
+    private void setValueForAUVinModel(TreePath selectionPath, Object lastSelectedPathComponent, AUV auv, GenericTreeModel mod){
+        boolean match = true;
+        Object[] path = selectionPath.getPath();
+        Object[] newpath = selectionPath.getPath();
+
+        newpath[1] = auv;
+
+        for (int i = 2; i < path.length; i++) {//build the new path together
+            Object object = path[i];
+            int index = mod.getIndexOfChild(selectionPath.getPath()[i-1], selectionPath.getPath()[i]);
+            Object child = mod.getChild(newpath[i-1], index);
+            if(index != -1 || child != null){//we have to check if we get valid index and child
+                //now we have to check if the elements of the paths match, when they dont than we abort
+                if(child instanceof HashMapWrapper && selectionPath.getPath()[i] instanceof HashMapWrapper){//same type in tree?
+                    HashMapWrapper hash = (HashMapWrapper)child;
+                    HashMapWrapper hash2 = (HashMapWrapper)selectionPath.getPath()[i];
+                    if(hash.getName().equals(hash2.getName())){
+                        newpath[i] = child;
+                    }else{
+                        match = false;
+                        break;
+                    }                        
+                }else if(child instanceof AUV_Parameters && selectionPath.getPath()[i] instanceof AUV_Parameters){//same type in tree?
+                    newpath[i] = child;                      
+                }else if(child instanceof Boolean || child instanceof Float || child instanceof Double || child instanceof String || child instanceof Integer){//primitive type, always ok because no name
+                    newpath[i] = child;
+                }else{//unknown tree type
+                    match = false;
+                    break;
+                }
+            }
+        }
+
+        if(match){//only when we have mathing paths we set the values
+            TreePath newPath = new TreePath(newpath);
+            mod.valueForPathChanged(newPath, lastSelectedPathComponent);
         }
     }
     
@@ -5436,42 +5489,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             AUV auv = (AUV)auvs.get(elem);
             AUV oauv = (AUV)selectionPath.getPathComponent(1);
             if(auv != oauv){ //not myself
-                boolean match = true;
-                Object[] path = selectionPath.getPath();
-                Object[] newpath = selectionPath.getPath();
-                
-                newpath[1] = auv;
-                
-                for (int i = 2; i < path.length; i++) {//build the new path together
-                    Object object = path[i];
-                    int index = mod.getIndexOfChild(selectionPath.getPath()[i-1], selectionPath.getPath()[i]);
-                    Object child = mod.getChild(newpath[i-1], index);
-                    if(index != -1 || child != null){//we have to check if we get valid index and child
-                        //now we have to check if the elements of the paths match, when they dont than we abort
-                        if(child instanceof HashMapWrapper && selectionPath.getPath()[i] instanceof HashMapWrapper){//same type in tree?
-                            HashMapWrapper hash = (HashMapWrapper)child;
-                            HashMapWrapper hash2 = (HashMapWrapper)selectionPath.getPath()[i];
-                            if(hash.getName().equals(hash2.getName())){
-                                newpath[i] = child;
-                            }else{
-                                match = false;
-                                break;
-                            }                        
-                        }else if(child instanceof AUV_Parameters && selectionPath.getPath()[i] instanceof AUV_Parameters){//same type in tree?
-                            newpath[i] = child;                      
-                        }else if(child instanceof Boolean || child instanceof Float || child instanceof Double || child instanceof String || child instanceof Integer){//primitive type, always ok because no name
-                            newpath[i] = child;
-                        }else{//unknown tree type
-                            match = false;
-                            break;
-                        }
-                    }
-                }
-                
-                if(match){//only when we have mathing paths we set the values
-                    TreePath newPath = new TreePath(newpath);
-                    mod.valueForPathChanged(newPath, lastSelectedPathComponent);
-                }
+                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
             }
         }
         auv_tree.updateUI();
@@ -5751,7 +5769,7 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
-    private final String VERSION = "0.7.4";
+    private final String VERSION = "0.7.5";
     private final String TITLE = "MArine Robotics Simulator (MARS)";
     private XYSeries depth_series;
     private XYSeries volume_series;

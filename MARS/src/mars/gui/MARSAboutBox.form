@@ -45,8 +45,8 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="appVendorLabel1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="appVendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="appVersionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="appVersionLabel" alignment="0" min="-2" pref="65" max="-2" attributes="0"/>
+                                  <Component id="appVendorLabel" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="appTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -78,14 +78,14 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="vendorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="appVendorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="appVendorLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="homepageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="appVendorLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="201" max="32767" attributes="0"/>
+                      <EmptySpace pref="220" max="32767" attributes="0"/>
                       <Component id="closeButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -114,7 +114,6 @@
             <Font bold="true" component="appTitleLabel" property="font" relativeSize="true" size="4"/>
           </FontInfo>
         </Property>
-        <Property name="text" type="java.lang.String" resourceKey="Application.title"/>
         <Property name="name" type="java.lang.String" value="appTitleLabel" noResource="true"/>
       </Properties>
       <AuxValues>
@@ -139,7 +138,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appVersionLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="Application.version"/>
+        <Property name="text" type="java.lang.String" resourceKey="appVersionLabel.text"/>
         <Property name="name" type="java.lang.String" value="appVersionLabel" noResource="true"/>
       </Properties>
       <AuxValues>
@@ -164,7 +163,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appVendorLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="Application.vendor"/>
+        <Property name="text" type="java.lang.String" resourceKey="appVendorLabel.text"/>
         <Property name="name" type="java.lang.String" value="appVendorLabel" noResource="true"/>
       </Properties>
       <AuxValues>
