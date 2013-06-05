@@ -3367,6 +3367,9 @@
                 <Property name="text" type="java.lang.String" resourceKey="forceValuePopUpAllClass.text"/>
                 <Property name="name" type="java.lang.String" value="forceValuePopUpAllClass" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="forceValuePopUpAllClassActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

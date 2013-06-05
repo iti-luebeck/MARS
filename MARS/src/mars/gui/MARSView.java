@@ -3961,6 +3961,11 @@ public class MARSView extends FrameView {
 
         forceValuePopUpAllClass.setText(resourceMap.getString("forceValuePopUpAllClass.text")); // NOI18N
         forceValuePopUpAllClass.setName("forceValuePopUpAllClass"); // NOI18N
+        forceValuePopUpAllClass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forceValuePopUpAllClassActionPerformed(evt);
+            }
+        });
         forceValuePopUpClass.add(forceValuePopUpAllClass);
 
         forceValuePopUp.add(forceValuePopUpClass);
@@ -5494,6 +5499,21 @@ private void StartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
         auv_tree.updateUI();
     }//GEN-LAST:event_forceValuePopUpAllActionPerformed
+
+    private void forceValuePopUpAllClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpAllClassActionPerformed
+        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+        HashMap<String, AUV> auvs = auvManager.getAUVs();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            AUV oauv = (AUV)selectionPath.getPathComponent(1);
+            if(auv != oauv){ //not myself
+                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
+            }
+        }
+        auv_tree.updateUI();
+    }//GEN-LAST:event_forceValuePopUpAllClassActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel;
