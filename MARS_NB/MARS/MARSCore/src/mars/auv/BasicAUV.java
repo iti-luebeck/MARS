@@ -1354,6 +1354,12 @@ public class BasicAUV implements AUV,SceneProcessor{
         mat_white.setColor("Color", ColorRGBA.Blue);
         auv_spatial.setMaterial(mat_white);*/
         auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
+        
+        //here should be somehow the fix for the gui rotation problem
+        /*Quaternion rot = new Quaternion();
+        rot.fromAngles(0f, -1.34f, 0f);
+        auv_spatial.setLocalRotation(rot);*/
+        
         auv_spatial.updateModelBound();
         auv_spatial.updateGeometricState();
         auv_spatial.setName(auv_param.getModel_name());

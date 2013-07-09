@@ -2547,7 +2547,17 @@ public final class MARSTopComponent extends TopComponent {
                 mars.restartSimState();
                 return null;
             }
-            });
+        });
+    }
+    
+    public void activateFlyByCam(){
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                mars.getChaseCam().setEnabled(false);         
+                mars.getFlyByCamera().setEnabled(true);
+                return null;
+            }
+        });
     }
     
     public void saveConfig(){
