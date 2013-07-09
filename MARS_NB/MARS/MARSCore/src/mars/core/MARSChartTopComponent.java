@@ -5,12 +5,6 @@
 package mars.core;
 
 import com.jme3.math.Vector3f;
-import com.sun.tools.visualvm.charts.ChartFactory;
-import com.sun.tools.visualvm.charts.SimpleXYChartDescriptor;
-import com.sun.tools.visualvm.charts.SimpleXYChartSupport;
-import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.ui.InteractivePanel;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.controls.LayoutFactory;
@@ -54,7 +48,6 @@ public final class MARSChartTopComponent extends TopComponent {
     private static final long SLEEP_TIME = 100;
     private static final int VALUES_LIMIT = 50;
     private static final int ITEMS_COUNT = 2;
-    private SimpleXYChartSupport support;
     
     // Note that dynamic charts need limited amount of values!!! 
     //private ITrace2D trace = new Trace2DLtd(200); 
@@ -240,51 +233,6 @@ public final class MARSChartTopComponent extends TopComponent {
         validate();
         
         initListener();
-    }
-    
-    private void createModels() {
-        SimpleXYChartDescriptor descriptor =
-        SimpleXYChartDescriptor.decimal(0, 1000, 1000, 1d, true, VALUES_LIMIT);
-
-        for (int i = 0; i < ITEMS_COUNT; i++) {
-        descriptor.addLineFillItems("Item " + i);
-        }
-
-        descriptor.setDetailsItems(new String[]{"Detail 1", "Detail 2", "Detail 3"});
-        descriptor.setChartTitle("<html><font size='+1'><b>Demo Chart</b></font></html>");
-        descriptor.setXAxisDescription("<html>X Axis <i>[time]</i></html>");
-        descriptor.setYAxisDescription("<html>Y Axis <i>[units]</i></html>");
-
-        support = ChartFactory.createSimpleXYChart(descriptor);
-
-        new Generator(support).start();
-    }
-    
-    private static class Generator extends Thread {
- 
-        private SimpleXYChartSupport support;
-
-        public void run() {
-            while (true) {
-                try {
-                    long[] values = new long[ITEMS_COUNT];
-                    for (int i = 0; i < values.length; i++) {
-                        values[i] = (long) (1000 * Math.random());
-                    }
-                    support.addValues(System.currentTimeMillis(), values);
-                    support.updateDetails(new String[]{1000 * Math.random() + "",
-                    1000 * Math.random() + "",
-                    1000 * Math.random() + ""});
-                    Thread.sleep(SLEEP_TIME);
-                } catch (Exception e) {
-                    e.printStackTrace(System.err);
-                }
-            }
-        }
-
-        private Generator(SimpleXYChartSupport support) {
-            this.support = support;
-        }
     }
     
     private static class ChartGenerator extends Thread {

@@ -1536,7 +1536,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      */
     public void pokeSelectedAUV(){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
             Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
@@ -1631,7 +1631,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      */
     public void chaseSelectedAUV(){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             mars.getFlyByCamera().setEnabled(false);
             mars.getChaseCam().setSpatial(selected_auv.getAUVNode());
@@ -1656,7 +1656,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param enable
      */
     public void enableSelectedAUV(boolean enable){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             if(!enable){
                 selected_auv.getAuv_param().setEnabled(false);
@@ -1674,7 +1674,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param selected
      */
     public void debugSelectedAUV(int debug_mode, boolean selected){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             switch(debug_mode){
                 case 0: selected_auv.getAuv_param().setDebugPhysicalExchanger(selected);selected_auv.setPhysicalExchangerVisible(selected);break;
@@ -1696,7 +1696,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param selected
      */
     public void waypointsSelectedAUV(int debug_mode, boolean selected){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             switch(debug_mode){
                 case 0: selected_auv.getAuv_param().setWaypoints_enabled(selected);selected_auv.setWaypointsEnabled(selected);break;
@@ -1713,7 +1713,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param newColor
      */
     public void waypointsColorSelectedAUV(java.awt.Color newColor){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             selected_auv.getAuv_param().setWaypoints_color(new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f));
         }
@@ -1723,7 +1723,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * 
      */
     public void resetSelectedAUV(){
-        AUV selected_auv = auvManager.getSelectedAUV();
+        AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             selected_auv.reset();
         }

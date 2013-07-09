@@ -91,14 +91,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>mars.libs.gral</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>mars.libs.guava</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -147,14 +139,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>mars.libs.profiler</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>mars.libs.rosjava</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -172,14 +156,6 @@
                 </dependency>
                 <dependency>
                     <code-name-base>mars.libs.swingx</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
-                    <code-name-base>mars.libs.visualvm</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

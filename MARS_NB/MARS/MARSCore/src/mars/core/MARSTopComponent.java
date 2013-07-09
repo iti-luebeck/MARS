@@ -541,6 +541,7 @@ public final class MARSTopComponent extends TopComponent {
         jme3_window_switcher.add(jme3_view);
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_splitview, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_splitview.text")); // NOI18N
+        jme3_splitview.setEnabled(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(split_view, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.split_view.text")); // NOI18N
         split_view.addActionListener(new java.awt.event.ActionListener() {
@@ -553,6 +554,7 @@ public final class MARSTopComponent extends TopComponent {
         jme3_window_switcher.add(jme3_splitview);
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_mergeview, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_mergeview.text")); // NOI18N
+        jme3_mergeview.setEnabled(false);
         jme3_window_switcher.add(jme3_mergeview);
 
         moveCameraDialog.setMinimumSize(new java.awt.Dimension(166, 193));
