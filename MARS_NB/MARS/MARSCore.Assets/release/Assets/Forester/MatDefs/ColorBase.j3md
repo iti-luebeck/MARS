@@ -1,0 +1,17 @@
+MaterialDef My MaterialDef {
+
+    MaterialParameters {
+    //The color map
+    Texture2D ColorMap
+    }
+
+    Technique {
+        VertexShader GLSL100:   forester/assets/shaders/impostors/Color.vert
+        FragmentShader GLSL100: forester/assets/shaders/impostors/Color.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+    }
+
+}

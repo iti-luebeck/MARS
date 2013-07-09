@@ -1,0 +1,12 @@
+Material My Material : MatDefs/MatCap/MatCap.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip Textures/matcaps/met2.png
+        Nor_Inv_Y : false
+        Nor_Inv_X : false
+        Nor_Inv_Z : false
+        FogColor : 0.8 0.8 0.8 19.0
+        Multiply_Color : 1.0 1.0 0.2 1.0
+     }
+    AdditionalRenderState {
+    }
+}

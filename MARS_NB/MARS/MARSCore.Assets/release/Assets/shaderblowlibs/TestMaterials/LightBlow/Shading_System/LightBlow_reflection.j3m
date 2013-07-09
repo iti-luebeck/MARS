@@ -1,0 +1,19 @@
+Material LightBlow_2 : ShaderBlow/MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        DiffuseMap : TestModels/LightBlow/jme_lightblow_dif.png
+        RefMap : Flip TestTextures/Water256.dds
+
+        EmissiveMap : true
+        Specular_Lighting : false
+        Spec_A_Nor : true
+        Specular : 1.0 1.0 1.0 1.0
+        Shininess : 5.0
+        Nor_Inv_Y : true
+        GlowMap : TestModels/LightBlow/jme_lightblow_dif.png
+        NormalMap : TestModels/LightBlow/jme_lightblow_nor.png
+}
+    AdditionalRenderState {
+
+
+    }
+}

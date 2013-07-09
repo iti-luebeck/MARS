@@ -1,0 +1,11 @@
+Material My Material : ShaderBlow/MatDefs/MatCap/MatCap.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip TestTextures/matcaps/Gold.jpg
+        Nor_Inv_Y : true
+        Nor_Inv_X : false
+
+        NormalMap : TestModels/LightBlow/jme_lightblow_nor.png
+     }
+    AdditionalRenderState {
+    }
+}

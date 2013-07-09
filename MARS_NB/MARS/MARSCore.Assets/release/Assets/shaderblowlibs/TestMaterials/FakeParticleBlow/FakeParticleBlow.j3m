@@ -1,0 +1,15 @@
+Material Fake_Particle_Blow : ShaderBlow/MatDefs/FakeParticleBlow/FakeParticleBlow.j3md {
+     MaterialParameters {
+        MaskMap : Flip Repeat TestTextures/FakeParticleBlow/mask.png
+        AniTexMap : Flip Repeat TestTextures/FakeParticleBlow/particles.png
+        BaseColor : 0.6 0.7 1.7 1.0
+        Change_Direction : true
+        Animation_Y : true
+        TimeSpeed : 2.0
+        FogColor : 0.0 0.0 0.0 10.0
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      Blend Additive
+    }
+}

@@ -1,0 +1,26 @@
+Material My Material : ShaderBlow/MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        DiffuseMap : Repeat TestTextures/Terrain_Textures/pattern_69/pattern_69_diffus.png
+        DiffuseMap_2 : Repeat TestTextures/Terrain_Textures/pattern_87/pattern_87_diffus.png
+        DiffuseMap_1 : Repeat TestTextures/Terrain_Textures/pattern_88/pattern_88_diffus.png
+        DiffuseMap_3 : Repeat TestTextures/Terrain_Textures/pattern_71/pattern_71_diffus.png
+        TextureMask : TestTextures/Terrain_Textures/texture_mask.png
+        uv_0_scale : 25.0
+        uv_3_scale : 25.0
+        uv_1_scale : 25.0
+        uv_2_scale : 25.0
+        NormalMap : Repeat TestTextures/Terrain_Textures/pattern_69/pattern_69_normal.png
+        NormalMap_1 : Repeat TestTextures/Terrain_Textures/pattern_88/pattern_88_normal.png
+        NormalMap_2 : Repeat TestTextures/Terrain_Textures/pattern_87/pattern_87_normal.png
+        NormalMap_3 : Repeat TestTextures/Terrain_Textures/pattern_71/pattern_71_normal.png
+        Spec_A_Dif : true
+        Specular_Lighting : true
+        Shininess : 1.6999999
+        Specular : 1.9 1.5 1.2 1.0
+        Nor_Inv_X : true
+
+        Nor_Inv_Y : true
+     }
+    AdditionalRenderState {
+    }
+}

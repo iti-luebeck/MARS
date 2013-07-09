@@ -400,7 +400,7 @@
                 </variables>
                 <accumulators>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator1">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main2</value>
                     </entry>
                 </accumulators>
             </value>
@@ -1237,11 +1237,11 @@
         </entry>
     </Actuators>
     <Accumulators>
-        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <variables>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main2</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="capacity">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">10.0</value>

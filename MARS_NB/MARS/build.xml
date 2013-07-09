@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="MARS" basedir=".">
+    <description>Builds the module suite MARS.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!-- override build to add update branding -->
+    <target name="build" depends="build-brand,suite.build"/>
+
+    <target name="build-brand" depends="-init">
+        <propertyfile
+            file="${basedir}/branding/core/core.jar/org/netbeans/core/startup/Bundle.properties" 
+            comment="Updated by build script">
+            <entry key="currentVersion" value="${app.title} ${app.version} " />
+        </propertyfile>
+
+        <propertyfile
+            file="${basedir}/branding/modules/org-netbeans-core-windows.jar/org/netbeans/core/windows/view/ui/Bundle.properties"
+            comment="Updated by build script">
+            <entry key="CTL_MainWindow_Title" value="${app.title} ${app.version}" />
+            <entry key="CTL_MainWindow_Title_No_Project" value="${app.title} ${app.version}" />
+        </propertyfile>
+
+        <!--<propertyfile
+            file="${basedir}/branding/modules/org-netbeans-core.jar/org/netbeans/core/ui/Bundle.properties" 
+            comment="Updated by build script">
+            <entry key="LBL_ProductInformation" value="${app.title}" />
+        </propertyfile>-->
+
+    </target>
+    
+    <!--<target name="build-launchers" depends="suite.build-launchers">
+        <echo message="Adding Config ..."/>
+        <mkdir dir="${build.launcher.dir}/config"/>
+        <copy todir="${build.launcher.dir}/config">
+            <fileset dir="config"/>
+        </copy>
+        <echo message="Adding Assets ..."/>
+        <mkdir dir="${build.launcher.dir}/Assets"/>
+        <copy todir="${build.launcher.dir}/Assets">
+            <fileset dir="Assets"/>
+        </copy>
+    </target>-->
+
+    <!-- Customized build-zip target to copy reports to the distribution -->
+    <!--<target name="build-zip" depends="suite.build-zip">
+        <echo message="Adding Extra Directorys ..."/>
+        <zip destfile="${dist.dir}/${app.name}.zip" update="true">
+            <zipfileset dir="${build.launcher.dir}/config/" prefix="${app.name}/config"/>
+            <zipfileset dir="${build.launcher.dir}/Assets/" prefix="${app.name}/Assets"/>
+        </zip>
+    </target>--> 
+    
+</project>

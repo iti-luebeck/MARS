@@ -1,0 +1,12 @@
+Material My Material : MatDefs/ImpostorGen/ColorBase.j3md {
+     MaterialParameters {
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      DepthWrite On
+      AlphaTestFalloff 0.01
+      Blend Alpha
+      ColorWrite On
+        DepthTest On
+    }
+}

@@ -1,0 +1,24 @@
+MaterialDef My MaterialDef {
+
+    MaterialParameters {
+        Float BSRadius
+        Texture2D ColorMap
+        Texture2D NormalMap
+    }
+
+    Technique {
+        VertexShader GLSL100:   forester/assets/shaders/impostors/DispNorm.vert
+        FragmentShader GLSL100: forester/assets/shaders/impostors/DispNorm.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+            CameraPosition
+        }
+
+        Defines {
+            NORMALMAP : NormalMap
+        }
+    }
+
+}

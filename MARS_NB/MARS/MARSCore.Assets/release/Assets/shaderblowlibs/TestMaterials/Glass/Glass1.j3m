@@ -1,0 +1,12 @@
+Material My Material : ShaderBlow/MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+        RefMap : Flip TestTextures/Water256.dds
+        Nor_Inv_Y : true
+        ChromaticAbberation : true
+
+        FogColor : 0.8 0.8 0.8 17.0
+     }
+    AdditionalRenderState {
+    }
+}
+

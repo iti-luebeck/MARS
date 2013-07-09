@@ -1,0 +1,19 @@
+MaterialDef LensFlare {
+ 
+    MaterialParameters {
+        Int NumSamples : 1
+        Float Threshold
+        Texture2D Texture
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   Shaders/LensFlareLightMap.vert
+        FragmentShader GLSL100: Shaders/LensFlareLightMap.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            Resolution
+        }
+    }
+}

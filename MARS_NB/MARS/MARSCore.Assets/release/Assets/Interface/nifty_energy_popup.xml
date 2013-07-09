@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+  <screen id="start">
+
+  </screen>
+  <screen id="hoverMenu">
+    <layer id="background" backgroundColor="#0000" childLayout="absolute-inside">
+		<panel id="hover" x="50" y="50" height="10%" width="15%" align="center" childLayout="horizontal" backgroundImage="energy_popup.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">  
+			<panel id="hover_right"  childLayout="center" backgroundColor="#0000" align="left" valign="center">  
+				<image filename="battery_charge.png" valign="center" align="center">
+				</image>
+			</panel>
+			<panel id="hover_left"  childLayout="vertical" backgroundColor="#0000" align="right" valign="center">
+				<panel id="hover_left_up"  childLayout="center" backgroundColor="#0000" valign="top">
+					<text id="hover_left_text" text="%" font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true"/>
+				</panel>
+				<panel id="hover_left_down"  childLayout="center" backgroundColor="#0000" valign="bottom">
+					<text id="hover_left_text_name" text="%" font="Interface/Fonts/Default.fnt" width="100%" height="50%" wrap="true"/>
+				</panel>
+			</panel>
+		</panel>
+		<effect>
+			<onStartScreen name="hide"/>
+		</effect>
+    </layer>
+	<layer id="speed_background" backgroundColor="#0000" childLayout="absolute-inside">
+		<panel id="speed" x="50" y="50" height="10%" width="15%" align="center" childLayout="horizontal" backgroundImage="energy_popup.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">  
+			<panel id="speed_right"  childLayout="center" backgroundColor="#0000" align="left" valign="center">  
+				<image filename="hanse_speed_64.png" valign="center" align="center">
+				</image>
+			</panel>
+			<panel id="speed_left"  childLayout="center" backgroundColor="#0000" align="right" valign="center">  
+				<text id="speed_left_text" text="%" font="Interface/Fonts/Default.fnt" width="100%" height="100%" wrap="true" />
+			</panel>
+			<!-- start="#f" end="#0" length="3000" neverStopRendering="true" -->
+		</panel>
+		<effect>
+			<onStartScreen name="hide"/>
+			<onCustom customKey="fadeIn" name="fade" start="#f" end="#0" length="3000" neverStopRendering="true"/>
+		</effect>
+    </layer>
+  </screen>
+</nifty>

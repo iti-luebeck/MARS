@@ -1,0 +1,11 @@
+Material My Material : ShaderBlow/MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+
+
+        DiffuseMap : Flip Repeat TestTextures/Simple_IBL/basic_wood_01.jpg
+        NormalMap : Flip Repeat TestTextures/Simple_IBL/basic_wood_01_nor.png
+        IblMap_Simple : TestTextures/Simple_IBL/Simple_IBL.png
+     }
+    AdditionalRenderState {
+    }
+}

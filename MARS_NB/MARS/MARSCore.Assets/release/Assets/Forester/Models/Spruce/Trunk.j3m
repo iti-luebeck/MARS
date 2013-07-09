@@ -1,0 +1,16 @@
+Material SpruceTrunk : forester/assets/matdefs/TreeBase.j3md {
+     MaterialParameters {
+        ColorMap : Repeat Models/Spruce/bark.png
+        NormalMap : Repeat Models/Spruce/bark_NORM.png
+        AlphaNoiseMap : Textures/noise.png
+        Diffuse : 1 1 1 1
+        Ambient : 1 1 1 1
+        UseMaterialColors : true
+     }
+    AdditionalRenderState {
+      FaceCull Back
+      DepthWrite On
+      ColorWrite On
+      DepthTest On
+    }
+}

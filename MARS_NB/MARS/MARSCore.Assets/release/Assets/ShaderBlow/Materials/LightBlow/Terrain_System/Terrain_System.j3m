@@ -1,0 +1,25 @@
+Material My Material : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip Repeat Textures/Terrain_Textures/pattern_69/pattern_69_diffus.png
+        DiffuseMap_2 : Flip Repeat Textures/Terrain_Textures/pattern_87/pattern_87_diffus.png
+        DiffuseMap_1 : Flip Repeat Textures/Terrain_Textures/pattern_88/pattern_88_diffus.png
+        DiffuseMap_3 : Flip Repeat Textures/Terrain_Textures/pattern_71/pattern_71_diffus.png
+        TextureMask : Flip Textures/Terrain_Textures/texture_mask.png
+        uv_0_scale : 25.0
+        uv_3_scale : 25.0
+        uv_1_scale : 25.0
+        uv_2_scale : 25.0
+        NormalMap : Flip Repeat Textures/Terrain_Textures/pattern_69/pattern_69_normal.png
+        NormalMap_1 : Flip Repeat Textures/Terrain_Textures/pattern_88/pattern_88_normal.png
+        NormalMap_2 : Flip Repeat Textures/Terrain_Textures/pattern_87/pattern_87_normal.png
+        NormalMap_3 : Flip Repeat Textures/Terrain_Textures/pattern_71/pattern_71_normal.png
+        Spec_A_Dif : true
+        Specular_Lighting : true
+        Shininess : 1.6999999
+        Specular : 1.9 1.5 1.2 1.0
+        Nor_Inv_X : true
+
+     }
+    AdditionalRenderState {
+    }
+}

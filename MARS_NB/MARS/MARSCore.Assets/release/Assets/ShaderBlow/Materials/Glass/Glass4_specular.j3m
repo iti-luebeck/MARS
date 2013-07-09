@@ -1,0 +1,9 @@
+Material My Material : MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+        MatCapSpecular : Flip Textures/Glass/glass_specular.jpg
+        RefMap : Flip Textures/Water256.dds
+        specularIntensity : 0.70000005
+     }
+    AdditionalRenderState {
+    }
+}

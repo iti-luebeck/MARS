@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="mars.core" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project mars.core.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--<target name="netbeans-extra">
+      <echo>Copying resources files to build cluster directory...</echo>
+      <mkdir dir="${cluster}/Assets"/>
+      <copy todir="${cluster}/Assets">
+        <fileset dir="Assets" includes="**"/>
+      </copy>
+	  <mkdir dir="${cluster}/config"/>
+      <copy todir="${cluster}/config">
+        <fileset dir="config" includes="**"/>
+      </copy>
+    </target>-->
+    <!--<target name="netbeans-extra">
+      <echo>Copying resources files to build cluster directory...</echo>
+      <mkdir dir="../Assets"/>
+      <copy todir="../Assets">
+        <fileset dir="Assets" includes="**"/>
+      </copy>
+        <mkdir dir="../config"/>
+      <copy todir="../config">
+        <fileset dir="config" includes="**"/>
+      </copy>-->
+      <!--<echo>Copying resources files to build cluster directory...</echo>
+      <mkdir dir="${build.launcher.dir}/config"/>
+      <copy todir="${build.launcher.dir}/config">
+        <fileset dir="${cluster}/config" includes="**"/>
+      </copy>-->
+    <!--</target>-->
+</project>

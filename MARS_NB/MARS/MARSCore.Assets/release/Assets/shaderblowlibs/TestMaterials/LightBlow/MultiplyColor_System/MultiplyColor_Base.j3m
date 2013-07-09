@@ -1,0 +1,10 @@
+Material Base : ShaderBlow/MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        NormalMap : TestModels/LightBlow/jme_lightblow_nor.png
+        Nor_Inv_Y : true
+        Nor_Inv_X : false
+        DiffuseMap : TestModels/LightBlow/jme_lightblow_dif.png
+     }
+    AdditionalRenderState {
+    }
+}

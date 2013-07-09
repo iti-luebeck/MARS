@@ -1,0 +1,38 @@
+MaterialDef ProjectedWater {
+
+    MaterialParameters {
+        Vector3 tangent;
+        Vector3 binormal;
+        Float normalTranslation;
+        Float refractionTranslation;
+        Texture2D normalMap;
+        Texture2D reflection;
+        Texture2D dudvMap;
+        Texture2D foamMap;
+        Color waterColor;
+        Color waterColorEnd;
+        Color fogColor;
+        Float fogStart;
+        Float fogScale;
+        Boolean abovewater;
+        Boolean useFadeToFogColor;
+        Float waterHeight;
+        Float heightFalloffStart;
+        Float heightFalloffSpeed;
+        Vector3 cameraPos;
+        Float amplitude;
+    }
+
+
+    Technique {
+        VertexShader GLSL100:   jme3test/water/data/projectedwatershader.vert
+        FragmentShader GLSL100: jme3test/water/data/projectedwatershader.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix;
+            WorldViewMatrix;
+            NormalMatrix
+        }
+    }
+
+}

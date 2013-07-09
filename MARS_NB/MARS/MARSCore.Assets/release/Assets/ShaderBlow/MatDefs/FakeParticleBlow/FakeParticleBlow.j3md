@@ -1,0 +1,63 @@
+MaterialDef FakeParticleBlow {
+ 
+    MaterialParameters {
+        Texture2D MaskMap
+        Texture2D AniTexMap
+        Float TimeSpeed : 1
+
+        Color BaseColor
+
+        Boolean Animation_Y
+        Boolean Animation_X
+        Boolean Change_Direction
+
+        // Fog
+        Color FogColor
+        TextureCubeMap FogSkyBox
+
+        
+    }
+ 
+    Technique {
+          VertexShader GLSL100:   Shaders/FakeParticleBlow/FakeParticleBlow.vert
+          FragmentShader GLSL100: Shaders/FakeParticleBlow/FakeParticleBlow.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            Time
+            
+        }
+ 
+        Defines {
+
+        ANY_DIR_Y : Animation_Y
+        ANY_DIR_X : Animation_X
+        CHANGE_DIR : Change_Direction
+        FOG : FogColor
+        FOG_SKY : FogSkyBox
+
+
+        }
+    }
+ 
+    Technique FixedFunc {
+    }
+ 
+
+    Technique Glow {
+
+        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
+        FragmentShader GLSL100: Shaders/PostBlow/GlowBlow.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+
+        Defines {
+            HAS_GLOWMAP : GlowMap
+            HAS_GLOWCOLOR : GlowColor
+        }
+    } 
+
+
+}

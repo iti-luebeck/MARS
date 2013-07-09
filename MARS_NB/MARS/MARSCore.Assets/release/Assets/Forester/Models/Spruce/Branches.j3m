@@ -1,0 +1,19 @@
+Material SpruceBranches : forester/assets/matdefs/TreeBase.j3md {
+     MaterialParameters {
+        ColorMap : Models/Spruce/sprucebranch_small.png
+        UseMaterialColors : true
+        Diffuse : 1 1 1 1
+        Ambient : 1 1 1 1
+        AlphaDiscardThreshold : 0.4
+        NormalMap : Models/Spruce/sprucebranch_small_NORM.png
+        AlphaNoiseMap : Textures/noise.png
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      Blend Alpha
+      AlphaTestFalloff 0.4
+      DepthTest On
+      ColorWrite On
+      DepthWrite On
+    }
+}

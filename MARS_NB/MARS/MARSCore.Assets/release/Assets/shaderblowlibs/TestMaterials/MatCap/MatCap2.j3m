@@ -1,0 +1,16 @@
+Material My Material : ShaderBlow/MatDefs/MatCap/MatCap.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip TestTextures/matcaps/Gold.jpg
+        Nor_Inv_Y : false
+        Nor_Inv_X : false
+        Nor_Inv_Z : false
+        
+        Toon : true
+        EdgesColor : 0.2 1.0 0.0 1.0
+        EdgeSize : 0.01
+        Fog_Edges : true
+        
+     }
+    AdditionalRenderState {
+    }
+}

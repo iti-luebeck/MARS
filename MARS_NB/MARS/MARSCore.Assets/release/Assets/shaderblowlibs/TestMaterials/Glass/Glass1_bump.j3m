@@ -1,0 +1,15 @@
+Material My Material : ShaderBlow/MatDefs/Glass/Glass.j3md {
+     MaterialParameters {
+        RefMap : Flip TestTextures/Water256.dds
+        Nor_Inv_Y : true
+        NormalMap : TestModels/LightBlow/jme_lightblow_nor.png
+        ChromaticAbberation : true
+        
+        Toon : true
+        EdgesColor : 1.0 0.0 0.0 1.0
+        EdgeSize : 0.01
+        Fog_Edges : true
+     }
+    AdditionalRenderState {
+    }
+}

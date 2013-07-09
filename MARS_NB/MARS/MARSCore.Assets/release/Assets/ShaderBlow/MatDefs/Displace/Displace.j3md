@@ -1,0 +1,243 @@
+MaterialDef Displace {
+ 
+    MaterialParameters {
+        Float SpeedX : 5.0
+        Float SpeedY : 5.0
+        Float SpeedZ : 5.0
+        Float SizeX : 1.0
+        Float SizeY : 1.0
+        Float SizeZ : 1.0
+        Float DepthX : 0.3
+        Float DepthY : 0.3
+        Float DepthZ : 0.3
+        Int DirX : 1
+        Int DirY : 1
+        Int DirZ : 1
+        Float RotationX : 45.0
+        Float RotationY : 45.0
+        Float RotationZ : 45.0
+        Float Offset1X : 0.0
+        Float Offset2X : 0.0
+        Float Offset1Y : 0.0
+        Float Offset2Y : 0.0
+        Float Offset1Z : 0.0
+        Float Offset2Z : 0.0
+        Boolean MirrorX
+        Boolean MirrorY
+        Boolean MirrorZ
+        Boolean DeformX_Wave
+        Boolean DeformY_Wave
+        Boolean DeformZ_Wave
+        Boolean DeformX_Ripple
+        Boolean DeformY_Ripple
+        Boolean DeformZ_Ripple
+        Boolean DeformX_Swell
+        Boolean DeformY_Swell
+        Boolean DeformZ_Swell
+        Boolean DeformX_Pulse
+        Boolean DeformY_Pulse
+        Boolean DeformZ_Pulse
+        Boolean DeformX_Warble
+        Boolean DeformY_Warble
+        Boolean DeformZ_Warble
+        Boolean DeformX_Water
+        Boolean DeformY_Water
+        Boolean DeformZ_Water
+        Boolean XPlane
+        Boolean YPlane
+        Boolean ZPlane
+ 
+        // Lighting
+        Boolean VertexLighting
+        Boolean LowQuality
+        Boolean HighQuality
+        Boolean UseAlpha
+        Float AlphaDiscardThreshold
+        Boolean LATC
+        Boolean UseMaterialColors
+        Boolean VTangent
+        Boolean Minnaert
+        Boolean WardIso
+        Boolean UseVertexColor
+        Color Ambient (MaterialAmbient)
+        Color Diffuse (MaterialDiffuse)
+        Color Specular (MaterialSpecular)
+        Float Shininess (MaterialShininess) : 1
+        Texture2D DiffuseMap
+        Texture2D NormalMap
+        Texture2D SpecularMap
+        Texture2D ParallaxMap
+        Boolean PackedNormalParallax
+        Float ParallaxHeight : 0.05
+        Boolean SteepParallax
+        Texture2D AlphaMap
+        Texture2D ColorRamp
+        Texture2D GlowMap
+        Texture2D LightMap
+        Boolean SeparateTexCoord
+        Color GlowColor
+        Vector3 FresnelParams
+        TextureCubeMap EnvMap
+        Boolean EnvMapAsSphereMap
+    }
+ 
+    Technique {
+        LightMode MultiPass
+ 
+        VertexShader GLSL100:   Shaders/Displace/Displace.vert
+        FragmentShader GLSL100: Common/MatDefs/Light/Lighting.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            ViewMatrix
+            CameraPosition
+            WorldMatrix
+            Time
+        }
+ 
+        Defines {
+            DEFORMX_WAVE : DeformX_Wave
+            DEFORMY_WAVE : DeformY_Wave
+            DEFORMZ_WAVE : DeformZ_Wave
+            DEFORMX_RIPPLE : DeformX_Ripple
+            DEFORMY_RIPPLE : DeformY_Ripple
+            DEFORMZ_RIPPLE : DeformZ_Ripple
+            DEFORMX_SWELL : DeformX_Swell
+            DEFORMY_SWELL : DeformY_Swell
+            DEFORMZ_SWELL : DeformZ_Swell
+            DEFORMX_PULSE : DeformX_Pulse
+            DEFORMY_PULSE : DeformY_Pulse
+            DEFORMZ_PULSE : DeformZ_Pulse
+            DEFORMX_WARBLE : DeformX_Warble
+            DEFORMY_WARBLE : DeformY_Warble
+            DEFORMZ_WARBLE : DeformZ_Warble
+            DEFORMX_WATER : DeformX_Water
+            DEFORMY_WATER : DeformY_Water
+            DEFORMZ_WATER : DeformZ_Water
+            USE_MIRRORX : MirrorX
+            USE_MIRRORY : MirrorY
+            USE_MIRRORZ : MirrorZ
+            IS_XPLANE : XPlane
+            IS_YPLANE : YPlane
+            IS_ZPLANE : ZPlane
+ 
+            //Lighting
+            LATC : LATC
+            VERTEX_COLOR : UseVertexColor
+            VERTEX_LIGHTING : VertexLighting
+            ATTENUATION : Attenuation
+            MATERIAL_COLORS : UseMaterialColors
+            V_TANGENT : VTangent
+            MINNAERT  : Minnaert
+            WARDISO   : WardIso
+            LOW_QUALITY : LowQuality
+            HQ_ATTENUATION : HighQuality
+ 
+            DIFFUSEMAP : DiffuseMap
+            NORMALMAP : NormalMap
+            SPECULARMAP : SpecularMap
+            PARALLAXMAP : ParallaxMap
+            NORMALMAP_PARALLAX : PackedNormalParallax
+            STEEP_PARALLAX : SteepParallax
+            ALPHAMAP : AlphaMap
+            COLORRAMP : ColorRamp
+            LIGHTMAP : LightMap
+            SEPARATE_TEXCOORD : SeparateTexCoord
+ 
+            USE_REFLECTION : EnvMap
+            SPHERE_MAP : SphereMap
+        }
+    }
+ 
+    Technique PreShadow {
+ 
+        VertexShader GLSL100 :   Common/MatDefs/Shadow/PreShadow.vert
+        FragmentShader GLSL100 : Common/MatDefs/Shadow/PreShadow.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+        }
+ 
+        Defines {
+            DIFFUSEMAP_ALPHA : DiffuseMap
+        }
+ 
+        RenderState {
+            FaceCull Off
+            DepthTest On
+            DepthWrite On
+            PolyOffset 5 0
+            ColorWrite Off
+        }
+ 
+    }
+ 
+  Technique PreNormalPass {
+ 
+        VertexShader GLSL100 :   Common/MatDefs/SSAO/normal.vert
+        FragmentShader GLSL100 : Common/MatDefs/SSAO/normal.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            NormalMatrix
+        }
+ 
+        Defines {
+            DIFFUSEMAP_ALPHA : DiffuseMap
+        }
+ 
+        RenderState {
+ 
+        }
+ 
+    }
+ 
+    Technique GBuf {
+ 
+        VertexShader GLSL100:   Common/MatDefs/Light/GBuf.vert
+        FragmentShader GLSL100: Common/MatDefs/Light/GBuf.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            NormalMatrix
+            WorldViewMatrix
+            WorldMatrix
+        }
+ 
+        Defines {
+            VERTEX_COLOR : UseVertexColor
+            MATERIAL_COLORS : UseMaterialColors
+            V_TANGENT : VTangent
+            MINNAERT  : Minnaert
+            WARDISO   : WardIso
+ 
+            DIFFUSEMAP : DiffuseMap
+            NORMALMAP : NormalMap
+            SPECULARMAP : SpecularMap
+            PARALLAXMAP : ParallaxMap
+        }
+    }
+ 
+    Technique FixedFunc {
+        LightMode FixedPipeline
+    }
+ 
+    Technique Glow {
+ 
+        VertexShader GLSL100:   Common/MatDefs/Misc/Unshaded.vert
+        FragmentShader GLSL100: Common/MatDefs/Light/Glow.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+            HAS_GLOWMAP : GlowMap
+            HAS_GLOWCOLOR : GlowColor
+        }
+    }
+}

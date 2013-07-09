@@ -1,0 +1,10 @@
+Material Base : MatDefs/LightBlow/LightBlow.j3md {
+     MaterialParameters {
+        NormalMap : Flip Models/LightBlow/jme_lightblow_nor.png
+        Nor_Inv_Y : false
+        Nor_Inv_X : false
+        FogColor : 0.7 0.7 0.7 20.0
+     }
+    AdditionalRenderState {
+    }
+}
