@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.tools.FileObject;
@@ -25,6 +26,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import mars.Helper.Helper;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
@@ -36,6 +38,7 @@ import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import org.openide.filesystems.FileUtil;
 import org.openide.modules.InstalledFileLocator;
+import org.openide.util.Lookup;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -233,7 +236,20 @@ public class XML_JAXB_ConfigReaderWriter {
     public BasicAUV loadAUV(File file){
         try {
             if(file.exists()){
-                JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
+                
+                //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+                Lookup bag = Lookup.getDefault();
+                // the bag of objects
+                // A query that looks up instances extending "MyClass"...
+                Lookup.Template<BasicAUV> pattern = new Lookup.Template(BasicAUV.class);
+                // The result of the query
+                Lookup.Result<BasicAUV> result = bag.lookup( pattern );
+                Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
+                Class[] toArray = allClasses.toArray(new Class[0]);
+                Class[] append = Helper.prepend(toArray, BasicAUV.class);
+                
+                JAXBContext context = JAXBContext.newInstance( append );
+                //JAXBContext context = JAXBContext.newInstance( BasicAUV.class.getPackage().getName() );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
@@ -352,7 +368,7 @@ public class XML_JAXB_ConfigReaderWriter {
             //String absolutePath3 = file2.getAbsolutePath();
             //io.getOut().println (absolutePath3);
             //FileObject fo = FileUtil.getConfigFile(configName);
-            if(file.exists()){
+            if(file.exists()){                        
                 JAXBContext context = JAXBContext.newInstance( MARS_Settings.class );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();

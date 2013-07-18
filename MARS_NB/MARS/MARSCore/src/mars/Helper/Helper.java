@@ -200,5 +200,19 @@ public class Helper {
         }
         return area;
     }
-
+    
+    public static <T> T[] append(T[] arr, T lastElement) {
+        final int N = arr.length;
+        arr = java.util.Arrays.copyOf(arr, N+1);
+        arr[N] = lastElement;
+        return arr;
+    }
+    
+    public static <T> T[] prepend(T[] arr, T firstElement) {
+        final int N = arr.length;
+        arr = java.util.Arrays.copyOf(arr, N+1);
+        System.arraycopy(arr, 0, arr, 1, N);
+        arr[0] = firstElement;
+        return arr;
+    }
 }

@@ -285,7 +285,36 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>mars</package>
+                <package>mars.Helper</package>
+                <package>mars.accumulators</package>
+                <package>mars.actuators</package>
+                <package>mars.actuators.servos</package>
+                <package>mars.actuators.visualizer</package>
+                <package>mars.actuators.weapons</package>
+                <package>mars.annotations</package>
+                <package>mars.auv</package>
+                <package>mars.auv.example</package>
+                <package>mars.control</package>
+                <package>mars.core</package>
+                <package>mars.filter</package>
+                <package>mars.gui</package>
+                <package>mars.gui.dnd</package>
+                <package>mars.gui.sonarview</package>
+                <package>mars.hardware</package>
+                <package>mars.recorder</package>
+                <package>mars.ros</package>
+                <package>mars.sensors</package>
+                <package>mars.sensors.sonar</package>
+                <package>mars.server</package>
+                <package>mars.server.ros</package>
+                <package>mars.simobjects</package>
+                <package>mars.states</package>
+                <package>mars.terrain</package>
+                <package>mars.waves</package>
+                <package>mars.xml</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

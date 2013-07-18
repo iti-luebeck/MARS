@@ -478,7 +478,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             MARSTopComp.setAuv_manager(auvManager);
             TreeTopComp.setSimob_manager(simobManager);
             MARSTopComp.setSimob_manager(simobManager);
-            TreeTopComp.initCharts();
             TreeTopComp.initAUVTree(auvManager);
             TreeTopComp.initSimObjectTree(simobManager);
             TreeTopComp.initEnvironmentTree(physical_environment);
@@ -1218,7 +1217,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         //update the view in the next frame
         Future fut = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
-                    TreeTopComp.initCharts();
                     TreeTopComp.updateTrees();
                     TreeTopComp.initPopUpMenues(auvManager);
                     return null;

@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
@@ -27,6 +28,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -177,6 +180,11 @@ public final class MARSTreeTopComponent extends TopComponent {
         booleanPopUpSettings = new javax.swing.JPopupMenu();
         booleanPopUpEnable3 = new javax.swing.JMenuItem();
         booleanPopUpDisable3 = new javax.swing.JMenuItem();
+        forceValueDialog = new javax.swing.JDialog();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -405,6 +413,75 @@ public final class MARSTreeTopComponent extends TopComponent {
             }
         });
         booleanPopUpSettings.add(booleanPopUpDisable3);
+
+        forceValueDialog.setTitle(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.forceValueDialog.title")); // NOI18N
+        forceValueDialog.setMinimumSize(new java.awt.Dimension(400, 362));
+
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "AUV", "Class", "ForceValue"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(jTable1);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout forceValueDialogLayout = new javax.swing.GroupLayout(forceValueDialog.getContentPane());
+        forceValueDialog.getContentPane().setLayout(forceValueDialogLayout);
+        forceValueDialogLayout.setHorizontalGroup(
+            forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(forceValueDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(forceValueDialogLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
+                .addContainerGap())
+        );
+        forceValueDialogLayout.setVerticalGroup(
+            forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(forceValueDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addContainerGap())
+        );
 
         auv_tree.setCellRenderer(new MyTreeCellRenderer());
         renderer = (DefaultTreeCellRenderer) auv_tree
@@ -1119,7 +1196,30 @@ public final class MARSTreeTopComponent extends TopComponent {
     }//GEN-LAST:event_booleanPopUpDisableActionPerformed
 
     private void forceValuePopUpForceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpForceActionPerformed
-        // TODO add your handling code here:
+        //get the table model
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        //clean it
+        model.setRowCount(0);
+        //get the last selected auv
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        AUV oauv = (AUV)selectionPath.getPathComponent(1);//its always the second one, first one is auv_manager 
+                
+        //get auv data from manager
+        HashMap<String, AUV> auvs = auvManager.getAUVs();
+        for (Map.Entry<String, AUV> entry : auvs.entrySet()) {
+            AUV auv = entry.getValue();
+            //add data to table
+            if(!oauv.getName().equals(auv.getName())){//but dont add ourself from selection
+                int ai = auv.getClass().getName().lastIndexOf(".");
+                Object[] rowData = {auv.getName(),auv.getClass().getName().substring(ai+1),false}; 
+                model.addRow(rowData);
+            }
+        }
+        //sort it all
+        jTable1.getRowSorter().toggleSortOrder(0);
+        //show it
+        forceValueDialog.setLocationRelativeTo(this);
+        forceValueDialog.setVisible(true);
     }//GEN-LAST:event_forceValuePopUpForceActionPerformed
 
     private void forceValuePopUpAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpAllActionPerformed
@@ -1363,6 +1463,30 @@ public final class MARSTreeTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_jme3_auv_debug_data_buyActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       forceValueDialog.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String auvName = (String)model.getValueAt(i, 0);
+            Boolean force = (Boolean)model.getValueAt(i, 2);
+            if(force){
+                AUV auv = auvManager.getAUV(auvName);
+                AUV oauv = (AUV)selectionPath.getPathComponent(1);
+                if(auv != oauv){ //not myself
+                    setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
+                }
+                auv_tree.updateUI();
+            }
+        }
+        forceValueDialog.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JPopupMenu auv_popup_menu;
@@ -1385,12 +1509,15 @@ public final class MARSTreeTopComponent extends TopComponent {
     private javax.swing.JColorChooser color_dialog;
     private javax.swing.JMenuItem delete_auv;
     private javax.swing.JCheckBoxMenuItem enable_auv;
+    private javax.swing.JDialog forceValueDialog;
     private javax.swing.JPopupMenu forceValuePopUp;
     private javax.swing.JMenu forceValuePopUpAUV;
     private javax.swing.JMenuItem forceValuePopUpAll;
     private javax.swing.JMenuItem forceValuePopUpAllClass;
     private javax.swing.JMenu forceValuePopUpClass;
     private javax.swing.JMenuItem forceValuePopUpForce;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1401,7 +1528,9 @@ public final class MARSTreeTopComponent extends TopComponent {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JMenu jme3_auv_debug_data;
     private javax.swing.JMenuItem jme3_auv_debug_data_buy;
     private javax.swing.JPopupMenu jme3_auv_sens;
@@ -1444,30 +1573,6 @@ public final class MARSTreeTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
-    }
-    
-        /**
-     * 
-     */
-    @Deprecated
-    public void initCharts(){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    if(auvManager != null){
-                        AUV auv = auvManager.getAUV("asv");
-                        /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
-                        auv.getPhysicalvalues().getTraceVolume().setVisible(false);*/
-                        /*ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
-                        Iterator iter = traces1.iterator();
-                        while(iter.hasNext()) {
-                            ITrace2D trace = (ITrace2D)iter.next();
-                            charts.addTrace(trace);
-                        }*/
-                    }
-                }
-            }
-        );
     }
     
     /**
@@ -1776,5 +1881,20 @@ public final class MARSTreeTopComponent extends TopComponent {
                 }
             }
         );
+    }
+    
+    private void forceValue(){
+        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
+        TreePath selectionPath = auv_tree.getSelectionPath();
+        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+        HashMap<String, AUV> auvs = auvManager.getAUVs();
+        for ( String elem : auvs.keySet() ){
+            AUV auv = (AUV)auvs.get(elem);
+            AUV oauv = (AUV)selectionPath.getPathComponent(1);
+            if(auv != oauv){ //not myself
+                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
+            }
+        }
+        auv_tree.updateUI();
     }
 }
