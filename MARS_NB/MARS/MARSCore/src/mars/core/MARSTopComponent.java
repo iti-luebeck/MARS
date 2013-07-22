@@ -7,6 +7,7 @@ package mars.core;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
 import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
@@ -122,6 +123,7 @@ public final class MARSTopComponent extends TopComponent {
     private static int resolution_height = 480;
     private static int resolution_width = 640;
     private static int framelimit = 60;
+    private static boolean headless = false;
     
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("Simple task");
 
@@ -1916,6 +1918,7 @@ public final class MARSTopComponent extends TopComponent {
                             resolution_height = mars_settings.getResolution_Height();
                             resolution_width = mars_settings.getResolution_Width();
                             framelimit = mars_settings.getFrameLimit();
+                            headless = mars_settings.isHeadless();
                         } catch (Exception ex) {
                             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -1982,47 +1985,50 @@ public final class MARSTopComponent extends TopComponent {
                         mars.setSettings(settings);
                         //mars.setProgressHandle(progr);
                         
-                        mars.start();
- 
-                        SwingUtilities.invokeLater(new Runnable(){
-                            public void run(){
-                                final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
+                        if(headless){
+                            mars.start(JmeContext.Type.Headless);
+                        }else{
+                            mars.start();
+                            SwingUtilities.invokeLater(new Runnable(){
+                                public void run(){
+                                    final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
 
-                                sim_panel = ctx.createPanel(PaintMode.Accelerated);
-                                sim_panel.setPreferredSize(new Dimension(640, 480));
-                                sim_panel.setMinimumSize(new Dimension(640, 480));
-                                sim_panel.transferFocus();
-                                ctx.setInputSource(sim_panel);
-                                
-                                map_panel = ctx.createPanel(PaintMode.Accelerated);
-                                map_panel.setPreferredSize(new Dimension(256, 256));
-                                map_panel.setMinimumSize(new Dimension(256, 256));
-                                        
-                                addAWTMainPanel(sim_panel);
-                                //addAWTMapPanel(map_panel);
-                                Runnable run = new Runnable() {
-                                    public void run() {
-                                        TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
-                                        MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
-                                        mtc.addAWTMapPanel(map_panel);
+                                    sim_panel = ctx.createPanel(PaintMode.Accelerated);
+                                    sim_panel.setPreferredSize(new Dimension(640, 480));
+                                    sim_panel.setMinimumSize(new Dimension(640, 480));
+                                    sim_panel.transferFocus();
+                                    ctx.setInputSource(sim_panel);
+
+                                    map_panel = ctx.createPanel(PaintMode.Accelerated);
+                                    map_panel.setPreferredSize(new Dimension(256, 256));
+                                    map_panel.setMinimumSize(new Dimension(256, 256));
+
+                                    addAWTMainPanel(sim_panel);
+                                    //addAWTMapPanel(map_panel);
+                                    Runnable run = new Runnable() {
+                                        public void run() {
+                                            TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
+                                            MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
+                                            mtc.addAWTMapPanel(map_panel);
+                                        };
                                     };
-                                };
-                                WindowManager.getDefault().invokeWhenUIReady(run);
-                        
-                                mars.enqueue(new Callable<Void>(){
-                                public Void call(){
-                                        mars.getViewPort().setClearFlags(true, true, true);
-                                        //app.getGuiViewPort().setEnabled(true);
-                                        mars.getFlyByCamera().setDragToRotate(true);
-                                        sim_panel.attachTo(true, mars.getViewPort());
-                                        //sim_panel.attachTo(false, mars.getViewPort2());
-                                        sim_panel.attachTo(true, mars.getGuiViewPort());
-                                        map_panel.attachTo(false, mars.getMapViewPort());
-                                        return null;
-                                    }
-                                });
-                            }
-                        });
+                                    WindowManager.getDefault().invokeWhenUIReady(run);
+
+                                    mars.enqueue(new Callable<Void>(){
+                                    public Void call(){
+                                            mars.getViewPort().setClearFlags(true, true, true);
+                                            //app.getGuiViewPort().setEnabled(true);
+                                            mars.getFlyByCamera().setDragToRotate(true);
+                                            sim_panel.attachTo(true, mars.getViewPort());
+                                            //sim_panel.attachTo(false, mars.getViewPort2());
+                                            sim_panel.attachTo(true, mars.getGuiViewPort());
+                                            map_panel.attachTo(false, mars.getMapViewPort());
+                                            return null;
+                                        }
+                                    });
+                                }
+                            });
+                        }   
                 }
         });
         t.start();

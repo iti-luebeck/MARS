@@ -467,7 +467,7 @@ public class MARS_Settings implements UpdateState{
         Physics.put("maxsubsteps", maxsubsteps);
     }
     
-        /**
+    /**
      *
      * @return
      */
@@ -1831,6 +1831,22 @@ public class MARS_Settings implements UpdateState{
      */
     public void setGlowSelection(boolean GlowSelection) {
         Gui.put("GlowSelection", GlowSelection);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isHeadless() {
+        return (Boolean)Misc.get("headless");
+    }
+
+    /**
+     *
+     * @param headless 
+     */
+    public void setHeadless(boolean headless) {
+        Misc.put("headless", headless);
     }
     
     @Override

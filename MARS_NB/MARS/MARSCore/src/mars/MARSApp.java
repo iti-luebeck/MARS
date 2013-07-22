@@ -28,6 +28,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
  * The main class of the application.
  * @author Thomas Tosik
  */
+@Deprecated
 public class MARSApp extends SingleFrameApplication {
 
     private static MARS_Main app;//com.jme3.app.Application app;
