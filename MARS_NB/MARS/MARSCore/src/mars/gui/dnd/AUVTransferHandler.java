@@ -18,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
 import mars.auv.AUV;
+import org.openide.modules.InstalledFileLocator;
 
 /**
  *
@@ -49,12 +50,15 @@ public class AUVTransferHandler extends TransferHandler{
                 if (selPath.getLastPathComponent() instanceof AUV) { 
                     AUV auv = (AUV)selPath.getLastPathComponent();
                     if(!auv.getAuv_param().getDNDIcon().equals("")){
-                        img = ImageIO.read(new File(".//Assets/Icons/"+auv.getAuv_param().getDNDIcon()));
+                        File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + auv.getAuv_param().getDNDIcon(), "mars.core", false);
+                        img = ImageIO.read(file);
                     }else{// no dnd image
-                        img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
+                        File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
+                        img = ImageIO.read(file);
                     }
                 }else{//default auv image?
-                    img = ImageIO.read(new File(".//Assets/Icons/"+"simob_undefined_dnd.png"));
+                    File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
+                    img = ImageIO.read(file);
                 }
             }
         } catch (IOException e) {

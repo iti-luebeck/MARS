@@ -227,7 +227,7 @@ public class ProjectedWaterProcessorWithRefraction implements SceneProcessor {
      * @param manager
      */
     protected void loadTextures(AssetManager manager) {
-        manager.registerLocator("Assets/gridwaves", FileLocator.class);
+        //manager.registerLocator("Assets/gridwaves", FileLocator.class);
         normalTexture = (Texture2D) manager.loadTexture("normalmap3.dds");
         dudvTexture = (Texture2D) manager.loadTexture("dudvmap.png");
         foamTexture = (Texture2D) manager.loadTexture("oceanfoam.png");

@@ -13,7 +13,10 @@ import com.jme3.scene.Spatial;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import mars.PickHint;
+import mars.auv.BasicAUV;
+import org.openide.util.Lookup;
 
 /**
  * This class has various basic static methods that are used everywhere.
@@ -215,4 +218,24 @@ public class Helper {
         arr[0] = firstElement;
         return arr;
     }
+    
+    public static Class[] concatClassArrays(Class[] a, Class[] b){
+        Class[] concat = new Class[a.length + b.length];
+        System.arraycopy(a, 0, concat, 0, a.length);
+        System.arraycopy(b, 0, concat, a.length, b.length);
+        return concat;
+    }
+    
+    /*public static Class[] lookout(Class cla){
+        //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+        Lookup bag = Lookup.getDefault();
+        // the bag of objects
+        // A query that looks up instances extending "MyClass"...
+        Lookup.Template<cla> pattern = new Lookup.Template(cla.class);
+        // The result of the query
+        Lookup.Result<BasicAUV> result = bag.lookup( pattern );
+        Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
+        Class[] toArray = allClasses.toArray(new Class[0]);
+        return toArray;
+    }*/
 }

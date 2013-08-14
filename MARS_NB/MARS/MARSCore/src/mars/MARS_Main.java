@@ -25,12 +25,15 @@ import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.ScreenshotAppState;
+import com.jme3.app.state.StereoCamAppState;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.RawInputListener;
+import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -38,7 +41,9 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.OBJLoader;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.system.awt.AwtPanel;
 import de.lessvoid.nifty.Nifty;
@@ -171,7 +176,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
 
         progr.progress( "Creating MapState" );
         mapstate = new MapState(assetManager);
-        MapViewPort.attachScene(mapstate.getRootNode());
+        MapViewPort.attachScene(mapstate.getRootNode());   
         stateManager.attach(mapstate);
         
         //nifty state
@@ -206,6 +211,10 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         }else{
             configManager.setConfig("default");
         }
+        
+        //enable OcullusRift support
+        //StereoCamAppState stereoCamAppState = new StereoCamAppState();
+        //stateManager.attach(stereoCamAppState);
             
        /* FlyCamAppState flycamState = (FlyCamAppState)stateManager.getState(FlyCamAppState.class);
         if(flycamState != null){
@@ -217,6 +226,21 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             stateManager.attach(flyc);
         }*/
         progr.finish();
+        
+        
+        //oculllus sutff
+        /*DirectionalLight sun = new DirectionalLight();
+        rootNode.addLight(sun);
+        
+        
+        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Geometry PressureSensorStart = new Geometry("PressureStart", sphere7);
+        Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat7.setColor("Color", ColorRGBA.White);
+        PressureSensorStart.setMaterial(mark_mat7);
+        PressureSensorStart.setLocalTranslation(0f, 0f, 0f);
+        PressureSensorStart.updateGeometricState();
+        rootNode.attachChild(PressureSensorStart);*/
     }
     
     private void initAssetPaths(){
@@ -262,8 +286,11 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         File file14 = InstalledFileLocator.getDefault().locate("Assets/MatDefs", "mars.core", false);
         assetManager.registerLocator(file14.getAbsolutePath(), FileLocator.class);
         
-        //File file15 = InstalledFileLocator.getDefault().locate("Assets/Materials", "mars.core", false);
-        //assetManager.registerLocator(file15.getAbsolutePath(), FileLocator.class);
+        File fileAll = InstalledFileLocator.getDefault().locate("Assets", "mars.core", false);
+        assetManager.registerLocator(fileAll.getAbsolutePath(), FileLocator.class);
+        
+        File file15 = InstalledFileLocator.getDefault().locate("Assets/Materials", "mars.core", false);
+        assetManager.registerLocator(file15.getAbsolutePath(), FileLocator.class);
         
         File file16 = InstalledFileLocator.getDefault().locate("Assets/Rim", "mars.core", false);
         assetManager.registerLocator(file16.getAbsolutePath(), FileLocator.class);
@@ -330,7 +357,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             statsDarken = false;
         }
 
-        if(startstate.isInitialized() && TreeTopComp!=null && MARSTopComp!=null && startstateinit==false){// little hack to allow the starting of a config only when the startstate was initialized
+        if(startstate != null && startstate.isInitialized() && TreeTopComp!=null && MARSTopComp!=null && startstateinit==false){// little hack to allow the starting of a config only when the startstate was initialized
             MARSTopComp.allowStateInteraction();
             startstateinit = true;
         }

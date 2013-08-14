@@ -22,6 +22,7 @@ import mars.Collider;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.PhysicalExchanger;
 import mars.gui.UpdateState;
 import mars.recorder.RecordManager;
 import mars.recorder.Recording;
@@ -32,11 +33,13 @@ import mars.sensors.sonar.Sonar;
 import mars.states.MapState;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Creates an AUV_Manger. You register your auv's here.
  * @author Thomas Tosik
  */
+@ServiceProvider(service=AUV_Manager.class)
 public class AUV_Manager implements UpdateState{
 
     //auv HashMap to store and load auv's
@@ -80,6 +83,9 @@ public class AUV_Manager implements UpdateState{
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.AUVsNode = simstate.getAUVsNode();
         this.bulletAppState = simstate.getBulletAppState();
+    }
+
+    public AUV_Manager() {
     }
 
     /**

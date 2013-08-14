@@ -37,6 +37,7 @@ import mars.PhysicalExchanger;
 import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * This a basic thruster implementation that you can use for your own thrusters.

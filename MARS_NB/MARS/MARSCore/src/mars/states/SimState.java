@@ -8,6 +8,7 @@ import com.jme3.bullet.collision.shapes.CollisionShape;//bulletphysics.collision
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.app.state.StereoCamAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
@@ -60,6 +61,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -103,6 +105,7 @@ import mars.ros.MARSNodeMain;
 import mars.xml.ConfigManager;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -264,6 +267,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
             
+            //enable OcullusRift support
+            //StereoCamAppState stereoCamAppState = new StereoCamAppState();
+            //stateManager.attach(stereoCamAppState);
+
+            
             //mars.getViewPort().setEnabled(false);
     
             
@@ -366,6 +374,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 }
             }
             
+            Lookup bag = Lookup.getDefault();
+            Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
+            Lookup.Result<AUV_Manager> result3 = bag.lookup( pattern3 );
+            Collection<? extends AUV_Manager> allInstances = result3.allInstances();
+                
             progr.progress( "Init Map" );
             initMap();//for mars_settings
             

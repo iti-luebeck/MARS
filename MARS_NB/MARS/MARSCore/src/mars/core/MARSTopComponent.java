@@ -15,8 +15,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +41,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 import java.util.logging.XMLFormatter;
+import javax.swing.Action;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -1900,7 +1907,7 @@ public final class MARSTopComponent extends TopComponent {
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
-         
+
         //set the toolbar positions
         ToolbarPool.getDefault().setConfiguration("MyToolbar");
         
@@ -1922,10 +1929,13 @@ public final class MARSTopComponent extends TopComponent {
                         } catch (Exception ex) {
                             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        AppSettings settings = new AppSettings(true);
+                        final AppSettings settings = new AppSettings(true);
                         settings.setWidth(640);
                         settings.setHeight(480);
+                        /*settings.setWidth(1280);
+                        settings.setHeight(800);
                         settings.setFrameRate(60);
+                        settings.setFullscreen(true);*/
                         //settings.setCustomRenderer(mars);
                         settings.setCustomRenderer(AwtPanelsContext.class);
                         //view.setCanvasPanel(settings.getWidth(),settings.getHeight());
@@ -1996,6 +2006,8 @@ public final class MARSTopComponent extends TopComponent {
                                     sim_panel = ctx.createPanel(PaintMode.Accelerated);
                                     sim_panel.setPreferredSize(new Dimension(640, 480));
                                     sim_panel.setMinimumSize(new Dimension(640, 480));
+                                    //sim_panel.setPreferredSize(new Dimension(1280, 800));
+                                    //sim_panel.setMinimumSize(new Dimension(1280, 800));
                                     sim_panel.transferFocus();
                                     ctx.setInputSource(sim_panel);
 
@@ -2004,6 +2016,16 @@ public final class MARSTopComponent extends TopComponent {
                                     map_panel.setMinimumSize(new Dimension(256, 256));
 
                                     addAWTMainPanel(sim_panel);
+                                    
+                                    /*JFrame jf = new JFrame();
+                                    jf.setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS));
+                                    jf.add(sim_panel);
+                                    jf.setExtendedState(Frame.MAXIMIZED_BOTH);  
+                                    jf.setUndecorated(true);  
+                                    jf.setSize(1280, 800);
+                                    //jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                    jf.setVisible(true);*/
+                                    
                                     //addAWTMapPanel(map_panel);
                                     Runnable run = new Runnable() {
                                         public void run() {
@@ -2013,6 +2035,13 @@ public final class MARSTopComponent extends TopComponent {
                                         };
                                     };
                                     WindowManager.getDefault().invokeWhenUIReady(run);
+                                    
+                                    /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            FileUtil.getConfigObject("Actions/Window/org-netbeans-core-windows-actions-ToggleFullScreenAction.instance", Action.class).actionPerformed(null);
+                                        }
+                                    });*/
 
                                     mars.enqueue(new Callable<Void>(){
                                     public Void call(){

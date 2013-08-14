@@ -15,6 +15,7 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +31,9 @@ import mars.Helper.Helper;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchanger;
+import mars.actuators.Actuator;
+import mars.actuators.Thruster;
 import mars.recorder.Recording;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -100,7 +104,18 @@ public class XML_JAXB_ConfigReaderWriter {
     public SimObject loadSimObject(File file){
         try {
             if(file.exists()){
-                JAXBContext context = JAXBContext.newInstance( SimObject.class );
+                //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+                Lookup bag = Lookup.getDefault();
+                // the bag of objects
+                // A query that looks up instances extending "MyClass"...
+                Lookup.Template<SimObject> pattern = new Lookup.Template(SimObject.class);
+                // The result of the query
+                Lookup.Result<SimObject> result = bag.lookup( pattern );
+                Set<Class<? extends SimObject>> allClasses = result.allClasses();
+                Class[] toArray = allClasses.toArray(new Class[0]);
+                Class[] append = Helper.prepend(toArray, SimObject.class);
+                
+                JAXBContext context = JAXBContext.newInstance( append );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
@@ -125,7 +140,18 @@ public class XML_JAXB_ConfigReaderWriter {
             //File file = new File("./config/" + getConfigName() + "/simobjects/" + name + ".xml");
             File file = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/simobjects/" + name + ".xml", "mars.core", false);
             if(file.exists()){
-                JAXBContext context = JAXBContext.newInstance( SimObject.class );
+                //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+                Lookup bag = Lookup.getDefault();
+                // the bag of objects
+                // A query that looks up instances extending "MyClass"...
+                Lookup.Template<SimObject> pattern = new Lookup.Template(SimObject.class);
+                // The result of the query
+                Lookup.Result<SimObject> result = bag.lookup( pattern );
+                Set<Class<? extends SimObject>> allClasses = result.allClasses();
+                Class[] toArray = allClasses.toArray(new Class[0]);
+                Class[] append = Helper.prepend(toArray, SimObject.class);
+                
+                JAXBContext context = JAXBContext.newInstance( append );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
@@ -246,10 +272,30 @@ public class XML_JAXB_ConfigReaderWriter {
                 Lookup.Result<BasicAUV> result = bag.lookup( pattern );
                 Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
                 Class[] toArray = allClasses.toArray(new Class[0]);
+                
                 Class[] append = Helper.prepend(toArray, BasicAUV.class);
                 
-                JAXBContext context = JAXBContext.newInstance( append );
-                //JAXBContext context = JAXBContext.newInstance( BasicAUV.class.getPackage().getName() );
+                
+                
+                Lookup.Template<PhysicalExchanger> pattern2 = new Lookup.Template(PhysicalExchanger.class);
+                // The result of the query
+                Lookup.Result<PhysicalExchanger> result2 = bag.lookup( pattern2 );
+                Set<Class<? extends PhysicalExchanger>> allClasses2 = result2.allClasses();
+                Class[] toArray2 = allClasses2.toArray(new Class[0]);
+                
+                Class[] append2 = Helper.prepend(toArray2, PhysicalExchanger.class);
+                
+                Class[] append3 = Helper.concatClassArrays(append, append2);
+                
+                
+                Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
+                Lookup.Result<AUV_Manager> result3 = bag.lookup( pattern3 );
+                Collection<? extends AUV_Manager> allInstances = result3.allInstances();
+//                Class[] toArray4 = allInstances.toArray(new Class[0]);
+                
+                
+                
+                JAXBContext context = JAXBContext.newInstance( append3 );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
@@ -274,7 +320,18 @@ public class XML_JAXB_ConfigReaderWriter {
             //File file = new File("./config/" + getConfigName() + "/auvs/" + name + ".xml");
             File file = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/auvs/" + name + ".xml", "mars.core", false);
             if(file.exists()){
-                JAXBContext context = JAXBContext.newInstance( BasicAUV.class );
+                //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+                Lookup bag = Lookup.getDefault();
+                // the bag of objects
+                // A query that looks up instances extending "MyClass"...
+                Lookup.Template<BasicAUV> pattern = new Lookup.Template(BasicAUV.class);
+                // The result of the query
+                Lookup.Result<BasicAUV> result = bag.lookup( pattern );
+                Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
+                Class[] toArray = allClasses.toArray(new Class[0]);
+                Class[] append = Helper.prepend(toArray, BasicAUV.class);
+                
+                JAXBContext context = JAXBContext.newInstance( append );
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
