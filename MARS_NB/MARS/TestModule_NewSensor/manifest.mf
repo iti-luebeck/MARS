@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.testmod.newsensor
+OpenIDE-Module-Localizing-Bundle: mars/testmod/newsensor/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -88,6 +89,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.Lookups;
 import org.openide.windows.IOProvider;
 import org.openide.windows.WindowManager;
 
@@ -133,8 +137,12 @@ public final class MARSTopComponent extends TopComponent {
     private static boolean headless = false;
     
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("Simple task");
+    private final InstanceContent content = new InstanceContent();
+    private Lookup.Result res;
 
     public MARSTopComponent() {
+        associateLookup (new AbstractLookup (content)); 
+        
         //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
         ToolTipManager ttm = ToolTipManager.sharedInstance();
         ttm.setLightWeightPopupEnabled(false);
@@ -1913,7 +1921,9 @@ public final class MARSTopComponent extends TopComponent {
         
         //redirect sysout to output window
         redirectSystemStreams();
-                
+        
+        final MARSTopComponent marsTop = this;
+
         //start actual mars sim
         Thread t = new Thread(new Runnable() {
  
@@ -2058,6 +2068,16 @@ public final class MARSTopComponent extends TopComponent {
                                 }
                             });
                         }   
+                        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            System.out.println("test1: " + mars);
+                                            //content.set(Collections.singleton(mars), null);
+                                            CentralLookup.getDefault().add(mars);}
+                                    });
+                        //System.out.println("test1: " + mars);
+                        //content.set(Collections.singleton(mars), null);
+                        //CentralLookup.getDefault().add(mars);
                 }
         });
         t.start();

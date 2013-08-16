@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.testmod.newauv
+OpenIDE-Module-Localizing-Bundle: mars/testmod/newauv/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -375,6 +375,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             }
             
             Lookup bag = Lookup.getDefault();
+            
             Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
             Lookup.Result<AUV_Manager> result3 = bag.lookup( pattern3 );
             Collection<? extends AUV_Manager> allInstances = result3.allInstances();
