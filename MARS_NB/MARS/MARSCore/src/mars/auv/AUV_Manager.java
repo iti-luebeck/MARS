@@ -44,8 +44,6 @@ public class AUV_Manager implements UpdateState{
 
     //auv HashMap to store and load auv's
     private HashMap<String,AUV> auvs = new HashMap<String,AUV> ();
-    @Deprecated
-    private Node SonarDetectableNode;
     private Collider RayDetectable;
     private Node sceneReflectionNode;
     private Node AUVsNode;
@@ -78,7 +76,6 @@ public class AUV_Manager implements UpdateState{
         this.simstate = simstate;
         this.mars = simstate.getMARS();
         this.rootNode = simstate.getRootNode();
-        this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.AUVsNode = simstate.getAUVsNode();
@@ -270,7 +267,6 @@ public class AUV_Manager implements UpdateState{
         updateSensorsOfAUVs(tpf);
         updateCommunicationOfAUVs(tpf);
         updateWaypointsOfAUVs(tpf);
-        updateValuesOfAUVs(tpf);
         updateAccumulatorsOfAUVs(tpf);
         updateRecord(tpf);
     }
@@ -308,20 +304,6 @@ public class AUV_Manager implements UpdateState{
             AUV auv = (AUV)auvs.get(elem);
             if(auv.getAuv_param().isEnabled()){
                 auv.updateWaypoints(tpf);
-            }
-        }
-    }
-
-    /**
-     *
-     * @param tpf
-     */
-    @Deprecated
-    private void updateValuesOfAUVs(float tpf){
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            if(auv.getAuv_param().isEnabled()){
-                auv.updateValues(tpf);
             }
         }
     }

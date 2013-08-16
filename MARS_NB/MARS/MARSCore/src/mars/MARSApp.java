@@ -127,7 +127,7 @@ public class MARSApp extends SingleFrameApplication {
                         app.setPauseOnLostFocus(false);                  
                         app.setShowSettings(false);
                         app.setSettings(settings);
-                        app.setView(view);
+                        //app.setView(view);
                         app.start();
  
                         SwingUtilities.invokeLater(new Runnable(){

@@ -1341,7 +1341,7 @@ public final class MARSTopComponent extends TopComponent {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.splitView();
+                    //do nothing
                 }
                 return null;
             }
@@ -2075,9 +2075,6 @@ public final class MARSTopComponent extends TopComponent {
                                             //content.set(Collections.singleton(mars), null);
                                             CentralLookup.getDefault().add(mars);}
                                     });
-                        //System.out.println("test1: " + mars);
-                        //content.set(Collections.singleton(mars), null);
-                        //CentralLookup.getDefault().add(mars);
                 }
         });
         t.start();

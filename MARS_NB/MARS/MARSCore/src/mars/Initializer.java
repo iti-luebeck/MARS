@@ -121,8 +121,6 @@ public class Initializer {
     private AppSettings settings;
     private InputManager inputManager;
     private Node sceneReflectionNode;
-    @Deprecated
-    private Node SonarDetectableNode;
     private Collider RayDetectable;
     private AssetManager assetManager;
     private RenderManager renderManager;
@@ -235,7 +233,6 @@ public class Initializer {
         this.assetManager = simstate.getAssetManager();
         this.physical_environment = physical_environment;
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
-        this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.RayDetectable = simstate.getCollider();
         this.viewPort = mars.getViewPort();
         this.water_height = mars_settings.getPhysical_environment().getWater_height();
@@ -1465,7 +1462,8 @@ public class Initializer {
         physicsTerrain.updateModelBound();*/
 
         terrain_node.attachChild(mmG);
-        SonarDetectableNode.attachChild(terrain_node);
+        sceneReflectionNode.attachChild(terrain_node);
+        RayDetectable.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain_node);
     }
     

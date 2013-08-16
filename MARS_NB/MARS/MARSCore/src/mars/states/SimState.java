@@ -4,23 +4,18 @@
  */
 package mars.states;
 
-import com.jme3.bullet.collision.shapes.CollisionShape;//bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.app.state.StereoCamAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.collision.PhysicsCollisionObject;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
-import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -35,26 +30,16 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.Renderer;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Box;
-import com.jme3.system.NanoTimer;
-import com.jme3.texture.FrameBuffer;
-import com.rits.cloning.Cloner;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -63,7 +48,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -82,26 +66,19 @@ import mars.auv.BasicAUV;
 import mars.auv.Communication_Manager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
-import mars.gui.MARSView;
 import mars.gui.ViewManager;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
-import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 import javax.swing.TransferHandler;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 import mars.Collider;
 import mars.MyDebugAppStateFilter;
-import mars.auv.WayPoints;
 import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
 import mars.recorder.RecordControl;
 import mars.recorder.RecordManager;
-import mars.recorder.Recording;
-import mars.ros.MARSNodeMain;
 import mars.xml.ConfigManager;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -128,8 +105,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private float time = 0f;
 
     //needed for graphs
-    @Deprecated
-    private MARSView view;
     private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
@@ -146,8 +121,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     private Initializer initer;
     private ArrayList auvs = new ArrayList();
     private ArrayList simobs = new ArrayList();
-    @Deprecated
-    private XMLConfigReaderWriter xmll;
     private XML_JAXB_ConfigReaderWriter xml;
     private ConfigManager configManager;
     
@@ -155,8 +128,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
-    @Deprecated
-    private Node SonarDetectableNode = new Node("SonarDetectableNode");
     private Collider RayDetectable = new Collider();
     private Node AUVsNode = new Node("AUVNode");
     private Node SimObNode = new Node("SimObNode");
@@ -198,17 +169,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     /**
      * 
-     * @param view
-     */
-    @Deprecated
-    public SimState(MARSView view, ConfigManager configManager) {
-        this.view = view;
-        this.configManager = configManager;
-    }
-    
-    /**
-     * 
-     * @param view
+     * @param MARSTopComp
+     * @param TreeTopComp
+     * @param MARSMapComp
+     * @param MARSLogComp
+     * @param configManager  
      */
     public SimState(MARSTopComponent MARSTopComp ,MARSTreeTopComponent TreeTopComp, MARSMapTopComponent MARSMapComp, MARSLogTopComponent MARSLogComp,ConfigManager configManager) {
         this.TreeTopComp = TreeTopComp;
@@ -226,6 +191,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         return rootNode;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -249,6 +217,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         chaseCam = null;
     }
 
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         
@@ -331,7 +304,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             rootNode.attachChild(mark8);*/
         
             progr.progress( "Adding Nodes" );
-            //sceneReflectionNode.attachChild(SonarDetectableNode);
             sceneReflectionNode.attachChild(AUVsNode);
             sceneReflectionNode.attachChild(SimObNode);
             rootNode.attachChild(sceneReflectionNode);
@@ -560,16 +532,27 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         MARSTopComp.allowServerInteraction(false);
     }
     
+    /**
+     *
+     * @param enable
+     */
     public void enablePublishing(boolean enable){
         mars_settings.setROS_Server_publish(enable);
     }
     
+    /**
+     *
+     * @param enable
+     */
     public void enableRecording(boolean enable){
         if(recordManager != null){
             recordManager.setEnabled(enable);
         }
     }
     
+    /**
+     *
+     */
     public void playRecording(){
         recordManager.play();
         AUV auv = auvManager.getAUV("hanse");
@@ -579,20 +562,35 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         auv.getAUVNode().addControl(recordControl);
     }
     
+    /**
+     *
+     * @param step
+     */
     public void setRecord(int step){
         System.out.println("Step set to: " + step);
         recordManager.setRecord(step);
     }
     
+    /**
+     *
+     */
     public void pauseRecording(){
         recordManager.pause();
         recordManager.setEnabled(false);
     }
     
+    /**
+     *
+     * @param file
+     */
     public void saveRecording(File file){
         recordManager.saveRecording(file);
     }
     
+    /**
+     *
+     * @param file
+     */
     public void loadRecording(File file){
         recordManager.loadRecordings(file);
     }
@@ -1253,16 +1251,27 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 });
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -1271,6 +1280,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -1279,6 +1292,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled); 
@@ -1289,16 +1306,28 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {
@@ -1360,11 +1389,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      */
     public Node getAUVsNode() {
         return AUVsNode;
-    }
-  
-    @Deprecated
-    public Node getSonarDetectableNode() {
-        return SonarDetectableNode;
     }
     
     /**
@@ -1430,15 +1454,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     public AssetManager getAssetManager() {
         return assetManager;
     }
-    
-    /**
-     *
-     * @param view
-     */
-    @Deprecated
-    public void setView(MARSView view){
-        this.view = view;
-    }
 
     /**
      * 
@@ -1487,6 +1502,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * @param ps
      * @param tpf
      */
+    @Override
     public void physicsTick(PhysicsSpace ps, float tpf) {
         if (!super.isEnabled()) {
             return;
@@ -1758,6 +1774,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      * @param auvName
      * @param pos
+     * @param dropAction 
+     * @param name  
      */
     public void enableAUV(String auvName, Point pos, int dropAction, String name){
         AUV auv = auvManager.getAUV(auvName);
@@ -1799,6 +1817,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * Enables an AUV and sets it to the position. If already enabled then position change.
      * @param auvName
      * @param pos
+     * @param dropAction 
+     * @param name  
      */
     public void enableAUV(String auvName, Vector3f pos, int dropAction, String name){
         AUV auv = auvManager.getAUV(auvName);
@@ -1811,7 +1831,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 auvCopy.getAuv_param().setPosition(pos);
                 auvCopy.setState(this);
                 auvManager.registerAUV(auvCopy);
-                view.updateTrees();
+                /*view.updateTrees();
                 Future simStateFutureView = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         if(view != null){
@@ -1819,7 +1839,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                         }
                         return null;
                     }
-                }); 
+                }); */
             }else{
                 if( auv.getAuv_param().isEnabled()){//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(pos);
@@ -1838,6 +1858,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * Enables an SimObject and sets it to the position. If already enabled then position change.
      * @param simobName
      * @param pos
+     * @param dropAction 
+     * @param name  
      */
     public void enableSIMOB(String simobName, Vector3f pos, int dropAction, String name){
         SimObject simob = simobManager.getSimObject(simobName);
@@ -1875,6 +1897,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
      * Enables an AUV and sets it to the position. If already enabled then position change.  The position is computed from he screen position.
      * @param simobName
      * @param pos
+     * @param dropAction
+     * @param name  
      */
     public void enableSIMOB(String simobName, Point pos, int dropAction, String name){
         SimObject simob = simobManager.getSimObject(simobName);
@@ -1887,7 +1911,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                 simobCopy.setName(name);
                 simobCopy.setPosition(intersection);
                 simobManager.registerSimObject(simobCopy);
-                view.updateTrees();
+                /*view.updateTrees();
                 Future simStateFutureView = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         if(view != null){
@@ -1895,7 +1919,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
                         }
                         return null;
                     }
-                }); 
+                }); */
             }else{
                 if( simob.isEnabled()){//check if auf simob already enabled, then only new position
                     simob.setPosition(intersection);
@@ -1912,7 +1936,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     
     /**
      * 
-     * @param auv
      */
     public void deselectAllAUVs(){
         auvManager.deselectAllAUVs();
@@ -1947,6 +1970,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         }
     }
     
+    /**
+     *
+     */
     public void startNiftyState(){
         if (mars.getStateManager().getState(NiftyState.class) != null) {
             mars.getStateManager().getState(NiftyState.class).show(); 
@@ -1954,66 +1980,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
     }
     
     /**
-     * 
-     */
-    public void splitView(){
-        System.out.println("splitView");
-
-        /*Camera cam2 = mars.getCamera().clone();
-        cam2.setViewPort(0.0f,0.5f,0.0f,1.0f);
-        float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
-        aspect = 2f ;
-        cam2.setFrustum(-1000f, 1000f, -aspect * 1f, aspect * 1f, 1f, -1f);
-        ViewPort viewPort2 = mars.getRenderManager().createMainView("PiP", cam2);
-        viewPort2.setClearFlags(true, true, true);
-        viewPort2.attachScene(rootNode);
-        
-        System.out.println("cam w: " + mars.getCamera().getWidth());
-        System.out.println("cam h: " + mars.getCamera().getHeight());*/
-        
-        // Setup first view
-        mars.getCamera().setViewPort(.5f, 1f, 0f, 1f);
-        //mars.getCamera().setLocation(new Vector3f(3.3212643f, 4.484704f, 4.2812433f));
-        //mars.getCamera().setRotation(new Quaternion(-0.07680723f, 0.92299235f, -0.2564353f, -0.27645364f));
-        //mars.getViewPort().setEnabled(false);
-        
-        /*        
-        // Setup second view
-        Camera cam2 = mars.getCamera().clone();
-        cam2.setViewPort(0f, 0.5f, 0f, 0.5f);
-        cam2.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
-        cam2.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
-
-        ViewPort view2 = mars.getRenderManager().createMainView("Bottom Left", cam2);
-        view2.setClearFlags(true, true, true);
-        view2.attachScene(rootNode);
-        
-        // Setup second view
-        Camera cam3 = mars.getCamera().clone();
-        cam3.setViewPort(.5f, 1f, 0f, 0.5f);
-        cam3.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
-        cam3.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
-
-        ViewPort view3 = mars.getRenderManager().createMainView("Bottom Left2", cam3);
-        view3.setClearFlags(true, true, true);
-        view3.attachScene(rootNode);
-        */
-        
-        //float aspect = (float) (mars.getCamera().getWidth()) / mars.getCamera().getHeight();
-        //mars.getCamera().resize((mars.getCamera().getWidth()/2), mars.getCamera().getHeight(), true);
-        //mars.getCamera().setFrustum(-1000, 1000, -aspect * 1f, aspect * 1f, 1f, -1f);
-        //mars.getCamera().setFrustumLeft(1f*-aspect);
-       // mars.getCamera().setFrustumRight(1f*aspect);
-        //cam2.resize((mars.getCamera().getWidth()), mars.getCamera().getHeight(), true);
-        //mars.getCamera().setFrustumPerspective(90f, aspect, 0.1f, 1000f);
-        //mars.getCamera().set
-        
-        //mars.getCamera().setViewPort(0.5f,1.0f,0.0f,1.0f);
-    }
-    
-        /**
      *
-     * @param view
+     * @param TreeTopComp 
      */
     public void setTreeTopComp(MARSTreeTopComponent TreeTopComp){
         this.TreeTopComp = TreeTopComp;
@@ -2027,10 +1995,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         return TreeTopComp;
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSTopComponent getMARSTopComp() {
         return MARSTopComp;
     }
 
+    /**
+     *
+     * @param MARSTopComp
+     */
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
     }

@@ -81,16 +81,13 @@ import org.openide.util.RequestProcessor;
  * This is the MAIN class for JME3.
  * @author Thomas Tosik
  */
-public class MARS_Main extends SimpleApplication implements ScreenController,Controller{
+public class MARS_Main extends SimpleApplication{
 
     //needed for graphs
-    @Deprecated
-    private MARSView view;
     private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
     private MARSLogTopComponent MARSLogComp;
-    private boolean view_init = false;
     private boolean startstateinit = false;
     private boolean statsDarken = true;
 
@@ -320,14 +317,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         MapViewPort = renderManager.createMainView("MapView", map_cam);
         MapViewPort.setClearFlags(true, true, true);
         MapViewPort.setBackgroundColor(ColorRGBA.Black);
-        
-        /*Camera cam2 = getCamera().clone();
-        cam2.setViewPort(0f, 0.5f, 0f, 1f);
-        cam2.setLocation(new Vector3f(-0.10947256f, 1.5760219f, 4.81758f));
-        cam2.setRotation(new Quaternion(0.0010108891f, 0.99857414f, -0.04928594f, 0.020481428f));
-
-        ViewPort2 = getRenderManager().createMainView("Bottom Left", cam2);
-        ViewPort2.setClearFlags(true, true, true);*/
     }
     
     private void initProgressBar(){
@@ -361,18 +350,7 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
             MARSTopComp.allowStateInteraction();
             startstateinit = true;
         }
-       
-        /*if (load) {//we will be loading,switching appstates
-            //this.setProgress(0.5f, "dfsdfsdf");
-            //System.out.println("we are loading!!!");
-            if (simStateFuture != null && simStateFuture.isDone()) {//cleanup
-                System.out.println("simStateFuture is done!!!!");
-                nifty.gotoScreen("end");
-                nifty.exit();
-                guiViewPort.removeProcessor(niftyDisplay);
-                load = false;
-            }
-        }*/
+
     }
 
     /**
@@ -416,17 +394,9 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
      */
     public void startSimState(){
         endStart();
-        /*Element element = nifty.getScreen("loadlevel").findElementByName("loadingtext");
-        textRenderer = element.getRenderer(TextRenderer.class);
-        progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
-        nifty.gotoScreen("loadlevel");
-        load = true;*/
         simStateFuture = this.enqueue(new Callable() {
-            public Void call() throws Exception {
-                //SimState simstate = new SimState(view,configManager);   
+            public Void call() throws Exception {  
                 SimState simstate = new SimState(MARSTopComp,TreeTopComp,MARSMapComp,MARSLogComp,configManager);
-                //viewPort.attachScene(simstate.getRootNode());
-                //ViewPort2.attachScene(simstate.getRootNode());
                 simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
                 return null;
@@ -441,24 +411,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
                 return null;
             }
         });
-    }
-    
-    /**
-     *
-     * @param view
-     */
-    @Deprecated
-    public void setView(MARSView view){
-        this.view = view;
-    }
-
-     /**
-      *
-      * @return
-      */
-    @Deprecated
-    public MARSView getView() {
-        return view;
     }
     
     /**
@@ -548,64 +500,6 @@ public class MARS_Main extends SimpleApplication implements ScreenController,Con
         Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE); 
 
         guiViewPort.addProcessor(niftyDisplay);
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public void onStartScreen() {
-    }
- 
-    /**
-     * 
-     */
-    @Override
-    public void onEndScreen() {
-    }
-    
-    /**
-     * 
-     * @param nifty
-     * @param screen
-     */
-    @Override
-    public void bind(Nifty nifty, Screen screen) {
-        //progressBarElement = nifty.getScreen("loadlevel").findElementByName("progressbar");
-        this.nifty = nifty;
-    }
- 
-    // methods for Controller
-    /**
-     * 
-     * @param inputEvent
-     * @return
-     */
-    @Override
-    public boolean inputEvent(final NiftyInputEvent inputEvent) {
-        return false;
-    }
- 
-    /**
-     * 
-     * @param nifty
-     * @param screen
-     * @param elmnt
-     * @param prprts
-     * @param atrbts
-     */
-    @Override
-    public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
-        //progressBarElement = elmnt.findElementByName("progressbar");
-    }
-    
-    /**
-     * 
-     * @param prprts
-     * @param atrbts
-     */
-    @Override
-    public void init(Properties prprts, Attributes atrbts) {
     }
     
     /**

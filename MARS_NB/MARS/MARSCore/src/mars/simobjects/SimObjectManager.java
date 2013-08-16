@@ -32,8 +32,6 @@ import mars.states.SimState;
 public class SimObjectManager implements UpdateState{
     //auv HashMap to store and load auv's
     private HashMap<String,SimObject> simobs = new HashMap<String,SimObject> ();
-    @Deprecated
-    private Node SonarDetectableNode;
     private Collider RayDetectable;
     private Node sceneReflectionNode;
     private Node SimObNode;
@@ -63,7 +61,6 @@ public class SimObjectManager implements UpdateState{
         this.mars = simstate.getMARS();
         this.rootNode = simstate.getRootNode();
         this.assetManager = simstate.getAssetManager();
-        this.SonarDetectableNode = simstate.getSonarDetectableNode();
         this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
         this.SimObNode = simstate.getSimObNode();
@@ -256,7 +253,7 @@ public class SimObjectManager implements UpdateState{
                 if(simob.isRayDetectable()){
                     Future fut = mars.enqueue(new Callable() {
                         public Void call() throws Exception {
-                            SonarDetectableNode.attachChild(final_spatial);
+                            //SonarDetectableNode.attachChild(final_spatial);
                             return null;
                         }
                     });

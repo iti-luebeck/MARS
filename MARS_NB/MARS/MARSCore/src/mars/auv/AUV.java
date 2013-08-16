@@ -73,19 +73,6 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * @param tpf
      */
     public void updateWaypoints(float tpf);
-    /*
-     *
-     */
-    /**
-     *
-     * @param tpf
-     * @deprecated 
-     */
-    @Deprecated
-    public void updateValues(float tpf);
-    /*
-     * 
-     */
     /**
      * 
      */
