@@ -23,7 +23,7 @@ import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
 import mars.PhysicalExchanger;
-import mars.gui.UpdateState;
+import mars.gui.tree.UpdateState;
 import mars.recorder.RecordManager;
 import mars.recorder.Recording;
 import mars.states.SimState;

@@ -7,25 +7,18 @@ package mars.auv;
 
 import mars.CollisionType;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.rits.cloning.Cloner;
 import java.util.HashMap;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.bind.Unmarshaller;
-import mars.gui.TextFieldEditor;
 import mars.xml.HashMapAdapter;
-import mars.xml.XMLConfigReaderWriter;
 
 /**
  *
@@ -42,7 +35,6 @@ public class AUV_Parameters{
     private HashMap<String,Object> debug;
     private HashMap<String,Object> collision;
     private HashMap<String,Object> buoyancy;
-    private XMLConfigReaderWriter xmll;
     private AUV auv;
 
     private String auv_class = "Hanse";
@@ -87,65 +79,6 @@ public class AUV_Parameters{
     private float alpha_depth_scale = 3.0f;
     private String icon = "yellow_submarine.png";
     private String dnd_icon = "yellow_submarine.png";
-
-    /**
-     *
-     * @param xmll
-     */
-    public AUV_Parameters(XMLConfigReaderWriter xmll){
-        params = new HashMap<String,Object> ();
-        waypoints = new HashMap<String,Object> ();
-        model = new HashMap<String,Object> ();
-        debug = new HashMap<String,Object> ();
-        collision = new HashMap<String,Object> ();
-        buoyancy = new HashMap<String,Object> ();
-        params.put("Waypoints", waypoints);
-        params.put("Model", model);
-        params.put("Debug", debug);
-        params.put("Collision", collision);
-        params.put("Buoyancy", buoyancy);
-        setAngular_factor(angular_factor);
-        setAuv_name(auv_name);
-        setAuv_class(auv_class);
-        setBuoyancy_updaterate(buoyancy_updaterate);
-        setBuoyancy_distance(buoyancy_distance);
-        setCentroid_center_distance(centroid_center_distance);
-        setDamping_angular(damping_angular);
-        setDamping_linear(damping_linear);
-        setDrag_coefficient_linear(drag_coefficient_linear);
-        setDrag_coefficient_angular(drag_coefficient_angular);
-        setDrag_updaterate(drag_updaterate);
-        setPosition(position);
-        setRotation(rotation);
-        setLinear_factor(linear_factor);
-        setMass(mass_auv);
-        setMaxWaypoints(maxWaypoints);
-        setModelFilePath(model_filepath);
-        setModel_name(model_name);
-        setModel_scale(model_scale);
-        setOffCamera_height(offCamera_height);
-        setOffCamera_width(offCamera_width);
-        setPhysicalvalues_updaterate(physicalvalues_updaterate);
-        setWaypoints_color(waypoints_color);
-        setWaypoints_enabled(waypoints_enabled);
-        setWaypoints_updaterate(waypoints_updaterate);
-        setWaypoints_visible(waypoints_visible);
-        setWaypoints_gradient(waypoints_gradient);
-        setDebugDrag(debug_drag);
-        setDebugBuoycancy(debug_buoycancy);
-        setDebugPhysicalExchanger(debug_physical_exchanger);
-        setDebugCollision(debug_collision);
-        setDimensions(dimensions);
-        setCollisionPosition(collision_position);
-        setType(type);
-        setDebugCenters(debug_centers);
-        setEnabled(enabled);
-        setSelection_color(selection_color);
-        setMapColor(map_color);
-        setAlphaDepthScale(alpha_depth_scale);
-        setIcon(icon);
-        setDNDIcon(dnd_icon);
-    }
     
     /**
      * 
@@ -156,7 +89,6 @@ public class AUV_Parameters{
     
     public AUV_Parameters copy(){
         Cloner cloner = new Cloner();
-        cloner.dontClone(XMLConfigReaderWriter.class);
         cloner.dontCloneInstanceOf(AUV.class); 
         AUV_Parameters auvParamCopy = cloner.deepClone(this);
         return auvParamCopy;

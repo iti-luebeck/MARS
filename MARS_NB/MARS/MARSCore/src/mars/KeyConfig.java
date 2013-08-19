@@ -14,7 +14,7 @@ import com.jme3.input.KeyNames;
 import java.util.Map.Entry;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlElement;
-import mars.gui.UpdateState;
+import mars.gui.tree.UpdateState;
 
 /**
  * This class stores the mapping between the keyboard input and an action that you want to perform with a class that extends the KEYS interface.

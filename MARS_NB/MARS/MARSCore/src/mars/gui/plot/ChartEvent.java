@@ -2,37 +2,31 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.core;
+package mars.gui.plot;
 
 import java.util.EventObject;
-import mars.sensors.UnderwaterModem;
+import mars.auv.AUV;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class ModemEvent extends EventObject{
-    
-    private String msg = "";
+public class ChartEvent extends EventObject{
+    private Object msg = "";
     private long time = 0;
-    private int type = ModemEventType.IN;
     
-    public ModemEvent( UnderwaterModem source, String msg, long time, int type )
+    public ChartEvent( AUV auv, Object msg, long time )
     {
-      super( source );
+      super( auv );
       this.msg = msg;
       this.time = time;
     }
 
-    public String getMsg() {
+    public Object getObject() {
         return msg;
     }
 
     public long getTime() {
         return time;
-    }
-
-    public int getType() {
-        return type;
     }
 }

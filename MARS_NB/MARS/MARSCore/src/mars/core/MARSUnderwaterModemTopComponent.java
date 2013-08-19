@@ -4,6 +4,9 @@
  */
 package mars.core;
 
+import mars.ModemEvent;
+import mars.ModemEventType;
+import mars.gui.plot.PhysicalExchangerListener;
 import java.util.Calendar;
 import javax.swing.text.DefaultCaret;
 import mars.sensors.UnderwaterModem;

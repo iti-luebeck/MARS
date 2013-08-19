@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.tree;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -11,35 +11,37 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.tree.TreePath;
-import mars.KeyConfig;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
+import mars.auv.AUV_Parameters;
 
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
-public class KeyConfigModel extends GenericTreeModel{
+public class AUVManagerModel extends GenericTreeModel{
 
-    private final KeyConfig keyConfig;
+    private final AUV_Manager auvManager;
             
     /**
      * 
-     * @param keyConfig
+     * @param auvManager
      */
-    public KeyConfigModel(KeyConfig keyConfig) {
-        this.keyConfig = keyConfig;
+    public AUVManagerModel(AUV_Manager auvManager) {
+        this.auvManager = auvManager;
     }
 
     @Override
     public Object getRoot() {
-        return keyConfig;
+        return auvManager;
     }
 
     @Override
     public int getChildCount(Object parent) {
         int childCount = super.getChildCount(parent);
         if(childCount == 0){
-            if(parent instanceof KeyConfig){
-                return keyConfig.getKeys().size();
+            if(parent instanceof AUV_Manager){
+                return auvManager.getAUVs().size();
             }else{
                 return childCount;
             }
@@ -52,15 +54,15 @@ public class KeyConfigModel extends GenericTreeModel{
     public Object getChild(Object parent, int index) {
         Object child = super.getChild(parent,index);
         if(child == null){
-            if(parent instanceof KeyConfig){
-                SortedSet<String> sortedset= new TreeSet<String>(keyConfig.getKeys().keySet());
+            if(parent instanceof AUV_Manager){
+                SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
                 Iterator<String> it = sortedset.iterator();
                 int i = 0;
                 while (it.hasNext()) {
                     String elem = it.next();
                     if(i == index){
-                        Object obj = (Object)keyConfig.getKeys().get(elem);
-                        return new HashMapWrapper(obj,elem);
+                        AUV auv = (AUV)auvManager.getAUVs().get(elem);
+                        return auv;
                     }else if(i > index){
                         return null;
                     }
@@ -73,5 +75,5 @@ public class KeyConfigModel extends GenericTreeModel{
         }else{
             return child;
         }
-    }   
+    }
 }

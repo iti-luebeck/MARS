@@ -6,63 +6,35 @@
 package mars;
 
 import com.jme3.app.FlyCamAppState;
-import com.jme3.input.event.JoyAxisEvent;
-import com.jme3.input.event.JoyButtonEvent;
-import com.jme3.input.event.KeyInputEvent;
-import com.jme3.input.event.MouseButtonEvent;
-import com.jme3.input.event.MouseMotionEvent;
-import com.jme3.input.event.TouchEvent;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.states.StartState;
 import com.jme3.font.BitmapFont;
-import mars.gui.MARSView;
-import mars.xml.XMLConfigReaderWriter;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.ScreenshotAppState;
-import com.jme3.app.state.StereoCamAppState;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
-import com.jme3.input.InputManager;
-import com.jme3.input.RawInputListener;
-import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.OBJLoader;
-import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
-import com.jme3.system.awt.AwtPanel;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
 import java.io.File;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import mars.auv.AUV;
+import mars.core.CentralLookup;
 import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
@@ -74,7 +46,6 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.modules.InstalledFileLocator;
-import org.openide.util.RequestProcessor;
 
 
 /**
@@ -205,6 +176,7 @@ public class MARS_Main extends SimpleApplication{
             SimState simstate = new SimState(MARSTopComp,TreeTopComp,MARSMapComp,MARSLogComp,configManager);
             simstate.setMapState(mapstate);
             stateManager.attach(simstate);
+            CentralLookup.getDefault().add(simstate);
         }else{
             configManager.setConfig("default");
         }

@@ -22,7 +22,7 @@ import javax.swing.tree.TreePath;
 import mars.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.gui.UpdateState;
+import mars.gui.tree.UpdateState;
 import mars.states.SimState;
 
 /**

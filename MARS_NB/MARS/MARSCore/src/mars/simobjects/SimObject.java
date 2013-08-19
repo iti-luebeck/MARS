@@ -6,7 +6,6 @@
 package mars.simobjects;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
@@ -29,7 +28,6 @@ import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -40,10 +38,8 @@ import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PickHint;
-import mars.gui.HashMapWrapper;
-import mars.gui.TextFieldEditor;
+import mars.gui.tree.HashMapWrapper;
 import mars.xml.HashMapAdapter;
-import mars.xml.XMLConfigReaderWriter;
 
 /**
  * A basic simauv object that shall be loaded. For example an pipe or another custom made model.
@@ -57,7 +53,6 @@ public class SimObject{
     @XmlElement(name="")
     private HashMap<String,Object> simob_variables;
     private HashMap<String,Object> collision;
-    private XMLConfigReaderWriter xmll;
     
     //selection stuff aka highlightening
     private boolean selected = false;
@@ -92,33 +87,6 @@ public class SimObject{
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
     private Spatial debugShape;
-
-    /**
-     * 
-     * @param xmll
-     */
-    public SimObject(XMLConfigReaderWriter xmll){
-        simob_variables = new HashMap<String,Object> ();
-        collision = new HashMap<String,Object> ();
-        simob_variables.put("Collision", collision);
-        setPosition(position);
-        setRotation(rotation);
-        setFilepath(filepath);
-        setScale(scale);
-        setName(name);
-        setEnabled(enabled);
-        setCollidable(collidable);
-        setSonar_detectable(sonar_detectable);
-        setColor(color);
-        setLight(light);
-        setDebugCollision(debug_collision);
-        setDimensions(dimensions);
-        setCollisionPosition(collision_position);
-        setType(type);
-        setIcon(icon);
-        setDNDIcon(dnd_icon);
-        this.xmll = xmll;
-    }
     
     /**
      * 

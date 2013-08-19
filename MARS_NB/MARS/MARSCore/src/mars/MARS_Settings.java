@@ -5,21 +5,17 @@
 
 package mars;
 
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.gui.TextFieldEditor;
-import mars.gui.UpdateState;
+import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
-import mars.xml.XMLConfigReaderWriter;
 
 /**
  * Holds the major of all settings that are useful for SIMAUV like
@@ -63,8 +59,6 @@ public class MARS_Settings implements UpdateState{
     private HashMap<String,Object> Auto;
     //private HashMap<String,Object> FPS;
 
-    @XmlTransient
-    private XMLConfigReaderWriter xmll;
     @XmlTransient
     private Initializer initer;
 
@@ -111,76 +105,6 @@ public class MARS_Settings implements UpdateState{
     private float tileHeigth = 12f;
     
     /**
-     *
-     * @param xmll 
-     * @deprecated 
-     */
-    @Deprecated
-    public MARS_Settings(XMLConfigReaderWriter xmll){
-        settings = new HashMap<String,Object> ();
-        Graphics = new HashMap<String,Object> ();
-        Gui = new HashMap<String,Object> ();
-        Server = new HashMap<String,Object> ();
-        RAW = new HashMap<String,Object> ();
-        ROS = new HashMap<String,Object> ();
-        Physics = new HashMap<String,Object> ();
-        Resolution = new HashMap<String,Object> ();
-        Axis = new HashMap<String,Object> ();
-        Grid = new HashMap<String,Object> ();
-        Fog = new HashMap<String,Object> ();
-        DepthOfField = new HashMap<String,Object> ();
-        WavesWater = new HashMap<String,Object> ();
-        ProjectedWavesWater = new HashMap<String,Object> ();
-        Water = new HashMap<String,Object> ();
-        PlaneWater = new HashMap<String,Object> ();
-        SkyBox = new HashMap<String,Object> ();
-        SkyDome = new HashMap<String,Object> ();
-        SimpleSkyBox = new HashMap<String,Object> ();
-        Terrain = new HashMap<String,Object> ();
-        Flow = new HashMap<String,Object> ();
-        Grass = new HashMap<String,Object> ();
-        Light = new HashMap<String,Object> ();
-        Shadow = new HashMap<String,Object> ();
-        WireFrame = new HashMap<String,Object> ();
-        CrossHairs = new HashMap<String,Object> ();
-        Misc = new HashMap<String,Object> ();
-        Camera = new HashMap<String,Object> ();
-        Auto = new HashMap<String,Object> ();
-        //FPS = new HashMap<String,Object> ();
-        settings.put("Graphics", Graphics);
-        Graphics.put("Resolution", Resolution);
-        Graphics.put("FrameLimit", FrameLimit);
-        Graphics.put("FPS", FPS);
-        Graphics.put("Axis", Axis);
-        Graphics.put("Gird", Grid);
-        Graphics.put("Fog", Fog);
-        Graphics.put("DepthOfField", DepthOfField);
-        Graphics.put("WavesWater", WavesWater);
-        Graphics.put("ProjectedWavesWater", ProjectedWavesWater);
-        Graphics.put("Water", Water);
-        Graphics.put("PlaneWater", PlaneWater);
-        Graphics.put("SkyBox", SkyBox);
-        Graphics.put("SkyDome", SkyDome);
-        Graphics.put("SimpleSkyBox", SimpleSkyBox);
-        Graphics.put("Terrain", Terrain);
-        Graphics.put("Flow", Flow);
-        Graphics.put("Grass", Grass);
-        Graphics.put("Light", Light);
-        Graphics.put("Shadow", Shadow);
-        Graphics.put("WireFrame", WireFrame);
-        Graphics.put("CrossHairs", CrossHairs);
-        settings.put("Server", Server);
-        settings.put("Physics", Physics);
-        settings.put("Misc", Misc);
-        Misc.put("Camera", Camera);
-        Misc.put("Auto", Auto);
-        Server.put("RAW", RAW);
-        Server.put("ROS", ROS);
-        settings.put("Gui", Gui);
-        this.xmll = xmll;
-    }
-    
-    /**
      * 
      */
     public MARS_Settings(){
@@ -220,67 +144,6 @@ public class MARS_Settings implements UpdateState{
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
         Auto = (HashMap<String,Object>)Misc.get("Auto");
-    }
-
-    private void saveValue(TextFieldEditor editor){
-        HashMap<String,Object> hashmap = settings;
-        String target = editor.getTreepath().getParentPath().getLastPathComponent().toString();
-        int pathcount = editor.getTreepath().getPathCount();
-        Object[] treepath = editor.getTreepath().getPath();
-        if( settings.containsKey(target) && pathcount < 4){//no hasmap, direct save
-            Object obj = settings.get(target);
-            detectType(obj,editor,target,settings);
-        }else{//it's in another hashmap, search deeper
-            for (int i = 2; i < pathcount-2; i++) {
-                hashmap = (HashMap<String,Object>)hashmap.get(treepath[i].toString());
-            }
-            //found the corresponding hashmap
-            Object obj = hashmap.get(target);
-            detectType(obj,editor,target,hashmap);
-        }
-    }
-
-    @Deprecated
-    private void detectType(Object obj,TextFieldEditor editor,String target,HashMap hashmap){
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)editor.getTreepath().getLastPathComponent();
-        Object node_obj = node.getUserObject();
-        Object[] treepath = editor.getTreepath().getPath();
-        int pathcount = editor.getTreepath().getPathCount();
-        if(obj instanceof Float){
-            hashmap.put(target, (Float)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }else if(obj instanceof Integer){
-            hashmap.put(target, (Integer)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }else if(obj instanceof Boolean){
-            hashmap.put(target, (Boolean)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }else if(obj instanceof String){
-            hashmap.put(target, (String)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }else if(obj instanceof Vector3f){
-            hashmap.put(target, (Vector3f)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }else if(obj instanceof ColorRGBA){
-            hashmap.put(target, (ColorRGBA)node_obj);
-            updateState(target);
-            xmll.setPathElement(treepath, pathcount, node_obj);
-        }
-    }
-
-    @Deprecated
-    private void updateState(String target){
-        if(target.equals("position")){
-            RigidBodyControl physics_control = initer.getTerrain_physics_control();
-            if(physics_control != null ){
-                physics_control.setPhysicsLocation(getTerrain_position());
-            }
-        }
     }
     
     /**

@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.tree;
 
+import mars.gui.tree.GenericTreeModel;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
@@ -11,36 +12,35 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.tree.TreePath;
-import mars.simobjects.SimObject;
-import mars.simobjects.SimObjectManager;
+import mars.KeyConfig;
 
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
-public class SimObjectManagerModel extends GenericTreeModel{
+public class KeyConfigModel extends GenericTreeModel{
 
-    private final SimObjectManager simobManager;
+    private final KeyConfig keyConfig;
             
     /**
      * 
-     * @param simobManager
+     * @param keyConfig
      */
-    public SimObjectManagerModel(SimObjectManager simobManager) {
-        this.simobManager = simobManager;
+    public KeyConfigModel(KeyConfig keyConfig) {
+        this.keyConfig = keyConfig;
     }
 
     @Override
     public Object getRoot() {
-        return simobManager;
+        return keyConfig;
     }
 
     @Override
     public int getChildCount(Object parent) {
         int childCount = super.getChildCount(parent);
         if(childCount == 0){
-            if(parent instanceof SimObjectManager){
-                return simobManager.getSimObjects().size();
+            if(parent instanceof KeyConfig){
+                return keyConfig.getKeys().size();
             }else{
                 return childCount;
             }
@@ -53,15 +53,15 @@ public class SimObjectManagerModel extends GenericTreeModel{
     public Object getChild(Object parent, int index) {
         Object child = super.getChild(parent,index);
         if(child == null){
-            if(parent instanceof SimObjectManager){
-                SortedSet<String> sortedset= new TreeSet<String>(simobManager.getSimObjects().keySet());
+            if(parent instanceof KeyConfig){
+                SortedSet<String> sortedset= new TreeSet<String>(keyConfig.getKeys().keySet());
                 Iterator<String> it = sortedset.iterator();
                 int i = 0;
                 while (it.hasNext()) {
                     String elem = it.next();
                     if(i == index){
-                        SimObject simob = (SimObject)simobManager.getSimObjects().get(elem);
-                        return simob;
+                        Object obj = (Object)keyConfig.getKeys().get(elem);
+                        return new HashMapWrapper(obj,elem);
                     }else if(i > index){
                         return null;
                     }

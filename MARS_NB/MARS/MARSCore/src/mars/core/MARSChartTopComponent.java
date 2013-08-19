@@ -4,6 +4,8 @@
  */
 package mars.core;
 
+import mars.gui.plot.AUVListener;
+import mars.gui.plot.ChartEvent;
 import com.jme3.math.Vector3f;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;

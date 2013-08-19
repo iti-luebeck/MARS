@@ -6,21 +6,16 @@
 package mars;
 
 import com.jme3.bullet.BulletAppState;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.gui.TextFieldEditor;
-import mars.gui.UpdateState;
-import mars.states.SimState;
+import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
-import mars.xml.XMLConfigReaderWriter;
 
 /**
  * This class contains all physical parameters that are important for the auv like fluid density.
@@ -49,16 +44,6 @@ public class PhysicalEnvironment implements UpdateState{
     private Vector3f magnetic_z = Vector3f.UNIT_Y;
     private Vector3f water_current = new Vector3f(0f,0f,0f);
     private float water_height = 0.0f;//m
-
-    /**
-     *
-     * @param xmll 
-     * @deprecated 
-     */
-    @Deprecated
-    public PhysicalEnvironment(XMLConfigReaderWriter xmll) {
-         environment = new HashMap<String,Object> ();
-    }
     
     /**
      * 

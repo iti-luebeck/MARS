@@ -29,9 +29,9 @@ import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
 import mars.auv.Communication_Manager;
-import mars.core.ModemEvent;
-import mars.core.ModemEventType;
-import mars.core.PhysicalExchangerListener;
+import mars.ModemEvent;
+import mars.ModemEventType;
+import mars.gui.plot.PhysicalExchangerListener;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 

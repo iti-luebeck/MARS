@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.tree;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -11,37 +11,35 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.tree.TreePath;
-import mars.auv.AUV;
-import mars.auv.AUV_Manager;
-import mars.auv.AUV_Parameters;
+import mars.MARS_Settings;
 
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
-public class AUVManagerModel extends GenericTreeModel{
+public class MarsSettingsModel extends GenericTreeModel{
 
-    private final AUV_Manager auvManager;
+    private final MARS_Settings settings;
             
     /**
      * 
-     * @param auvManager
+     * @param settings
      */
-    public AUVManagerModel(AUV_Manager auvManager) {
-        this.auvManager = auvManager;
+    public MarsSettingsModel(MARS_Settings settings) {
+        this.settings = settings;
     }
 
     @Override
     public Object getRoot() {
-        return auvManager;
+        return settings;
     }
 
     @Override
     public int getChildCount(Object parent) {
         int childCount = super.getChildCount(parent);
         if(childCount == 0){
-            if(parent instanceof AUV_Manager){
-                return auvManager.getAUVs().size();
+            if(parent instanceof MARS_Settings){
+                return settings.getSettings().size();
             }else{
                 return childCount;
             }
@@ -54,15 +52,15 @@ public class AUVManagerModel extends GenericTreeModel{
     public Object getChild(Object parent, int index) {
         Object child = super.getChild(parent,index);
         if(child == null){
-            if(parent instanceof AUV_Manager){
-                SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
+            if(parent instanceof MARS_Settings){
+                SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());
                 Iterator<String> it = sortedset.iterator();
                 int i = 0;
                 while (it.hasNext()) {
                     String elem = it.next();
                     if(i == index){
-                        AUV auv = (AUV)auvManager.getAUVs().get(elem);
-                        return auv;
+                        Object obj = (Object)settings.getSettings().get(elem);
+                        return new HashMapWrapper(obj,elem);
                     }else if(i > index){
                         return null;
                     }

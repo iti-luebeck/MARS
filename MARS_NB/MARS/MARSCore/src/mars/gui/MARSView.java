@@ -4,6 +4,14 @@
 
 package mars.gui;
 
+import mars.gui.tree.MyTreeCellRenderer;
+import mars.gui.tree.KeyConfigModel;
+import mars.gui.tree.HashMapWrapper;
+import mars.gui.tree.GenericTreeModel;
+import mars.gui.tree.MarsSettingsModel;
+import mars.gui.tree.AUVManagerModel;
+import mars.gui.tree.PhysicalEnvironmentModel;
+import mars.gui.tree.SimObjectManagerModel;
 import java.util.Set;
 import mars.gui.dnd.AUVTransferHandler;
 import mars.gui.dnd.SimStateTransferHandler;
@@ -128,7 +136,6 @@ import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
 import mars.xml.ConfigManager;
 import mars.xml.HashMapEntry;
-import mars.xml.XMLConfigReaderWriter;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -142,7 +149,6 @@ public class MARSView extends FrameView {
     private PhysicalEnvironment penv;
     private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
-    private XMLConfigReaderWriter xmll;
     private MARS_Main mars;
     private ConfigManager configManager; 
     
@@ -595,17 +601,6 @@ public class MARSView extends FrameView {
                 }
             }
         );
-    }
-    
-
-    /**
-     * 
-     * @param xmll
-     * @deprecated 
-     */
-    @Deprecated
-    public void setXMLL(XMLConfigReaderWriter xmll){
-        this.xmll = xmll;
     }
 
     /**
@@ -4114,7 +4109,7 @@ public class MARSView extends FrameView {
 
         //cleanup
         simob_manager.deregisterSimObject(simobj);
-        xmll.deleteSimObj(simobj);
+        //xmll.deleteSimObj(simobj);
         node.removeFromParent();
         auv_tree.updateUI();
     }//GEN-LAST:event_delete_simobActionPerformed

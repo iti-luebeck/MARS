@@ -2,44 +2,43 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui;
+package mars.gui.tree;
 
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.tree.TreePath;
-import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
+import mars.xml.HashMapEntry;
 
 /**
- * This is a TreeModel for the JTree
+ *
  * @author Thomas Tosik
  */
-public class MarsSettingsModel extends GenericTreeModel{
+public class PhysicalEnvironmentModel extends GenericTreeModel{
 
-    private final MARS_Settings settings;
+    private final PhysicalEnvironment penv;
             
     /**
      * 
-     * @param settings
+     * @param penv
      */
-    public MarsSettingsModel(MARS_Settings settings) {
-        this.settings = settings;
+    public PhysicalEnvironmentModel(PhysicalEnvironment penv) {
+        this.penv = penv;
     }
 
     @Override
     public Object getRoot() {
-        return settings;
+        return penv;
     }
 
     @Override
     public int getChildCount(Object parent) {
         int childCount = super.getChildCount(parent);
         if(childCount == 0){
-            if(parent instanceof MARS_Settings){
-                return settings.getSettings().size();
+            if(parent instanceof PhysicalEnvironment){
+                return penv.getAllEnvironment().size();
             }else{
                 return childCount;
             }
@@ -52,14 +51,14 @@ public class MarsSettingsModel extends GenericTreeModel{
     public Object getChild(Object parent, int index) {
         Object child = super.getChild(parent,index);
         if(child == null){
-            if(parent instanceof MARS_Settings){
-                SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());
+            if(parent instanceof PhysicalEnvironment){
+                SortedSet<String> sortedset= new TreeSet<String>(penv.getAllEnvironment().keySet());
                 Iterator<String> it = sortedset.iterator();
                 int i = 0;
                 while (it.hasNext()) {
                     String elem = it.next();
                     if(i == index){
-                        Object obj = (Object)settings.getSettings().get(elem);
+                        Object obj = (Object)penv.getAllEnvironment().get(elem);
                         return new HashMapWrapper(obj,elem);
                     }else if(i > index){
                         return null;

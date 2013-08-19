@@ -73,6 +73,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
 import javax.swing.TransferHandler;
 import mars.Collider;
 import mars.MyDebugAppStateFilter;
+import mars.core.CentralLookup;
 import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
@@ -357,6 +358,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
             
             progr.progress( "Populate AUVManager" );
             populateAUV_Manager(auvs,physical_environment,mars_settings,comManager,recordManager,initer);
+            
+            Future fut = mars.enqueue(new Callable() {
+             public Void call() throws Exception {
+                 CentralLookup.getDefault().add(auvManager);
+                 return null;
+             }
+            });
+   
             progr.progress( "Populate SimObjectManager" );
             populateSim_Object_Manager(simobs);
             
@@ -1367,6 +1376,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener{
         return simobManager;
     }
 
+    public AUV_Manager getAuvManager() {
+        return auvManager;
+    }
+ 
     /**
      *
      * @return
