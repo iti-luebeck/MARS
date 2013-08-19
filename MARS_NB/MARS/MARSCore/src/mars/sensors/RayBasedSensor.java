@@ -36,7 +36,7 @@ import mars.states.SimState;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Sonar.class,LaserScanner.class} )
+@XmlSeeAlso( {Sonar.class,LaserScanner.class,InfraRedSensor.class} )
 public class RayBasedSensor extends Sensor{
         /**
      *
@@ -135,7 +135,6 @@ public class RayBasedSensor extends Sensor{
             logger.addHandler(handler);
         } catch (IOException e) { }
 
-        this.detectable = detectable;
         this.RayDetectable = simstate.getCollider();
         this.pe = pe;
         rootNode.attachChild(debug_node);
@@ -156,8 +155,6 @@ public class RayBasedSensor extends Sensor{
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
         } catch (IOException e) { }
-
-        this.detectable = detectable;
         this.RayDetectable = simstate.getCollider();
         rootNode.attachChild(debug_node);
     }
@@ -339,24 +336,6 @@ public class RayBasedSensor extends Sensor{
     public void setDebug(boolean Debug) {
         variables.put("Debug", Debug);
     }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Node getDetectable() {
-        return detectable;
-    }
-
-    /**
-     * 
-     * @param detectable
-     */
-    @Deprecated
-    public void setDetectable(Node detectable) {
-        this.detectable = detectable;
-    }
     
     /**
      *
@@ -379,7 +358,7 @@ public class RayBasedSensor extends Sensor{
      * @return
      */
     public float getMaxRange() {
-       return (Float)variables.get("SonarMaxRange");
+       return (Float)variables.get("MaxRange");
     }
 
     /**
@@ -387,7 +366,7 @@ public class RayBasedSensor extends Sensor{
      * @param SonarMaxRange
      */
     public void setMaxRange(float SonarMaxRange) {
-        variables.put("SonarMaxRange", SonarMaxRange);
+        variables.put("MaxRange", SonarMaxRange);
     }
 
     /**
@@ -395,7 +374,7 @@ public class RayBasedSensor extends Sensor{
      * @return
      */
     public float getMinRange() {
-        return (Float)variables.get("SonarMinRange");
+        return (Float)variables.get("MinRange");
     }
 
     /**
@@ -403,7 +382,7 @@ public class RayBasedSensor extends Sensor{
      * @param SonarMinRange
      */
     public void setMinRange(float SonarMinRange) {
-        variables.put("SonarMinRange", SonarMinRange);
+        variables.put("MinRange", SonarMinRange);
     }
 
     /**
@@ -1155,6 +1134,7 @@ public class RayBasedSensor extends Sensor{
     /**
      *
      */
+    @Override
     public void reset(){
         debug_node.detachAllChildren();
         scanning_iterations = 0;

@@ -2059,7 +2059,6 @@ public final class MARSTopComponent extends TopComponent {
                                             //app.getGuiViewPort().setEnabled(true);
                                             mars.getFlyByCamera().setDragToRotate(true);
                                             sim_panel.attachTo(true, mars.getViewPort());
-                                            //sim_panel.attachTo(false, mars.getViewPort2());
                                             sim_panel.attachTo(true, mars.getGuiViewPort());
                                             map_panel.attachTo(false, mars.getMapViewPort());
                                             return null;

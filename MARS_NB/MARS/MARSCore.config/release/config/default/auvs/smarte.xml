@@ -370,7 +370,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="beam_ray_height_resolution">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">4</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="SonarMaxRange">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="MaxRange">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">50.0</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="beam_ray_width_resolution">
@@ -437,7 +437,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="SonarMinRange">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="MinRange">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.5</value>
                     </entry>
                 </variables>

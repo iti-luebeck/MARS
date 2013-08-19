@@ -71,7 +71,6 @@ import mars.Keys;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Settings;
-import mars.gui.MARSView;
 import mars.MARS_Main;
 import mars.Manipulating;
 import mars.Moveable;

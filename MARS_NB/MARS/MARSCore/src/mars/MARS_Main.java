@@ -13,6 +13,7 @@ import mars.states.StartState;
 import com.jme3.font.BitmapFont;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.ScreenshotAppState;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
@@ -39,6 +40,7 @@ import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
+import mars.states.AppStateExtension;
 import mars.states.MapState;
 import mars.states.NiftyState;
 import mars.xml.ConfigManager;
@@ -70,7 +72,6 @@ public class MARS_Main extends SimpleApplication{
     Camera map_cam;
     
     ViewPort MapViewPort;
-    ViewPort ViewPort2;
     
     AdvancedFlyByCamera advFlyCam;
     
@@ -289,6 +290,25 @@ public class MARS_Main extends SimpleApplication{
         MapViewPort = renderManager.createMainView("MapView", map_cam);
         MapViewPort.setClearFlags(true, true, true);
         MapViewPort.setBackgroundColor(ColorRGBA.Black);
+    }
+    
+    
+    public ViewPort addState(AbstractAppState state){
+        Camera stateCam = cam.clone();
+        float aspect = (float) stateCam.getWidth() / stateCam.getHeight();
+        float frustumSize = 1f;
+        stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
+        stateCam.setParallelProjection(false);
+        ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
+        StateViewPort.setClearFlags(true, true, true);
+        StateViewPort.setBackgroundColor(ColorRGBA.Black);
+        if(state instanceof AppStateExtension){
+            StateViewPort.attachScene(((AppStateExtension)state).getRootNode());   
+        }else{
+            Logger.getLogger(MARS_Main.class.getName()).log(Level.WARNING, "AppState: " + state + " doesn't implement the interface AppStateExtension! No RootNode found!", "");
+        }
+        stateManager.attach(state);
+        return StateViewPort;
     }
     
     private void initProgressBar(){
@@ -686,10 +706,6 @@ public class MARS_Main extends SimpleApplication{
      */
     public ViewPort getMapViewPort(){
         return MapViewPort;
-    }
-    
-    public ViewPort getViewPort2(){
-        return ViewPort2;
     }
 
     /**

@@ -34,7 +34,7 @@ import mars.ros.MARSNodeMain;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class InfraRedSensor extends Sensor implements ChartValue{
+public class InfraRedSensor extends RayBasedSensor implements ChartValue{
     /**
      *
      */
@@ -44,8 +44,6 @@ public class InfraRedSensor extends Sensor implements ChartValue{
      */
     protected Geometry End;
 
-    @Deprecated
-    private Node detectable;
     private Collider RayDetectable;
     
     //ROS stuff
@@ -58,31 +56,6 @@ public class InfraRedSensor extends Sensor implements ChartValue{
     public InfraRedSensor() {
         super();
     }
-    
-    /**
-     * 
-     * @param simstate
-     * @param pe
-     * @param detectable
-     * @deprecated
-     */
-    @Deprecated
-    public InfraRedSensor(SimState simstate, PhysicalEnvironment pe, Node detectable) {
-        super(simstate);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) { }
-
-        this.detectable = detectable;
-        this.RayDetectable = simstate.getCollider();
-        this.pe = pe;
-    }
 
     /**
      * 
@@ -90,7 +63,7 @@ public class InfraRedSensor extends Sensor implements ChartValue{
      * @param detectable
      */
     public InfraRedSensor(SimState simstate, Node detectable) {
-        super(simstate);
+        super(simstate,detectable);
         //set the logging
         try {
             // Create an appending file handler
@@ -101,7 +74,6 @@ public class InfraRedSensor extends Sensor implements ChartValue{
             logger.addHandler(handler);
         } catch (IOException e) { }
 
-        this.detectable = detectable;
         this.RayDetectable = simstate.getCollider();
     }
     
@@ -116,179 +88,7 @@ public class InfraRedSensor extends Sensor implements ChartValue{
         return sensor;
     }
     
-    public void init(Node auv_node) {
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
-        Start = new Geometry("InfraStart", sphere7);
-        Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat7.setColor("Color", ColorRGBA.Red);
-        Start.setMaterial(mark_mat7);
-        Start.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(Start);
-
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
-        End = new Geometry("InfraEnd", sphere9);
-        Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat9.setColor("Color", ColorRGBA.Red);
-        End.setMaterial(mark_mat9);
-        End.setLocalTranslation(Vector3f.UNIT_X);
-        End.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(End);
-
-        Vector3f ray_start = Vector3f.ZERO;
-        Vector3f ray_direction = Vector3f.UNIT_X;
-        Geometry mark4 = new Geometry("Infra_Arrow", new Arrow(ray_direction.mult(getMaxRange())));
-        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat4.setColor("Color", ColorRGBA.Red);
-        mark4.setMaterial(mark_mat4);
-        mark4.setLocalTranslation(ray_start);
-        mark4.updateGeometricState();
-        PhysicalExchanger_Node.attachChild(mark4);
-        
-        PhysicalExchanger_Node.setLocalTranslation(getPosition());
-        Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
-        PhysicalExchanger_Node.setLocalRotation(quat);
-        auv_node.attachChild(PhysicalExchanger_Node);
-    }
-
-    public void update(float tpf) {
-
-    }
-
-    public void reset() {
-    }
-
     /**
-     *
-     * @return
-     */
-    public float getAngular_factor() {
-        return (Float)variables.get("angular_factor");
-    }
-
-    /**
-     *
-     * @param angular_factor
-     */
-    public void setAngular_factor(float angular_factor) {
-        variables.put("angular_factor", angular_factor);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public float getLength_factor() {
-        return (Float)variables.get("length_factor");
-    }
-
-    /**
-     *
-     * @param length_factor
-     */
-    public void setLength_factor(float length_factor) {
-        variables.put("length_factor", length_factor);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isAngular_damping() {
-        return (Boolean)variables.get("angular_damping");
-    }
-
-    /**
-     * 
-     * @param angular_damping
-     */
-    public void setAngular_damping(boolean angular_damping) {
-        variables.put("angular_damping", angular_damping);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isLength_damping() {
-        return (Boolean)variables.get("length_damping");
-    }
-
-    /**
-     *
-     * @param length_damping
-     */
-    public void setLength_damping(boolean length_damping) {
-        variables.put("length_damping", length_damping);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public Node getDetectable() {
-        return detectable;
-    }
-
-    /**
-     * 
-     * @param detectable
-     */
-    @Deprecated
-    public void setDetectable(Node detectable) {
-        this.detectable = detectable;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public Collider getCollider() {
-        return RayDetectable;
-    }
-
-    /**
-     * 
-     * @param detectable
-     */
-    public void setCollider(Collider RayDetectable) {
-        this.RayDetectable = RayDetectable;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public float getMaxRange() {
-        return (Float)variables.get("MaxRange");
-    }
-
-    /**
-     *
-     * @param MaxRange 
-     */
-    public void setMaxRange(float MaxRange) {
-        variables.put("MaxRange", MaxRange);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public float getMinRange() {
-        return (Float)variables.get("MinRange");
-    }
-
-    /**
-     *
-     * @param MinRange 
-     */
-    public void setMinRange(float MinRange) {
-        variables.put("MinRange", MinRange);
-    }
-    
-         /**
      *
      * @return The exact depth of the current auv
      */
@@ -314,55 +114,6 @@ public class InfraRedSensor extends Sensor implements ChartValue{
         float[] infra_data = getRawRayData(ray_start, ray_direction);
         
         return infra_data[0];
-    }
-    
-     private float[] getRawRayData(Vector3f start, Vector3f direction){
-        if(RayDetectable == null){
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "No detectable Node/Object added...", "");
-            return new float[2];
-        }
-
-        CollisionResults results = new CollisionResults();
-        float[] arr_ret = new float[2];
-        Vector3f ray_start = start;
-        Vector3f ray_direction = direction;
-        //System.out.println("r " + ray_start);
-        //System.out.println("r+ " + ray_direction);
-
-        Ray ray = new Ray(ray_start, ray_direction);
-
-        RayDetectable.collideWith(ray, results);
-        //System.out.println(results2.size());
-        for (int i = 0; i < results.size(); i++) {
-            float distance = results.getCollision(i).getDistance();
-            //System.out.println(" d " + i + " " + distance);
-            if(distance >= getMaxRange()){//too far away
-                //System.out.println("too far away");
-                break;
-            }else if(results.getCollision(i).getContactPoint().y >= pe.getWater_height()){//forget hits over water
-                break;
-            }else if ((distance > getMinRange())) {
-                //first = results2.getCollision(i).getContactPoint();
-                Vector3f cnormal = results.getCollision(i).getContactNormal();
-                Vector3f direction_negated = direction.negate();
-                float angle = cnormal.angleBetween(direction_negated);
-                if(angle > Math.PI/2){//sometimes the normal vector isnt right and than we have to much angle
-                    angle = (float)Math.PI/2;
-                }
-
-                /*System.out.println("angle: " + angle);
-                System.out.println("cnor: " + cnormal);
-                System.out.println("direc: " + direction_negated);*/
-                //System.out.println(first);
-                //ret = (first.subtract(ray_start)).length();
-                arr_ret[0] = distance;
-                arr_ret[1] = angle;
-                //System.out.println(distance);
-                break;
-            }
-            //System.out.println("point too near!");
-        }
-        return arr_ret;
     }
     
     /**

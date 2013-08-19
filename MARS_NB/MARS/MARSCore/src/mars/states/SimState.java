@@ -89,7 +89,7 @@ import org.openide.util.Lookup;
  *
  * @author Thomas Tosik
  */
-public class SimState extends AbstractAppState implements PhysicsTickListener{
+public class SimState extends AbstractAppState implements PhysicsTickListener,AppStateExtension{
 
     private Node rootNode = new Node("SimState Root Node");
     private AssetManager assetManager;

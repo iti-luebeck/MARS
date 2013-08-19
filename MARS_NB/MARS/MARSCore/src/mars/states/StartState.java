@@ -60,7 +60,7 @@ import jme3tools.optimize.GeometryBatchFactory;
  *
  * @author Thomas Tosik
  */
-public class StartState extends AbstractAppState{
+public class StartState extends AbstractAppState implements AppStateExtension{
 
     private Node rootNode = new Node("StartState Root Node");
     private AssetManager assetManager;

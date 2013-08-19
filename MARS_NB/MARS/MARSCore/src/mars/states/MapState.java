@@ -49,7 +49,7 @@ import org.openide.modules.InstalledFileLocator;
  * This state is for updating the map in the gui.
  * @author Thomas Tosik
  */
-public class MapState extends AbstractAppState{
+public class MapState extends AbstractAppState implements AppStateExtension{
 
     private Node rootNode = new Node("MapState Root Node");
     private Node auvsNode = new Node("AUVS Node");
