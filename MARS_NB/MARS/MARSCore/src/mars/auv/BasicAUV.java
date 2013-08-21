@@ -320,6 +320,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      * @param auv_param
      */
+    @Override
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
         this.physicalvalues.setAuv(this);
@@ -328,6 +329,9 @@ public class BasicAUV implements AUV, SceneProcessor {
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
         auv_node.setName(auv_param.getAuv_name() + "_physicnode");
+        if(WayPoints != null){
+            WayPoints.setAuv_param(auv_param);
+        }
     }
 
     /**

@@ -150,6 +150,14 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      *
      */
     public abstract void init(Node auv_node);
+    
+    /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+    }
 
     /**
      * This method updates the forces for the physicsNode so the auv moves

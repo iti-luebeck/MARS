@@ -453,7 +453,9 @@ public class GenericTreeModel implements TreeModel{
                            + path + " --> " + newValue);
         
         //save the new value
-        saveValue(path, path, newValue);
+        if(newValue != null){
+            saveValue(path, path, newValue);
+        }
         
         //dont forget to tell the listeners that something has changed
         Iterator iter = treeModelListeners.iterator();
@@ -466,7 +468,10 @@ public class GenericTreeModel implements TreeModel{
     
     protected void saveValue(TreePath originalPath, TreePath path, Object value){
         Object obj = path.getLastPathComponent();
-        if(!(obj instanceof HashMapWrapper)){
+        if(obj instanceof AUV_Parameters){// in the case of a save in not a leaf but higher we need to check it here
+            AUV auv = (AUV)path.getParentPath().getLastPathComponent();
+            auv.setAuv_param((AUV_Parameters)value);//path[1] must be an auv here
+        }else if(!(obj instanceof HashMapWrapper)){
             saveValue(originalPath,path.getParentPath(),value);
         }else{
             HashMapWrapper hasher = (HashMapWrapper)obj;

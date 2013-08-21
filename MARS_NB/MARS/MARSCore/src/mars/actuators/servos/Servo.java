@@ -157,6 +157,22 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         actuator.initAfterJAXB();
         return actuator;
     }
+    
+   /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+        if(pe instanceof Servo){
+            HashMap<String, String> actionOriginal = ((Servo)pe).getAllActions();
+            Cloner cloner = new Cloner();
+            action_mapping = cloner.deepClone(actionOriginal);
+            
+            ArrayList<String> slavesOriginal = ((Servo)pe).getSlavesNames();
+            slaves_names = cloner.deepClone(slavesOriginal);
+        }
+    }
 
     /**
      * 

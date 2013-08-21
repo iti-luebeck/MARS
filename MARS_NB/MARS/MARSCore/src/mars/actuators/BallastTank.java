@@ -13,7 +13,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import com.rits.cloning.Cloner;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
-import mars.NoiseType;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -93,6 +91,19 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
         BallastTank actuator = new BallastTank(this);
         actuator.initAfterJAXB();
         return actuator;
+    }
+    
+   /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+        if(pe instanceof BallastTank){
+            HashMap<String, String> actionsOriginal = ((BallastTank)pe).getAllActions();
+            Cloner cloner = new Cloner();
+            action_mapping = cloner.deepClone(actionsOriginal);
+        }
     }
 
     /**

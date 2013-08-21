@@ -117,6 +117,14 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     public abstract void init(Node auv_node);
     
     /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+    }
+    
+    /**
      * 
      * @param path
      */

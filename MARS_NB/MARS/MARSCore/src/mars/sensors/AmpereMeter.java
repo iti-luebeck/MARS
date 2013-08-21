@@ -89,6 +89,19 @@ public class AmpereMeter extends Sensor implements ChartValue{
     }
     
     /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+        if(pe instanceof AmpereMeter){
+            HashMap<String, String> accumulatorsOriginal = ((AmpereMeter)pe).getAccumulators();
+            Cloner cloner = new Cloner();
+            accumulators = cloner.deepClone(accumulatorsOriginal);
+        }
+    }
+    
+    /**
      * 
      * @return
      */

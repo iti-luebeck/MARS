@@ -12,6 +12,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -182,6 +183,15 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public abstract void reset();
     
     public abstract PhysicalExchanger copy();
+    
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        HashMap<String, Object> variablesOriginal = pe.getAllVariables();
+        Cloner cloner = new Cloner();
+        variables = cloner.deepClone(variablesOriginal);
+        
+        HashMap<String, Object> noisevariablesOriginal = pe.getAllNoiseVariables();
+        noises = cloner.deepClone(noisevariablesOriginal);
+    }
     
     public abstract void cleanup();
     

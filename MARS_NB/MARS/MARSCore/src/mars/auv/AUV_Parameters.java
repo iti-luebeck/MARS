@@ -37,49 +37,6 @@ public class AUV_Parameters{
     private HashMap<String,Object> buoyancy;
     private AUV auv;
 
-    private String auv_class = "Hanse";
-    private Vector3f position = new Vector3f(0f,0f,0f);
-    private Vector3f rotation = new Vector3f(0f,0f,0f);
-    private Vector3f centroid_center_distance = new Vector3f(-0.04f,0.175f,-0.035f);
-    private float mass_auv = 24.0f;
-    private float drag_coefficient_linear = 1.45f;
-    private float drag_coefficient_angular = 1.0f;
-    private float damping_linear = 0.2f;
-    private float damping_angular = 0.3f;
-    private int offCamera_width = 320;
-    private int offCamera_height = 240;
-    private float model_scale = 0.1f;
-    private String model_name = "HANSE_MODEL_2";
-    private String model_filepath = "hanse_very_low.obj";
-    private int buoyancy_updaterate = 0;
-    private int drag_updaterate = 5;
-    private float waypoints_updaterate = 1.0f;
-    private float physicalvalues_updaterate = 1.0f;
-    private int maxWaypoints = 0;
-    private ColorRGBA waypoints_color = new ColorRGBA(0f, 0f, 0f, 0.0f);
-    private boolean waypoints_enabled = true;
-    private boolean waypoints_gradient = true;
-    private boolean waypoints_visible = false;
-    private float angular_factor = 1.0f;
-    private Vector3f linear_factor = new Vector3f(1f,1f,1f);
-    private String auv_name = "hanse_irgendwas";
-    private boolean debug_drag = false;
-    private boolean debug_buoycancy = false;
-    private boolean debug_physical_exchanger = false;
-    private boolean debug_collision = false;
-    private boolean debug_centers = false;
-    private Vector3f dimensions = new Vector3f(0.5f,0.5f,0.5f);
-    private Vector3f collision_position = new Vector3f(0.0f,0.0f,0.0f);
-    private int type = CollisionType.CYLINDERCOLLISIONSHAPE;
-    private float buoyancy_distance = 0f;
-    private float buoyancy_scale = 0.9f;
-    private boolean enabled = false;
-    private ColorRGBA selection_color = ColorRGBA.Red;
-    private ColorRGBA map_color = ColorRGBA.Red;
-    private float alpha_depth_scale = 3.0f;
-    private String icon = "yellow_submarine.png";
-    private String dnd_icon = "yellow_submarine.png";
-    
     /**
      * 
      */

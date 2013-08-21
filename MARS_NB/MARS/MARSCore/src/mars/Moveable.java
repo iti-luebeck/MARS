@@ -14,14 +14,6 @@ import com.jme3.math.Vector3f;
 public interface Moveable {
     /**
      * 
-     * @param rotation_axis
-     * @param alpha
-     * @deprecated 
-     */
-    @Deprecated
-    public void updateRotation(Vector3f rotation_axis, float alpha);
-    /**
-     * 
      * @param alpha
      */
     public void updateRotation(float alpha);

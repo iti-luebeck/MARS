@@ -13,6 +13,7 @@ import mars.states.SimState;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
+@Deprecated
 public class BlackfinCamera extends VideoCamera{
 
     /**

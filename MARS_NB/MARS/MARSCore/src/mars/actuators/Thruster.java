@@ -112,6 +112,19 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
         actuator.initAfterJAXB();
         return actuator;
     }
+    
+    /**
+     *
+     */
+    @Override
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+        super.copyValuesFromPhysicalExchanger(pe);
+        if(pe instanceof Thruster){
+            HashMap<String, String> actionsOriginal = ((Thruster)pe).getAllActions();
+            Cloner cloner = new Cloner();
+            action_mapping = cloner.deepClone(actionsOriginal);
+        }
+    }
 
     /**
      * DON'T CALL THIS METHOD!
@@ -247,24 +260,6 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
      */
     public float getMotorCurrent() {
         return MotorCurrent;
-    }
-    
-    /**
-     * Don't call this anymore. You have first to call setLocalRotationAxisPoints once at the begining of the simulation
-     * @param rotation_axis
-     * @param alpha
-     * @deprecated 
-     */
-    @Override
-    @Deprecated
-    public void updateRotation(Vector3f rotation_axis, float alpha){
-        System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + rotation_axis );
-        Vector3f local_rotation_axis = new Vector3f();
-        PhysicalExchanger_Node.worldToLocal(rotation_axis, local_rotation_axis);
-        System.out.println("My local rotation axis is:" + local_rotation_axis );
-        Quaternion quat = new Quaternion();
-        quat.fromAngleAxis(alpha, local_rotation_axis);
-        PhysicalExchanger_Node.setLocalRotation(quat);
     }
     
     /**

@@ -184,6 +184,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        saveIdentity = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -456,6 +457,9 @@ public final class MARSTreeTopComponent extends TopComponent {
             }
         });
 
+        saveIdentity.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(saveIdentity, org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.saveIdentity.text")); // NOI18N
+
         javax.swing.GroupLayout forceValueDialogLayout = new javax.swing.GroupLayout(forceValueDialog.getContentPane());
         forceValueDialog.getContentPane().setLayout(forceValueDialogLayout);
         forceValueDialogLayout.setHorizontalGroup(
@@ -463,6 +467,9 @@ public final class MARSTreeTopComponent extends TopComponent {
             .addGroup(forceValueDialogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(forceValueDialogLayout.createSequentialGroup()
+                        .addComponent(saveIdentity)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(forceValueDialogLayout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -474,8 +481,10 @@ public final class MARSTreeTopComponent extends TopComponent {
             forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(forceValueDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(saveIdentity)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(forceValueDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
@@ -687,6 +696,14 @@ public final class MARSTreeTopComponent extends TopComponent {
                         //show it only when deep enough for value
                         if(selPath.getLastPathComponent() instanceof Boolean || selPath.getLastPathComponent() instanceof Float || selPath.getLastPathComponent() instanceof Double || selPath.getLastPathComponent() instanceof String || selPath.getLastPathComponent() instanceof Integer){
                             forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }
+                        if(selPath.getLastPathComponent() instanceof AUV_Parameters){
+                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }else if(selPath.getLastPathComponent() instanceof HashMapWrapper) {       
+                             HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                             if(hashwrap.getUserData() instanceof PhysicalExchanger){
+                                  forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                             }
                         }
                     }else{
                         if (selPath.getLastPathComponent() instanceof AUV) { 
@@ -1540,6 +1557,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     public mars.gui.TextFieldCellEditor textfieldEditor3;
     private DefaultTreeCellRenderer renderer3;
     private javax.swing.JMenuItem reset_auv;
+    private javax.swing.JCheckBox saveIdentity;
     private javax.swing.JTree settings_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor4;
     private DefaultTreeCellRenderer renderer4;
@@ -1805,7 +1823,29 @@ public final class MARSTreeTopComponent extends TopComponent {
 
         if(match){//only when we have mathing paths we set the values
             TreePath newPath = new TreePath(newpath);
-            mod.valueForPathChanged(newPath, lastSelectedPathComponent);
+            if(lastSelectedPathComponent instanceof AUV_Parameters){
+                AUV_Parameters newParam = ((AUV_Parameters)lastSelectedPathComponent).copy();
+                //minimal identity save
+                newParam.setAuv(auv);
+                newParam.setAuv_class(auv.getAuv_param().getAuv_class());
+                newParam.setAuv_name(auv.getName());
+                if(saveIdentity.isSelected()){//extra identity save
+                    newParam.setDNDIcon(auv.getAuv_param().getDNDIcon());
+                    newParam.setIcon(auv.getAuv_param().getIcon());
+                }
+                mod.valueForPathChanged(newPath, newParam);
+            }else if(lastSelectedPathComponent instanceof HashMapWrapper){
+                Object userData = ((HashMapWrapper)lastSelectedPathComponent).getUserData();
+                if(userData instanceof PhysicalExchanger){
+                    PhysicalExchanger userData1 = (PhysicalExchanger)((HashMapWrapper)newpath[3]).getUserData(); //it has to be a pe at this position
+                    userData1.copyValuesFromPhysicalExchanger((PhysicalExchanger)userData);//it has to be a pe at this position
+                    //since we dont clone the pe, only copy the data within, we nee only to update the listeners not the object, hence null as param. Its a little bit problematic to clone a pe live into the same auv.
+                    //Since most sensors etc need initialization...
+                    mod.valueForPathChanged(newPath, null);
+                }  
+            }else{
+                mod.valueForPathChanged(newPath, lastSelectedPathComponent);
+            }
         }
     }
     
