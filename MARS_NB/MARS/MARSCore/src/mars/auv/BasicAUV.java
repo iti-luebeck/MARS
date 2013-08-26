@@ -183,7 +183,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private HashMap<String, Accumulator> accumulators = new HashMap<String, Accumulator>();
     private PhysicalValues physicalvalues;
     private EventListenerList listeners = new EventListenerList();
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
     private MARSNodeMain mars_node;
     //selection stuff aka highlightening
     private boolean selected = false;
@@ -374,7 +374,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @return
      */
     @Override
-    public Communication_Manager getCommunicationManager() {
+    public CommunicationManager getCommunicationManager() {
         return com_manager;
     }
 
@@ -383,7 +383,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param com_manager
      */
     @Override
-    public void setCommunicationManager(Communication_Manager com_manager) {
+    public void setCommunicationManager(CommunicationManager com_manager) {
         this.com_manager = com_manager;
     }
 
@@ -1028,6 +1028,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         resetAllSensors();
         resetAllAccumulators();
         clearForces();
+        WayPoints.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());
         rotateAUV();
     }
