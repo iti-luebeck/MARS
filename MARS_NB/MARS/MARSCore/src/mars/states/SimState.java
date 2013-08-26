@@ -657,6 +657,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
         physical_environment.setBulletAppState(bulletAppState);
+        
+        bulletAppState.setEnabled(false);
     }
 
     private void setupCams(){
@@ -1544,6 +1546,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
         initial_ready = true;
         MARSTopComp.allowPhysicsInteraction(true);
+        bulletAppState.setEnabled(true);
         System.out.println("Simulation started...");
     }
             
@@ -1551,6 +1554,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * 
      */
     public void pauseSimulation(){
+        bulletAppState.setEnabled(false);
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         auvManager.clearForcesOfAUVs();
         initial_ready = false;
