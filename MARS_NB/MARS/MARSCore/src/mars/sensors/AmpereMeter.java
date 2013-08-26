@@ -29,8 +29,8 @@ import org.ros.node.topic.Publisher;
 public class AmpereMeter extends Sensor implements ChartValue{
 
     ///ROS stuff
-    private Publisher<std_msgs.Float32> publisher = null;
-    private std_msgs.Float32 fl;
+    private Publisher<hanse_msgs.Ampere> publisher = null;
+    private hanse_msgs.Ampere fl;
     private std_msgs.Header header; 
     
     /**
@@ -181,8 +181,8 @@ public class AmpereMeter extends Sensor implements ChartValue{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),std_msgs.Float32._TYPE);  
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),hanse_msgs.Ampere._TYPE);  
+        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.Ampere._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
@@ -195,7 +195,9 @@ public class AmpereMeter extends Sensor implements ChartValue{
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setData((float)getAmpere());
+        fl.setHeader(header);
+        
+        fl.setAmpere(getAmpere());
         
         if( publisher != null ){
             publisher.publish(fl);

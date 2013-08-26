@@ -831,6 +831,22 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    public int getROS_Gloabl_Queue_Size() {
+        return (Integer)ROS.get("GlobalQueueSize");
+    }
+
+    /**
+     *
+     * @param FrameLimit
+     */
+    public void setROS_Gloabl_Queue_Size(int GlobalQueueSize) {
+        ROS.put("GlobalQueueSize", GlobalQueueSize);
+    }
+    
+    /**
+     *
+     * @return
+     */
     public boolean isROS_Server_enabled() {
         return (Boolean)ROS.get("enabled");
     }

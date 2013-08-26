@@ -35,14 +35,6 @@ import mars.ros.MARSNodeMain;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class InfraRedSensor extends RayBasedSensor implements ChartValue{
-    /**
-     *
-     */
-    protected Geometry Start;
-    /**
-     *
-     */
-    protected Geometry End;
 
     private Collider RayDetectable;
     
@@ -107,9 +99,9 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue{
     }
     
     private float getRawDistance(){
-        Vector3f ray_start = this.Start.getWorldTranslation();
+        Vector3f ray_start = this.SonarStart.getWorldTranslation();
 
-        Vector3f ray_direction = (End.getWorldTranslation()).subtract(Start.getWorldTranslation());
+        Vector3f ray_direction = (SonarEnd.getWorldTranslation()).subtract(SonarStart.getWorldTranslation());
 
         float[] infra_data = getRawRayData(ray_start, ray_direction);
         

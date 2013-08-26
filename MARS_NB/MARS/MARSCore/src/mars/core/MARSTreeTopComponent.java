@@ -5,11 +5,7 @@
 package mars.core;
 
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.system.Timer;
-import info.monitorenter.gui.chart.Chart2D;
-import info.monitorenter.gui.chart.ITrace2D;
-import info.monitorenter.gui.chart.traces.Trace2DLtd;
+import com.rits.cloning.Cloner;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.InputEvent;
@@ -23,13 +19,11 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -52,8 +46,6 @@ import mars.gui.tree.HashMapWrapper;
 import mars.gui.tree.KeyConfigModel;
 import mars.gui.tree.MarsSettingsModel;
 import mars.gui.tree.MyTreeCellRenderer;
-import mars.gui.MyVerifier;
-import mars.gui.MyVerifierType;
 import mars.gui.tree.PhysicalEnvironmentModel;
 import mars.gui.tree.SimObjectManagerModel;
 import mars.gui.dnd.AUVTransferHandler;
@@ -69,7 +61,6 @@ import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
 import mars.xml.ConfigManager;
-import org.jfree.data.xy.XYSeries;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -700,10 +691,16 @@ public final class MARSTreeTopComponent extends TopComponent {
                         if(selPath.getLastPathComponent() instanceof AUV_Parameters){
                             forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
                         }else if(selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                             HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                             if(hashwrap.getUserData() instanceof PhysicalExchanger){
-                                  forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                             }
+                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                            if(hashwrap.getUserData() instanceof PhysicalExchanger){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof Accumulator){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof Boolean || hashwrap.getUserData() instanceof Float || hashwrap.getUserData() instanceof Double || hashwrap.getUserData() instanceof String || hashwrap.getUserData() instanceof Integer){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof HashMap && !hashwrap.getName().equals("Sensors") && !hashwrap.getName().equals("Actuators") && !hashwrap.getName().equals("Accumulators")){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }
                         }
                     }else{
                         if (selPath.getLastPathComponent() instanceof AUV) { 
@@ -1842,7 +1839,20 @@ public final class MARSTreeTopComponent extends TopComponent {
                     //since we dont clone the pe, only copy the data within, we nee only to update the listeners not the object, hence null as param. Its a little bit problematic to clone a pe live into the same auv.
                     //Since most sensors etc need initialization...
                     mod.valueForPathChanged(newPath, null);
-                }  
+                }else if(userData instanceof Accumulator){
+                    Accumulator userData1 = (Accumulator)((HashMapWrapper)newpath[3]).getUserData(); //it has to be a pe at this position
+                    userData1.copyValuesFromAccumulator((Accumulator)userData);
+                    mod.valueForPathChanged(newPath, null);
+                }else if(userData instanceof Boolean || userData instanceof Float || userData instanceof Double || userData instanceof String || userData instanceof Integer){
+                    //build path ond deeper for primitive data types
+                    Object obj = ((HashMapWrapper)newPath.getLastPathComponent()).getUserData();
+                    TreePath pathByAddingChild = newPath.pathByAddingChild(obj);
+                    mod.valueForPathChanged(pathByAddingChild, userData);
+                }else if(userData instanceof HashMap){
+                    HashMap userData1 = (HashMap)((HashMapWrapper)newPath.getLastPathComponent()).getUserData();
+                    userData1.putAll((HashMap)userData);
+                    mod.valueForPathChanged(newPath, null);
+                }
             }else{
                 mod.valueForPathChanged(newPath, lastSelectedPathComponent);
             }

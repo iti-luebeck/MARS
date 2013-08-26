@@ -28,7 +28,7 @@ import mars.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
-import mars.auv.Communication_Manager;
+import mars.auv.CommunicationManager;
 import mars.ModemEvent;
 import mars.ModemEventType;
 import mars.gui.plot.PhysicalExchangerListener;
@@ -48,7 +48,7 @@ public class UnderwaterModem extends Sensor{
     private Material debugDistanceMat;
     private Node comNet = new Node("comNet");
     
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
 
     //ROS stuff
     private Publisher<std_msgs.String> publisher = null;
@@ -144,7 +144,7 @@ public class UnderwaterModem extends Sensor{
      * 
      * @return
      */
-    public Communication_Manager getCommunicationManager() {
+    public CommunicationManager getCommunicationManager() {
         return com_manager;
     }
 
@@ -152,14 +152,16 @@ public class UnderwaterModem extends Sensor{
      * 
      * @param com_manager
      */
-    public void setCommunicationManager(Communication_Manager com_manager) {
+    public void setCommunicationManager(CommunicationManager com_manager) {
         this.com_manager = com_manager;
     }
 
+    @Override
     public void update(float tpf){
 
     }
 
+    @Override
     public void init(Node auv_node){
         Sphere sphere7 = new Sphere(16, 16, 0.05f);
         UnderwaterModemStart = new Geometry("UnderwaterModemStart", sphere7);
@@ -292,18 +294,6 @@ public class UnderwaterModem extends Sensor{
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
-        /*super.initROS(ros_node, auv_name);
-        final String fin_auv_name = auv_name;
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out", "std_msgs/String");  
-    
-        ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName() + "/in", "std_msgs/String",
-          new MessageListener<org.ros.message.std_msgs.String>() {
-            @Override
-            public void onNewMessage(org.ros.message.std_msgs.String message) {
-              System.out.println(fin_auv_name + " heard: \"" + message.data + "\"");
-              com_manager.putMsg(fin_auv_name,message.data);
-            }
-          });*/
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out",std_msgs.String._TYPE);  
         publisherSig = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/signal",std_msgs.Int8._TYPE); 
@@ -316,11 +306,11 @@ public class UnderwaterModem extends Sensor{
         subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
                 @Override
                 public void onNewMessage(std_msgs.String message) {
-                    System.out.println(fin_auv_name + "sends: \"" + message.getData() + "\"");
+                    System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
                     notifyAdvertisement(new ModemEvent(fin_this,message.getData(),System.currentTimeMillis(),ModemEventType.IN));
                     com_manager.putMsg(fin_auv_name,message.getData());
                 }
-        });
+        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
         this.rosinit = true;
     }
     

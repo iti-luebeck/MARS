@@ -1436,6 +1436,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
 
         if (getAuv_param().isDebugCollision()) {
+            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Setting DebugHint for: " + getName(), "");
             Helper.setNodeUserData(auv_node, DebugHint.DebugName, DebugHint.Debug);
         } else {
             Helper.setNodeUserData(auv_node, DebugHint.DebugName, DebugHint.NoDebug);

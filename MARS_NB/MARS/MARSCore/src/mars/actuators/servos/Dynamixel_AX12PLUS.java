@@ -76,6 +76,6 @@ public class Dynamixel_AX12PLUS extends Servo{
                     System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((double)message.getData());
                 }
-        });
+        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
     }
 }

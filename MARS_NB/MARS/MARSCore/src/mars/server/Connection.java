@@ -17,7 +17,7 @@ import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.MARS_Main;
 import mars.actuators.Thruster;
-import mars.auv.Communication_Manager;
+import mars.auv.CommunicationManager;
 import mars.sensors.Accelerometer;
 import mars.sensors.Compass;
 import mars.sensors.Gyroscope;
@@ -39,7 +39,7 @@ public class Connection extends Thread {
     private MARS_Main mars;
     private BasicAUV auv;
     private AUV_Manager auv_manager;
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
 
     private int OutputStreamSize = 1228100;
 
@@ -71,7 +71,7 @@ public class Connection extends Thread {
      * @param auv_manager
      * @param com_manager  
      */
-    public Connection(Socket sockConnected,MARS_Main mars, AUV_Manager auv_manager, Communication_Manager com_manager) {
+    public Connection(Socket sockConnected,MARS_Main mars, AUV_Manager auv_manager, CommunicationManager com_manager) {
         //set the logging
         /*
         try {

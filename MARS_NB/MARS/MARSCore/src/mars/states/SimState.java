@@ -63,7 +63,7 @@ import mars.PickHint;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
-import mars.auv.Communication_Manager;
+import mars.auv.CommunicationManager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.gui.ViewManager;
@@ -97,7 +97,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     private AUV_Manager auvManager;
     private RecordManager recordManager;
     private SimObjectManager simobManager;
-    private Communication_Manager comManager;
+    private CommunicationManager comManager;
     private BulletAppState bulletAppState;
     private MARS_Main mars;
     
@@ -330,7 +330,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             //recordManager.loadRecordings();
             auvManager = new AUV_Manager(this);
             simobManager = new SimObjectManager(this);
-            comManager = new Communication_Manager(auvManager, this, rootNode, physical_environment);
+            comManager = new CommunicationManager(auvManager, this, rootNode, physical_environment);
         
             progr.progress( "Creating Initializer" );
             initer = new Initializer(mars,this,auvManager,comManager,physical_environment);
@@ -649,9 +649,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
         }*/ //doesnt work here because DebugAppState suuuuuucks
         
-        if(mars_settings.isPhysicsDebug()){
+        //if(mars_settings.isPhysicsDebug()){
             bulletAppState.setDebugEnabled(true);
-        }
+        //}
+            
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
@@ -1225,7 +1226,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      /*
      *
      */
-    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, Communication_Manager com_manager, RecordManager recordManager, Initializer initer){
+    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, CommunicationManager com_manager, RecordManager recordManager, Initializer initer){
         auvManager.setBulletAppState(bulletAppState);
         auvManager.setPhysical_environment(pe);
         auvManager.setSimauv_settings(mars_settings);
@@ -1498,6 +1499,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         //setting Filter in the DebugState so we can show specific collision boxes
         if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
             if(!debugFilter && init){
+                Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Initialiazing DebugAppStateFilter...", "");
                 mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter(mars_settings,auvManager)); 
                 debugFilter = true;
             }

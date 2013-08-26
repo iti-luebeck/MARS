@@ -92,7 +92,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.auv.Communication_Manager;
+import mars.auv.CommunicationManager;
+import mars.auv.CommunicationManagerRunnable;
 import mars.filter.FishEyeFilter;
 import mars.filter.LensFlareFilter;
 import mars.server.ros.ROS_Node;
@@ -127,7 +128,7 @@ public class Initializer {
     private ViewPort viewPort;
     private float water_height;
     private AUV_Manager auv_manager;
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
     private BulletAppState bulletAppState;
     private FilterPostProcessor fpp;
 
@@ -185,6 +186,8 @@ public class Initializer {
     private Thread raw_server_thread;
     private ROS_Node ros_server;
     private Thread ros_server_thread;
+    private CommunicationManagerRunnable com_server;
+    private Thread com_server_thread;
 
     /**
      *
@@ -195,7 +198,7 @@ public class Initializer {
      * @deprecated 
      */
     @Deprecated
-    public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, Communication_Manager com_manager){
+    public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, CommunicationManager com_manager){
         this.mars = mars;
         this.mars_settings = MARS_settings;
         this.guiNode = mars.getGuiNode();
@@ -223,7 +226,7 @@ public class Initializer {
      * @param com_manager
      * @param physical_environment  
      */
-    public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, Communication_Manager com_manager, PhysicalEnvironment physical_environment){
+    public Initializer(MARS_Main mars, SimState simstate, AUV_Manager auv_manager, CommunicationManager com_manager, PhysicalEnvironment physical_environment){
         this.mars = mars;
         this.mars_settings = simstate.getMARSSettings();
         this.guiNode = mars.getGuiNode();
@@ -379,6 +382,10 @@ public class Initializer {
             ros_server.init();
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
+            
+            com_server = new CommunicationManagerRunnable(com_manager);
+            com_server_thread = new Thread( com_server );
+            com_server_thread.start();
         }
     }
     
@@ -386,6 +393,14 @@ public class Initializer {
      * 
      */
     public void killServer(){
+        Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Killing CommunicationManager Server...", "");
+        if(this.getCom_server() != null){
+            this.getCom_server().setRunning(false);
+            Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "CommunicationManager Server killed!", "");
+        }else{
+            Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "CommunicationManager Server not running. Cant be killed", "");
+        }
+        
         Logger.getLogger(Initializer.class.getName()).log(Level.INFO, "Killing ROS Server...", "");
         if(this.getROS_Server() != null){
             this.getROS_Server().shutdown();
@@ -434,6 +449,7 @@ public class Initializer {
     /**
      * 
      */
+    @Deprecated
     public void setupROS_Server(){
         if(mars_settings.isROS_Server_enabled()){
             ros_server = new ROS_Node( mars, auv_manager, mars_settings );
@@ -473,6 +489,14 @@ public class Initializer {
      */
     public synchronized ROS_Node getROS_Server(){
         return ros_server;
+    }
+
+    public CommunicationManagerRunnable getCom_server() {
+        return com_server;
+    }
+
+    public Thread getCom_server_thread() {
+        return com_server_thread;
     }
         
     /**

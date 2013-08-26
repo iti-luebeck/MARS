@@ -62,24 +62,6 @@ public class SimObject{
     private Node debugNode = new Node("debugNode");
     private Node renderNode = new Node("renderNode");
 
-    private Vector3f position = new Vector3f(0f,0f,0f);
-    private Vector3f rotation = new Vector3f(0f,0f,0f);
-    private String filepath = "pipe/pipe_1.obj";
-    private float scale = 0.1f;
-    private String name = "pipe_test_simobject";
-    private boolean enabled = true;
-    private boolean collidable = false;
-    private boolean sonar_detectable = false;
-    private boolean pinger  = false;
-    private ColorRGBA color = new ColorRGBA(0f, 1f, 0f, 1f);
-    private boolean light = false;
-    private boolean debug_collision = false;
-    private Vector3f dimensions = new Vector3f(0.5f,0.5f,0.5f);
-    private Vector3f collision_position = new Vector3f(0.0f,0.0f,0.0f);
-    private int type = CollisionType.CYLINDERCOLLISIONSHAPE;
-    private String icon = "box_closed.png";
-    private String dnd_icon = "box_closed.png";
-
     private MARS_Main simauv;
     private AssetManager assetManager;
     private Spatial spatial;

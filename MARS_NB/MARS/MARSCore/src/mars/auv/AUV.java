@@ -290,7 +290,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * 
      * @return
      */
-    public Communication_Manager getCommunicationManager();
+    public CommunicationManager getCommunicationManager();
     /*
     * 
     */
@@ -298,7 +298,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * 
      * @param com_manager
      */
-    public void setCommunicationManager(Communication_Manager com_manager);
+    public void setCommunicationManager(CommunicationManager com_manager);
     /**
      * 
      * @param mars_node

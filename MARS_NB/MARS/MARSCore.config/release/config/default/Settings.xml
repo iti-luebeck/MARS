@@ -475,6 +475,9 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterport">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">11311</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="GlobalQueueSize">
+                            <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">10</value>
+                        </entry>
                     </value>
                 </entry>
             </value>

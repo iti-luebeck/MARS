@@ -4,12 +4,14 @@
  */
 package mars.accumulators;
 
+import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.PhysicalExchanger;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -40,6 +42,12 @@ public class Accumulator {
             setActualCurrent(getCapacity());
         }
     };
+    
+    public void copyValuesFromAccumulator(Accumulator acc){
+        HashMap<String, Object> variablesOriginal = acc.getAllVariables();
+        Cloner cloner = new Cloner();
+        variables = cloner.deepClone(variablesOriginal);
+    }
     
     /**
      * 

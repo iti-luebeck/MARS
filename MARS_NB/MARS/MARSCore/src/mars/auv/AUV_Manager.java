@@ -53,7 +53,7 @@ public class AUV_Manager implements UpdateState{
     private BulletAppState bulletAppState;
     private Node rootNode;
     private SimState simstate;
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
     private RecordManager recManager;
     private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
 
@@ -178,7 +178,7 @@ public class AUV_Manager implements UpdateState{
      * 
      * @return
      */
-    public Communication_Manager getCommunicationManager() {
+    public CommunicationManager getCommunicationManager() {
         return com_manager;
     }
 
@@ -186,7 +186,7 @@ public class AUV_Manager implements UpdateState{
      * 
      * @param com_manager
      */
-    public void setCommunicationManager(Communication_Manager com_manager) {
+    public void setCommunicationManager(CommunicationManager com_manager) {
         this.com_manager = com_manager;
     }
 

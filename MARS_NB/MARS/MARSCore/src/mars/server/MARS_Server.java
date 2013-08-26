@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV_Manager;
 import mars.MARS_Main;
-import mars.auv.Communication_Manager;
+import mars.auv.CommunicationManager;
 
 /**
  * This is the server thread class. It waits for new requests from the clients(i.e. Hanse) and than processes it.
@@ -29,7 +29,7 @@ public class MARS_Server implements Runnable {
 
     private MARS_Main mars;
     private AUV_Manager auv_manager;
-    private Communication_Manager com_manager;
+    private CommunicationManager com_manager;
     
     private ArrayList<Connection> connections = new ArrayList<Connection>();
 
@@ -39,7 +39,7 @@ public class MARS_Server implements Runnable {
      * @param auv_manager
      * @param com_manager  
      */
-    public MARS_Server(MARS_Main simauv, AUV_Manager auv_manager, Communication_Manager com_manager) {
+    public MARS_Server(MARS_Main simauv, AUV_Manager auv_manager, CommunicationManager com_manager) {
         //set the logging
         try {
             // Create an appending file handler

@@ -319,6 +319,28 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     }
     
     /**
+     * 
+     * @return
+     */
+    public int getRos_queue_listener_size() {   
+        Integer ros_queue_listener_size = (Integer)variables.get("ros_queue_listener_size");
+        if(ros_queue_listener_size != null){
+            return ros_queue_listener_size;
+        }else{
+            return 1;
+        }
+    }
+
+    /**
+     * 
+     * @param ros_frame_id
+     */
+    public void setRos_queue_listener_size(int ros_queue_listener_size) {
+        //this.ros_frame_id = ros_frame_id;
+        variables.put("ros_queue_listener_size",ros_queue_listener_size);
+    }
+    
+    /**
      *
      * @param tpf
      */

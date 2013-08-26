@@ -256,6 +256,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="propagation_distance">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">10.0</value>
                     </entry>
@@ -850,6 +853,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
                     </entry>
@@ -916,6 +922,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
                     </entry>
@@ -972,6 +981,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
@@ -1039,6 +1051,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
                     </entry>
@@ -1096,6 +1111,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
                     </entry>
@@ -1152,6 +1170,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
