@@ -39,6 +39,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.control.LodControl;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Image.Format;
@@ -64,6 +65,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jme3tools.optimize.LodGenerator;
 import mars.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
@@ -88,6 +90,7 @@ import mars.auv.example.SMARTE;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
 import mars.LimitedRigidBodyControl;
+import mars.control.MyLodControl;
 import mars.gui.tree.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
@@ -181,6 +184,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Accumulators")
     private HashMap<String, Accumulator> accumulators = new HashMap<String, Accumulator>();
+    
     private PhysicalValues physicalvalues;
     private EventListenerList listeners = new EventListenerList();
     private CommunicationManager com_manager;
@@ -189,6 +193,9 @@ public class BasicAUV implements AUV, SceneProcessor {
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
     private Spatial ghost_auv_spatial;
+    
+    //LOD
+    private List<Geometry> listGeoms = new ArrayList<Geometry>();
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble.
@@ -1320,6 +1327,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //own load controler, still lacks a lot of features to be used productive
         /*SpatialLodControl slc = new SpatialLodControl(mars.getCamera(),auv_spatial);
          auv_spatial.addControl(slc);*/
+        optimizeSpatial(auv_spatial);
 
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();
@@ -1350,6 +1358,32 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         setWireframeVisible(auv_param.isDebugWireframe());
         auv_node.attachChild(auv_spatial);
+    }
+    
+    private void optimizeSpatial(Spatial auv_spatial){
+        if(auv_spatial instanceof Node){
+            Node auv = (Node)auv_spatial;
+            if(auv_param.isBatched()){
+                jme3tools.optimize.GeometryBatchFactory.optimize(auv);
+            }
+            if(auv_param.isLod()){
+                for (Spatial spatial : auv.getChildren()) {
+                    if (spatial instanceof Geometry) {
+                        listGeoms.add((Geometry) spatial);
+                    }
+                }
+
+                for (final Geometry geometry : listGeoms) {
+                    LodGenerator lodGenerator = new LodGenerator(geometry);          
+                    lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, auv_param.getLodReduction1(), auv_param.getLodReduction2());
+                    geometry.setLodLevel(0);
+                    LodControl control = new LodControl();
+                    control.setDistTolerance(auv_param.getLodDistTolerance());
+                    control.setTrisPerPixel(auv_param.getLodTrisPerPixel());
+                    geometry.addControl(control);
+                }
+            }
+        }
     }
 
     private void createGhostAUV() {

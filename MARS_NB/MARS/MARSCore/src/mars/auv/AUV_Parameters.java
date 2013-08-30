@@ -35,6 +35,7 @@ public class AUV_Parameters{
     private HashMap<String,Object> debug;
     private HashMap<String,Object> collision;
     private HashMap<String,Object> buoyancy;
+    private HashMap<String,Object> optimize;
     private AUV auv;
 
     /**
@@ -60,6 +61,7 @@ public class AUV_Parameters{
         debug = (HashMap<String,Object>)params.get("Debug");
         collision = (HashMap<String,Object>)params.get("Collision");
         buoyancy = (HashMap<String,Object>)params.get("Buoyancy");
+        optimize = (HashMap<String,Object>)params.get("Optimize");
     }
 
     /**
@@ -396,6 +398,102 @@ public class AUV_Parameters{
      */
     public Float getPhysicalvalues_updaterate() {
         return (Float)params.get("physicalvalues_updaterate");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isBatched() {
+        return (Boolean)optimize.get("batched");
+    }
+
+    /**
+     *
+     * @param sonar_detectable
+     */
+    public void setBatched(boolean batched) {
+        optimize.put("batched", batched);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isLod() {
+        return (Boolean)optimize.get("lod");
+    }
+
+    /**
+     *
+     * @param sonar_detectable
+     */
+    public void setLod(boolean lod) {
+        optimize.put("lod", lod);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getLodTrisPerPixel() {
+        return (Float)optimize.get("LodTrisPerPixel");
+    }
+
+    /**
+     *
+     * @param LodTrisPerPixel
+     */
+    public void setLodTrisPerPixel(float LodTrisPerPixel) {
+        optimize.put("LodTrisPerPixel", LodTrisPerPixel);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getLodDistTolerance() {
+        return (Float)optimize.get("LodDistTolerance");
+    }
+
+    /**
+     *
+     * @param LodDistTolerance
+     */
+    public void setLodDistTolerance(float LodDistTolerance) {
+        optimize.put("LodDistTolerance", LodDistTolerance);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getLodReduction1() {
+        return (Float)optimize.get("LodReduction1");
+    }
+
+    /**
+     *
+     * @param LodReduction1
+     */
+    public void setLodReduction1(float LodReduction1) {
+        optimize.put("LodReduction1", LodReduction1);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getLodReduction2() {
+        return (Float)optimize.get("LodReduction2");
+    }
+
+    /**
+     *
+     * @param LodReduction2
+     */
+    public void setLodReduction2(float LodReduction2) {
+        optimize.put("LodReduction2", LodReduction2);
     }
 
     /**

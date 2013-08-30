@@ -667,28 +667,31 @@ public class Initializer {
     }
 
     /*
-     * This creates shader water.
+     * This creates shader water. I never got the params right and it always look so unrealistic like in morrorwind. Fog also was never implemented.
+     * Onyl works form one side etc....
      */
+    @Deprecated
     private void setupWater(){
         SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assetManager);
         waterProcessor.setReflectionScene(sceneReflectionNode);
         waterProcessor.setDebug(false);
-        waterProcessor.setLightPosition(mars_settings.getLight_direction().normalizeLocal());
+        waterProcessor.setLightPosition(mars_settings.getLight_direction().mult(-400f));
 
         //setting the water plane
-        Vector3f waterLocation=new Vector3f(0,-10,0);
+        Vector3f waterLocation=new Vector3f(0,water_height,0);
         waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
         waterProcessor.setWaterColor(ColorRGBA.Blue);
         //lower render size for higher performance
 //        waterProcessor.setRenderSize(128,128);
         //raise depth to see through water
-//        waterProcessor.setWaterDepth(20);
+        waterProcessor.setWaterDepth(0.5f);
         //lower the distortion scale if the waves appear too strong
-//        waterProcessor.setDistortionScale(0.1f);
+        //waterProcessor.setDistortionScale(0.1f);
         //lower the speed of the waves if they are too fast
-//        waterProcessor.setWaveSpeed(0.01f);
-        waterProcessor.setRefractionClippingOffset(100.0f);
-        waterProcessor.setReflectionClippingOffset(0.0f);
+        waterProcessor.setWaveSpeed(0.01f);
+        waterProcessor.setWaterTransparency(0.05f);
+        waterProcessor.setRefractionClippingOffset(2.0f);
+        waterProcessor.setReflectionClippingOffset(2.0f);
 
         Quad quad = new Quad(1000,1000);
 

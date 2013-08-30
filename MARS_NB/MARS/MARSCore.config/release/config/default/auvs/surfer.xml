@@ -155,8 +155,30 @@
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="collision">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
+                </value>
+            </entry>
+			<entry xsi:type="myHashMapEntryTypeHashMap" key="Optimize" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <value>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="batched">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="lod">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="LodTrisPerPixel">
+						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.3</value>
+					</entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="LodDistTolerance">
+						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+					</entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="LodReduction1">
+						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.3</value>
+					</entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="LodReduction2">
+						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.6</value>
+					</entry>
                 </value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeObject" key="auv_name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -371,6 +393,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraHeight">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">480</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="format">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">BGR8</value>
+                    </entry>
                 </variables>
             </value>
         </entry>
@@ -460,6 +485,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraHeight">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">480</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="format">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">BGR8</value>
                     </entry>
                 </variables>
             </value>

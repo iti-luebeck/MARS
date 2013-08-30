@@ -32,11 +32,11 @@ public class MyCustomGhostControl extends GhostControl implements PhysicsCollisi
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        /*Spatial nodeA = event.getNodeA();
+        Spatial nodeA = event.getNodeA();
         Spatial nodeB = event.getNodeB();
-        System.out.println("Collision: " + nodeA.getName() + " " + nodeB.getName());*/
+        System.out.println("Collision: " + nodeA.getName() + " " + nodeB.getName());
         collided = true;
-        //System.out.println(System.currentTimeMillis() + ": collision");
+        System.out.println(System.currentTimeMillis() + ": collision");
     }
     
     @Override

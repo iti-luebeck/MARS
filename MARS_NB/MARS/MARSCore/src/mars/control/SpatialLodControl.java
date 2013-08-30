@@ -18,6 +18,7 @@ import java.util.HashMap;
  * This is calss used for controlling the lod of spatials. We perform so called manual lod which isnt supported in jme3 yet.
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class SpatialLodControl extends AbstractControl{
     private int index; // can have custom fields -- example 
     private Spatial auv_spatial;

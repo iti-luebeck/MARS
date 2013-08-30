@@ -10,8 +10,10 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Image.Format;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
 import mars.PickHint;
@@ -238,4 +240,16 @@ public class Helper {
         Class[] toArray = allClasses.toArray(new Class[0]);
         return toArray;
     }*/
+    
+    public static String getROSEncoding(Format key){
+        EnumMap<Format, String> stateMap = new EnumMap<Format, String>(Format.class);
+        stateMap.put(Format.RGB8, "rgb8");
+        stateMap.put(Format.RGBA8, "rgba8");
+        stateMap.put(Format.RGB16, "rgb16");
+        stateMap.put(Format.RGBA16, "rgba16");
+        stateMap.put(Format.BGR8, "bgra8");
+        stateMap.put(Format.Luminance8, "mono8");
+        stateMap.put(Format.Luminance16, "mono16");
+        return stateMap.get(key);
+    }
 }

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.Moveable;
@@ -55,26 +56,15 @@ public class VideoCamera extends Sensor implements Moveable{
     private Geometry CameraEnd;
     private Geometry CameraTop;
 
-    private Vector3f CameraStartVector = new Vector3f(0,0,0);
-    private Vector3f CameraDirection = new Vector3f(0,0,0);
-    private Vector3f CameraTopDirection = new Vector3f(0,0,0);
-
-    private boolean debug = true;
-
     private Renderer renderer;
     private RenderManager renderManager;
     private Initializer initer;
-
-    private int CameraWidth = 640;
-    private int CameraHeight = 480;
-    private float CameraAngle = 45f;
 
     private Camera offCamera;
     private Camera debugCamera;
     private ViewPort offView;
     private ViewPort debugView;
     private FrameBuffer offBuffer;
-    private float frustumSize = 3.5f;//1
 
     private ByteBuffer cpuBuf;
     
@@ -180,6 +170,22 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     public void setCameraWidth(int CameraWidth) {
          variables.put("CameraWidth", CameraWidth);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getFormat(){
+        return (String)variables.get("format");
+    }
+    
+    /**
+     * 
+     * @param icon
+     */
+    public void setFormat(String format){
+        variables.put("format",format);
     }
 
     public void init(Node auv_node){
@@ -300,7 +306,8 @@ public class VideoCamera extends Sensor implements Moveable{
         // this is faster for gpu -> cpu copies
         offBuffer.setDepthBuffer(Format.Depth);
         //offBuffer.setColorBuffer(Format.RGBA8);
-        offBuffer.setColorBuffer(Format.BGR8);
+        offBuffer.setColorBuffer(Format.valueOf(getFormat()));
+        //offBuffer.setColorBuffer(Format.BGR8);
         //offBuffer.setColorTexture(offTex);
 
         //set viewport to render to offscreen framebuffer
@@ -444,7 +451,8 @@ public class VideoCamera extends Sensor implements Moveable{
         
         fl.setHeight(getCameraHeight());
         fl.setWidth(getCameraWidth());
-        fl.setEncoding("bgra8");
+        fl.setEncoding(Helper.getROSEncoding(Format.valueOf(getFormat())));
+        //fl.setEncoding("bgra8");
         fl.setIsBigendian((byte)1);
         fl.setStep(getCameraWidth()*4);
         /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
