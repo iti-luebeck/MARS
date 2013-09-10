@@ -1038,6 +1038,9 @@ public class BasicAUV implements AUV, SceneProcessor {
         WayPoints.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());
         rotateAUV();
+        for (final Geometry geometry : listGeoms) {
+            geometry.setLodLevel(0);
+        }
     }
 
     /*
@@ -1375,11 +1378,12 @@ public class BasicAUV implements AUV, SceneProcessor {
 
                 for (final Geometry geometry : listGeoms) {
                     LodGenerator lodGenerator = new LodGenerator(geometry);          
-                    lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, auv_param.getLodReduction1(), auv_param.getLodReduction2());
+                    lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.5f);
                     geometry.setLodLevel(0);
+                    //MyLodControl control = new MyLodControl();
                     LodControl control = new LodControl();
-                    control.setDistTolerance(auv_param.getLodDistTolerance());
-                    control.setTrisPerPixel(auv_param.getLodTrisPerPixel());
+                    control.setDistTolerance(1f);
+                    control.setTrisPerPixel(1f);
                     geometry.addControl(control);
                 }
             }

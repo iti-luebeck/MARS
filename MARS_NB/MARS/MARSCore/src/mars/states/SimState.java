@@ -1543,23 +1543,33 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * 
      */
     public void startSimulation(){
-        bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
-        initial_ready = true;
-        MARSTopComp.allowPhysicsInteraction(true);
-        bulletAppState.setEnabled(true);
-        System.out.println("Simulation started...");
+        simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
+                initial_ready = true;
+                MARSTopComp.allowPhysicsInteraction(true);
+                bulletAppState.setEnabled(true);
+                System.out.println("Simulation started...");
+                return null;
+            }
+        }); 
     }
             
     /**
      * 
      */
     public void pauseSimulation(){
-        bulletAppState.setEnabled(false);
-        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
-        auvManager.clearForcesOfAUVs();
-        initial_ready = false;
-        MARSTopComp.allowPhysicsInteraction(false);
-        System.out.println("Simulation stopped...");            
+        simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                bulletAppState.setEnabled(false);
+                bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
+                auvManager.clearForcesOfAUVs();
+                initial_ready = false;
+                MARSTopComp.allowPhysicsInteraction(false);
+                System.out.println("Simulation stopped...");    
+                return null;
+            }
+        });         
     }
     
     /**
