@@ -17,6 +17,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
+import mars.geodesy.Ellipsoid;
+import mars.geodesy.GeodeticCalculator;
+import mars.geodesy.GlobalPosition;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
@@ -40,6 +43,9 @@ public class GPSReceiver extends Sensor{
     private std_msgs.Header header; 
     
     private Geometry GPSReceiverGeom;
+    
+    private GeodeticCalculator geoCalc = new GeodeticCalculator();
+    private Ellipsoid reference = Ellipsoid.WGS84;  
     
     /**
      * 
@@ -243,14 +249,35 @@ public class GPSReceiver extends Sensor{
         NavSatStatus.setStatus((byte)0);
         fl.setStatus(NavSatStatus);
         
-        float longitudeFactor = getLatitudeFactor() * (float)Math.cos(getReferencePointGPS().y*(FastMath.PI/180f));
-        Vector3f diffPosition= pos.getPosition().subtract(getReferencePointWorld());
-        float latitude = (diffPosition.x/getLatitudeFactor())*(180f/FastMath.PI);
-        float longitude = (diffPosition.z/longitudeFactor)*(180f/FastMath.PI);
+        GlobalPosition pointA = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x, 0.0); // Point A
+
+        GlobalPosition userPos = new GlobalPosition(getReferencePointGPS().z+0.01f, getReferencePointGPS().x, 0.0); // Point B
+        GlobalPosition userPos2 = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x+0.01f, 0.0); // Point B
+
+        double distanceLat = geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
+        double distanceLon = geoCalc.calculateGeodeticCurve(reference, userPos2, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
         
-        fl.setAltitude(pos.getPositionY());
-        fl.setLatitude(getReferencePointGPS().x + latitude);
-        fl.setLongitude(getReferencePointGPS().z + longitude); 
+        Vector3f diffPosition = pos.getPosition().subtract(getReferencePointWorld());
+        double metLat = (1d/distanceLat)*(Math.abs(pointA.getLatitude()-userPos.getLatitude()));
+        double latitude = diffPosition.z * metLat;
+        
+        double metLon = (1d/distanceLon)*(Math.abs(pointA.getLongitude()-userPos2.getLongitude()));
+        double longitude = diffPosition.x * metLon;
+        
+        fl.setAltitude((double)pos.getPositionY());
+        fl.setLatitude(((double)getReferencePointGPS().z) - latitude);
+        fl.setLongitude(((double)getReferencePointGPS().x) + longitude);
+        
+        
+        //old style
+        /*double longitudeFactor = (double)getLatitudeFactor() * (double)Math.cos(((double)getReferencePointGPS().y)*(Math.PI/180d));
+        Vector3f diffPosition = pos.getPosition().subtract(getReferencePointWorld());
+        double latitude = (diffPosition.z/getLatitudeFactor())*(180d/Math.PI);
+        double longitude = (diffPosition.x/longitudeFactor)*(180d/Math.PI);
+        
+        fl.setAltitude((double)pos.getPositionY());
+        fl.setLatitude(((double)getReferencePointGPS().z) - latitude);
+        fl.setLongitude(((double)getReferencePointGPS().x) + longitude);*/
         
         if( publisher != null ){
             publisher.publish(fl);
