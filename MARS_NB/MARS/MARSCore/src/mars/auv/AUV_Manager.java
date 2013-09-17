@@ -577,6 +577,7 @@ public class AUV_Manager implements UpdateState{
 
     private void removeAUVFromScene(AUV auv){
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
+        bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
         RayDetectable.detachChild(auv.getSelectionNode());
         auv.cleanupOffscreenView();
         auv.getSelectionNode().removeFromParent();
