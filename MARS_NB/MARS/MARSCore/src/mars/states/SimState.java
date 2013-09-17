@@ -13,6 +13,7 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState;
+import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
@@ -1143,6 +1144,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
               if((String)target.getParent().getUserData("auv_name") != null){
                   BasicAUV auv = (BasicAUV)auvManager.getAUV((String)target.getParent().getUserData("auv_name"));
                   if(auv != null){
+                        auvManager.deselectAllAUVs();//deselect all auvs before (....seamless tansition through two auvs)
                         auv.setSelected(true);
                         guiControlState.setLatestSelectedAUV(auv);
                         this.mars.setHoverMenuForAUV(auv,(int)inputManager.getCursorPosition().x,mars.getViewPort().getCamera().getHeight()-(int)inputManager.getCursorPosition().y);
@@ -1155,7 +1157,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
           auvManager.deselectAllAUVs();
           this.mars.setHoverMenuForAUV(false);
         }else{//nothing to pickRightClick
-            System.out.println("Nothing to pick auv!");
+            //System.out.println("Nothing to pick auv!");
             auvManager.deselectAllAUVs();
             this.mars.setHoverMenuForAUV(false);
             //guiControlState.setFree(true);
@@ -1174,6 +1176,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                     if( (pickType == null) || (pickType == PickHint.Pick) ){//only pick spatials who are pickable
                         SimObject simob = (SimObject)simobManager.getSimObject((String)target.getUserData("simob_name"));
                         if(simob != null){
+                            simobManager.deselectAllSimObs();
                             simob.setSelected(true);
                             guiControlState.setLatestSelectedSimOb(simob);
                             return;
@@ -1185,8 +1188,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             //run through and nothing found that is worth to pick
             simobManager.deselectAllSimObs();
         }else{//nothing to pickRightClick
-            System.out.println("Nothing to pick simobs!");
-                simobManager.deselectAllSimObs();
+            //System.out.println("Nothing to pick simobs!");
+            simobManager.deselectAllSimObs();
         }     
     }
     
@@ -1481,6 +1484,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         if (!super.isEnabled()) {
             return;
         }
+        //limit velocitys
+        /*Collection<PhysicsRigidBody> rigidBodyList = ps.getRigidBodyList();
+        //System.out.println("rbody size: " + rigidBodyList.size());
+        for (PhysicsRigidBody physicsRigidBody : rigidBodyList) {
+            Vector3f angularVelocity = physicsRigidBody.getAngularVelocity();
+            System.out.println("angular_drag_torque_vec: " + angularVelocity.length() + " " + angularVelocity);
+            float speed = angularVelocity.length();
+            if(Helper.infinityCheck(angularVelocity)){
+                System.out.println("INF!!!!!");
+                physicsRigidBody.setAngularVelocity(Vector3f.ZERO);
+            }
+            if(speed > 1f) {
+                angularVelocity.mult(1f/speed);
+                physicsRigidBody.setAngularVelocity(angularVelocity);
+            }
+        }*/
         
         /*AUV auv = auvManager.getAUV("hanse");
         if(auv != null){
@@ -1524,6 +1543,18 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         if (!super.isEnabled()) {
             return;
         }
+         /*//limit velocitys
+        Collection<PhysicsRigidBody> rigidBodyList = ps.getRigidBodyList();
+        //System.out.println("rbody size: " + rigidBodyList.size());
+        for (PhysicsRigidBody physicsRigidBody : rigidBodyList) {
+            Vector3f angularVelocity = physicsRigidBody.getAngularVelocity();
+            float speed = angularVelocity.length();
+                if(speed > 1f) {
+                    angularVelocity.mult(1f/speed);
+                    physicsRigidBody.setAngularVelocity(angularVelocity);
+                }
+        }*/
+        //System.out.println("PHYSICS: " + tpf);
     }
 
     private void initNiftyLoading(){
@@ -1576,9 +1607,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * 
      */
     public void restartSimulation(){
-        System.out.println("RESET!!!");
-        time = 0f;
-        auvManager.resetAllAUVs();
+        simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                System.out.println("RESET!!!");
+                time = 0f;
+                auvManager.resetAllAUVs();
+                return null;
+            }
+        });  
     }
     
     /**
@@ -1597,8 +1633,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         if(selected_auv != null){
             Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
             Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
-            System.out.println("POKE!");     
-            selected_auv.getPhysicsControl().applyImpulse(direction.mult(selected_auv.getAuv_param().getMass()*5f/mars_settings.getPhysicsFramerate()), rel_pos);
+            //System.out.println("POKE!");     
+            Vector3f mult = direction.mult(selected_auv.getAuv_param().getMass()*5f/((float)mars_settings.getPhysicsFramerate()));
+            System.out.println("POKE!: " + mult + " rel_pos: " + rel_pos);  
+            selected_auv.getPhysicsControl().applyImpulse(mult, rel_pos);
         }
     }
     
