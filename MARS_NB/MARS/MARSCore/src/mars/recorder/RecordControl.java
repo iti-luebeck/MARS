@@ -13,7 +13,6 @@ import com.jme3.scene.control.Control;
 import java.util.List;
 import mars.auv.AUV;
 import mars.core.MARSLogTopComponent;
-import mars.gui.MARSView;
 
 /**
  * This control set the auv spatial to a recored position/rotation at a specific time.

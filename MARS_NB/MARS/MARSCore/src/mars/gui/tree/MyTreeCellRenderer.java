@@ -4,7 +4,6 @@
  */
 package mars.gui.tree;
 
-import mars.gui.tree.HashMapWrapper;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.awt.Component;
@@ -20,7 +19,6 @@ import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
-import mars.gui.MARSView;
 import mars.sensors.AmpereMeter;
 import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
@@ -46,15 +44,6 @@ import org.openide.modules.InstalledFileLocator;
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
 
     public MyTreeCellRenderer() {
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    @Deprecated
-    public MyTreeCellRenderer(MARSView view){
-        super();
     }
     
     @Override 

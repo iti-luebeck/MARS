@@ -4,26 +4,17 @@
  */
 package mars.gui.dnd;
 
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.InputVerifier;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 import mars.MARS_Main;
-import mars.auv.AUV_Manager;
-import mars.gui.MARSView;
 import mars.states.SimState;
-import mars.gui.MyVerifier;
-import mars.gui.MyVerifierType;
 
 /**
  * This TransferHandler is used to detect a drop from i.e. the auv JTree and 

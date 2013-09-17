@@ -4,12 +4,10 @@
 
 package mars;
 
-import mars.gui.MARSView;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
-import com.jme3.system.JmeSystem;
 import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
@@ -35,7 +33,6 @@ public class MARSApp extends SingleFrameApplication {
     private static JmeCanvasContext context;
     private static Canvas canvas;
     private static AwtPanel sim_panel, map_panel;
-    private static MARSView view;
     private static JFrame frame;
     private static MARS_Main simpleApp;
     private static int resolution_height = 480;
@@ -47,9 +44,9 @@ public class MARSApp extends SingleFrameApplication {
      */
     @Override 
     protected void startup() {
-        view = new MARSView(this);
-        show(view);
-        frame = view.getFrame();
+        //view = new MARSView(this);
+        //show(view);
+        //frame = view.getFrame();
         assignIcon();
         String appClass = "mars.MARS_Main";
         frame.pack();
@@ -81,12 +78,12 @@ public class MARSApp extends SingleFrameApplication {
         settings.setFrameRate(framelimit);
         //settings.setCustomRenderer(app);
         settings.setCustomRenderer(AwtPanelsContext.class);
-        view.setCanvasPanel(settings.getWidth(),settings.getHeight());
+        //view.setCanvasPanel(settings.getWidth(),settings.getHeight());
 
         //JmeSystem.setLowPermissions(true);
         app = new MARS_Main();
 
-        view.setSimAUV(app);
+        //view.setSimAUV(app);
 
         app.setPauseOnLostFocus(false);
         app.setShowSettings(false);
@@ -117,12 +114,12 @@ public class MARSApp extends SingleFrameApplication {
                         settings.setFrameRate(framelimit);
                         //settings.setCustomRenderer(app);
                         settings.setCustomRenderer(AwtPanelsContext.class);
-                        view.setCanvasPanel(settings.getWidth(),settings.getHeight());
+                        //view.setCanvasPanel(settings.getWidth(),settings.getHeight());
 
                         //JmeSystem.setLowPermissions(true);
                         app = new MARS_Main();
 
-                        view.setSimAUV(app);
+                        //view.setSimAUV(app);
 
                         app.setPauseOnLostFocus(false);                  
                         app.setShowSettings(false);
@@ -143,8 +140,8 @@ public class MARSApp extends SingleFrameApplication {
                                 map_panel.setPreferredSize(new Dimension(256, 256));
                                 map_panel.setMinimumSize(new Dimension(256, 256));
 
-                                view.addAWTMainPanel(sim_panel);
-                                view.addAWTMapPanel(map_panel);
+                                //view.addAWTMainPanel(sim_panel);
+                                //view.addAWTMapPanel(map_panel);
                                 app.enqueue(new Callable<Void>(){
                                 public Void call(){
                                         app.getViewPort().setClearFlags(true, true, true);
