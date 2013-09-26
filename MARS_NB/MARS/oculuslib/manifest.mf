@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.oculuslib
+OpenIDE-Module-Localizing-Bundle: mars/libs/oculuslib/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

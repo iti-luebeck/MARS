@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>mars.libs.objenesis</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>org.objenesis</package>
+                <package>org.objenesis.instantiator</package>
+                <package>org.objenesis.instantiator.basic</package>
+                <package>org.objenesis.instantiator.gcj</package>
+                <package>org.objenesis.instantiator.jrockit</package>
+                <package>org.objenesis.instantiator.perc</package>
+                <package>org.objenesis.instantiator.sun</package>
+                <package>org.objenesis.strategy</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/objenesis-1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/objenesis-1.2.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.jMonkeyEngine
+OpenIDE-Module-Localizing-Bundle: mars/libs/jMonkeyEngine/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.2
+

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.guava
+OpenIDE-Module-Localizing-Bundle: mars/libs/guava/Bundle.properties
+OpenIDE-Module-Specification-Version: 13.0.1
+

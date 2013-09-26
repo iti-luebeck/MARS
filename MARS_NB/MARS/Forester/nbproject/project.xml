@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>mars.libs.Forester</code-name-base>
+            <suite-component/>
+            <module-dependencies>
+                <dependency>
+                    <code-name-base>mars.libs.jMonkeyEngineCore</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.2</specification-version>
+                    </run-dependency>
+                </dependency>
+            </module-dependencies>
+            <public-packages>
+                <package>forester</package>
+                <package>forester.grass</package>
+                <package>forester.grass.algorithms</package>
+                <package>forester.grass.datagrids</package>
+                <package>forester.image</package>
+                <package>forester.paging</package>
+                <package>forester.paging.grid</package>
+                <package>forester.paging.interfaces</package>
+                <package>forester.paging.terraingrid</package>
+                <package>forester.random</package>
+                <package>forester.trees</package>
+                <package>forester.trees.datagrids</package>
+                <package>forester.trees.impostors</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/Forester.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/Forester.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

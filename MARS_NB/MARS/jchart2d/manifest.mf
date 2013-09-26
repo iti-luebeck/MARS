@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.jchart2d
+OpenIDE-Module-Localizing-Bundle: mars/libs/jchart2d/Bundle.properties
+OpenIDE-Module-Specification-Version: 3.2.2
+

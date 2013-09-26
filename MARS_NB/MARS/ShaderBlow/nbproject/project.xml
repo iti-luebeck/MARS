@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>mars.libs.ShaderBlow</code-name-base>
+            <suite-component/>
+            <module-dependencies>
+                <dependency>
+                    <code-name-base>mars.libs.jMonkeyEngineCore</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.2</specification-version>
+                    </run-dependency>
+                </dependency>
+            </module-dependencies>
+            <public-packages>
+                <package>com.shaderblow.filter.basicssao</package>
+                <package>com.shaderblow.filter.colorscale</package>
+                <package>com.shaderblow.filter.grayscale</package>
+                <package>com.shaderblow.filter.oldfilm</package>
+                <package>com.shaderblow.filter.simplerefractionfilter</package>
+                <package>com.shaderblow.forceshield</package>
+                <package>com.shaderblow.lightblow</package>
+                <package>com.shaderblow.simplerefraction</package>
+                <package>com.shaderblow.skydome</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/assets.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/assets.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/ShaderBlow.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ShaderBlow.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

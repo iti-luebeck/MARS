@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.netty
+OpenIDE-Module-Localizing-Bundle: mars/libs/netty/Bundle.properties
+OpenIDE-Module-Specification-Version: 3.5.7
+

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.ShaderBlow
+OpenIDE-Module-Localizing-Bundle: mars/libs/ShaderBlow/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
