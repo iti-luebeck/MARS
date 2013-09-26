@@ -30,16 +30,21 @@ public class LimitedRigidBodyControl extends RigidBodyControl{
     
     @Override
     public void update(float tpf) {
-        if (enabled && spatial != null) {
-            //System.out.println("getLinearVelocity(): " + getLinearVelocity().length());
-            getMotionState().applyTransform(spatial);
-            /*if(getPhysicsLocation().y <= -0.25f){
-                getMotionState().applyTransform(spatial);
-            }else{
-                //setLinearVelocity(getLinearVelocity());//make sure that the forces dont add up too much velocity
-                spatial.setLocalTranslation(spatial.getLocalTranslation().setY(-0.25f));
-                getMotionState().applyTransform(spatial);
-            }*/
-        }
+        
+        //if(super.getAngularVelocity().length() <= 100f && super.getLinearVelocity().length() <= 100f){
+            super.update(tpf);
+            //System.out.println(tpf + " " + "getWorldTranslation(): " + super.spatial.getWorldTranslation() + " " + super.spatial.getWorldRotation());
+            //if (enabled && spatial != null) {
+                //System.out.println("getLinearVelocity(): " + getLinearVelocity().length());
+                //getMotionState().applyTransform(spatial);
+                /*if(getPhysicsLocation().y <= -0.25f){
+                    getMotionState().applyTransform(spatial);
+                }else{
+                    //setLinearVelocity(getLinearVelocity());//make sure that the forces dont add up too much velocity
+                    spatial.setLocalTranslation(spatial.getLocalTranslation().setY(-0.25f));
+                    getMotionState().applyTransform(spatial);
+                }*/
+            //}
+        //}
     }
 }

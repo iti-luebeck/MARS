@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.ChartValue;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
-import mars.MyCustomGhostControl;
+import mars.control.MyCustomGhostControl;
 import mars.accumulators.Accumulator;
 import mars.states.SimState;
 import mars.actuators.Actuator;

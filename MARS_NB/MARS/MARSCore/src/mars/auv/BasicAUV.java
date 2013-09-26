@@ -821,7 +821,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void updateAngularDragForces() {
         Vector3f cur_ang = physics_control.getAngularVelocity();
         float angular_velocity = physics_control.getAngularVelocity().length();
-        System.out.println("angular_drag_torque_vec: " + angular_velocity + " " + physics_control.getAngularVelocity());
+        //System.out.println("angular_drag_torque_vec: " + angular_velocity + " " + physics_control.getAngularVelocity());
         notifySafeAdvertisement(new ChartEvent(this, angular_velocity, 0));
         
         /*if(Helper.infinityCheck(physics_control.getAngularVelocity())){

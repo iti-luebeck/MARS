@@ -69,6 +69,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         //hide main panel because niftyys effect/event system sucks!
         setHoverMenuForAUV(false);
         setSpeedMenu(false);
+        setPopupMenu(false);
         
         //set logging to less spam
         Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE); 
@@ -183,6 +184,21 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    public void setPopupMenu(boolean visible){
+        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
+        if( niftyElement != null){
+            if(visible){
+                niftyElement.show();
+                Element niftyElement2 = nifty.getScreen("hoverMenu").findElementByName("popup_background");
+                if( niftyElement2 != null){
+                    niftyElement2.startEffect(EffectEventId.onCustom, null, "fadeIn");
+                }
+            }else{
+                niftyElement.hide();
+            }
+        }
+    }
+    
     public void setSpeedUp(boolean visible){
 
         Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("speed");
@@ -216,6 +232,12 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             niftyElement2.show();
         }
         setSpeedMenu(false);
+        
+        Element niftyElement3 = nifty.getScreen("hoverMenu").findElementByName("popup_background");
+        if(niftyElement3 != null){
+            niftyElement3.show();
+        }
+        setPopupMenu(false);
     }
     
     /**

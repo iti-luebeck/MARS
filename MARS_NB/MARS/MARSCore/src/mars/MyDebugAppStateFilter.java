@@ -4,6 +4,7 @@
  */
 package mars;
 
+import mars.control.MyCustomGhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState.DebugAppStateFilter;
 import com.jme3.bullet.debug.BulletRigidBodyDebugControl;
@@ -28,12 +29,12 @@ public class MyDebugAppStateFilter implements DebugAppStateFilter{
     public MyDebugAppStateFilter(MARS_Settings mars_settings, AUV_Manager auvManager) {
         this.mars_settings = mars_settings;
         this.auvManager =  auvManager;
-        Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Setting up DebugAppStateFilter", "");
+        //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Setting up DebugAppStateFilter", "");
     }
 
     @Override
     public boolean displayObject(Object o) {
-        Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Try to display DebugObject: " + o, "");
+        //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Try to display DebugObject: " + o, "");
         if(mars_settings.isPhysicsDebug()){
             return true;
         }else{
@@ -41,7 +42,7 @@ public class MyDebugAppStateFilter implements DebugAppStateFilter{
                 return false;
             }else{
                 if(o instanceof RigidBodyControl){
-                    Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Displaying DebugObject: " + o, "");
+                    //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Displaying DebugObject: " + o, "");
                     RigidBodyControl control = (RigidBodyControl)o;
                     Object userObject = control.getUserObject();
                     if(userObject != null && userObject instanceof Spatial){
