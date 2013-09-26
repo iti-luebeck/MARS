@@ -4,6 +4,7 @@
  */
 package mars.states;
 
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
 /**
@@ -12,4 +13,5 @@ import com.jme3.scene.Node;
  */
 public interface AppStateExtension {
      public Node getRootNode();
+     public void setCamera(Camera cam);
 }

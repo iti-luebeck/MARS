@@ -22,6 +22,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -96,7 +97,12 @@ public class StartState extends AbstractAppState implements AppStateExtension{
     public Node getRootNode(){
         return rootNode;
     }
-    
+
+    @Override
+    public void setCamera(Camera cam) {
+       
+    }
+ 
     @Override
     public void cleanup() {
         super.cleanup();

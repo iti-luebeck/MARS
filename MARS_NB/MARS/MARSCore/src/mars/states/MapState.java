@@ -17,6 +17,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
@@ -99,6 +100,11 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         auv_nodes.clear();
     }
 
+    @Override
+    public void setCamera(Camera cam) {
+        
+    }
+ 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
