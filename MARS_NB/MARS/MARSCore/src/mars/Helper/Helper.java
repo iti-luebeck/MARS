@@ -38,6 +38,13 @@ public class Helper {
         System.arraycopy(b, 0, concat, a.length, b.length);
         return concat;
     }
+    
+    public static boolean infinityCheck(Vector3f vec) {
+        if ( Float.isNaN(vec.x) || Float.isNaN(vec.y) || Float.isNaN(vec.z) || Float.isInfinite(vec.x) || Float.isInfinite(vec.y) || Float.isInfinite(vec.z)) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 
