@@ -2422,7 +2422,7 @@ public final class MARSTopComponent extends TopComponent {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    jme3_window_switcher.show(mtc,x,y);
+                    //jme3_window_switcher.show(mtc,x,y);
                 }
             }
         );

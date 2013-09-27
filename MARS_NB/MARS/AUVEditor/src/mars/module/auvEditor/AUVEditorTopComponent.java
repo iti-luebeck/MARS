@@ -99,6 +99,7 @@ public final class AUVEditorTopComponent extends TopComponent {
             final AUVEditorAppState appState = new AUVEditorAppState();
             appState.setEnabled(true);       
             final ViewPort viewPort = mars.addState(appState);
+            ctx.setInputSource(auvedpanel);
             
             mars.enqueue(new Callable<Void>(){
                 public Void call(){

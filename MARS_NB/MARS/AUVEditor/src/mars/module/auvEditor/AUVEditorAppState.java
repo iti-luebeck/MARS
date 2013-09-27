@@ -30,6 +30,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
+import java.io.File;
 import mars.states.AppStateExtension;
 
 /**
@@ -94,6 +95,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             this.inputManager = this.app.getInputManager();
             this.assetManager = this.app.getAssetManager();
             
+            initAsetsPaths();
+            
             assetManager.registerLocator("./assets", FileLocator.class);
 
             selectables = new Node("selectables");
@@ -102,15 +105,21 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.attachChild(getLineCross());
             rootNode.attachChild(getWireFrameCross());            
 
-        	initKeys();
-        //	initCoordinateAxes();
-        //	initRationOrb();
-        	initAUVNode();
-        //	loadAUV("Models/Cube.obj");
-        //	loadAUV("Models/Cube.obj");
-        //	loadAUV("Models/Cube.obj");
+            initKeys();
+            initCoordinateAxes();
+            initRationOrb();
+            initAUVNode();
+            loadAUV("Models/Cube.obj");
+            loadAUV("Models/Cube.obj");
+            loadAUV("Models/Cube.obj");
         }
 	super.initialize(stateManager, app);
+    }
+    
+    public void initAsetsPaths(){
+        /*File file = InstalledFileLocator.getDefault().locate("Assets/Images", "mars.core", false);
+        String absolutePath = file.getAbsolutePath();
+        assetManager.registerLocator(absolutePath, FileLocator.class);*/
     }
 
     @Override
