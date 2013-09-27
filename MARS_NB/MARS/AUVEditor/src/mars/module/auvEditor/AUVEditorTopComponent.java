@@ -90,21 +90,24 @@ public final class AUVEditorTopComponent extends TopComponent {
         //result.addLookupListener(this);
         if(mars == null){// try to get mars, else its the listener
             mars = cl.lookup(MARS_Main.class);
+            
+            final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
+            auvedpanel = ctx.createPanel(PaintMode.Accelerated);
+            auvedpanel.setPreferredSize(new Dimension(640, 480));
+            auvedpanel.setMinimumSize(new Dimension(640, 480));
+            jPanel1.add(auvedpanel);
+            final AUVEditorAppState appState = new AUVEditorAppState();
+            appState.setEnabled(true);       
+            final ViewPort viewPort = mars.addState(appState);
+            
             mars.enqueue(new Callable<Void>(){
                 public Void call(){
-                    AUVEditorAppState appState = new AUVEditorAppState();
-                    appState.setEnabled(true);
-                    final ViewPort viewPort = mars.addState(appState);
-                    final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
-                    auvedpanel = ctx.createPanel(PaintMode.Accelerated);
-                    auvedpanel.setPreferredSize(new Dimension(640, 480));
-                    auvedpanel.setMinimumSize(new Dimension(640, 480));
-                    jPanel1.add(auvedpanel);
-            
-                    viewPort.setClearFlags(true, true, true);
-                    //app.getGuiViewPort().setEnabled(true);
-                    mars.getFlyByCamera().setDragToRotate(true);
-                    auvedpanel.attachTo(true, viewPort);
+                    
+                    //final ViewPort viewPort = mars.addState(appState);
+
+                    //mars.getFlyByCamera().setDragToRotate(true);
+                    viewPort.attachScene(appState.getRootNode());   
+                    auvedpanel.attachTo(false, viewPort);
                     return null;
                 }
             });

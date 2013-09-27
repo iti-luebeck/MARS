@@ -23,11 +23,13 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
+import com.jme3.scene.shape.Sphere;
 import mars.states.AppStateExtension;
 
 /**
@@ -87,26 +89,28 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
+        if(!super.isInitialized()){
+            this.app = (SimpleApplication) app;
+            this.inputManager = this.app.getInputManager();
+            this.assetManager = this.app.getAssetManager();
+
+            //assetManager.registerLocator("./assets", FileLocator.class);
+
+            selectables = new Node("selectables");
+            rootNode.attachChild(selectables);
+
+            rootNode.attachChild(getLineCross());
+            rootNode.attachChild(getWireFrameCross());            
+
+        //	initKeys();
+        //	initCoordinateAxes();
+        //	initRationOrb();
+        //	initAUVNode();
+        //	loadAUV("Models/Cube.obj");
+        //	loadAUV("Models/Cube.obj");
+        //	loadAUV("Models/Cube.obj");
+        }
 	super.initialize(stateManager, app);
-	this.app = (SimpleApplication) app;
-	this.inputManager = this.app.getInputManager();
-	this.assetManager = this.app.getAssetManager();
-
-	//assetManager.registerLocator("./assets", FileLocator.class);
-
-	selectables = new Node("selectables");
-	/*rootNode.attachChild(selectables);
-
-	rootNode.attachChild(getLineCross());
-	rootNode.attachChild(getWireFrameCross());*/
-
-//	initKeys();
-//	initCoordinateAxes();
-//	initRationOrb();
-//	initAUVNode();
-//	loadAUV("Models/Cube.obj");
-//	loadAUV("Models/Cube.obj");
-//	loadAUV("Models/Cube.obj");
     }
 
     @Override
@@ -122,10 +126,43 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     public void setCamera(Camera cam) {
         this.cam = cam;
     }
+    
+     @Override
+    public boolean isInitialized() {
+        return super.isInitialized();
+    }
+
+    @Override
+    public void postRender() {
+        if (!super.isEnabled()) {
+            return;
+        }
+        super.postRender();
+    }
+
+    @Override
+    public void render(RenderManager rm) {
+        if (!super.isEnabled()) {
+            return;
+        }
+        super.render(rm);
+    }
+    
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        //mars.getRootNode().detachChild(getRootNode());
+    }
 
     @Override
     public void update(float tpf) {
-	super.update(tpf);
+	if (!super.isEnabled()) {
+            return;
+        }
+        super.update(tpf);
+        
+        rootNode.updateLogicalState(tpf);
+        rootNode.updateGeometricState();
     }
 
     private void initKeys() {
@@ -448,5 +485,25 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 	} catch (Exception e) {
 	    return false;
 	}
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if(!enabled){
+            rootNode.setCullHint(Spatial.CullHint.Always);
+        }else{
+            rootNode.setCullHint(Spatial.CullHint.Never);
+        }
+    }
+    
+    @Override
+    public void stateAttached(AppStateManager stateManager) {
+        super.stateAttached(stateManager);
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        super.stateDetached(stateManager);
     }
 }
