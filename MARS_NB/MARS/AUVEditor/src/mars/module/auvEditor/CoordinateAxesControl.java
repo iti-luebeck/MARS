@@ -157,11 +157,21 @@ public class CoordinateAxesControl extends AbstractControl {
                  * scale
                  */
                 if (name.equals("Scale Up")) {
-                    spatial.scale(1.1f, 1.1f, 1.1f);
+                    if (spatial.getName().equals("AUV")) {
+                        spatial.getParent().scale(1.1f, 1.1f, 1.1f);
+                    } else {
+                        // else it's a attachemnt. Scale only the attachment
+                        spatial.scale(1.1f, 1.1f, 1.1f);
+                    }
 
                 }
                 if (name.equals("Scale Down")) {
-                    spatial.scale(10f / 11);
+                    if (spatial.getName().equals("AUV")) {
+                        spatial.getParent().scale(10f / 11);
+                    } else {
+                        // else it's a attachemnt. Scale only the attachment
+                        spatial.scale(10f / 11);
+                    }
                 }
 
                 /*
