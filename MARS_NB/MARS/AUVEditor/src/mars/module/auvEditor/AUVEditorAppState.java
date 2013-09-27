@@ -93,8 +93,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             this.app = (SimpleApplication) app;
             this.inputManager = this.app.getInputManager();
             this.assetManager = this.app.getAssetManager();
-
-            //assetManager.registerLocator("./assets", FileLocator.class);
+            
+            assetManager.registerLocator("./assets", FileLocator.class);
 
             selectables = new Node("selectables");
             rootNode.attachChild(selectables);
@@ -102,10 +102,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.attachChild(getLineCross());
             rootNode.attachChild(getWireFrameCross());            
 
-        //	initKeys();
+        	initKeys();
         //	initCoordinateAxes();
         //	initRationOrb();
-        //	initAUVNode();
+        	initAUVNode();
         //	loadAUV("Models/Cube.obj");
         //	loadAUV("Models/Cube.obj");
         //	loadAUV("Models/Cube.obj");
