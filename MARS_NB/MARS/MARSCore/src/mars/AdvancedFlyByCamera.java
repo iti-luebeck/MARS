@@ -23,6 +23,11 @@ public class AdvancedFlyByCamera extends FlyByCamera{
     public AdvancedFlyByCamera(Camera cam){
         super(cam);
     }
+
+    public void setCam(Camera cam) {
+        this.cam = cam;
+        initialUpVec = cam.getUp().clone();
+    }
     
     /**
      * 

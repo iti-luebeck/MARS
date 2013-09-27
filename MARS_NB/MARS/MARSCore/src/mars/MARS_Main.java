@@ -306,6 +306,7 @@ public class MARS_Main extends SimpleApplication{
         //float frustumSize = 1f;
         //stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
         stateCam.setParallelProjection(false);
+        advFlyCam.setCam(stateCam);
         final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
         StateViewPort.setClearFlags(true, true, true);
         StateViewPort.setBackgroundColor(ColorRGBA.Black);
