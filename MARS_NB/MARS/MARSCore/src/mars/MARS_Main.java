@@ -40,6 +40,7 @@ import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
+import mars.states.AUVEditorAppState;
 import mars.states.AppStateExtension;
 import mars.states.MapState;
 import mars.states.NiftyState;
@@ -66,6 +67,7 @@ public class MARS_Main extends SimpleApplication{
 
     StartState startstate;
     MapState mapstate;
+    AUVEditorAppState editstate;
     NiftyState niftystate;
     
     ChaseCamera chaseCam;
@@ -147,6 +149,10 @@ public class MARS_Main extends SimpleApplication{
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());   
         stateManager.attach(mapstate);
+        
+        /*editstate = new AUVEditorAppState();
+        MapViewPort.attachScene(editstate.getRootNode());   
+        stateManager.attach(editstate);*/
         
         //nifty state
         progr.progress( "Creating NiftyState" );
@@ -295,21 +301,22 @@ public class MARS_Main extends SimpleApplication{
     
     public ViewPort addState(final AbstractAppState state){
         Camera stateCam = cam.clone();
-        float aspect = (float) stateCam.getWidth() / stateCam.getHeight();
-        float frustumSize = 1f;
-        stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
+        
+        //float aspect = (float) stateCam.getWidth() / stateCam.getHeight();
+        //float frustumSize = 1f;
+        //stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
         stateCam.setParallelProjection(false);
         final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
         StateViewPort.setClearFlags(true, true, true);
         StateViewPort.setBackgroundColor(ColorRGBA.Black);
         if(state instanceof AppStateExtension){
             ((AppStateExtension)state).setCamera(stateCam);
-            this.enqueue(new Callable<Void>(){
-                    public Void call(){
-                        StateViewPort.attachScene(((AppStateExtension)state).getRootNode());   
-                        return null;
-                    }
-            });
+            //this.enqueue(new Callable<Void>(){
+             //       public Void call(){
+                        //StateViewPort.attachScene(((AppStateExtension)state).getRootNode());   
+            //            return null;
+            //        }
+            //});
             
         }else{
             Logger.getLogger(MARS_Main.class.getName()).log(Level.WARNING, "AppState: " + state + " doesn't implement the interface AppStateExtension! No RootNode found!", "");

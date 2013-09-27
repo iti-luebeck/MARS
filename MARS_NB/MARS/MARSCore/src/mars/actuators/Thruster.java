@@ -171,7 +171,7 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
 
 
         if(MotorStart.getWorldTranslation().y <= this.getIniter().getCurrentWaterHeight(MotorStart.getWorldTranslation().x, MotorStart.getWorldTranslation().z)){
-            physics_control.applyImpulse(left.mult(MotorForce/simauv_settings.getPhysicsFramerate()), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
+            physics_control.applyImpulse(left.mult(MotorForce/((float)simauv_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         }
         //physics_control.applyForce(left.mult(MotorForce), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         //physics_control.applyImpulse(left.mult(MotorForce/simauv_settings.getPhysicsFramerate()), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));

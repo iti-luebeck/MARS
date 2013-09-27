@@ -1940,8 +1940,11 @@ public final class MARSTopComponent extends TopComponent {
                             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         final AppSettings settings = new AppSettings(true);
-                        settings.setWidth(640);
-                        settings.setHeight(480);
+                        settings.setWidth(resolution_width);
+                        settings.setHeight(resolution_height);
+                        settings.setFrameRate(framelimit);
+                        /*settings.setWidth(640);
+                        settings.setHeight(480);*/
                         /*settings.setWidth(1280);
                         settings.setHeight(800);
                         settings.setFrameRate(60);
