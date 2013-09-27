@@ -17,9 +17,11 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -32,8 +34,11 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
 import java.io.File;
+import java.util.Map;
+import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
 import mars.states.SimState;
 
@@ -82,7 +87,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * memorizes the geometry to which the coordinate axes are attached by
      * CoordinateAxesControl
      */
-    private Geometry currentCoordinateAxesControlSelected;
+    private Node currentCoordinateAxesControlSelected;
+    private Line line;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -92,7 +98,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             this.assetManager = this.app.getAssetManager();
             SimState simState = (SimState) stateManager.getState(SimState.class);
             AUV_Manager auvManager = simState.getAuvManager();
-            AUV smarte = auvManager.getAUVs().get("hanse");
+            BasicAUV hanse = (BasicAUV) auvManager.getAUVs().get("hanse");
 
 
             initAsetsPaths();
@@ -123,20 +129,18 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.attachChild(auvNode);
 
             // load auv spatial
-            Spatial auvSpatial = smarte.getAUVSpatial();
+            Spatial auvSpatial = hanse.loadModelCopy();
+            auvSpatial.setName("AUV");
             auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
             auvNode.attachChild(auvSpatial);
 
-            // load first attachment spatial
-            Spatial attach1 = factory.getAttachmentSpatial("Models/Cube.obj", new Vector3f(2, 2, 0));
-            attach1.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, attach1, this));
-            auvNode.attachChild(attach1);
 
-            // load second attachment spatial
-            Spatial attach2 = factory.getAttachmentSpatial("Models/Cube.obj", new Vector3f(0, -2, 0));
-            attach2.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, attach2, this));
-            auvNode.attachChild(attach2);
-
+            for (Map.Entry<String, Actuator> entry : hanse.getActuators().entrySet()) {
+                Actuator actuator = entry.getValue();
+                Node physicalExchanger_Node = actuator.getPhysicalExchanger_Node().clone(true);
+                physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
+                auvNode.attachChild(physicalExchanger_Node);
+            }
             // englighten it
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
@@ -168,6 +172,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void setCamera(Camera cam) {
         this.cam = cam;
+        cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
+        cam.setLocation(new Vector3f(1, 1.5f, 1));
     }
 
     @Override
@@ -244,8 +250,14 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
                 // select a new object
                 if (closestCollision != null) {
-                    closestCollision.getGeometry().getControl(CoordinateAxesControl.class).setEnabled(true);
-                    currentCoordinateAxesControlSelected = closestCollision.getGeometry();
+                    Node newNode;
+                    if(closestCollision.getGeometry().getParent().getName().equals("AUV")){
+                        newNode = closestCollision.getGeometry().getParent();
+                    } else{
+                        newNode = closestCollision.getGeometry().getParent().getParent();
+                    }
+                    newNode.getControl(CoordinateAxesControl.class).setEnabled(true);
+                    currentCoordinateAxesControlSelected = newNode;
                 }
             }
         }
@@ -265,9 +277,19 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
         // get first collision for all allowedTargets and find the closest
         CollisionResult closestCollision = null;
+
+        // prepare colored material
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.White);
+
+        line = new Line(click3d, click3d.add(dir.mult(100f)));
+        Geometry geometry = new Geometry("line", line);
+        geometry.setMaterial(mat);
+        rootNode.attachChild(geometry);
         for (Node target : allowedTargets) {
             CollisionResults results = new CollisionResults();
             Ray ray = new Ray(click3d, dir);
+
             target.collideWith(ray, results);
             if (closestCollision != null && results.getClosestCollision() != null && results.getClosestCollision().getDistance() < closestCollision.getDistance()) {
                 closestCollision = results.getClosestCollision();
