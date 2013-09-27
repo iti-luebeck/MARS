@@ -502,6 +502,12 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
     public Quaternion getTFOrientation() {
         return PhysicalExchanger_Node.getLocalRotation();
     }
+
+    public Node getPhysicalExchanger_Node() {
+        return PhysicalExchanger_Node;
+    }
+    
+    
     
     /**
      * 
