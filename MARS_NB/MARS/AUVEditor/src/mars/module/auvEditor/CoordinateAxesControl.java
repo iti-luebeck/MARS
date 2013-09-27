@@ -286,7 +286,14 @@ public class CoordinateAxesControl extends AbstractControl {
                     spatial.getParent().setLocalRotation(rotationQuaternion.mult(spatial.getParent().getLocalRotation()));
                 } else {
                     // else it's a attachemnt. Rotate only the attachment
-                    spatial.move(moveVector);
+                    // move considers only local scale of spatial, so we have to look for "AUV Node"'s scale
+                    Vector3f auvScale = spatial.getParent().getLocalScale().clone();
+                    // get "AUV Node"'s rotation
+                    Quaternion auvRotation = spatial.getParent().getLocalRotation().clone();
+                    // rotate the moveVector
+                    moveVector = auvRotation.toRotationMatrix().invert().mult(moveVector);
+                    // move the spatial by scaling the newly rotated moveVector
+                    spatial.move(moveVector.divide(auvScale));
                     spatial.setLocalRotation(rotationQuaternion.mult(spatial.getLocalRotation()));
                 }
                 rotationOrbNode.rotate(rotationQuaternion);
