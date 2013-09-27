@@ -1416,6 +1416,27 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.attachChild(auv_spatial);
     }
     
+        /*
+     *
+     */
+    public Spatial loadModelCopy() {
+        Spatial auv_spatial_copy = assetManager.loadModel(auv_param.getModelFilePath());
+        
+        optimizeSpatial(auv_spatial_copy);
+
+        auv_spatial_copy.setLocalScale(auv_param.getModel_scale());
+        auv_spatial_copy.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
+
+        auv_spatial_copy.updateModelBound();
+        auv_spatial_copy.updateGeometricState();
+        auv_spatial_copy.setName(auv_param.getModel_name() + "_copy");
+        auv_spatial_copy.setUserData("auv_name", getName());
+        auv_spatial_copy.setCullHint(CullHint.Never);//never cull it because offscreen uses it
+        auv_spatial_copy.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
+        return auv_spatial_copy;
+    }
+    
     private void optimizeSpatial(Spatial auv_spatial){
         if(auv_spatial instanceof Node){
             Node auv = (Node)auv_spatial;
