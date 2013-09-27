@@ -455,6 +455,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param pex
      */
     public void registerPhysicalExchanger(PhysicalExchanger pex) {
+        pex.setPhysicalExchangerName(pex.getPhysicalExchangerName());
         if (pex instanceof Sensor) {
             sensors.put(pex.getPhysicalExchangerName(), (Sensor) pex);
             Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Sensor " + pex.getPhysicalExchangerName() + " added...", "");
@@ -628,6 +629,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //init sensors
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
+            element.setPhysicalExchangerName(element.getPhysicalExchangerName());
             if (element.isEnabled()) {
                 element.setAuv(this);
                 element.setSimState(simstate);
@@ -669,6 +671,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //init actuators
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
+            element.setPhysicalExchangerName(element.getPhysicalExchangerName());
             if (element.isEnabled()) {
                 element.setAuv(this);
                 element.setSimState(simstate);
