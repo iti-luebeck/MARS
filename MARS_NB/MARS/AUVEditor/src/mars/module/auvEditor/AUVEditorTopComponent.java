@@ -16,8 +16,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -45,7 +45,7 @@ public final class AUVEditorTopComponent extends TopComponent {
     private Lookup.Result<MARS_Main> result = null;
     private MARS_Main mars = null;
     private static AwtPanel auvedpanel;
-    
+
     public AUVEditorTopComponent() {
         initComponents();
         setName(Bundle.CTL_AUVEditorTopComponent());
@@ -76,10 +76,10 @@ public final class AUVEditorTopComponent extends TopComponent {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -88,9 +88,9 @@ public final class AUVEditorTopComponent extends TopComponent {
         CentralLookup cl = CentralLookup.getDefault();
         result = cl.lookup(template);
         //result.addLookupListener(this);
-        if(mars == null){// try to get mars, else its the listener
+        if (mars == null) {// try to get mars, else its the listener
             mars = cl.lookup(MARS_Main.class);
-            
+
             final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
             auvedpanel = ctx.createPanel(PaintMode.Accelerated);
             auvedpanel.setPreferredSize(new Dimension(640, 480));
@@ -98,17 +98,17 @@ public final class AUVEditorTopComponent extends TopComponent {
             auvedpanel.transferFocus();
             jPanel1.add(auvedpanel);
             final AUVEditorAppState appState = new AUVEditorAppState();
-            appState.setEnabled(true);       
+            appState.setEnabled(true);
             final ViewPort viewPort = mars.addState(appState);
             ctx.setInputSource(auvedpanel);
-            
-            mars.enqueue(new Callable<Void>(){
-                public Void call(){
-                    
+
+            mars.enqueue(new Callable<Void>() {
+                public Void call() {
+
                     //final ViewPort viewPort = mars.addState(appState);
 
                     //mars.getFlyByCamera().setDragToRotate(true);
-                    viewPort.attachScene(appState.getRootNode());   
+                    viewPort.attachScene(appState.getRootNode());
                     auvedpanel.attachTo(false, viewPort);
                     return null;
                 }

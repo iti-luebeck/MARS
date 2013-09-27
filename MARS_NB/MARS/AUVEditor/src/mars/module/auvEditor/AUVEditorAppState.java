@@ -17,8 +17,6 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -30,13 +28,9 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
-import com.jme3.scene.shape.Sphere;
-import java.io.File;
 import java.util.Map;
 import mars.actuators.Actuator;
-import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
@@ -88,6 +82,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * CoordinateAxesControl
      */
     private Node currentCoordinateAxesControlSelected;
+    /**
+     * Line for debugging shooting
+     */
     private Line line;
 
     @Override
@@ -134,13 +131,14 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
             auvNode.attachChild(auvSpatial);
 
-
+            // load actuators 
             for (Map.Entry<String, Actuator> entry : hanse.getActuators().entrySet()) {
                 Actuator actuator = entry.getValue();
                 Node physicalExchanger_Node = actuator.getPhysicalExchanger_Node().clone(true);
                 physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
                 auvNode.attachChild(physicalExchanger_Node);
             }
+
             // englighten it
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
@@ -250,14 +248,14 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
                 // select a new object
                 if (closestCollision != null) {
-                    Node newNode;
-                    if(closestCollision.getGeometry().getParent().getName().equals("AUV")){
-                        newNode = closestCollision.getGeometry().getParent();
-                    } else{
-                        newNode = closestCollision.getGeometry().getParent().getParent();
+                    // if it is a AUV the parent is the wanted node
+                    if (closestCollision.getGeometry().getParent().getName().equals("AUV")) {
+                        currentCoordinateAxesControlSelected = closestCollision.getGeometry().getParent();
+                    } else {
+                        // else the parent parent is a physical exchanger
+                        currentCoordinateAxesControlSelected = closestCollision.getGeometry().getParent().getParent();
                     }
-                    newNode.getControl(CoordinateAxesControl.class).setEnabled(true);
-                    currentCoordinateAxesControlSelected = newNode;
+                    currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(true);
                 }
             }
         }
