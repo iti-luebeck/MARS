@@ -157,11 +157,21 @@ public class CoordinateAxesControl extends AbstractControl {
                  * scale
                  */
                 if (name.equals("Scale Up")) {
-                    spatial.scale(1.1f, 1.1f, 1.1f);
+                    if (spatial.getName().equals("AUV")) {
+                        spatial.getParent().scale(1.1f, 1.1f, 1.1f);
+                    } else {
+                        // else it's a attachemnt. Scale only the attachment
+                        spatial.scale(1.1f, 1.1f, 1.1f);
+                    }
 
                 }
                 if (name.equals("Scale Down")) {
-                    spatial.scale(10f / 11);
+                    if (spatial.getName().equals("AUV")) {
+                        spatial.getParent().scale(10f / 11);
+                    } else {
+                        // else it's a attachemnt. Scale only the attachment
+                        spatial.scale(10f / 11);
+                    }
                 }
 
                 /*
@@ -276,7 +286,14 @@ public class CoordinateAxesControl extends AbstractControl {
                     spatial.getParent().setLocalRotation(rotationQuaternion.mult(spatial.getParent().getLocalRotation()));
                 } else {
                     // else it's a attachemnt. Rotate only the attachment
-                    spatial.move(moveVector);
+                    // move considers only local scale of spatial, so we have to look for "AUV Node"'s scale
+                    Vector3f auvScale = spatial.getParent().getLocalScale().clone();
+                    // get "AUV Node"'s rotation
+                    Quaternion auvRotation = spatial.getParent().getLocalRotation().clone();
+                    // rotate the moveVector
+                    moveVector = auvRotation.toRotationMatrix().invert().mult(moveVector);
+                    // move the spatial by scaling the newly rotated moveVector
+                    spatial.move(moveVector.divide(auvScale));
                     spatial.setLocalRotation(rotationQuaternion.mult(spatial.getLocalRotation()));
                 }
                 rotationOrbNode.rotate(rotationQuaternion);
