@@ -301,19 +301,7 @@ public class MARS_Main extends SimpleApplication{
     
     public ViewPort addState(final AbstractAppState state){
         Camera stateCam = cam.clone();
-        //float aspect = (float) stateCam.getWidth() / stateCam.getHeight();
-        //float frustumSize = 1f;
-        //stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        //stateCam.setParallelProjection(false);
-        //advFlyCam.setCam(stateCam);
-        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(stateCam);
-        advFlyCamState.setDragToRotate(true);
-        advFlyCamState.setEnabled(true);
-        advFlyCamState.registerWithInput(inputManager);
-        //ChaseCamera chaseCamState = new ChaseCamera(stateCam, inputManager);
-        final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
-        StateViewPort.setClearFlags(true, true, true);
-        StateViewPort.setBackgroundColor(ColorRGBA.Black);
+        
         if(state instanceof AppStateExtension){
             ((AppStateExtension)state).setCamera(stateCam);
             //this.enqueue(new Callable<Void>(){
@@ -326,6 +314,15 @@ public class MARS_Main extends SimpleApplication{
         }else{
             Logger.getLogger(MARS_Main.class.getName()).log(Level.WARNING, "AppState: " + state + " doesn't implement the interface AppStateExtension! No RootNode found!", "");
         }
+        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(stateCam);
+        advFlyCamState.setDragToRotate(true);
+        advFlyCamState.setEnabled(true);
+        advFlyCamState.registerWithInput(inputManager);
+        //ChaseCamera chaseCamState = new ChaseCamera(stateCam, inputManager);
+        final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
+        StateViewPort.setClearFlags(true, true, true);
+        StateViewPort.setBackgroundColor(ColorRGBA.Black);
+        
         stateManager.attach(state);
         return StateViewPort;
     }

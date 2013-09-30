@@ -28,6 +28,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Line;
 import java.util.Map;
 import mars.actuators.Actuator;
@@ -143,6 +144,17 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
             rootNode.addLight(sun);
+            
+            Vector3f ray_start = Vector3f.ZERO;
+            Vector3f ray_direction = Vector3f.UNIT_Y;
+            Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
+            Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mark_mat4.setColor("Color", ColorRGBA.Orange);
+            mark4.setMaterial(mark_mat4);
+            mark4.updateGeometricState();
+            rootNode.attachChild(mark4);
+            
+            rootNode.updateGeometricState();
         }
         super.initialize(stateManager, app);
     }
@@ -170,6 +182,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void setCamera(Camera cam) {
         this.cam = cam;
+        cam.setAxes(Vector3f.UNIT_Z, Vector3f.UNIT_Y, Vector3f.UNIT_X);//cloning of the cam lead to some troubles....
         //cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
         //cam.setLocation(new Vector3f(1, 1.5f, 1));
     }
