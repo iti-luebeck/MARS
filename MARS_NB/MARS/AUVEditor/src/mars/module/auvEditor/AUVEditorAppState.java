@@ -191,7 +191,6 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void setCamera(Camera cam) {
         this.cam = cam;
-        cam.setAxes(Vector3f.UNIT_Z, Vector3f.UNIT_Y, Vector3f.UNIT_X);//cloning of the cam lead to some troubles....
         //cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
         //cam.setLocation(new Vector3f(1, 1.5f, 1));
     }
