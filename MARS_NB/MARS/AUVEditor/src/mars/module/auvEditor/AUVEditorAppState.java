@@ -170,8 +170,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void setCamera(Camera cam) {
         this.cam = cam;
-        cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
-        cam.setLocation(new Vector3f(1, 1.5f, 1));
+        //cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
+        //cam.setLocation(new Vector3f(1, 1.5f, 1));
     }
 
     @Override
@@ -271,8 +271,12 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     public CollisionResult getClosestCollisionToMouseRay(Node... allowedTargets) {
         // get vector directed to the clicked object
         Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+        
+        Vector3f click3d = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight()-click2d.y), 0f).clone();
+        Vector3f dir = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight()-click2d.y), 1f).subtractLocal(click3d);
+        
+        //Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        //Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
         // get first collision for all allowedTargets and find the closest
         CollisionResult closestCollision = null;
 

@@ -301,12 +301,16 @@ public class MARS_Main extends SimpleApplication{
     
     public ViewPort addState(final AbstractAppState state){
         Camera stateCam = cam.clone();
-        
         //float aspect = (float) stateCam.getWidth() / stateCam.getHeight();
         //float frustumSize = 1f;
         //stateCam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-        stateCam.setParallelProjection(false);
-        advFlyCam.setCam(stateCam);
+        //stateCam.setParallelProjection(false);
+        //advFlyCam.setCam(stateCam);
+        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(stateCam);
+        advFlyCamState.setDragToRotate(true);
+        advFlyCamState.setEnabled(true);
+        advFlyCamState.registerWithInput(inputManager);
+        //ChaseCamera chaseCamState = new ChaseCamera(stateCam, inputManager);
         final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
         StateViewPort.setClearFlags(true, true, true);
         StateViewPort.setBackgroundColor(ColorRGBA.Black);
