@@ -51,6 +51,11 @@ public final class LoadAUVWizardAction implements ActionListener {
         if (DialogDisplayer.getDefault().notify(wiz) == WizardDescriptor.FINISH_OPTION) {
             JComboBox jComboBox1 = ((LoadAUVVisualPanel1) (panels.get(0).getComponent())).getjComboBox1();
             DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(jComboBox1.getSelectedItem()));
+            
+            AUVEditorTopComponent auvEditorTopComponent = new AUVEditorTopComponent();
+            auvEditorTopComponent.open();
+            auvEditorTopComponent.requestActive();;
+            auvEditorTopComponent.repaint();
         }
     }
 }
