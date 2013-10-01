@@ -115,7 +115,7 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
                         auvedpanel.setMinimumSize(new Dimension(640, 480));
                         auvedpanel.transferFocus();
                         jPanel1.add(auvedpanel);
-                        final AUVEditorAppState appState = new AUVEditorAppState();
+                        appState = new AUVEditorAppState();
                         appState.setEnabled(true);
                         final ViewPort viewPort = mars.addState(appState);
                         ctx.setInputSource(auvedpanel);

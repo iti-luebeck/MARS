@@ -28,13 +28,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Line;
-import java.util.Map;
-import mars.actuators.Actuator;
-import mars.auv.AUV_Manager;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
-import mars.sensors.Sensor;
 import mars.states.AppStateExtension;
-import mars.states.SimState;
 
 /**
  * Appstate for pointing out attatchments on a AUV
@@ -94,9 +93,6 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             this.app = (SimpleApplication) app;
             this.inputManager = this.app.getInputManager();
             this.assetManager = this.app.getAssetManager();
-            SimState simState = (SimState) stateManager.getState(SimState.class);
-            AUV_Manager auvManager = simState.getAuvManager();
-            BasicAUV hanse = (BasicAUV) auvManager.getAUVs().get("hanse");
 
 
             initAsetsPaths();
@@ -124,6 +120,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
             // init auv node
             auvNode = new Node("AUV Node");
+            auvNode.setLocalTranslation(auv.getAuv_param().getCentroid_center_distance());
             rootNode.attachChild(auvNode);
 
             // load auv spatial
@@ -132,21 +129,21 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
             auvNode.attachChild(auvSpatial);
 
-            // load actuators 
-            for (Map.Entry<String, Actuator> entry : auv.getActuators().entrySet()) {
-                Actuator actuator = entry.getValue();
-                Node physicalExchanger_Node = actuator.getPhysicalExchanger_Node().clone(true);
+            HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<Entry<String, PhysicalExchanger>>();
+            physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
+            physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+            for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
+                // load actuators 
+                PhysicalExchanger physicalExchanger = entry.getValue();
+                Node physicalExchanger_Node = physicalExchanger.getPhysicalExchanger_Node().clone(true);
                 physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
                 auvNode.attachChild(physicalExchanger_Node);
+                physicalExchanger_Node.setLocalTranslation(physicalExchanger_Node.getLocalTranslation().subtract(auv.getAuv_param().getCentroid_center_distance()));
             }
 
-            //load sensors
-            for (Map.Entry<String, Sensor> entry : auv.getSensors().entrySet()) {
-                Sensor sensor = entry.getValue();
-                Node physicalExchanger_Node = sensor.getPhysicalExchanger_Node().clone(true);
-                physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
-                auvNode.attachChild(physicalExchanger_Node);
-            }
+            auvNode.setLocalRotation(auv.getAuv_param().getRotationQuaternion());
+
+            auvNode.updateGeometricState();
 
             // englighten it
             DirectionalLight sun = new DirectionalLight();
@@ -231,6 +228,32 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
+
+        auv.getAuv_param().setCentroid_center_distance(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(auvNode.getWorldTranslation()));
+        System.out.println("AUV: " + auvNode.getWorldTranslation());
+        Vector3f auvRotation = new Vector3f();
+        //TODO Rotation auf Roll Pitch Yaw
+        float[] angles = new float[3];
+        auvNode.getWorldRotation().toAngles(angles);
+        auvRotation = new Vector3f(angles[0], angles[1], angles[2]);
+        auv.getAuv_param().setRotation(auvRotation);
+        System.out.println("AUV angle: " + auvRotation);
+        //TODO Scale of AUV
+        HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<Entry<String, PhysicalExchanger>>();
+        physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
+        physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+
+        for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
+            // get the corresponding Node
+            Node physicalExchanger = (Node) auvNode.getChild(entry.getKey());
+            // set translation
+            entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
+            // set rotation
+//            angles = new float[3];
+//            physicalExchanger.getWorldRotation().toAngles(angles);
+//            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
+//            entry.getValue().setRotation(physicalExchangerRotation);
+        }
     }
 
     private void initKeys() {
