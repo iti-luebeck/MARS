@@ -18,8 +18,6 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -88,6 +86,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * Line for debugging shooting
      */
     private Line line;
+    private BasicAUV auv;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -128,13 +127,13 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.attachChild(auvNode);
 
             // load auv spatial
-            Spatial auvSpatial = hanse.loadModelCopy();
+            Spatial auvSpatial = auv.loadModelCopy();
             auvSpatial.setName("AUV");
             auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
             auvNode.attachChild(auvSpatial);
 
             // load actuators 
-            for (Map.Entry<String, Actuator> entry : hanse.getActuators().entrySet()) {
+            for (Map.Entry<String, Actuator> entry : auv.getActuators().entrySet()) {
                 Actuator actuator = entry.getValue();
                 Node physicalExchanger_Node = actuator.getPhysicalExchanger_Node().clone(true);
                 physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
@@ -142,7 +141,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             }
 
             //load sensors
-            for (Map.Entry<String, Sensor> entry : hanse.getSensors().entrySet()) {
+            for (Map.Entry<String, Sensor> entry : auv.getSensors().entrySet()) {
                 Sensor sensor = entry.getValue();
                 Node physicalExchanger_Node = sensor.getPhysicalExchanger_Node().clone(true);
                 physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
@@ -298,10 +297,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     public CollisionResult getClosestCollisionToMouseRay(Node... allowedTargets) {
         // get vector directed to the clicked object
         Vector2f click2d = inputManager.getCursorPosition();
-        
-        Vector3f click3d = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight()-click2d.y), 0f).clone();
-        Vector3f dir = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight()-click2d.y), 1f).subtractLocal(click3d);
-        
+
+        Vector3f click3d = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight() - click2d.y), 0f).clone();
+        Vector3f dir = getCamera().getWorldCoordinates(new Vector2f(click2d.x, getCamera().getHeight() - click2d.y), 1f).subtractLocal(click3d);
+
         //Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
         //Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
         // get first collision for all allowedTargets and find the closest
@@ -348,5 +347,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
+    }
+
+    public void setAUV(BasicAUV auv) {
+        this.auv = auv;
     }
 }

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
+import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -49,6 +50,7 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
     private Lookup.Result<MARS_Main> result = null;
     private MARS_Main mars = null;
     private static AwtPanel auvedpanel;
+    private AUVEditorAppState appState;
 
     public AUVEditorTopComponent() {
         initComponents();
@@ -168,6 +170,9 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
                 }
             }
         }
-
+    }
+    
+    public void setAUV(BasicAUV auv) {
+        appState.setAUV(auv);
     }
 }
