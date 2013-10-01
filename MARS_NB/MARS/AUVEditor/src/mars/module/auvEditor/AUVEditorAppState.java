@@ -249,10 +249,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             // set translation
             entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
             // set rotation
-//            angles = new float[3];
-//            physicalExchanger.getWorldRotation().toAngles(angles);
-//            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
-//            entry.getValue().setRotation(physicalExchangerRotation);
+            angles = new float[3];
+            physicalExchanger.getWorldRotation().toAngles(angles);
+            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
+            entry.getValue().setRotation(physicalExchangerRotation.subtract(auvRotation));
         }
     }
 
@@ -329,14 +329,15 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         // get first collision for all allowedTargets and find the closest
         CollisionResult closestCollision = null;
 
-        // prepare colored material
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.White);
+        // Trace click for deugging
+        //Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat.setColor("Color", ColorRGBA.White);
 
-        line = new Line(click3d, click3d.add(dir.mult(100f)));
-        Geometry geometry = new Geometry("line", line);
-        geometry.setMaterial(mat);
-        rootNode.attachChild(geometry);
+        //line = new Line(click3d, click3d.add(dir.mult(100f)));
+        //Geometry geometry = new Geometry("line", line);
+        //geometry.setMaterial(mat);
+        //rootNode.attachChild(geometry);
+        
         for (Node target : allowedTargets) {
             CollisionResults results = new CollisionResults();
             Ray ray = new Ray(click3d, dir);
