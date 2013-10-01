@@ -1070,7 +1070,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         clearForces();
         WayPoints.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());    
-        physics_control.setPhysicsRotation(Quaternion.IDENTITY);
+        /*physics_control.setPhysicsRotation(Quaternion.IDENTITY);
         physics_control.setEnabled(false);
         auv_node.setLocalRotation(Quaternion.IDENTITY);
         auv_node.setLocalTranslation(Vector3f.ZERO);
@@ -1080,7 +1080,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.updateModelBound();
         simstate.getAUVsNode().attachChild(getSelectionNode());
 
-       physics_control.setEnabled(true);
+        physics_control.setEnabled(true);*/
         rotateAUV();
         for (final Geometry geometry : listGeoms) {
             geometry.setLodLevel(0);
