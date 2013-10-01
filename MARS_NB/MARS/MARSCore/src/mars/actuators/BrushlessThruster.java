@@ -76,11 +76,7 @@ public class BrushlessThruster extends Thruster{
      */
     @Override
     protected float calculateThrusterCurrent(int speed){
-        if( Math.abs(speed) > 22){
-            return 0.01f*Math.abs(speed)-0.22f;
-        }else{
-            return 0f;
-        }
+        return 0.01f*Math.abs(speed);
     }
     
     /**
