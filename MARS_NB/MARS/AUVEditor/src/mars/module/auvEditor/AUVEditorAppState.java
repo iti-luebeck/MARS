@@ -34,6 +34,7 @@ import java.util.Map;
 import mars.actuators.Actuator;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
+import mars.sensors.Sensor;
 import mars.states.AppStateExtension;
 import mars.states.SimState;
 
@@ -140,11 +141,19 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
                 auvNode.attachChild(physicalExchanger_Node);
             }
 
+            //load sensors
+            for (Map.Entry<String, Sensor> entry : hanse.getSensors().entrySet()) {
+                Sensor sensor = entry.getValue();
+                Node physicalExchanger_Node = sensor.getPhysicalExchanger_Node().clone(true);
+                physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
+                auvNode.attachChild(physicalExchanger_Node);
+            }
+
             // englighten it
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
             rootNode.addLight(sun);
-            
+
             Vector3f ray_start = Vector3f.ZERO;
             Vector3f ray_direction = Vector3f.UNIT_Y;
             Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
@@ -153,7 +162,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             mark4.setMaterial(mark_mat4);
             mark4.updateGeometricState();
             rootNode.attachChild(mark4);
-            
+
             rootNode.updateGeometricState();
         }
         super.initialize(stateManager, app);
@@ -261,16 +270,21 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
                 // select a new object
                 if (closestCollision != null) {
-                    // if it is a AUV the parent is the wanted node
-                    if (closestCollision.getGeometry().getParent().getName().equals("AUV")) {
-                        currentCoordinateAxesControlSelected = closestCollision.getGeometry().getParent();
-                    } else {
-                        // else the parent parent is a physical exchanger
-                        currentCoordinateAxesControlSelected = closestCollision.getGeometry().getParent().getParent();
-                    }
+                    currentCoordinateAxesControlSelected = getControlNode(closestCollision);
                     currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(true);
                 }
             }
+        }
+
+        private Node getControlNode(CollisionResult closestCollision) {
+            Node node = closestCollision.getGeometry().getParent();
+            while (node.getParent() != null) {
+                if (node.getControl(CoordinateAxesControl.class) != null) {
+                    return node;
+                }
+                node = node.getParent();
+            }
+            return null;
         }
     };
 
