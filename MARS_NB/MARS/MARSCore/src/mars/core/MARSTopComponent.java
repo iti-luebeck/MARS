@@ -2070,18 +2070,28 @@ public final class MARSTopComponent extends TopComponent {
                                 }
                             });
                         }   
-                        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                        /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
                                         @Override
                                         public void run() {
                                             System.out.println("test1: " + mars);
                                             //content.set(Collections.singleton(mars), null);
                                             CentralLookup.getDefault().add(mars);}
-                                    });
+                                    });*/
                 }
         });
         t.start();
     }
 
+    @Override
+    protected void componentShowing() {
+        super.componentShowing(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void componentHidden() {
+        super.componentHidden(); //To change body of generated methods, choose Tools | Templates.
+    }
+ 
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing

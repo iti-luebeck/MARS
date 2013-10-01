@@ -9,6 +9,8 @@ import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
 import java.awt.Dimension;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
 import mars.core.CentralLookup;
@@ -16,6 +18,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
@@ -40,7 +44,7 @@ import org.openide.windows.TopComponent;
     "CTL_AUVEditorTopComponent=AUVEditor Window",
     "HINT_AUVEditorTopComponent=This is a AUVEditor window"
 })
-public final class AUVEditorTopComponent extends TopComponent {
+public final class AUVEditorTopComponent extends TopComponent implements LookupListener{
 
     private Lookup.Result<MARS_Main> result = null;
     private MARS_Main mars = null;
@@ -50,7 +54,7 @@ public final class AUVEditorTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_AUVEditorTopComponent());
         setToolTipText(Bundle.HINT_AUVEditorTopComponent());
-
+        
     }
 
     /**
@@ -87,34 +91,44 @@ public final class AUVEditorTopComponent extends TopComponent {
         Lookup.Template template = new Lookup.Template(MARS_Main.class);
         CentralLookup cl = CentralLookup.getDefault();
         result = cl.lookup(template);
-        //result.addLookupListener(this);
+        result.addLookupListener(this);
+        System.out.println("LOKKUP3!");
         if (mars == null) {// try to get mars, else its the listener
+            System.out.println("LOKKUP4!");
             mars = cl.lookup(MARS_Main.class);
-
-            final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
-            auvedpanel = ctx.createPanel(PaintMode.Accelerated);
-            auvedpanel.setPreferredSize(new Dimension(640, 480));
-            auvedpanel.setMinimumSize(new Dimension(640, 480));
-            auvedpanel.transferFocus();
-            jPanel1.add(auvedpanel);
-            final AUVEditorAppState appState = new AUVEditorAppState();
-            appState.setEnabled(true);
-            final ViewPort viewPort = mars.addState(appState);
-            ctx.setInputSource(auvedpanel);
-
-            mars.enqueue(new Callable<Void>() {
-                public Void call() {
-
-                    //final ViewPort viewPort = mars.addState(appState);
-
-                    //mars.getFlyByCamera().setDragToRotate(true);
-                    viewPort.attachScene(appState.getRootNode());
-                    auvedpanel.attachTo(false, viewPort);
-                    return null;
-                }
-            });
-            System.out.println("testnew: " + mars);
+            if(mars != null){//succesfull lookup?
+                initState(mars);
+            }else{//no, we failed
+            
+            }
         }
+    }
+    
+    private void initState(final MARS_Main mars){
+         //mars.enqueue(new Callable<Void>() {
+          //      public Void call() {
+                        final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
+                        auvedpanel = ctx.createPanel(PaintMode.Accelerated);
+                        auvedpanel.setPreferredSize(new Dimension(640, 480));
+                        auvedpanel.setMinimumSize(new Dimension(640, 480));
+                        auvedpanel.transferFocus();
+                        jPanel1.add(auvedpanel);
+                        final AUVEditorAppState appState = new AUVEditorAppState();
+                        appState.setEnabled(true);
+                        final ViewPort viewPort = mars.addState(appState);
+                        ctx.setInputSource(auvedpanel);
+
+                        mars.enqueue(new Callable<Void>() {
+                            public Void call() {
+                                viewPort.attachScene(appState.getRootNode());
+                                auvedpanel.attachTo(false, viewPort);
+                                return null;
+                            }
+                        });
+                        System.out.println("testnew: " + mars);  
+            //            return null;
+            //    }
+            //});
     }
 
     @Override
@@ -132,5 +146,28 @@ public final class AUVEditorTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    
+    @Override
+    public void resultChanged(LookupEvent le) {
+        System.out.println("LOKKUP1!");
+         if(mars == null){//only check if we dont have mars
+            System.out.println("LOKKUP2!");
+            Lookup.Result res = (Lookup.Result) le.getSource(); //this is always an safe cast!
+            Collection instances = res.allInstances(); //we get all instances from the lookup
+
+            if (!instances.isEmpty()) {
+                Iterator it = instances.iterator();
+                while (it.hasNext()) {
+                    Object o = it.next();
+                    if(o instanceof MARS_Main){//you might wan to use this – better safe than sorry, check if you got what you expected!
+                        System.out.println("testM: " + (MARS_Main)o);
+                        mars = (MARS_Main)o;
+                        initState(mars);
+                    }
+                }
+            }
+        }
+
     }
 }

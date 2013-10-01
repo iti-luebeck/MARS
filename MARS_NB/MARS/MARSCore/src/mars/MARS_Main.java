@@ -217,6 +217,15 @@ public class MARS_Main extends SimpleApplication{
         PressureSensorStart.setLocalTranslation(0f, 0f, 0f);
         PressureSensorStart.updateGeometricState();
         rootNode.attachChild(PressureSensorStart);*/
+        
+        //adding mars to the central lookup after some initial stuff is ready
+        final MARS_Main marsfin = this;
+        simStateFuture = this.enqueue(new Callable() {
+            public Void call() throws Exception {
+                CentralLookup.getDefault().add(marsfin);
+                return null;
+            }
+        });
     }
     
     private void initAssetPaths(){
