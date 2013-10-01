@@ -10,14 +10,20 @@ import java.awt.event.ActionListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import mars.MARS_Main;
+import mars.auv.AUV_Manager;
+import mars.auv.BasicAUV;
+import mars.core.CentralLookup;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.util.Lookup;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:
@@ -25,6 +31,9 @@ import org.openide.awt.ActionRegistration;
 @ActionRegistration(displayName = "Open LoadAUV Wizard")
 @ActionReference(path = "Menu/Tools", position = 1)
 public final class LoadAUVWizardAction implements ActionListener {
+
+    private Lookup.Result<MARS_Main> result = null;
+    private AUV_Manager auv_manager = null;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -50,11 +59,20 @@ public final class LoadAUVWizardAction implements ActionListener {
         wiz.setTitle("Load AUV");
         if (DialogDisplayer.getDefault().notify(wiz) == WizardDescriptor.FINISH_OPTION) {
             JComboBox jComboBox1 = ((LoadAUVVisualPanel1) (panels.get(0).getComponent())).getjComboBox1();
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(jComboBox1.getSelectedItem()));
-            
+
             AUVEditorTopComponent auvEditorTopComponent = new AUVEditorTopComponent();
             auvEditorTopComponent.open();
-            auvEditorTopComponent.requestActive();;
+            
+            Lookup.Template template = new Lookup.Template(AUV_Manager.class);
+            CentralLookup cl = CentralLookup.getDefault();
+            result = cl.lookup(template);
+            //result.addLookupListener(this);
+            if (auv_manager == null) {// try to get mars, else its the listener
+                auv_manager = cl.lookup(AUV_Manager.class);
+                auvEditorTopComponent.setAUV((BasicAUV) auv_manager.getAUV(jComboBox1.getSelectedItem().toString()));
+            }
+            
+            auvEditorTopComponent.requestActive();
             auvEditorTopComponent.repaint();
         }
     }

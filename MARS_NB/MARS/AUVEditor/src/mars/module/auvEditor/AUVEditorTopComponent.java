@@ -11,6 +11,7 @@ import com.jme3.system.awt.PaintMode;
 import java.awt.Dimension;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
+import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -45,6 +46,7 @@ public final class AUVEditorTopComponent extends TopComponent {
     private Lookup.Result<MARS_Main> result = null;
     private MARS_Main mars = null;
     private static AwtPanel auvedpanel;
+    private AUVEditorAppState appState;
 
     public AUVEditorTopComponent() {
         initComponents();
@@ -97,12 +99,13 @@ public final class AUVEditorTopComponent extends TopComponent {
             auvedpanel.setMinimumSize(new Dimension(640, 480));
             auvedpanel.transferFocus();
             jPanel1.add(auvedpanel);
-            final AUVEditorAppState appState = new AUVEditorAppState();
+            appState = new AUVEditorAppState();
             appState.setEnabled(true);
             final ViewPort viewPort = mars.addState(appState);
             ctx.setInputSource(auvedpanel);
 
             mars.enqueue(new Callable<Void>() {
+                @Override
                 public Void call() {
 
                     //final ViewPort viewPort = mars.addState(appState);
@@ -132,5 +135,9 @@ public final class AUVEditorTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    
+    public void setAUV(BasicAUV auv) {
+        appState.setAUV(auv);
     }
 }
