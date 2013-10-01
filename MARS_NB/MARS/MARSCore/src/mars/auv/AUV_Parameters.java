@@ -799,6 +799,27 @@ public class AUV_Parameters{
     public void setRotation(Vector3f rotation) {
         params.put("rotation", rotation);
     }
+    
+        /**
+     *
+     * @return
+     */
+    public Quaternion getRotationQuaternion() {
+        Quaternion quat = new Quaternion();
+        Vector3f rotation = getRotation();
+        quat.fromAngles(rotation.x, rotation.y, rotation.z);
+        return quat;
+    }
+
+    /**
+     *
+     * @param rotation
+     */
+    public void setRotationQuaternion(Quaternion quaternion) {
+        Vector3f axis = new Vector3f();
+        quaternion.toAngleAxis(axis);
+        setRotation(axis);
+    }
 
     /**
      *
