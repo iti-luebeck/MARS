@@ -138,6 +138,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+    public void createDefault();
     /**
      * 
      */

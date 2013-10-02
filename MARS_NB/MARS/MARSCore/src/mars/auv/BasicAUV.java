@@ -284,6 +284,11 @@ public class BasicAUV implements AUV, SceneProcessor {
         selectionNode.attachChild(auv_node);
     }
 
+    @Override
+    public void createDefault() {
+        initAfterJAXB();
+    }
+
     /**
      *
      */
@@ -1479,12 +1484,12 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.attachChild(ghost_auv_spatial);
 
         //add ghost collision to the "ghost" object so we can get collision results
-        BoundingBox ghostBound = (BoundingBox) ghost_auv_spatial.getWorldBound();
+        /*BoundingBox ghostBound = (BoundingBox) ghost_auv_spatial.getWorldBound();
         ghostControl = new MyCustomGhostControl(new BoxCollisionShape(ghostBound.getExtent(null)));
         ghostControl.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
         ghostControl.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
 
-        ghost_auv_spatial.addControl(ghostControl);
+        ghost_auv_spatial.addControl(ghostControl);*/
 
         /*Spatial debugShape2 = ghostControl.createDebugShape(assetManager);
          auv_node.attachChild(debugShape2);*/

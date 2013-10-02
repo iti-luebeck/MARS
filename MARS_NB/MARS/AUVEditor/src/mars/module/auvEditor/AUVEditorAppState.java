@@ -31,6 +31,7 @@ import com.jme3.scene.shape.Line;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import mars.AdvancedFlyByCamera;
 import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
@@ -96,6 +97,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
 
             initAsetsPaths();
+            initFlyCam();
 
             assetManager.registerLocator("./assets", FileLocator.class);
 
@@ -168,6 +170,13 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         /*File file = InstalledFileLocator.getDefault().locate("Assets/Images", "mars.core", false);
          String absolutePath = file.getAbsolutePath();
          assetManager.registerLocator(absolutePath, FileLocator.class);*/
+    }
+    
+    public void initFlyCam(){
+        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(getCamera());
+        advFlyCamState.setDragToRotate(true);
+        advFlyCamState.setEnabled(true);
+        advFlyCamState.registerWithInput(inputManager);
     }
 
     /**
