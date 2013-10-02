@@ -18,6 +18,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -30,7 +31,10 @@ import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Line;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.prefs.Preferences;
 import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
@@ -86,6 +90,13 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      */
     private Line line;
     private BasicAUV auv;
+    private boolean showXGrid = true;
+    private boolean showYGrid = true;
+    private boolean showZGrid = true;
+    private boolean enableAUVWireframe = true;
+    private int scaleAxesAndOrb = 5;
+    private Node wireframeGrid;
+    private boolean oldEnableAUVWireframe;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -106,7 +117,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
             // get colored line cross and wirefram
             rootNode.attachChild(factory.getLineCrossNode());
-            rootNode.attachChild(factory.getWireFrameCrossNode());
+            wireframeGrid = factory.getWireFrameCrossNode();
+            rootNode.attachChild(wireframeGrid);
 
             // get coordinate axes
             coordinateAxesNode = factory.getCoordinateAxesNode();
@@ -228,32 +240,51 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
+        saveChangesToAUVObject();
 
-        auv.getAuv_param().setCentroid_center_distance(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(auvNode.getWorldTranslation()));
-        System.out.println("AUV: " + auvNode.getWorldTranslation());
-        Vector3f auvRotation = new Vector3f();
-        //TODO Rotation auf Roll Pitch Yaw
-        float[] angles = new float[3];
-        auvNode.getWorldRotation().toAngles(angles);
-        auvRotation = new Vector3f(angles[0], angles[1], angles[2]);
-        auv.getAuv_param().setRotation(auvRotation);
-        System.out.println("AUV angle: " + auvRotation);
-        //TODO Scale of AUV
-        HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<Entry<String, PhysicalExchanger>>();
-        physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
-        physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+        /*
+         * load preferences
+         */
+        if (Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showGrid", true)) {
+            if (Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showXGrid", true)) {
+                wireframeGrid.getChild("x Plain").setCullHint(Spatial.CullHint.Never);
+            } else {
+                wireframeGrid.getChild("x Plain").setCullHint(Spatial.CullHint.Always);
+            }
+            if (Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showYGrid", true)) {
+                wireframeGrid.getChild("y Plain").setCullHint(Spatial.CullHint.Never);
+            } else {
+                wireframeGrid.getChild("y Plain").setCullHint(Spatial.CullHint.Always);
+            }
+            if (Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showZGrid", true)) {
+                wireframeGrid.getChild("z Plain").setCullHint(Spatial.CullHint.Never);
+            } else {
+                wireframeGrid.getChild("z Plain").setCullHint(Spatial.CullHint.Always);
+            }
+        } else {
+            wireframeGrid.getChild("x Plain").setCullHint(Spatial.CullHint.Always);
+            wireframeGrid.getChild("y Plain").setCullHint(Spatial.CullHint.Always);
+            wireframeGrid.getChild("z Plain").setCullHint(Spatial.CullHint.Always);
 
-        for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
-            // get the corresponding Node
-            Node physicalExchanger = (Node) auvNode.getChild(entry.getKey());
-            // set translation
-            entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
-            // set rotation
-            angles = new float[3];
-            physicalExchanger.getLocalRotation().toAngles(angles);
-            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
-            entry.getValue().setRotation(physicalExchangerRotation);
         }
+
+        LinkedList<Spatial> children = new LinkedList<>();
+        children.add(auvNode.getChild("AUV"));
+        if (oldEnableAUVWireframe != Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("enableAUVWireframe", true)) {
+            oldEnableAUVWireframe = !oldEnableAUVWireframe;
+            while (!children.isEmpty()) {
+                Spatial child = children.removeFirst();
+                if (child instanceof Geometry) {
+                    Material material = ((Geometry) child).getMaterial();
+                    material.getAdditionalRenderState().setWireframe(
+                            oldEnableAUVWireframe);
+                } else {
+                    children.addAll(((Node) child).getChildren());
+                }
+            }
+        }
+
+        //  rotationOrbNode.scale(FastMath.pow(2, Preferences.userNodeForPackage(AUVEditorPanel.class).getInt("scaleAxesAndOrb", 5) - 5));
     }
 
     private void initKeys() {
@@ -285,21 +316,25 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
                 CollisionResult closestCollision = getClosestCollisionToMouseRay(auvNode);
 
                 // deselect the current object
+
+
                 if (currentCoordinateAxesControlSelected != null) {
                     currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(false);
                     currentCoordinateAxesControlSelected = null;
                 }
-
-                // select a new object
+// select a new object
                 if (closestCollision != null) {
                     currentCoordinateAxesControlSelected = getControlNode(closestCollision);
-                    currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(true);
+                    currentCoordinateAxesControlSelected
+                            .getControl(CoordinateAxesControl.class).setEnabled(true);
                 }
             }
         }
 
         private Node getControlNode(CollisionResult closestCollision) {
             Node node = closestCollision.getGeometry().getParent();
+
+
             while (node.getParent() != null) {
                 if (node.getControl(CoordinateAxesControl.class) != null) {
                     return node;
@@ -337,7 +372,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         //Geometry geometry = new Geometry("line", line);
         //geometry.setMaterial(mat);
         //rootNode.attachChild(geometry);
-        
+
         for (Node target : allowedTargets) {
             CollisionResults results = new CollisionResults();
             Ray ray = new Ray(click3d, dir);
@@ -375,5 +410,31 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
     public void setAUV(BasicAUV auv) {
         this.auv = auv;
+    }
+
+    public void saveChangesToAUVObject() {
+        auv.getAuv_param().setCentroid_center_distance(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(auvNode.getWorldTranslation()));
+        System.out.println("AUV: " + auvNode.getWorldTranslation());
+        float[] angles = new float[3];
+        auvNode.getWorldRotation().toAngles(angles);
+        Vector3f auvRotation = new Vector3f(angles[0], angles[1], angles[2]);
+        auv.getAuv_param().setRotation(auvRotation);
+        System.out.println("AUV angle: " + auvRotation);
+        //TODO Scale of AUV
+        HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<>();
+        physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
+        physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+
+        for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
+            // get the corresponding Node
+            Node physicalExchanger = (Node) auvNode.getChild(entry.getKey());
+            // set translation
+            entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
+            // set rotation
+            angles = new float[3];
+            physicalExchanger.getLocalRotation().toAngles(angles);
+            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
+            entry.getValue().setRotation(physicalExchangerRotation);
+        }
     }
 }
