@@ -51,6 +51,7 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
     private MARS_Main mars = null;
     private static AwtPanel auvedpanel;
     private AUVEditorAppState appState;
+    private AwtPanelsContext ctx;
 
     public AUVEditorTopComponent() {
         initComponents();
@@ -109,7 +110,7 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
     private void initState(final MARS_Main mars){
          //mars.enqueue(new Callable<Void>() {
           //      public Void call() {
-                        final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
+                        ctx = (AwtPanelsContext) mars.getContext();
                         auvedpanel = ctx.createPanel(PaintMode.Accelerated);
                         auvedpanel.setPreferredSize(new Dimension(640, 480));
                         auvedpanel.setMinimumSize(new Dimension(640, 480));
@@ -136,6 +137,15 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
+    }
+
+    @Override
+    protected void componentShowing() {
+        super.componentShowing(); //To change body of generated methods, choose Tools | Templates.
+        if(ctx != null){
+            auvedpanel.transferFocus();
+            ctx.setInputSource(auvedpanel);
+        }
     }
 
     void writeProperties(java.util.Properties p) {
