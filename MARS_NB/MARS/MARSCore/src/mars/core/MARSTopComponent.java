@@ -120,6 +120,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private static AwtPanel sim_panel, map_panel;
     private static MARS_Main mars;
+    private AwtPanelsContext ctx;
     
     private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
@@ -2014,7 +2015,7 @@ public final class MARSTopComponent extends TopComponent {
                             mars.start();
                             SwingUtilities.invokeLater(new Runnable(){
                                 public void run(){
-                                    final AwtPanelsContext ctx = (AwtPanelsContext) mars.getContext();
+                                    ctx = (AwtPanelsContext) mars.getContext();
 
                                     sim_panel = ctx.createPanel(PaintMode.Accelerated);
                                     sim_panel.setPreferredSize(new Dimension(640, 480));
@@ -2085,11 +2086,17 @@ public final class MARSTopComponent extends TopComponent {
     @Override
     protected void componentShowing() {
         super.componentShowing(); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(getName() + " showing");
+        if(ctx != null){
+            sim_panel.transferFocus();
+            ctx.setInputSource(sim_panel);
+        }
     }
 
     @Override
     protected void componentHidden() {
         super.componentHidden(); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(getName() + " hidden");
     }
  
     @Override
