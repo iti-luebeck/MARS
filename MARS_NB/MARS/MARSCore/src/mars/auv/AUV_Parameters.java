@@ -63,6 +63,66 @@ public class AUV_Parameters{
         buoyancy = (HashMap<String,Object>)params.get("Buoyancy");
         optimize = (HashMap<String,Object>)params.get("Optimize");
     }
+    
+    public void createDefault(){
+        initAfterJAXB();
+        setAlphaDepthScale(3.0f);
+        setAngular_factor(1.0f);
+        setAuv_class(this.getClass().getName());
+        setAuv_name("basicAUV");
+        setBatched(true);
+        setBuoyancy_distance(0.0f);
+        setBuoyancy_resolution(0.03125f);
+        setBuoyancy_scale(0.9f);
+        setBuoyancy_updaterate(1);
+        setCentroid_center_distance(Vector3f.ZERO);
+        setCollisionPosition(Vector3f.ZERO);
+        setDNDIcon("");
+        setDamping_angular(0.1f);
+        setDamping_linear(0.2f);
+        setDebugBounding(false);
+        setDebugBuoycancy(false);
+        setDebugCenters(false);
+        setDebugCollision(false);
+        setDebugDrag(false);
+        setDebugPhysicalExchanger(false);
+        setDebugVisualizers(false);
+        setDebugWireframe(false);
+        setDimensions(Vector3f.UNIT_XYZ);
+        setDrag_coefficient_angular(0.3f);
+        setDrag_coefficient_linear(1.45f);
+        setDrag_updaterate(1);
+        setEnabled(true);
+        setFlow_updaterate(0);
+        setIcon("");
+        setLinear_factor(Vector3f.UNIT_XYZ);
+        setLod(true);
+        setLodDistTolerance(1.0f);
+        setLodReduction1(0.3f);
+        setLodReduction2(0.6f);
+        setLodTrisPerPixel(0.5f);
+        setMapColor(ColorRGBA.Red);
+        setMass(1.0f);
+        setMaxWaypoints(25);
+        setModelFilePath("");
+        setModel_name("");
+        setModel_scale(0.1f);
+        setOffCamera_height(240);
+        setOffCamera_width(320);
+        setPhysicalvalues_updaterate(0.0f);
+        setPosition(Vector3f.ZERO);
+        setRayDetectable(false);
+        setRotation(Vector3f.ZERO);
+        setRotationQuaternion(Quaternion.IDENTITY);
+        setSelection_color(ColorRGBA.Red);
+        setType(1);
+        setWayPointLineWidth(5.0f);
+        setWaypoints_color(ColorRGBA.White);
+        setWaypoints_enabled(true);
+        setWaypoints_gradient(true);
+        setWaypoints_updaterate(1.0f);
+        setWaypoints_visible(true);
+   }
 
     /**
      * 

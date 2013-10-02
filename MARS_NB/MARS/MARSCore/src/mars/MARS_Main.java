@@ -323,10 +323,7 @@ public class MARS_Main extends SimpleApplication{
         }else{
             Logger.getLogger(MARS_Main.class.getName()).log(Level.WARNING, "AppState: " + state + " doesn't implement the interface AppStateExtension! No RootNode found!", "");
         }
-        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(stateCam);
-        advFlyCamState.setDragToRotate(true);
-        advFlyCamState.setEnabled(true);
-        advFlyCamState.registerWithInput(inputManager);
+
         //ChaseCamera chaseCamState = new ChaseCamera(stateCam, inputManager);
         final ViewPort StateViewPort = renderManager.createMainView("View" + state, stateCam);
         StateViewPort.setClearFlags(true, true, true);
