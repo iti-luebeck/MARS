@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import mars.MARS_Main;
 import mars.auv.AUV_Manager;
+import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.openide.DialogDisplayer;
@@ -58,22 +61,34 @@ public final class LoadAUVWizardAction implements ActionListener {
         wiz.setTitleFormat(new MessageFormat("{0}"));
         wiz.setTitle("Load AUV");
         if (DialogDisplayer.getDefault().notify(wiz) == WizardDescriptor.FINISH_OPTION) {
-            JComboBox jComboBox1 = ((LoadAUVVisualPanel1) (panels.get(0).getComponent())).getjComboBox1();
 
-            AUVEditorTopComponent auvEditorTopComponent = new AUVEditorTopComponent();
-            auvEditorTopComponent.open();
-            
-            Lookup.Template template = new Lookup.Template(AUV_Manager.class);
-            CentralLookup cl = CentralLookup.getDefault();
-            result = cl.lookup(template);
-            //result.addLookupListener(this);
-            if (auv_manager == null) {// try to get mars, else its the listener
-                auv_manager = cl.lookup(AUV_Manager.class);
-                auvEditorTopComponent.setAUV((BasicAUV) auv_manager.getAUV(jComboBox1.getSelectedItem().toString()));
+            LoadAUVVisualPanel1 auvVisualPanel = ((LoadAUVVisualPanel1) (panels.get(0).getComponent()));
+            JComboBox jComboBox1 = auvVisualPanel.getjComboBox1();
+            JRadioButton jRadioButton1 = auvVisualPanel.getjRadioButton1();
+            JTextField jTextField1 = auvVisualPanel.getjTextField1();
+            JTextField jTextField2 = auvVisualPanel.getjTextField2();
+
+            if (jRadioButton1.isSelected()) {
+                AUVEditorTopComponent auvEditorTopComponent = new AUVEditorTopComponent();
+                auvEditorTopComponent.open();
+
+                Lookup.Template template = new Lookup.Template(AUV_Manager.class);
+                CentralLookup cl = CentralLookup.getDefault();
+                result = cl.lookup(template);
+                //result.addLookupListener(this);
+                if (auv_manager == null) {// try to get mars, else its the listener
+                    auv_manager = cl.lookup(AUV_Manager.class);
+                    auvEditorTopComponent.setAUV((BasicAUV) auv_manager.getAUV(jComboBox1.getSelectedItem().toString()));
+                }
+
+                auvEditorTopComponent.requestActive();
+                auvEditorTopComponent.repaint();
+            } else {
+                BasicAUV basicAUV = new BasicAUV();
+                basicAUV.setAuv_param(new AUV_Parameters()); // hier muss noch alles rein
             }
-            
-            auvEditorTopComponent.requestActive();
-            auvEditorTopComponent.repaint();
+
+
         }
     }
 }
