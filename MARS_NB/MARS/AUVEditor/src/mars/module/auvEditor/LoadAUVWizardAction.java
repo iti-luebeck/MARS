@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.module.auvEditor;
 
 import java.awt.Component;
@@ -10,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
@@ -21,13 +16,17 @@ import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.util.Lookup;
 
+/**
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ */
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:
 @ActionID(category = "...", id = "mars.module.auvEditor.LoadAUVWizardAction")
@@ -85,7 +84,28 @@ public final class LoadAUVWizardAction implements ActionListener {
                 auvEditorTopComponent.repaint();
             } else {
                 BasicAUV basicAUV = new BasicAUV();
-                basicAUV.setAuv_param(new AUV_Parameters()); // hier muss noch alles rein
+                basicAUV.createDefault();
+                AUV_Parameters auv_Parameters = new AUV_Parameters();
+                auv_Parameters.createDefault();
+                auv_Parameters.setModelFilePath(jTextField1.getText().substring(jTextField1.getText().lastIndexOf("Models")));
+                basicAUV.setAuv_param(auv_Parameters); // hier muss noch alles rein
+                basicAUV.setName(jTextField2.getText());
+
+                AUVEditorTopComponent auvEditorTopComponent = new AUVEditorTopComponent();
+                auvEditorTopComponent.open();
+
+                Lookup.Template template = new Lookup.Template(AUV_Manager.class);
+                CentralLookup cl = CentralLookup.getDefault();
+                result = cl.lookup(template);
+                //result.addLookupListener(this);
+                if (auv_manager == null) {// try to get mars, else its the listener
+                    auv_manager = cl.lookup(AUV_Manager.class);
+                    auv_manager.registerAUV(basicAUV);
+                    auvEditorTopComponent.setAUV(basicAUV);
+                }
+
+                auvEditorTopComponent.requestActive();
+                auvEditorTopComponent.repaint();
             }
 
 

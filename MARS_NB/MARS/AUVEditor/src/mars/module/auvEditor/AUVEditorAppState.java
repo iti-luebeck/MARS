@@ -17,9 +17,7 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -28,20 +26,22 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Line;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-import mars.AdvancedFlyByCamera;
 import java.util.prefs.Preferences;
+import mars.AdvancedFlyByCamera;
 import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
 
 /**
  * Appstate for pointing out attatchments on a AUV
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
  */
 public class AUVEditorAppState extends AbstractAppState implements AppStateExtension {
 
@@ -189,8 +189,8 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
          String absolutePath = file.getAbsolutePath();
          assetManager.registerLocator(absolutePath, FileLocator.class);*/
     }
-    
-    public void initFlyCam(){
+
+    public void initFlyCam() {
         AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(getCamera());
         advFlyCamState.setDragToRotate(true);
         advFlyCamState.setEnabled(true);
@@ -301,10 +301,12 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
                 }
             }
         }
-        
+
         /**
-         * gets the parent node of the given collisionresult that has a CoordinateAxesControl attached
-         * @param closestCollision 
+         * gets the parent node of the given collisionresult that has a
+         * CoordinateAxesControl attached
+         *
+         * @param closestCollision
          * @return parent Node with a CoordinateAxesControl attached
          */
         private Node getControlNode(CollisionResult closestCollision) {

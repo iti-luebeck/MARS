@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.module.auvEditor;
 
 import java.util.prefs.Preferences;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ */
 final class AUVEditorPanel extends javax.swing.JPanel {
 
     private final AUVEditorOptionsPanelController controller;
@@ -159,33 +158,30 @@ final class AUVEditorPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextField1InputMethodTextChanged
-        
     }//GEN-LAST:event_jTextField1InputMethodTextChanged
 
     private void jSlider1VetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_jSlider1VetoableChange
-        
     }//GEN-LAST:event_jSlider1VetoableChange
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jSlider1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSlider1PropertyChange
-        jTextField1.setText(jSlider1.getValue()+ "");
+        jTextField1.setText(jSlider1.getValue() + "");
     }//GEN-LAST:event_jSlider1PropertyChange
 
     private void jTextField1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTextField1PropertyChange
-        try{
+        try {
             int parseInt = Integer.parseInt(jTextField1.getText());
             jSlider1.setValue(parseInt);
-        } catch(Exception e){
+        } catch (Exception e) {
             jTextField1.setText("5");
             jSlider1.setValue(5);
         }
     }//GEN-LAST:event_jTextField1PropertyChange
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        jTextField1.setText(jSlider1.getValue()+ "");
+        jTextField1.setText(jSlider1.getValue() + "");
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
@@ -215,7 +211,7 @@ final class AUVEditorPanel extends javax.swing.JPanel {
         Preferences.userNodeForPackage(AUVEditorPanel.class).putBoolean("showYGrid", jCheckBox3.isSelected());
         Preferences.userNodeForPackage(AUVEditorPanel.class).putBoolean("showZGrid", jCheckBox4.isSelected());
         Preferences.userNodeForPackage(AUVEditorPanel.class).putBoolean("enableAUVWireframe", jCheckBox5.isSelected());
-         Preferences.userNodeForPackage(AUVEditorPanel.class).putInt("scaleAxesAndOrb", jSlider1.getValue());
+        Preferences.userNodeForPackage(AUVEditorPanel.class).putInt("scaleAxesAndOrb", jSlider1.getValue());
         // or for org.openide.util with API spec. version >= 7.4:
         // NbPreferences.forModule(AUVEditorPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
         // or:

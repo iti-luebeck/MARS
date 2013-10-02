@@ -1,5 +1,3 @@
-/*
- */
 package mars.module.auvEditor;
 
 import com.jme3.asset.AssetManager;
@@ -16,6 +14,9 @@ import com.jme3.scene.shape.Line;
 
 /**
  * Factry Class to get Nodes containing 3D Objects
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
  */
 public class Model3DFactory {
 
