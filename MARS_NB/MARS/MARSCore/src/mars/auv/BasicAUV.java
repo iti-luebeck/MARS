@@ -1428,7 +1428,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         optimizeSpatial(auv_spatial_copy);
 
         auv_spatial_copy.setLocalScale(auv_param.getModel_scale());
-        auv_spatial_copy.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
 
         auv_spatial_copy.updateModelBound();
         auv_spatial_copy.updateGeometricState();

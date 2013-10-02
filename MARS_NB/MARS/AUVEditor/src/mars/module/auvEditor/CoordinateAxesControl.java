@@ -294,7 +294,18 @@ public class CoordinateAxesControl extends AbstractControl {
                     moveVector = auvRotation.toRotationMatrix().invert().mult(moveVector);
                     // move the spatial by scaling the newly rotated moveVector
                     spatial.move(moveVector.divide(auvScale));
-                    spatial.setLocalRotation(rotationQuaternion.mult(spatial.getLocalRotation()));
+                    /* Matrix multiplication: 
+                     * A: AUV local rotation matrix (there is no rotation in an higher node, so it's basicly global)
+                     * Q: current rotation
+                     * L: current local rotation
+                     * What is done in next line:
+                     * A_inverse * Q * A * L
+                     * A * L = res1 : rotates L from local to AUV coordinates
+                     * Q * res1 = res2 : rotate in AUV coordinates by the given rotation
+                     * A_inverse * res2 = res3 : rotates from AUV coordinates back to local coordinates
+                     */
+                    Matrix3f rotationMatrix = auvRotation.toRotationMatrix().invert().mult(rotationQuaternion.toRotationMatrix().mult(auvRotation.toRotationMatrix().mult(spatial.getLocalRotation().toRotationMatrix())));
+                    spatial.setLocalRotation(rotationMatrix);
                 }
                 rotationOrbNode.rotate(rotationQuaternion);
             }
