@@ -250,9 +250,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
             // set rotation
             angles = new float[3];
-            physicalExchanger.getWorldRotation().toAngles(angles);
+            physicalExchanger.getLocalRotation().toAngles(angles);
             Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
-            entry.getValue().setRotation(physicalExchangerRotation.subtract(auvRotation));
+            entry.getValue().setRotation(physicalExchangerRotation);
         }
     }
 
