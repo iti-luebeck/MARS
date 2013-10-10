@@ -182,11 +182,6 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     public void setAuv_param(AUV_Parameters auvParam);
     /**
      *
-     * @return
-     */
-    public PhysicalValues getPhysicalvalues();
-    /**
-     *
      * @param classNameString
      * @return
      */

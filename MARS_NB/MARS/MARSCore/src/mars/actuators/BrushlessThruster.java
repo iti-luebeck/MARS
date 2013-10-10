@@ -66,7 +66,7 @@ public class BrushlessThruster extends Thruster{
      */
     @Override
     protected float calculateThrusterForce(int speed){
-        return (Math.signum(speed))*(0.00046655f * (float)Math.pow((float)Math.abs(speed), 2.02039525f) );
+        return (Math.signum(speed))*(0.00020655f * (float)Math.pow((float)Math.abs(speed), 2.02039525f) );
     }
     
     /**
