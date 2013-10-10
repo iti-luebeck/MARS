@@ -1,5 +1,3 @@
-/*
- */
 package mars.module.auvEditor;
 
 import com.jme3.collision.CollisionResult;
@@ -21,6 +19,9 @@ import com.jme3.scene.control.AbstractControl;
  * Control class for Objects that should be moved by "ijklum"-keys with a
  * visible coordinate system.<br/>
  * There must always be maximum one enabled instance of the class!
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
  */
 public class CoordinateAxesControl extends AbstractControl {
 

@@ -1,19 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.module.auvEditor;
 
-import com.jme3.app.state.AppStateManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.system.awt.AwtPanel;
-import com.jme3.system.awt.AwtPanelsContext;
-import com.jme3.system.awt.PaintMode;
-import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -25,6 +15,11 @@ import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import org.openide.util.Lookup;
 
+/**
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ */
 public final class LoadAUVVisualPanel1 extends JPanel {
 
     private Lookup.Result<MARS_Main> result = null;
@@ -101,8 +96,8 @@ public final class LoadAUVVisualPanel1 extends JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(LoadAUVVisualPanel1.class, "LoadAUVVisualPanel1.jLabel1.text")); // NOI18N
 
-        jTextField2.setEditable(false);
         jTextField2.setText(org.openide.util.NbBundle.getMessage(LoadAUVVisualPanel1.class, "LoadAUVVisualPanel1.jTextField2.text")); // NOI18N
+        jTextField2.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -263,6 +258,4 @@ public final class LoadAUVVisualPanel1 extends JPanel {
     public JTextField getjTextField2() {
         return jTextField2;
     }
-    
-    
 }

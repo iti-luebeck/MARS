@@ -1,13 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.module.auvEditor;
 
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 
+/**
+ * * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ */
 public class LoadAUVWizardPanel1 implements WizardDescriptor.Panel<WizardDescriptor> {
 
     /**

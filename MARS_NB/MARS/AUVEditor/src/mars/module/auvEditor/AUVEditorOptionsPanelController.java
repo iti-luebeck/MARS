@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.module.auvEditor;
 
 import java.beans.PropertyChangeListener;
@@ -11,6 +7,11 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ *
+ * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
+ * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ */
 @OptionsPanelController.TopLevelRegistration(
         categoryName = "#OptionsCategory_Name_AUVEditor",
         iconBase = "mars/module/auvEditor/Face-monkey.png",
