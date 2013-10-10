@@ -65,32 +65,6 @@ public final class MARSChartTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_MARSChartTopComponent());
         setToolTipText(Bundle.HINT_MARSChartTopComponent());
-        //createModels();
-        //add(support.getChart(), BorderLayout.CENTER);
-        //DataTable data = new DataTable(Double.class, Double.class);
-        /*for (double x = -5.0; x <= 5.0; x+=0.25) {
-            double y = 5.0*Math.sin(x);
-            data.add(x, y);
-        }*/
-        //XYPlot plot = new XYPlot(data);
-        //add(new InteractivePanel(plot));
-        
-        //if(auvManager != null){
-        //                AUV auv = auvManager.getAUV("asv");
-                        /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
-                        auv.getPhysicalvalues().getTraceVolume().setVisible(false);
-                        ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
-                        Iterator iter = traces1.iterator();
-                        while(iter.hasNext()) {
-                            ITrace2D trace = (ITrace2D)iter.next();
-                            charts.addTrace(trace);
-                        }*/
-        //            }
-        //createChart();
-        //charts.addTrace(trace);
-        //charts.addTrace(trace2);
-        //new Generator2(trace).start();
-        //new ChartGenerator(trace).start();
     }
     
     public MARSChartTopComponent(ChartValue chartValue) {
@@ -99,36 +73,10 @@ public final class MARSChartTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_MARSChartTopComponent());
         setToolTipText(Bundle.HINT_MARSChartTopComponent());
-        //createModels();
-        //add(support.getChart(), BorderLayout.CENTER);
-        //DataTable data = new DataTable(Double.class, Double.class);
-        /*for (double x = -5.0; x <= 5.0; x+=0.25) {
-            double y = 5.0*Math.sin(x);
-            data.add(x, y);
-        }*/
-        //XYPlot plot = new XYPlot(data);
-        //add(new InteractivePanel(plot));
-        
-        //if(auvManager != null){
-        //                AUV auv = auvManager.getAUV("asv");
-                        /*charts.addTrace(auv.getPhysicalvalues().getTraceVolume());
-                        auv.getPhysicalvalues().getTraceVolume().setVisible(false);
-                        ArrayList<ITrace2D> traces1 = auv.getPhysicalvalues().getTraces();
-                        Iterator iter = traces1.iterator();
-                        while(iter.hasNext()) {
-                            ITrace2D trace = (ITrace2D)iter.next();
-                            charts.addTrace(trace);
-                        }*/
-        //            }
+
         createChart();
-        //charts.addTrace(trace);
-        //charts.addTrace(trace2);
-        //trace.addTracePainter(new TracePainterFill(charts));
-        //trace.setTracePainter(new TracePainterVerticalBar(charts));
-        //trace2.setTracePainter(new TracePainterVerticalBar(charts));
-        //new Generator2(trace).start();
+
         new ChartGenerator(traces,chartValue).start();
-        //new ChartGenerator3(trace2,chartValue).start();
     }
     
     public MARSChartTopComponent(AUV auv) {

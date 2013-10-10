@@ -48,7 +48,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import mars.auv.AUV_Manager;
 import mars.server.MARS_Server;
-import mars.terrain.MultMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.Vector4f;
@@ -135,8 +134,6 @@ public class Initializer {
     //terrrain
     private RigidBodyControl terrain_physics_control;
     private Node terrain_node;
-    private int[] pixelSamples;
-    private int[][] pixelSample;
     private int terrain_image_width = 0;
     private int terrain_image_heigth = 0;
     private byte[] terrain_byte_arrray;
@@ -188,35 +185,6 @@ public class Initializer {
     private Thread ros_server_thread;
     private CommunicationManagerRunnable com_server;
     private Thread com_server_thread;
-
-    /**
-     *
-     * @param mars
-     * @param MARS_settings 
-     * @param auv_manager 
-     * @param com_manager 
-     * @deprecated 
-     */
-    @Deprecated
-    public Initializer(MARS_Main mars, MARS_Settings MARS_settings, AUV_Manager auv_manager, CommunicationManager com_manager){
-        this.mars = mars;
-        this.mars_settings = MARS_settings;
-        this.guiNode = mars.getGuiNode();
-        this.settings = mars.getSettings();
-        this.rootNode = mars.getRootNode();
-        this.inputManager = mars.getInputManager();
-        this.assetManager = mars.getAssetManager();
-        //this.sceneReflectionNode = mars.getSceneReflectionNode();
-        //this.SonarDetectableNode = mars.getSonarDetectableNode();
-        this.viewPort = mars.getViewPort();
-        this.water_height = MARS_settings.getPhysical_environment().getWater_height();
-        this.auv_manager = auv_manager;
-        this.com_manager = com_manager;
-        this.renderManager = mars.getRenderManager();
-        this.bulletAppState = mars.getStateManager().getState(BulletAppState.class);
-        this.mars_settings.setInit(this);
-        fpp = new FilterPostProcessor(assetManager);
-    }
     
     /**
      * 
@@ -275,7 +243,7 @@ public class Initializer {
             setupSkyDome();
         }
         if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
-            setupTerrain();
+            setupAdvancedTerrain();
         }
         if(mars_settings.isSetupTerrain() && mars_settings.isSetupAdvancedTerrain()){
             setupAdvancedTerrain();
@@ -1403,97 +1371,7 @@ public class Initializer {
         //bulletAppState.getPhysicsSpace().add(terrain);
         bulletAppState.getPhysicsSpace().add(terrain_physics_control);
     }
-    
-    private void setupTerrain(){
-        //read the gray scale map
-        File file = new File("./Assets/Textures/Terrain/" + mars_settings.getTerrainfilepath_hm());
-        BufferedImage bimage = null;
-        try {
-            bimage = ImageIO.read(file);
-        } catch (IOException ex) {
-        }
 
-        int w = bimage.getWidth();
-        int h = bimage.getHeight();
-        terrain_image_width = w;
-        terrain_image_heigth = h;
-        pixelSamples = new int[h * w];
-        pixelSample = new int[h][w];
-        terrain_byte_arrray = new byte[h*w];
-        bimage.getRaster().getSamples(0, 0, w, h, 0, pixelSamples);
-        int count = 0;
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                pixelSample[i][j] = pixelSamples[count];
-                /*if(Math.round(((pixelSamples[count]*100f)/256f)) < 20f){
-                    terrain_byte_arrray[count] = (byte)(0);
-                }else{*/
-                    terrain_byte_arrray[count] = (byte)Math.round(((pixelSamples[count]*100f)/255f));
-                //}
-                //System.out.println(count + ": " + pixelSamples[count]);
-                count++;
-            }
-        }
-        //generate vectors based on the gray information
-        Vector3f[][] vertex = new Vector3f[h][w];
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                vertex[i][j] = new Vector3f(j * mars_settings.getTerrain_scale().x, pixelSample[i][j] / mars_settings.getTileHeigth(), i * mars_settings.getTerrain_scale().z);
-            }
-        }
-        //pass the vectors to the MultMesh object
-        MultMesh mm = new MultMesh(vertex);
-        mm.initMesh();
-        //setup material
-        Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        //assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
-        TextureKey key2 = new TextureKey(mars_settings.getTerrainfilepath_cm());
-        key2.setGenerateMips(true);
-        Texture tex2 = assetManager.loadTexture(key2);
-        mat2.setTexture("ColorMap", tex2);
-        //generate grometry
-        Geometry mmG = new Geometry("TerrainMesh", mm);
-        mmG.setMaterial(mat2);
-        mmG.updateModelBound();
-        mmG.updateGeometricState();
-
-        //Making a terrain Physics
-        CollisionShape terrainShape = CollisionShapeFactory.createMeshShape(mmG);
-
-        //CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
-
-        //BoxCollisionShape boxCollisionShape = new BoxCollisionShape(new Vector3f(5f,5f,2f));
-        //compoundCollisionShape1.addChildShape(terrainShape, new Vector3f(55f,3f,17f));
-
-        terrain_node = new Node("terrain");
-        terrain_physics_control = new RigidBodyControl(terrainShape, 0);
-
-        /*Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/WireColor.j3md");
-            debug_mat.setColor("Color", ColorRGBA.Red);
-            terrain_physics_control.attachDebugShape(debug_mat);*/
-
-        terrain_physics_control.setCollisionGroup(1);
-        terrain_physics_control.setCollideWithGroups(1);
-        //terrain_physics_control.setFriction(0f);
-        //terrain_physics_control.setRestitution(1f);
-
-        terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
-        terrain_node.addControl(terrain_physics_control);
-        terrain_node.updateGeometricState();
-
-
-        /*physicsTerrain = new PhysicsNode(mmG,terrainShape,0);
-        physicsTerrain.setName("terrain");
-        physicsTerrain.setLocalTranslation(mars_settings.getTerrain_position());
-        physicsTerrain.updateGeometricState();
-        physicsTerrain.updateModelBound();*/
-
-        terrain_node.attachChild(mmG);
-        sceneReflectionNode.attachChild(terrain_node);
-        RayDetectable.attachChild(terrain_node);
-        bulletAppState.getPhysicsSpace().add(terrain_node);
-    }
-    
     /**
      * 
      */
