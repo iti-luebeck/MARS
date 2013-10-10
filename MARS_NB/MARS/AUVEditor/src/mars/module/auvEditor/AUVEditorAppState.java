@@ -29,6 +29,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Line;
+import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -39,6 +40,7 @@ import java.util.prefs.Preferences;
 import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.states.AppStateExtension;
+import org.openide.modules.InstalledFileLocator;
 
 /**
  * Appstate for pointing out attatchments on a AUV
@@ -110,7 +112,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             initAsetsPaths();
             initFlyCam();
 
-            assetManager.registerLocator("./assets", FileLocator.class);
+            //assetManager.registerLocator("./assets", FileLocator.class);
 
             initKeys();
 
@@ -179,9 +181,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     }
 
     public void initAsetsPaths() {
-        /*File file = InstalledFileLocator.getDefault().locate("Assets/Images", "mars.core", false);
+         File file = InstalledFileLocator.getDefault().locate("Assets/Models", "mars.module.auvEditor", false);
          String absolutePath = file.getAbsolutePath();
-         assetManager.registerLocator(absolutePath, FileLocator.class);*/
+         assetManager.registerLocator(absolutePath, FileLocator.class);
     }
     
     public void initFlyCam(){
