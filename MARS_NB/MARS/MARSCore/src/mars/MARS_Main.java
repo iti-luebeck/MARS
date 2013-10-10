@@ -40,7 +40,6 @@ import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
-import mars.states.AUVEditorAppState;
 import mars.states.AppStateExtension;
 import mars.states.MapState;
 import mars.states.NiftyState;
@@ -67,7 +66,6 @@ public class MARS_Main extends SimpleApplication{
 
     StartState startstate;
     MapState mapstate;
-    AUVEditorAppState editstate;
     NiftyState niftystate;
     
     ChaseCamera chaseCam;
@@ -149,10 +147,6 @@ public class MARS_Main extends SimpleApplication{
         mapstate = new MapState(assetManager);
         MapViewPort.attachScene(mapstate.getRootNode());   
         stateManager.attach(mapstate);
-        
-        /*editstate = new AUVEditorAppState();
-        MapViewPort.attachScene(editstate.getRootNode());   
-        stateManager.attach(editstate);*/
         
         //nifty state
         progr.progress( "Creating NiftyState" );
