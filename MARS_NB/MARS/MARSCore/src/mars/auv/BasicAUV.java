@@ -1332,11 +1332,12 @@ public class BasicAUV implements AUV, SceneProcessor {
         /*SpatialLodControl slc = new SpatialLodControl(mars.getCamera(),auv_spatial);
          auv_spatial.addControl(slc);*/
         //
-        /*PopupControl ppcontrol = new PopupControl();
+        PopupControl ppcontrol = new PopupControl();
         ppcontrol.setCam(mars.getCamera());
         ppcontrol.setSpatial(auv_spatial);
         ppcontrol.setStateManager(mars.getStateManager());
-        auv_spatial.addControl(ppcontrol);*/
+        ppcontrol.setAuv(this);
+        auv_spatial.addControl(ppcontrol);
         
         
 

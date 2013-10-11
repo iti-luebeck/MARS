@@ -14,20 +14,20 @@ import mars.auv.BasicAUV;
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class Monsun2 extends BasicAUV{
+public class Monsun3 extends BasicAUV{
     
     /**
      * 
      * @param simstate 
      */
-    public Monsun2(SimState simstate){
+    public Monsun3(SimState simstate){
         super(simstate);
     }
 
     /**
      *
      */
-    public Monsun2(){
+    public Monsun3(){
         super();
     }
 

@@ -5,12 +5,14 @@
 package mars.control;
 
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import mars.auv.AUV;
 import mars.states.NiftyState;
 
 /**
@@ -21,6 +23,7 @@ public class PopupControl extends AbstractControl{
 
     private Camera cam;
     private AppStateManager stateManager;
+    private AUV auv;
     
     public PopupControl() {
     }
@@ -32,15 +35,19 @@ public class PopupControl extends AbstractControl{
 
     @Override
     protected void controlUpdate(float f) {
-        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > 10f ){
+        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > 20f ){
             if(stateManager.getState(NiftyState.class) != null){
                 NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
-                niftyState.setPopupMenu(true);
+                System.out.println("cam " + auv.getName() + ": " + cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation()));
+                Vector3f worldTranslation = cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation());
+                niftyState.setPopUpNameForAUV(auv, (int)worldTranslation.x, cam.getHeight()-(int)worldTranslation.y);
+                //niftyState.setPopupMenu(true);
+                niftyState.setPopupMenu(auv,true);
             }
         }else{
             if(stateManager.getState(NiftyState.class) != null){
                 NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
-                niftyState.setPopupMenu(false);
+                niftyState.setPopupMenu(auv,false);
             }
         }
     }
@@ -56,5 +63,9 @@ public class PopupControl extends AbstractControl{
 
     public void setStateManager(AppStateManager stateManager) {
         this.stateManager = stateManager;
+    }
+
+    public void setAuv(AUV auv) {
+        this.auv = auv;
     }
 }

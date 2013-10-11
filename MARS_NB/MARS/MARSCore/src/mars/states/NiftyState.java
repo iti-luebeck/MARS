@@ -17,6 +17,9 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.dynamic.PanelCreator;
+import de.lessvoid.nifty.controls.dynamic.TextCreator;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -69,7 +72,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         //hide main panel because niftyys effect/event system sucks!
         setHoverMenuForAUV(false);
         setSpeedMenu(false);
-        setPopupMenu(false);
+        setPopupMenu(true);
         
         //set logging to less spam
         Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE); 
@@ -94,7 +97,6 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             niftyElement.setConstraintX(new SizeValue(String.valueOf(x+5)));
             niftyElement.setConstraintY(new SizeValue(String.valueOf(y+10)));
             niftyElement.getParent().layoutElements();
-            
             Element text = niftyElement.findElementByName("hover_left_text");
             if(text!=null){
                 text.getRenderer(TextRenderer.class).setText(getAkkuForAUV());
@@ -111,6 +113,86 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             }
             setHoverMenuForAUV(true);
         }
+    }
+    
+        /**
+     * 
+     * @param auv
+     * @param x
+     * @param y
+     */
+    public void setPopUpNameForAUV(AUV auv, int x, int y){
+        // find old text
+        //this.auv = auv;
+        
+        Screen hoverMenu = nifty.getScreen("hoverMenu");
+        Element niftyElementLayer = hoverMenu.findElementByName("popup_background");
+        Element findElementByName = niftyElementLayer.findElementByName("popup_" + auv.getName());
+        if(findElementByName == null){//not existing, so we have to create it here
+            //create base panel
+            PanelCreator createPanel = new PanelCreator();
+            createPanel.setHeight("10%");
+            createPanel.setWidth("15%");
+            createPanel.setAlign("center");
+            createPanel.setChildLayout("horizontal");
+            createPanel.setBackgroundImage("energy_popup2.png");
+            createPanel.setImageMode("resize:24,2,15,9,24,2,15,14,24,2,15,9");
+            createPanel.setName("popup_" + auv.getName());
+            createPanel.setId("popup_" + auv.getName());
+            Element newPanel = createPanel.create(nifty, hoverMenu, niftyElementLayer);
+
+            //create txt panel
+            PanelCreator createPanel2 = new PanelCreator();
+            createPanel2.setAlign("left");
+            createPanel2.setVAlign("center");
+            createPanel2.setBackgroundColor("#0000");
+            createPanel2.setChildLayout("vertical");
+            createPanel2.setName("popup_left_" + auv.getName());
+            createPanel2.setId("popup_left_" + auv.getName());
+            Element newPanel2 = createPanel2.create(nifty, hoverMenu, newPanel);
+
+            //create txt
+            TextCreator createText = new TextCreator(auv.getName());
+            createText.setId("popup_left_text_" + auv.getName());
+            createText.setText(auv.getName());
+            createText.setWidth("100%");
+            createText.setHeight("100%");
+            createText.setWrap(true);
+            createText.setFont("Interface/Fonts/Default.fnt");
+            Element txt = createText.create(nifty, hoverMenu, newPanel2);
+
+            newPanel.show();
+            newPanel.layoutElements();
+            niftyElementLayer.layoutElements();
+        }
+        
+        findElementByName = niftyElementLayer.findElementByName("popup_" + auv.getName());
+        if(findElementByName != null){//its existing, so we have to set the position
+            findElementByName.setConstraintX(new SizeValue(String.valueOf(x+5)));
+            findElementByName.setConstraintY(new SizeValue(String.valueOf(y-35)));
+            findElementByName.getParent().layoutElements();
+        }
+            
+        
+
+        
+       /*Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
+        // swap old with new text
+        if( niftyElement != null){
+            niftyElement.setConstraintX(new SizeValue(String.valueOf(x+5)));
+            niftyElement.setConstraintY(new SizeValue(String.valueOf(y+10)));
+            niftyElement.getParent().layoutElements();
+            
+            Element text = niftyElement.findElementByName("popup_left_text");
+            if(text!=null){
+                text.getRenderer(TextRenderer.class).setText("test");
+                
+                //text.getRenderer(TextRenderer.class).setColor(new Color(1f-getAkkuValueForAUV(),getAkkuValueForAUV(), 0f, 1f));
+                text.getParent().layoutElements();
+            }
+            setPopupMenu(true);
+        }*/
+        
     }
     
     /**
@@ -185,7 +267,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
     }
     
     public void setPopupMenu(boolean visible){
-        Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
+        /*Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
         if( niftyElement != null){
             if(visible){
                 niftyElement.show();
@@ -195,6 +277,37 @@ public class NiftyState extends AbstractAppState implements ScreenController{
                 }
             }else{
                 niftyElement.hide();
+            }
+        }*/
+        Element niftyElement3 = nifty.getScreen("hoverMenu").findElementByName("popup_background");
+        if(niftyElement3 != null){
+            if(visible){
+                niftyElement3.show();
+            }else{
+                niftyElement3.hide();
+            }
+        }
+    }
+    
+    public void setPopupMenu(AUV auv, boolean visible){
+        /*Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
+        if( niftyElement != null){
+            if(visible){
+                niftyElement.show();
+                Element niftyElement2 = nifty.getScreen("hoverMenu").findElementByName("popup_background");
+                if( niftyElement2 != null){
+                    niftyElement2.startEffect(EffectEventId.onCustom, null, "fadeIn");
+                }
+            }else{
+                niftyElement.hide();
+            }
+        }*/
+        Element niftyElement3 = nifty.getScreen("hoverMenu").findElementByName("popup_" + auv.getName());
+        if(niftyElement3 != null){
+            if(visible){
+                niftyElement3.show();
+            }else{
+                niftyElement3.hide();
             }
         }
     }
@@ -237,7 +350,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         if(niftyElement3 != null){
             niftyElement3.show();
         }
-        setPopupMenu(false);
+        setPopupMenu(true);
     }
     
     /**
