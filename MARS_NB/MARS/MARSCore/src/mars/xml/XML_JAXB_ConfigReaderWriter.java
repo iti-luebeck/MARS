@@ -505,14 +505,6 @@ public class XML_JAXB_ConfigReaderWriter {
         }else if(!Files.isWritable(auvPath)){
             return "Can't create Directory: " + auvFile.getAbsolutePath() + " . No Write Access";
         }
-        
-        //cleanup auv directory
-        try {
-            EnumSet<FileVisitOption> opts = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
-            Files.walkFileTree(auvPath, opts, 1, new XMLFileWalker());//ignore anything deeper
-        } catch (IOException ex) {
-            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
  
         //simob dir
         File simobFile = new File(file, "simobjects");
