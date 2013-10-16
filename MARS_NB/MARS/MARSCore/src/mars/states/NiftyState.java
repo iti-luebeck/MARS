@@ -131,7 +131,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         if(findElementByName == null){//not existing, so we have to create it here
             //create base panel
             PanelCreator createPanel = new PanelCreator();
-            createPanel.setHeight("10%");
+            createPanel.setHeight("5%");
             createPanel.setWidth("15%");
             createPanel.setAlign("center");
             createPanel.setChildLayout("horizontal");
@@ -169,7 +169,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         findElementByName = niftyElementLayer.findElementByName("popup_" + auv.getName());
         if(findElementByName != null){//its existing, so we have to set the position
             findElementByName.setConstraintX(new SizeValue(String.valueOf(x+5)));
-            findElementByName.setConstraintY(new SizeValue(String.valueOf(y-35)));
+            findElementByName.setConstraintY(new SizeValue(String.valueOf(y-15)));
             findElementByName.getParent().layoutElements();
         }
             

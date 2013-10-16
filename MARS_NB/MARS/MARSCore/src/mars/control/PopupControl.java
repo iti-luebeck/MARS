@@ -12,6 +12,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.states.NiftyState;
 
@@ -24,6 +25,7 @@ public class PopupControl extends AbstractControl{
     private Camera cam;
     private AppStateManager stateManager;
     private AUV auv;
+    private MARS_Settings mars_settings;
     
     public PopupControl() {
     }
@@ -35,7 +37,7 @@ public class PopupControl extends AbstractControl{
 
     @Override
     protected void controlUpdate(float f) {
-        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > 20f ){
+        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getPopUpAUVNameDistance() && auv.getMARS_Settings().isPopUpAUVName()){
             if(stateManager.getState(NiftyState.class) != null){
                 NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
                 System.out.println("cam " + auv.getName() + ": " + cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation()));
@@ -67,5 +69,9 @@ public class PopupControl extends AbstractControl{
 
     public void setAuv(AUV auv) {
         this.auv = auv;
+    }
+
+    public void setMars_settings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
     }
 }

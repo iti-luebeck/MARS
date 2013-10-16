@@ -1716,6 +1716,38 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    public boolean isPopUpAUVName() {
+        return (Boolean)Gui.get("PopUpAUVName");
+    }
+
+    /**
+     *
+     * @param GlowSelection 
+     */
+    public void setPopUpAUVName(boolean PopUpAUVName) {
+        Gui.put("PopUpAUVName", PopUpAUVName);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getPopUpAUVNameDistance() {
+        return (Float)Gui.get("PopUpAUVNameDistance");
+    }
+
+    /**
+     *
+     * @param speed 
+     */
+    public void setPopUpAUVNameDistance(float PopUpAUVNameDistance) {
+        Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
+    }
+
+    /**
+     *
+     * @return
+     */
     public boolean isHeadless() {
         return (Boolean)Misc.get("headless");
     }
