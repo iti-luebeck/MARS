@@ -537,7 +537,7 @@ public class AUV_Manager implements UpdateState{
     private void preloadAUV(AUV auv){
         //if(auv.getAuv_param().isEnabled()){
             auv.setState(simstate);
-            auv.setSimauv_settings(simauv_settings);
+            auv.setMARS_Settings(simauv_settings);
             auv.setPhysical_environment(physical_environment);
             auv.setCommunicationManager(com_manager);
             auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
@@ -577,7 +577,9 @@ public class AUV_Manager implements UpdateState{
 
     private void removeAUVFromScene(AUV auv){
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
-        bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
+        if(auv.getGhostControl() != null){//only try too remove when ghost control exists
+            bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
+        }
         RayDetectable.detachChild(auv.getSelectionNode());
         auv.cleanupOffscreenView();
         auv.getSelectionNode().removeFromParent();
