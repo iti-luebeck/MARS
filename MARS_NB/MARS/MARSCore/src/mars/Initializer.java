@@ -150,6 +150,13 @@ public class Initializer {
     private int flow_image_width = 0;
     private int flow_image_heigth = 0;
     
+    //pollution
+    ImageBasedHeightMap pollutionmap;
+    private Node pollutionNode;
+    private Vector3f pollutionVector = Vector3f.ZERO;
+    private int pollution_image_width = 0;
+    private int pollution_image_heigth = 0;
+    
     //grass
     private Forester forester;
     private GrassLoader grassLoader;
@@ -277,6 +284,7 @@ public class Initializer {
         //setupFishEye();
         //setupLensFlare();
         setupFlow();
+        setupPollution();
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -1469,6 +1477,42 @@ public class Initializer {
 
     }
     
+    private void setupPollution(){
+
+        
+       /** 2. Create the height map */
+        Texture pollutionMapImage = assetManager.loadTexture(
+                mars_settings.getPollutionFilepath());
+        //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
+        pollutionmap = new ImageBasedHeightMap(pollutionMapImage.getImage());
+        int h = pollutionMapImage.getImage().getHeight();
+        int w = pollutionMapImage.getImage().getWidth();
+        pollution_image_heigth = h;
+        pollution_image_width = w;
+        pollutionmap.load();
+        
+        float[] heightMap = pollutionmap.getHeightMap();
+        pollutionNode = new Node("pollution");
+
+        //flowNode.setLocalTranslation(mars_settings.getTerrain_position());
+        pollutionNode.updateGeometricState();
+
+        Geometry grid = new Geometry("pollution grid", new Grid(h, w, mars_settings.getTerrain_scale().x));
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", mars_settings.getGridColor());
+        grid.setMaterial(mat);
+        //grid.center().move(mars_settings.getGridPosition());
+        //Quaternion quat = new Quaternion();
+        //quat.fromAngles(mars_settings.getGridRotation().x, mars_settings.getGridRotation().y, mars_settings.getGridRotation().z);
+        //grid.setLocalRotation(quat);
+        grid.move(0f, -1f, 0f);
+        
+        //flowNode.attachChild(grid);
+        rootNode.attachChild(pollutionNode);
+
+    }
+    
     /**
      * 
      * @param flipX
@@ -1536,6 +1580,10 @@ public class Initializer {
                 ShortBuffer sbuf = buf.asShortBuffer();
                 sbuf.position( position );
                 return (sbuf.get() & 0xFFFF)-32768;
+            case Luminance8:
+                ShortBuffer sbuf2 = buf.asShortBuffer();
+                sbuf2.position( position );
+                return (sbuf2.get() & 0xFF)-128;
             default:
                 throw new UnsupportedOperationException("Image format: "+image.getFormat());
         }
@@ -1664,6 +1712,38 @@ public class Initializer {
      */
     public Vector3f getFlowVector(){
         return flowVector;
+    }
+
+    public int getPollution_image_width() {
+        return pollution_image_width;
+    }
+
+    public int getPollution_image_heigth() {
+        return pollution_image_heigth;
+    }
+
+    public ImageBasedHeightMap getPollutionmap() {
+        return pollutionmap;
+    }
+
+    public float getPollution(Vector3f position){
+        Vector3f flow_scale = mars_settings.getPollutionScale();
+
+        Vector3f addedPollutionPos = mars_settings.getPollutionPosition().add(-((float) getPollution_image_width() * flow_scale.x) / 2f, 0f, -((float) getPollution_image_width() * flow_scale.z) / 2f);
+        Vector3f relSensorPos = position.subtract(addedPollutionPos);
+
+        if ((relSensorPos.x <= ((float) getPollution_image_width() * flow_scale.x)) && (relSensorPos.x >= 0) && (relSensorPos.z <= ((float) getPollution_image_width() * flow_scale.z)) && (relSensorPos.z >= 0)) {//in pollutionmap bounds
+
+            int auv_pos_x = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.x)) * relSensorPos.x);
+            int auv_pos_y = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.z)) * relSensorPos.z);
+
+            int pollution = (int)getPollutionmap().getTrueHeightAtPoint(auv_pos_x, auv_pos_y);
+            //System.out.println(auv_pos_x + "/" + auv_pos_y + " pollution: " + pollution);
+
+            return pollution;
+        } else {//out of pollutionmap bound. no pollution
+            return 0f;
+        } 
     }
 
     /**

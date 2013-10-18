@@ -49,6 +49,7 @@ public class MARS_Settings implements UpdateState{
     private HashMap<String,Object> SimpleSkyBox;
     private HashMap<String,Object> Terrain;
     private HashMap<String,Object> Flow;
+    private HashMap<String,Object> Pollution;
     private HashMap<String,Object> Grass;
     private HashMap<String,Object> Light;
     private HashMap<String,Object> Shadow;
@@ -137,6 +138,7 @@ public class MARS_Settings implements UpdateState{
         SimpleSkyBox = (HashMap<String,Object>)Graphics.get("SimpleSkyBox");
         Terrain = (HashMap<String,Object>)Graphics.get("Terrain");
         Flow = (HashMap<String,Object>)Graphics.get("Flow");
+        Pollution = (HashMap<String,Object>)Graphics.get("Pollution");
         Grass = (HashMap<String,Object>)Graphics.get("Grass");
         Light = (HashMap<String,Object>)Graphics.get("Light");
         Shadow = (HashMap<String,Object>)Graphics.get("Shadow");
@@ -1598,6 +1600,102 @@ public class MARS_Settings implements UpdateState{
      */
     public void setFlowRotation(Vector3f rotation) {
         Flow.put("rotation", rotation);
+    }
+   
+    /**
+     *
+     * @return
+     */
+    public String getPollutionFilepath() {
+        return (String)Pollution.get("filepath_pollutionmap");
+    }
+
+    /**
+     *
+     * @param filepath_flowmap_x 
+     */
+    public void setPollutionFilepath(String filepath_pollutionmap) {
+        Pollution.put("filepath_pollutionmap", filepath_pollutionmap);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getPollutionScaleFactor() {
+        return (Float)Pollution.get("pollutionScale");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setPollutionScaleFactor(float pollutionScale) {
+        Pollution.put("pollutionScale", pollutionScale);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean isSetupPollution() {
+        return (Boolean)Pollution.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled 
+     */
+    public void setSetupPollution(boolean enabled) {
+        Pollution.put("enabled", enabled);
+    }
+    
+           /**
+     *
+     * @return
+     */
+    public Vector3f getPollutionPosition() {
+        return (Vector3f)Pollution.get("position");
+    }
+
+    /**
+     *
+     * @param position
+     */
+    public void setPollutionPosition(Vector3f position) {
+        Pollution.put("position", position);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getPollutionScale() {
+        return (Vector3f)Pollution.get("scale");
+    }
+
+    /**
+     *
+     * @param scale 
+     */
+    public void setPollutionScale(Vector3f scale) {
+        Pollution.put("scale", scale);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getPollutionRotation() {
+        return (Vector3f)Pollution.get("rotation");
+    }
+
+    /**
+     *
+     * @param rotation 
+     */
+    public void setPollutionRotation(Vector3f rotation) {
+        Pollution.put("rotation", rotation);
     }
 
     /**

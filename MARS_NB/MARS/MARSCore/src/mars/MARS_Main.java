@@ -241,6 +241,8 @@ public class MARS_Main extends SimpleApplication{
         assetManager.registerLocator(file7.getAbsolutePath(), FileLocator.class);
         File file10 = InstalledFileLocator.getDefault().locate("Assets/Textures/Flow", "mars.core", false);
         assetManager.registerLocator(file10.getAbsolutePath(), FileLocator.class);
+        File filePol = InstalledFileLocator.getDefault().locate("Assets/Textures/Pollution", "mars.core", false);
+        assetManager.registerLocator(filePol.getAbsolutePath(), FileLocator.class);
         File file20 = InstalledFileLocator.getDefault().locate("Assets/Textures/Water", "mars.core", false);
         assetManager.registerLocator(file20.getAbsolutePath(), FileLocator.class);
         
