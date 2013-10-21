@@ -75,6 +75,12 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="AmbientSelection">
                     <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="PopUpAUVName">
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="PopUpAUVNameDistance">
+                    <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">30.0</value>
+                </entry>
             </value>
         </entry>
         <entry xsi:type="myHashMapEntryTypeHashMap" key="Graphics" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -106,6 +112,40 @@
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="filepath_flowmap_y">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">flow_y.png</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
+                            <value>
+                                <x>0.0</x>
+                                <y>0.0</y>
+                                <z>0.0</z>
+                            </value>
+                        </entry>
+                    </value>
+                </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Pollution">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="pollutionScale">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">20.0</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_pollutionmap">
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">pollution.png</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
+                            <value>
+                                <x>-7.0</x>
+                                <y>-2.0</y>
+                                <z>0.0</z>
+                            </value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
+                            <value>
+                                <x>0.15625</x>
+                                <y>0.01176</y>
+                                <z>0.15625</z>
+                            </value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
                             <value>

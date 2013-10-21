@@ -104,6 +104,30 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.8</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancy_dimensions">
+                        <value>
+                            <x>1.0</x>
+                            <y>1.0</y>
+                            <z>1.0</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancy_position">
+                        <value>
+                            <x>0.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancyScale">
+                        <value>
+                            <x>1.0</x>
+                            <y>1.0</y>
+                            <z>1.0</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_type">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">6</value>
+                    </entry>
                 </value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeVector3F" key="linear_factor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -155,6 +179,9 @@
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="collision">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="buoycancyVolume">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                 </value>

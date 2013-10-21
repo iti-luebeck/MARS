@@ -217,7 +217,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * 
      * @return
      */
-    public MARS_Settings getSimauv_settings();
+    public MARS_Settings getMARS_Settings();
     /*
      * 
      */
@@ -225,7 +225,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      *
      * @param simauv_settings
      */
-    public void setSimauv_settings(MARS_Settings simauv_settings);
+    public void setMARS_Settings(MARS_Settings simauv_settings);
     /*
      *
      */
@@ -346,6 +346,11 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * @param visible
      */
     public void setBuoycancyVisible(boolean visible);
+    /**
+     * 
+     * @param visible
+     */
+    public void setBuoyancyVolumeVisible(boolean visible);
     /**
      * 
      * @param visible

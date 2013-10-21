@@ -244,6 +244,7 @@ public final class MARSTopComponent extends TopComponent {
         jme3_debug_auv_drag = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_wireframe = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_bounding = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_bounding_volume = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv = new javax.swing.JMenu();
         jme3_waypoints_auv_enable = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
@@ -883,6 +884,15 @@ public final class MARSTopComponent extends TopComponent {
             }
         });
         jme3_debug_auv.add(jme3_debug_auv_bounding);
+
+        jme3_debug_auv_bounding_volume.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_bounding_volume, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_bounding_volume.text")); // NOI18N
+        jme3_debug_auv_bounding_volume.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_bounding_volumeActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_bounding_volume);
 
         jme3_auv.add(jme3_debug_auv);
 
@@ -1793,6 +1803,20 @@ public final class MARSTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_auv_name_textKeyPressed
 
+    private void jme3_debug_auv_bounding_volumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_bounding_volumeActionPerformed
+        Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    final boolean selected = jme3_debug_auv_bounding_volume.isSelected();
+                    simState.debugSelectedAUV(8,selected);
+                }
+                return null;
+            }
+        });
+        toggleJMenuCheckbox(jme3_debug_auv_bounding_volume);
+    }//GEN-LAST:event_jme3_debug_auv_bounding_volumeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel2;
     private javax.swing.JButton Cancel3;
@@ -1859,6 +1883,7 @@ public final class MARSTopComponent extends TopComponent {
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JMenu jme3_debug_auv;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_bounding;
+    private javax.swing.JCheckBoxMenuItem jme3_debug_auv_bounding_volume;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_buoy;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_centers;
     private javax.swing.JCheckBoxMenuItem jme3_debug_auv_collision;
@@ -2202,6 +2227,11 @@ public final class MARSTopComponent extends TopComponent {
                         jme3_debug_auv_bounding.setSelected(true);
                     }else{
                         jme3_debug_auv_bounding.setSelected(false);
+                    }
+                    if(auv_param.isDebugBuoycancyVolume()){
+                        jme3_debug_auv_bounding_volume.setSelected(true);
+                    }else{
+                        jme3_debug_auv_bounding_volume.setSelected(false);
                     }
                     if(auv_param.isWaypoints_enabled()){
                         jme3_waypoints_auv_enable.setSelected(true);

@@ -356,11 +356,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                 }
             }
             
-            Lookup bag = Lookup.getDefault();
+            /*Lookup bag = Lookup.getDefault();
             
             Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
             Lookup.Result<AUV_Manager> result3 = bag.lookup( pattern3 );
-            Collection<? extends AUV_Manager> allInstances = result3.allInstances();
+            Collection<? extends AUV_Manager> allInstances = result3.allInstances();*/
                 
             progr.progress( "Init Map" );
             initMap();//for mars_settings
@@ -1788,6 +1788,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                 case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
                 case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
                 case 7: selected_auv.getAuv_param().setDebugVisualizers(selected);selected_auv.setVisualizerVisible(selected);break;
+                case 8: selected_auv.getAuv_param().setDebugBuoycancyVolume(selected);selected_auv.setBuoyancyVolumeVisible(selected);break;
                 default:;
             }                
         }

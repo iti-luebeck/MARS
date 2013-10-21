@@ -75,6 +75,10 @@ public class AUV_Parameters{
         setBuoyancy_resolution(0.03125f);
         setBuoyancy_scale(0.9f);
         setBuoyancy_updaterate(1);
+        setBuoyancyDimensions(Vector3f.UNIT_XYZ);
+        setBuoyancyPosition(Vector3f.ZERO);
+        setBuoyancyScale(Vector3f.UNIT_XYZ);
+        setBuoyancyType(0);
         setCentroid_center_distance(Vector3f.ZERO);
         setCollisionPosition(Vector3f.ZERO);
         setDNDIcon("");
@@ -88,6 +92,7 @@ public class AUV_Parameters{
         setDebugPhysicalExchanger(false);
         setDebugVisualizers(false);
         setDebugWireframe(false);
+        setDebugBuoycancyVolume(false);
         setDimensions(Vector3f.UNIT_XYZ);
         setDrag_coefficient_angular(0.3f);
         setDrag_coefficient_linear(1.45f);
@@ -619,6 +624,70 @@ public class AUV_Parameters{
     public void setBuoyancy_resolution(float buoyancy_resolution) {
         buoyancy.put("buoyancy_resolution", buoyancy_resolution);
     }
+    
+        /**
+     *
+     * @return
+     */
+    public Vector3f getBuoyancyDimensions() {
+        return (Vector3f)buoyancy.get("buoyancy_dimensions");
+    }
+
+    /**
+     *
+     * @param dimensions
+     */
+    public void setBuoyancyDimensions(Vector3f buoyancy_dimensions) {
+        buoyancy.put("buoyancy_dimensions", buoyancy_dimensions);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getBuoyancyPosition() {
+        return (Vector3f)buoyancy.get("buoyancy_position");
+    }
+
+    /**
+     *
+     * @param collision_position 
+     */
+    public void setBuoyancyPosition(Vector3f buoyancy_position) {
+        buoyancy.put("buoyancy_position", buoyancy_position);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getBuoyancyScale() {
+        return (Vector3f)buoyancy.get("buoyancyScale");
+    }
+
+    /**
+     *
+     * @param collision_position 
+     */
+    public void setBuoyancyScale(Vector3f buoyancyScale) {
+        buoyancy.put("buoyancyScale", buoyancyScale);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getBuoyancyType() {
+        return (Integer)buoyancy.get("buoyancy_type");
+    }
+
+    /**
+     *
+     * @param type
+     */
+    public void setBuoyancyType(int buoyancy_type) {
+        buoyancy.put("buoyancy_type", buoyancy_type);
+    }
 
     /**
      *
@@ -1039,6 +1108,22 @@ public class AUV_Parameters{
      */
     public void setDebugBuoycancy(boolean buoycancy) {
         debug.put("buoycancy", buoycancy);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isDebugBuoycancyVolume() {
+         return (Boolean)debug.get("buoycancyVolume");
+    }
+
+    /**
+     *
+     * @param buoycancy
+     */
+    public void setDebugBuoycancyVolume(boolean buoycancyVolume) {
+        debug.put("buoycancyVolume", buoycancyVolume);
     }
 
     /**

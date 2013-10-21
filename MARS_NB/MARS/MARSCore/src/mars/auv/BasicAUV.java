@@ -40,8 +40,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.LodControl;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Line;
 import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
@@ -66,6 +68,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import jme3tools.optimize.LodGenerator;
+import mars.BuoyancyType;
 import mars.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
@@ -90,6 +93,7 @@ import mars.auv.example.SMARTE;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
 import mars.LimitedRigidBodyControl;
+import mars.auv.example.Buoy;
 import mars.control.MyLodControl;
 import mars.control.MyR;
 import mars.control.MyRigidBodyControl;
@@ -101,6 +105,7 @@ import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
+import mars.sensors.PollutionMeter;
 import mars.sensors.RayBasedSensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
@@ -117,7 +122,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class})
+@XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class})
 public class BasicAUV implements AUV, SceneProcessor {
 
     private Geometry MassCenterGeom;
@@ -144,12 +149,12 @@ public class BasicAUV implements AUV, SceneProcessor {
     private ColorRGBA ghostColor = new ColorRGBA();
     private CollisionShape collisionShape;
     private Geometry boundingBox;
-    private Geometry boundingBoxGeom;
-    float bbVolume = 0f;
+    private Geometry BuoyancyGeom;
     private Camera onCamera;
     private int buoyancy_updaterate = 5;
     private int drag_updaterate = 5;
     private int flow_updaterate = 1;
+    
     //offview
     private FrameBuffer drag_offBuffer;
     private ViewPort drag_offView;
@@ -161,22 +166,26 @@ public class BasicAUV implements AUV, SceneProcessor {
     private final ByteBuffer cpuBuf = BufferUtils.createByteBuffer(offCamera_width * offCamera_height * 4);
     private final byte[] cpuArray = new byte[offCamera_width * offCamera_height * 4];
     ViewPort debug_drag_view;
+    
     //area
     private float frustumSize = 0.6f;//0.6f
     private float pixel_heigth = 0.0f;
     private float pixel_width = 0.0f;
     private float pixel_area = 0.0f;
+    
     //physics
     private PhysicalEnvironment physical_environment;
-    private float volume = 0.0f;//m³
+    private float completeVolume = 0.0f;//m³
     private float actual_vol = 0.0f;//m³
     private float actual_vol_air = 0.0f;//m³
     private float drag_area = 0.0f;//m² pojected
     private float drag_area_temp = 0.0f;//m² pojected
+    
     //forces
     private float buoyancy_force = 0.0f;
     private Vector3f drag_force_vec = new Vector3f(0f, 0f, 0f);
     private Node rootNode;
+    
     //PhysicalExchanger HashMaps to store and load sensors and actuators
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Sensors")
@@ -351,7 +360,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @return
      */
     @Override
-    public MARS_Settings getSimauv_settings() {
+    public MARS_Settings getMARS_Settings() {
         return mars_settings;
     }
 
@@ -359,7 +368,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      */
     @Override
-    public void setSimauv_settings(MARS_Settings simauv_settings) {
+    public void setMARS_Settings(MARS_Settings simauv_settings) {
         this.mars_settings = simauv_settings;
     }
 
@@ -589,15 +598,21 @@ public class BasicAUV implements AUV, SceneProcessor {
             setupCam2();
         }
 
-        //calculate the volume one time exact as possible, ignore water height
-        long old_time = System.currentTimeMillis();
+        //calculate the completeVolume one time exact as possible, ignore water height
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
-        float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
-        volume = vol[0];
-        long new_time = System.currentTimeMillis();
-        System.out.println("time: " + (new_time - old_time));
-        System.out.println("VOLUME: " + volume + "VOLUME AIR: " + vol[1]);
-        actual_vol = volume;
+        //used primarly for auftriebspunkt
+        if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
+            float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
+            completeVolume = vol[0];
+        }else{
+            float[] calculateVolumeExcact = calculateVolumeExcact(auv_spatial, true);
+            completeVolume = calculateVolumeExcact[0];
+        }
+        
+        
+        //calculate first buoyancy force
+        //System.out.println("VOLUME: " + completeVolume + "VOLUME AIR: " + calculateVolumeExcact[1]);
+        actual_vol = completeVolume;
         buoyancy_force = physical_environment.getFluid_density() * (physical_environment.getGravitational_acceleration()) * actual_vol;
 
         initPhysicalExchangers();
@@ -644,6 +659,9 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
                 if (element instanceof FlowMeter) {
                     ((FlowMeter) element).setIniter(initer);//is needed for filters
+                }
+                if (element instanceof PollutionMeter) {
+                    ((PollutionMeter) element).setIniter(initer);//is needed for filters
                 }
                 element.init(auv_node);
                 if (element instanceof Keys) {
@@ -784,13 +802,14 @@ public class BasicAUV implements AUV, SceneProcessor {
         //physicalvalues.updateDragArea(drag_area);
         //physicalvalues.updateVector(physics_control.getLinearVelocity());
         //notifySafeAdvertisement(new ChartEvent(this, drag_area, 0));
+        //notifySafeAdvertisement(new ChartEvent(this, drag_force_vec.length(), 0));
     }
 
     private void updateAngularDragForces() {
         Vector3f cur_ang = physics_control.getAngularVelocity();
         float angular_velocity = physics_control.getAngularVelocity().length();
         //System.out.println("angular_drag_torque_vec: " + angular_velocity + " " + physics_control.getAngularVelocity());
-        notifySafeAdvertisement(new ChartEvent(this, angular_velocity, 0));
+        //notifySafeAdvertisement(new ChartEvent(this, angular_velocity, 0));
         
         /*if(Helper.infinityCheck(physics_control.getAngularVelocity())){
             System.out.println("UNF!!!!!!!!!!");
@@ -824,80 +843,26 @@ public class BasicAUV implements AUV, SceneProcessor {
         Vector3f brick_vec = OldCenterGeom.getWorldTranslation();
         float distance_to_surface = 1.0f;
         float epsilon = 0.5f;
+        buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
         if (buoyancy_updaterate == 1) {//take all buoyancy_updaterate times new values
-            buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
-
-            //System.out.println("wah " + (this.water_height-distance_to_surface));
-            //System.out.println("bv " + brick_vec.y);
-
-            /*
-             //we wanted to save some ressources here but it lead to some problems so its deactivated
-             if(brick_vec.y >= physical_environment.getWater_height()-distance_to_surface){//calculate repressed volume only if we are near the water surface
-             //actual_vol = (float)calculateVolume(pn,false,0.0625f,80,60,false);
-             actual_vol = (float)calculateVolume(auv_spatial,false,0.03125f,30,30,false);
-             }else{//we are deep enough underwater that we use our super precision calculated volume and volumecenter
-             actual_vol = volume;
-             final Vector3f in = VolumeCenterPreciseGeom.getLocalTranslation();
-             Future fut = mars.enqueue(new Callable() {
-             public Void call() throws Exception {
-             VolumeCenterGeom.setLocalTranslation(in);
-             return null;
-             }
-             });
-             }*/
-
-            /*
-             if( (brick_vec.y <= (physical_environment.getWater_height()-distance_to_surface)+epsilon) && (brick_vec.y >= (physical_environment.getWater_height()-distance_to_surface)-epsilon)){// if we are in the "zone" than "fuzzy" a little
-             System.out.println("ZONE");
-             float difference = Math.abs(brick_vec.y-(physical_environment.getWater_height()-distance_to_surface+epsilon));
-             float length = 2*epsilon;
-             float x = (difference/length)*100f;
-             actual_vol = (float)calculateVolume(auv_spatial,0.03125f,30,30,false);
-             actual_vol = (actual_vol*(100f-x)+volume*x)/100f;
-
-                
-             //                Vector3f in = VolumeCenterPreciseGeom.getLocalTranslation();
-             //                Vector3f distance_vec = VolumeCenterGeom.getLocalTranslation().subtract(in).normalize();
-             //                float distance = in.distance(VolumeCenterGeom.getLocalTranslation());
-             //                float y = (difference/length)*distance;
-             //                distance_vec = distance_vec.mult(y);
-             //                final Vector3f gabe = in.add(distance_vec);
-             //
-             //                Future fut = mars.enqueue(new Callable() {
-             //                    public Void call() throws Exception {
-             //                        VolumeCenterGeom.setLocalTranslation(gabe);
-             //                        VolumeCenterGeom.updateGeometricState();
-             //                        return null;
-             //                    }
-             //                });
-             }else if(brick_vec.y > (physical_environment.getWater_height()-distance_to_surface)+epsilon){// over the "zone"
-             actual_vol = (float)calculateVolume(auv_spatial,0.03125f,30,30,false);
-             }else{//under the "zone"
-             actual_vol = volume;
-             final Vector3f in = VolumeCenterPreciseGeom.getLocalTranslation();
-             Future fut = mars.enqueue(new Callable() {
-             public Void call() throws Exception {
-             VolumeCenterGeom.setLocalTranslation(in);
-             VolumeCenterGeom.updateGeometricState();
-             return null;
-             }
-             });
-             }*/
-
+  
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
-            //float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
-            float[] vol = (float[]) calculateVolumeExcact(auv_spatial, false);
-            actual_vol = vol[0] * auv_param.getBuoyancy_scale();
-            actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
+            if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
+                float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
+                actual_vol = vol[0] * auv_param.getBuoyancy_scale();
+                actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
+            }else{
+                float[] vol = (float[]) calculateVolumeExcact(auv_spatial, false);
+                actual_vol = vol[0] * auv_param.getBuoyancy_scale();
+                actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
+            }
+            
 
-            //System.out.println("act vol: " + actual_vol);
-            //System.out.println("vol: " + volume);
-
-            //buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * volume;
+            //buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume;
             buoyancy_force = (physical_environment.getFluid_density() * actual_vol + physical_environment.getAir_density() * actual_vol_air) * physical_environment.getGravitational_acceleration();
 
-            //buoyancy_force_air = physical_environment.getAir_density() * physical_environment.getGravitational_acceleration() * Math.abs(volume - actual_vol);
-            /*if(volume >= actual_vol){
+            //buoyancy_force_air = physical_environment.getAir_density() * physical_environment.getGravitational_acceleration() * Math.abs(completeVolume - actual_vol);
+            /*if(completeVolume >= actual_vol){
              System.out.println("!!!!!!!!!!!!!");
              System.out.println(buoyancy_force_water);
              System.out.println(buoyancy_force_air);
@@ -906,38 +871,31 @@ public class BasicAUV implements AUV, SceneProcessor {
             //addValueToSeries(OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()),0);
             //addValueToSeries((float)Math.sqrt(Math.pow(this.AUVPhysicsNode.get.getContinuousForce().x, 2)+Math.pow(this.AUVPhysicsNode.getContinuousForce().y, 2)+Math.pow(this.AUVPhysicsNode.getContinuousForce().z,2)),2);
             //addValueToSeries(buoyancy_force_water+buoyancy_force_air,2);
-            //final PressureSensor press = (PressureSensor)this.getSensor("press");
-            //addValueToSeries(press.getDepth(),0);
         } else if (auv_param.getBuoyancy_updaterate() == 0) {//dont compute everytime the buoyancy, use the computed once
-            buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
             if (brick_vec.y <= (physical_environment.getWater_height() - auv_param.getBuoyancy_distance())) {//under water
-                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * volume;
+                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume;
             } else {//at water surface
-                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * volume * auv_param.getBuoyancy_scale();
+                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume * auv_param.getBuoyancy_scale();
             }
-            //System.out.println("Adding B: " + buoyancy_force);
         } else {
-            //buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * actual_vol;
             buoyancy_force = (physical_environment.getFluid_density() * actual_vol + physical_environment.getAir_density() * actual_vol_air) * physical_environment.getGravitational_acceleration();
-            buoyancy_updaterate--;
+            if(buoyancy_updaterate > 0){
+                buoyancy_updaterate--;
+            }
         }
 
         //buoyancy_force = buoyancy_force_water + buoyancy_force_air;
 
-        //System.out.println("buyo: " + buoyancy_force);
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f, buoyancy_force / ((float)mars_settings.getPhysicsFramerate()), 0.0f);
-        //physicalvalues.updateVolume(volume);
-        //physicalvalues.updateBuoyancyForce(buoyancy_force);
         //notifySafeAdvertisement(new ChartEvent(this, OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()), 0));
-        //notifySafeAdvertisement(new ChartEvent(this, actual_vol, 0));
-        //addValueToSeries(buoyancy_force,1);
-        //addValueToSeries(actual_vol,1);
-        //addValueToSeries(actual_vol_air,2);
-        //System.out.println("vol: " + actual_vol + " " + actual_vol_air + " " + buoyancy_force_vec);
+        notifySafeAdvertisement(new ChartEvent(this, actual_vol, 0));
+        //notifySafeAdvertisement(new ChartEvent(this,VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()).length(), 0));
+        
         //physics_control.applyCentralForce(buoyancy_force_vec);
         //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
         if (!Helper.infinityCheck(buoyancy_force_vec)) {
+            //System.out.println("VolumeCenterGeom: " + VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
             physics_control.applyImpulse(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
             //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
         } else {
@@ -1083,6 +1041,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
             //add the water_current
             updateWaterCurrentForce();
+            
+            //set all velocity to zero for debug purposes
+            //physics_control.setLinearVelocity(Vector3f.ZERO);
+            //physics_control.setAngularVelocity(Vector3f.ZERO);
+            //physics_control.setPhysicsLocation(Vector3f.ZERO);
             
             //System.out.println("FORCES: " + physics_control.getLinearVelocity() + " " + physics_control.getAngularVelocity());
 
@@ -1329,9 +1292,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
 
         //own load controler, still lacks a lot of features to be used productive
+        // offical lod control from jme3 is used now
         /*SpatialLodControl slc = new SpatialLodControl(mars.getCamera(),auv_spatial);
          auv_spatial.addControl(slc);*/
-        //
+        
+        //a control for showing a popup when too far away from the auv
         PopupControl ppcontrol = new PopupControl();
         ppcontrol.setCam(mars.getCamera());
         ppcontrol.setSpatial(auv_spatial);
@@ -1343,7 +1308,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();
-        bbVolume = bb.getVolume();
+        //bbVolume = bb.getVolume();
         //BoundingBox bb = new BoundingBox();
         //bb.computeFromPoints(auv_spatial.);
         wbx.fromBoundingBox(bb);
@@ -1360,13 +1325,54 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.attachChild(boundingBox);
 
         //add a full geom box bounding box since the WireBox produces NPE
-        Box box = new Box(bb.getXExtent(), bb.getYExtent(), bb.getZExtent());
-        boundingBoxGeom = new Geometry("BBMesh", box);
-        boundingBoxGeom.setLocalTranslation(bb.getCenter());
-        boundingBoxGeom.updateGeometricState();
-        Helper.setNodePickUserData(boundingBoxGeom, PickHint.NoPick);
-        setSpatialVisible(boundingBoxGeom, false);
-        auv_node.attachChild(boundingBoxGeom);
+        //Box box = new Box(bb.getXExtent(), bb.getYExtent(), bb.getZExtent());
+        //BuoyancyGeom = new Geometry("BuoyancyGeom", box);
+        Material BuoyancyGeomMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        BuoyancyGeomMat.setColor("Color", ColorRGBA.Cyan);
+        /*BuoyancyGeom.setMaterial(BuoyancyGeomMat);
+        BuoyancyGeom.setLocalTranslation(bb.getCenter());
+        BuoyancyGeom.updateModelBound();
+        BuoyancyGeom.updateGeometricState();
+        Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
+        setSpatialVisible(BuoyancyGeom, false);
+        auv_node.attachChild(BuoyancyGeom);*/
+        
+        //add a buoyancy geom, needed for exact completeVolume calculation later
+        if (auv_param.getBuoyancyType() == BuoyancyType.BOXCOLLISIONSHAPE) {
+            Box buoyancyBox = new Box(auv_param.getBuoyancyDimensions().x,auv_param.getBuoyancyDimensions().y,auv_param.getBuoyancyDimensions().z);
+            BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
+            BuoyancyGeom.setMaterial(BuoyancyGeomMat);
+            BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancyPosition());
+            BuoyancyGeom.updateModelBound();
+            BuoyancyGeom.updateGeometricState();
+            Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
+            auv_node.attachChild(BuoyancyGeom);
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.SPHERECOLLISIONSHAPE) {
+            //collisionShape = new SphereCollisionShape(auv_param.getDimensions().x);
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.CONECOLLISIONSHAPE) {
+           //collisionShape = new ConeCollisionShape(auv_param.getDimensions().x, auv_param.getDimensions().y);
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
+            //collisionShape = new CylinderCollisionShape(auv_param.getDimensions(), 0);
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.MESHACCURATE) {
+            //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.BOUNDINGBOX) {
+            Box buoyancyBox = new Box(bb.getXExtent(), bb.getYExtent(), bb.getZExtent());
+            BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
+            BuoyancyGeom.setMaterial(BuoyancyGeomMat);
+            BuoyancyGeom.setLocalTranslation(bb.getCenter());
+            BuoyancyGeom.updateModelBound();
+            BuoyancyGeom.updateGeometricState();
+            Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
+            auv_node.attachChild(BuoyancyGeom);
+        }else if (auv_param.getBuoyancyType() == BuoyancyType.NOSHAPE) {
+            //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
+        } else {
+            //collisionShape = new BoxCollisionShape(auv_param.getDimensions());
+        }
+        
+        if(BuoyancyGeom!= null){//for init
+            setBuoyancyVolumeVisible(getAuv_param().isDebugBuoycancyVolume());
+        }
 
         setWireframeVisible(auv_param.isDebugWireframe());
         auv_node.attachChild(auv_spatial);
@@ -1682,7 +1688,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     }
 
     /*
-     * gets us the volume and volume center of one bracket
+     * gets us the completeVolume and completeVolume center of one bracket
      */
     private float[] giveLengthVolumeCenterCollisionAuto(Spatial auv, Vector3f start, boolean ignore_water_height) {
         CollisionResults results = new CollisionResults();
@@ -1715,7 +1721,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //System.out.println("=========================");
 
 
-        //water height for checking what is air and water volume
+        //water height for checking what is air and water completeVolume
         /*float waterheight = 0;
          if(mars_settings.isSetupProjectedWavesWater()){
          waterheight = initer.getWhg().getHeight(start.x, start.z, mars.getTimer().getTimeInSeconds());
@@ -1779,7 +1785,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
 
                         if (second.y > waterheight/*physical_environment.getWater_height()*/ && !ignore_water_height) {
-                            //we need to calculate the volume + center above water height
+                            //we need to calculate the completeVolume + center above water height
                             float temp_overwater = Math.abs((second.y) - (waterheight));
                             if (temp_overwater != 0.0f) {
                                 Vector3f temp3 = new Vector3f(first.x, waterheight + (temp_overwater / 2f), first.z);
@@ -1825,8 +1831,8 @@ public class BasicAUV implements AUV, SceneProcessor {
     }
 
     /*
-     * Calculates the center of the volume. It's basicly the same like with normal
-     * centroid calculation only that we assume that the volume "weights" everywhere the same.
+     * Calculates the center of the completeVolume. It's basicly the same like with normal
+     * centroid calculation only that we assume that the completeVolume "weights" everywhere the same.
      */
     private Vector3f calculateVolumeCentroid(Vector3f old_centroid, Vector3f new_centroid, float old_mass, float new_mass) {
         float all_mass = old_mass + new_mass;
@@ -1838,44 +1844,39 @@ public class BasicAUV implements AUV, SceneProcessor {
         float[] arr_ret = new float[2];
         float volume = 0f;
 
-        /*Vector3f v1 = new Vector3f(0f,0f,0f);
-         Vector3f v2 = new Vector3f(2f,0f,0f);
-         Vector3f v3 = new Vector3f(0f,2f,0f);
-         Vector3f v4 = new Vector3f(0f,2f,0f);
-         ArrayList<Vector3f> vecs = new ArrayList<Vector3f>();
-         vecs.add(v1);
-         vecs.add(v2);
-         vecs.add(v3);
-         //vecs.add(v4);
-         vecs.add(v1);
-         Vector3f nor = FastMath.computeNormal(v1, v2, v3);
-         float area3D_Polygon = Helper.area3D_Polygon(vecs, nor);*/
+        Mesh mesh = BuoyancyGeom.getMesh();
 
-
-        /*BoundingBox bb = (BoundingBox) auv.getWorldBound();
-         Vector3f extent = bb.getExtent(null);
-         float volume1 = bb.getVolume();
-         Box box = new Box(bb.getXExtent(),bb.getYExtent(),bb.getZExtent());
-         final Geometry boundingBoxGeom = new Geometry("TheMesh", box);
-         boundingBoxGeom.setLocalTranslation(bb.getCenter());
-         Mesh mesh = boundingBoxGeom.getMesh();*/
-        Mesh mesh = boundingBoxGeom.getMesh();
-
-        float waterheight = initer.getCurrentWaterHeight(auv.getWorldTranslation().x, auv.getWorldTranslation().z);
-        Vector3f worldToLocal = boundingBox.worldToLocal(new Vector3f(0f, waterheight, 0f), null);
-        Vector3f worldToLocalUnit = boundingBox.worldToLocal(Vector3f.UNIT_Y, null);
-        waterheight = worldToLocal.y;
+        float waterheightWorld = initer.getCurrentWaterHeight(auv.getWorldTranslation().x, auv.getWorldTranslation().z);
+        Vector3f worldToLocal = BuoyancyGeom.worldToLocal(new Vector3f(0f, waterheightWorld, 0f), null);
+        //System.out.println("unity: " + Vector3f.UNIT_Y);
+        Vector3f worldToLocalUnit = Vector3f.UNIT_Y;//(BuoyancyGeom.worldToLocal(Vector3f.UNIT_Y, null));
+        //System.out.println("worldToLocalUnit: " + worldToLocalUnit + " length: " + worldToLocalUnit.length());
+        float waterheight = waterheightWorld;//worldToLocal.y;
+        
+        /*Arrow arrow = new Arrow(BuoyancyGeom.localToWorld(worldToLocalUnit, null));
+        //arrow.set
+        final Geometry line3 = new Geometry("tedt", arrow);
+        Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat11.setColor("Color", ColorRGBA.Cyan);
+        line3.setMaterial(mark_mat11);
+        line3.setLocalTranslation(BuoyancyGeom.localToWorld(new Vector3f(0f, waterheight, 0f), null));
+        line3.updateGeometricState();
+        Future simStateFutureView3 = mars.enqueue(new Callable() {
+           public Void call() throws Exception {
+              rootNode.attachChild(line3);
+              return null;
+           }
+        });*/
+        
         ArrayList<Vector3f> polyline = new ArrayList<Vector3f>();
 
         for (int i = 0; i < mesh.getTriangleCount(); i++) {
             Triangle t = new Triangle();
             mesh.getTriangle(i, t);
-            //System.out.println("triang" + i + ": " + t.get1() + " " + t.get2() + " " + t.get3());
-            //float sign = Math.signum(t.get1().dot(t.getNormal()));
-            Vector3f a = t.get1();
-            Vector3f b = t.get2();
-            Vector3f c = t.get3();
-            if (a.y < waterheight && b.y < waterheight && c.y < waterheight) {//if all vertex of the triangle are underwater we are safe, count them towards normal volume
+            Vector3f a = BuoyancyGeom.localToWorld(t.get1(),null);
+            Vector3f b = BuoyancyGeom.localToWorld(t.get2(),null);
+            Vector3f c = BuoyancyGeom.localToWorld(t.get3(),null);
+            if (ignore_water_height || a.y < waterheight && b.y < waterheight && c.y < waterheight) {//if all vertex of the triangle are underwater we are safe, count them towards normal completeVolume
                 float volume_t = Helper.calculatePolyederVolume(a, b, c);
                 volume = volume + volume_t;
             } else if (a.y >= waterheight && b.y >= waterheight && c.y >= waterheight) {//if they are abouth water we can forget them because we need only the waterplane
@@ -1890,22 +1891,53 @@ public class BasicAUV implements AUV, SceneProcessor {
                     float volume_t = Helper.calculatePolyederVolume(a, intersectionWithPlaneB, intersectionWithPlaneC);
                     volume = volume + volume_t;
                     //dont forget to add the new vertex to the polylist for later triangulation
-                    //polyline.add(intersectionWithPlaneB);
-                    //polyline.add(intersectionWithPlaneC);
+                    polyline.add(intersectionWithPlaneB);
+                    polyline.add(intersectionWithPlaneC);
                 } else if ((a.y >= waterheight && b.y < waterheight && c.y >= waterheight)) {
-                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), b, a.subtract(b));
-                    Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), b, c.subtract(b));
+                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, b, a.subtract(b));
+                    Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, b, c.subtract(b));
                     /*Triangle tN = new Triangle();
                      tN.set1(a);
                      tN.set2(intersectionWithPlaneB);
                      tN.set3(intersectionWithPlaneC);*/
                     float volume_t = Helper.calculatePolyederVolume(intersectionWithPlaneA, b, intersectionWithPlaneC);
                     volume = volume + volume_t;
-                    //polyline.add(intersectionWithPlaneA);
-                    //polyline.add(intersectionWithPlaneC);
+                    polyline.add(intersectionWithPlaneA);
+                    polyline.add(intersectionWithPlaneC);
                 } else if ((a.y >= waterheight && b.y >= waterheight && c.y < waterheight)) {
-                    Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), c, b.subtract(c));
-                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), c, a.subtract(c));
+                    /*final Geometry line = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(c, null), BuoyancyGeom.localToWorld(a, null)));
+                    Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    mark_mat9.setColor("Color", ColorRGBA.Cyan);
+                    line.setMaterial(mark_mat9);
+                    Future simStateFutureView = mars.enqueue(new Callable() {
+                       public Void call() throws Exception {
+                          rootNode.attachChild(line);
+                          return null;
+                       }
+                    }); 
+                    final Geometry line2 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(c, null), BuoyancyGeom.localToWorld(b, null)));
+                    Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    mark_mat10.setColor("Color", ColorRGBA.Cyan);
+                    line2.setMaterial(mark_mat10);
+                    Future simStateFutureView2 = mars.enqueue(new Callable() {
+                       public Void call() throws Exception {
+                          rootNode.attachChild(line2);
+                          return null;
+                       }
+                    });
+                    final Geometry line3 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(worldToLocal, null), BuoyancyGeom.localToWorld(worldToLocalUnit, null)));
+                    Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    mark_mat11.setColor("Color", ColorRGBA.Cyan);
+                    line3.setMaterial(mark_mat11);
+                    Future simStateFutureView3 = mars.enqueue(new Callable() {
+                       public Void call() throws Exception {
+                          rootNode.attachChild(line3);
+                          return null;
+                       }
+                    });*/
+                    
+                    Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f,waterheight,0f), worldToLocalUnit, c, b.subtract(c));
+                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f,waterheight,0f), worldToLocalUnit, c, a.subtract(c));
                     /*Triangle tN = new Triangle();
                      tN.set1(a);
                      tN.set2(intersectionWithPlaneB);
@@ -1918,8 +1950,8 @@ public class BasicAUV implements AUV, SceneProcessor {
                     if (a.y >= waterheight) {//check which vertex is above water, the other ones must be under water due to the check above
                         //we have now to produce 2 triangles
                         //but first check the intersections
-                        Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), a, b.subtract(a));
-                        Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), a, c.subtract(a));
+                        Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, a, b.subtract(a));
+                        Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, a, c.subtract(a));
 
                         //now produce the two triangles
                         float volume_t = Helper.calculatePolyederVolume(intersectionWithPlaneB, b, c);
@@ -1933,8 +1965,8 @@ public class BasicAUV implements AUV, SceneProcessor {
                     } else if (b.y >= waterheight) {
                         //we have now to produce 2 triangles
                         //but first check the intersections
-                        Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), b, a.subtract(b));
-                        Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), b, c.subtract(b));
+                        Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, b, a.subtract(b));
+                        Vector3f intersectionWithPlaneC = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, b, c.subtract(b));
 
                         //now produce the two triangles
                         float volume_t = Helper.calculatePolyederVolume(a, intersectionWithPlaneA, intersectionWithPlaneC);
@@ -1948,8 +1980,8 @@ public class BasicAUV implements AUV, SceneProcessor {
                     } else if (c.y >= waterheight) {
                         //we have now to produce 2 triangles
                         //but first check the intersections
-                        Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), c, b.subtract(c));
-                        Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit.normalize(), c, a.subtract(c));
+                        Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, c, b.subtract(c));
+                        Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, c, a.subtract(c));
 
                         //now produce the two triangles
                         float volume_t = Helper.calculatePolyederVolume(a, intersectionWithPlaneA, intersectionWithPlaneB);
@@ -1972,45 +2004,47 @@ public class BasicAUV implements AUV, SceneProcessor {
         
          float area3D_Polygon = Helper.area3D_Polygon(polyline, nor);*/
 
-        //we calculated the volume of the cut but we forgot the cutting plane
+        //we calculated the completeVolume of the cut but we forgot the cutting plane
         //since we stored all cutting points (always a pair) we can "triangulize" the cutting plane
         //by taking a point in the middle of the konvex hull as a origin from which we can triangulize
         if (!polyline.isEmpty()) {//it could be that the auv is completely above water
             Vector3f v1 = polyline.get(0);
-            Vector3f v2 = polyline.get(5);
+            Vector3f v2 = polyline.get(5);//<-- buggy!!!
             Vector3f origin = v1.add((v2.subtract(v1)).mult(0.5f));
-            float sign = Math.signum(origin.dot(worldToLocalUnit));//its always up direction because its a clean cut in the x,z plane
+            float sign = 1.0f;//Math.signum(origin.dot(worldToLocalUnit));//its always up direction because its a clean cut in the x,z plane
+            
             for (int i = 0; i < polyline.size(); i = i + 2) {
                 Vector3f vec1 = polyline.get(i);
                 Vector3f vec2 = polyline.get(i + 1);
                 float volume_t = Helper.calculatePolyederVolume(origin, vec1, vec2, sign);
                 volume = volume + volume_t;
             }
+            //System.out.println("sign: " + sign);
         }
 
         //debug polyline
         /*for (int i = 0; i < polyline.size(); i=i+2) {
             
             
-         Vector3f vec1 = polyline.get(i);
-         Vector3f vec2 = polyline.get(i+1);
-            
-         final Geometry line = new Geometry("tedt", new Line(boundingBoxGeom.localToWorld(vec1, null), boundingBoxGeom.localToWorld(vec2, null)));
-         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         mark_mat9.setColor("Color", ColorRGBA.Red);
-         line.setMaterial(mark_mat9);
-         Future simStateFutureView = mars.enqueue(new Callable() {
-         public Void call() throws Exception {
-         rootNode.attachChild(line);
-         return null;
-         }
-         });
+            Vector3f vec1 = polyline.get(i);
+            Vector3f vec2 = polyline.get(i+1);
+
+            final Geometry line = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(vec1, null), BuoyancyGeom.localToWorld(vec2, null)));
+            Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mark_mat9.setColor("Color", ColorRGBA.Red);
+            line.setMaterial(mark_mat9);
+            Future simStateFutureView = mars.enqueue(new Callable() {
+               public Void call() throws Exception {
+                  rootNode.attachChild(line);
+                  return null;
+               }
+            });
          }*/
 
         /*Future simStateFutureView = mars.enqueue(new Callable() {
          public Void call() throws Exception {
          WireBox wbx = new WireBox();
-         wbx.fromBoundingBox((BoundingBox)boundingBoxGeom.getWorldBound());
+         wbx.fromBoundingBox((BoundingBox)BuoyancyGeom.getWorldBound());
          Geometry boundingBox2 = new Geometry("TheMesh", wbx);
          Material mat_box = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
          mat_box.setColor("Color", ColorRGBA.Blue);
@@ -2021,13 +2055,16 @@ public class BasicAUV implements AUV, SceneProcessor {
          });*/
 
         arr_ret[0] = volume;
-        System.out.println("volume: " + volume);
-        arr_ret[1] = bbVolume - volume;
+        //System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
+        if(volume > completeVolume+0.1f){
+            System.out.println("too much volume!!!!!!!");
+        }
+        arr_ret[1] = completeVolume - volume;
         return arr_ret;
     }
 
     /*
-     * Calculates the volume of the auv. Uses a ray-based approach. The rays are fired in a equidistant ciruclar pattern.
+     * Calculates the completeVolume of the auv. Uses a ray-based approach. The rays are fired in a equidistant ciruclar pattern.
      */
     private float[] calculateVolumeAutoRound(Spatial auv, float resolution, boolean ignore_water_height) {
         float[] arr_ret = new float[2];
@@ -2158,8 +2195,6 @@ public class BasicAUV implements AUV, SceneProcessor {
             System.out.println("NPE");
         }
         //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
-
-        //addValueToSeries( VolumeCenterPreciseGeom.getWorldTranslation().subtract(volume_center).y, 1);
 
         final Vector3f in = volume_center_local.clone();
         Future fut = mars.enqueue(new Callable() {
@@ -2488,6 +2523,15 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setBoundingBoxVisible(boolean visible) {
         setSpatialVisible(boundingBox, visible);
+    }
+    
+    /**
+     *
+     * @param visible
+     */
+    @Override
+    public void setBuoyancyVolumeVisible(boolean visible) {
+        setSpatialVisible(BuoyancyGeom, visible);
     }
 
     /**
