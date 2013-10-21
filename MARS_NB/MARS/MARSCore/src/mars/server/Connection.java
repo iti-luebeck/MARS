@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.CommunicationType;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.MARS_Main;
@@ -278,7 +279,7 @@ public class Connection extends Thread {
             String comm_name = input[1];
             String comm_msg = input[2];
             //com_manager.putMsg(comm_msg);
-            com_manager.putMsg(auv.getName(), comm_msg);
+            com_manager.putMsg(auv.getName(), comm_msg,CommunicationType.UNDERWATERSOUND);
             //UnderwaterModem comm = (UnderwaterModem)auv.getSensor(comm_name);
             /*if(comm != null){
                 String ret = " " + comm.getMessage();

@@ -5,23 +5,24 @@
 package mars;
 
 import java.util.EventObject;
-import mars.sensors.UnderwaterModem;
+import mars.sensors.CommunicationDevice;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class ModemEvent extends EventObject{
+public class CommunicationDeviceEvent extends EventObject{
     
     private String msg = "";
     private long time = 0;
-    private int type = ModemEventType.IN;
+    private int type = CommunicationDeviceEventType.IN;
     
-    public ModemEvent( UnderwaterModem source, String msg, long time, int type )
+    public CommunicationDeviceEvent( CommunicationDevice source, String msg, long time, int type )
     {
       super( source );
       this.msg = msg;
       this.time = time;
+      this.type = type;
     }
 
     public String getMsg() {

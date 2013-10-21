@@ -28,7 +28,7 @@ import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.ModemEvent;
+import mars.CommunicationDeviceEvent;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.gui.tree.UpdateState;
 import mars.ros.MARSNodeMain;

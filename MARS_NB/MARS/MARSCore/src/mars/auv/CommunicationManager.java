@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import mars.CommunicationType;
 import mars.PhysicalEnvironment;
-import mars.sensors.ModemMessage;
+import mars.sensors.CommunicationDevice;
+import mars.sensors.CommunicationMessage;
 import mars.states.SimState;
 import mars.sensors.UnderwaterModem;
+import mars.sensors.WiFi;
 import mars.server.MARS_Server;
 
 /**
@@ -23,7 +26,7 @@ import mars.server.MARS_Server;
  */
 public class CommunicationManager {
 
-    private ConcurrentLinkedQueue<ModemMessage> msgQueue = new ConcurrentLinkedQueue<ModemMessage>();
+    private ConcurrentLinkedQueue<CommunicationMessage> msgQueue = new ConcurrentLinkedQueue<CommunicationMessage>();
 
     private final HashMap<String,UnderwaterModem> uws = new HashMap<String, UnderwaterModem>();
 
@@ -55,10 +58,10 @@ public class CommunicationManager {
      */
     public void update(float tpf){
         //System.out.println("Time to communicate: " + tpf);
-        ModemMessage peek = msgQueue.peek();
+        CommunicationMessage peek = msgQueue.peek();
         if(peek != null){
-            ModemMessage poll = msgQueue.poll();
-            updateCommunication(poll.getAuvName(),poll.getMsg());
+            CommunicationMessage poll = msgQueue.poll();
+            updateCommunication(poll.getAuvName(),poll.getMsg(),poll.getCommunicationType());
             sendMsgs(poll.getAuvName(),poll.getMsg());
         }
         //updateComNet();
@@ -72,28 +75,49 @@ public class CommunicationManager {
      * Seeks the underwater modems of the other auvs and send the msgs to them
      * checks for distance and noise is also made here
      */
-    private void updateCommunication(String auv_name, String msg){
+    private void updateCommunication(String auv_name, String msg, int communicationType){
         AUV sender = (AUV)auv_manager.getAUV(auv_name);
-        ArrayList sender_uwmo = sender.getSensorsOfClass(UnderwaterModem.class.getName());
-        UnderwaterModem senderUW = (UnderwaterModem)sender_uwmo.get(0);
-        Vector3f senderUWPos = senderUW.getWorldPosition();
+        
+        CommunicationDevice senderUW;
+        Vector3f senderUWPos;
+        if(communicationType == CommunicationType.UNDERWATERSOUND){
+            ArrayList sender_uwmo = sender.getSensorsOfClass(UnderwaterModem.class.getName());
+            senderUW = (UnderwaterModem)sender_uwmo.get(0);
+            senderUWPos = senderUW.getWorldPosition();
+        }else if(communicationType == CommunicationType.WIFI){
+            ArrayList sender_uwmo = sender.getSensorsOfClass(WiFi.class.getName());
+            senderUW = (WiFi)sender_uwmo.get(0);
+            senderUWPos = senderUW.getWorldPosition();
+        }else{//no type -> error
+            return;
+        }
         
         HashMap<String,AUV> auvs = auv_manager.getAUVs();
+        
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName()) && !auv.getName().equals(auv_name)){
-                ArrayList uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+            
+            if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName()) && !auv.getName().equals(auv_name)){
+                ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
                 Iterator it = uwmo.iterator();
                 while(it.hasNext()){
-                    UnderwaterModem mod = (UnderwaterModem)it.next();
+                    CommunicationDevice mod = (CommunicationDevice)it.next();
                     Vector3f modPos = mod.getWorldPosition();
                     Vector3f distance = modPos.subtract(senderUWPos);
-                    //System.out.println(auv.getName() + " modPos: " + modPos + " dis: " + Math.abs(distance.length()));
-                    if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
-                        mod.publish(msg);
+                    if(communicationType == CommunicationType.UNDERWATERSOUND && mod instanceof UnderwaterModem){//check the communications ways (underwater, overwater)
+                        if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
+                            //if()//check if the receiver is also underwater
+                            mod.publish(msg);
+                        }
+                    }else if(communicationType == CommunicationType.WIFI && mod instanceof WiFi){
+                        if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
+                            //if()//check if the receiver is also overwater
+                            mod.publish(msg);
+                        }
                     }
                 }        
             }
+            
         }    
     }
     
@@ -133,8 +157,8 @@ public class CommunicationManager {
      * @param auv_name
      * @param msg
      */
-    public synchronized void putMsg(String auv_name,String msg){
-        msgQueue.offer(new ModemMessage(auv_name, msg));
+    public synchronized void putMsg(String auv_name,String msg,int communicationType){
+        msgQueue.offer(new CommunicationMessage(auv_name, msg, communicationType));
         System.out.println("Added msg to bag: " + msg + " all: " + msgQueue.size());
     }    
 }

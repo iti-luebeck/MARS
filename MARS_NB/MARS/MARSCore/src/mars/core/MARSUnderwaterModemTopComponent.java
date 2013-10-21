@@ -4,11 +4,12 @@
  */
 package mars.core;
 
-import mars.ModemEvent;
-import mars.ModemEventType;
+import mars.CommunicationDeviceEvent;
+import mars.CommunicationDeviceEventType;
 import mars.gui.plot.PhysicalExchangerListener;
 import java.util.Calendar;
 import javax.swing.text.DefaultCaret;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.UnderwaterModem;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -28,7 +29,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSUnderwaterModemTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_MARSUnderwaterModemAction",
         preferredID = "MARSUnderwaterModemTopComponent")
@@ -39,7 +40,7 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class MARSUnderwaterModemTopComponent extends TopComponent {
 
-    private UnderwaterModem modem;
+    private CommunicationDevice comDev;
     
     public MARSUnderwaterModemTopComponent() {
         initComponents();
@@ -47,8 +48,8 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_MARSUnderwaterModemTopComponent());
     }
     
-    public MARSUnderwaterModemTopComponent(UnderwaterModem modem) {
-        this.modem = modem;
+    public MARSUnderwaterModemTopComponent(CommunicationDevice comDev) {
+        this.comDev = comDev;
         initComponents();
         setName(Bundle.CTL_MARSUnderwaterModemTopComponent());
         setToolTipText(Bundle.HINT_MARSUnderwaterModemTopComponent());
@@ -152,8 +153,8 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
 
     @Override
     public void componentClosed() {
-        if(modem != null){
-            modem.removeAdListener(null);
+        if(comDev != null){
+            comDev.removeAdListener(null);
         }
     }
 
@@ -171,10 +172,10 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
     
     void initListener(){
         class ComplainingAdListener implements PhysicalExchangerListener{
-            @Override public void onNewData( ModemEvent e ) {
+            @Override public void onNewData( CommunicationDeviceEvent e ) {
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(e.getTime());
-                if(e.getType() == ModemEventType.OUT){
+                if(e.getType() == CommunicationDeviceEventType.OUT){
                     out.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + e.getMsg() + "\n");
                 }else{
                     in.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + e.getMsg() + "\n");
@@ -182,6 +183,6 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
             }
         }
 
-        modem.addAdListener( new ComplainingAdListener() );
+        comDev.addAdListener( new ComplainingAdListener() );
     }
 }

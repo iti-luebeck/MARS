@@ -102,6 +102,7 @@ import mars.gui.tree.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
@@ -571,7 +572,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor sens = (Sensor) sensors.get(elem);
             try {
-                return (Class.forName(classNameString).isInstance(sens));
+                boolean ret = (Class.forName(classNameString).isInstance(sens));
+                if(ret){
+                    return true;
+                }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -638,8 +642,8 @@ public class BasicAUV implements AUV, SceneProcessor {
                 if (element instanceof VideoCamera) {
                     ((VideoCamera) element).setIniter(initer);//is needed for filters
                 }
-                if (element instanceof UnderwaterModem) {
-                    ((UnderwaterModem) element).setCommunicationManager(com_manager);//is needed for filters
+                if (element instanceof CommunicationDevice) {
+                    ((CommunicationDevice) element).setCommunicationManager(com_manager);//is needed for filters
                 }
                 if (element instanceof InfraRedSensor) {
                     ((InfraRedSensor) element).setCollider(simstate.getCollider());//is needed for filters

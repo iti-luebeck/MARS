@@ -8,7 +8,7 @@ package mars;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class ModemEventType {
+public class CommunicationDeviceEventType {
     /**
      * 
      */

@@ -260,6 +260,136 @@
         </params>
     </Parameters>
     <Sensors>
+	    <entry xsi:type="myHashMapEntryTypeSensors" key="wifi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="wiFi">
+                <noise>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+                    </entry>
+                </noise>
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="debug_color">
+                        <value>
+                            <a>0.3</a>
+                            <b>0.0</b>
+                            <g>0.0</g>
+                            <r>1.0</r>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wifi</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
+                        <value>
+                            <x>0.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="debug">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="Rotation">
+                        <value>
+                            <x>0.0</x>
+                            <y>-1.5707964</y>
+                            <z>0.0</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="propagation_distance">
+                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">100.0</value>
+                    </entry>
+                </variables>
+            </value>
+        </entry>
+	    <entry xsi:type="myHashMapEntryTypeSensors" key="gps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="gpsReceiver">
+                <noise>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+                    </entry>
+                </noise>
+                <variables>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="ReferencePointWorld">
+                        <value>
+                            <x>0.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">gps</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="ReferencePointGPS">
+                        <value>
+                            <x>53.86274</x>
+                            <y>0.0</y>
+                            <z>10.703268</z>
+                        </value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="LatitudeFactor">
+                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">111300.0</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
+                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main</value>
+                    </entry>
+                    <entry xsi:type="myHashMapEntryTypeObject" key="currentConsumption">
+                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.037</value>
+                    </entry>
+                </variables>
+                <Positionmeter>
+                    <noise>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                            <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+                        </entry>
+                    </noise>
+                    <variables>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="name">
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">gps_positionmeter</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                            <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
+                        </entry>
+                    </variables>
+                </Positionmeter>
+            </value>
+        </entry>
 		<entry xsi:type="myHashMapEntryTypeSensors" key="pollution" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pollutionMeter">
                 <noise>

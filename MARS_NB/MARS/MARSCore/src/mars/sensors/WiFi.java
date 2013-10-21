@@ -29,8 +29,9 @@ import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
 import mars.auv.CommunicationManager;
-import mars.ModemEvent;
-import mars.ModemEventType;
+import mars.CommunicationDeviceEvent;
+import mars.CommunicationDeviceEventType;
+import mars.CommunicationType;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
@@ -40,23 +41,19 @@ import org.ros.node.topic.Subscriber;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class WiFi extends Sensor{
+public class WiFi extends CommunicationDevice{
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
     private Geometry DebugDistance;
     private Sphere debugDistanceSphere;
     private Material debugDistanceMat;
     private Node comNet = new Node("comNet");
-    
-    private CommunicationManager com_manager;
 
     //ROS stuff
     private Publisher<std_msgs.String> publisher = null;
     private Publisher<std_msgs.Int8> publisherSig = null;
     private std_msgs.String fl;
     private std_msgs.Int8 flSig;
-    
-    private EventListenerList listeners = new EventListenerList();
     
     /**
      * 
@@ -88,6 +85,7 @@ public class WiFi extends Sensor{
      * 
      * @return
      */
+    @Override
     public Vector3f getWorldPosition() {
        return UnderwaterModemStart.getWorldTranslation();
     }
@@ -96,6 +94,7 @@ public class WiFi extends Sensor{
      * 
      * @return
      */
+    @Override
     public float getPropagationDistance() {
         return (Float)variables.get("propagation_distance");
     }
@@ -138,22 +137,6 @@ public class WiFi extends Sensor{
      */
     public void setDebugColor(ColorRGBA debug_color) {
         variables.put("debug_color", debug_color);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public CommunicationManager getCommunicationManager() {
-        return com_manager;
-    }
-
-    /**
-     * 
-     * @param com_manager
-     */
-    public void setCommunicationManager(CommunicationManager com_manager) {
-        this.com_manager = com_manager;
     }
 
     @Override
@@ -307,8 +290,8 @@ public class WiFi extends Sensor{
                 @Override
                 public void onNewMessage(std_msgs.String message) {
                     System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
-                    notifyAdvertisement(new ModemEvent(fin_this,message.getData(),System.currentTimeMillis(),ModemEventType.IN));
-                    com_manager.putMsg(fin_auv_name,message.getData());
+                    notifyAdvertisement(new CommunicationDeviceEvent(fin_this,message.getData(),System.currentTimeMillis(),CommunicationDeviceEventType.IN));
+                    com_manager.putMsg(fin_auv_name,message.getData(),CommunicationType.WIFI);
                 }
         },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
         this.rosinit = true;
@@ -326,11 +309,12 @@ public class WiFi extends Sensor{
      * 
      * @param msg
      */
+    @Override
     public void publish(String msg){
         fl.setData(msg);
         if( publisher != null ){
-            System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisement(new ModemEvent(this,msg,System.currentTimeMillis(),ModemEventType.OUT));
+            //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
+            notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
     }
@@ -341,25 +325,5 @@ public class WiFi extends Sensor{
      */
     public String getMessage(){
         return "This is a Message";
-    }
-    
-    public void addAdListener( PhysicalExchangerListener listener )
-    {
-      listeners.add( PhysicalExchangerListener.class, listener );
-    }
-
-    public void removeAdListener( PhysicalExchangerListener listener )
-    {
-      listeners.remove( PhysicalExchangerListener.class, listener );
-    }
-    
-    public void removeAllListener(){
-        //listeners.
-    }
-
-    protected synchronized void notifyAdvertisement( ModemEvent event )
-    {
-      for ( PhysicalExchangerListener l : listeners.getListeners( PhysicalExchangerListener.class ) )
-        l.onNewData( event );
     }
 }

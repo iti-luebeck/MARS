@@ -225,14 +225,14 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewCompassActionPerformed"/>
           </Events>
         </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="viewUnderwaterModem">
+        <MenuItem class="javax.swing.JMenuItem" name="viewCommunicationDevice">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="mars/core/Bundle.properties" key="MARSTreeTopComponent.viewUnderwaterModem.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="mars/core/Bundle.properties" key="MARSTreeTopComponent.viewCommunicationDevice.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewUnderwaterModemActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewCommunicationDeviceActionPerformed"/>
           </Events>
         </MenuItem>
       </SubComponents>

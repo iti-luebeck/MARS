@@ -33,6 +33,7 @@ import mars.sensors.TerrainSender;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
+import mars.sensors.WiFi;
 import mars.sensors.sonar.Sonar;
 import mars.simobjects.SimObject;
 import mars.xml.HashMapEntry;
@@ -192,6 +193,9 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
                         }else if(hasher.getUserData() instanceof UnderwaterModem){
                             File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "speaker-volume.png", "mars.core", false);
+                            setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+                        }else if(hasher.getUserData() instanceof WiFi){
+                            File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "radio_2.png", "mars.core", false);
                             setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
                         }else if(hasher.getUserData() instanceof Lamp){
                             File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "flashlight-shine.png", "mars.core", false);

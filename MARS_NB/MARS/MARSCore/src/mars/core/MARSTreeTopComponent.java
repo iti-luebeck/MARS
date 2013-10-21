@@ -53,6 +53,7 @@ import mars.gui.dnd.SimObTransferHandler;
 import mars.gui.sonarview.PlanarView;
 import mars.gui.sonarview.PolarView;
 import mars.gui.sonarview.RayBasedSensorView;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.Compass;
 import mars.sensors.RayBasedSensor;
 import mars.sensors.UnderwaterModem;
@@ -106,7 +107,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     private ChartValue lastSelectedChartValue;
     private VideoCamera lastSelectedVideoCamera;
     private Compass lastSelectedCompass;
-    private UnderwaterModem lastSelectedUnderwaterModem;
+    private CommunicationDevice lastSelectedCommunicationDevice;
     private AUV lastSelectedAUV;
     
     //jtree stuff
@@ -160,7 +161,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         addDataToChart = new javax.swing.JMenuItem();
         viewCamera = new javax.swing.JMenuItem();
         viewCompass = new javax.swing.JMenuItem();
-        viewUnderwaterModem = new javax.swing.JMenuItem();
+        viewCommunicationDevice = new javax.swing.JMenuItem();
         booleanPopUpSimObject = new javax.swing.JPopupMenu();
         booleanPopUpEnable1 = new javax.swing.JMenuItem();
         booleanPopUpDisable1 = new javax.swing.JMenuItem();
@@ -337,13 +338,13 @@ public final class MARSTreeTopComponent extends TopComponent {
         });
         jme3_auv_sens.add(viewCompass);
 
-        org.openide.awt.Mnemonics.setLocalizedText(viewUnderwaterModem, org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.viewUnderwaterModem.text")); // NOI18N
-        viewUnderwaterModem.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(viewCommunicationDevice, org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.viewCommunicationDevice.text")); // NOI18N
+        viewCommunicationDevice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewUnderwaterModemActionPerformed(evt);
+                viewCommunicationDeviceActionPerformed(evt);
             }
         });
-        jme3_auv_sens.add(viewUnderwaterModem);
+        jme3_auv_sens.add(viewCommunicationDevice);
 
         booleanPopUpSimObject.setName("booleanPopUp"); // NOI18N
 
@@ -767,11 +768,11 @@ public final class MARSTreeTopComponent extends TopComponent {
                                     viewCompass.setEnabled(false);
                                 }
                                 
-                                if(hashwrap.getUserData() instanceof UnderwaterModem){
-                                    lastSelectedUnderwaterModem = (UnderwaterModem)hashwrap.getUserData();
-                                    viewUnderwaterModem.setEnabled(true);
+                                if(hashwrap.getUserData() instanceof CommunicationDevice){
+                                    lastSelectedCommunicationDevice = (CommunicationDevice)hashwrap.getUserData();
+                                    viewCommunicationDevice.setEnabled(true);
                                 }else{
-                                    viewUnderwaterModem.setEnabled(false);
+                                    viewCommunicationDevice.setEnabled(false);
                                 }
                                 
                                 jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
@@ -1452,17 +1453,17 @@ public final class MARSTreeTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_viewCompassActionPerformed
 
-    private void viewUnderwaterModemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewUnderwaterModemActionPerformed
-        if(lastSelectedUnderwaterModem != null){
-            MARSUnderwaterModemTopComponent uw = new MARSUnderwaterModemTopComponent(lastSelectedUnderwaterModem);
+    private void viewCommunicationDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCommunicationDeviceActionPerformed
+        if(lastSelectedCommunicationDevice != null){
+            MARSUnderwaterModemTopComponent uw = new MARSUnderwaterModemTopComponent(lastSelectedCommunicationDevice);
 
-            uw.setName("Video of: " + lastSelectedUnderwaterModem.getPhysicalExchangerName());
+            uw.setName("Data of: " + lastSelectedCommunicationDevice.getAuv().getName() + "/" + lastSelectedCommunicationDevice.getPhysicalExchangerName());
             uw.open();
             uw.requestActive(); 
 
             uw.repaint();
         }
-    }//GEN-LAST:event_viewUnderwaterModemActionPerformed
+    }//GEN-LAST:event_viewCommunicationDeviceActionPerformed
 
     private void jme3_auv_debug_data_buyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_auv_debug_data_buyActionPerformed
         if(lastSelectedAUV != null){
@@ -1562,10 +1563,10 @@ public final class MARSTreeTopComponent extends TopComponent {
     public mars.gui.TextFieldCellEditor textfieldEditor2;
     private DefaultTreeCellRenderer renderer2;
     private javax.swing.JMenuItem viewCamera;
+    private javax.swing.JMenuItem viewCommunicationDevice;
     private javax.swing.JMenuItem viewCompass;
     private javax.swing.JMenuItem viewSonarPlanar;
     private javax.swing.JMenuItem viewSonarPolar;
-    private javax.swing.JMenuItem viewUnderwaterModem;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
