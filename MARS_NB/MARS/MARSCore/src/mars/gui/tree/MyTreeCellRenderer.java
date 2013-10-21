@@ -26,6 +26,7 @@ import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
 import mars.sensors.IMU;
 import mars.sensors.PingDetector;
+import mars.sensors.PollutionMeter;
 import mars.sensors.PressureSensor;
 import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
@@ -138,6 +139,9 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
             }else if(hasher.getName().equals("Gui")){
                 File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "ui-scroll-pane-image.png", "mars.core", false);
                 setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+            }else if(hasher.getName().equals("Pollution")){
+                File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "oil-barrel.png", "mars.core", false);
+                setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();
@@ -209,6 +213,9 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                             setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
                         }else if(hasher.getUserData() instanceof Teleporter){
                             File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "transform_move.png", "mars.core", false);
+                            setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+                        }else if(hasher.getUserData() instanceof PollutionMeter){
+                            File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "oil-barrel.png", "mars.core", false);
                             setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
                         }
                     }
