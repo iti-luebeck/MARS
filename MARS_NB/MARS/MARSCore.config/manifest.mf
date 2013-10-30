@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: mars.core.config
 OpenIDE-Module-Localizing-Bundle: mars/core/config/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0.6
+OpenIDE-Module-Specification-Version: 1.0.6.2
 

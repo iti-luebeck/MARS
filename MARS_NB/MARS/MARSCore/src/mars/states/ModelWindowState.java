@@ -21,7 +21,9 @@ import mars.auv.AUV_Manager;
 /**
  * this is the state for the modeling window. i.e. adding a new auv or changing the position of sensors.
  * @author Tosik
+ * @deprecated see new AUV-Editor Module
  */
+@Deprecated
 public class ModelWindowState extends AbstractAppState{
 
     private Node rootNode = new Node("Root Node");

@@ -187,6 +187,8 @@ public class MARS_Settings implements UpdateState{
             initer.changeSpeed(getPhysicsSpeed());
         }else if(target.equals("debug") && hashmapname.equals("Physics")){
             initer.showPhysicsDebug(isPhysicsDebug());
+        }else if(target.equals("visible") && hashmapname.equals("Pollution")){
+            initer.hidePollution(isPollutionVisible());
         }
     }
     
@@ -1650,6 +1652,22 @@ public class MARS_Settings implements UpdateState{
         Pollution.put("enabled", enabled);
     }
     
+    /**
+     *
+     * @return
+     */
+    public Boolean isPollutionVisible() {
+        return (Boolean)Pollution.get("visible");
+    }
+
+    /**
+     *
+     * @param enabled 
+     */
+    public void setPollutionVisible(boolean visible) {
+        Pollution.put("visible", visible);
+    }
+    
            /**
      *
      * @return
@@ -1840,6 +1858,22 @@ public class MARS_Settings implements UpdateState{
      */
     public void setPopUpAUVNameDistance(float PopUpAUVNameDistance) {
         Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
+    }
+    
+    /**
+     *
+     * @param GlowSelection 
+     */
+    public void setMouseUpdateFollow(boolean MouseUpdateFollow) {
+        Gui.put("MouseUpdateFollow", MouseUpdateFollow);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isMouseUpdateFollow() {
+        return (Boolean)Gui.get("MouseUpdateFollow");
     }
 
     /**

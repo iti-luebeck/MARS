@@ -153,9 +153,9 @@ public class Initializer {
     //pollution
     ImageBasedHeightMap pollutionmap;
     private Node pollutionNode;
-    private Vector3f pollutionVector = Vector3f.ZERO;
     private int pollution_image_width = 0;
     private int pollution_image_heigth = 0;
+    Geometry pollution_plane;
     
     //grass
     private Forester forester;
@@ -708,7 +708,7 @@ public class Initializer {
                 if(water_plane != null){
                     water_plane.removeFromParent();
                 }
-                Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
+                Box boxshape = new Box(new Vector3f(0f,0f,0f), 2000f,0.01f,2000f);
                 water_plane = new Geometry("water_plane", boxshape);
                 water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -767,7 +767,7 @@ public class Initializer {
                         rootNode.removeLight(ambLight);
                         sun.setColor(mars_settings.getLight_color());
                         sun.setDirection(mars_settings.getLight_direction().normalize());
-                        ambLight.setColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 0.2f));
+                        ambLight.setColor(mars_settings.getAmbientColor());
                         if(mars_settings.isSetupLight()){
                             rootNode.addLight(sun);
                         }else{
@@ -976,6 +976,18 @@ public class Initializer {
             water_plane.setCullHint(CullHint.Always);
         }else{
             water_plane.setCullHint(CullHint.Never);
+        }
+    }
+    
+    /**
+     * 
+     * @param hide
+     */
+    public void hidePollution(boolean hide){
+        if(!hide){
+            pollution_plane.setCullHint(CullHint.Always);
+        }else{
+            pollution_plane.setCullHint(CullHint.Never);
         }
     }
     
@@ -1510,6 +1522,33 @@ public class Initializer {
         
         //flowNode.attachChild(grid);
         rootNode.attachChild(pollutionNode);
+        
+        //let us see the pollution
+        Future fut = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(pollution_plane != null){
+                    pollution_plane.removeFromParent();
+                }
+                //Box boxshape = new Box(new Vector3f(0f,0f,0f), 10f,0.01f,10f);
+                Quad quad = new Quad(mars_settings.getPollutionScale().x*pollution_image_heigth, mars_settings.getPollutionScale().z*pollution_image_width, false);
+                pollution_plane = new Geometry("pollution_plane", quad);
+                Quaternion quat = new Quaternion();
+                quat.fromAngles(-FastMath.HALF_PI, 0f, 0f);
+                pollution_plane.setLocalRotation(quat);
+                pollution_plane.setLocalTranslation(-mars_settings.getPollutionScale().x*pollution_image_heigth/2f+mars_settings.getPollutionPosition().x, water_height+0.02f, mars_settings.getPollutionScale().z*pollution_image_width/2f+mars_settings.getPollutionPosition().z);
+                Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                mat_tt.setColor("Color", new ColorRGBA(1.0f,1.0f,1.0f,1.0f));
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionFilepath()));
+                mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
+                mat_tt.getAdditionalRenderState().setDepthWrite(false);
+                mat_tt.getAdditionalRenderState().setAlphaTest(true);
+                pollution_plane.setMaterial(mat_tt);
+                pollution_plane.setQueueBucket(Bucket.Transparent);
+                rootNode.attachChild(pollution_plane);
+                hidePollution(mars_settings.isPollutionVisible());
+                return null;
+             }
+        });
 
     }
     

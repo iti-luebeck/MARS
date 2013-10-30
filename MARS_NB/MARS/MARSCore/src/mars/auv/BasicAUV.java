@@ -948,6 +948,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                 int auv_pos_x = (int) (((float) flow_image_width / ((float) flow_image_width * flow_scale.x)) * relAuvPos.x);
                 int auv_pos_y = (int) (((float) flow_image_width / ((float) flow_image_width * flow_scale.z)) * relAuvPos.z);
 
+                //check on bounds....has to be done here if flowmap!=heightmap
                 int flowX = initer.getFlowX()[(auv_pos_x) + (initer.getTerrain_image_width() * auv_pos_y)];
                 int flowY = initer.getFlowY()[(auv_pos_x) + (initer.getTerrain_image_width() * auv_pos_y)];
                 //System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);

@@ -77,6 +77,7 @@ public class GPSReceiver extends Sensor{
     
     public GPSReceiver(GPSReceiver sensor){
         super(sensor);
+        pos = (Positionmeter)sensor.getPositionMeter().copy();
     }
 
     @Override
@@ -119,7 +120,11 @@ public class GPSReceiver extends Sensor{
     public void reset(){
         pos.reset();
     }
-    
+
+    public Positionmeter getPositionMeter() {
+        return pos;
+    }
+
     /**
      *
      * @return
