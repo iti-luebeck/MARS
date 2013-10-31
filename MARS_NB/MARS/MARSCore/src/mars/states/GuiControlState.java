@@ -26,6 +26,7 @@ import mars.simobjects.SimObject;
  */
 public class GuiControlState {
     private boolean move_auv = false;
+    private boolean select_auv = false;
     private boolean rotate_auv = false;
     private boolean move_simob = false;
     private boolean rotate_simob = false;
@@ -184,6 +185,14 @@ public class GuiControlState {
         }else{
             setFree(true);
         }
+    }
+
+    public boolean isSelect_auv() {
+        return select_auv;
+    }
+
+    public void setSelect_auv(boolean select_auv) {
+        this.select_auv = select_auv;
     }
 
     /**

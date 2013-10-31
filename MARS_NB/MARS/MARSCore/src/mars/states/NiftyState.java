@@ -17,9 +17,12 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.TextCreator;
+import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
+import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -139,7 +142,30 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             createPanel.setImageMode("resize:24,2,15,9,24,2,15,14,24,2,15,9");
             createPanel.setName("popup_" + auv.getName());
             createPanel.setId("popup_" + auv.getName());
+            /*ControlEffectAttributes cus = new ControlEffectAttributes();
+            cus.setName("fade");
+            cus.setCustomKey("fadeIn");
+            cus.setNeverStopRendering("true");
+            cus.setAttribute("start", "#f");
+            cus.setAttribute("end", "#0");
+            cus.setAttribute("length", "3000");
+            createPanel.addEffectsOnCustom(cus);*/
             Element newPanel = createPanel.create(nifty, hoverMenu, niftyElementLayer);
+            
+            /*EffectBuilder eff = new EffectBuilder("fade"){{
+                this.customKey("fadeIn");
+                this.effectValue("start","#f");
+                this.effectValue("end","#0");
+                this.effectValue("length","3000");
+                this.neverStopRendering( true );
+            }};
+
+            newPanel.registerEffect(EffectEventId.onCustom, eff.);*/
+            
+            /*<effect>
+			<onStartScreen name="hide"/>
+			<onCustom customKey="fadeIn" name="fade" start="#f" end="#0" length="3000" neverStopRendering="true"/>
+		</effect>*/
 
             //create txt panel
             PanelCreator createPanel2 = new PanelCreator();
@@ -162,8 +188,9 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             Element txt = createText.create(nifty, hoverMenu, newPanel2);
 
             newPanel.show();
+            //newPanel.startEffect(EffectEventId.onCustom, null, "fadeIn");
             newPanel.layoutElements();
-            niftyElementLayer.layoutElements();
+            //niftyElementLayer.layoutElements();
         }
         
         findElementByName = niftyElementLayer.findElementByName("popup_" + auv.getName());
@@ -171,6 +198,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
             findElementByName.setConstraintX(new SizeValue(String.valueOf(x+5)));
             findElementByName.setConstraintY(new SizeValue(String.valueOf(y-15)));
             findElementByName.getParent().layoutElements();
+            //findElementByName.startEffect(EffectEventId.onCustom, null, "fadeIn");
         }
             
         
@@ -283,6 +311,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         if(niftyElement3 != null){
             if(visible){
                 niftyElement3.show();
+                //niftyElement3.startEffect(EffectEventId.onCustom, null, "fadeIn");
             }else{
                 niftyElement3.hide();
             }
@@ -306,6 +335,7 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         if(niftyElement3 != null){
             if(visible){
                 niftyElement3.show();
+                //niftyElement3.startEffect(EffectEventId.onCustom, null, "fadeIn");
             }else{
                 niftyElement3.hide();
             }
