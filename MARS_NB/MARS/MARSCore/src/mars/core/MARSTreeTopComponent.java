@@ -60,6 +60,7 @@ import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
+import mars.states.GuiState;
 import mars.states.SimState;
 import mars.xml.ConfigManager;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -802,9 +803,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                 //deselect all auvs before we start to selcting it clean
                 Future simStateFutureD = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectAllAUVs();
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectAllAUVs();
                                 }
                                 return null;
                             }
@@ -817,10 +818,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                                 final AUV auv = (AUV)treePath.getLastPathComponent();
                                 Future simStateFuture = mars.enqueue(new Callable() {
                                     public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(SimState.class) != null){
-                                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                                        if(mars.getStateManager().getState(GuiState.class) != null){
+                                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
                                             //simState.deselectAllAUVs();
-                                            simState.selectAUV(auv);
+                                            guiState.selectAUV(auv);
                                         }
                                         return null;
                                     }
@@ -828,9 +829,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                             }else{
                                     Future simStateFuture = mars.enqueue(new Callable() {
                                         public Void call() throws Exception {
-                                            if(mars.getStateManager().getState(SimState.class) != null){
-                                                SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                                simState.deselectAllAUVs();
+                                            if(mars.getStateManager().getState(GuiState.class) != null){
+                                                GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                                guiState.deselectAllAUVs();
                                             }
                                             return null;
                                         }
@@ -839,9 +840,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                         } catch (IllegalArgumentException e) {
                                 Future simStateFuture = mars.enqueue(new Callable() {
                                     public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(SimState.class) != null){
-                                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                            simState.deselectAllAUVs();
+                                        if(mars.getStateManager().getState(GuiState.class) != null){
+                                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                            guiState.deselectAllAUVs();
                                         }
                                         return null;
                                     }
@@ -883,9 +884,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                 //clear the selected auvs
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectAllAUVs();
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectAllAUVs();
                                 }
                                 return null;
                             }
@@ -966,10 +967,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                         final SimObject simob = (SimObject)selPath.getLastPathComponent();
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectSimObs(null);
-                                    simState.selectSimObs(simob);
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectSimObs(null);
+                                    guiState.selectSimObs(simob);
                                 }
                                 return null;
                             }
@@ -977,9 +978,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                     }else{
                             Future simStateFuture = mars.enqueue(new Callable() {
                                 public Void call() throws Exception {
-                                    if(mars.getStateManager().getState(SimState.class) != null){
-                                        SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                        simState.deselectSimObs(null);
+                                    if(mars.getStateManager().getState(GuiState.class) != null){
+                                        GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                        guiState.deselectSimObs(null);
                                     }
                                     return null;
                                 }
@@ -988,9 +989,9 @@ public final class MARSTreeTopComponent extends TopComponent {
                 } catch (IllegalArgumentException e) {
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectSimObs(null);
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectSimObs(null);
                                 }
                                 return null;
                             }
@@ -999,9 +1000,9 @@ public final class MARSTreeTopComponent extends TopComponent {
             }else{
                         Future simStateFuture = mars.enqueue(new Callable() {
                             public Void call() throws Exception {
-                                if(mars.getStateManager().getState(SimState.class) != null){
-                                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                                    simState.deselectSimObs(null);
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectSimObs(null);
                                 }
                                 return null;
                             }

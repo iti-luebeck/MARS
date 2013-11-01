@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
  * 
  * @author Thomas Tosik
  */
+@Deprecated
 public class ViewManager {
     
     /**

@@ -70,7 +70,6 @@ import mars.auv.BasicAUV;
 import mars.auv.CommunicationManager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
-import mars.gui.ViewManager;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
@@ -107,8 +106,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     
     private boolean initial_ready = false;
 
-    private float time = 0f;
-
     //needed for graphs
     private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
@@ -142,21 +139,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     private Hanse auv_hanse;
     private Monsun2 auv_monsun2;
     
-    //loading screen
-    private Nifty nifty_load;
-    //private TextRenderer textRenderer;
-    
-    //nifty(gui) stuff
-    private NiftyJmeDisplay niftyDisplay;
-    private Nifty nifty;
-    private Element progressBarElement;
-    private TextRenderer textRenderer;
-    private boolean load = false;
     private Future simStateFuture = null;
-    
-    //general gui stuff
-    private GuiControlState guiControlState;
-    private ViewManager viewManager = new ViewManager();
         
     //map stuff
     private MapState mapState;
@@ -217,10 +200,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         
         //clean up all auvs (offscreen view from drag for example)
         auvManager.cleanup();
-        
-        //deattach the input listeners
-        inputManager.removeRawInputListener(mouseMotionListener);
-        inputManager.removeListener(actionListener);
+
+        //cleanup gui state
         
         //clean the cameras
         chaseCam.setEnabled(false);
@@ -244,7 +225,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                 mars = (MARS_Main)app;
                 assetManager = mars.getAssetManager();
                 inputManager = mars.getInputManager();
-                nifty_load = mars.getNifty();
                 mars.getRootNode().attachChild(getRootNode());
             }else{
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
@@ -325,12 +305,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             startNiftyState();
             progr.progress( "Loading Config" );
             loadXML(configManager.getConfig());
-            progr.progress( "Init Keys" );
-            initPrivateKeys();// load custom key mappings
+            //progr.progress( "Init Keys" );
+            //initPrivateKeys();// load custom key mappings
             progr.progress( "Starting Physics" );
             setupPhysics();
-            progr.progress( "Starting GUI" );
-            setupGUI();
+            //progr.progress( "Starting GUI" );
+            //setupGUI();
             progr.progress( "Starting Cameras" );
             setupCams();
             
@@ -355,12 +335,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                 
                 }
             }
-            
-            /*Lookup bag = Lookup.getDefault();
-            
-            Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
-            Lookup.Result<AUV_Manager> result3 = bag.lookup( pattern3 );
-            Collection<? extends AUV_Manager> allInstances = result3.allInstances();*/
                 
             progr.progress( "Init Map" );
             initMap();//for mars_settings
@@ -380,21 +354,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             
             //initMap();//for manager
             
-            progr.progress( "Init public Keys" );
-            initPublicKeys();
+            //progr.progress( "Init public Keys" );
+            //initPublicKeys();
             
             progr.progress( "Init View" );
             initView();
             
             init = true;
-            
-           /*             Box box = new Box(1f, 1f, 1f);
-                        Geometry cur1 = new Geometry("BOOM2!", box);
-                        Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                        mark_mat.setColor("Color", ColorRGBA.Green);
-                        cur1.setMaterial(mark_mat);
-            cur1.setLocalTranslation(Vector3f.ZERO);
-            currents.attachChild(cur1);*/
             
             /*JAXBContext context;
             try {*/
@@ -461,11 +427,20 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             /*Thruster tt = (Thruster)auv_hanse.getActuator("thrusterDownFront");
             tt.test();*/
             //XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);
-
-            //rootNode.updateGeometricState();
+            
+            progr.progress( "Init GuiState" );
+            GuiState guiState = new GuiState();
+            guiState.setAuvManager(auvManager);
+            guiState.setSimobManager(simobManager);
+            guiState.setIniter(initer);
+            guiState.setAUVsNode(AUVsNode);
+            guiState.setSimObNode(SimObNode);
+            guiState.setMars_settings(mars_settings);
+            stateManager.attach(guiState);
         }
         progr.progress( "Init Super" );
         super.initialize(stateManager, app);
+        
         progr.finish();
     }
     
@@ -625,25 +600,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     }
     
     /*
-     * 
-     */
-    private void setupGUI(){
-        guiControlState = new GuiControlState(assetManager);
-        guiControlState.init();
-        rootNode.attachChild(guiControlState.getGUINode());
-        BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        mars.setGuiFont(guiFont);
-        mars.setStatsStateDark(false);
-        if(mars_settings.isFPS()){
-            mars.setDisplayFps(true);
-            mars.setDisplayStatView(true);
-        }else{
-            mars.setDisplayFps(false);
-            mars.setDisplayStatView(false);
-        }
-    }
-    
-    /*
      *
      */
     private void setupPhysics(){
@@ -759,469 +715,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
              simobs = xml.loadSimObjects();
         } catch (Exception ex) {
             Logger.getLogger(SimState.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void initPublicKeys() {
-        
-    }
-    
-    /** Declaring the "Shoot" action and mapping to its triggers. */
-    private void initPrivateKeys() {
-        inputManager.addRawInputListener(mouseMotionListener);
-        
-        inputManager.addMapping("Shoott",new KeyTrigger(KeyInput.KEY_SPACE));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "Shoott");
-
-        inputManager.addMapping("start", new KeyTrigger(KeyInput.KEY_X));
-        inputManager.addListener(actionListener, "start");
-        inputManager.addMapping("stop", new KeyTrigger(KeyInput.KEY_Y));
-        inputManager.addListener(actionListener, "stop");
-
-        inputManager.addMapping("reset", new KeyTrigger(KeyInput.KEY_R));
-        inputManager.addListener(actionListener, "reset");
-        
-        inputManager.addMapping("moveauv", new KeyTrigger(KeyInput.KEY_LCONTROL));
-        inputManager.addListener(actionListener, "moveauv");
-        
-        inputManager.addMapping("rotateauv", new KeyTrigger(KeyInput.KEY_LSHIFT));
-        inputManager.addListener(actionListener, "rotateauv");
-        
-        inputManager.addMapping("context_menue",new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "context_menue");
-        
-        inputManager.addMapping("context_menue_off",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "context_menue_off");
-        
-        inputManager.addMapping("depth_auv_down",new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "depth_auv_down");
-        
-        inputManager.addMapping("depth_auv_up",new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "depth_auv_up");
-        
-        inputManager.addMapping("ampp",new KeyTrigger(KeyInput.KEY_H));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "ampp");
-        
-        inputManager.addMapping("ampm",new KeyTrigger(KeyInput.KEY_J));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "ampm");
-        
-        inputManager.addMapping("octp",new KeyTrigger(KeyInput.KEY_K));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "octp");
-        
-        inputManager.addMapping("octm",new KeyTrigger(KeyInput.KEY_L));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "octm");
-        
-        inputManager.addMapping("scalebigp",new KeyTrigger(KeyInput.KEY_U));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "scalebigp");
-        
-        inputManager.addMapping("scalebigm",new KeyTrigger(KeyInput.KEY_I));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "scalebigm");
-        
-        inputManager.addMapping("speedbigp",new KeyTrigger(KeyInput.KEY_O));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "speedbigp");
-        
-        inputManager.addMapping("speedbigm",new KeyTrigger(KeyInput.KEY_P));         // trigger 2: left-button click
-        inputManager.addListener(actionListener, "speedbigm");
-    }
-    
-    private RawInputListener mouseMotionListener = new RawInputListener() {
-
-        public void beginInput() {
-        }
-
-        public void endInput() {
-        }
-
-        public void onJoyAxisEvent(JoyAxisEvent evt) {
-        }
-
-        public void onJoyButtonEvent(JoyButtonEvent evt) {
-        }
-
-        public void onMouseMotionEvent(MouseMotionEvent evt) {
-            if(guiControlState.isMove_auv()){
-                    //System.out.println("Moveing auv to: " + inputManager.getCursorPosition());
-                    AUV selected_auv = auvManager.getSelectedAUV();
-                    if(selected_auv != null){
-                        moveSelectedGhostAUV(selected_auv);
-                        if(mars_settings.isMouseUpdateFollow()){
-                            selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
-                        }
-                    }
-            }else if(guiControlState.isRotate_auv()){
-                    //System.out.println("rotaing auv to: " + inputManager.getCursorPosition());
-                    AUV selected_auv = auvManager.getSelectedAUV();
-                    if(selected_auv != null){
-                        rotateSelectedGhostAUV(selected_auv);
-                    }
-            }else if(guiControlState.isMove_simob()){
-                    //System.out.println("Moveing simob to: " + inputManager.getCursorPosition());
-                    SimObject selected_simob = simobManager.getSelectedSimObject();
-                    if(selected_simob != null){
-                        moveSelectedGhostSimOb(selected_simob);
-                    }
-            }else if(guiControlState.isRotate_simob()){
-                    //System.out.println("Moveing simob to: " + inputManager.getCursorPosition());
-                    SimObject selected_simob = simobManager.getSelectedSimObject();
-                    if(selected_simob != null){
-                        rotateSelectedGhostSimOb(selected_simob);
-                    }
-            }else if(guiControlState.isSelect_auv()){
-                
-            }else{
-                    pickHover();
-            }
-        }
-
-        public void onMouseButtonEvent(MouseButtonEvent evt) {
-        }
-
-        public void onKeyEvent(KeyInputEvent evt) {
-        }
-
-        public void onTouchEvent(TouchEvent evt) {
-        }
-    };
-            
-    /*
-     * what actions should be done when pressing a registered button?
-     */
-    private ActionListener actionListener = new ActionListener() {
-
-        public void onAction(String name, boolean keyPressed, float tpf) {
-            if(name.equals("start") && !keyPressed) {
-                startSimulation();
-            }else if(name.equals("stop") && !keyPressed) {
-                pauseSimulation();
-            }else if(name.equals("ampp") && !keyPressed) {
-                initer.getWhg().setHeightbig(initer.getWhg().getHeightbig()+0.1f);
-            }else if(name.equals("ampm") && !keyPressed) {
-                initer.getWhg().setHeightbig(initer.getWhg().getHeightbig()-0.1f);
-            }else if(name.equals("octp") && !keyPressed) {
-                initer.getWhg().setOctaves(initer.getWhg().getOctaves()+1);
-            }else if(name.equals("octm") && !keyPressed) {
-                initer.getWhg().setOctaves(initer.getWhg().getOctaves()-1);
-            }else if(name.equals("scalebigp") && !keyPressed) {
-                initer.getWhg().setScaleybig(initer.getWhg().getScaleybig()+0.1f);
-            }else if(name.equals("scalebigm") && !keyPressed) {
-                initer.getWhg().setScaleybig(initer.getWhg().getScaleybig()-0.1f);
-            }else if(name.equals("speedbigp") && !keyPressed) {
-                initer.getWhg().setSpeedbig(initer.getWhg().getSpeedbig()+0.1f);
-            }else if(name.equals("speedbigm") && !keyPressed) {
-                initer.getWhg().setSpeedbig(initer.getWhg().getSpeedbig()-0.1f);
-            }else  if (name.equals("Shoott") && !keyPressed) {
-
-            }else if(name.equals("reset") && !keyPressed) {
-                restartSimulation();
-            }else if(name.equals("context_menue") && !keyPressed) {
-                //System.out.println("context");
-                pickRightClick();
-            }else if(name.equals("context_menue_off") && !keyPressed) {
-                guiControlState.setSelect_auv(false);
-                pickHover();
-            }else if(name.equals("depth_auv_down") && keyPressed) {
-                if(guiControlState.isMove_auv()){
-                    AUV selected_auv = auvManager.getSelectedAUV();
-                    if(selected_auv != null){
-                        guiControlState.decrementDepthIteration();
-                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
-                    }
-                }
-            }else if(name.equals("depth_auv_up") && keyPressed) {
-                if(guiControlState.isMove_auv()){
-                    AUV selected_auv = auvManager.getSelectedAUV();
-                    if(selected_auv != null){
-                        guiControlState.incrementDepthIteration();
-                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));
-                    }
-                }
-            }else if(name.equals("moveauv") && keyPressed) {
-                mars.getFlyByCamera().setEnabled(false);
-                AUV selected_auv = auvManager.getSelectedAUV();
-                if(selected_auv != null){
-                    guiControlState.setMove_auv(true);
-                    guiControlState.setGhostObject(selected_auv.getGhostAUV());
-                    //guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
-                    if(mars_settings.isMouseUpdateFollow()){
-                        selected_auv.hideGhostAUV(true);
-                    }else{
-                        selected_auv.hideGhostAUV(false);
-                    }
-                }
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if(selected_simob != null){
-                    guiControlState.setMove_simob(true);
-                    guiControlState.setGhostObject(selected_simob.getGhostSpatial());
-                    selected_simob.hideGhostSpatial(false);
-                }
-            }else if(name.equals("moveauv") && !keyPressed) {
-                AUV selected_auv = auvManager.getSelectedAUV();
-                mars.getFlyByCamera().setEnabled(true);
-                if(selected_auv != null){
-                    selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
-                    guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//reset ghost auv for rotation
-                    selected_auv.hideGhostAUV(true);
-                }
-                
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if(selected_simob != null){
-                    selected_simob.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
-                    selected_simob.hideGhostSpatial(true);
-                }
-                guiControlState.setDepth_iteration(0);
-                guiControlState.setMove_auv(false);
-                guiControlState.setMove_simob(false);
-            }else if(name.equals("rotateauv") && keyPressed) {
-                AUV selected_auv = auvManager.getSelectedAUV();
-                mars.getFlyByCamera().setEnabled(false);
-                if(selected_auv != null){
-                    guiControlState.setGhostObject(selected_auv.getGhostAUV());
-                    selected_auv.hideGhostAUV(false);
-                    rotateSelectedGhostAUV(selected_auv);
-                    guiControlState.setRotateArrowVisible(true);
-                    guiControlState.setRotate_auv(true);
-                }
-                
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if(selected_simob != null){
-                    guiControlState.setGhostObject(selected_simob.getGhostSpatial());
-                    selected_simob.hideGhostSpatial(false);
-                    rotateSelectedGhostSimOb(selected_simob);
-                    guiControlState.setRotateArrowVisible(true);
-                    guiControlState.setRotate_simob(true);
-                }
-                
-            }else if(name.equals("rotateauv") && !keyPressed) {
-                AUV selected_auv = auvManager.getSelectedAUV();
-                mars.getFlyByCamera().setEnabled(true);
-                if(selected_auv != null){
-                    selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-                    selected_auv.hideGhostAUV(true);
-                    guiControlState.setRotateArrowVisible(false);
-                }
-                
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if(selected_simob != null){
-                    selected_simob.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-                    selected_simob.hideGhostSpatial(true);
-                    guiControlState.setRotateArrowVisible(false);
-                }
-                
-                guiControlState.setRotate_auv(false);
-                guiControlState.setRotate_simob(false);
-            }
-        }
-    };
-    
-    private void moveSelectedGhostAUV(AUV auv){
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
-        guiControlState.setIntersection(intersection);
-        if(guiControlState.getGhostObject() != null){
-            guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
-            guiControlState.getGhostObject().setLocalRotation(auv.getAUVSpatial().getLocalRotation());
-        }
-    }
-    
-    private void moveSelectedGhostSimOb(SimObject simob){
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
-        guiControlState.setIntersection(intersection);
-        if(guiControlState.getGhostObject() != null){
-            guiControlState.getGhostObject().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection,null));
-        }
-    }
-    
-    private void moveSelectedGhostAUV(AUV auv, Vector3f position){
-        auv.hideGhostAUV(false);
-        auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(position,null));
-    }
-    
-    private void rotateSelectedGhostAUV(AUV auv){
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
-        Vector3f diff = intersection.subtract(auv.getAUVNode().getWorldTranslation());
-        diff.y = 0f;
-        diff.normalizeLocal();
-        float angle = 0f;
-        if(diff.z < 0f){
-            angle = diff.angleBetween(Vector3f.UNIT_X);
-        }else{
-            angle = diff.angleBetween(Vector3f.UNIT_X)*(-1);
-        }
-        
-        //System.out.println("angle: " + angle);
-        if(guiControlState.getGhostObject() != null){
-            Quaternion quat = new Quaternion();
-            Quaternion gquat = new Quaternion();
-            
-            Quaternion wQuat = auv.getAUVSpatial().getWorldRotation();
-            float[] ff = wQuat.toAngles(null);
-            //System.out.println("ff: " + ff[1]);
-            float newAng = ff[1] - angle;
-            
-            quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
-            gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
-            guiControlState.setRotation(quat);
-            guiControlState.getGhostObject().setLocalRotation(gquat);
-            guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
-            guiControlState.setRotateArrowVectorEnd(intersection);
-            guiControlState.updateRotateArrow();
-        }
-    }
-    
-    private void rotateSelectedGhostSimOb(SimObject simob){
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
-        //System.out.println("Intersection: " + intersection);
-        Vector3f diff = intersection.subtract(simob.getSpatial().getWorldTranslation());
-        diff.y = 0f;
-        diff.normalizeLocal();
-        float angle = 0f;
-        if(diff.z < 0f){
-            angle = diff.angleBetween(Vector3f.UNIT_X);
-        }else{
-            angle = diff.angleBetween(Vector3f.UNIT_X)*(-1);
-        }
-        
-        //System.out.println("angle: " + angle);
-        if(guiControlState.getGhostObject() != null){
-            Quaternion quat = new Quaternion();
-            Quaternion gquat = new Quaternion();
-            
-            Quaternion wQuat = simob.getSpatial().getWorldRotation();
-            float[] ff = wQuat.toAngles(null);
-            //System.out.println("ff: " + ff[1]);
-            float newAng = ff[1] - angle;
-            
-            quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
-            gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
-            guiControlState.setRotation(quat);
-            guiControlState.getGhostObject().setLocalRotation(gquat);
-            guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
-            guiControlState.setRotateArrowVectorEnd(intersection);
-            guiControlState.updateRotateArrow();
-        }
-    }
-    
-    private void pickHover(){
-        CollisionResults results = new CollisionResults();
-        // Convert screen click to 3d position
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-
-        // Aim the ray from the clicked spot forwards.
-        Ray ray = new Ray(click3d, dir);
-        // Collect intersections between ray and all nodes in results list.
-        AUVsNode.collideWith(ray, results);
-        // Use the results -- we rotate the selected geometry.
-        if (results.size() > 0) {
-          // The closest result is the target that the player picked:
-          //Geometry target = results.getClosestCollision().getGeometry();
-          for (int i = 0; i < results.size(); i++) {
-              Geometry target = results.getCollision(i).getGeometry();
-              // Here comes the action:
-              System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
-              if((String)target.getParent().getUserData("auv_name") != null){
-                  BasicAUV auv = (BasicAUV)auvManager.getAUV((String)target.getParent().getUserData("auv_name"));
-                  if(auv != null){
-                        auvManager.deselectAllAUVs();//deselect all auvs before (....seamless tansition through two auvs)
-                        auv.setSelected(true);
-                        guiControlState.setLatestSelectedAUV(auv);
-                        this.mars.setHoverMenuForAUV(auv,(int)inputManager.getCursorPosition().x,mars.getViewPort().getCamera().getHeight()-(int)inputManager.getCursorPosition().y);
-                        return;
-                    //guiControlState.setFree(false);
-                  }
-              }
-          }
-          //run through and nothing found that is worth to pick
-          auvManager.deselectAllAUVs();
-          this.mars.setHoverMenuForAUV(false);
-        }else{//nothing to pickRightClick
-            //System.out.println("Nothing to pick auv!");
-            auvManager.deselectAllAUVs();
-            this.mars.setHoverMenuForAUV(false);
-            //guiControlState.setFree(true);
-        }
-
-        results.clear();
-        SimObNode.collideWith(ray, results);
-        // Use the results -- we rotate the selected geometry.
-        if (results.size() > 0) {
-            for (int i = 0; i < results.size(); i++) {
-              Geometry target = results.getCollision(i).getGeometry();
-              // Here comes the action:
-              //System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
-                if( ((String)target.getUserData("simob_name") != null) ){
-                    Integer pickType = (Integer)target.getUserData(PickHint.PickName);
-                    if( (pickType == null) || (pickType == PickHint.Pick) ){//only pick spatials who are pickable
-                        SimObject simob = (SimObject)simobManager.getSimObject((String)target.getUserData("simob_name"));
-                        if(simob != null){
-                            simobManager.deselectAllSimObs();
-                            simob.setSelected(true);
-                            guiControlState.setLatestSelectedSimOb(simob);
-                            return;
-                            //guiControlState.setFree(false);
-                        }
-                    }
-                }
-            }
-            //run through and nothing found that is worth to pick
-            simobManager.deselectAllSimObs();
-        }else{//nothing to pickRightClick
-            //System.out.println("Nothing to pick simobs!");
-            simobManager.deselectAllSimObs();
-        }     
-    }
-    
-    private void pickRightClick(){
-        CollisionResults results = new CollisionResults();
-        // Convert screen click to 3d position
-        Vector2f click2d = inputManager.getCursorPosition();
-        //System.out.println("click2d: " + click2d);
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight()-click2d.y), 1f).subtractLocal(click3d);
-        
-        //cleanup everything before
-        auvManager.deselectAllAUVs();
-        
-        // Aim the ray from the clicked spot forwards.
-        Ray ray = new Ray(click3d, dir);
-        // Collect intersections between ray and all nodes in results list.
-        AUVsNode.collideWith(ray, results);
-        // Use the results -- we rotate the selected geometry.
-        if (results.size() > 0) {
-            for (int i = 0; i < results.size(); i++) {
-                Geometry target = results.getCollision(i).getGeometry();
-                guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
-                guiControlState.setAuvContactDirection(dir.normalize());
-                guiControlState.setSelect_auv(true);
-                  // Here comes the action:
-                  if((String)target.getParent().getUserData("auv_name") != null){
-                      BasicAUV auv = (BasicAUV)auvManager.getAUV((String)target.getParent().getUserData("auv_name"));
-                      if(auv != null){
-                            auv.setSelected(true);
-                            guiControlState.setLatestSelectedAUV(auv);
-                            MARSTopComp.initPopUpMenuesForAUV(auv.getAuv_param());
-                            MARSTopComp.showpopupAUV((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y); 
-                      }
-                  }
-            }
-        }else{//nothing to pickRightClick but still normal context menu for split view
-            //System.out.println("nothing to choose");
-            guiControlState.setSelect_auv(false);
-            //auvManager.deselectAllAUVs();
-            MARSTopComp.hideAllPopupWindows();
-            MARSTopComp.showpopupWindowSwitcher((int)inputManager.getCursorPosition().x,(int)inputManager.getCursorPosition().y);  
         }
     }
     
@@ -1354,7 +847,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             System.out.println("MARSTopComp is NULL");
         }
         
-        //System.out.println("time: " + tpf);
         /*if(mars_settings.isSetupWavesWater()){
             //initer.updateWavesWater(tpf);
         }*/
@@ -1607,7 +1099,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 System.out.println("RESET!!!");
-                time = 0f;
                 auvManager.resetAllAUVs();
                 return null;
             }
@@ -1624,68 +1115,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     
     /**
      * 
-     */
-    public void pokeSelectedAUV(){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
-            Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
-            //System.out.println("POKE!");     
-            Vector3f mult = direction.mult(selected_auv.getAuv_param().getMass()*5f/((float)mars_settings.getPhysicsFramerate()));
-            System.out.println("POKE!: " + mult + " rel_pos: " + rel_pos);  
-            selected_auv.getPhysicsControl().applyImpulse(mult, rel_pos);
-        }
-    }
-    
-    /**
-     * 
-     * @param new_position
-     * @param relative
-     */
-    public void moveSelectedAUV(Vector3f new_position, boolean relative){
-        //System.out.println("moveSelectedAUV" + new_position);
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            selected_auv.hideGhostAUV(true);
-            if(!relative){
-                selected_auv.getAuv_param().setPosition(new_position);
-                selected_auv.getPhysicsControl().setPhysicsLocation(new_position);
-            }else{
-                selected_auv.getAuv_param().setPosition(new_position.add(selected_auv.getAuv_param().getPosition()));
-                selected_auv.getPhysicsControl().setPhysicsLocation(selected_auv.getPhysicsControl().getPhysicsLocation().add(new_position));
-            }
-        }
-    }
-    
-    /**
-     * 
-     * @param new_rotation
-     * @param relative
-     */
-    public void rotateSelectedAUV(Vector3f new_rotation, boolean relative){
-        //System.out.println("rotateSelectedAUV" + new_rotation);
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            selected_auv.hideGhostAUV(true);
-            if(!relative){
-                selected_auv.getAuv_param().setRotation(new_rotation);
-                Quaternion quat = new Quaternion();
-                quat.fromAngles(new_rotation.x, new_rotation.y, new_rotation.z);
-                selected_auv.getPhysicsControl().setPhysicsRotation(quat);
-            }else{
-                
-            }
-        }
-    }
-    
-    /**
-     * 
      * @param new_position
      * @param relative
      */
     public void moveCamera(Vector3f new_position, boolean relative){
-        //System.out.println("moveCamera" + new_position);
-        viewManager.moveCamera(new_position,relative);
         if(!relative){
             mars.getCamera().setLocation(new_position);
         }else{
@@ -1709,30 +1142,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     
     /**
      * 
-     * @param new_position
-     */
-    public void moveSelectedGhostAUV(Vector3f new_position){
-        //System.out.println("moveSelectedGhostAUV" + new_position);
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            moveSelectedGhostAUV(selected_auv,new_position);
-        }
-    }
-    
-    /**
-     * 
-     */
-    public void chaseSelectedAUV(){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            mars.getFlyByCamera().setEnabled(false);
-            mars.getChaseCam().setSpatial(selected_auv.getAUVNode());
-            mars.getChaseCam().setEnabled(true);
-        }
-    }
-    
-    /**
-     * 
      * @param auv
      */
     public void chaseAUV(AUV auv){
@@ -1740,98 +1149,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             mars.getFlyByCamera().setEnabled(false);
             mars.getChaseCam().setSpatial(auv.getAUVNode());
             mars.getChaseCam().setEnabled(true);
-        }
-    }
-    
-    /**
-     * 
-     * @param enable
-     */
-    public void enableSelectedAUV(boolean enable){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            if(!enable){
-                selected_auv.getAuv_param().setEnabled(false);
-                auvManager.enableAUV(selected_auv, false);
-            }else{
-                selected_auv.getAuv_param().setEnabled(true);
-                auvManager.enableAUV(selected_auv, true);
-            }
-        }
-    }
-    
-    /**
-     * 
-     * @param debug_mode
-     * @param selected
-     */
-    public void debugSelectedAUV(int debug_mode, boolean selected){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            switch(debug_mode){
-                case 0: selected_auv.getAuv_param().setDebugPhysicalExchanger(selected);selected_auv.setPhysicalExchangerVisible(selected);break;
-                case 1: selected_auv.getAuv_param().setDebugCenters(selected);selected_auv.setCentersVisible(selected);break;
-                case 2: selected_auv.getAuv_param().setDebugBuoycancy(selected);selected_auv.setBuoycancyVisible(selected);break;
-                case 3: selected_auv.getAuv_param().setDebugCollision(selected);selected_auv.setCollisionVisible(selected);break;
-                case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
-                case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
-                case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
-                case 7: selected_auv.getAuv_param().setDebugVisualizers(selected);selected_auv.setVisualizerVisible(selected);break;
-                case 8: selected_auv.getAuv_param().setDebugBuoycancyVolume(selected);selected_auv.setBuoyancyVolumeVisible(selected);break;
-                default:;
-            }                
-        }
-    }
-    
-    /**
-     * 
-     * @param debug_mode
-     * @param selected
-     */
-    public void waypointsSelectedAUV(int debug_mode, boolean selected){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            switch(debug_mode){
-                case 0: selected_auv.getAuv_param().setWaypoints_enabled(selected);selected_auv.setWaypointsEnabled(selected);break;
-                case 1: selected_auv.getAuv_param().setWaypoints_visible(selected);selected_auv.setWayPointsVisible(selected);break;
-                case 2: selected_auv.getWaypoints().reset();break;
-                case 3: selected_auv.getAuv_param().setWaypoints_gradient(selected);if(!selected){selected_auv.getWaypoints().updateColor();}break;
-                default:;
-            }                
-        }
-    }
-    
-    /**
-     * 
-     * @param newColor
-     */
-    public void waypointsColorSelectedAUV(java.awt.Color newColor){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            selected_auv.getAuv_param().setWaypoints_color(new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f));
-        }
-    }
-    
-    /**
-     * 
-     */
-    public void resetSelectedAUV(){
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if(selected_auv != null){
-            selected_auv.reset();
-        }
-    }
-    
-    /**
-     * 
-     * @param auv
-     */
-    public void selectAUV(AUV auv){
-        if(auv != null){
-            if(auv.getAuv_param().isEnabled()){
-                auv.setSelected(true);
-                guiControlState.setLatestSelectedAUV(auv);
-            }
         }
     }
     
@@ -1995,42 +1312,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                     simobManager.enableSimObject(simob, true);
                     simob.getPhysicsControl().setPhysicsLocation(intersection);
                 }
-            }
-        }
-    }
-    
-    /**
-     * 
-     */
-    public void deselectAllAUVs(){
-        auvManager.deselectAllAUVs();
-    }
-    
-    /**
-     * 
-     * @param auv
-     */
-    public void deselectAUV(AUV auv){
-        auvManager.deselectAUV(auv);
-    }
-    
-    /**
-     * 
-     * @param simob
-     */
-    public void deselectSimObs(SimObject simob){
-        simobManager.deselectAllSimObs();
-    }
-    
-    /**
-     * 
-     * @param simob
-     */
-    public void selectSimObs(SimObject simob){
-        if(simob != null){
-            if(simob.isEnabled()){
-                simob.setSelected(true);
-                guiControlState.setLatestSelectedSimOb(simob);
             }
         }
     }
