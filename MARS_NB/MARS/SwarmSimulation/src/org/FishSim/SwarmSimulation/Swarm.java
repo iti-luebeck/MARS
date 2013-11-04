@@ -1,4 +1,4 @@
-package SwarmSimulation;
+package org.FishSim.SwarmSimulation;
 
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.math.Vector3f;

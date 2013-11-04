@@ -2,14 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package SwarmSimulation;
-
-import com.jme3.scene.Node;
+package org.FishSim.SwarmSimulation;
 
 /**
  *
  * @author Acer
  */
-interface AppStateExtension {
-    public Node getRootNode();
+public class FishControl {
+    
 }

@@ -1,4 +1,4 @@
-package SwarmSimulation;
+package org.FishSim.SwarmSimulation;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
