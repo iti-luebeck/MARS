@@ -6,10 +6,12 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import mars.states.AppStateExtension;
 
 public class FishSim extends AbstractAppState implements AppStateExtension {
     private Node rootNode = new Node("FishSimState Root Node");
@@ -145,4 +147,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public main getMain(){
         return main;
     }
+
+    @Override
+    public void setCamera(Camera cam) {
+        
+    }
+    
 }
