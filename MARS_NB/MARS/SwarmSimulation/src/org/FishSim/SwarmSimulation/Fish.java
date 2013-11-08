@@ -13,6 +13,7 @@ import com.jme3.scene.control.LodControl;
 import java.util.ArrayList;
 import java.util.List;
 import jme3tools.optimize.LodGenerator;
+import mars.control.MyLodControl;
 
 /**
  *
@@ -50,6 +51,7 @@ public class Fish extends Node{
         this.sim = sim;
         
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
+        optimize(model);
         //modelControl = model.getChild("Cube").getControl(AnimControl.class);
         
         //channel_swim = modelControl.createChannel();
@@ -75,29 +77,31 @@ public class Fish extends Node{
        this.swarm = swarm; 
     }
     
+    private void optimize(Node node){
+        
+        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        
+        for(Spatial spatial : node.getChildren()){
+           if(spatial instanceof Geometry){
+                Geometry geo = (Geometry) spatial;
+                LodGenerator lodGenerator = new LodGenerator(geo);          
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.3f, 0.6f);
+                geo.setLodLevel(0);
+                MyLodControl control = new MyLodControl();
+                control.setDistTolerance(1f);
+                control.setTrisPerPixel(0.5f);
+                control.setCam(sim.getMain().getCamera());
+                geo.addControl(control);
+            }else if(spatial instanceof Node){
+                optimize((Node)spatial);
+            }
+        }        
+    }
+    
     /**
      *
      */
     public void show(){
-        /*
-        jme3tools.optimize.GeometryBatchFactory.optimize(model);
-        
-        Geometry geo = null;
-        for(Spatial spatial : model.getChildren()){
-           if(spatial instanceof Geometry){
-                geo = (Geometry) spatial;
-            }
-        }
-        
-        LodGenerator lodGenerator = new LodGenerator(geo);          
-        lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.5f);
-        geo.setLodLevel(1);
-        LodControl control = new LodControl();
-        control.setDistTolerance(1);
-        control.setTrisPerPixel(1);
-        geo.addControl(control);
-        
-        attachChild(geo);*/
         sim.getRootNode().attachChild(this);
     }
     

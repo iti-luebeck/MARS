@@ -105,8 +105,9 @@ public class Swarm {
         this.id = id;
         
         for(int i = 0; i < size; i++){
-            swarm.add(new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map));
-            swarm.get(i).show();
+            Fish fish = new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map);
+            swarm.add(fish);
+            fish.show();
         }
         initCollidable();
     }
