@@ -1219,4 +1219,52 @@ public class RayBasedSensor extends Sensor{
     public void setFailureThreshold(int failure_threshold) {
         noises.put("failure_threshold", failure_threshold);
     }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isDepthBufferUsage() {
+        return (Boolean)variables.get("DepthBufferUsage");
+    }
+
+    /**
+     *
+     * @param failure_switch 
+     */
+    public void setDepthBufferUsage(boolean DepthBufferUsage) {
+        variables.put("DepthBufferUsage", DepthBufferUsage);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int getDepthBufferWidth() {
+        return (Integer)variables.get("DepthBufferWidth");
+    }
+
+    /**
+     *
+     * @param failure_threshold 
+     */
+    public void setDepthBufferWidth(int DepthBufferWidth) {
+        variables.put("DepthBufferWidth", DepthBufferWidth);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int getDepthBufferHeigth() {
+        return (Integer)variables.get("DepthBufferHeigth");
+    }
+
+    /**
+     *
+     * @param failure_threshold 
+     */
+    public void setDepthBufferHeigth(int DepthBufferHeigth) {
+        variables.put("DepthBufferHeigth", DepthBufferHeigth);
+    }
 }

@@ -81,6 +81,7 @@ import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
+import mars.filter.FishEyeFilter;
 import mars.recorder.RecordControl;
 import mars.recorder.RecordManager;
 import mars.xml.ConfigManager;
@@ -437,6 +438,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             guiState.setSimObNode(SimObNode);
             guiState.setMars_settings(mars_settings);
             stateManager.attach(guiState);
+            
+            progr.progress( "Init other States" );
+            progr.progress( "Init FishSwarm State" );
+            Lookup lkp = Lookup.getDefault();
+            AbstractAppState state = lkp.lookup(AbstractAppState.class);
+            stateManager.attach(state);
         }
         progr.progress( "Init Super" );
         super.initialize(stateManager, app);

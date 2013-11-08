@@ -124,6 +124,10 @@ public class MARS_Main extends SimpleApplication{
      */
     @Override
     public void simpleInitApp() {
+        
+        //change renderer to an own with depthbuffer access
+        //renderer = new ReadableDepthRenderer();
+        
         initAssetPaths();
         initProgressBar();
         progr.progress( "Starting MARS_MAIN" );
