@@ -9,6 +9,11 @@ import java.util.ArrayList;
  */
 public class FoodSourceMap extends ArrayList<FoodSource>{
     
+    /**
+     *
+     * @param location
+     * @return
+     */
     public FoodSource getNearestFS(Vector3f location){
         FoodSource nearest = null;
         float dist;

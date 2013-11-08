@@ -30,12 +30,16 @@ public class Fish extends Node{
     private Vector3f lastMove = new Vector3f().zero();
     private Quaternion rotation = new Quaternion();   
     private float rotateSpeed = 2;
+    /**
+     *
+     */
     protected float moveSpeed;
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
  
     /**
      * Create a new Fish.
      *
+     * @param sim 
      * @param scale             Size of the fish
      * @param rot               Starting rotation
      * @param localTrans        Starting position
@@ -63,10 +67,17 @@ public class Fish extends Node{
         rotateSpeed = (float) (Math.random()) + 1f;
     }
     
+    /**
+     *
+     * @param swarm
+     */
     public void setSwarm(Swarm swarm){
        this.swarm = swarm; 
     }
     
+    /**
+     *
+     */
     public void show(){
         /*
         jme3tools.optimize.GeometryBatchFactory.optimize(model);
@@ -87,9 +98,13 @@ public class Fish extends Node{
         geo.addControl(control);
         
         attachChild(geo);*/
-        sim.getMain().getRootNode().attachChild(this);
+        sim.getRootNode().attachChild(this);
     }
     
+    /**
+     *
+     * @param tpf
+     */
     public void swim(float tpf){
         Vector3f diff = new Vector3f(0f ,0f ,0f);
         
@@ -146,7 +161,7 @@ public class Fish extends Node{
         }
         
         //WaterHeight
-        if(getLocalTranslation().y > (sim.getMain().getWaterHeight() - 5f)){
+        if(getLocalTranslation().y > (sim.getIniter().getCurrentWaterHeight(0f,0f) - 5f)){
             diff.normalizeLocal();
             diff.subtractLocal(Vector3f.UNIT_Y.mult(2));
         }
@@ -172,6 +187,10 @@ public class Fish extends Node{
         
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getLastMove(){
         return lastMove;
     }

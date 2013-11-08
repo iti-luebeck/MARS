@@ -12,17 +12,30 @@ public class FoodSource extends Node{
     float size;
     FoodSourceMap map;
     
+    /**
+     *
+     * @param sim
+     * @param size
+     * @param localTrans
+     */
     public FoodSource(FishSim sim, float size, Vector3f localTrans){
         this.sim = sim;
         this.size = size;
         this.setLocalTranslation(localTrans);
     }
     
+    /**
+     *
+     * @param map
+     */
     public void show(FoodSourceMap map){
         this.map = map;
-        sim.getMain().getRootNode().attachChild(this);
+        sim.getRootNode().attachChild(this);
     }
     
+    /**
+     *
+     */
     public void eat(){
         size--;
         if(size <= 0){

@@ -32,14 +32,19 @@ import com.jme3.water.WaterFilter;
 /**
  *
  * @author Acer
+ * @deprecated 
  */
-public class main extends SimpleApplication {
+@Deprecated
+public class MARS_Main extends SimpleApplication {
     
  private Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
  private WaterFilter water;
  TerrainQuad terrain;
  Material matRock;
- protected RigidBodyControl land;
+    /**
+     *
+     */
+    protected RigidBodyControl land;
  BulletAppState bullet;
  private float time = 0.0f;
  private float waterHeight = 0.0f;
@@ -48,6 +53,9 @@ public class main extends SimpleApplication {
  private FishSim fSim;
  
  
+    /**
+     *
+     */
     @Override
     public void simpleInitApp() {
         fSim = new FishSim(this);
@@ -115,6 +123,10 @@ public class main extends SimpleApplication {
         viewPort.addProcessor(fpp);     
     }
     
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void simpleUpdate(float tpf){
         super.simpleUpdate(tpf);
@@ -124,9 +136,13 @@ public class main extends SimpleApplication {
         stateManager.update(tpf);
     }
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         //Create an instance of this program
-        main app = new main();
+        MARS_Main app = new MARS_Main();
         //The start() method runs simpleInitGame(),
         app.start();
     }
@@ -176,10 +192,18 @@ public class main extends SimpleApplication {
         rootNode.attachChild(terrain);
     }
     
+    /**
+     *
+     * @return
+     */
     public float getWaterHeight(){
         return initialWaterHeight;
     }
     
+    /**
+     *
+     * @return
+     */
     public BulletAppState getBulletAppState(){
         return bullet;
     }

@@ -11,32 +11,90 @@ import java.util.Random;
  * @author Acer
  */
 public class Swarm {
+    /**
+     *
+     */
     protected List<Fish> swarm;
+    /**
+     *
+     */
     protected FishSim sim;
+    /**
+     *
+     */
     protected Vector3f scale;
+    /**
+     *
+     */
     protected float near;
+    /**
+     *
+     */
     protected int id;
+    /**
+     *
+     */
     protected Random random = new Random();
+    /**
+     *
+     */
     protected Vector3f center;
+    /**
+     *
+     */
     protected float radius;
+    /**
+     *
+     */
     protected SwarmColControl colCont;
+    /**
+     *
+     */
     protected SwarmViewControl viewCont;
     private Vector3f colLocation = null;
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
+    /**
+     *
+     */
     protected int type;
+    /**
+     *
+     */
     protected float moveSpeed = 5;
     private float avoidTime = 0f;
     private float targetTime = 0f;
+    /**
+     *
+     */
     protected float splitTime = 0f;
+    /**
+     *
+     */
     protected float escapeInc = 0;
     private Vector3f lastCenter = Vector3f.ZERO;
     private boolean collided = false;
     private boolean viewCollided = false;
+    /**
+     *
+     */
     protected boolean split = false;
+    /**
+     *
+     */
     protected boolean merge = false;
     private Swarm mergeWith;
     
+    /**
+     *
+     * @param sim
+     * @param size
+     * @param scale
+     * @param spawn
+     * @param map
+     * @param type
+     * @param id
+     */
     public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap map, int type, int id){
         near = (float) ((Math.log1p((float)size)) + scale.length());
         this.sim = sim;
@@ -53,6 +111,15 @@ public class Swarm {
         initCollidable();
     }
     
+    /**
+     *
+     * @param sim
+     * @param size
+     * @param spawn
+     * @param map
+     * @param type
+     * @param id
+     */
     public Swarm(FishSim sim, int size, Vector3f spawn, FoodSourceMap map, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
         near = (float) ((Math.log1p((float)size)) + scale.length());
@@ -71,6 +138,14 @@ public class Swarm {
         initCollidable();
     }
     
+    /**
+     *
+     * @param sim
+     * @param size
+     * @param spawn
+     * @param type
+     * @param id
+     */
     public Swarm(FishSim sim, int size, Vector3f spawn, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
         near = (float) ((Math.log1p((float)size)) + scale.length());
@@ -97,6 +172,10 @@ public class Swarm {
         enableCol();
     }
 
+    /**
+     *
+     * @param tpf
+     */
     public void move(float tpf) {
         computeRadius();
         computeCenter();
@@ -144,11 +223,18 @@ public class Swarm {
             }
         }
     }
+    /**
+     *
+     * @param splitLocation
+     */
     public void setSplit(Vector3f splitLocation){
         split = true;
         this.splitLocation = splitLocation;
     }
     
+    /**
+     *
+     */
     public void split(){
         disableCol();
         
@@ -180,11 +266,18 @@ public class Swarm {
         sim.addedSwarms.addAll(swarms);
         sim.removedSwarms.add(this);
     }
+    /**
+     *
+     * @param mergeWith
+     */
     public void setMerge(Swarm mergeWith){
         merge = true;
         this.mergeWith = mergeWith;
     }
     
+    /**
+     *
+     */
     public void merge(){
         disableCol();
         mergeWith.disableCol();
@@ -207,11 +300,20 @@ public class Swarm {
         sim.removedSwarms.addAll(swarms);
     }
     
+    /**
+     *
+     * @param fish
+     */
     public void add(Fish fish){
         swarm.add(fish);
         fish.setSwarm(this);
     }
     
+    /**
+     *
+     * @param fish
+     * @return
+     */
     public ArrayList<Fish> getNearNeigh(Fish fish){
         ArrayList<Fish> neigh = new ArrayList<Fish>();
         float dist;
@@ -226,6 +328,10 @@ public class Swarm {
         return neigh;
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getCenter(){
         return center;
     }
@@ -251,58 +357,103 @@ public class Swarm {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getMoveDirection(){
         return center.subtract(lastCenter);
     }
     
+    /**
+     *
+     * @return
+     */
     public float getNear(){
         return near;
     }
     
+    /**
+     *
+     * @param cLocation
+     */
     public void setCollided(Vector3f cLocation){
         collided = true;
         colLocation = cLocation;
     }
     
+    /**
+     *
+     * @param vLocation
+     */
     public void setViewCollided(Vector3f vLocation){
         viewCollided = true;
         viewLocation = vLocation;
     }
     
+    /**
+     *
+     */
     public void enableCol(){
-        sim.getMain().getBulletAppState().getPhysicsSpace().add(colCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().addCollisionListener(colCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().add(viewCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().addCollisionListener(viewCont);
+        sim.getBulletAppState().getPhysicsSpace().add(colCont);
+        sim.getBulletAppState().getPhysicsSpace().addCollisionListener(colCont);
+        sim.getBulletAppState().getPhysicsSpace().add(viewCont);
+        sim.getBulletAppState().getPhysicsSpace().addCollisionListener(viewCont);
     }
     
+    /**
+     *
+     */
     public void disableCol(){
-        sim.getMain().getBulletAppState().getPhysicsSpace().removeCollisionListener(colCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().remove(colCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().removeCollisionListener(viewCont);
-        sim.getMain().getBulletAppState().getPhysicsSpace().remove(viewCont);
+        sim.getBulletAppState().getPhysicsSpace().removeCollisionListener(colCont);
+        sim.getBulletAppState().getPhysicsSpace().remove(colCont);
+        sim.getBulletAppState().getPhysicsSpace().removeCollisionListener(viewCont);
+        sim.getBulletAppState().getPhysicsSpace().remove(viewCont);
     }
     
+    /**
+     *
+     * @return
+     */
     public float getSplitTime(){
         return splitTime;
     }
     
+    /**
+     *
+     */
     public void resetSplitTime(){
         splitTime = 10.0f;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getSize(){
         return swarm.size();
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getColLocation(){
         return colLocation;
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getViewLocation(){
         return viewLocation;
     }
     
+    /**
+     *
+     * @return
+     */
     public int size(){
         return swarm.size();
     }

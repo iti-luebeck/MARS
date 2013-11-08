@@ -15,11 +15,20 @@ import com.jme3.math.Vector3f;
 public class SwarmColControl extends RigidBodyControl implements PhysicsCollisionListener{
 private Swarm swarm;
 
+    /**
+     *
+     * @param shape
+     * @param swarm
+     */
     public SwarmColControl(CollisionShape shape, Swarm swarm){
         super(shape, 1);
         this.swarm = swarm;
     }
     
+    /**
+     *
+     * @param event
+     */
     @Override
     public void collision(PhysicsCollisionEvent event) {
         if(event.getObjectA() == this){
@@ -91,6 +100,10 @@ private Swarm swarm;
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public Swarm getSwarm(){
         return this.swarm;
     }   
