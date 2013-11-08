@@ -55,7 +55,7 @@ public class Fish extends Node{
         //channel_swim = modelControl.createChannel();
         //channel_swim.setAnim("ArmatureAction.014");
         //channel_swim.setLoopMode(LoopMode.Loop);
-        //attachChild(model);
+        attachChild(model);
         scale(scale.x, scale.y, scale.z);
         rotate(rot.x, rot.y, rot.z);
         setLocalTranslation(localTrans.x, localTrans.y, localTrans.z);

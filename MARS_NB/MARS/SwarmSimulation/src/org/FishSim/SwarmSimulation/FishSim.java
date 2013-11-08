@@ -100,9 +100,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         //swarms.add(new Swarm(this, 200, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-197.21957f, 81.6459f, 136.884346f), map, 2));
         
         //Splitting
-        map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
-        addSwarm(500, new Vector3f(-327.21957f, 81.6459f, 120.884346f), map, 0);
-        createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
+        map.add(new FoodSource(this, 10000, new Vector3f(1f, 0f, 1f)));
+        addSwarm(500, new Vector3f(0f, -1.0f, 0f), map, 0);
+        //createObstacle(new Vector3f(1f, -1.0f, 0f), 5f);
     }
     
     /**
@@ -254,7 +254,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         obstacle.setCollisionGroup(3);
         obstacle.setCollideWithGroups(1);
         obstacle.setPhysicsLocation(pos);
-        //mars.getBulletAppState().getPhysicsSpace().add(obstacle);
+        getBulletAppState().getPhysicsSpace().add(obstacle);
     }
     
     /**

@@ -761,22 +761,23 @@ public class Initializer {
      * 
      */
     public void setupLight(){
+        final Node rootNodeMars = mars.getRootNode();
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
-                        rootNode.removeLight(sun);//remove all old stuff before
-                        rootNode.removeLight(ambLight);
+                        rootNodeMars.removeLight(sun);//remove all old stuff before
+                        rootNodeMars.removeLight(ambLight);
                         sun.setColor(mars_settings.getLight_color());
                         sun.setDirection(mars_settings.getLight_direction().normalize());
                         ambLight.setColor(mars_settings.getAmbientColor());
                         if(mars_settings.isSetupLight()){
-                            rootNode.addLight(sun);
+                            rootNodeMars.addLight(sun);
                         }else{
-                            rootNode.removeLight(sun);
+                            rootNodeMars.removeLight(sun);
                         }
                         if(mars_settings.isSetupAmbient()){
-                            rootNode.addLight(ambLight);
+                            rootNodeMars.addLight(ambLight);
                         }else{
-                            rootNode.removeLight(ambLight);
+                            rootNodeMars.removeLight(ambLight);
                         }
                         return null;
                     }
