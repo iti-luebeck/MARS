@@ -122,7 +122,7 @@ public class Swarm {
      * @param id
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, FoodSourceMap map, int type, int id){
-        scale = new Vector3f(0.25f, 0.25f, 0.25f);
+        scale = new Vector3f(0.05f, 0.05f, 0.05f);
         near = (float) ((Math.log1p((float)size)) + scale.length());
         this.sim = sim;
         swarm = new ArrayList<Fish>();
@@ -132,7 +132,7 @@ public class Swarm {
         
         float rand;
         for(int i = 0; i < size; i++){
-            rand = getGaussianDistributionNoise(0.1f);
+            rand = getGaussianDistributionNoise(0.01f);
             swarm.add(new Fish(sim, scale.add(rand, rand, rand), new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map));
             swarm.get(i).show();
         }
