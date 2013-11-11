@@ -107,7 +107,7 @@ public class Swarm {
         for(int i = 0; i < size; i++){
             Fish fish = new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map);
             swarm.add(fish);
-            fish.show();
+            //fish.show();
         }
         initCollidable();
     }
@@ -224,6 +224,13 @@ public class Swarm {
             }
         }
     }
+    
+    public void stat(){
+        for(int i = 0; i < swarm.size(); i++){
+            System.out.println(swarm.get(i).getTriangleCount());
+        }
+    }
+    
     /**
      *
      * @param splitLocation

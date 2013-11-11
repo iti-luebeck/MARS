@@ -22,6 +22,8 @@ import mars.control.MyLodControl;
 
 public class Fish extends Node{
     private final String path = "Models/Fishtest4/Fishtest4.j3o";
+    //private final String path = "Models/Monsun2/monsun2_very_low.obj";
+    
     private Swarm swarm;
     private Node model;
     private AnimControl modelControl;
@@ -67,6 +69,8 @@ public class Fish extends Node{
         //Speed of this fish
         moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
         rotateSpeed = (float) (Math.random()) + 1f;
+        
+        sim.getRootNode().attachChild(this);
     }
     
     /**
@@ -84,8 +88,8 @@ public class Fish extends Node{
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
                 Geometry geo = (Geometry) spatial;
-                LodGenerator lodGenerator = new LodGenerator(geo);          
-                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.3f, 0.6f);
+                /*LodGenerator lodGenerator = new LodGenerator(geo);          
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.8f, 0.8f);*/
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
                 control.setDistTolerance(1f);
@@ -100,7 +104,21 @@ public class Fish extends Node{
     
     /**
      *
+     * @param enabled
      */
+    public void setVisible(boolean enabled) {
+        if(!enabled){
+            this.setCullHint(Spatial.CullHint.Always);
+        }else{
+            this.setCullHint(Spatial.CullHint.Never);
+        }
+    }
+    
+    /**
+     *
+     * @deprecated see setVisible
+     */
+    @Deprecated
     public void show(){
         sim.getRootNode().attachChild(this);
     }
