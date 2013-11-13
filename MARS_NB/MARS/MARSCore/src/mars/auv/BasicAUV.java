@@ -1045,7 +1045,9 @@ public class BasicAUV implements AUV, SceneProcessor {
             updateAngularDragForces();
 
             //add the water_current
-            updateWaterCurrentForce();
+            if(getMARS_Settings().isSetupFlow()){
+                updateWaterCurrentForce();
+            }
             
             //set all velocity to zero for debug purposes
             //physics_control.setLinearVelocity(Vector3f.ZERO);
