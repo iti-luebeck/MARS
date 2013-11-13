@@ -21,7 +21,7 @@ import mars.control.MyLodControl;
  */
 
 public class Fish extends Node{
-    private final String path = "Models/Fishtest4/Fishtest4.j3o";
+    private final String path = "Models/Fish/Fish.j3o";
     //private final String path = "Models/Monsun2/monsun2_very_low.obj";
     
     private Swarm swarm;
