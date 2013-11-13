@@ -42,7 +42,7 @@
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="config">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">default</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wak</value>
                         </entry>
                     </value>
                 </entry>
@@ -510,10 +510,10 @@
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="localip">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.88.159</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.158.154</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.88.157</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.158.218</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="publish">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>

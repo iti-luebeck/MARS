@@ -83,6 +83,9 @@
             <entry xsi:type="myHashMapEntryTypeObject" key="angular_factor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
             </entry>
+			<entry xsi:type="myHashMapEntryTypeObject" key="ThreatLevel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.0</value>
+            </entry>
             <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value>
                     <x>0.0</x>

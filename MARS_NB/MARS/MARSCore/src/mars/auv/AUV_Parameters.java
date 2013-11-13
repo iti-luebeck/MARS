@@ -325,6 +325,27 @@ public class AUV_Parameters{
      *
      * @return
      */
+    public float getThreatLevel() {
+        Float ret = (Float)params.get("ThreatLevel");
+        if(ret != null){
+            return ret;
+        }else{
+            return 0f;
+        }
+    }
+
+    /**
+     *
+     * @param ThreatLevel
+     */
+    public void setThreatLevel(float ThreatLevel) {
+        params.put("ThreatLevel", ThreatLevel);
+    }
+    
+    /**
+     *
+     * @return
+     */
     public Float getWayPointLineWidth() {
          return (Float)waypoints.get("lineWidth");
     }
