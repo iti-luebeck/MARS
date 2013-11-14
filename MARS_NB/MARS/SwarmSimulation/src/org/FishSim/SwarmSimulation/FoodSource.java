@@ -5,8 +5,9 @@ import com.jme3.scene.Node;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
+
 public class FoodSource extends Node{
     FishSim sim;
     float size;
@@ -14,9 +15,9 @@ public class FoodSource extends Node{
     
     /**
      *
-     * @param sim
-     * @param size
-     * @param localTrans
+     * @param sim           Simulation
+     * @param size          Size of the foodsource
+     * @param localTrans    Position of the foodsource
      */
     public FoodSource(FishSim sim, float size, Vector3f localTrans){
         this.sim = sim;
@@ -26,15 +27,15 @@ public class FoodSource extends Node{
     
     /**
      *
-     * @param map
+     * @param map   Show foodsourcemap
      */
     public void show(FoodSourceMap map){
         this.map = map;
-        sim.getRootNode().attachChild(this);
+        sim.getMain().getRootNode().attachChild(this);
     }
     
     /**
-     *
+     * Eat 
      */
     public void eat(){
         size--;

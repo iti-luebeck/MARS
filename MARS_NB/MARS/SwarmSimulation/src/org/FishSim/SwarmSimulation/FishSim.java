@@ -20,7 +20,7 @@ import mars.states.SimState;
 
 /**
  *
- * @author Tosik
+ * @author Mandy Feldvoß
  */
 @ServiceProvider(service=AbstractAppState.class)
 public class FishSim extends AbstractAppState implements AppStateExtension {
@@ -29,31 +29,21 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     private MARS_Main mars;
     private Initializer initer;
     private BulletAppState bulletAppState;
-    
-    //FishSim variables
-    /**
-     *
-     */
     protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
-    /**
-     *
-     */
     protected ArrayList<Swarm> addedSwarms = new ArrayList<Swarm>();
-    /**
-     *
-     */
     protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
     private int latestSwarmId;
     private FoodSourceMap map;
-
+ 
     /**
+     *
      *
      */
     public FishSim() {
         super();
     }
- 
-    /**
+    
+        /**
      *
      * @param main
      * @deprecated
@@ -90,7 +80,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             } 
         }
-        super.initialize(stateManager, app);
+        super.initialize(stateManager, app);  
         
         map = new FoodSourceMap();
         
@@ -99,71 +89,55 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         //swarms.add(new Swarm(this, 400, new Vector3f(-327.21957f, 81.6459f, 116.884346f), map, 0));
         //swarms.add(new Swarm(this, 200, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-197.21957f, 81.6459f, 136.884346f), map, 2));
         
-        //Splitting
-        map.add(new FoodSource(this, 10000, new Vector3f(1f, 0f, 1f)));
-        addSwarm(500, new Vector3f(0f, -1.0f, 0f), map, 0);
-        //createObstacle(new Vector3f(1f, -1.0f, 0f), 5f);
+        //Splitting-Test
+        map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
+        addSwarm(100, null, new Vector3f(-327.21957f, 81.6459f, 120.884346f), map, 0);
+        //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);
+        //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
     }
     
     /**
      *
-     * @param size
+     * @param size      Size of the swarm
      * @param trans
      * @param map
      * @param type
      */
-    public void addSwarm(int size, Vector3f trans, FoodSourceMap map, int type){
-        addedSwarms.add(new Swarm(this, size, trans, map, type, latestSwarmId));
+    public void addSwarm(int size, Vector3f scale, Vector3f trans, FoodSourceMap map, int type){
+        if(scale==null){
+            addedSwarms.add(new Swarm(this, size, trans, map, type, latestSwarmId));
+        }else{
+            addedSwarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
+        }
         latestSwarmId ++;
         
     }
     
+    
     /**
      *
-     * @return
+     * @return rootNode
      */
     @Override
     public Node getRootNode(){
         return rootNode;
     }
     
-    /**
-     *
-     */
     @Override
     public void cleanup() {
         super.cleanup();
-        //rootNode.detachAllChildren();
-        //mars.getRootNode().detachChild(getRootNode());
-        /*simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                mars.getRootNode().detachChild(getRootNode());
-                return null;
-            }
-        });*/
     }
     
-    /**
-     *
-     * @return
-     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
-    /**
-     *
-     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -184,10 +158,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         super.render(rm);
     }
 
-    /**
-     *
-     * @param enabled
-     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -217,10 +187,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     }
 
        
-    /**
-     *
-     * @param tpf
-     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {
@@ -230,7 +196,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         
         for(int i = 0; i < swarms.size(); i++){
             swarms.get(i).move(tpf);
-            //swarms.get(i).stat();
         }
         
         swarms.addAll(addedSwarms);
@@ -245,8 +210,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     
     /**
      *
-     * @param pos
-     * @param size
+     * @param pos   Position of the obstacle
+     * @param size  Size of the obstacle
      */
     public void createObstacle(Vector3f pos, float size){
         SphereCollisionShape sphere = new SphereCollisionShape(size);
@@ -265,16 +230,16 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public MARS_Main getMain(){
         return mars;
     }
-
-    /**
+    
+        /**
      *
      * @return
      */
     public Initializer getIniter() {
         return initer;
     }
-
-    /**
+    
+        /**
      *
      * @return
      */
@@ -290,5 +255,4 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public void setCamera(Camera cam) {
         
     }
-    
 }

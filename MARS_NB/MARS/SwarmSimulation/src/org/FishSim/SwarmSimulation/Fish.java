@@ -1,29 +1,25 @@
 package org.FishSim.SwarmSimulation;
 
+
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
-import com.jme3.animation.SkeletonControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.LodControl;
 import java.util.ArrayList;
 import java.util.List;
-import jme3tools.optimize.LodGenerator;
 import mars.control.MyLodControl;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
 
 public class Fish extends Node{
     private final String path = "Models/Fish/Fish.j3o";
-    //private final String path = "Models/Monsun2/monsun2_very_low.obj";
-    
     private Swarm swarm;
     private Node model;
     private AnimControl modelControl;
@@ -33,16 +29,13 @@ public class Fish extends Node{
     private Vector3f lastMove = new Vector3f().zero();
     private Quaternion rotation = new Quaternion();   
     private float rotateSpeed = 2;
-    /**
-     *
-     */
     protected float moveSpeed;
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
  
     /**
      * Create a new Fish.
      *
-     * @param sim 
+     * @param sim               Simulation
      * @param scale             Size of the fish
      * @param rot               Starting rotation
      * @param localTrans        Starting position
@@ -53,12 +46,11 @@ public class Fish extends Node{
         this.sim = sim;
         
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
+        modelControl = model.getChild("Cube").getControl(AnimControl.class);
         optimize(model);
-        //modelControl = model.getChild("Cube").getControl(AnimControl.class);
-        
-        //channel_swim = modelControl.createChannel();
-        //channel_swim.setAnim("ArmatureAction.014");
-        //channel_swim.setLoopMode(LoopMode.Loop);
+        channel_swim = modelControl.createChannel();
+        channel_swim.setAnim("ArmatureAction.001");
+        channel_swim.setLoopMode(LoopMode.Loop);
         attachChild(model);
         scale(scale.x, scale.y, scale.z);
         rotate(rot.x, rot.y, rot.z);
@@ -125,9 +117,10 @@ public class Fish extends Node{
     
     /**
      *
-     * @param tpf
+     * @param tpf Time per frame
      */
     public void swim(float tpf){
+   
         Vector3f diff = new Vector3f(0f ,0f ,0f);
         
         Vector3f tempVec = new Vector3f(0f ,0f ,0f);
@@ -154,7 +147,7 @@ public class Fish extends Node{
         FoodSource food = map.getNearestFS(getLocalTranslation());
         if(food != null){
             tempVec = food.getLocalTranslation().subtract(getLocalTranslation());
-            if(tempVec.length() > this.getLocalScale().length() + 1){
+            if(tempVec.length() > (this.getLocalScale().length())){
                 diff.addLocal(tempVec.divide(tempVec.length()/2));
             }
             if(getLocalTranslation().distance(food.getLocalTranslation()) <= 0.5f){
@@ -169,7 +162,7 @@ public class Fish extends Node{
             Vector3f tempVector = getLocalTranslation().subtract(tempVec);
             tempF = tempVector.length();
             tempVector.normalizeLocal();
-            diff.addLocal(tempVector.mult(2));   
+            diff.addLocal(tempVector);   
         }
         
         //Collision
@@ -179,7 +172,7 @@ public class Fish extends Node{
             Vector3f tempVector = getLocalTranslation().subtract(tempVec);
             tempF = tempVector.length();
             tempVector.normalizeLocal();
-            diff.addLocal(tempVector.divide(tempF/5));
+            diff.addLocal(tempVector);
         }
         
         //WaterHeight
@@ -198,12 +191,12 @@ public class Fish extends Node{
         rotation.lookAt(diff, getLocalRotation().multLocal(Vector3f.UNIT_Y));
         Vector3f moveVec = getLocalRotation().mult(Vector3f.UNIT_Z);
         moveVec.multLocal(moveSpeed + swarm.escapeInc);
-        moveVec.multLocal(tpf);
         moveVec.multLocal(diff.length());
+        //AnimationSpeed
+        channel_swim.setSpeed(moveVec.length());
+        moveVec.multLocal(tpf);
         lastMove = moveVec;
-        this.setLocalTranslation(getLocalTranslation().add(moveVec));
-        
-        //channel_swim.setSpeed((moveSpeed + swarm.escapeInc));
+        this.setLocalTranslation(getLocalTranslation().add(moveVec)); 
         
         this.getLocalRotation().slerp(rotation, tpf*rotateSpeed);
         
@@ -211,7 +204,7 @@ public class Fish extends Node{
     
     /**
      *
-     * @return
+     * @return lastMove
      */
     public Vector3f getLastMove(){
         return lastMove;

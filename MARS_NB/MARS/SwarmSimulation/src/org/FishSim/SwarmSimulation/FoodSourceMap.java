@@ -5,14 +5,15 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
+
 public class FoodSourceMap extends ArrayList<FoodSource>{
     
     /**
      *
-     * @param location
-     * @return
+     * @param location Location of the foodsource
+     * @return Nearest foodsource
      */
     public FoodSource getNearestFS(Vector3f location){
         FoodSource nearest = null;
