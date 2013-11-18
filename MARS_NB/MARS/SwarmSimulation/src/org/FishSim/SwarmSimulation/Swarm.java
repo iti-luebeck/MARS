@@ -8,92 +8,45 @@ import java.util.Random;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
+
 public class Swarm {
-    /**
-     *
-     */
     protected List<Fish> swarm;
-    /**
-     *
-     */
     protected FishSim sim;
-    /**
-     *
-     */
     protected Vector3f scale;
-    /**
-     *
-     */
     protected float near;
-    /**
-     *
-     */
     protected int id;
-    /**
-     *
-     */
     protected Random random = new Random();
-    /**
-     *
-     */
     protected Vector3f center;
-    /**
-     *
-     */
     protected float radius;
-    /**
-     *
-     */
     protected SwarmColControl colCont;
-    /**
-     *
-     */
     protected SwarmViewControl viewCont;
     private Vector3f colLocation = null;
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
-    /**
-     *
-     */
     protected int type;
-    /**
-     *
-     */
     protected float moveSpeed = 5;
     private float avoidTime = 0f;
     private float targetTime = 0f;
-    /**
-     *
-     */
     protected float splitTime = 0f;
-    /**
-     *
-     */
     protected float escapeInc = 0;
     private Vector3f lastCenter = Vector3f.ZERO;
     private boolean collided = false;
     private boolean viewCollided = false;
-    /**
-     *
-     */
     protected boolean split = false;
-    /**
-     *
-     */
     protected boolean merge = false;
     private Swarm mergeWith;
     
     /**
      *
-     * @param sim
-     * @param size
+     * @param sim       Simulation
+     * @param size      Size of the fish
      * @param scale
-     * @param spawn
-     * @param map
-     * @param type
-     * @param id
+     * @param spawn     Spawnpoint of the fish
+     * @param map       Foodsourcemap where the fish belongs to
+     * @param type      Type of the fish
+     * @param id        Id of the swarm
      */
     public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap map, int type, int id){
         near = (float) ((Math.log1p((float)size)) + scale.length());
@@ -105,24 +58,23 @@ public class Swarm {
         this.id = id;
         
         for(int i = 0; i < size; i++){
-            Fish fish = new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map);
-            swarm.add(fish);
-            //fish.show();
+            swarm.add(new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map));
+            swarm.get(i).show();
         }
         initCollidable();
     }
     
     /**
      *
-     * @param sim
-     * @param size
-     * @param spawn
-     * @param map
-     * @param type
-     * @param id
+     * @param sim       Simulation
+     * @param size      Size of the fish
+     * @param spawn     Spawnpoint of the fish
+     * @param map       Foodsourcemap where the fish belongs to
+     * @param type      Type of the fish
+     * @param id        Id of the swarm
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, FoodSourceMap map, int type, int id){
-        scale = new Vector3f(0.05f, 0.05f, 0.05f);
+        scale = new Vector3f(0.25f, 0.25f, 0.25f);
         near = (float) ((Math.log1p((float)size)) + scale.length());
         this.sim = sim;
         swarm = new ArrayList<Fish>();
@@ -132,7 +84,7 @@ public class Swarm {
         
         float rand;
         for(int i = 0; i < size; i++){
-            rand = getGaussianDistributionNoise(0.01f);
+            rand = getGaussianDistributionNoise(0.1f);
             swarm.add(new Fish(sim, scale.add(rand, rand, rand), new Vector3f(0.0f, 0.0f, 0.0f), spawn, this, map));
             swarm.get(i).show();
         }
@@ -141,11 +93,11 @@ public class Swarm {
     
     /**
      *
-     * @param sim
-     * @param size
-     * @param spawn
-     * @param type
-     * @param id
+     * @param sim       Simulation
+     * @param size      Size of the fish
+     * @param spawn     Spawnpoint of the fish
+     * @param type      Type of the fish
+     * @param id        Id of the swarm
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
@@ -175,7 +127,7 @@ public class Swarm {
 
     /**
      *
-     * @param tpf
+     * @param tpf   Time per frame
      */
     public void move(float tpf) {
         computeRadius();
@@ -197,14 +149,15 @@ public class Swarm {
         if(viewCollided){
             viewCollided = false;
             targetTime = 30f;
-            escapeInc = moveSpeed;
+            escapeInc = 2*moveSpeed;
         }else{
             if(targetTime <= 0){
                 viewLocation = null;
                 escapeInc = 0;
             }else{
                 targetTime -= tpf;
-                escapeInc = escapeInc * targetTime/30;
+                escapeInc = 2*moveSpeed * targetTime/30f;
+                System.out.println(escapeInc);
             }
         }
         
@@ -225,15 +178,15 @@ public class Swarm {
         }
     }
     
-    public void stat(){
+        public void stat(){
         for(int i = 0; i < swarm.size(); i++){
             System.out.println(swarm.get(i).getTriangleCount());
         }
     }
-    
+        
     /**
      *
-     * @param splitLocation
+     * @param splitLocation     Location where the swarm should split up
      */
     public void setSplit(Vector3f splitLocation){
         split = true;
@@ -241,7 +194,7 @@ public class Swarm {
     }
     
     /**
-     *
+     * Split the swarm
      */
     public void split(){
         disableCol();
@@ -276,7 +229,7 @@ public class Swarm {
     }
     /**
      *
-     * @param mergeWith
+     * @param mergeWith     Swarm to merge with
      */
     public void setMerge(Swarm mergeWith){
         merge = true;
@@ -284,7 +237,7 @@ public class Swarm {
     }
     
     /**
-     *
+     * Merge two swarms
      */
     public void merge(){
         disableCol();
@@ -320,7 +273,7 @@ public class Swarm {
     /**
      *
      * @param fish
-     * @return
+     * @return Neighbourhoods
      */
     public ArrayList<Fish> getNearNeigh(Fish fish){
         ArrayList<Fish> neigh = new ArrayList<Fish>();
@@ -338,7 +291,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return Center of the swarm
      */
     public Vector3f getCenter(){
         return center;
@@ -367,7 +320,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return MoveDirection
      */
     public Vector3f getMoveDirection(){
         return center.subtract(lastCenter);
@@ -375,7 +328,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return near
      */
     public float getNear(){
         return near;
@@ -383,7 +336,7 @@ public class Swarm {
     
     /**
      *
-     * @param cLocation
+     * @param cLocation     Location of the collision from the colControl
      */
     public void setCollided(Vector3f cLocation){
         collided = true;
@@ -392,7 +345,7 @@ public class Swarm {
     
     /**
      *
-     * @param vLocation
+     * @param vLocation     Location of the collision from the viewControl
      */
     public void setViewCollided(Vector3f vLocation){
         viewCollided = true;
@@ -400,7 +353,7 @@ public class Swarm {
     }
     
     /**
-     *
+     * Enable Collosion
      */
     public void enableCol(){
         sim.getBulletAppState().getPhysicsSpace().add(colCont);
@@ -410,7 +363,7 @@ public class Swarm {
     }
     
     /**
-     *
+     * Disable Collision
      */
     public void disableCol(){
         sim.getBulletAppState().getPhysicsSpace().removeCollisionListener(colCont);
@@ -421,14 +374,14 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return splitTime
      */
     public float getSplitTime(){
         return splitTime;
     }
     
     /**
-     *
+     * Reset the splitTime
      */
     public void resetSplitTime(){
         splitTime = 10.0f;
@@ -436,7 +389,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return Size of the swarm
      */
     public int getSize(){
         return swarm.size();
@@ -444,7 +397,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return Location of the collision from the colControl
      */
     public Vector3f getColLocation(){
         return colLocation;
@@ -452,7 +405,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return Location of the collision from the viewControl
      */
     public Vector3f getViewLocation(){
         return viewLocation;
@@ -460,7 +413,7 @@ public class Swarm {
     
     /**
      *
-     * @return
+     * @return size of the swarm
      */
     public int size(){
         return swarm.size();

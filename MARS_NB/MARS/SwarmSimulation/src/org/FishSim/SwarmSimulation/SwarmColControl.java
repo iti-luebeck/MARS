@@ -1,4 +1,3 @@
-
 package org.FishSim.SwarmSimulation;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
@@ -10,8 +9,9 @@ import com.jme3.math.Vector3f;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
+
 public class SwarmColControl extends RigidBodyControl implements PhysicsCollisionListener{
 private Swarm swarm;
 

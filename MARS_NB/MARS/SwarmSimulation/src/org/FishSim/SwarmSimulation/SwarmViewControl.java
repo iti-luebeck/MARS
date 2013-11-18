@@ -1,16 +1,15 @@
-
 package org.FishSim.SwarmSimulation;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.Vector3f;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
+
 public class SwarmViewControl extends RigidBodyControl implements PhysicsCollisionListener{
 private Swarm swarm;
 
