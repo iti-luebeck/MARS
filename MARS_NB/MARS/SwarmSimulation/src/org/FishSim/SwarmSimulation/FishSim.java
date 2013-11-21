@@ -91,7 +91,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         
         //Splitting-Test
         map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
-        addSwarm(100, null, new Vector3f(-327.21957f, 81.6459f, 120.884346f), map, 0);
+        addSwarm(100, new Vector3f(0.1f, 0.1f, 0.1f), new Vector3f(-327.21957f, 81.6459f, 120.884346f), map, 0);
         //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);
         //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
     }
