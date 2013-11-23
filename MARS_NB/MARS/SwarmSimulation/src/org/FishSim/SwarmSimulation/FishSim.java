@@ -30,7 +30,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     private Initializer initer;
     private BulletAppState bulletAppState;
     protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
-    protected ArrayList<Swarm> addedSwarms = new ArrayList<Swarm>();
     protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
     private int latestSwarmId;
     private FoodSourceMap map;
@@ -90,8 +89,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         //swarms.add(new Swarm(this, 200, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-197.21957f, 81.6459f, 136.884346f), map, 2));
         
         //Splitting-Test
-        map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
-        addSwarm(100, new Vector3f(0.1f, 0.1f, 0.1f), new Vector3f(-327.21957f, 81.6459f, 120.884346f), map, 0);
+        //map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
+        addSwarm(100, new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, 0f), map, 0);
+        swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
+        swarms.get(latestSwarmId-1).setRotationSpeed(1f);
         //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);
         //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
     }
@@ -105,9 +106,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
      */
     public void addSwarm(int size, Vector3f scale, Vector3f trans, FoodSourceMap map, int type){
         if(scale==null){
-            addedSwarms.add(new Swarm(this, size, trans, map, type, latestSwarmId));
+            swarms.add(new Swarm(this, size, trans, map, type, latestSwarmId));
         }else{
-            addedSwarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
+            swarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
         }
         latestSwarmId ++;
         
@@ -197,9 +198,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         for(int i = 0; i < swarms.size(); i++){
             swarms.get(i).move(tpf);
         }
-        
-        swarms.addAll(addedSwarms);
-        addedSwarms.clear();
         
         swarms.removeAll(removedSwarms);
         removedSwarms.clear();

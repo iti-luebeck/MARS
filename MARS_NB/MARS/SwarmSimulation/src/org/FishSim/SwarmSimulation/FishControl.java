@@ -1,6 +1,9 @@
 package org.FishSim.SwarmSimulation;
 
 import com.jme3.math.Vector3f;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +29,8 @@ public class FishControl {
        for(int i = 0; i < neigh.size(); i++){
            tempVec.set(fish.getLocalTranslation().subtract(neigh.get(i).getLocalTranslation()));
            tempVec.normalizeLocal();
+           tempVec.multLocal(1+fish.getLocalScale().length()+neigh.get(i).getLocalScale().length());
+           
            //Seperation
            //diff.addLocal(tempVec.multLocal(1/neigh.size()));
            diff.addLocal(tempVec.multLocal(1/fish.swarm.getNear())); // nach reynolds
@@ -72,11 +77,10 @@ public class FishControl {
        }
         
        //WaterHeight
-       System.err.println("was geht aaaaaab!?");
-       System.out.println(fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z));
-       if(fish.getLocalTranslation().y > (fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z) - 5f)){
+       if(fish.getLocalTranslation().y > (fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z) - 5*fish.getLocalScale().length())){
            diff.normalizeLocal();
-           diff.subtractLocal(Vector3f.UNIT_Y.mult(2));
+           //diff.subtractLocal(Vector3f.UNIT_Y.mult(2));
+           diff.subtractLocal(new Vector3f(0f, 2f, 0f));
        }
         
        if(diff.equals(new Vector3f().zero())){
@@ -88,7 +92,7 @@ public class FishControl {
        }
        fish.rotation.lookAt(diff, fish.getLocalRotation().multLocal(Vector3f.UNIT_Y));
        Vector3f moveVec = fish.getLocalRotation().mult(Vector3f.UNIT_Z);
-       moveVec.multLocal(fish.moveSpeed + fish.swarm.escapeInc);
+       moveVec.multLocal(fish.swarm.moveSpeed + fish.swarm.escapeInc);
        moveVec.multLocal(diff.length());
        //AnimationSpeed
        fish.channel_swim.setSpeed(moveVec.length());
@@ -96,6 +100,6 @@ public class FishControl {
        fish.lastMove = moveVec;
        fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec)); 
         
-       fish.getLocalRotation().slerp(fish.rotation, tpf*fish.rotateSpeed);       
+       fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);       
    }
 }

@@ -29,8 +29,6 @@ public class Fish extends Node{
     FoodSourceMap map;
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
-    protected float rotateSpeed = 2;
-    protected float moveSpeed;
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
  
     /**
@@ -60,8 +58,9 @@ public class Fish extends Node{
         this.map = map;
         
         //Speed of this fish
-        moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
-        rotateSpeed = (float) (Math.random()) + 1f;
+        //moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
+        //moveSpeed = (float) swarm.moveSpeed + this.getLocalScale().length();
+        //rotateSpeed = (float) (Math.random()) + 1f;
         
         sim.getRootNode().attachChild(this);
     }
