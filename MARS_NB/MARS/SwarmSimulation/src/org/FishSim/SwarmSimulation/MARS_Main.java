@@ -34,7 +34,7 @@ import com.jme3.water.WaterFilter;
  * @author Acer
  * @deprecated 
  */
-@Deprecated
+//@Deprecated
 public class MARS_Main extends SimpleApplication {
     
  private Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
@@ -63,7 +63,7 @@ public class MARS_Main extends SimpleApplication {
         
         bullet = new BulletAppState();
         stateManager.attach(bullet);
-        //bullet.setDebugEnabled(true);
+        bullet.setDebugEnabled(true);
               
         flyCam.setMoveSpeed(50);
         

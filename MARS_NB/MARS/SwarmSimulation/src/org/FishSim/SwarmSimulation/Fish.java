@@ -20,16 +20,15 @@ import mars.control.MyLodControl;
 
 public class Fish extends Node{
     private final String path = "Models/Fish/Fish.j3o";
-    private Swarm swarm;
+    protected Swarm swarm;
+    private FishControl control;
     private Node model;
     private AnimControl modelControl;
-    private AnimChannel channel_swim;
-    private FishSim sim;
+    protected AnimChannel channel_swim;
+    protected FishSim sim;
     FoodSourceMap map;
-    private Vector3f lastMove = new Vector3f().zero();
-    private Quaternion rotation = new Quaternion();   
-    private float rotateSpeed = 2;
-    protected float moveSpeed;
+    protected Vector3f lastMove = new Vector3f().zero();
+    protected Quaternion rotation = new Quaternion();   
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
  
     /**
@@ -44,10 +43,10 @@ public class Fish extends Node{
      */
     public Fish(FishSim sim, Vector3f scale, Vector3f rot, Vector3f localTrans, Swarm swarm, FoodSourceMap map){
         this.sim = sim;
-        
+        control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
         modelControl = model.getChild("Cube").getControl(AnimControl.class);
-        optimize(model);
+        //optimize(model);
         channel_swim = modelControl.createChannel();
         channel_swim.setAnim("ArmatureAction.001");
         channel_swim.setLoopMode(LoopMode.Loop);
@@ -59,8 +58,9 @@ public class Fish extends Node{
         this.map = map;
         
         //Speed of this fish
-        moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
-        rotateSpeed = (float) (Math.random()) + 1f;
+        //moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
+        //moveSpeed = (float) swarm.moveSpeed + this.getLocalScale().length();
+        //rotateSpeed = (float) (Math.random()) + 1f;
         
         sim.getRootNode().attachChild(this);
     }
@@ -120,86 +120,7 @@ public class Fish extends Node{
      * @param tpf Time per frame
      */
     public void swim(float tpf){
-   
-        Vector3f diff = new Vector3f(0f ,0f ,0f);
-        
-        Vector3f tempVec = new Vector3f(0f ,0f ,0f);
-        float tempF;
-        ArrayList<Fish> neigh = swarm.getNearNeigh(this);
-        
-        for(int i = 0; i < neigh.size(); i++){
-            tempVec.set(getLocalTranslation().subtract(neigh.get(i).getLocalTranslation()));
-            tempF = tempVec.length();
-            if(tempF < 0.1){
-                tempF = 0.1f;
-            }
-            tempVec.normalizeLocal();
-            //Seperation
-            diff.addLocal(tempVec.multLocal(swarm.getNear() / tempF));
-            //Allignment
-            diff.addLocal(neigh.get(i).getLastMove());
-        }
-        
-        //Cohesion
-        diff.addLocal(swarm.getCenter().subtract(getLocalTranslation()));
-        
-        //EAT!
-        FoodSource food = map.getNearestFS(getLocalTranslation());
-        if(food != null){
-            tempVec = food.getLocalTranslation().subtract(getLocalTranslation());
-            if(tempVec.length() > (this.getLocalScale().length())){
-                diff.addLocal(tempVec.divide(tempVec.length()/2));
-            }
-            if(getLocalTranslation().distance(food.getLocalTranslation()) <= 0.5f){
-                food.eat();
-            }
-        }
-        
-        //Escape
-        tempVec = swarm.getViewLocation();
-        if(tempVec != null){
-            diff.normalizeLocal();
-            Vector3f tempVector = getLocalTranslation().subtract(tempVec);
-            tempF = tempVector.length();
-            tempVector.normalizeLocal();
-            diff.addLocal(tempVector);   
-        }
-        
-        //Collision
-        tempVec = swarm.getColLocation();
-        if(tempVec != null){
-            diff.normalizeLocal();
-            Vector3f tempVector = getLocalTranslation().subtract(tempVec);
-            tempF = tempVector.length();
-            tempVector.normalizeLocal();
-            diff.addLocal(tempVector);
-        }
-        
-        //WaterHeight
-        if(getLocalTranslation().y > (sim.getIniter().getCurrentWaterHeight(0f,0f) - 5f)){
-            diff.normalizeLocal();
-            diff.subtractLocal(Vector3f.UNIT_Y.mult(2));
-        }
-        
-        if(diff.equals(new Vector3f().zero())){
-            diff.set((float) (Math.random() - Math.random())/5f, (float) (Math.random() - Math.random())/5f, (float) (Math.random() - Math.random())/5f);
-        }
-        
-        if(diff.length() > 1){
-            diff.normalizeLocal();
-        }
-        rotation.lookAt(diff, getLocalRotation().multLocal(Vector3f.UNIT_Y));
-        Vector3f moveVec = getLocalRotation().mult(Vector3f.UNIT_Z);
-        moveVec.multLocal(moveSpeed + swarm.escapeInc);
-        moveVec.multLocal(diff.length());
-        //AnimationSpeed
-        channel_swim.setSpeed(moveVec.length());
-        moveVec.multLocal(tpf);
-        lastMove = moveVec;
-        this.setLocalTranslation(getLocalTranslation().add(moveVec)); 
-        
-        this.getLocalRotation().slerp(rotation, tpf*rotateSpeed);
-        
+        control.swim(tpf);
     }
     
     /**

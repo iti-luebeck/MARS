@@ -26,7 +26,8 @@ public class Swarm {
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
     protected int type;
-    protected float moveSpeed = 5;
+    protected float moveSpeed = 1;
+    protected float rotationSpeed = 1;
     private float avoidTime = 0f;
     private float targetTime = 0f;
     protected float splitTime = 0f;
@@ -49,7 +50,7 @@ public class Swarm {
      * @param id        Id of the swarm
      */
     public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap map, int type, int id){
-        near = (float) ((Math.log1p((float)size)) + scale.length());
+        near = (float) ((Math.log1p((float)size)) * scale.length());
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -75,7 +76,7 @@ public class Swarm {
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, FoodSourceMap map, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
-        near = (float) ((Math.log1p((float)size)) + scale.length());
+        near = (float) ((Math.log1p((float)size)) * scale.length());
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -101,7 +102,7 @@ public class Swarm {
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
-        near = (float) ((Math.log1p((float)size)) + scale.length());
+        near = (float) ((Math.log1p((float)size)) * scale.length());
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -130,7 +131,7 @@ public class Swarm {
      * @param tpf   Time per frame
      */
     public void move(float tpf) {
-        computeRadius();
+        //computeRadius();
         computeCenter();
         colCont.setPhysicsLocation(center);
         viewCont.setPhysicsLocation(center);
@@ -184,6 +185,14 @@ public class Swarm {
         }
     }
         
+    public void setMoveSpeed(float moveSpeed){
+        this.moveSpeed = moveSpeed;
+    }
+    
+    public void setRotationSpeed(float rotationSpeed){
+        this.rotationSpeed = rotationSpeed;
+    }
+        
     /**
      *
      * @param splitLocation     Location where the swarm should split up
@@ -224,7 +233,7 @@ public class Swarm {
         ArrayList<Swarm> swarms = new ArrayList<Swarm>();
         swarms.add(split1);
         swarms.add(split2);
-        sim.addedSwarms.addAll(swarms);
+        sim.swarms.addAll(swarms);
         sim.removedSwarms.add(this);
     }
     /**
@@ -254,7 +263,7 @@ public class Swarm {
             merged.add(mergeWith.swarm.get(i));
         }
         
-        sim.addedSwarms.add(merged);
+        sim.swarms.add(merged);
         ArrayList<Swarm> swarms = new ArrayList<Swarm>();
         swarms.add(this);
         swarms.add(mergeWith);
@@ -278,14 +287,17 @@ public class Swarm {
     public ArrayList<Fish> getNearNeigh(Fish fish){
         ArrayList<Fish> neigh = new ArrayList<Fish>();
         float dist;
+        float angle;
         for(int i = 0; i < swarm.size(); i++){
             dist = fish.getLocalTranslation().distance(swarm.get(i).getLocalTranslation());
             if(dist <= near){
-                if(swarm.get(i) != fish){
+                angle = (float) Math.toDegrees(fish.lastMove.normalize().angleBetween(swarm.get(i).getLocalTranslation().subtract(fish.getLocalTranslation()).normalize()));
+                if(angle < 150f){
                     neigh.add(swarm.get(i));
                 }
             }
         }
+        neigh.remove(fish);
         return neigh;
     }
     
