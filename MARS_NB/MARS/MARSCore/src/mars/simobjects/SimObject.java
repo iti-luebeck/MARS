@@ -6,6 +6,7 @@
 package mars.simobjects;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
@@ -190,8 +191,11 @@ public class SimObject{
             collisionShape = new BoxCollisionShape(getDimensions());
         }
         physics_control = new RigidBodyControl(collisionShape, 0f);
-        physics_control.setCollisionGroup(1);
-        physics_control.setCollideWithGroups(1);
+        physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
+        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
+        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
+        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
         
          //debug
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
