@@ -85,7 +85,7 @@ public class Fish extends Node{
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
-                control.setDistTolerance(25f);
+                control.setDistTolerance(20f);
                 control.setTrisPerPixel(0.5f);
                 control.setCam(sim.getMain().getCamera());
                 geo.addControl(control);
