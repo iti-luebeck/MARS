@@ -20,86 +20,108 @@ public class FishControl {
     
     public void swim(float tpf){
    
-       Vector3f diff = new Vector3f(0f ,0f ,0f);
-        
-       Vector3f tempVec = new Vector3f(0f ,0f ,0f);
-       Vector3f avgMove = new Vector3f(0f, 0f, 0f);
-       ArrayList<Fish> neigh = fish.swarm.getNearNeigh(fish);
-        
-       for(int i = 0; i < neigh.size(); i++){
-           tempVec.set(fish.getLocalTranslation().subtract(neigh.get(i).getLocalTranslation()));
-           tempVec.normalizeLocal();
-           tempVec.multLocal(1+fish.getLocalScale().length()+neigh.get(i).getLocalScale().length());
-           
-           //Seperation
-           //diff.addLocal(tempVec.multLocal(1/neigh.size()));
-           diff.addLocal(tempVec.multLocal(1/fish.swarm.getNear())); // nach reynolds
-           
-           //Allignment
-           avgMove.add(neigh.get(i).getLastMove());
-       }
+       Vector3f steerVec = new Vector3f(0,0,0);
        
-       //Allignment
-       avgMove.divide(neigh.size());
-       diff.addLocal(avgMove.subtract(fish.lastMove));
-        
-       //Cohesion
-       diff.addLocal(fish.swarm.getCenter().subtract(fish.getLocalTranslation()));
-        
-       //EAT!
-       FoodSource food = fish.map.getNearestFS(fish.getLocalTranslation());
-       if(food != null){
-           tempVec = food.getLocalTranslation().subtract(fish.getLocalTranslation());
-           if(tempVec.length() > (fish.getLocalScale().length())){
-               diff.addLocal(tempVec.divide(tempVec.length()/2));
-           }
-           if(fish.getLocalTranslation().distance(food.getLocalTranslation()) <= 0.5f){
-               food.eat();
-           }
-       }
-        
-       //Escape
-       tempVec = fish.swarm.getViewLocation();
-       if(tempVec != null){
-           diff.normalizeLocal();
-           Vector3f tempVector = fish.getLocalTranslation().subtract(tempVec);
-           tempVector.normalizeLocal();
-           diff.addLocal(tempVector);   
-       }
-        
-       //Collision
-       tempVec = fish.swarm.getColLocation();
-       if(tempVec != null){
-           diff.normalizeLocal();
-           Vector3f tempVector = fish.getLocalTranslation().subtract(tempVec);
-           tempVector.normalizeLocal();
-           diff.addLocal(tempVector);
-       }
-        
-       //WaterHeight
-       if(fish.getLocalTranslation().y > (fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z) - 5*fish.getLocalScale().length())){
-           diff.normalizeLocal();
-           //diff.subtractLocal(Vector3f.UNIT_Y.mult(2));
-           diff.subtractLocal(new Vector3f(0f, 2f, 0f));
-       }
-        
-       if(diff.equals(new Vector3f().zero())){
-           diff.set((float) (Math.random() - Math.random())/5f, (float) (Math.random() - Math.random())/5f, (float) (Math.random() - Math.random())/5f);
-       }
-        
-       if(diff.length() > 1){
-           diff.normalizeLocal();
-       }
-       fish.rotation.lookAt(diff, fish.getLocalRotation().multLocal(Vector3f.UNIT_Y));
+       steerVec = basicRules(steerVec);
+       steerVec = feed(steerVec);
+       steerVec = flee(steerVec);
+       steerVec = collision(steerVec);
+       steerVec = waterHeight(steerVec);
+
+       fish.rotation.lookAt(steerVec, fish.getLocalRotation().multLocal(Vector3f.UNIT_Y));
        Vector3f moveVec = fish.getLocalRotation().mult(Vector3f.UNIT_Z);
        moveVec.multLocal(fish.swarm.moveSpeed + fish.swarm.escapeInc);
-       moveVec.multLocal(diff.length());
+       moveVec.multLocal(steerVec.length());
+       moveVec.multLocal(1f-(float)Math.toDegrees(moveVec.normalize().angleBetween(steerVec.normalize()))/180f);
        //AnimationSpeed
-       fish.channel_swim.setSpeed(moveVec.length());
+       fish.channel_swim.setSpeed(10*moveVec.length());
        moveVec.multLocal(tpf);
        fish.lastMove = moveVec;
        fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec)); 
         
        fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);       
    }
+    
+    private Vector3f basicRules(Vector3f steerVec){
+        Vector3f tempVec;
+        float tempF;
+        Vector3f avgMove = new Vector3f(0f, 0f, 0f);
+        ArrayList<Fish> neigh = fish.swarm.getNearNeigh(fish);
+        
+        //Cohesion
+        steerVec.addLocal(fish.swarm.getCenter().subtract(fish.getLocalTranslation()));
+       
+        for(int i = 0; i < neigh.size(); i++){
+            //Seperation
+            tempVec = fish.getLocalTranslation().subtract(neigh.get(i).getLocalTranslation());
+            tempF = tempVec.length();
+            tempVec.normalizeLocal();
+            tempVec.multLocal((float)Math.pow(1f-tempF/fish.swarm.getNear(), 2f));
+            //tempVec.multLocal(1+fish.getLocalScale().length()+neigh.get(i).getLocalScale().length());
+           
+            steerVec.addLocal(tempVec.multLocal(1/fish.swarm.getNear())); // nach reynolds
+           
+            //Allignment
+            avgMove.add(neigh.get(i).getLastMove());
+        }
+       
+        //Allignment
+        avgMove.divide(neigh.size());
+        steerVec.addLocal(avgMove.subtract(fish.lastMove));
+        return steerVec;
+    }
+    
+    private Vector3f feed(Vector3f steerVec){
+       //EAT!
+        Vector3f tempVec;
+        float tempF;
+        tempVec = fish.map.getNearestFS(fish.getLocalTranslation());
+        if(tempVec != null){
+            tempVec.subtractLocal(fish.getLocalTranslation());
+            if(tempVec.length() > 1f){
+                steerVec.addLocal(tempVec.normalize());
+            }else{
+                tempF = tempVec.length();
+                steerVec.multLocal(tempVec.length());
+                tempVec.normalizeLocal();
+                steerVec.addLocal(tempVec.multLocal(1+tempF));
+            }
+        }
+         return steerVec;
+     }
+    
+    private Vector3f flee(Vector3f steerVec){
+        //Escape
+        Vector3f tempVec;
+        tempVec = fish.swarm.getViewLocation();
+        if(tempVec != null){
+            steerVec.normalizeLocal();
+            Vector3f tempVector = fish.getLocalTranslation().subtract(tempVec);
+            tempVector.normalizeLocal();
+            steerVec.addLocal(tempVector);   
+        }
+         return steerVec;
+     }
+    
+    private Vector3f collision(Vector3f steerVec){
+        //Collision
+        Vector3f tempVec;
+        tempVec = fish.swarm.getColLocation();
+        if(tempVec != null){
+            steerVec.normalizeLocal();
+            Vector3f tempVector = fish.getLocalTranslation().subtract(tempVec);
+            tempVector.normalizeLocal();
+            steerVec.addLocal(tempVector);
+        }
+        return steerVec;
+    }
+    
+    private Vector3f waterHeight(Vector3f steerVec){
+        //WaterHeight
+        float waterHeight = fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z);
+        if(fish.getLocalTranslation().y > waterHeight-1){
+            steerVec = new Vector3f(0, -1, 0);
+        }
+        return steerVec;
+    }
 }

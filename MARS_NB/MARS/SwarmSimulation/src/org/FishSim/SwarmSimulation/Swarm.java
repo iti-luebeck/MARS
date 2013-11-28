@@ -26,7 +26,7 @@ public class Swarm {
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
     protected int type;
-    protected float moveSpeed = 1;
+    protected float moveSpeed = 1f;
     protected float rotationSpeed = 1;
     private float avoidTime = 0f;
     private float targetTime = 0f;
@@ -50,7 +50,8 @@ public class Swarm {
      * @param id        Id of the swarm
      */
     public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap map, int type, int id){
-        near = (float) ((Math.log1p((float)size)) * scale.length());
+        radius = (float) ((Math.log1p((float)size)) * scale.length());
+        near = (float)  3 * scale.length();
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -76,7 +77,8 @@ public class Swarm {
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, FoodSourceMap map, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
-        near = (float) ((Math.log1p((float)size)) * scale.length());
+        radius = (float) ((Math.log1p((float)size)) * scale.length());
+        near = (float)  3 * scale.length();
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -102,7 +104,8 @@ public class Swarm {
      */
     public Swarm(FishSim sim, int size, Vector3f spawn, int type, int id){
         scale = new Vector3f(0.25f, 0.25f, 0.25f);
-        near = (float) ((Math.log1p((float)size)) * scale.length());
+        radius = (float) ((Math.log1p((float)size)) * scale.length());
+        near = (float)  3 * scale.length();
         this.sim = sim;
         swarm = new ArrayList<Fish>();
         center = spawn;
@@ -112,13 +115,13 @@ public class Swarm {
     }
     
     private void initCollidable(){
-        SphereCollisionShape colSphere = new SphereCollisionShape((near + scale.length() + 1)*2);
+        SphereCollisionShape colSphere = new SphereCollisionShape(radius);
         colCont = new SwarmColControl(colSphere, this);
         colCont.setCollisionGroup(1);
         colCont.setCollideWithGroups(0);
         colCont.setCollideWithGroups(1);
         colCont.setKinematic(true);
-        SphereCollisionShape viewSphere = new SphereCollisionShape(colSphere.getRadius()*5);
+        SphereCollisionShape viewSphere = new SphereCollisionShape(colSphere.getRadius()+5);
         viewCont = new SwarmViewControl(viewSphere, this);
         viewCont.setCollisionGroup(2);
         viewCont.setCollideWithGroups(1);
@@ -317,17 +320,6 @@ public class Swarm {
             center.addLocal(swarm.get(i).getLocalTranslation());
         }
         center.divideLocal((float) swarm.size());
-    }
-    
-    private void computeRadius(){
-        radius = 0;
-        float temp;
-        for(int i = 0; i < swarm.size(); i++){
-            temp = center.distance(swarm.get(i).getLocalTranslation());
-            if(radius < temp){
-                radius = temp;
-            }
-        }
     }
     
     /**

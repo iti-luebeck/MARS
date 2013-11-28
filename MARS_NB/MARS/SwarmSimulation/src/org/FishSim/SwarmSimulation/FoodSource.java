@@ -8,36 +8,33 @@ import com.jme3.scene.Node;
  * @author Mandy Feldvoß
  */
 
-public class FoodSource extends Node{
-    FishSim sim;
+public class FoodSource extends Node implements IFoodSource{
     float size;
     FoodSourceMap map;
     
     /**
      *
-     * @param sim           Simulation
      * @param size          Size of the foodsource
      * @param localTrans    Position of the foodsource
      */
-    public FoodSource(FishSim sim, float size, Vector3f localTrans){
-        this.sim = sim;
+    public FoodSource(float size, Vector3f localTrans){
         this.size = size;
-        this.setLocalTranslation(localTrans);
+        setLocalTranslation(localTrans);
     }
     
     /**
      *
      * @param map   Show foodsourcemap
      */
-    public void show(FoodSourceMap map){
+    public void setMap(FoodSourceMap map){
         this.map = map;
-        sim.getMain().getRootNode().attachChild(this);
     }
     
     /**
-     * Eat 
+     * Feed
      */
-    public void eat(){
+    @Override
+    public void feed(){
         size--;
         if(size <= 0){
             map.remove(this);

@@ -15,15 +15,15 @@ public class FoodSourceMap extends ArrayList<FoodSource>{
      * @param location Location of the foodsource
      * @return Nearest foodsource
      */
-    public FoodSource getNearestFS(Vector3f location){
-        FoodSource nearest = null;
+    public Vector3f getNearestFS(Vector3f location){
+        FoodSource nearest;
         float dist;
         try{
             nearest = this.get(0);
             dist = location.distance(nearest.getLocalTranslation());
         }catch( Exception e){
             
-            return nearest; 
+            return null; 
         }
         
         float temp;
@@ -35,12 +35,16 @@ public class FoodSourceMap extends ArrayList<FoodSource>{
                 nearest = this.get(i);
             }
         }
-        return nearest;
+        Vector3f tempVec = location.subtract(nearest.getLocalTranslation()).normalize().mult((float)nearest.size/1000);
+        if(location.distance(nearest.getLocalTranslation()) <= tempVec.length() + 0.03){
+               nearest.feed();
+        }
+        return nearest.getLocalTranslation().add(tempVec);
     }
     
     @Override
     public boolean add(FoodSource food){
-        food.show(this);
+        food.setMap(this);
         return super.add(food);
     }
 }

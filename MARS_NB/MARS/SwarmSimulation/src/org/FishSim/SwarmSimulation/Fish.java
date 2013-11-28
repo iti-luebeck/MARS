@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
+import jme3tools.optimize.LodGenerator;
 import mars.control.MyLodControl;
 
 /**
@@ -19,7 +20,7 @@ import mars.control.MyLodControl;
  */
 
 public class Fish extends Node{
-    private final String path = "Models/Fish/Fish.j3o";
+    private final String path = "Models/Fishtest/Fishtest.j3o";
     protected Swarm swarm;
     private FishControl control;
     private Node model;
@@ -46,7 +47,7 @@ public class Fish extends Node{
         control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
         modelControl = model.getChild("Cube").getControl(AnimControl.class);
-        //optimize(model);
+        optimize(model);
         channel_swim = modelControl.createChannel();
         channel_swim.setAnim("ArmatureAction.001");
         channel_swim.setLoopMode(LoopMode.Loop);
@@ -75,16 +76,16 @@ public class Fish extends Node{
     
     private void optimize(Node node){
         
-        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
                 Geometry geo = (Geometry) spatial;
-                /*LodGenerator lodGenerator = new LodGenerator(geo);          
-                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.8f, 0.8f);*/
+                LodGenerator lodGenerator = new LodGenerator(geo);          
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
-                control.setDistTolerance(1f);
+                control.setDistTolerance(25f);
                 control.setTrisPerPixel(0.5f);
                 control.setCam(sim.getMain().getCamera());
                 geo.addControl(control);
