@@ -250,10 +250,10 @@ public class Initializer {
             setupSkyDome();
         }
         if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
-            setupAdvancedTerrain();
+            setupTerrain();
         }
         if(mars_settings.isSetupTerrain() && mars_settings.isSetupAdvancedTerrain()){
-            setupAdvancedTerrain();
+            setupTerrain();
         }
         if(mars_settings.isSetupGrass()){
             setupGrass();
@@ -1238,7 +1238,7 @@ public class Initializer {
         grassLoader.setWind(new Vector2f(mars_settings.getPhysical_environment().getWater_current().getX(),mars_settings.getPhysical_environment().getWater_current().getZ()));
     }
 
-    private void setupAdvancedTerrain(){
+    private void setupTerrain(){
         /** 1. Create terrain material and load four textures into it. */
         /*mat_terrain = new Material(assetManager, 
                 "Common/MatDefs/Terrain/Terrain.j3md");*/
@@ -1377,6 +1377,9 @@ public class Initializer {
         
         terrain_physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
         terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
+        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
+        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
+        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
         //terrain_physics_control.setFriction(0f);
         //terrain_physics_control.setRestitution(1f);
         //terrain_node.attachChild(terrain);
