@@ -10,12 +10,12 @@ import com.jme3.math.Vector3f;
 
 /**
  *
- * @author Acer
+ * @author Mandy Feldvoß
  */
 public interface IFoodSource {
-     public Vector3f getLocalTranslation();
+     public Vector3f getNearestLocation(Vector3f location);
      
-     public void feed();
+     public void feed(float tpf);
      
      
 }

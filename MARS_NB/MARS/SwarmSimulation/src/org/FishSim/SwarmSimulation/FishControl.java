@@ -22,8 +22,8 @@ public class FishControl {
    
        Vector3f steerVec = new Vector3f(0,0,0);
        
-       steerVec = basicRules(steerVec);
-       steerVec = feed(steerVec);
+       steerVec = basicRules(steerVec, tpf);
+       steerVec = feed(steerVec, tpf);
        steerVec = flee(steerVec);
        steerVec = collision(steerVec);
        steerVec = waterHeight(steerVec);
@@ -42,7 +42,7 @@ public class FishControl {
        fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);       
    }
     
-    private Vector3f basicRules(Vector3f steerVec){
+    private Vector3f basicRules(Vector3f steerVec, float tpf){
         Vector3f tempVec;
         float tempF;
         Vector3f avgMove = new Vector3f(0f, 0f, 0f);
@@ -71,11 +71,11 @@ public class FishControl {
         return steerVec;
     }
     
-    private Vector3f feed(Vector3f steerVec){
+    private Vector3f feed(Vector3f steerVec, float tpf){
        //EAT!
         Vector3f tempVec;
         float tempF;
-        tempVec = fish.map.getNearestFS(fish.getLocalTranslation());
+        tempVec = fish.swarm.getDirection(fish, tpf);
         if(tempVec != null){
             tempVec.subtractLocal(fish.getLocalTranslation());
             if(tempVec.length() > 1f){
@@ -112,6 +112,8 @@ public class FishControl {
             Vector3f tempVector = fish.getLocalTranslation().subtract(tempVec);
             tempVector.normalizeLocal();
             steerVec.addLocal(tempVector);
+            
+            steerVec = new Vector3f(0,-5,0);
         }
         return steerVec;
     }
@@ -119,7 +121,7 @@ public class FishControl {
     private Vector3f waterHeight(Vector3f steerVec){
         //WaterHeight
         float waterHeight = fish.sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z);
-        if(fish.getLocalTranslation().y > waterHeight-1){
+        if(fish.getLocalTranslation().y > waterHeight - fish.getLocalScale().length()){
             steerVec = new Vector3f(0, -1, 0);
         }
         return steerVec;

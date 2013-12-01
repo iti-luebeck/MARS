@@ -89,11 +89,11 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         //swarms.add(new Swarm(this, 200, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-197.21957f, 81.6459f, 136.884346f), map, 2));
         
         //Splitting-Test
-        FoodSource food = new FoodSource(1000, new Vector3f(0f, -3f, 20));
+        FoodSource food = new FoodSource(1000, new Vector3f(0f, -1f, 20));
         mars.getRootNode().attachChild(food);
         map.add(food);
-        addSwarm(100, new Vector3f(0.1f, 0.1f, 0.1f), new Vector3f(0f, 0f, 0f), map, 0);
-        swarms.get(latestSwarmId-1).setMoveSpeed(1f);
+        addSwarm(1, new Vector3f(0.05f, 0.05f, 0.05f), new Vector3f(0f, 0f, 0f), map, 0);
+        swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
         swarms.get(latestSwarmId-1).setRotationSpeed(2f);
         //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);
         //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
@@ -107,13 +107,13 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
      * @param type
      */
     public void addSwarm(int size, Vector3f scale, Vector3f trans, FoodSourceMap map, int type){
-        if(scale==null){
-            swarms.add(new Swarm(this, size, trans, map, type, latestSwarmId));
-        }else{
-            swarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
-        }
-        latestSwarmId ++;
-        
+        swarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
+        latestSwarmId ++;      
+    }
+    
+    public void addSwarm(int size, Vector3f scale, float deviation, Vector3f trans, FoodSourceMap map, int type){
+        swarms.add(new Swarm(this, size, scale, deviation, trans, map, type, latestSwarmId));
+        latestSwarmId ++;      
     }
     
     
@@ -217,8 +217,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         SphereCollisionShape sphere = new SphereCollisionShape(size);
         RigidBodyControl obstacle = new RigidBodyControl(sphere, 1);
         obstacle.setKinematic(true);
-        obstacle.setCollisionGroup(3);
-        obstacle.setCollideWithGroups(1);
+        obstacle.setCollisionGroup(06);
+        obstacle.setCollideWithGroups(04);
         obstacle.setPhysicsLocation(pos);
         getBulletAppState().getPhysicsSpace().add(obstacle);
     }

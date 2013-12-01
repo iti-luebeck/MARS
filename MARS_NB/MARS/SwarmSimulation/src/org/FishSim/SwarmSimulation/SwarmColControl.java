@@ -14,6 +14,8 @@ import com.jme3.math.Vector3f;
 
 public class SwarmColControl extends RigidBodyControl implements PhysicsCollisionListener{
 private Swarm swarm;
+private int terrainCG = 01;
+private int obstacleCG = 06;
 
     /**
      *
@@ -42,10 +44,10 @@ private Swarm swarm;
                     }
                 }
             }
-            if(event.getObjectB().getCollisionGroup() == 0){
+            if(event.getObjectB().getCollisionGroup() == terrainCG){
                 swarm.setCollided(event.getPositionWorldOnA());
             }
-            if(event.getObjectB().getCollisionGroup() == 3){
+            if(event.getObjectB().getCollisionGroup() == obstacleCG){
                 if(event.getObjectB().getClass().equals(RigidBodyControl.class)){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectB();
                     if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){
@@ -76,10 +78,10 @@ private Swarm swarm;
                     }
                 }
             }
-            if(event.getObjectA().getCollisionGroup() == 0){
+            if(event.getObjectA().getCollisionGroup() == terrainCG){
                 swarm.setCollided(event.getPositionWorldOnB());
             }
-            if(event.getObjectA().getCollisionGroup() == 3){                 
+            if(event.getObjectA().getCollisionGroup() == obstacleCG){                 
                 if(event.getObjectA().getClass().equals(RigidBodyControl.class)){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectA();
                     if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){

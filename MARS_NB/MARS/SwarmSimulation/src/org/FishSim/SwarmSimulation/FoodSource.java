@@ -30,12 +30,17 @@ public class FoodSource extends Node implements IFoodSource{
         this.map = map;
     }
     
+    @Override
+    public Vector3f getNearestLocation(Vector3f location){
+        return getLocalTranslation().add(location.subtract(getLocalTranslation()).normalize().mult((float)size/1000));
+    }
+    
     /**
      * Feed
      */
     @Override
-    public void feed(){
-        size--;
+    public void feed(float tpf){
+        size -= tpf;
         if(size <= 0){
             map.remove(this);
         }

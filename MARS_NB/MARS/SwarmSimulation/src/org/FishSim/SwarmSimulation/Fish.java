@@ -27,7 +27,6 @@ public class Fish extends Node{
     private AnimControl modelControl;
     protected AnimChannel channel_swim;
     protected FishSim sim;
-    FoodSourceMap map;
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
@@ -56,7 +55,6 @@ public class Fish extends Node{
         rotate(rot.x, rot.y, rot.z);
         setLocalTranslation(localTrans.x, localTrans.y, localTrans.z);
         this.swarm = swarm;
-        this.map = map;
         
         //Speed of this fish
         //moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
@@ -76,7 +74,7 @@ public class Fish extends Node{
     
     private void optimize(Node node){
         
-        jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
@@ -85,7 +83,7 @@ public class Fish extends Node{
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
-                control.setDistTolerance(20f);
+                control.setDistTolerance(25f);
                 control.setTrisPerPixel(0.5f);
                 control.setCam(sim.getMain().getCamera());
                 geo.addControl(control);
