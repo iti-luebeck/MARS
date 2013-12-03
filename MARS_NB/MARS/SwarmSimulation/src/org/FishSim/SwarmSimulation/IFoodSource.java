@@ -15,6 +15,8 @@ import com.jme3.math.Vector3f;
 public interface IFoodSource {
      public Vector3f getNearestLocation(Vector3f location);
      
+     public void addToMap(FoodSourceMap map);
+     
      public void feed(float tpf);
      
      

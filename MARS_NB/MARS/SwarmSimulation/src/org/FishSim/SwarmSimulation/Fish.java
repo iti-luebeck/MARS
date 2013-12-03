@@ -41,7 +41,7 @@ public class Fish extends Node{
      * @param swarm             Swarm where the fish belongs to
      * @param map               Foodsourcemap where the fish belongs to
      */
-    public Fish(FishSim sim, Vector3f scale, Vector3f rot, Vector3f localTrans, Swarm swarm, FoodSourceMap map){
+    public Fish(FishSim sim, Vector3f scale, Vector3f rot, Vector3f localTrans, Swarm swarm){
         this.sim = sim;
         control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);

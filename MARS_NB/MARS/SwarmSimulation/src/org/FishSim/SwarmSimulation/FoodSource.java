@@ -2,6 +2,7 @@ package org.FishSim.SwarmSimulation;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.ArrayList;
 
 /**
  *
@@ -10,7 +11,7 @@ import com.jme3.scene.Node;
 
 public class FoodSource extends Node implements IFoodSource{
     float size;
-    FoodSourceMap map;
+    ArrayList<FoodSourceMap> foreignMaps;
     
     /**
      *
@@ -24,15 +25,24 @@ public class FoodSource extends Node implements IFoodSource{
     
     /**
      *
-     * @param map   Show foodsourcemap
+     * @param foreignMap  foodsourcemap which this foodsource belongs to
      */
-    public void setMap(FoodSourceMap map){
-        this.map = map;
+    @Override
+    public void addToMap(FoodSourceMap foreignMap){
+        if(foreignMaps == null){
+            foreignMaps = new ArrayList<FoodSourceMap>();
+        }
+        foreignMaps.add(foreignMap);
     }
     
     @Override
     public Vector3f getNearestLocation(Vector3f location){
-        return getLocalTranslation().add(location.subtract(getLocalTranslation()).normalize().mult((float)size/1000));
+        Vector3f radiusVec = location.subtract(getLocalTranslation()).normalize().mult((float)size/1000);
+        if(getLocalTranslation().distance(location) > getLocalTranslation().distance(getLocalTranslation().add(radiusVec))){
+            return getLocalTranslation().add(radiusVec);
+        }else{
+            return new Vector3f(location);
+        }
     }
     
     /**
@@ -42,7 +52,9 @@ public class FoodSource extends Node implements IFoodSource{
     public void feed(float tpf){
         size -= tpf;
         if(size <= 0){
-            map.remove(this);
+            for(int i = 0; i < foreignMaps.size(); i++){
+                foreignMaps.get(i).remove(this);
+            }
         }
     }
 }

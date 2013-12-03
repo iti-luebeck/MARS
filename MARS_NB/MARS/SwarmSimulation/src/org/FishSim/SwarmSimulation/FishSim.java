@@ -32,7 +32,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
     protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
     private int latestSwarmId;
-    private FoodSourceMap map;
  
     /**
      *
@@ -79,20 +78,19 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             } 
         }
-        super.initialize(stateManager, app);  
+        super.initialize(stateManager, app); 
         
-        map = new FoodSourceMap();
-        
-        //Collision and escaping
-        //map.add(new FoodSource(this, 100, new Vector3f(-327.21957f, 30.6459f, 86.884346f)));
-        //swarms.add(new Swarm(this, 400, new Vector3f(-327.21957f, 81.6459f, 116.884346f), map, 0));
-        //swarms.add(new Swarm(this, 200, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-197.21957f, 81.6459f, 136.884346f), map, 2));
-        
-        //Splitting-Test
+        FoodSourceMap mapType0 = new FoodSourceMap();
         FoodSource food = new FoodSource(1000, new Vector3f(0f, -1f, 20));
         mars.getRootNode().attachChild(food);
-        map.add(food);
-        addSwarm(1, new Vector3f(0.05f, 0.05f, 0.05f), new Vector3f(0f, 0f, 0f), map, 0);
+        mapType0.add(food);
+        addSwarm(100, new Vector3f(0.05f, 0.05f, 0.05f), new Vector3f(0f, 0f, 0f), mapType0, 0);
+        swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
+        swarms.get(latestSwarmId-1).setRotationSpeed(2f);
+        
+        FoodSourceMap mapType2 = new FoodSourceMap();
+        mapType2.add(swarms.get(latestSwarmId-1));
+        //addSwarm(10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-20f, -5f, 10f), mapType2, 2);
         swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
         swarms.get(latestSwarmId-1).setRotationSpeed(2f);
         //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);

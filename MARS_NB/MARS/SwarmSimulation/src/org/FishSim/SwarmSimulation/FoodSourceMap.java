@@ -8,15 +8,15 @@ import java.util.ArrayList;
  * @author Mandy Feldvoß
  */
 
-public class FoodSourceMap extends ArrayList<FoodSource>{
+public class FoodSourceMap extends ArrayList<IFoodSource>{
     
     /**
      *
      * @param location Location of the foodsource
      * @return Nearest foodsource
      */
-    public Vector3f getNearestFS(Vector3f location, float tpf){
-        FoodSource nearest;
+    public IFoodSource getNearestFS(Vector3f location){
+        IFoodSource nearest;
         float dist;
         try{
             nearest = this.get(0);
@@ -36,16 +36,12 @@ public class FoodSourceMap extends ArrayList<FoodSource>{
             }
         }
         
-        Vector3f distVec = nearest.getNearestLocation(location);
-        if(dist <= 0.3){
-               nearest.feed(tpf);
-        }
-        return distVec;
+        return nearest;
     }
     
     @Override
-    public boolean add(FoodSource food){
-        food.setMap(this);
+    public boolean add(IFoodSource food){
+        food.addToMap(this);
         return super.add(food);
     }
 }

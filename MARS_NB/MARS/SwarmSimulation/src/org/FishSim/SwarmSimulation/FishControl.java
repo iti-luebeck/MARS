@@ -56,7 +56,7 @@ public class FishControl {
             tempVec = fish.getLocalTranslation().subtract(neigh.get(i).getLocalTranslation());
             tempF = tempVec.length();
             tempVec.normalizeLocal();
-            tempVec.multLocal((float)Math.pow(1f-tempF/fish.swarm.getNear(), 2f));
+            tempVec.multLocal((float)Math.pow(1f-tempF/fish.swarm.getNear(), 1f));
             //tempVec.multLocal(1+fish.getLocalScale().length()+neigh.get(i).getLocalScale().length());
            
             steerVec.addLocal(tempVec.multLocal(1/fish.swarm.getNear())); // nach reynolds
@@ -76,15 +76,21 @@ public class FishControl {
         Vector3f tempVec;
         float tempF;
         tempVec = fish.swarm.getDirection(fish, tpf);
-        if(tempVec != null){
-            tempVec.subtractLocal(fish.getLocalTranslation());
-            if(tempVec.length() > 1f){
-                steerVec.addLocal(tempVec.normalize());
-            }else{
-                tempF = tempVec.length();
-                steerVec.multLocal(tempVec.length());
+        tempVec.subtractLocal(fish.getLocalTranslation());
+        if(tempVec.length() > fish.swarm.viewRadius){
+            steerVec.addLocal(tempVec.normalize());
+        }else{
+            tempF = tempVec.length()/fish.swarm.viewRadius;
+            if(tempF >= fish.getLocalScale().z){
+                steerVec.multLocal(tempF);
                 tempVec.normalizeLocal();
                 steerVec.addLocal(tempVec.multLocal(1+tempF));
+            }else{
+                steerVec.multLocal(fish.getLocalScale().z);
+                if(tempVec.length() != 0f){
+                    tempVec.normalizeLocal();
+                }
+                steerVec.addLocal(tempVec);
             }
         }
          return steerVec;
