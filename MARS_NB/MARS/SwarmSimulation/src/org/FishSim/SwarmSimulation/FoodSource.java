@@ -49,12 +49,13 @@ public class FoodSource extends Node implements IFoodSource{
      * Feed
      */
     @Override
-    public void feed(float tpf){
-        size -= tpf;
+    public float feed(Vector3f location, float amount){
+        size -= amount;
         if(size <= 0){
             for(int i = 0; i < foreignMaps.size(); i++){
                 foreignMaps.get(i).remove(this);
             }
         }
+        return 1+amount;
     }
 }

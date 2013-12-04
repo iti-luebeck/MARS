@@ -17,7 +17,7 @@ public interface IFoodSource {
      
      public void addToMap(FoodSourceMap map);
      
-     public void feed(float tpf);
+     public float feed(Vector3f location, float amount);
      
      
 }

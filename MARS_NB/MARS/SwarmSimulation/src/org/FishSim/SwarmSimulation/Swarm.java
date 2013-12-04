@@ -330,7 +330,8 @@ public class Swarm implements IFoodSource{
     
     public Vector3f getDirection(Fish fish, float tpf){
         IFoodSource source = ownMap.getNearestFS(fish.getLocalTranslation());
-        if(source == null){
+        if(source == null || !fish.isHungry()){
+            fish.getHungry(tpf);
             if(fish.getLocalTranslation().add(searchVec).y > sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z - colRadius)){
                 searchVec.negateLocal();
             }
@@ -340,7 +341,7 @@ public class Swarm implements IFoodSource{
             float dist = fish.getLocalTranslation().distance(location);
             if(dist <= viewRadius){
                 if(dist < scale.length()){
-                    source.feed(tpf);
+                    fish.eat(source, tpf);
                 }
                 return location;
             }else{
@@ -479,7 +480,8 @@ public class Swarm implements IFoodSource{
     }
 
     @Override
-    public void feed(float tpf) {
+    public float feed(Vector3f location, float amount) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0;
     }
 }

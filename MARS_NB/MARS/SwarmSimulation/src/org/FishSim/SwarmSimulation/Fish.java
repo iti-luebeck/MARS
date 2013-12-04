@@ -30,6 +30,9 @@ public class Fish extends Node{
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
+    private float initHunger = 100;
+    private float hungerAmount = initHunger;
+    private boolean hunger = true;
  
     /**
      * Create a new Fish.
@@ -129,4 +132,25 @@ public class Fish extends Node{
     public Vector3f getLastMove(){
         return lastMove;
     }
+    
+    public void eat(IFoodSource source, float tpf){
+        hungerAmount -= source.feed(getLocalTranslation(), (1+getLocalScale().length())*tpf);
+        if(hungerAmount <= 0){
+            hungerAmount = 0;
+            hunger = false;
+        }
+    }
+    
+    public void getHungry(float tpf){
+        hungerAmount += tpf;
+        if(hungerAmount >= initHunger){
+            hungerAmount = initHunger;
+            hunger = true;
+        }
+    }
+    
+    public boolean isHungry(){
+        return hunger;
+    }
+    
 }
