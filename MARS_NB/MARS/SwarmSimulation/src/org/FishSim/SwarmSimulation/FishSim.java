@@ -90,7 +90,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         
         //Splitting-Test
         //map.add(new FoodSource(this, 10000, new Vector3f(-327.21957f, 81.6459f, 0.884346f)));
-        addSwarm(100, new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, 0f), map, 0);
+        addSwarm(100, new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(10f, 0f, 10f), map, 0);
         swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
         swarms.get(latestSwarmId-1).setRotationSpeed(1f);
         //addSwarm(1, new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(-327.21957f, 81.6459f, -120.884346f), map, 2);
@@ -215,8 +215,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         SphereCollisionShape sphere = new SphereCollisionShape(size);
         RigidBodyControl obstacle = new RigidBodyControl(sphere, 1);
         obstacle.setKinematic(true);
-        obstacle.setCollisionGroup(3);
-        obstacle.setCollideWithGroups(1);
+        obstacle.setCollisionGroup(6);
+        obstacle.setCollideWithGroups(4);
         obstacle.setPhysicsLocation(pos);
         getBulletAppState().getPhysicsSpace().add(obstacle);
     }
