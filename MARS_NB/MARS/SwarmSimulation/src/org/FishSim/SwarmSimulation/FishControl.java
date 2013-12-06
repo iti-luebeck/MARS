@@ -22,13 +22,14 @@ public class FishControl {
    
        Vector3f steerVec = new Vector3f(0,0,0);
        
-       steerVec = basicRules(steerVec, tpf);
+       steerVec = basicRules(steerVec);
        steerVec = feed(steerVec, tpf);
        steerVec = flee(steerVec);
        steerVec = collision(steerVec);
        steerVec = waterHeight(steerVec);
 
        fish.rotation.lookAt(steerVec, fish.getLocalRotation().multLocal(Vector3f.UNIT_Y));
+       fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);
        Vector3f moveVec = fish.getLocalRotation().mult(Vector3f.UNIT_Z);
        moveVec.multLocal(fish.swarm.moveSpeed + fish.swarm.escapeInc);
        moveVec.multLocal(steerVec.length());
@@ -36,13 +37,14 @@ public class FishControl {
        //AnimationSpeed
        fish.channel_swim.setSpeed(10*moveVec.length());
        moveVec.multLocal(tpf);
+       if(moveVec.length() > fish.lastMove.length() + fish.lastMove.length()*tpf && fish.lastMove.length() != 0f){
+           moveVec.normalizeLocal().multLocal(fish.lastMove.length() + fish.lastMove.length()*tpf);
+       }
        fish.lastMove = moveVec;
-       fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec)); 
-        
-       fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);       
+       fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec));        
    }
     
-    private Vector3f basicRules(Vector3f steerVec, float tpf){
+    private Vector3f basicRules(Vector3f steerVec){
         Vector3f tempVec;
         float tempF;
         Vector3f avgMove = new Vector3f(0f, 0f, 0f);
