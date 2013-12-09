@@ -44,7 +44,7 @@ public class Fish extends Node{
      * @param swarm             Swarm where the fish belongs to
      * @param map               Foodsourcemap where the fish belongs to
      */
-    public Fish(FishSim sim, Vector3f scale, Vector3f rot, Vector3f localTrans, Swarm swarm){
+    public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm){
         this.sim = sim;
         control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
@@ -55,7 +55,6 @@ public class Fish extends Node{
         channel_swim.setLoopMode(LoopMode.Loop);
         attachChild(model);
         scale(scale.x, scale.y, scale.z);
-        rotate(rot.x, rot.y, rot.z);
         setLocalTranslation(localTrans.x, localTrans.y, localTrans.z);
         this.swarm = swarm;
         
@@ -106,15 +105,6 @@ public class Fish extends Node{
         }else{
             this.setCullHint(Spatial.CullHint.Never);
         }
-    }
-    
-    /**
-     *
-     * @deprecated see setVisible
-     */
-    @Deprecated
-    public void show(){
-        sim.getRootNode().attachChild(this);
     }
     
     /**

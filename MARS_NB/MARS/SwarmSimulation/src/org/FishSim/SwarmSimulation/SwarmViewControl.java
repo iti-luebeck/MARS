@@ -33,7 +33,10 @@ private Swarm swarm;
             if(event.getObjectB().getClass().equals(SwarmColControl.class)){
                 SwarmColControl temp = (SwarmColControl) event.getObjectB();    
                 if(temp.getSwarm().type == 2 && this.swarm != temp.getSwarm()){
-                    swarm.setViewCollided(temp.getSwarm().getCenter());
+                    float angle = (float) Math.toDegrees(swarm.getMoveDirection().normalize().angleBetween(event.getPositionWorldOnA().subtract(swarm.center).normalize()));
+                    if(angle < 150){
+                        swarm.setViewCollided(temp.getSwarm().getCenter());
+                    }
                 }
             }
         }
@@ -41,7 +44,10 @@ private Swarm swarm;
             if(event.getObjectA().getClass().equals(SwarmColControl.class)){
                 SwarmColControl temp = (SwarmColControl) event.getObjectA();    
                 if(temp.getSwarm().type == 2 && this.swarm != temp.getSwarm()){
-                    swarm.setViewCollided(temp.getSwarm().getCenter());
+                    float angle = (float) Math.toDegrees(swarm.getMoveDirection().normalize().angleBetween(event.getPositionWorldOnB().subtract(swarm.center).normalize()));
+                    if(angle < 150){
+                        swarm.setViewCollided(temp.getSwarm().getCenter());
+                    }
                 }
             }
         }

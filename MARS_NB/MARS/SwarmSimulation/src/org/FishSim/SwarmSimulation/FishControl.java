@@ -37,6 +37,7 @@ public class FishControl {
        //AnimationSpeed
        fish.channel_swim.setSpeed(10*moveVec.length());
        moveVec.multLocal(tpf);
+       //acceleration limit
        if(moveVec.length() > fish.lastMove.length() + fish.lastMove.length()*tpf && fish.lastMove.length() != 0f){
            moveVec.normalizeLocal().multLocal(fish.lastMove.length() + fish.lastMove.length()*tpf);
        }

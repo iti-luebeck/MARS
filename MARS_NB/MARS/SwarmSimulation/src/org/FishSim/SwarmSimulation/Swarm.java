@@ -43,6 +43,7 @@ public class Swarm implements IFoodSource{
     protected boolean merge = false;
     private Swarm mergeWith;
     private Vector3f searchVec;
+    private int lastSize;
     
     /**
      *
@@ -65,10 +66,13 @@ public class Swarm implements IFoodSource{
         this.type = type;
         this.id = id;
         this.ownMap = ownMap;
+        lastSize = size;
         
+        Fish fish;
         for(int i = 0; i < size; i++){
-            swarm.add(new Fish(sim, scale, new Vector3f(0.0f, 0.0f, 0.0f), spawn, this));
-            swarm.get(i).show();
+            fish = new Fish(sim, scale, spawn, this);
+            swarm.add(fish);
+            sim.getRootNode().attachChild(fish);
         }
         initCollidable();
     }
@@ -93,12 +97,16 @@ public class Swarm implements IFoodSource{
         this.type = type;
         this.id = id;
         this.ownMap = ownMap;
+        lastSize = size;
         
         float rand;
+        
+        Fish fish;
         for(int i = 0; i < size; i++){
             rand = getGaussianDistributionNoise(deviation);
-            swarm.add(new Fish(sim, scale.add(rand, rand, rand), new Vector3f(0.0f, 0.0f, 0.0f), spawn, this));
-            swarm.get(i).show();
+            fish = new Fish(sim, scale.add(rand, rand, rand), spawn, this);
+            swarm.add(fish);
+            sim.getRootNode().attachChild(fish);
         }
         initCollidable();
     }
@@ -118,12 +126,17 @@ public class Swarm implements IFoodSource{
         viewRadius = colRadius + 5;
         near = (float)  3 * scale.length();
         this.sim = sim;
-        this.swarm = swarm;
+        this.swarm = new ArrayList<Fish>();
         center = spawn;
         this.scale = scale;
         this.type = type;
         this.id = id;
         this.ownMap = ownMap;
+        lastSize = swarm.size();
+        
+        for(int i = 0; i < swarm.size(); i++){
+            this.swarm.add(swarm.get(i));
+        }
         initCollidable();
     }
        
@@ -283,10 +296,8 @@ public class Swarm implements IFoodSource{
         Swarm merged = new Swarm(sim, newFishList, scale.add(mergeWith.scale).divide(2f),  newCenter, ownMap, type, id);
         
         sim.swarms.add(merged);
-        ArrayList<Swarm> swarms = new ArrayList<Swarm>();
-        swarms.add(this);
-        swarms.add(mergeWith);
-        sim.removedSwarms.addAll(swarms);
+        sim.removedSwarms.add(this);
+        sim.removedSwarms.add(mergeWith);
     }
     
     /**
@@ -481,7 +492,32 @@ public class Swarm implements IFoodSource{
 
     @Override
     public float feed(Vector3f location, float amount) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return 0;
+        
+        Fish fish = swarm.get(0);
+        float minDist = fish.getLocalTranslation().distance(location);
+        for(int i = 1; i < swarm.size(); i++){
+            if(swarm.get(i).getLocalTranslation().distance(location) < minDist){
+                minDist = swarm.get(i).getLocalTranslation().distance(location);
+                fish = swarm.get(i);
+            }
+        }
+        swarm.remove(fish);
+        sim.getRootNode().detachChild(fish);
+        if(swarm.isEmpty()){
+            for(int i = 0; i < foreignMaps.size(); i++){
+                foreignMaps.get(i).remove(this);
+            }
+            disableCol();
+            sim.removedSwarms.add(this);
+        }else{
+            if((float)lastSize/ (float)swarm.size() > 1.1f){
+                lastSize = swarm.size();
+                disableCol();
+                colRadius = (float) ((Math.log1p((float)swarm.size())) * scale.length());
+                viewRadius = colRadius + 5;
+                initCollidable();
+            }
+        }
+        return 10f;
     }
 }
