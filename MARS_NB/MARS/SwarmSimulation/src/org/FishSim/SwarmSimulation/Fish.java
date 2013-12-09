@@ -83,6 +83,8 @@ public class Fish extends Node{
                 Geometry geo = (Geometry) spatial;
                 LodGenerator lodGenerator = new LodGenerator(geo);          
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
+                /*LodGenerator lodGenerator = new LodGenerator(geo);          
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.8f, 0.8f);*/
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
                 control.setDistTolerance(25f);

@@ -143,14 +143,16 @@ public class Swarm implements IFoodSource{
     private void initCollidable(){
         SphereCollisionShape colSphere = new SphereCollisionShape(colRadius);
         colCont = new SwarmColControl(colSphere, this);
-        colCont.setCollisionGroup(04);
-        colCont.setCollideWithGroups(01);
-        colCont.setCollideWithGroups(04);
+        colCont.setCollisionGroup(4);
+        colCont.setCollideWithGroups(1);
+        colCont.setCollideWithGroups(2);
+        colCont.setCollideWithGroups(3);
+        colCont.setCollideWithGroups(4);
         colCont.setKinematic(true);
         SphereCollisionShape viewSphere = new SphereCollisionShape(viewRadius);
         viewCont = new SwarmViewControl(viewSphere, this);
-        viewCont.setCollisionGroup(05);
-        viewCont.setCollideWithGroups(04);
+        viewCont.setCollisionGroup(5);
+        viewCont.setCollideWithGroups(4);
         viewCont.setKinematic(true);
         enableCol();
     }
