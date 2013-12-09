@@ -14,8 +14,8 @@ import com.jme3.math.Vector3f;
 
 public class SwarmColControl extends RigidBodyControl implements PhysicsCollisionListener{
 private Swarm swarm;
-private int terrainCG = 01;
-private int obstacleCG = 06;
+private int terrainCG = 1;
+private int obstacleCG = 6;
 
     /**
      *
