@@ -42,10 +42,10 @@ private Swarm swarm;
                     }
                 }
             }
-            if(event.getObjectB().getCollisionGroup() == 0){
+            if(event.getObjectB().getCollisionGroup() == 1){
                 swarm.setCollided(event.getPositionWorldOnA());
             }
-            if(event.getObjectB().getCollisionGroup() == 3){
+            if(event.getObjectB().getCollisionGroup() == 6){
                 if(event.getObjectB().getClass().equals(RigidBodyControl.class)){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectB();
                     if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){
@@ -76,10 +76,10 @@ private Swarm swarm;
                     }
                 }
             }
-            if(event.getObjectA().getCollisionGroup() == 0){
+            if(event.getObjectA().getCollisionGroup() == 1){
                 swarm.setCollided(event.getPositionWorldOnB());
             }
-            if(event.getObjectA().getCollisionGroup() == 3){                 
+            if(event.getObjectA().getCollisionGroup() == 6){                 
                 if(event.getObjectA().getClass().equals(RigidBodyControl.class)){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectA();
                     if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){

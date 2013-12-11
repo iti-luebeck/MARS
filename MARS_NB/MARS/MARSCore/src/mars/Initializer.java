@@ -91,6 +91,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jme3utilities.TimeOfDay;
+import jme3utilities.sky.SkyControl;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
 import mars.filter.FishEyeFilter;
@@ -171,6 +173,9 @@ public class Initializer {
     //gui
     BitmapText ch;
     
+    //SkyDome
+    SkyControl skyControl;
+    
     //water
     private WaterFilter water;
     private float waves_time = 0f;
@@ -240,15 +245,6 @@ public class Initializer {
         //if(mars_settings.isSetupPlaneWater()){
             setupPlaneWater();
         //}
-        if(mars_settings.isSetupSimpleSkyBox()){
-            setupSimpleSkyBox();
-        }
-        if(mars_settings.isSetupSkyBox()){
-            setupSkyBox();
-        }
-        if(mars_settings.isSetupSkyDome()){
-            setupSkyDome();
-        }
         if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
             setupTerrain();
         }
@@ -285,6 +281,17 @@ public class Initializer {
         //setupLensFlare();
         setupFlow();
         setupPollution();
+        
+        if(mars_settings.isSetupSimpleSkyBox()){
+            setupSimpleSkyBox();
+        }
+        if(mars_settings.isSetupSkyBox()){
+            setupSkyBox();
+        }
+        if(mars_settings.isSetupSkyDome()){
+            setupSkyDome();
+        }
+        
         //add all the filters to the viewport(main window)
         viewPort.addProcessor(fpp);
     }
@@ -767,7 +774,7 @@ public class Initializer {
                         rootNodeMars.removeLight(sun);//remove all old stuff before
                         rootNodeMars.removeLight(ambLight);
                         sun.setColor(mars_settings.getLight_color());
-                        sun.setDirection(mars_settings.getLight_direction().normalize());
+                        //sun.setDirection(mars_settings.getLight_direction().normalize());
                         ambLight.setColor(mars_settings.getAmbientColor());
                         if(mars_settings.isSetupLight()){
                             rootNodeMars.addLight(sun);
@@ -808,57 +815,106 @@ public class Initializer {
      * This creates a dynamic sky.
      */
     private void setupSkyDome(){
-        //this.assetManager.registerLocator("Assets/shaderblowlibs", FileLocator.class);
-        SkyDomeControl skyDome = new SkyDomeControl(assetManager, mars.getCamera(),
-                "TestModels/SkyDome/SkyDome.j3o",
-                "TestTextures/SkyDome/SkyNight_L.png",
-                "TestTextures/SkyDome/Moon_L.png",
-                "TestTextures/SkyDome/Clouds_L.png",
-                "TestTextures/SkyDome/Fog_Alpha.png");
-        Node sky = new Node();
-        sky.setQueueBucket(Bucket.Sky);
-        sky.addControl(skyDome);
-        sky.setCullHint(Spatial.CullHint.Never);
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        /*
+                        * Create a SkyControl to animate the sky.
+                        */
+                       float cloudFlattening;
+                       boolean starMotion;
+                       boolean bottomDome;
+                       /*if (singleDome) {
+                           cloudFlattening = 0f; // single dome implies clouds on hemisphere
+                           starMotion = false; // single dome implies non-moving stars
+                           bottomDome = false; // single dome implies exposed background
+                       } else {
+                           cloudFlattening = 0.9f; // clouds overhead are 10x closer
+                           starMotion = true; // allow stars to move
+                           bottomDome = true; // helpful in case scene has a low horizon
+                       }*/
+
+                       cloudFlattening = 0.9f; // clouds overhead are 10x closer
+                       starMotion = true; // allow stars to move
+                       bottomDome = true; // helpful in case scene has a low horizon
+
+                       skyControl = new SkyControl(assetManager, mars.getCamera(), cloudFlattening, starMotion,
+                               bottomDome);
+                       /*
+                        * Put SkyControl in charge of the lights, the
+                        * shadow renderer, and the viewport background. (optional)
+                        */
+                       skyControl.addViewPort(viewPort);
+                       skyControl.setAmbientLight(ambLight);
+                       skyControl.setMainLight(sun);
+                       skyControl.setShadowRenderer(dlsr);
+                       skyControl.getSunAndStars().setHour(10f);
+                       /*
+                        * Add SkyControl to the scene and enable it.
+                        */
+                       final Node rootNodeMars = mars.getRootNode();
+                       //rootNodeMars.addControl(skyControl);
+                       //sceneReflectionNode.addControl(skyControl);
+                       //skyControl.setEnabled(true);
+                       
+                       final TimeOfDay timeOfDay = new TimeOfDay(4.75f);
+                       mars.getStateManager().attach(timeOfDay);
+                       timeOfDay.setRate(100f);
+                       
+                       return null;
+                    }
+                });
         
-        // Either add a reference to the control for the existing JME fog filter or use the one I posted…
-// But… REMEMBER!  If you use JME’s… the sky dome will have fog rendered over it.
-// Sorta pointless at that point
-//        FogFilter fog = new FogFilter(ColorRGBA.Blue, 0.5f, 10f);
-//        skyDome.setFogFilter(fog, viewPort);
-
-// Set some fog colors… or not (defaults are cool)
-        /*skyDome.setFogColor(ColorRGBA.Blue);
-        skyDome.setFogNightColor(new ColorRGBA(0.5f, 0.5f, 1f, 1f));
-        skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));*/
-
-// Enable the control to modify the fog filter
-        skyDome.setControlFog(false);
-
-// Add the directional light you use for sun… or not
-        /*DirectionalLight sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
-        sun.setColor(new ColorRGBA(1, 1, 1, 1));
-        rootNode.addLight(sun);
-        skyDome.setSun(sun);*/
-        skyDome.setSun(sun);
-        
-        /*AmbientLight al = new AmbientLight();
-        al.setColor(new ColorRGBA(0.7f,0.7f,1f,1.0f));
-        rootNode.addLight(al);  */        
-
-// Set some sunlight day/night colors… or not
-        skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
-        skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
-
-// Enable the control to modify your sunlight
-        skyDome.setControlSun(true);
-
-// Enable the control
-        skyDome.setEnabled(true);
-        skyDome.cycleNightToDay();
-        skyDome.cycleNightToDay();
-// Add the skydome to the root… or where ever
-        rootNode.attachChild(sky);
+//        //this.assetManager.registerLocator("Assets/shaderblowlibs", FileLocator.class);
+//        SkyDomeControl skyDome = new SkyDomeControl(assetManager, mars.getCamera(),
+//                "TestModels/SkyDome/SkyDome.j3o",
+//                "TestTextures/SkyDome/SkyNight_L.png",
+//                "TestTextures/SkyDome/Moon_L.png",
+//                "TestTextures/SkyDome/Clouds_L.png",
+//                "TestTextures/SkyDome/Fog_Alpha.png");
+//        Node sky = new Node();
+//        sky.setQueueBucket(Bucket.Sky);
+//        sky.addControl(skyDome);
+//        sky.setCullHint(Spatial.CullHint.Never);
+//        
+//        // Either add a reference to the skyControl for the existing JME fog filter or use the one I posted…
+//// But… REMEMBER!  If you use JME’s… the sky dome will have fog rendered over it.
+//// Sorta pointless at that point
+////        FogFilter fog = new FogFilter(ColorRGBA.Blue, 0.5f, 10f);
+////        skyDome.setFogFilter(fog, viewPort);
+//
+//// Set some fog colors… or not (defaults are cool)
+//        /*skyDome.setFogColor(ColorRGBA.Blue);
+//        skyDome.setFogNightColor(new ColorRGBA(0.5f, 0.5f, 1f, 1f));
+//        skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));*/
+//
+//// Enable the skyControl to modify the fog filter
+//        skyDome.setControlFog(false);
+//
+//// Add the directional light you use for sun… or not
+//        /*DirectionalLight sun = new DirectionalLight();
+//        sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
+//        sun.setColor(new ColorRGBA(1, 1, 1, 1));
+//        rootNode.addLight(sun);
+//        skyDome.setSun(sun);*/
+//        skyDome.setSun(sun);
+//        
+//        /*AmbientLight al = new AmbientLight();
+//        al.setColor(new ColorRGBA(0.7f,0.7f,1f,1.0f));
+//        rootNode.addLight(al);  */        
+//
+//// Set some sunlight day/night colors… or not
+//        skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
+//        skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
+//
+//// Enable the skyControl to modify your sunlight
+//        skyDome.setControlSun(true);
+//
+//// Enable the skyControl
+//        skyDome.setEnabled(true);
+//        skyDome.cycleNightToDay();
+//        skyDome.cycleNightToDay();
+//// Add the skydome to the root… or where ever
+//        rootNode.attachChild(sky);
     }
 
     /*
@@ -1796,4 +1852,9 @@ public class Initializer {
     public void setFlowVector(Vector3f flowVector) {
         this.flowVector = flowVector;
     }
+
+    public SkyControl getSkyControl() {
+        return skyControl;
+    }
+ 
 }

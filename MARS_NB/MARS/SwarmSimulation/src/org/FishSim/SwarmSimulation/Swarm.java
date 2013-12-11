@@ -112,7 +112,7 @@ public class Swarm {
     }
     
     private void initCollidable(){
-        SphereCollisionShape colSphere = new SphereCollisionShape((near + scale.length() + 1)*2);
+        SphereCollisionShape colSphere = new SphereCollisionShape((near + scale.length() + 1f)*0.75f);
         colCont = new SwarmColControl(colSphere, this);
         colCont.setCollisionGroup(4);
         colCont.setCollideWithGroups(1);
@@ -120,7 +120,7 @@ public class Swarm {
         colCont.setCollideWithGroups(3);
         colCont.setCollideWithGroups(4);
         colCont.setKinematic(true);
-        SphereCollisionShape viewSphere = new SphereCollisionShape(colSphere.getRadius()*5);
+        SphereCollisionShape viewSphere = new SphereCollisionShape(colSphere.getRadius()*2.5f);
         viewCont = new SwarmViewControl(viewSphere, this);
         viewCont.setCollisionGroup(5);
         viewCont.setCollideWithGroups(4);

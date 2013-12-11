@@ -31,7 +31,7 @@ public class FoodSource extends Node{
      */
     public void show(FoodSourceMap map){
         this.map = map;
-        sim.getMain().getRootNode().attachChild(this);
+        sim.getRootNode().attachChild(this);
     }
     
     /**

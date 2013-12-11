@@ -1,5 +1,6 @@
 package org.FishSim.SwarmSimulation;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -99,7 +100,9 @@ public class FishControl {
        moveVec.multLocal(tpf);
        fish.lastMove = moveVec;
        fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec)); 
-        
-       fish.getLocalRotation().slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);       
+       
+       Quaternion localRotation = fish.getLocalRotation();
+       localRotation.slerp(fish.rotation, tpf*fish.swarm.rotationSpeed);
+       fish.setLocalRotation(localRotation);   
    }
 }
