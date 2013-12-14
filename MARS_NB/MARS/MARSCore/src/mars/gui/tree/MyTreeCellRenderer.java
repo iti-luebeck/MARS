@@ -143,6 +143,15 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
             }else if(hasher.getName().equals("Pollution")){
                 File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "oil-barrel.png", "mars.core", false);
                 setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+            }else if(hasher.getName().equals("SkyDome")){
+                File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "sun_cloudy.png", "mars.core", false);
+                setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+            }else if(hasher.getName().equals("SkyBox")){
+                File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "sun_cloudy.png", "mars.core", false);
+                setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
+            }else if(hasher.getName().equals("SimpleSkyBox")){
+                File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "sun_cloudy.png", "mars.core", false);
+                setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
             }else{
                 if(hasher.getUserData() instanceof PhysicalExchanger){
                     PhysicalExchanger pe = (PhysicalExchanger)hasher.getUserData();

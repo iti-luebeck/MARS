@@ -1,4 +1,4 @@
-package org.FishSim.SwarmSimulation;
+package SwarmSimulation;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -34,57 +34,91 @@ private int obstacleCG = 6;
     @Override
     public void collision(PhysicsCollisionEvent event) {
         if(event.getObjectA() == this){
-            if(event.getObjectB().getClass().equals(this.getClass())){
+            int cg = event.getObjectB().getCollisionGroup();
+            if(event.getObjectB() instanceof SwarmColControl){
                 SwarmColControl temp = (SwarmColControl) event.getObjectB();
-                if(temp.getSwarm().type > this.swarm.type){
-                    swarm.setCollided(event.getPositionWorldOnA());
+                if(temp.getSwarm().type != this.swarm.type){
+                    if(temp.getSwarm().type == 2){
+                        swarm.setViewCollided(event.getPositionWorldOnA());
+                    }else{
+                        if(temp.getSwarm().type > this.swarm.type){
+                            colType1(event.getPositionWorldOnA());
+                        }
+                    }
                 }else{
-                    if(swarm.id == temp.swarm.id && swarm.splitTime <= 0 && temp.swarm.splitTime <= 0 && swarm.merge == false && temp.swarm.merge == false){
+                    if(swarm.splitTime <= 0 && temp.swarm.splitTime <= 0 && swarm.merge == false && temp.swarm.merge == false){
                         swarm.setMerge(temp.swarm);
                     }
                 }
             }
-            if(event.getObjectB().getCollisionGroup() == terrainCG){
-                swarm.setCollided(event.getPositionWorldOnA());
+            
+            if(cg != terrainCG && cg != obstacleCG && cg != 4 && cg != 5){
+                colType1(event.getPositionWorldOnA());
             }
-            if(event.getObjectB().getCollisionGroup() == obstacleCG){
-                if(event.getObjectB().getClass().equals(RigidBodyControl.class)){
+            
+            if(cg == terrainCG){
+                swarm.setCollided(event.getPositionWorldOnA());
+                swarm.setSolidCollisionType(2);
+            }
+            
+            if(cg == obstacleCG){
+                if(event.getObjectB() instanceof RigidBodyControl){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectB();
-                    if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){
+                    if(temp.getCollisionShape() instanceof SphereCollisionShape){
                         SphereCollisionShape tempShape = (SphereCollisionShape) temp.getCollisionShape();
                         SphereCollisionShape tempColShape = (SphereCollisionShape) this.getCollisionShape();
                         if(tempShape.getRadius() < tempColShape.getRadius()){
                             Vector3f moveDirect = swarm.getMoveDirection().normalize();
                             Vector3f colDirect = event.getPositionWorldOnA().subtract(swarm.getCenter()).normalize();
-                            if((Math.toDegrees(moveDirect.angleBetween(colDirect)) < 15f) && (swarm.getSize() > 50) && swarm.split == false && swarm.splitTime <= 0){
+                            if((Math.toDegrees(moveDirect.angleBetween(colDirect)) < 150f) && (swarm.getSize() > 50) && swarm.split == false && swarm.splitTime <= 0){
                                 swarm.setSplit(event.getPositionWorldOnA());
                             }else{
-                                swarm.setCollided(event.getPositionWorldOnA());
-                            }       
+                                colType1(event.getPositionWorldOnA());
+                            }     
+                        }else{
+                            colType1(event.getPositionWorldOnA());
                         }
+                    }else{
+                        colType1(event.getPositionWorldOnA());
                     }
+                }else{
+                    colType1(event.getPositionWorldOnA());
                 }
             }
         }
             
         if(event.getObjectB() == this){
-            if(event.getObjectA().getClass().equals(this.getClass())){
+            int cg = event.getObjectA().getCollisionGroup();
+            if(event.getObjectA() instanceof SwarmColControl){
                 SwarmColControl temp = (SwarmColControl) event.getObjectA();    
-                if(temp.getSwarm().type > this.swarm.type){
-                    swarm.setCollided(event.getPositionWorldOnB());
+                if(temp.getSwarm().type != this.swarm.type){
+                    if(temp.getSwarm().type == 2){
+                        swarm.setViewCollided(event.getPositionWorldOnB());
+                    }else{
+                        if(temp.getSwarm().type > this.swarm.type){
+                            colType1(event.getPositionWorldOnB());
+                        }    
+                    }
                 }else{
-                    if(swarm.id == temp.swarm.id && swarm.splitTime <= 0 && temp.swarm.splitTime <= 0 && swarm.merge == false && temp.swarm.merge == false){
+                    if(swarm.splitTime <= 0 && temp.swarm.splitTime <= 0 && swarm.merge == false && temp.swarm.merge == false){
                         swarm.setMerge(temp.swarm);
                     }
                 }
             }
-            if(event.getObjectA().getCollisionGroup() == terrainCG){
-                swarm.setCollided(event.getPositionWorldOnB());
+            
+            if(cg != terrainCG && cg != obstacleCG && cg != 4 && cg != 5){
+                colType1(event.getPositionWorldOnB());
             }
-            if(event.getObjectA().getCollisionGroup() == obstacleCG){                 
-                if(event.getObjectA().getClass().equals(RigidBodyControl.class)){
+            
+            if(cg == terrainCG){
+                swarm.setCollided(event.getPositionWorldOnB());
+                swarm.setSolidCollisionType(2);
+            }
+            
+            if(cg == obstacleCG){                 
+                if(event.getObjectA() instanceof RigidBodyControl){
                     RigidBodyControl temp = (RigidBodyControl) event.getObjectA();
-                    if(temp.getCollisionShape().getClass().equals(SphereCollisionShape.class)){
+                    if(temp.getCollisionShape() instanceof SphereCollisionShape){
                         SphereCollisionShape tempShape = (SphereCollisionShape) temp.getCollisionShape();
                         SphereCollisionShape tempColShape = (SphereCollisionShape) this.getCollisionShape();
                         if(tempShape.getRadius() < tempColShape.getRadius()){
@@ -93,10 +127,16 @@ private int obstacleCG = 6;
                             if((Math.toDegrees(moveDirect.angleBetween(colDirect)) < 15f) && (swarm.getSize() > 50) && swarm.split == false && swarm.splitTime <= 0){
                                 swarm.setSplit(event.getPositionWorldOnB());
                             }else{
-                                swarm.setCollided(event.getPositionWorldOnB());     
+                                colType1(event.getPositionWorldOnB());    
                             }
+                        }else{
+                            colType1(event.getPositionWorldOnB());
                         }
+                    }else{
+                        colType1(event.getPositionWorldOnB());
                     }
+                }else{
+                    colType1(event.getPositionWorldOnB());
                 }
             }
         }
@@ -108,5 +148,12 @@ private int obstacleCG = 6;
      */
     public Swarm getSwarm(){
         return this.swarm;
-    }   
+    }
+    
+    private void colType1(Vector3f location){
+        if(swarm.getSolidCollisionType() < 2){
+            swarm.setCollided(location);
+            swarm.setSolidCollisionType(1);
+        }
+    }
 }

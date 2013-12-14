@@ -1,4 +1,4 @@
-package org.FishSim.SwarmSimulation;
+package SwarmSimulation;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;

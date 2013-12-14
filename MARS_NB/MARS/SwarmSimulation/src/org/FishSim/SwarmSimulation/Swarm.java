@@ -1,4 +1,4 @@
-package org.FishSim.SwarmSimulation;
+package SwarmSimulation;
 
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.math.Vector3f;
@@ -15,10 +15,9 @@ public class Swarm implements IFoodSource{
     protected List<Fish> swarm;
     protected FishSim sim;
     protected FoodSourceMap ownMap;
-    protected ArrayList<FoodSourceMap> foreignMaps;
+    protected ArrayList<FoodSourceMap> foreignMaps = new ArrayList<FoodSourceMap>();
     protected Vector3f scale;
     protected float near;
-    protected int id;
     protected Random random = new Random();
     protected Vector3f center;
     protected float colRadius;
@@ -28,6 +27,7 @@ public class Swarm implements IFoodSource{
     private Vector3f colLocation = null;
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
+    private int solidCollisionType = 0;
     protected int type;
     protected float moveSpeed = 1f;
     protected float rotationSpeed = 1;
@@ -42,7 +42,7 @@ public class Swarm implements IFoodSource{
     protected boolean split = false;
     protected boolean merge = false;
     private Swarm mergeWith;
-    private Vector3f searchVec;
+    private Vector3f searchVec = new Vector3f(0,0,0);
     private int lastSize;
     
     /**
@@ -55,8 +55,8 @@ public class Swarm implements IFoodSource{
      * @param type      Type of the fish
      * @param id        Id of the swarm
      */
-    public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap ownMap, int type, int id){
-        colRadius = (float) ((Math.log1p((float)size)) * scale.length());
+    public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, FoodSourceMap ownMap, int type, String path, boolean animation){
+        colRadius = (float) (Math.sqrt((float)size) * scale.length());
         viewRadius = colRadius + 5;
         near = (float)  3 * scale.length();
         this.sim = sim;
@@ -64,13 +64,12 @@ public class Swarm implements IFoodSource{
         center = spawn;
         this.scale = scale;
         this.type = type;
-        this.id = id;
         this.ownMap = ownMap;
         lastSize = size;
         
         Fish fish;
         for(int i = 0; i < size; i++){
-            fish = new Fish(sim, scale, spawn, this);
+            fish = new Fish(sim, scale, spawn, this, path, animation);
             swarm.add(fish);
             sim.getRootNode().attachChild(fish);
         }
@@ -86,8 +85,8 @@ public class Swarm implements IFoodSource{
      * @param type      Type of the fish
      * @param id        Id of the swarm
      */
-    public Swarm(FishSim sim, int size, Vector3f scale, float deviation, Vector3f spawn, FoodSourceMap ownMap, int type, int id){
-        colRadius = (float) ((Math.log1p((float)size)) * scale.length());
+    public Swarm(FishSim sim, int size, Vector3f scale, float deviation, Vector3f spawn, FoodSourceMap ownMap, int type, String path, boolean animation){
+        colRadius = (float) (Math.sqrt((float)size) * scale.length());
         viewRadius = colRadius + 5;
         near = (float)  3 * scale.length();
         this.sim = sim;
@@ -95,7 +94,6 @@ public class Swarm implements IFoodSource{
         center = spawn;
         this.scale = scale;
         this.type = type;
-        this.id = id;
         this.ownMap = ownMap;
         lastSize = size;
         
@@ -104,7 +102,7 @@ public class Swarm implements IFoodSource{
         Fish fish;
         for(int i = 0; i < size; i++){
             rand = getGaussianDistributionNoise(deviation);
-            fish = new Fish(sim, scale.add(rand, rand, rand), spawn, this);
+            fish = new Fish(sim, scale.add(rand, rand, rand), spawn, this, path, animation);
             swarm.add(fish);
             sim.getRootNode().attachChild(fish);
         }
@@ -120,9 +118,8 @@ public class Swarm implements IFoodSource{
      * @param type      Type of the fish
      * @param id        Id of the swarm
      */
-    public Swarm(FishSim sim, ArrayList<Fish> swarm, Vector3f scale, Vector3f spawn, FoodSourceMap ownMap, int type, int id){
-        scale = new Vector3f(0.25f, 0.25f, 0.25f);
-        colRadius = (float) ((Math.log1p((float)swarm.size())) * scale.length());
+    public Swarm(FishSim sim, ArrayList<Fish> swarm, Vector3f scale, Vector3f spawn, FoodSourceMap ownMap, int type){
+        colRadius = (float) (Math.sqrt((float)swarm.size()) * scale.length());
         viewRadius = colRadius + 5;
         near = (float)  3 * scale.length();
         this.sim = sim;
@@ -130,12 +127,11 @@ public class Swarm implements IFoodSource{
         center = spawn;
         this.scale = scale;
         this.type = type;
-        this.id = id;
         this.ownMap = ownMap;
         lastSize = swarm.size();
         
         for(int i = 0; i < swarm.size(); i++){
-            this.swarm.add(swarm.get(i));
+            add(swarm.get(i));
         }
         initCollidable();
     }
@@ -176,10 +172,11 @@ public class Swarm implements IFoodSource{
         
         if(collided){
             collided = false;
-            avoidTime = 2.0f;
+            avoidTime = 1.0f;
         }else{
             if(avoidTime <= 0f){
                 colLocation = null;
+                solidCollisionType = 0;
             }else{
                 avoidTime -= tpf;
             }
@@ -196,7 +193,6 @@ public class Swarm implements IFoodSource{
             }else{
                 targetTime -= tpf;
                 escapeInc = 2*moveSpeed * targetTime/30f;
-                System.out.println(escapeInc);
             }
         }
         
@@ -219,16 +215,21 @@ public class Swarm implements IFoodSource{
     
     public void stat(){
         for(int i = 0; i < swarm.size(); i++){
-            System.out.println(swarm.get(i).getTriangleCount());
         }
     }
         
     public void setMoveSpeed(float moveSpeed){
         this.moveSpeed = moveSpeed;
+        for(int i = 0; i < swarm.size(); i++){
+            swarm.get(i).setMoveSpeed((float)(Math.random() - Math.random())*moveSpeed);
+        }
     }
     
     public void setRotationSpeed(float rotationSpeed){
         this.rotationSpeed = rotationSpeed;
+        for(int i = 0; i < swarm.size(); i++){
+            swarm.get(i).setRotationSpeed((float)(Math.random() - Math.random())*rotationSpeed);
+        }
     }
         
     /**
@@ -248,20 +249,31 @@ public class Swarm implements IFoodSource{
 
         ArrayList<Fish> fishList1 = new ArrayList<Fish>();
         ArrayList<Fish> fishList2 = new ArrayList<Fish>();
+        
+        Vector3f splitAt = splitLocation.subtract(center).cross(new Vector3f((float) (Math.random()-Math.random()), (float) (Math.random()-Math.random()), (float) (Math.random()-Math.random()))).normalizeLocal();
         for(int i = 0; i < swarm.size(); i++){
-            if(swarm.get(i).getLocalTranslation().y < splitLocation.y){
+            if((float)Math.toDegrees(splitAt.angleBetween(swarm.get(i).getLocalTranslation().subtract(center).normalize())) < 90f){
                 fishList1.add(swarm.get(i));
+                
             }else{
                 fishList2.add(swarm.get(i));
             }
         }
         
-        Swarm split1 = new Swarm(sim, fishList1, scale, center, ownMap, type, id);
-        Swarm split2 = new Swarm(sim, fishList2, scale, center, ownMap, type, id);
-                
-        split1.setCollided(splitLocation);
+        Swarm split1 = new Swarm(sim, fishList1, scale, center, ownMap, type);
+        Swarm split2 = new Swarm(sim, fishList2, scale, center, ownMap, type);
+        split1.setMoveSpeed(moveSpeed);
+        split1.setRotationSpeed(rotationSpeed);
+        split2.setMoveSpeed(moveSpeed);
+        split2.setRotationSpeed(rotationSpeed);
+        
+        for(int i = 0; i < foreignMaps.size(); i++){
+            foreignMaps.get(i).remove(this);
+            foreignMaps.get(i).add(split1);
+            foreignMaps.get(i).add(split2);
+        }
+        
         split1.resetSplitTime();
-        split2.setCollided(splitLocation);
         split2.resetSplitTime();
         
         ArrayList<Swarm> swarms = new ArrayList<Swarm>();
@@ -295,7 +307,20 @@ public class Swarm implements IFoodSource{
         for(int i = 0; i < mergeWith.swarm.size(); i++){
             newFishList.add(mergeWith.swarm.get(i));
         }
-        Swarm merged = new Swarm(sim, newFishList, scale.add(mergeWith.scale).divide(2f),  newCenter, ownMap, type, id);
+        Swarm merged = new Swarm(sim, newFishList, scale.add(mergeWith.scale).divide(2f), newCenter, ownMap, type);
+        merged.setMoveSpeed((moveSpeed + mergeWith.getMoveSpeed())/2f);
+        merged.setRotationSpeed((rotationSpeed + mergeWith.getRotationSpeed())/2f);
+        
+        for(int i = 0; i < foreignMaps.size(); i++){
+            foreignMaps.get(i).remove(this);
+            foreignMaps.get(i).add(merged);
+        }
+        
+        ArrayList<FoodSourceMap> mergeForeignMaps = mergeWith.getForeignMaps();
+        for(int i = 0; i < mergeForeignMaps.size(); i++){
+            mergeForeignMaps.get(i).remove(mergeWith);
+            mergeForeignMaps.get(i).add(merged);
+        }
         
         sim.swarms.add(merged);
         sim.removedSwarms.add(this);
@@ -341,11 +366,23 @@ public class Swarm implements IFoodSource{
         return center;
     }
     
+    public float getMoveSpeed(){
+        return moveSpeed;
+    }
+    
+    public float getRotationSpeed(){
+        return rotationSpeed;
+    }
+    
+    public ArrayList<FoodSourceMap> getForeignMaps(){
+        return foreignMaps;
+    }
+    
     public Vector3f getDirection(Fish fish, float tpf){
         IFoodSource source = ownMap.getNearestFS(fish.getLocalTranslation());
         if(source == null || !fish.isHungry()){
             fish.getHungry(tpf);
-            if(fish.getLocalTranslation().add(searchVec).y > sim.getIniter().getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z - colRadius)){
+            if(fish.getLocalTranslation().add(searchVec).y > sim.getCurrentWaterHeight(fish.getLocalTranslation().x, fish.getLocalTranslation().z - colRadius)){
                 searchVec.negateLocal();
             }
             return fish.getLocalTranslation().add(searchVec.normalize().mult(viewRadius+1));
@@ -396,6 +433,10 @@ public class Swarm implements IFoodSource{
     public void setCollided(Vector3f cLocation){
         collided = true;
         colLocation = cLocation;
+    }
+    
+    public void setSolidCollisionType(int type){
+        solidCollisionType = type;
     }
     
     /**
@@ -458,6 +499,10 @@ public class Swarm implements IFoodSource{
         return colLocation;
     }
     
+    public int getSolidCollisionType(){
+        return solidCollisionType;
+    }
+    
     /**
      *
      * @return Location of the collision from the viewControl
@@ -486,9 +531,6 @@ public class Swarm implements IFoodSource{
     
     @Override
     public void addToMap(FoodSourceMap foreignMap){
-        if(foreignMaps == null){
-            foreignMaps = new ArrayList<FoodSourceMap>();
-        }
         foreignMaps.add(foreignMap);
     }
 

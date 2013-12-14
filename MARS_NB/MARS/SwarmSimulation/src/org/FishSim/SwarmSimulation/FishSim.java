@@ -1,4 +1,4 @@
-package org.FishSim.SwarmSimulation;
+package SwarmSimulation;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -11,27 +11,27 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import org.openide.util.lookup.ServiceProvider;
+//import org.openide.util.lookup.ServiceProvider;
 import java.util.ArrayList;
-import mars.Initializer;
-import mars.MARS_Main;
-import mars.states.AppStateExtension;
-import mars.states.SimState;
+//import mars.Initializer;
+//import mars.MARS_Main;
+//import mars.states.AppStateExtension;
+//import mars.states.SimState;
 
 /**
  *
  * @author Mandy Feldvoß
  */
-@ServiceProvider(service=AbstractAppState.class)
+//@ServiceProvider(service=AbstractAppState.class)
 public class FishSim extends AbstractAppState implements AppStateExtension {
     //MARS variables
     private Node rootNode = new Node("FishSimState Root Node");
     private MARS_Main mars;
-    private Initializer initer;
+//    private Initializer initer;
     private BulletAppState bulletAppState;
     protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
     protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
-    private int latestSwarmId;
+    FPSTest fpsTest = new FPSTest(10f, 60f, "FPSTest.txt");
  
     /**
      *
@@ -64,11 +64,11 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
                 mars = (MARS_Main)app;
                 //assetManager = mars.getAssetManager();
                 mars.getRootNode().attachChild(getRootNode());
-                if(stateManager.getState(SimState.class)!=null){
-                    initer = stateManager.getState(SimState.class).getIniter();
-                }else{
-                    throw new RuntimeException("SimState not found/initialized!");
-                }
+//                if(stateManager.getState(SimState.class)!=null){
+//                    initer = stateManager.getState(SimState.class).getIniter();
+//                }else{
+//                    throw new RuntimeException("SimState not found/initialized!");
+//                }
                 if(stateManager.getState(BulletAppState.class)!=null){
                     bulletAppState = stateManager.getState(BulletAppState.class);
                 }else{
@@ -80,37 +80,43 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }
         super.initialize(stateManager, app); 
         
-        FoodSourceMap mapType0 = new FoodSourceMap();
-        FoodSource food = new FoodSource(1000, new Vector3f(0f, -1f, 20));
-        mars.getRootNode().attachChild(food);
-        mapType0.add(food);
-        addSwarm(100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(0f, 0f, 0f), mapType0, 0);
-        swarms.get(latestSwarmId-1).setMoveSpeed(0.5f);
-        swarms.get(latestSwarmId-1).setRotationSpeed(2f);
+        FoodSourceMap mapType0_1 = new FoodSourceMap();
+        FoodSourceMap mapType0_2 = new FoodSourceMap();
+        FoodSourceMap mapType0_3 = new FoodSourceMap();
+        //FoodSourceMap mapType2 = new FoodSourceMap();
         
-        FoodSourceMap mapType2 = new FoodSourceMap();
-        mapType2.add(swarms.get(latestSwarmId-1));
-        addSwarm(10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-20f, -5f, 10f), mapType2, 2);
-        swarms.get(latestSwarmId-1).setMoveSpeed(1f);
-        swarms.get(latestSwarmId-1).setRotationSpeed(1f);
-        //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
-    }
-    
-    /**
-     *
-     * @param size      Size of the swarm
-     * @param trans
-     * @param map
-     * @param type
-     */
-    public void addSwarm(int size, Vector3f scale, Vector3f trans, FoodSourceMap map, int type){
-        swarms.add(new Swarm(this, size, scale, trans, map, type, latestSwarmId));
-        latestSwarmId ++;      
-    }
-    
-    public void addSwarm(int size, Vector3f scale, float deviation, Vector3f trans, FoodSourceMap map, int type){
-        swarms.add(new Swarm(this, size, scale, deviation, trans, map, type, latestSwarmId));
-        latestSwarmId ++;      
+        FoodSource food = new FoodSource(1000, new Vector3f(-350f, 70f, 150));
+        getRootNode().attachChild(food);
+        mapType0_1.add(food);
+        
+        food = new FoodSource(1000, new Vector3f(-340f, 75f, 150));
+        getRootNode().attachChild(food);
+        mapType0_2.add(food);
+        
+        food = new FoodSource(1000, new Vector3f(-350f, 70f, 200));
+        getRootNode().attachChild(food);
+        mapType0_3.add(food);
+        
+        Swarm swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(-350f, 80f, 150f), mapType0_1, 0, "Models/Fishtest/Fishtest.j3o", true);
+        swarm.setMoveSpeed(0.01f);
+        swarm.setRotationSpeed(0.01f);
+        swarms.add(swarm);
+        
+        swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(-345f, 75f, 150f), mapType0_2, 0, "Models/Fishtest/Fishtest.j3o", true);
+        swarm.setMoveSpeed(0.01f);
+        swarm.setRotationSpeed(0.01f);
+        swarms.add(swarm);
+        
+        swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(-350f, 80f, 145f), mapType0_3, 0, "Models/Fishtest/Fishtest.j3o", true);
+        swarm.setMoveSpeed(0.01f);
+        swarm.setRotationSpeed(0.01f);
+        swarms.add(swarm);
+        
+        //swarm = new Swarm(this, 10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-350f, 60f, 100), mapType2, 2);
+        //swarm.setMoveSpeed(1f);
+        //swarm.setRotationSpeed(1f);
+        //swarms.add(swarm);
+        createObstacle(new Vector3f(-350f, 75f, 150), 0.3f);
     }
     
     
@@ -194,6 +200,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }
         super.update(tpf);
         
+        fpsTest.next(tpf);
+        
         for(int i = 0; i < swarms.size(); i++){
             swarms.get(i).move(tpf);
         }
@@ -234,9 +242,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
      *
      * @return
      */
-    public Initializer getIniter() {
-        return initer;
-    }
+//    public Initializer getIniter() {
+//        return initer;
+//    }
     
         /**
      *
@@ -245,13 +253,16 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public BulletAppState getBulletAppState() {
         return bulletAppState;
     }
+    
+    public float getCurrentWaterHeight(float x, float z){
+        return mars.getWaterHeight();
+    }
 
     /**
      *
      * @param cam
      */
-    @Override
-    public void setCamera(Camera cam) {
-        
-    }
+//    @Override
+//    public void setCamera(Camera cam) {        
+//    }
 }

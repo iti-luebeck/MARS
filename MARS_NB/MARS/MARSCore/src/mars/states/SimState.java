@@ -444,7 +444,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             progr.progress( "Init FishSwarm State" );
             Lookup lkp = Lookup.getDefault();
             AbstractAppState state = lkp.lookup(AbstractAppState.class);
-            stateManager.attach(state);
+            if(state != null){
+                stateManager.attach(state);
+            }
         }
         progr.progress( "Init Super" );
         super.initialize(stateManager, app);
@@ -622,9 +624,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
         }*/ //doesnt work here because DebugAppState suuuuuucks
         
-        //if(mars_settings.isPhysicsDebug()){
+        if(mars_settings.isPhysicsDebug()){
             bulletAppState.setDebugEnabled(true);
-        //}
+        }
             
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f/mars_settings.getPhysicsFramerate());
@@ -865,6 +867,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         
         if(mars_settings.isSetupGrass()){
             initer.updateGrass(tpf);
+        }
+        
+        if(initer != null && initer.getSkyControl() != null){
+            System.out.println("SkyControl: " + initer.getSkyControl().getSunAndStars().toString());
+            if(initer.getSkyControl().getSunAndStars().getHour() < 24f-0.01f){
+                initer.getSkyControl().getSunAndStars().setHour(initer.getSkyControl().getSunAndStars().getHour()+0.01f);
+            }else{
+                 initer.getSkyControl().getSunAndStars().setHour(0f);
+            }
         }
         
         rootNode.updateLogicalState(tpf);
