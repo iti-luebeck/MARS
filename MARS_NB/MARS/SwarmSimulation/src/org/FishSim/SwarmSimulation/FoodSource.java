@@ -37,7 +37,7 @@ public class FoodSource extends Node implements IFoodSource{
     
     @Override
     public Vector3f getNearestLocation(Vector3f location){
-        Vector3f radiusVec = location.subtract(getLocalTranslation()).normalize().mult((float)size/1000);
+        Vector3f radiusVec = location.subtract(getLocalTranslation()).normalize().mult(size/1000f);
         if(getLocalTranslation().distance(location) > getLocalTranslation().distance(getLocalTranslation().add(radiusVec))){
             return getLocalTranslation().add(radiusVec);
         }else{

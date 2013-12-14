@@ -90,9 +90,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         
         FoodSourceMap mapType2 = new FoodSourceMap();
         mapType2.add(swarms.get(latestSwarmId-1));
-        //addSwarm(10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-20f, -5f, 10f), mapType2, 2);
-        //swarms.get(latestSwarmId-1).setMoveSpeed(1f);
-        //swarms.get(latestSwarmId-1).setRotationSpeed(1f);
+        addSwarm(10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-20f, -5f, 10f), mapType2, 2);
+        swarms.get(latestSwarmId-1).setMoveSpeed(1f);
+        swarms.get(latestSwarmId-1).setRotationSpeed(1f);
         //createObstacle(new Vector3f(-327.21957f, 81.6459f, 80.884346f), 5f);
     }
     
