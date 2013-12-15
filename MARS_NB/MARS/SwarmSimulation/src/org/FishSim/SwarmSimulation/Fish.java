@@ -20,7 +20,6 @@ import mars.control.MyLodControl;
  */
 
 public class Fish extends Node{
-    private final String path = "Models/Fishtest/Fishtest.j3o";
     protected Swarm swarm;
     private FishControl control;
     private Node model;
@@ -30,6 +29,8 @@ public class Fish extends Node{
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
+    protected float moveSpeed = 0;
+    protected float rotationSpeed = 0;
     private float initHunger = 100;
     private float hungerAmount = initHunger;
     private boolean hunger = true;
@@ -44,25 +45,21 @@ public class Fish extends Node{
      * @param swarm             Swarm where the fish belongs to
      * @param map               Foodsourcemap where the fish belongs to
      */
-    public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm){
+    public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm, String path, boolean animation){
         this.sim = sim;
         control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
-        modelControl = model.getChild("Cube").getControl(AnimControl.class);
+        if(animation){
+            modelControl = model.getChild("Cube").getControl(AnimControl.class);
+            channel_swim = modelControl.createChannel();
+            channel_swim.setAnim("ArmatureAction.001");
+            channel_swim.setLoopMode(LoopMode.Loop);
+        }
         optimize(model);
-        channel_swim = modelControl.createChannel();
-        channel_swim.setAnim("ArmatureAction.001");
-        channel_swim.setLoopMode(LoopMode.Loop);
         attachChild(model);
         scale(scale.x, scale.y, scale.z);
-        setLocalTranslation(localTrans.x, localTrans.y, localTrans.z);
-        this.swarm = swarm;
-        
-        //Speed of this fish
-        //moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
-        //moveSpeed = (float) swarm.moveSpeed + this.getLocalScale().length();
-        //rotateSpeed = (float) (Math.random()) + 1f;
-        
+        setLocalTranslation(localTrans);
+        this.swarm = swarm;     
         sim.getRootNode().attachChild(this);
     }
     
@@ -75,16 +72,14 @@ public class Fish extends Node{
     }
     
     private void optimize(Node node){
-        
-        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        /*
+        jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
                 Geometry geo = (Geometry) spatial;
                 LodGenerator lodGenerator = new LodGenerator(geo);          
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
-                /*LodGenerator lodGenerator = new LodGenerator(geo);          
-                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.8f, 0.8f);*/
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
                 control.setDistTolerance(25f);
@@ -94,9 +89,9 @@ public class Fish extends Node{
             }else if(spatial instanceof Node){
                 optimize((Node)spatial);
             }
-        }        
+        } */       
     }
-    
+   
     /**
      *
      * @param enabled
@@ -115,6 +110,14 @@ public class Fish extends Node{
      */
     public void swim(float tpf){
         control.swim(tpf);
+    }
+    
+    public void setMoveSpeed(float speed){
+        this.moveSpeed = speed;
+    }
+    
+    public void setRotationSpeed(float speed){
+        this.rotationSpeed = speed;
     }
     
     /**
@@ -143,6 +146,5 @@ public class Fish extends Node{
     
     public boolean isHungry(){
         return hunger;
-    }
-    
+    }   
 }

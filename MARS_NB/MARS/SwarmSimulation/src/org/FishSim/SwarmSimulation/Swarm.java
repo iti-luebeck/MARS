@@ -1,4 +1,4 @@
-package SwarmSimulation;
+package org.FishSim.SwarmSimulation;
 
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.math.Vector3f;
@@ -221,14 +221,14 @@ public class Swarm implements IFoodSource{
     public void setMoveSpeed(float moveSpeed){
         this.moveSpeed = moveSpeed;
         for(int i = 0; i < swarm.size(); i++){
-            swarm.get(i).setMoveSpeed((float)(Math.random() - Math.random())*moveSpeed);
+            swarm.get(i).setMoveSpeed((float)(Math.random() - Math.random())*moveSpeed/20);
         }
     }
     
     public void setRotationSpeed(float rotationSpeed){
         this.rotationSpeed = rotationSpeed;
         for(int i = 0; i < swarm.size(); i++){
-            swarm.get(i).setRotationSpeed((float)(Math.random() - Math.random())*rotationSpeed);
+            swarm.get(i).setRotationSpeed((float)(Math.random() - Math.random())*rotationSpeed/20);
         }
     }
         

@@ -1,4 +1,4 @@
-package SwarmSimulation;
+package org.FishSim.SwarmSimulation;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;

@@ -30,9 +30,9 @@ private Swarm swarm;
     @Override
     public void collision(PhysicsCollisionEvent event) {
         if(event.getObjectA() == this){
-            if(event.getObjectB().getClass().equals(SwarmColControl.class)){
+            if(event.getObjectB() instanceof SwarmColControl){
                 SwarmColControl temp = (SwarmColControl) event.getObjectB();    
-                if(temp.getSwarm().type == 2 && this.swarm != temp.getSwarm()){
+                if(temp.getSwarm().type == 2 && swarm.type != 2 && swarm != temp.getSwarm()){
                     float angle = (float) Math.toDegrees(swarm.getMoveDirection().normalize().angleBetween(event.getPositionWorldOnA().subtract(swarm.center).normalize()));
                     if(angle < 150){
                         swarm.setViewCollided(temp.getSwarm().getCenter());
@@ -41,9 +41,9 @@ private Swarm swarm;
             }
         }
         if(event.getObjectB() == this){
-            if(event.getObjectA().getClass().equals(SwarmColControl.class)){
+            if(event.getObjectA() instanceof SwarmColControl){
                 SwarmColControl temp = (SwarmColControl) event.getObjectA();    
-                if(temp.getSwarm().type == 2 && this.swarm != temp.getSwarm()){
+                if(temp.getSwarm().type == 2 && swarm.type != 2 && swarm != temp.getSwarm()){
                     float angle = (float) Math.toDegrees(swarm.getMoveDirection().normalize().angleBetween(event.getPositionWorldOnB().subtract(swarm.center).normalize()));
                     if(angle < 150){
                         swarm.setViewCollided(temp.getSwarm().getCenter());
