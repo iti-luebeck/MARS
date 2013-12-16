@@ -10,14 +10,18 @@ import java.util.ArrayList;
 final class FoodSourceMapPanel extends javax.swing.JPanel {
 
     private final FoodSourceMapOptionsPanelController controller;
-    private FishSim sim;
-    private int[] selectedMaps;
-    private int[] selectedSources;
+    private final FishSim sim;
+    private int[] selectedMaps = new int[0];
+    private int[] selectedSources = new int[0];
     private int sourceType;
 
     FoodSourceMapPanel(FoodSourceMapOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
+        while(FishSim.getInstance() == null){
+        }
+        sim = FishSim.getInstance();
+        sim.setFoodSourceMapPanel(this);
         // TODO listen to changes in form fields and call controller.changed()
     }
 
@@ -36,8 +40,6 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         jList2.setModel(new javax.swing.DefaultListModel());
@@ -88,10 +90,6 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(FoodSourceMapPanel.class, "FoodSourceMapPanel.jButton2.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(FoodSourceMapPanel.class, "FoodSourceMapPanel.jButton3.text")); // NOI18N
-
         org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(FoodSourceMapPanel.class, "FoodSourceMapPanel.jButton4.text")); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,11 +108,6 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addComponent(jButton4))
                 .addContainerGap(55, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,37 +118,40 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         sim.addFoodSourceMap();
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
-        for(int i = 1; i <=  sim.getFoodSourceMaps().size(); i++){
-            model.addElement("FoodSource"+i);
-        }
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void updateFoodSourceMapList(ArrayList<FoodSourceMap> mapList){
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
+        model.clear();
+        for(int i = 1; i <=  mapList.size(); i++){
+            model.addElement("FoodSourceMap"+i);
+        }  
+    }
+    
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
         selectedMaps = jList1.getSelectedIndices();    
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         jDialog1.setVisible(true);
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList2.getModel();
-        for(int i = 1; i <=  sim.getFoodSources().size(); i++){
-            model.addElement("FoodSource"+i);
-        }
-        for(int i = 1; i <=  sim.getSwarms().size(); i++){
-            model.addElement("Swarm"+i);
-        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    public void updateFoodSources(ArrayList<FoodSource> sources, ArrayList<Swarm> swarms){
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList2.getModel();
+        model.clear();
+        for(int i = 1; i <=  sources.size(); i++){
+            model.addElement("FoodSource: "+i);
+        }
+        for(int i = 1; i <=  swarms.size(); i++){
+            model.addElement("Swarm: "+i);
+        }
+    }
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
         selectedSources = jList2.getSelectedIndices();
     }//GEN-LAST:event_jList2ValueChanged
@@ -163,13 +159,16 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         for(int i = 0; i < selectedMaps.length; i++){
             for(int j = 0; j < selectedSources.length; j++){
-                if(selectedSources[j] < sim.getFoodSources().size()){
+                if(selectedSources[j] < sim.getFoodSourcesSize()){
                     sim.addToMap(i, 1, j);
                 }else{
                     sim.addToMap(i, 0, j);
                 }
             }
         }
+        selectedMaps = new int[0];
+        selectedSources = new int[0];
+        jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     void load() {
@@ -199,8 +198,6 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JDialog jDialog1;

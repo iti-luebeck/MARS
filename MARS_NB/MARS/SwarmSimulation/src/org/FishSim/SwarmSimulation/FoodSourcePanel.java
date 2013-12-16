@@ -5,14 +5,20 @@
  */
 package org.FishSim.SwarmSimulation;
 
+import java.util.ArrayList;
+
 final class FoodSourcePanel extends javax.swing.JPanel {
 
     private final FoodSourceOptionsPanelController controller;
-    private FishSim sim;
+    private final FishSim sim;
 
     FoodSourcePanel(FoodSourceOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
+        while(FishSim.getInstance() == null){
+        }
+        sim = FishSim.getInstance();
+        sim.setFoodSourcePanel(this);
         // TODO listen to changes in form fields and call controller.changed()
     }
 
@@ -33,10 +39,7 @@ final class FoodSourcePanel extends javax.swing.JPanel {
         jTextField6 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.DefaultListModel());
         jScrollPane1.setViewportView(jList1);
@@ -63,8 +66,6 @@ final class FoodSourcePanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(FoodSourcePanel.class, "FoodSourcePanel.jLabel3.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(FoodSourcePanel.class, "FoodSourcePanel.jButton5.text")); // NOI18N
-
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(FoodSourcePanel.class, "FoodSourcePanel.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,13 +89,11 @@ final class FoodSourcePanel extends javax.swing.JPanel {
                             .addComponent(jTextField2)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 26, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -112,16 +111,10 @@ final class FoodSourcePanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton1))
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addGap(62, 62, 62)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(FoodSourcePanel.class, "FoodSourcePanel.jButton2.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(FoodSourcePanel.class, "FoodSourcePanel.jButton3.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -132,11 +125,6 @@ final class FoodSourcePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 15, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,10 +133,7 @@ final class FoodSourcePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                .addGap(29, 29, 29))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -161,13 +146,16 @@ final class FoodSourcePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sim.addFoodSource(Float.parseFloat(jTextField6.getText()), Float.parseFloat(jTextField2.getText()), Float.parseFloat(jTextField3.getText()), Float.parseFloat(jTextField4.getText()));
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
-        for(int i = 1; i <=  sim.getFoodSources().size(); i++){
-            model.addElement("FoodSource"+i);
-        }
+        sim.addFoodSource(jTextField6.getText() + " " + jTextField2.getText() + " " + jTextField3.getText() + " " + jTextField4.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void updateFoodSources(ArrayList<FoodSource> sources){
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
+        model.clear();
+        for(int i = 1; i <=  sources.size(); i++){
+            model.addElement("FoodSource"+i);
+        }   
+    }
     void load() {
         // TODO read settings and initialize GUI
         // Example:        
@@ -195,9 +183,6 @@ final class FoodSourcePanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JList jList1;

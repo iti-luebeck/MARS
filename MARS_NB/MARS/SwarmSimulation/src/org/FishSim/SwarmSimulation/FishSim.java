@@ -25,13 +25,22 @@ import mars.states.SimState;
 @ServiceProvider(service=AbstractAppState.class)
 public class FishSim extends AbstractAppState implements AppStateExtension {
     //MARS variables
+    private static FishSim instance = null;
+    protected SwarmPanel sPanel;
+    protected FoodSourcePanel fSPanel;
+    protected FoodSourceMapPanel fSMPanel;
     private Node rootNode = new Node("FishSimState Root Node");
     private MARS_Main mars;
     private Initializer initer;
     private BulletAppState bulletAppState;
+    private boolean swarmsChanged = false;
+    private boolean fSChanged = false;
+    private boolean fSMChanged = false;
     protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
+    protected ArrayList<String> newSwarms = new ArrayList<String>();
     protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
-    protected ArrayList<IFoodSource> sources = new ArrayList<IFoodSource>();
+    protected ArrayList<String> newSources = new ArrayList<String>();
+    protected ArrayList<FoodSource> sources = new ArrayList<FoodSource>();
     protected ArrayList<FoodSourceMap> sourceMaps = new ArrayList<FoodSourceMap>();
  
     /**
@@ -80,44 +89,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             } 
         }
         
-        super.initialize(stateManager, app); 
-        
-        /*FoodSourceMap mapType0_1 = new FoodSourceMap();
-        FoodSourceMap mapType0_2 = new FoodSourceMap();
-        FoodSourceMap mapType0_3 = new FoodSourceMap();
-        //FoodSourceMap mapType2 = new FoodSourceMap();
-        
-        FoodSource food = new FoodSource(1000, new Vector3f(-350f, 70f, 150));
-        getRootNode().attachChild(food);
-        mapType0_1.add(food);
-        
-        food = new FoodSource(1000, new Vector3f(-340f, 75f, 150));
-        getRootNode().attachChild(food);
-        mapType0_2.add(food);
-        
-        food = new FoodSource(1000, new Vector3f(-350f, 70f, 200));
-        getRootNode().attachChild(food);
-        mapType0_3.add(food);
-        Swarm swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(0f, -1f, 0f), mapType0_1, 0, "Models/Fishtest/Fishtest.j3o", true);
-        swarm.setMoveSpeed(0.5f);
-        swarm.setRotationSpeed(1f);
-        swarms.add(swarm);
-        
-        swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(0f, -1f, 0f), mapType0_2, 0, "Models/Fishtest/Fishtest.j3o", true);
-        swarm.setMoveSpeed(0.01f);
-        swarm.setRotationSpeed(0.01f);
-        swarms.add(swarm);
-        
-        swarm = new Swarm(this, 100, new Vector3f(0.05f, 0.05f, 0.05f), 0.01f, new Vector3f(-350f, 80f, 145f), mapType0_3, 0, "Models/Fishtest/Fishtest.j3o", true);
-        swarm.setMoveSpeed(0.01f);
-        swarm.setRotationSpeed(0.01f);
-        swarms.add(swarm);*/
-        
-        //swarm = new Swarm(this, 10, new Vector3f(0.2f, 0.2f, 0.2f), new Vector3f(-350f, 60f, 100), mapType2, 2);
-        //swarm.setMoveSpeed(1f);
-        //swarm.setRotationSpeed(1f);
-        //swarms.add(swarm);
-        //createObstacle(new Vector3f(-350f, 75f, 150), 0.3f);
+        super.initialize(stateManager, app);
+        setInstance(this);
     }
     
     
@@ -200,6 +173,28 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             return;
         }
         super.update(tpf);
+        newSwarms();
+        newFoodSources();
+        
+        if(sPanel != null && fSPanel != null && fSMPanel != null){
+            if(swarmsChanged || fSChanged){
+                if(swarmsChanged){
+                    sPanel.updateSwarmList(swarms);
+                    swarmsChanged = false;
+                }
+                if(fSChanged){
+                    fSPanel.updateFoodSources(sources);
+                    fSChanged = false;
+                }
+                fSMPanel.updateFoodSources(sources, swarms);
+            }
+            
+            if(fSMChanged){
+                sPanel.updateFoodSourceList(sourceMaps);
+                fSMPanel.updateFoodSourceMapList(sourceMaps);
+                fSMChanged = false;
+            }
+        }
         
         for(int i = 0; i < swarms.size(); i++){
             swarms.get(i).move(tpf);
@@ -263,36 +258,46 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public void setCamera(Camera cam) {        
     }
     
-    public void addSwarm(int size, float sX, float sY, float sZ, float deviat, float tX, float tY,float tZ, int map, int type, String path, boolean anim, float mS, float rS){
-        Swarm swarm;
-        if(deviat == 0){
-            swarm = new Swarm(this, size, new Vector3f(sX, sY, sZ), new Vector3f(tX, tY, tZ), sourceMaps.get(map), type, path, anim);
-        }else{
-            swarm = new Swarm(this, size, new Vector3f(sX, sY, sZ), deviat, new Vector3f(tX, tY, tZ), sourceMaps.get(map), type, path, anim);
+    private void newSwarms(){
+        for(int i = 0; i < newSwarms.size(); i++){
+            String[] values = newSwarms.get(i).split(" ");
+            boolean anim = false;
+            if (values[10].equals("true")){
+                anim = true;
+            }  
+            Swarm swarm = new Swarm(this, Integer.parseInt(values[0]), new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3])), Float.parseFloat(values[4]), new Vector3f(Float.parseFloat(values[5]), Float.parseFloat(values[6]), Float.parseFloat(values[7])), Integer.parseInt(values[8]), values[9], anim);
+            if(Integer.parseInt(values[11]) >= 0){
+                swarm.setFoodSourceMap(sourceMaps.get(Integer.parseInt(values[11])));
+            }
+            swarm.setMoveSpeed(Float.parseFloat(values[12]));
+            swarm.setRotationSpeed(Float.parseFloat(values[13]));
+            swarms.add(swarm);
+            swarmsChanged = true;
         }
-        swarm.setMoveSpeed(mS);
-        swarm.setRotationSpeed(rS);
-        swarms.add(swarm);
+        newSwarms.clear();
     }
     
-    public ArrayList<Swarm> getSwarms(){
-        return swarms;
+    public void addSwarm(String values){
+            newSwarms.add(values);
     }
     
-    public void addFoodSource(float size, float tX, float tY, float tZ){
-        sources.add(new FoodSource(size, new Vector3f(tX, tY, tZ)));
+    public void addFoodSource(String values){
+        newSources.add(values);
     }
     
-    public ArrayList<IFoodSource> getFoodSources(){
-        return sources;
+    private void newFoodSources(){
+        for(int i = 0; i < newSources.size(); i++){
+            String[] values = newSources.get(i).split(" ");
+            sources.add(new FoodSource(Float.parseFloat(values[0]), new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]))));
+            fSChanged = true;
+        }
+            newSources.clear();
     }
     
     public void addFoodSourceMap(){
         sourceMaps.add(new FoodSourceMap());
-    }
-    
-    public ArrayList<FoodSourceMap> getFoodSourceMaps(){
-        return sourceMaps;
+        fSMPanel.updateFoodSourceMapList(sourceMaps);
+        fSMChanged = true;
     }
     
     public void removeFoodSourceMap(int idx){
@@ -305,5 +310,29 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }else{
             sourceMaps.get(mapIdx).add(sources.get(sourceIdx));
         }
+    }
+    
+    public int getFoodSourcesSize(){
+        return sources.size();
+    }
+    
+    private void setInstance(FishSim sim){
+        instance = sim;
+    }
+    
+    public static FishSim getInstance(){
+        return instance;
+    }
+    
+    public void setSwarmPanel(SwarmPanel sPanel){
+      this.sPanel = sPanel;  
+    }
+    
+    public void setFoodSourcePanel(FoodSourcePanel fSPanel){
+      this.fSPanel = fSPanel;  
+    }
+    
+    public void setFoodSourceMapPanel(FoodSourceMapPanel fSMPanel){
+      this.fSMPanel = fSMPanel;  
     }
 }
