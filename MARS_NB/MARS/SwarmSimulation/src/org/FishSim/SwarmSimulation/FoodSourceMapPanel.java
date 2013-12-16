@@ -37,6 +37,7 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList();
         jButton5 = new javax.swing.JButton();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
@@ -203,6 +204,7 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
