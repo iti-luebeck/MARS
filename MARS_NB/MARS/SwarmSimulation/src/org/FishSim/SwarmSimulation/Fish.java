@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
+import jme3tools.optimize.LodGenerator;
 import mars.control.MyLodControl;
 
 /**
@@ -19,17 +20,20 @@ import mars.control.MyLodControl;
  */
 
 public class Fish extends Node{
-    private final String path = "Models/Fish/Fish.j3o";
     protected Swarm swarm;
     private FishControl control;
     private Node model;
     private AnimControl modelControl;
     protected AnimChannel channel_swim;
     protected FishSim sim;
-    FoodSourceMap map;
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
+    protected float moveSpeed = 0;
+    protected float rotationSpeed = 0;
+    private float initHunger = 100;
+    private float hungerAmount = initHunger;
+    private boolean hunger = true;
  
     /**
      * Create a new Fish.
@@ -41,27 +45,21 @@ public class Fish extends Node{
      * @param swarm             Swarm where the fish belongs to
      * @param map               Foodsourcemap where the fish belongs to
      */
-    public Fish(FishSim sim, Vector3f scale, Vector3f rot, Vector3f localTrans, Swarm swarm, FoodSourceMap map){
+    public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm, String path, boolean animation){
         this.sim = sim;
         control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
-        modelControl = model.getChild("Cube").getControl(AnimControl.class);
-        //optimize(model);
-        channel_swim = modelControl.createChannel();
-        channel_swim.setAnim("ArmatureAction.001");
-        channel_swim.setLoopMode(LoopMode.Loop);
+        if(animation){
+            modelControl = model.getChild("Cube").getControl(AnimControl.class);
+            channel_swim = modelControl.createChannel();
+            channel_swim.setAnim("ArmatureAction.001");
+            channel_swim.setLoopMode(LoopMode.Loop);
+        }
+        optimize(model);
         attachChild(model);
         scale(scale.x, scale.y, scale.z);
-        rotate(rot.x, rot.y, rot.z);
-        setLocalTranslation(localTrans.x, localTrans.y, localTrans.z);
-        this.swarm = swarm;
-        this.map = map;
-        
-        //Speed of this fish
-        //moveSpeed = (float) (Math.random()) + swarm.moveSpeed;
-        //moveSpeed = (float) swarm.moveSpeed + this.getLocalScale().length();
-        //rotateSpeed = (float) (Math.random()) + 1f;
-        
+        setLocalTranslation(localTrans);
+        this.swarm = swarm;     
         sim.getRootNode().attachChild(this);
     }
     
@@ -74,26 +72,26 @@ public class Fish extends Node{
     }
     
     private void optimize(Node node){
-        
-        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        /*
+        jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
                 Geometry geo = (Geometry) spatial;
-                /*LodGenerator lodGenerator = new LodGenerator(geo);          
-                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.8f, 0.8f);*/
+                LodGenerator lodGenerator = new LodGenerator(geo);          
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
-                control.setDistTolerance(1f);
+                control.setDistTolerance(25f);
                 control.setTrisPerPixel(0.5f);
                 control.setCam(sim.getMain().getCamera());
                 geo.addControl(control);
             }else if(spatial instanceof Node){
                 optimize((Node)spatial);
             }
-        }        
+        } */       
     }
-    
+   
     /**
      *
      * @param enabled
@@ -108,19 +106,18 @@ public class Fish extends Node{
     
     /**
      *
-     * @deprecated see setVisible
-     */
-    @Deprecated
-    public void show(){
-        sim.getRootNode().attachChild(this);
-    }
-    
-    /**
-     *
      * @param tpf Time per frame
      */
     public void swim(float tpf){
         control.swim(tpf);
+    }
+    
+    public void setMoveSpeed(float speed){
+        this.moveSpeed = speed;
+    }
+    
+    public void setRotationSpeed(float speed){
+        this.rotationSpeed = speed;
     }
     
     /**
@@ -130,4 +127,24 @@ public class Fish extends Node{
     public Vector3f getLastMove(){
         return lastMove;
     }
+    
+    public void eat(IFoodSource source, float tpf){
+        hungerAmount -= source.feed(getLocalTranslation(), (1+getLocalScale().length())*tpf);
+        if(hungerAmount <= 0){
+            hungerAmount = 0;
+            hunger = false;
+        }
+    }
+    
+    public void getHungry(float tpf){
+        hungerAmount += tpf;
+        if(hungerAmount >= initHunger){
+            hungerAmount = initHunger;
+            hunger = true;
+        }
+    }
+    
+    public boolean isHungry(){
+        return hunger;
+    }   
 }

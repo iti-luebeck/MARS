@@ -2,45 +2,60 @@ package org.FishSim.SwarmSimulation;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.ArrayList;
 
 /**
  *
  * @author Mandy Feldvoß
  */
 
-public class FoodSource extends Node{
-    FishSim sim;
+public class FoodSource extends Node implements IFoodSource{
     float size;
-    FoodSourceMap map;
+    ArrayList<FoodSourceMap> foreignMaps;
     
     /**
      *
-     * @param sim           Simulation
      * @param size          Size of the foodsource
      * @param localTrans    Position of the foodsource
      */
-    public FoodSource(FishSim sim, float size, Vector3f localTrans){
-        this.sim = sim;
+    public FoodSource(float size, Vector3f localTrans){
         this.size = size;
-        this.setLocalTranslation(localTrans);
+        setLocalTranslation(localTrans);
     }
     
     /**
      *
-     * @param map   Show foodsourcemap
+     * @param foreignMap  foodsourcemap which this foodsource belongs to
      */
-    public void show(FoodSourceMap map){
-        this.map = map;
-        sim.getRootNode().attachChild(this);
+    @Override
+    public void addToMap(FoodSourceMap foreignMap){
+        if(foreignMaps == null){
+            foreignMaps = new ArrayList<FoodSourceMap>();
+        }
+        foreignMaps.add(foreignMap);
+    }
+    
+    @Override
+    public Vector3f getNearestLocation(Vector3f location){
+        Vector3f radiusVec = location.subtract(getLocalTranslation()).normalize().mult(size/1000f);
+        if(getLocalTranslation().distance(location) > getLocalTranslation().distance(getLocalTranslation().add(radiusVec))){
+            return getLocalTranslation().add(radiusVec);
+        }else{
+            return new Vector3f(location);
+        }
     }
     
     /**
-     * Eat 
+     * Feed
      */
-    public void eat(){
-        size--;
+    @Override
+    public float feed(Vector3f location, float amount){
+        size -= amount;
         if(size <= 0){
-            map.remove(this);
+            for(int i = 0; i < foreignMaps.size(); i++){
+                foreignMaps.get(i).remove(this);
+            }
         }
+        return 1+amount;
     }
 }
