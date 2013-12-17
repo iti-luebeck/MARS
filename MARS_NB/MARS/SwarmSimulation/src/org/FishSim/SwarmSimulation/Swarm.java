@@ -44,6 +44,7 @@ public class Swarm implements IFoodSource{
     private Swarm mergeWith;
     private Vector3f searchVec = new Vector3f(0,0,0);
     private int lastSize;
+    private String name;
     
     /**
      *
@@ -209,6 +210,14 @@ public class Swarm implements IFoodSource{
         }
     }
     
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
     public void setFoodSourceMap(FoodSourceMap ownMap){
         this.ownMap = ownMap;
     }
@@ -273,11 +282,11 @@ public class Swarm implements IFoodSource{
         split1.resetSplitTime();
         split2.resetSplitTime();
         
-        ArrayList<Swarm> swarms = new ArrayList<Swarm>();
-        swarms.add(split1);
-        swarms.add(split2);
-        sim.swarms.addAll(swarms);
-        sim.removedSwarms.add(this);
+        sim.newSwarm(split1);
+        sim.newSwarm(split2);
+        
+        clear();
+        sim.removeSwarm(this);
     }
     /**
      *
@@ -320,9 +329,12 @@ public class Swarm implements IFoodSource{
             mergeForeignMaps.get(i).add(merged);
         }
         
-        sim.swarms.add(merged);
-        sim.removedSwarms.add(this);
-        sim.removedSwarms.add(mergeWith);
+        sim.newSwarm(merged);
+        
+        mergeWith.clear();
+        clear();
+        sim.removeSwarm(mergeWith);
+        sim.removeSwarm(this);
     }
     
     /**
@@ -528,6 +540,20 @@ public class Swarm implements IFoodSource{
          float rand = (float)((random.nextGaussian()*(StandardDeviation)));
          return rand;
      }
+    
+    public void clear(){
+        swarm.clear();
+    }
+    
+    public void delete(){
+        disableCol();
+        for(int i = 0; i < swarm.size(); i++){
+            sim.getRootNode().detachChild(swarm.get(i));
+        }
+        for(int i = 0; i < foreignMaps.size(); i++){
+                foreignMaps.get(i).remove(this);
+        }
+    }
 
     @Override
     public Vector3f getNearestLocation(Vector3f location) {
@@ -553,11 +579,7 @@ public class Swarm implements IFoodSource{
         swarm.remove(fish);
         sim.getRootNode().detachChild(fish);
         if(swarm.isEmpty()){
-            for(int i = 0; i < foreignMaps.size(); i++){
-                foreignMaps.get(i).remove(this);
-            }
-            disableCol();
-            sim.removedSwarms.add(this);
+            sim.removeSwarm(this);
         }else{
             if((float)lastSize/ (float)swarm.size() > 1.1f){
                 lastSize = swarm.size();

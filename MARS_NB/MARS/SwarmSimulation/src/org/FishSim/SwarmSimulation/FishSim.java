@@ -36,12 +36,16 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     private boolean swarmsChanged = false;
     private boolean fSChanged = false;
     private boolean fSMChanged = false;
-    protected ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
-    protected ArrayList<String> newSwarms = new ArrayList<String>();
-    protected ArrayList<Swarm> swarms = new ArrayList<Swarm>();
-    protected ArrayList<String> newSources = new ArrayList<String>();
-    protected ArrayList<FoodSource> sources = new ArrayList<FoodSource>();
-    protected ArrayList<FoodSourceMap> sourceMaps = new ArrayList<FoodSourceMap>();
+    
+    private ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
+    private ArrayList<String> newSwarms = new ArrayList<String>();
+    private ArrayList<Swarm> swarms = new ArrayList<Swarm>();
+    
+    private ArrayList<FoodSource> removedSources = new ArrayList<FoodSource>();
+    private ArrayList<String> newSources = new ArrayList<String>();
+    private ArrayList<FoodSource> sources = new ArrayList<FoodSource>();
+    
+    private ArrayList<FoodSourceMap> sourceMaps = new ArrayList<FoodSourceMap>();
  
     /**
      *
@@ -176,32 +180,14 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         newSwarms();
         newFoodSources();
         
-        if(sPanel != null && fSPanel != null && fSMPanel != null){
-            if(swarmsChanged || fSChanged){
-                if(swarmsChanged){
-                    sPanel.updateSwarmList(swarms);
-                    swarmsChanged = false;
-                }
-                if(fSChanged){
-                    fSPanel.updateFoodSources(sources);
-                    fSChanged = false;
-                }
-                fSMPanel.updateFoodSources(sources, swarms);
-            }
-            
-            if(fSMChanged){
-                sPanel.updateFoodSourceList(sourceMaps);
-                fSMPanel.updateFoodSourceMapList(sourceMaps);
-                fSMChanged = false;
-            }
-        }
+        updatePanels();
         
         for(int i = 0; i < swarms.size(); i++){
             swarms.get(i).move(tpf);
         }
         
-        swarms.removeAll(removedSwarms);
-        removedSwarms.clear();
+        removeSwarms();
+        removeFoodSources();
         
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -258,6 +244,42 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public void setCamera(Camera cam) {        
     }
     
+    private void updatePanels(){
+        if(sPanel != null && fSPanel != null && fSMPanel != null){
+            if(swarmsChanged || fSChanged){
+                if(swarmsChanged){
+                    sPanel.updateSwarmList(swarms);
+                    swarmsChanged = false;
+                }
+                if(fSChanged){
+                    fSPanel.updateFoodSources(sources);
+                    fSChanged = false;
+                }
+                fSMPanel.updateFoodSources(sources, swarms);
+            }
+            
+            if(fSMChanged){
+                sPanel.updateFoodSourceList(sourceMaps);
+                fSMPanel.updateFoodSourceMapList(sourceMaps);
+                fSMChanged = false;
+            }
+        }
+    }
+    
+    public void addSwarm(String values){
+        newSwarms.add(values);
+    }
+    
+    public void addFoodSource(String values){
+        newSources.add(values);
+    }
+    
+    public void addFoodSourceMap(){
+        sourceMaps.add(new FoodSourceMap());
+        fSMPanel.updateFoodSourceMapList(sourceMaps);
+        fSMChanged = true;
+    }
+    
     private void newSwarms(){
         for(int i = 0; i < newSwarms.size(); i++){
             String[] values = newSwarms.get(i).split(" ");
@@ -277,31 +299,57 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         newSwarms.clear();
     }
     
-    public void addSwarm(String values){
-            newSwarms.add(values);
-    }
-    
-    public void addFoodSource(String values){
-        newSources.add(values);
+    public void newSwarm(Swarm swarm){
+        swarms.add(swarm);
+        swarmsChanged = true;
     }
     
     private void newFoodSources(){
         for(int i = 0; i < newSources.size(); i++){
             String[] values = newSources.get(i).split(" ");
-            sources.add(new FoodSource(Float.parseFloat(values[0]), new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]))));
+            sources.add( new FoodSource(this, Float.parseFloat(values[0]), new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]))));
             fSChanged = true;
         }
             newSources.clear();
     }
     
-    public void addFoodSourceMap(){
-        sourceMaps.add(new FoodSourceMap());
-        fSMPanel.updateFoodSourceMapList(sourceMaps);
-        fSMChanged = true;
+    protected void removeSwarm(int i){
+        removedSwarms.add(swarms.get(i));
+    }
+    
+    protected void removeSwarm(Swarm swarm){
+        removedSwarms.add(swarm);
+    }
+    
+    protected void removeFoodSource(int i){
+        removedSources.add(sources.get(i));
+    }
+    
+    protected void removeFoodSource(FoodSource source){
+        removedSources.add(source);
     }
     
     public void removeFoodSourceMap(int idx){
         sourceMaps.remove(idx);
+        fSMChanged = true;
+    }
+    
+    private void removeSwarms(){
+        for(int i = 0; i < removedSwarms.size(); i++){
+            removedSwarms.get(i).delete();
+            swarms.remove(removedSwarms.get(i));
+            swarmsChanged = true;
+        }
+        removedSwarms.clear();
+    }
+    
+        private void removeFoodSources(){
+        for(int i = 0; i < removedSources.size(); i++){
+            removedSources.get(i).delete();
+            sources.remove(removedSources.get(i));
+            fSChanged = true;
+        }
+        removedSources.clear();
     }
     
     public void addToMap(int mapIdx, int list, int sourceIdx){
