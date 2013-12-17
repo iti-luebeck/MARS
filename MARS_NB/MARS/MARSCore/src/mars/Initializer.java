@@ -175,6 +175,7 @@ public class Initializer {
     
     //SkyDome
     SkyControl skyControl;
+    TimeOfDay timeOfDay;
     
     //water
     private WaterFilter water;
@@ -847,18 +848,27 @@ public class Initializer {
                        skyControl.setAmbientLight(ambLight);
                        skyControl.setMainLight(sun);
                        skyControl.setShadowRenderer(dlsr);
-                       skyControl.getSunAndStars().setHour(10f);
+                       
+                       skyControl.getSunAndStars().setHour(mars_settings.getSkyDomeHour());
+                       skyControl.getSunAndStars().setObserverLatitude(mars_settings.getSkyDomeObserverLatitude());
+                       skyControl.getSunAndStars().setSolarLongitude(mars_settings.getSkyDomeSolarLongitude());
+                       
+                       skyControl.setCloudRate(mars_settings.getSkyDomeCloudRate());
+                       skyControl.setCloudiness(mars_settings.getSkyDomeCloudiness());
+                       skyControl.setCloudModulation(mars_settings.isSkyDomeCloudModulation());
+                       skyControl.setLunarDiameter(mars_settings.getSkyDomeLunarDiameter());
+                       
                        /*
                         * Add SkyControl to the scene and enable it.
                         */
                        final Node rootNodeMars = mars.getRootNode();
-                       //rootNodeMars.addControl(skyControl);
+                       rootNodeMars.addControl(skyControl);
                        //sceneReflectionNode.addControl(skyControl);
-                       //skyControl.setEnabled(true);
+                       skyControl.setEnabled(true);
                        
-                       final TimeOfDay timeOfDay = new TimeOfDay(4.75f);
+                       timeOfDay = new TimeOfDay(mars_settings.getSkyDomeHour());
                        mars.getStateManager().attach(timeOfDay);
-                       timeOfDay.setRate(100f);
+                       timeOfDay.setRate(mars_settings.getSkyDomeSpeed()*mars_settings.getSkyDomeDirection());
                        
                        return null;
                     }
@@ -1442,7 +1452,7 @@ public class Initializer {
         terrain.addControl(terrain_physics_control);
         
         //set shadwos for terrain
-        terrain.setShadowMode(ShadowMode.Receive);
+        terrain.setShadowMode(ShadowMode.CastAndReceive);
         
         terrain_node.attachChild(terrain);
         //SonarDetectableNode.attachChild(terrain_node);
@@ -1856,5 +1866,13 @@ public class Initializer {
     public SkyControl getSkyControl() {
         return skyControl;
     }
- 
+
+    public TimeOfDay getTimeOfDay() {
+        return timeOfDay;
+    }
+    
+    public void resetTimeOfDay(float hour){
+        timeOfDay = new TimeOfDay(hour);
+    }
+
 }
