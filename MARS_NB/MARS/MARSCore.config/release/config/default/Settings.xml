@@ -7,7 +7,7 @@
                     <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="debug">
-                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="framerate">
                     <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">60</value>
@@ -82,7 +82,7 @@
                     <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">30.0</value>
                 </entry>
 				<entry xsi:type="myHashMapEntryTypeObject" key="MouseUpdateFollow">
-                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                 </entry>
             </value>
         </entry>
@@ -175,7 +175,7 @@
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">skytest.dds</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                     </value>
                 </entry>
@@ -192,7 +192,37 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="SkyDome">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="speed">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">100.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="direction">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="cloudiness">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.5</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="cloudRate">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="cloudModulation">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="hour">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">5.7</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="observerLatitude">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.8932385672196739</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="lunarDiameter">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.0092</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="solarLongitude">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="lunarPhase">
+                            <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
                     </value>
                 </entry>

@@ -189,7 +189,12 @@ public class MARS_Settings implements UpdateState{
             initer.showPhysicsDebug(isPhysicsDebug());
         }else if(target.equals("visible") && hashmapname.equals("Pollution")){
             initer.hidePollution(isPollutionVisible());
+        }else if(target.equals("hour") && hashmapname.equals("SkyDome")){
+            initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
+            initer.resetTimeOfDay(getSkyDomeHour());
         }
+        
+        
     }
     
     /**
@@ -1230,6 +1235,166 @@ public class MARS_Settings implements UpdateState{
      */
     public void setSetupSkyDome(boolean enabled) {
         SkyDome.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public boolean isSkyDomeCloudModulation() {
+        return (Boolean)SkyDome.get("cloudModulation");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setSkyDomeCloudModulation(boolean cloudModulation) {
+        SkyDome.put("cloudModulation", cloudModulation);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getSkyDomeSpeed() {
+        return (Float)SkyDome.get("speed");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeSpeed(float speed) {
+        SkyDome.put("speed", speed);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getSkyDomeDirection() {
+        return (Float)SkyDome.get("direction");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeDirection(float direction) {
+        SkyDome.put("direction", direction);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeCloudiness() {
+        return (Float)SkyDome.get("cloudiness");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeCloudiness(float cloudiness) {
+        SkyDome.put("cloudiness", cloudiness);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeCloudRate() {
+        return (Float)SkyDome.get("cloudRate");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeCloudRate(float cloudRate) {
+        SkyDome.put("cloudRate", cloudRate);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeHour() {
+        return (Float)SkyDome.get("hour");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeHour(float hour) {
+        SkyDome.put("hour", hour);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeObserverLatitude() {
+        return (Float)SkyDome.get("observerLatitude");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeObserverLatitude(float observerLatitude) {
+        SkyDome.put("observerLatitude", observerLatitude);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeLunarDiameter() {
+        return (Float)SkyDome.get("lunarDiameter");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeLunarDiameter(float lunarDiameter) {
+        SkyDome.put("lunarDiameter", lunarDiameter);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Float getSkyDomeSolarLongitude() {
+        return (Float)SkyDome.get("solarLongitude");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeSolarLongitude(float solarLongitude) {
+        SkyDome.put("solarLongitude", solarLongitude);
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public Integer getSkyDomeLunarPhase() {
+        return (Integer)SkyDome.get("lunarPhase");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setSkyDomeLunarPhase(int lunarPhase) {
+        SkyDome.put("lunarPhase", lunarPhase);
     }
 
     /**

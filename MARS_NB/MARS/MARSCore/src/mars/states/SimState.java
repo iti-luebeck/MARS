@@ -445,7 +445,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             Lookup lkp = Lookup.getDefault();
             AbstractAppState state = lkp.lookup(AbstractAppState.class);
             if(state != null){
-                stateManager.attach(state);
+                //stateManager.attach(state);
             }
         }
         progr.progress( "Init Super" );
@@ -870,11 +870,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         }
         
         if(initer != null && initer.getSkyControl() != null){
-            System.out.println("SkyControl: " + initer.getSkyControl().getSunAndStars().toString());
-            if(initer.getSkyControl().getSunAndStars().getHour() < 24f-0.01f){
-                initer.getSkyControl().getSunAndStars().setHour(initer.getSkyControl().getSunAndStars().getHour()+0.01f);
-            }else{
-                 initer.getSkyControl().getSunAndStars().setHour(0f);
+            if(getMARSSettings().getSkyDomeSpeed() != 0f){
+                initer.getTimeOfDay().update(tpf);
+                initer.getTimeOfDay().setRate(getMARSSettings().getSkyDomeSpeed() * getMARSSettings().getSkyDomeDirection());
+                initer.getSkyControl().getSunAndStars().setHour(initer.getTimeOfDay().getHour());
             }
         }
         

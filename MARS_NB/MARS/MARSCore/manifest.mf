@@ -3,5 +3,5 @@ OpenIDE-Module: mars.core/0
 OpenIDE-Module-Layer: mars/core/layer.xml
 OpenIDE-Module-Localizing-Bundle: mars/core/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Specification-Version: 0.8.0.8.5.2
+OpenIDE-Module-Specification-Version: 0.8.0.8.6.1
 
