@@ -72,8 +72,8 @@ public class Fish extends Node{
     }
     
     private void optimize(Node node){
-        /*
-        jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        
+        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
@@ -82,14 +82,14 @@ public class Fish extends Node{
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
                 geo.setLodLevel(0);
                 MyLodControl control = new MyLodControl();
-                control.setDistTolerance(25f);
+                control.setDistTolerance(0.1f);
                 control.setTrisPerPixel(0.5f);
                 control.setCam(sim.getMain().getCamera());
                 geo.addControl(control);
             }else if(spatial instanceof Node){
                 optimize((Node)spatial);
             }
-        } */       
+        }       
     }
    
     /**
