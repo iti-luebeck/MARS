@@ -29,7 +29,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     protected SwarmPanel sPanel;
     protected FoodSourcePanel fSPanel;
     protected FoodSourceMapPanel fSMPanel;
-    private Node rootNode = new Node("FishSimState Root Node");
+    private final Node rootNode = new Node("FishSimState Root Node");
     private MARS_Main mars;
     private Initializer initer;
     private BulletAppState bulletAppState;
@@ -37,15 +37,15 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     private boolean fSChanged = false;
     private boolean fSMChanged = false;
     
-    private ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
-    private ArrayList<String> newSwarms = new ArrayList<String>();
-    private ArrayList<Swarm> swarms = new ArrayList<Swarm>();
+    private final ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
+    private final ArrayList<String> newSwarms = new ArrayList<String>();
+    private final ArrayList<Swarm> swarms = new ArrayList<Swarm>();
     
-    private ArrayList<FoodSource> removedSources = new ArrayList<FoodSource>();
-    private ArrayList<String> newSources = new ArrayList<String>();
-    private ArrayList<FoodSource> sources = new ArrayList<FoodSource>();
+    private final ArrayList<FoodSource> removedSources = new ArrayList<FoodSource>();
+    private final ArrayList<String> newSources = new ArrayList<String>();
+    private final ArrayList<FoodSource> sources = new ArrayList<FoodSource>();
     
-    private ArrayList<FoodSourceMap> sourceMaps = new ArrayList<FoodSourceMap>();
+    private final ArrayList<FoodSourceMap> sourceMaps = new ArrayList<FoodSourceMap>();
  
     /**
      *
@@ -57,7 +57,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     
         /**
      *
-     * @param main
+     * @param main MARS main
      * @deprecated
      */
     @Deprecated
@@ -107,21 +107,35 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         return rootNode;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -142,6 +156,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -170,7 +188,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         super.stateDetached(stateManager);
     }
 
-       
+    /**
+     *
+     * @param tpf Time per frame
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {
@@ -232,6 +253,12 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         return bulletAppState;
     }
     
+    /**
+     *
+     * @param x x-Coordinate 
+     * @param z z-Coordinate 
+     * @return y-Coordinate of the Waterheight
+     */
     public float getCurrentWaterHeight(float x, float z){
         return initer.getCurrentWaterHeight(x, z);
     }
@@ -244,6 +271,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     public void setCamera(Camera cam) {        
     }
     
+    // Updated the panels of the gui
     private void updatePanels(){
         if(sPanel != null && fSPanel != null && fSMPanel != null){
             if(swarmsChanged || fSChanged){
@@ -266,14 +294,25 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }
     }
     
+    /**
+     *
+     * @param values Parameters of a swarm in the form of a string
+     */
     public void addSwarm(String values){
         newSwarms.add(values);
     }
     
+    /**
+     *
+     * @param values Parameters of a foodsource in the form of a string
+     */
     public void addFoodSource(String values){
         newSources.add(values);
     }
     
+    /**
+     * Add a foodsourcemap to the simulation
+     */
     public void addFoodSourceMap(){
         sourceMaps.add(new FoodSourceMap());
         fSMPanel.updateFoodSourceMapList(sourceMaps);
@@ -299,6 +338,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         newSwarms.clear();
     }
     
+    /**
+     *
+     * @param swarm Add a swarm to the simulation
+     */
     public void newSwarm(Swarm swarm){
         swarms.add(swarm);
         swarmsChanged = true;
@@ -313,22 +356,42 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             newSources.clear();
     }
     
+    /**
+     *
+     * @param i Index of the arraylist of the swarms
+     */
     protected void removeSwarm(int i){
         removedSwarms.add(swarms.get(i));
     }
     
+    /**
+     *
+     * @param swarm The swarm which is to be deleted.
+     */
     protected void removeSwarm(Swarm swarm){
         removedSwarms.add(swarm);
     }
     
+    /**
+     *
+     * @param i Index of the arraylist of the foodsources
+     */
     protected void removeFoodSource(int i){
         removedSources.add(sources.get(i));
     }
     
+    /**
+     *
+     * @param source The foodsource which is to be deleted.
+     */
     protected void removeFoodSource(FoodSource source){
         removedSources.add(source);
     }
     
+    /**
+     *
+     * @param idx The index of the foodsourcemap which is to be deleted.
+     */
     public void removeFoodSourceMap(int idx){
         sourceMaps.remove(idx);
         fSMChanged = true;
@@ -352,6 +415,12 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         removedSources.clear();
     }
     
+    /**
+     *
+     * @param mapIdx Index of the foodsourcemap
+     * @param list Descripes whether the foodsouce is a swarm or not
+     * @param sourceIdx Index of the foodsource
+     */
     public void addToMap(int mapIdx, int list, int sourceIdx){
         if(list == 0){
             sourceMaps.get(mapIdx).add(swarms.get(sourceIdx));
@@ -360,6 +429,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }
     }
     
+    /**
+     *
+     * @return Size of the list of the foodsources
+     */
     public int getFoodSourcesSize(){
         return sources.size();
     }
@@ -368,18 +441,34 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         instance = sim;
     }
     
+    /**
+     *
+     * @return Last active fishsim instance
+     */
     public static FishSim getInstance(){
         return instance;
     }
     
+    /**
+     *
+     * @param sPanel Swarmpanel of the GUI
+     */
     public void setSwarmPanel(SwarmPanel sPanel){
       this.sPanel = sPanel;  
     }
     
+    /**
+     *
+     * @param fSPanel Foodsourcepanel of the GUI
+     */
     public void setFoodSourcePanel(FoodSourcePanel fSPanel){
       this.fSPanel = fSPanel;  
     }
     
+    /**
+     *
+     * @param fSMPanel Foodsourcemappanel of the GUI
+     */
     public void setFoodSourceMapPanel(FoodSourceMapPanel fSMPanel){
       this.fSMPanel = fSMPanel;  
     }

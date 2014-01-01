@@ -144,7 +144,7 @@ private int obstacleCG = 6;
     
     /**
      *
-     * @return
+     * @return Swarm
      */
     public Swarm getSwarm(){
         return this.swarm;

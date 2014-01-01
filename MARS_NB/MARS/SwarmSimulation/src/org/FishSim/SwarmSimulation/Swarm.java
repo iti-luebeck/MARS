@@ -50,9 +50,11 @@ public class Swarm implements IFoodSource{
      *
      * @param sim       Simulation
      * @param size      Size of the swarm
-     * @param scale
+     * @param scale     Size of the fish
      * @param spawn     Spawnpoint of the fish
      * @param type      Type of the fish
+     * @param path      Path of the model
+     * @param animation Animation of/off
      */
     public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, int type, String path, boolean animation){
         colRadius = (float) (Math.sqrt((float)size) * scale.length());
@@ -77,9 +79,13 @@ public class Swarm implements IFoodSource{
     /**
      *
      * @param sim       Simulation
-     * @param size      Size of the fish
+     * @param size      Size of the swarm
+     * @param scale     Size of the fish
+     * @param deviation Deviation of the size of the fish
      * @param spawn     Spawnpoint of the fish
      * @param type      Type of the fish
+     * @param animation Animation on/off
+     * @param path      Path of the model
      */
     public Swarm(FishSim sim, int size, Vector3f scale, float deviation, Vector3f spawn, int type, String path, boolean animation){
         colRadius = (float) (Math.sqrt((float)size) * scale.length());
@@ -108,6 +114,7 @@ public class Swarm implements IFoodSource{
      *
      * @param sim       Simulation
      * @param swarm     List of fishes
+     * @param scale     Size of the fish
      * @param spawn     Spawnpoint of the fish
      * @param type      Type of the fish
      */
@@ -205,23 +212,34 @@ public class Swarm implements IFoodSource{
         }
     }
     
-    public void stat(){
-        for(int i = 0; i < swarm.size(); i++){
-        }
-    }
-    
+    /**
+     *
+     * @param name Name of the swarm
+     */
     public void setName(String name){
         this.name = name;
     }
     
+    /**
+     *
+     * @return Get name of the swarm
+     */
     public String getName(){
         return name;
     }
     
+    /**
+     *
+     * @param ownMap Map from which the swarm searches its food
+     */
     public void setFoodSourceMap(FoodSourceMap ownMap){
         this.ownMap = ownMap;
     }
         
+    /**
+     *
+     * @param moveSpeed Movement speed of the fishes
+     */
     public void setMoveSpeed(float moveSpeed){
         this.moveSpeed = moveSpeed;
         for(int i = 0; i < swarm.size(); i++){
@@ -229,6 +247,10 @@ public class Swarm implements IFoodSource{
         }
     }
     
+    /**
+     *
+     * @param rotationSpeed Rotation speed o the fishes
+     */
     public void setRotationSpeed(float rotationSpeed){
         this.rotationSpeed = rotationSpeed;
         for(int i = 0; i < swarm.size(); i++){
@@ -238,7 +260,7 @@ public class Swarm implements IFoodSource{
         
     /**
      *
-     * @param splitLocation     Location where the swarm should split up
+     * @param splitLocation Location where the swarm should split up
      */
     public void setSplit(Vector3f splitLocation){
         split = true;
@@ -376,18 +398,36 @@ public class Swarm implements IFoodSource{
         return center;
     }
     
+    /**
+     *
+     * @return Movement speed
+     */
     public float getMoveSpeed(){
         return moveSpeed;
     }
     
+    /**
+     *
+     * @return Rotation speed
+     */
     public float getRotationSpeed(){
         return rotationSpeed;
     }
     
+    /**
+     *
+     * @return Map on which the swarm is as a food source
+     */
     public ArrayList<FoodSourceMap> getForeignMaps(){
         return foreignMaps;
     }
     
+    /**
+     *
+     * @param fish
+     * @param tpf Time per frame
+     * @return View direction of the fish
+     */
     public Vector3f getDirection(Fish fish, float tpf){
         if(ownMap == null){
             fish.getHungry(tpf);
@@ -452,13 +492,17 @@ public class Swarm implements IFoodSource{
         colLocation = cLocation;
     }
     
+    /**
+     *
+     * @param type Type of the registrated collision
+     */
     public void setSolidCollisionType(int type){
         solidCollisionType = type;
     }
     
     /**
      *
-     * @param vLocation     Location of the collision from the viewControl
+     * @param vLocation Location of the collision from the viewControl
      */
     public void setViewCollided(Vector3f vLocation){
         viewCollided = true;
@@ -516,6 +560,10 @@ public class Swarm implements IFoodSource{
         return colLocation;
     }
     
+    /**
+     *
+     * @return Type of the collision
+     */
     public int getSolidCollisionType(){
         return solidCollisionType;
     }
@@ -541,10 +589,16 @@ public class Swarm implements IFoodSource{
          return rand;
      }
     
+    /**
+     * Deleted all objects of a swarm
+     */
     public void clear(){
         swarm.clear();
     }
     
+    /**
+     * Deleted a swarm
+     */
     public void delete(){
         disableCol();
         for(int i = 0; i < swarm.size(); i++){
@@ -555,16 +609,31 @@ public class Swarm implements IFoodSource{
         }
     }
 
+    /**
+     *
+     * @param location Location of the swarm
+     * @return Nearest location to reach the swarm
+     */
     @Override
     public Vector3f getNearestLocation(Vector3f location) {
         return center.add(location.subtract(center).normalize().mult(colRadius));
     }
     
+    /**
+     *
+     * @param foreignMap Map on which the swarm is as a food source
+     */
     @Override
     public void addToMap(FoodSourceMap foreignMap){
         foreignMaps.add(foreignMap);
     }
 
+    /**
+     *
+     * @param location Location of the fish
+     * @param amount The amount that can be eaten by a fish 
+     * @return Saturation which is granted to the fish
+     */
     @Override
     public float feed(Vector3f location, float amount) {
         

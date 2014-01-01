@@ -17,6 +17,7 @@ public class FoodSource extends Node implements IFoodSource{
     
     /**
      *
+     * @param sim           Simulation
      * @param size          Size of the foodsource
      * @param localTrans    Position of the foodsource
      */
@@ -27,15 +28,27 @@ public class FoodSource extends Node implements IFoodSource{
         sim.getRootNode().attachChild(this);
     }
     
+    /**
+     *
+     * @param name Name of the foodsource
+     */
     @Override
     public void setName(String name){
         this.name = name;
     }
     
+    /**
+     *
+     * @return Name of the foodsource
+     */
+    @Override
     public String getName(){
         return name;
     }
     
+    /**
+     * Delete foodsource
+     */
     public void delete(){
         for(int i = 0; i < foreignMaps.size(); i++){
             foreignMaps.get(i).remove(this);
@@ -63,7 +76,10 @@ public class FoodSource extends Node implements IFoodSource{
     }
     
     /**
-     * Feed
+     *
+     * @param location Location of the fish
+     * @param amount The amount that can be eaten by a fish 
+     * @return Saturation which is granted to the fish
      */
     @Override
     public float feed(Vector3f location, float amount){
