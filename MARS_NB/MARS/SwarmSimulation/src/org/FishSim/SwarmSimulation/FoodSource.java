@@ -10,17 +10,50 @@ import java.util.ArrayList;
  */
 
 public class FoodSource extends Node implements IFoodSource{
+    FishSim sim;
+    String name;
     float size;
-    ArrayList<FoodSourceMap> foreignMaps;
+    ArrayList<FoodSourceMap> foreignMaps = new ArrayList<FoodSourceMap>();
     
     /**
      *
+     * @param sim           Simulation
      * @param size          Size of the foodsource
      * @param localTrans    Position of the foodsource
      */
-    public FoodSource(float size, Vector3f localTrans){
+    public FoodSource(FishSim sim, float size, Vector3f localTrans){
+        this.sim = sim;
         this.size = size;
         setLocalTranslation(localTrans);
+        sim.getRootNode().attachChild(this);
+    }
+    
+    /**
+     *
+     * @param name Name of the foodsource
+     */
+    @Override
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    /**
+     *
+     * @return Name of the foodsource
+     */
+    @Override
+    public String getName(){
+        return name;
+    }
+    
+    /**
+     * Delete foodsource
+     */
+    public void delete(){
+        for(int i = 0; i < foreignMaps.size(); i++){
+            foreignMaps.get(i).remove(this);
+        }
+        sim.getRootNode().detachChild(this);
     }
     
     /**
@@ -29,9 +62,6 @@ public class FoodSource extends Node implements IFoodSource{
      */
     @Override
     public void addToMap(FoodSourceMap foreignMap){
-        if(foreignMaps == null){
-            foreignMaps = new ArrayList<FoodSourceMap>();
-        }
         foreignMaps.add(foreignMap);
     }
     
@@ -46,15 +76,16 @@ public class FoodSource extends Node implements IFoodSource{
     }
     
     /**
-     * Feed
+     *
+     * @param location Location of the fish
+     * @param amount The amount that can be eaten by a fish 
+     * @return Saturation which is granted to the fish
      */
     @Override
     public float feed(Vector3f location, float amount){
         size -= amount;
         if(size <= 0){
-            for(int i = 0; i < foreignMaps.size(); i++){
-                foreignMaps.get(i).remove(this);
-            }
+            sim.removeFoodSource(this);
         }
         return 1+amount;
     }

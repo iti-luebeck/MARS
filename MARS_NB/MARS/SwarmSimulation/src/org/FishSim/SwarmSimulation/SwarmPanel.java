@@ -11,6 +11,7 @@ final class SwarmPanel extends javax.swing.JPanel {
 
     private final SwarmOptionsPanelController controller;
     private final FishSim sim;
+    private int[] selectedSwarms = new int[0];
     private int foodSourceMap = -1;
 
     SwarmPanel(SwarmOptionsPanelController controller) {
@@ -35,7 +36,6 @@ final class SwarmPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton6 = new javax.swing.JButton();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         size = new javax.swing.JTextField();
         tX = new javax.swing.JTextField();
@@ -62,6 +62,7 @@ final class SwarmPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         swarms = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.DefaultListModel());
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -257,6 +258,11 @@ final class SwarmPanel extends javax.swing.JPanel {
         );
 
         swarms.setModel(new javax.swing.DefaultListModel());
+        swarms.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                swarmsValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(swarms);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jButton1.text")); // NOI18N
@@ -266,19 +272,29 @@ final class SwarmPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +304,11 @@ final class SwarmPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -303,6 +323,7 @@ final class SwarmPanel extends javax.swing.JPanel {
         for(int i = 1; i <= swarmList.size(); i++){
             model.addElement("Swarm"+i);
         }
+        updateUI();
     }
     
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -315,6 +336,7 @@ final class SwarmPanel extends javax.swing.JPanel {
         for(int i = 1; i <=  maps.size(); i++){
             model.addElement("FoodSourceMap"+i);
         }
+        updateUI();
     }
     
     private void rSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSpeedActionPerformed
@@ -332,6 +354,17 @@ final class SwarmPanel extends javax.swing.JPanel {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        for(int i = 0; i < selectedSwarms.length; i++){
+            sim.removeSwarm(selectedSwarms[i]);
+        }
+        selectedSwarms = new int[0];
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void swarmsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_swarmsValueChanged
+        selectedSwarms = swarms.getSelectedIndices();
+    }//GEN-LAST:event_swarmsValueChanged
 
     void load() {
         // TODO read settings and initialize GUI
@@ -362,6 +395,7 @@ final class SwarmPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox anim;
     private javax.swing.JTextField deviat;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton6;
     private javax.swing.JDialog jDialog1;
@@ -375,7 +409,6 @@ final class SwarmPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField mSpeed;

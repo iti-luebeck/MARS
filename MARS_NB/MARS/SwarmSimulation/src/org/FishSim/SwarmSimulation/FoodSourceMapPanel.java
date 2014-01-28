@@ -13,7 +13,6 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
     private final FishSim sim;
     private int[] selectedMaps = new int[0];
     private int[] selectedSources = new int[0];
-    private int sourceType;
 
     FoodSourceMapPanel(FoodSourceMapOptionsPanelController controller) {
         this.controller = controller;
@@ -37,11 +36,11 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList();
         jButton5 = new javax.swing.JButton();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jList2.setModel(new javax.swing.DefaultListModel());
         jList2.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -98,28 +97,41 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(FoodSourceMapPanel.class, "FoodSourceMapPanel.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jButton4)))
+                    .addComponent(jButton2))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -132,7 +144,8 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         model.clear();
         for(int i = 1; i <=  mapList.size(); i++){
             model.addElement("FoodSourceMap"+i);
-        }  
+        }
+        updateUI();
     }
     
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
@@ -152,6 +165,7 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         for(int i = 1; i <=  swarms.size(); i++){
             model.addElement("Swarm: "+i);
         }
+        updateUI();
     }
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
         selectedSources = jList2.getSelectedIndices();
@@ -171,6 +185,13 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
         selectedSources = new int[0];
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        for(int i = 0; i < selectedMaps.length; i++){
+            sim.removeFoodSourceMap(selectedMaps[i]);
+        }
+        selectedMaps = new int[0];
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     void load() {
         // TODO read settings and initialize GUI
@@ -199,12 +220,12 @@ final class FoodSourceMapPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables

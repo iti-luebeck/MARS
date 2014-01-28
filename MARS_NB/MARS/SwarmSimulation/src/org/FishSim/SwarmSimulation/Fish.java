@@ -21,17 +21,17 @@ import mars.control.MyLodControl;
 
 public class Fish extends Node{
     protected Swarm swarm;
-    private FishControl control;
-    private Node model;
+    private final FishControl control;
+    private final Node model;
     private AnimControl modelControl;
     protected AnimChannel channel_swim;
     protected FishSim sim;
     protected Vector3f lastMove = new Vector3f().zero();
     protected Quaternion rotation = new Quaternion();   
-    private List<Geometry> listGeoms = new ArrayList<Geometry>();
+    private final List<Geometry> listGeoms = new ArrayList<Geometry>();
     protected float moveSpeed = 0;
     protected float rotationSpeed = 0;
-    private float initHunger = 100;
+    private final float initHunger = 100;
     private float hungerAmount = initHunger;
     private boolean hunger = true;
  
@@ -40,10 +40,10 @@ public class Fish extends Node{
      *
      * @param sim               Simulation
      * @param scale             Size of the fish
-     * @param rot               Starting rotation
      * @param localTrans        Starting position
      * @param swarm             Swarm where the fish belongs to
-     * @param map               Foodsourcemap where the fish belongs to
+     * @param path              Path of the model
+     * @param animation         Animation on/off
      */
     public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm, String path, boolean animation){
         this.sim = sim;
@@ -65,7 +65,7 @@ public class Fish extends Node{
     
     /**
      *
-     * @param swarm
+     * @param swarm Swarm where the fish belongs to
      */
     public void setSwarm(Swarm swarm){
        this.swarm = swarm; 
@@ -81,20 +81,20 @@ public class Fish extends Node{
                 LodGenerator lodGenerator = new LodGenerator(geo);          
                 lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.98f);
                 geo.setLodLevel(0);
-                MyLodControl lodcontrol = new MyLodControl();
-                lodcontrol.setDistTolerance(2f);
-                lodcontrol.setTrisPerPixel(0.5f);
-                lodcontrol.setCam(sim.getMain().getCamera());
-                geo.addControl(lodcontrol);
+                MyLodControl lodControl = new MyLodControl();
+                lodControl.setDistTolerance(0.1f);
+                lodControl.setTrisPerPixel(0.5f);
+                lodControl.setCam(sim.getMain().getCamera());
+                geo.addControl(lodControl);
             }else if(spatial instanceof Node){
                 optimize((Node)spatial);
             }
-        }      
+        }
     }
    
     /**
      *
-     * @param enabled
+     * @param enabled 
      */
     public void setVisible(boolean enabled) {
         if(!enabled){
@@ -112,22 +112,35 @@ public class Fish extends Node{
         //control.swim(tpf);
     }
     
+    /**
+     *
+     * @param speed Movement speed
+     */
     public void setMoveSpeed(float speed){
         this.moveSpeed = speed;
     }
     
+    /**
+     *
+     * @param speed Rotation speed
+     */
     public void setRotationSpeed(float speed){
         this.rotationSpeed = speed;
     }
     
     /**
      *
-     * @return lastMove
+     * @return lastMove Last move of the fish
      */
     public Vector3f getLastMove(){
         return lastMove;
     }
     
+    /**
+     *
+     * @param source Foodsource
+     * @param tpf Time per frame
+     */
     public void eat(IFoodSource source, float tpf){
         hungerAmount -= source.feed(getLocalTranslation(), (1+getLocalScale().length())*tpf);
         if(hungerAmount <= 0){
@@ -136,6 +149,10 @@ public class Fish extends Node{
         }
     }
     
+    /**
+     *
+     * @param tpf Time per frame
+     */
     public void getHungry(float tpf){
         hungerAmount += tpf;
         if(hungerAmount >= initHunger){
@@ -144,6 +161,10 @@ public class Fish extends Node{
         }
     }
     
+    /**
+     *
+     * @return Amount of hunger of the fish
+     */
     public boolean isHungry(){
         return hunger;
     }   
