@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchanger;
 import mars.control.MyLightControl;
+import mygame.VolumeLightFilter;
 
 /**
  * This is a simple lamp to illuminate underwater scenes.
@@ -91,6 +92,11 @@ public class Lamp extends Actuator{
         MyLightControl lightControl = new MyLightControl(spotLight);
         lightControl.setLampEnd(LampEnd);
         LampStart.addControl(lightControl); // this spatial controls the position of this light.
+        
+        //add volumetric light
+        /*VolumeLightFilter vsf = new VolumeLightFilter(spotLight, 128, rootNode);
+        vsf.setInensity(1.0f);
+        getIniter().addFilter(vsf);*/
 
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();

@@ -1805,6 +1805,22 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    public Float getPollutionAlpha() {
+        return (Float)Pollution.get("pollutionAlpha");
+    }
+
+    /**
+     *
+     * @param flowScale 
+     */
+    public void setpollutionAlpha(float pollutionAlpha) {
+        Pollution.put("pollutionAlpha", pollutionAlpha);
+    }
+    
+    /**
+     *
+     * @return
+     */
     public Boolean isSetupPollution() {
         return (Boolean)Pollution.get("enabled");
     }
@@ -1833,6 +1849,22 @@ public class MARS_Settings implements UpdateState{
         Pollution.put("visible", visible);
     }
     
+     /**
+     *
+     * @return
+     */
+    public Boolean isPollutionDetectable() {
+        return (Boolean)Pollution.get("Detectable");
+    }
+
+    /**
+     *
+     * @param enabled 
+     */
+    public void setPollutionDetectable(boolean detectable) {
+        Pollution.put("detectable", detectable);
+    }
+
            /**
      *
      * @return

@@ -72,24 +72,24 @@ public class Fish extends Node{
     }
     
     private void optimize(Node node){
-        /*
-        jme3tools.optimize.GeometryBatchFactory.optimize(model);
+        
+        //jme3tools.optimize.GeometryBatchFactory.optimize(model);
         
         for(Spatial spatial : node.getChildren()){
            if(spatial instanceof Geometry){
                 Geometry geo = (Geometry) spatial;
                 LodGenerator lodGenerator = new LodGenerator(geo);          
-                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.1f, 0.8f);
+                lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, 0.98f);
                 geo.setLodLevel(0);
-                MyLodControl control = new MyLodControl();
-                control.setDistTolerance(25f);
-                control.setTrisPerPixel(0.5f);
-                control.setCam(sim.getMain().getCamera());
-                geo.addControl(control);
+                MyLodControl lodcontrol = new MyLodControl();
+                lodcontrol.setDistTolerance(2f);
+                lodcontrol.setTrisPerPixel(0.5f);
+                lodcontrol.setCam(sim.getMain().getCamera());
+                geo.addControl(lodcontrol);
             }else if(spatial instanceof Node){
                 optimize((Node)spatial);
             }
-        } */       
+        }      
     }
    
     /**
@@ -109,7 +109,7 @@ public class Fish extends Node{
      * @param tpf Time per frame
      */
     public void swim(float tpf){
-        control.swim(tpf);
+        //control.swim(tpf);
     }
     
     public void setMoveSpeed(float speed){

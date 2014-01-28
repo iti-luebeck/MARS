@@ -1,0 +1,46 @@
+MaterialDef ShadowVolume {
+
+    MaterialParameters {
+        Matrix4 LightViewProjectionMatrix
+
+        
+        Texture2D ShadowDepthMap
+        Texture2D SceneDepthTexture
+        
+        Vector2 LinearDepthFactorsLight;
+        Vector2 LinearDepthFactorsCam;
+        Vector2 LightNearFar;
+        Vector3 CameraPos
+        Vector3 LightPos
+        
+
+        Texture2D CookieMap
+        Color LightColor
+        Float LightIntensity
+    }
+
+
+    Technique {
+        VertexShader GLSL100:   Shaders/VolumetricLight.vert
+        FragmentShader GLSL100: Shaders/VolumetricLight.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            WorldMatrix
+            ModelViewMatrixInverse
+            WorldMatrixInverse
+            ViewPort
+            FrustumNearFar
+        }
+
+         RenderState {
+            DepthWrite Off
+            DepthTest Off
+            FaceCull Off
+            Blend Additive
+        }
+    }   
+
+
+}

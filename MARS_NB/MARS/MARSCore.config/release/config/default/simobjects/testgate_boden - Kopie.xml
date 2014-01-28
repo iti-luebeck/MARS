@@ -11,8 +11,12 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="enabled">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="scale">
-            <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">0.1</value>
+        <entry xsi:type="myHashMapEntryTypeVector3F" key="scale" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value>
+                <x>0.1</x>
+                <y>0.1</y>
+                <z>0.1</z>
+            </value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="filepath">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">pipe/pipe__gate_5meter.obj</value>

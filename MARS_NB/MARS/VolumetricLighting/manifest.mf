@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.VolumetricLighting
+OpenIDE-Module-Localizing-Bundle: mars/libs/VolumetricLighting/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

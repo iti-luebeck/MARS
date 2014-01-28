@@ -153,6 +153,9 @@
 						<entry xsi:type="myHashMapEntryTypeObject" key="visible">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="detectable">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                        </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
                             <value>
                                 <x>0.0</x>
@@ -192,7 +195,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="SkyDome">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
 						<entry xsi:type="myHashMapEntryTypeObject" key="speed">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">100.0</value>

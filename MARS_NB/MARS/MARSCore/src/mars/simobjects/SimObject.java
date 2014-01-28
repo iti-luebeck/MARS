@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.MARS_Main;
@@ -48,23 +49,24 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement(name="SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso( {OilBurst.class} )
 public class SimObject{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name="")
-    private HashMap<String,Object> simob_variables;
+    protected HashMap<String,Object> simob_variables;
     private HashMap<String,Object> collision;
     
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
     private Spatial ghost_simob_spatial;
-    private Node simObNode = new Node("simObNode");
-    private Node debugNode = new Node("debugNode");
-    private Node renderNode = new Node("renderNode");
+    protected Node simObNode = new Node("simObNode");
+    protected Node debugNode = new Node("debugNode");
+    protected Node renderNode = new Node("renderNode");
 
     private MARS_Main simauv;
-    private AssetManager assetManager;
+    protected AssetManager assetManager;
     private Spatial spatial;
     private Material spatialMaterial;
     private RigidBodyControl physics_control;
@@ -89,6 +91,7 @@ public class SimObject{
         simob.initAfterJAXB();
         return simob;
     }
+    
     /**
      * 
      * @param path
@@ -568,20 +571,20 @@ public class SimObject{
     public void setRotation(Vector3f rotation) {
         simob_variables.put("rotation", rotation);
     }
-
-    /**
+    
+     /**
      *
      * @return
      */
-    public float getScale() {
-        return (Float)simob_variables.get("scale");
+    public Vector3f getScale() {
+        return (Vector3f)simob_variables.get("scale");
     }
 
     /**
      *
-     * @param scale
+     * @param position
      */
-    public void setScale(float scale) {
+    public void setScale(Vector3f scale) {
         simob_variables.put("scale", scale);
     }
 

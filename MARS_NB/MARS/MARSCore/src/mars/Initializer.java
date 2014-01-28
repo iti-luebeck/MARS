@@ -51,9 +51,11 @@ import mars.server.MARS_Server;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.Vector4f;
+import com.jme3.post.Filter;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
 import com.jme3.post.filters.LightScatteringFilter;
+import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial.CullHint;
@@ -282,6 +284,7 @@ public class Initializer {
         //setupLensFlare();
         setupFlow();
         setupPollution();
+        setupTranslucentBucketFilter();
         
         if(mars_settings.isSetupSimpleSkyBox()){
             setupSimpleSkyBox();
@@ -533,6 +536,7 @@ public class Initializer {
         water.setFoamIntensity(0.2f);
         water.setFoamHardness(0.5f);
         water.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
+        water.setCausticsIntensity(0.25f);
         water.setUseFoam(true);
         //water.setNormalScale(0.5f);
         //water.setRefractionConstant(0.25f);
@@ -757,12 +761,21 @@ public class Initializer {
         fpp.addFilter(fisheye);
     }
     
+    private void setupTranslucentBucketFilter(){
+        TranslucentBucketFilter tbf = new TranslucentBucketFilter(true);
+        fpp.addFilter(tbf);
+    }
+    
     private void setupLensFlare(){
         //LensFlareFilter lf = new LensFlareFilter("Textures/lensdirt.png"); // or null if you don't own a +1 Lens Cloth of Smiting
         LensFlareFilter lf = new LensFlareFilter(null); // or null if you don't own a +1 Lens Cloth of Smiting
         lf.setGhostSpacing(0.125f);
         lf.setHaloDistance(0.48f);
         fpp.addFilter(lf);
+    }
+    
+    public void addFilter(Filter filter){
+        fpp.addFilter(filter);
     }
 
     /**
@@ -873,58 +886,6 @@ public class Initializer {
                        return null;
                     }
                 });
-        
-//        //this.assetManager.registerLocator("Assets/shaderblowlibs", FileLocator.class);
-//        SkyDomeControl skyDome = new SkyDomeControl(assetManager, mars.getCamera(),
-//                "TestModels/SkyDome/SkyDome.j3o",
-//                "TestTextures/SkyDome/SkyNight_L.png",
-//                "TestTextures/SkyDome/Moon_L.png",
-//                "TestTextures/SkyDome/Clouds_L.png",
-//                "TestTextures/SkyDome/Fog_Alpha.png");
-//        Node sky = new Node();
-//        sky.setQueueBucket(Bucket.Sky);
-//        sky.addControl(skyDome);
-//        sky.setCullHint(Spatial.CullHint.Never);
-//        
-//        // Either add a reference to the skyControl for the existing JME fog filter or use the one I posted…
-//// But… REMEMBER!  If you use JME’s… the sky dome will have fog rendered over it.
-//// Sorta pointless at that point
-////        FogFilter fog = new FogFilter(ColorRGBA.Blue, 0.5f, 10f);
-////        skyDome.setFogFilter(fog, viewPort);
-//
-//// Set some fog colors… or not (defaults are cool)
-//        /*skyDome.setFogColor(ColorRGBA.Blue);
-//        skyDome.setFogNightColor(new ColorRGBA(0.5f, 0.5f, 1f, 1f));
-//        skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));*/
-//
-//// Enable the skyControl to modify the fog filter
-//        skyDome.setControlFog(false);
-//
-//// Add the directional light you use for sun… or not
-//        /*DirectionalLight sun = new DirectionalLight();
-//        sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
-//        sun.setColor(new ColorRGBA(1, 1, 1, 1));
-//        rootNode.addLight(sun);
-//        skyDome.setSun(sun);*/
-//        skyDome.setSun(sun);
-//        
-//        /*AmbientLight al = new AmbientLight();
-//        al.setColor(new ColorRGBA(0.7f,0.7f,1f,1.0f));
-//        rootNode.addLight(al);  */        
-//
-//// Set some sunlight day/night colors… or not
-//        skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
-//        skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
-//
-//// Enable the skyControl to modify your sunlight
-//        skyDome.setControlSun(true);
-//
-//// Enable the skyControl
-//        skyDome.setEnabled(true);
-//        skyDome.cycleNightToDay();
-//        skyDome.cycleNightToDay();
-//// Add the skydome to the root… or where ever
-//        rootNode.attachChild(sky);
     }
 
     /*
@@ -1452,7 +1413,7 @@ public class Initializer {
         terrain.addControl(terrain_physics_control);
         
         //set shadwos for terrain
-        terrain.setShadowMode(ShadowMode.CastAndReceive);
+        terrain.setShadowMode(ShadowMode.Receive);
         
         terrain_node.attachChild(terrain);
         //SonarDetectableNode.attachChild(terrain_node);
@@ -1620,6 +1581,30 @@ public class Initializer {
              }
         });
 
+    }
+    
+        /**
+     * 
+     */
+    public void updatePollution(){
+        Future fut = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(pollution_plane != null){
+                    pollution_plane.removeFromParent();
+                }
+                Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                mat_tt.setColor("Color", new ColorRGBA(1.0f,1.0f,1.0f,1.0f));
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionFilepath()));
+                mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
+                mat_tt.getAdditionalRenderState().setDepthWrite(false);
+                mat_tt.getAdditionalRenderState().setAlphaTest(true);
+                pollution_plane.setMaterial(mat_tt);
+                pollution_plane.setQueueBucket(Bucket.Transparent);
+                rootNode.attachChild(pollution_plane);
+                hidePollution(mars_settings.isPollutionVisible());
+                return null;
+             }
+        });
     }
     
     /**
@@ -1836,23 +1821,27 @@ public class Initializer {
     }
 
     public float getPollution(Vector3f position){
-        Vector3f flow_scale = mars_settings.getPollutionScale();
-
-        Vector3f addedPollutionPos = mars_settings.getPollutionPosition().add(-((float) getPollution_image_width() * flow_scale.x) / 2f, 0f, -((float) getPollution_image_width() * flow_scale.z) / 2f);
-        Vector3f relSensorPos = position.subtract(addedPollutionPos);
-
-        if ((relSensorPos.x <= ((float) getPollution_image_width() * flow_scale.x)) && (relSensorPos.x >= 0) && (relSensorPos.z <= ((float) getPollution_image_width() * flow_scale.z)) && (relSensorPos.z >= 0)) {//in pollutionmap bounds
-
-            int auv_pos_x = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.x)) * relSensorPos.x);
-            int auv_pos_y = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.z)) * relSensorPos.z);
-
-            int pollution = (int)getPollutionmap().getTrueHeightAtPoint(auv_pos_x, auv_pos_y);
-            //System.out.println(auv_pos_x + "/" + auv_pos_y + " pollution: " + pollution);
-
-            return pollution;
-        } else {//out of pollutionmap bound. no pollution
+        if(mars_settings.isPollutionDetectable()){
             return 0f;
-        } 
+        }else{
+            Vector3f flow_scale = mars_settings.getPollutionScale();
+
+            Vector3f addedPollutionPos = mars_settings.getPollutionPosition().add(-((float) getPollution_image_width() * flow_scale.x) / 2f, 0f, -((float) getPollution_image_width() * flow_scale.z) / 2f);
+            Vector3f relSensorPos = position.subtract(addedPollutionPos);
+
+            if ((relSensorPos.x <= ((float) getPollution_image_width() * flow_scale.x)) && (relSensorPos.x >= 0) && (relSensorPos.z <= ((float) getPollution_image_width() * flow_scale.z)) && (relSensorPos.z >= 0)) {//in pollutionmap bounds
+
+                int auv_pos_x = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.x)) * relSensorPos.x);
+                int auv_pos_y = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.z)) * relSensorPos.z);
+
+                int pollution = (int)getPollutionmap().getTrueHeightAtPoint(auv_pos_x, auv_pos_y);
+                //System.out.println(auv_pos_x + "/" + auv_pos_y + " pollution: " + pollution);
+
+                return pollution;
+            } else {//out of pollutionmap bound. no pollution
+                return 0f;
+            } 
+        }
     }
 
     /**

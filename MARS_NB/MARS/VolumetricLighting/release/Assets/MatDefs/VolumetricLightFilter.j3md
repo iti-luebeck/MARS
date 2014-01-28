@@ -1,0 +1,27 @@
+MaterialDef VSR Final {
+
+    MaterialParameters {
+        Int NumSamples
+        Texture2D Texture
+        Texture2D LightingVolumeTex
+        Texture2D DepthTexture
+    }
+
+
+
+    Technique {
+        VertexShader GLSL100:   Common/MatDefs/Post/Post.vert
+        FragmentShader GLSL100: Shaders/VSRfinal.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+        
+        Defines {
+            
+        }
+
+    }
+
+
+}
