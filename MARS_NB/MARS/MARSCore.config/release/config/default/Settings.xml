@@ -27,6 +27,20 @@
 						<entry xsi:type="myHashMapEntryTypeObject" key="ChaseCamZoomSensitivity">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.5</value>
                         </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="CamDefaultPosition">
+                            <value>
+                                <x>15.0</x>
+                                <y>10.0</y>
+                                <z>0.0</z>
+                            </value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeVector3F" key="CamDefaultRotation">
+                            <value>
+                                <x>0.0</x>
+                                <y>0.0</y>
+                                <z>0.0</z>
+                            </value>
+                        </entry>
                     </value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Record">

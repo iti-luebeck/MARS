@@ -375,6 +375,38 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    public Vector3f getCamDefaultPosition() {
+        return (Vector3f)Camera.get("CamDefaultPosition");
+    }
+
+    /**
+     *
+     * @param CamDefaultPosition
+     */
+    public void setCamDefaultPosition(Vector3f CamDefaultPosition) {
+        Camera.put("CamDefaultPosition", CamDefaultPosition);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Vector3f getCamDefaultRotation() {
+        return (Vector3f)Camera.get("CamDefaultRotation");
+    }
+
+    /**
+     *
+     * @param CamDefaultRotation
+     */
+    public void setCamDefaultRotation(Vector3f CamDefaultRotation) {
+        Camera.put("CamDefaultRotation", CamDefaultRotation);
+    }
+    
+    /**
+     *
+     * @return
+     */
     public float getChaseCamZoomSensitivity() {
         return (Float)Camera.get("ChaseCamZoomSensitivity");
     }
@@ -1854,7 +1886,7 @@ public class MARS_Settings implements UpdateState{
      * @return
      */
     public Boolean isPollutionDetectable() {
-        return (Boolean)Pollution.get("Detectable");
+        return (Boolean)Pollution.get("detectable");
     }
 
     /**

@@ -328,6 +328,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             initer.init();
             
             //set camera to look to (0,0,0)
+            setupCamPos();
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
             
             comManager.setServer(initer.getRAW_Server());
@@ -643,6 +644,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         chaseCam.setInvertVerticalAxis(true);
         chaseCam.setZoomSensitivity(mars_settings.getChaseCamZoomSensitivity());
         chaseCam.setEnabled(false);
+    }
+    
+    private void setupCamPos(){
+        moveCamera(mars_settings.getCamDefaultPosition(), false);
+        rotateCamera(mars_settings.getCamDefaultRotation(), false);
     }
     
     /*
