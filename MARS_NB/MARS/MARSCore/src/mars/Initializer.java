@@ -1821,7 +1821,7 @@ public class Initializer {
     }
 
     public float getPollution(Vector3f position){
-        if(mars_settings.isPollutionDetectable()){
+        if(!mars_settings.isPollutionDetectable()){
             return 0f;
         }else{
             Vector3f flow_scale = mars_settings.getPollutionScale();
