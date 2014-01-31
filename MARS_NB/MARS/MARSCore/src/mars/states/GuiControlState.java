@@ -86,8 +86,9 @@ public class GuiControlState {
      * @param visible
      */
     public void setRotateArrowVisible(boolean visible){
+        System.out.println("setRotateArrowVisible: " + visible);
         if(visible){
-            rotateArrow.setCullHint(CullHint.Inherit);
+            rotateArrow.setCullHint(CullHint.Never);
         }else{
             rotateArrow.setCullHint(CullHint.Always);
         }

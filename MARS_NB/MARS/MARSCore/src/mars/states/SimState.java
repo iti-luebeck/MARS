@@ -432,14 +432,24 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             //XML_JAXB_ConfigReaderWriter.saveAUV(auv_hanse);
             
             progr.progress( "Init GuiState" );
-            GuiState guiState = new GuiState();
+            final GuiState guiState = new GuiState();
             guiState.setAuvManager(auvManager);
             guiState.setSimobManager(simobManager);
             guiState.setIniter(initer);
             guiState.setAUVsNode(AUVsNode);
             guiState.setSimObNode(SimObNode);
             guiState.setMars_settings(mars_settings);
-            stateManager.attach(guiState);
+            final AppStateManager stateManagerFin = stateManager;
+            Future fut2 = mars.enqueue(new Callable() {
+             public Void call() throws Exception {
+                    getMARS().getViewPort().attachScene(guiState.getRootNode());
+                    stateManagerFin.attach(guiState);
+                    return null;
+             }
+            });
+            
+            
+            
             
             progr.progress( "Init other States" );
             progr.progress( "Init FishSwarm State" );
