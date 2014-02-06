@@ -466,6 +466,54 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+       /**
+     * 
+     * @return
+     */
+    public ConfigManager loadConfigManager(){
+        try {
+            File file = InstalledFileLocator.getDefault().locate("config/" + "Config" + ".xml", "mars.core", false);
+            if(file.exists()){                        
+                JAXBContext context = JAXBContext.newInstance( ConfigManager.class );
+                Unmarshaller u = context.createUnmarshaller();
+                UnmarshallListener ll = new UnmarshallListener();
+                u.setListener(ll);
+                ConfigManager config = (ConfigManager)u.unmarshal( file );
+                return config;
+            }else{
+                return null;
+            }
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /**
+     * 
+     * @param mars_settings
+     * @param file  
+     */
+    public static String saveConfigManager(ConfigManager config,File file){
+        try {
+            JAXBContext context = JAXBContext.newInstance( ConfigManager.class );
+            Marshaller m = context.createMarshaller();
+            m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+            file.setWritable(true);
+            Path toPath = file.toPath();
+            try {
+                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, StandardCharsets.UTF_8);
+                m.marshal( config, newBufferedWriter );
+                newBufferedWriter.flush();
+            } catch (IOException ex) {
+                return "Can't write File: " + file.getAbsolutePath() + " . No Write Access";
+            }
+        } catch (JAXBException ex) {
+            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     /**
      * 
      * @param file

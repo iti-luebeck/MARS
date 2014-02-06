@@ -40,7 +40,10 @@ public class UnmarshallListener extends Listener{
         }/*else if(target instanceof Servo){
             Servo servo = (Servo)target;
             servo.initAfterJAXB();
-        }*/else if(target instanceof MARS_Settings){
+        }*/else if(target instanceof ConfigManager){
+            ConfigManager conf = (ConfigManager)target;
+            conf.initAfterJAXB();
+        }else if(target instanceof MARS_Settings){
             MARS_Settings settings = (MARS_Settings)target;
             settings.initAfterJAXB();
         }else if(target instanceof PhysicalEnvironment){

@@ -2664,7 +2664,7 @@ public final class MARSTopComponent extends TopComponent {
     
     public void saveConfig(){
         File basePath = InstalledFileLocator.getDefault().locate("config", "mars.core", false);
-        File f = new File(basePath.getAbsolutePath() + "/" + configManager.getConfig());
+        File f = new File(basePath.getAbsolutePath() + "/" + configManager.getConfigName());
         if(f != null){
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
             if(failure != null){

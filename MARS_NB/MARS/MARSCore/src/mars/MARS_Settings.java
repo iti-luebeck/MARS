@@ -423,6 +423,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    @Deprecated
     public String getAutoConfigName() {
         return (String)Auto.get("config");
     }
@@ -431,6 +432,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FlyCamMoveSpeed
      */
+    @Deprecated
     public void setAutoConfigName(String config) {
         Auto.put("config", config);
     }
@@ -439,6 +441,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
+    @Deprecated
     public boolean isAutoEnabled() {
          return (Boolean)Auto.get("enabled");
     }
@@ -447,6 +450,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
+    @Deprecated
     public void setAutoEnabled(boolean enabled) {
         Auto.put("enabled", enabled);
     }

@@ -306,7 +306,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             progr.progress( "Starting Nifty" );
             startNiftyState();
             progr.progress( "Loading Config" );
-            loadXML(configManager.getConfig());
+            loadXML(configManager.getConfigName());
             //progr.progress( "Init Keys" );
             //initPrivateKeys();// load custom key mappings
             progr.progress( "Starting Physics" );

@@ -73,9 +73,9 @@ public class MARS_Main extends SimpleApplication{
     
     ViewPort MapViewPort;
     
-    AdvancedFlyByCamera advFlyCam;
+    ConfigManager configManager;
     
-    ConfigManager configManager = new ConfigManager();
+    AdvancedFlyByCamera advFlyCam;
     
     //nifty(gui) stuff
     private NiftyJmeDisplay niftyDisplay;
@@ -132,8 +132,7 @@ public class MARS_Main extends SimpleApplication{
         initProgressBar();
         progr.progress( "Starting MARS_MAIN" );
         XML_JAXB_ConfigReaderWriter xml = new XML_JAXB_ConfigReaderWriter();
-        MARS_Settings mars_settings = xml.loadMARS_Settings();
-        configManager.setConfig(mars_settings.getAutoConfigName());
+        configManager = xml.loadConfigManager();
         //initNifty();
         progr.progress( "Init Map ViewPort" );
         initMapViewPort();
@@ -141,7 +140,7 @@ public class MARS_Main extends SimpleApplication{
         progr.progress( "Creating StartState" );
         startstate = new StartState(assetManager);
         startstate.setEnabled(true);
-        if(!mars_settings.isAutoEnabled()){
+        if(!configManager.isAutoEnabled()){
             viewPort.attachScene(startstate.getRootNode());
             //ViewPort2.attachScene(startstate.getRootNode());
             stateManager.attach(startstate);
@@ -175,7 +174,7 @@ public class MARS_Main extends SimpleApplication{
         advFlyCam.setEnabled(false);
         advFlyCam.registerWithInput(inputManager);
         
-        if(mars_settings.isAutoEnabled()){
+        if(configManager.isAutoEnabled()){
             //SimState simstate = new SimState(view,configManager);
             progr.progress( "Creating SimState" );
             SimState simstate = new SimState(MARSTopComp,TreeTopComp,MARSMapComp,MARSLogComp,configManager);
@@ -183,7 +182,7 @@ public class MARS_Main extends SimpleApplication{
             stateManager.attach(simstate);
             CentralLookup.getDefault().add(simstate);
         }else{
-            configManager.setConfig("default");
+            configManager.setConfigName("default");
         }
         
         //enable OcullusRift support
@@ -791,7 +790,7 @@ public class MARS_Main extends SimpleApplication{
     }
     
     public void setConfigName(String configName){
-        configManager.setConfig(configName);
+        configManager.setConfigName(configName);
     }
     
     public void setProgressHandle(ProgressHandle progr){
