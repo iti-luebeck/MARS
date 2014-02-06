@@ -1049,8 +1049,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             }
         }
 
-        //only update physics if auv_hanse exists and when simulation is started
-        if(auvManager != null && initial_ready){
+        //only update physics when simulation is started and auv_manager/comManager are both ready and instantied.
+        if(auvManager != null && initial_ready && comManager != null){
             auvManager.updateAllAUVs(tpf);
             comManager.update(tpf);
         }            
