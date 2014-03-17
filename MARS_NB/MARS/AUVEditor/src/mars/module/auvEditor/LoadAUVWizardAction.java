@@ -107,8 +107,6 @@ public final class LoadAUVWizardAction implements ActionListener {
                 auvEditorTopComponent.requestActive();
                 auvEditorTopComponent.repaint();
             }
-
-
         }
     }
 }
