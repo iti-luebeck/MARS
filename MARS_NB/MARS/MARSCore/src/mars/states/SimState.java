@@ -873,9 +873,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             System.out.println("MARSTopComp is NULL");
         }
         
-        /*if(mars_settings.isSetupWavesWater()){
-            //initer.updateWavesWater(tpf);
-        }*/
+        if(mars_settings.isSetupWavesWater()){
+            initer.updateWavesWater(tpf);
+        }
 
         if(mars_settings.isSetupProjectedWavesWater()){
             initer.updateProjectedWavesWater(tpf);

@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 import mars.Collider;
 import mars.PhysicalEnvironment;
@@ -30,6 +31,8 @@ import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.sonar.Sonar;
+import mars.server.MARSClient;
+import mars.server.MARSClientEvent;
 import mars.states.MapState;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -56,6 +59,7 @@ public class AUV_Manager implements UpdateState{
     private CommunicationManager com_manager;
     private RecordManager recManager;
     private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
+    private EventListenerList listeners = new EventListenerList();
 
     /**
      *
@@ -718,4 +722,45 @@ public class AUV_Manager implements UpdateState{
         AUV auv = (AUV)path.getPathComponent(1);
         auv.updateState(path);
     } 
+    
+    /**
+     *
+     * @param listener
+     */
+    public void addAdListener(MARSClient listener) {
+        listeners.add(MARSClient.class, listener);
+    }
+
+    /**
+     *
+     * @param listener
+     */
+    public void removeAdListener(MARSClient listener) {
+        listeners.remove(MARSClient.class, listener);
+    }
+
+    /**
+     *
+     */
+    public void removeAllListener() {
+        //listeners.
+    }
+
+    /**
+     *
+     * @param event
+     */
+    public void notifyAdvertisement(MARSClientEvent event) {
+        for (MARSClient l : listeners.getListeners(MARSClient.class)) {
+            l.onNewData(event);
+        }
+    }
+
+    /**
+     *
+     * @param event
+     */
+    protected synchronized void notifySafeAdvertisement(MARSClientEvent event) {
+        notifyAdvertisement(event);
+    }
 }

@@ -5,6 +5,7 @@
 
 package mars;
 
+import com.jme3.app.state.AbstractAppState;
 import java.nio.ShortBuffer;
 import mars.states.SimState;
 import com.jme3.asset.AssetManager;
@@ -89,23 +90,31 @@ import forester.image.DensityMap.Channel;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
+import mars.Helper.Helper;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
 import mars.filter.FishEyeFilter;
 import mars.filter.LensFlareFilter;
+import mars.server.MARSClient;
+import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
+import mars.simobjects.SimObject;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
 import mygame.MaterialSP;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 
 /**
  * With this class we initialize all the different things on the
@@ -279,6 +288,8 @@ public class Initializer {
             setupShadow();
         }
         setupServer();
+        setupAdvServer();
+        setupPublisher();
         //setupGlow();
         //setupFishEye();
         //setupLensFlare();
@@ -374,6 +385,36 @@ public class Initializer {
             com_server_thread = new Thread( com_server );
             com_server_thread.start();
         }
+    }
+    
+    public void setupAdvServer(){
+        //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+        Lookup bag = Lookup.getDefault();
+        // the bag of objects
+        // A query that looks up instances extending "MyClass"...
+        Lookup.Template<MARSClient> pattern = new Lookup.Template(MARSClient.class);
+        // The result of the query
+        Lookup.Result<MARSClient> result = bag.lookup( pattern );
+        Set<Class<? extends MARSClient>> allClasses = result.allClasses();
+        //go trough all results and instance
+        for (Class<? extends MARSClient> next : allClasses) {
+            try {
+                MARSClient marsClient = next.newInstance();
+                marsClient.setAUVManager(auv_manager);
+                auv_manager.addAdListener(marsClient);
+                PhysicalExchangerPublisher puber = new PhysicalExchangerPublisher(mars, auv_manager, mars_settings);
+                Thread puber_thread = new Thread( puber );
+                puber_thread.start();
+            } catch (InstantiationException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (IllegalAccessException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+    }
+    
+    public void setupPublisher(){
+        
     }
     
     /**
