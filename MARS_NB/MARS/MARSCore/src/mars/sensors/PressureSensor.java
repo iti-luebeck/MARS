@@ -220,7 +220,6 @@ public class PressureSensor extends Sensor implements ChartValue{
     public void publishData() {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPressureMbar(), System.currentTimeMillis());
-        System.out.println("PRESSS!!!!!!!!!");
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
  

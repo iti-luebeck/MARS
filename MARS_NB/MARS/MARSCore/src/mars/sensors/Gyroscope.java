@@ -14,6 +14,7 @@ import mars.NoiseType;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 
 /**
  * This a basic gyroscope class. It gives you the Angular velocity.
@@ -144,5 +145,12 @@ public class Gyroscope extends Sensor{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAngularVelocity().length(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

@@ -15,6 +15,7 @@ import mars.NoiseType;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 
 /**
  *  This a basis Velocimeter class. It gives you the linear velocity.
@@ -145,6 +146,13 @@ public class Velocimeter extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getLinearVelocity().length(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

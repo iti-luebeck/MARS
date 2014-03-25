@@ -23,6 +23,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 
@@ -175,6 +176,13 @@ public class TemperatureSensor extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getTemperature()*10, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

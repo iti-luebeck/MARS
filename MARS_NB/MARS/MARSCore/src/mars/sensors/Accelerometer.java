@@ -16,6 +16,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 
 /**
  * An basic Acclerometer class. Measures the accleration for all 3 axis.
@@ -170,6 +171,13 @@ public class Accelerometer extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAcceleration().length(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override
