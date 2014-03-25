@@ -36,7 +36,7 @@ public final class LoadAUVVisualPanel1 extends JPanel {
 
     @Override
     public String getName() {
-        return "Step #1";
+        return "Select existing or load new 3D Model";
     }
 
     /**
