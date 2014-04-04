@@ -13,7 +13,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,6 +41,25 @@ import mars.xml.HashMapAdapter;
 @XmlSeeAlso( {Actuator.class,Sensor.class} )
 public abstract class PhysicalExchanger extends Noise implements ROS{
 
+    @SuppressWarnings("FieldMayBeFinal")
+    private List listeners = Collections.synchronizedList(new LinkedList());
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
+    }
+    
     /**
      *
      * @param auv_node 
@@ -203,6 +227,22 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         return (Boolean)variables.get("enabled");
     }
 
+    /**
+     * 
+     * @return
+     */
+    public Boolean getEnabled() {
+        return (Boolean)variables.get("enabled");
+    }
+    
+    /**
+     * 
+     * @param enabled
+     */
+    public void setEnabled(Boolean enabled) {
+        variables.put("enabled", enabled);
+    }
+    
     /**
      * 
      * @param enabled
@@ -452,7 +492,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param Position
      */
     public void setPosition(Vector3f Position){
+        Vector3f old = getPosition();
         variables.put("Position",Position);
+        fire("Position", old, Position);
     }
     
         /**
@@ -468,7 +510,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param Rotation
      */
     public void setRotation(Vector3f Rotation){
+        Vector3f old = getRotation();
         variables.put("Rotation",Rotation);
+        fire("Rotation", old, Rotation);
     }
     
     /**
