@@ -9,15 +9,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
+import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
 
 /**
@@ -47,6 +48,7 @@ import org.openide.windows.TopComponent;
 public final class AUVEditorTopComponent extends TopComponent implements LookupListener {
 
     private Lookup.Result<MARS_Main> result = null;
+    private Lookup.Result<PhysicalExchanger> treeResult = null;
     private MARS_Main mars = null;
     private static AwtPanel auvedpanel;
     private AUVEditorAppState appState;
@@ -88,7 +90,10 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        // create lookup for tree used to add CoordinateAxesControl for selected physical exchanger.
+        treeResult = Utilities.actionsGlobalContext().lookupResult(PhysicalExchanger.class);
+        treeResult.addLookupListener(this);
+
         //register listener
         Lookup.Template template = new Lookup.Template(MARS_Main.class);
         CentralLookup cl = CentralLookup.getDefault();
@@ -106,8 +111,6 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
     }
 
     private void initState(final MARS_Main mars) {
-        //mars.enqueue(new Callable<Void>() {
-        //      public Void call() {
         ctx = (AwtPanelsContext) mars.getContext();
         auvedpanel = ctx.createPanel(PaintMode.Accelerated);
         auvedpanel.setPreferredSize(new Dimension(640, 480));
@@ -120,21 +123,19 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
         ctx.setInputSource(auvedpanel);
 
         mars.enqueue(new Callable<Void>() {
+            @Override
             public Void call() {
                 viewPort.attachScene(appState.getRootNode());
                 auvedpanel.attachTo(false, viewPort);
                 return null;
             }
         });
-        System.out.println("testnew: " + mars);
-        //            return null;
-        //    }
-        //});
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        result.removeLookupListener(this);
+        treeResult.removeLookupListener(this);
     }
 
     @Override
@@ -160,9 +161,7 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
 
     @Override
     public void resultChanged(LookupEvent le) {
-        System.out.println("LOKKUP1!");
         if (mars == null) {//only check if we dont have mars
-            System.out.println("LOKKUP2!");
             Lookup.Result res = (Lookup.Result) le.getSource(); //this is always an safe cast!
             Collection instances = res.allInstances(); //we get all instances from the lookup
 
@@ -170,13 +169,19 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
                 Iterator it = instances.iterator();
                 while (it.hasNext()) {
                     Object o = it.next();
-                    if (o instanceof MARS_Main) {//you might wan to use this – better safe than sorry, check if you got what you expected!
-                        System.out.println("testM: " + (MARS_Main) o);
+                    if (o instanceof MARS_Main) {
                         mars = (MARS_Main) o;
                         initState(mars);
                     }
                 }
             }
+        }
+
+        Collection<? extends PhysicalExchanger> allEvents = treeResult.allInstances();
+        if (!allEvents.isEmpty()) {
+            PhysicalExchanger pE = allEvents.iterator().next();
+            appState.setCoordinateAxesControl(pE);
+        } else {
         }
     }
 

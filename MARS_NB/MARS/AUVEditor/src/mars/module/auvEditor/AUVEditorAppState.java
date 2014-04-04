@@ -18,6 +18,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -27,15 +28,21 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Line;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 import java.util.prefs.Preferences;
 import mars.AdvancedFlyByCamera;
 import mars.PhysicalExchanger;
+import mars.actuators.Actuator;
 import mars.auv.BasicAUV;
+import mars.sensors.Sensor;
 import mars.states.AppStateExtension;
 import org.openide.modules.InstalledFileLocator;
 
@@ -109,6 +116,19 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      */
     private float OrbAndCrossScale;
 
+    /**
+     * flag for saving values. Enabled from CoordinateAxesControl after a button
+     * is released.
+     */
+    private boolean save = false;
+
+    /**
+     * Sets the AppStateManager and Application. Additionally initializes the
+     * AUVModel, Camera and the Directional Light.
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if (!super.isInitialized()) {
@@ -118,12 +138,11 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
             // set asset path
             this.assetManager = this.app.getAssetManager();
-            initAsetsPaths();
+            initAssetsPaths();
 
             initFlyCam();
 
             //assetManager.registerLocator("./assets", FileLocator.class);
-
             // set key mapping
             initKeys();
 
@@ -145,53 +164,116 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.attachChild(rotationOrbNode);
             rotationOrbNode.setCullHint(Spatial.CullHint.Always);
 
-            // init auv node
-            auvNode = new Node("AUV Node");
-            auvNode.setLocalTranslation(auv.getAuv_param().getCentroid_center_distance());
-            rootNode.attachChild(auvNode);
-
-            // load auv spatial
-            Spatial auvSpatial = auv.loadModelCopy();
-            auvSpatial.setName("AUV");
-            auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
-            auvNode.attachChild(auvSpatial);
-            auvNode.setLocalRotation(auv.getAuv_param().getRotationQuaternion());
-
-            // load all physical exchanger's (sensors and actors) 3D model
-            // add all to a hashset
-            HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<>();
-            physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
-            physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
-            // iterate over the hashset
-            for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
-                PhysicalExchanger physicalExchanger = entry.getValue();
-                Node physicalExchanger_Node = physicalExchanger.getPhysicalExchanger_Node().clone(true);
-                // the control enables you to transform it wuth the Orb-Axes control
-                physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
-                auvNode.attachChild(physicalExchanger_Node);
-                // the values preset in the node are relative to the centroid center point. But this editor sets them relative to the AUV and the AUV relative to the centroid center point which is at the rootNode. So we have to substract the vector from origin to centroid center cistance from the physical exchangers local translation.
-                physicalExchanger_Node.setLocalTranslation(physicalExchanger_Node.getLocalTranslation().subtract(auv.getAuv_param().getCentroid_center_distance()));
-            }
-
-            auvNode.updateGeometricState();
-
-
-            // englighten it
+            // put light into the scene
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
             rootNode.addLight(sun);
-
             rootNode.updateGeometricState();
+
+            if (auv != null) {
+                addAUVSpatial();
+                cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_Y);
+            }
         }
         super.initialize(stateManager, app);
     }
 
-    public void initAsetsPaths() {
-         File file = InstalledFileLocator.getDefault().locate("Assets/Models", "mars.module.auvEditor", false);
-         String absolutePath = file.getAbsolutePath();
-         assetManager.registerLocator(absolutePath, FileLocator.class);
+    private void addAUVSpatial() {
+        // init auv node
+        auvNode = new Node("AUV Node");
+        auvNode.setLocalTranslation(auv.getAuv_param().getCentroid_center_distance());
+        rootNode.attachChild(auvNode);
+
+        // load auv spatial
+        Spatial auvSpatial = auv.loadModelCopy();
+        auvSpatial.setName("AUV");
+        auvSpatial.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, auvSpatial, this));
+        auvNode.attachChild(auvSpatial);
+        auvNode.setLocalRotation(auv.getAuv_param().getRotationQuaternion());
+
+        // load all physical exchanger's (sensors and actors) 3D model
+        // add all to a hashset
+        HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<>();
+        physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
+        physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+        // iterate over the hashset
+        for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
+            PhysicalExchanger physicalExchanger = entry.getValue();
+
+            // propertychangelistener for changes from property sheet
+            // currently disabled because AUV editor must be adapted to work correctly
+            //physicalExchanger.addPropertyChangeListener(new NodePropertyListener());
+            Node physicalExchanger_Node = physicalExchanger.getPhysicalExchanger_Node().clone(true);
+            // the control enables you to transform it wuth the Orb-Axes control
+            physicalExchanger_Node.addControl(new CoordinateAxesControl(coordinateAxesNode, rotationOrbNode, speed, inputManager, physicalExchanger_Node, this));
+            auvNode.attachChild(physicalExchanger_Node);
+            // the values preset in the node are relative to the centroid center point. But this editor sets them relative to the AUV and the AUV relative to the centroid center point which is at the rootNode. So we have to substract the vector from origin to centroid center cistance from the physical exchangers local translation.
+            physicalExchanger_Node.setLocalTranslation(physicalExchanger_Node.getLocalTranslation().subtract(auv.getAuv_param().getCentroid_center_distance()));
+        }
+
+        auvNode.updateGeometricState();
     }
 
+    /**
+     * Inner class to add property listeners for the nodes of AUVEditor. These
+     * PropertyChangeListeners should only be called after changing a value in
+     * thePropertySheet of NetBeans.
+     */
+    class NodePropertyListener implements PropertyChangeListener {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            // Depending on the event the rotation or the translation is updated
+            switch (evt.getPropertyName()) {
+                case "Position": {
+                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getPhysicalExchangerName());
+                    final Vector3f v = new Vector3f((Vector3f) evt.getNewValue());
+                    app.enqueue(new Callable() {
+                        @Override
+                        public Void call() throws Exception {
+                            // update the translation
+                            n.setLocalTranslation(v);
+                            currentCoordinateAxesControlSelected = n;
+                            currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(true);
+                            return null;
+                        }
+                    });
+                    break;
+                }
+                case "Rotation": {
+                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getPhysicalExchangerName());
+                    final Vector3f v = new Vector3f((Vector3f) evt.getNewValue());
+                    app.enqueue(new Callable() {
+                        @Override
+                        public Void call() throws Exception {
+                            // update the translation
+                            n.setLocalTranslation(v);
+                            float[] floats = v.toArray(new float[3]);
+                            n.setLocalRotation(new Quaternion(floats));
+                            currentCoordinateAxesControlSelected = n;
+                            currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(true);
+                            return null;
+                        }
+                    });
+                    break;
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Initializes the AssetsPaths which will be needed to load modelfiles.
+     */
+    public void initAssetsPaths() {
+        File file = InstalledFileLocator.getDefault().locate("Assets/Models", "mars.module.auvEditor", false);
+        String absolutePath = file.getAbsolutePath();
+        assetManager.registerLocator(absolutePath, FileLocator.class);
+    }
+
+    /**
+     * Initializes the flycam.
+     */
     public void initFlyCam() {
         AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(getCamera());
         advFlyCamState.setDragToRotate(true);
@@ -209,18 +291,34 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         return rootNode;
     }
 
+    /**
+     * Getter
+     *
+     * @return Camera
+     */
     public Camera getCamera() {
         return cam;
     }
 
+    /**
+     * Setter
+     *
+     * @param cam
+     */
     @Override
     public void setCamera(Camera cam) {
         this.cam = cam;
-        cam.setAxes(Vector3f.UNIT_Z, Vector3f.UNIT_Y, Vector3f.UNIT_X);//cloning of the cam lead to some troubles....
+        cam.setAxes(Vector3f.UNIT_Z, Vector3f.UNIT_Y, Vector3f.UNIT_X);
         //cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
-        cam.setLocation(new Vector3f(1, 1.5f, 1));
+        //cam.setLocation(new Vector3f(1, 1.5f, 1));
+        //cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_X);
     }
 
+    /**
+     * Returns the inherited isInitialized() value.
+     *
+     * @return boolean
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
@@ -245,9 +343,14 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     @Override
     public void cleanup() {
         super.cleanup();
-        //mars.getRootNode().detachChild(getRootNode());
     }
 
+    /**
+     * This method is called in the update loop of the AUVEditor. Inside this
+     * loop saving of the AUV Model and loading preferences takes place.
+     *
+     * @param tpf Time Per Frame
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {
@@ -255,8 +358,11 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         }
         super.update(tpf);
 
-        saveChangesToAUVObject();
-        loadPreferences();
+        // only execute if an auv is loaded
+        if (auv != null) {
+            saveChangesToAUVObject();
+            loadPreferences();
+        }
 
         rootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -281,6 +387,61 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         inputManager.addListener(actionListener, "SelectObject");
 
     }
+
+    /**
+     * This method is called when a component in the tree is selected
+     *
+     * @param pE
+     */
+    @SuppressWarnings("element-type-mismatch")
+    public void setCoordinateAxesControl(PhysicalExchanger pE) {
+        String pEName = null;
+        if (auv.getActuators().containsValue(pE)) {
+            Iterator<Entry<String, Actuator>> i = auv.getActuators().entrySet().iterator();
+            for (Entry<String, Actuator> e; i.hasNext();) {
+                e = i.next();
+                if (e.getValue().equals(pE)) {
+                    pEName = e.getKey();
+                    break;
+                }
+            }
+        }
+        if (auv.getSensors().containsValue(pE) && pEName == null) {
+            Iterator<Entry<String, Sensor>> i = auv.getSensors().entrySet().iterator();
+            for (Entry<String, Sensor> e; i.hasNext();) {
+                e = i.next();
+                if (e.equals(pE)) {
+                    pEName = e.getKey();
+                    break;
+                }
+            }
+        }
+        if (pEName != null) {
+            final Node pEN = (Node) auvNode.getChild(pEName);
+            // deselect the current object
+            if (currentCoordinateAxesControlSelected != null) {
+                app.enqueue(new Callable() {
+                    @Override
+                    public Void call() throws Exception {
+                        currentCoordinateAxesControlSelected.getControl(CoordinateAxesControl.class).setEnabled(false);
+                        currentCoordinateAxesControlSelected = null;
+                        return null;
+                    }
+                });
+            }
+            // select a new object
+            app.enqueue(new Callable() {
+                @Override
+                public Void call() throws Exception {
+                    currentCoordinateAxesControlSelected = pEN;
+                    currentCoordinateAxesControlSelected
+                            .getControl(CoordinateAxesControl.class).setEnabled(true);
+                    return null;
+                }
+            });
+        }
+    }
+
     /**
      * Action listener to select selectables like AUVs and attachments.
      */
@@ -314,7 +475,6 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         private Node getControlNode(CollisionResult closestCollision) {
             Node node = closestCollision.getGeometry().getParent();
 
-
             while (node.getParent() != null) {
                 if (node.getControl(CoordinateAxesControl.class) != null) {
                     return node;
@@ -345,12 +505,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         // Trace click for deugging
         //Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         //mat.setColor("Color", ColorRGBA.White);
-
         //line = new Line(click3d, click3d.add(dir.mult(100f)));
         //Geometry geometry = new Geometry("line", line);
         //geometry.setMaterial(mat);
         //rootNode.attachChild(geometry);
-
         for (Node target : allowedTargets) {
             CollisionResults results = new CollisionResults();
             Ray ray = new Ray(click3d, dir);
@@ -366,6 +524,11 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         return closestCollision;
     }
 
+    /**
+     * Setter
+     * 
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -386,33 +549,62 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         super.stateDetached(stateManager);
     }
 
+    /**
+     * Setter
+     * 
+     * @param auv
+     */
     public void setAUV(BasicAUV auv) {
         this.auv = auv;
     }
 
-    public void saveChangesToAUVObject() {
-        auv.getAuv_param().setCentroid_center_distance(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(auvNode.getWorldTranslation()));
-        System.out.println("AUV: " + auvNode.getWorldTranslation());
-        float[] angles = new float[3];
-        auvNode.getWorldRotation().toAngles(angles);
-        Vector3f auvRotation = new Vector3f(angles[0], angles[1], angles[2]);
-        auv.getAuv_param().setRotation(auvRotation);
-        System.out.println("AUV angle: " + auvRotation);
-        //TODO Scale of AUV
-        HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<>();
-        physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
-        physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+    /**
+     * This method is called by CoordinateAxesControl to permit saving in update
+     * loop once
+     */
+    public void save() {
+        save = true;
+    }
 
-        for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
-            // get the corresponding Node
-            Node physicalExchanger = (Node) auvNode.getChild(entry.getKey());
-            // set translation
-            entry.getValue().setPosition(auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation()));
-            // set rotation
-            angles = new float[3];
-            physicalExchanger.getLocalRotation().toAngles(angles);
-            Vector3f physicalExchangerRotation = new Vector3f(angles[0], angles[1], angles[2]);
-            entry.getValue().setRotation(physicalExchangerRotation);
+    /**
+     * Updates the model values if values in editor and model differ.
+     */
+    public void saveChangesToAUVObject() {
+        if (save) {
+            Vector3f newCentroidCenterDistance = auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(auvNode.getWorldTranslation());
+
+            // update centroid
+            auv.getAuv_param().setCentroid_center_distance(newCentroidCenterDistance);
+
+            // update auv rotation
+            float[] angles = new float[3];
+            auvNode.getWorldRotation().toAngles(angles);
+            Vector3f newRotation = new Vector3f(angles[0], angles[1], angles[2]);
+            auv.getAuv_param().setRotation(newRotation);
+
+            // TODO Scale of AUV
+            // load all actuators and sensors into one HashSet
+            HashSet<Entry<String, PhysicalExchanger>> physicalExchangers = new HashSet<>();
+            physicalExchangers.addAll((Collection) auv.getActuators().entrySet());
+            physicalExchangers.addAll((Collection) auv.getSensors().entrySet());
+
+            for (Entry<String, PhysicalExchanger> entry : physicalExchangers) {
+                // only save if changes are from editor
+
+                // get the corresponding Node
+                Node physicalExchanger = (Node) auvNode.getChild(entry.getKey());
+
+                // set translation
+                Vector3f newPosition = auvNode.getWorldRotation().clone().inverse().toRotationMatrix().mult(physicalExchanger.getWorldTranslation());
+                entry.getValue().setPosition(newPosition);
+
+                // set rotation
+                angles = new float[3];
+                physicalExchanger.getLocalRotation().toAngles(angles);
+                newRotation = new Vector3f(angles[0], angles[1], angles[2]);
+                entry.getValue().setRotation(newRotation);
+            }
+            save = false;
         }
     }
 

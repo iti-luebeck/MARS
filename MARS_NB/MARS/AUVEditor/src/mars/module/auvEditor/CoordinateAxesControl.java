@@ -66,6 +66,7 @@ public class CoordinateAxesControl extends AbstractControl {
      * @param speed movement speed
      * @param inputManager the application's input manager
      * @param spatial the spatial the controller will be attached to
+     * @param appState Appstate of the AUVEditor
      */
     public CoordinateAxesControl(Node coordinateAxesNode, Node rotationOrbNode, float speed, InputManager inputManager, Spatial spatial, AUVEditorAppState appState) {
         super();
@@ -82,7 +83,7 @@ public class CoordinateAxesControl extends AbstractControl {
 
     private void initKeys() {
         inputManager.addListener(analogListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
-        inputManager.addListener(actionListener, "SelectManipulator");
+        inputManager.addListener(actionListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
     }
 
     @Override
@@ -128,6 +129,7 @@ public class CoordinateAxesControl extends AbstractControl {
                         }
                     }
                 }
+                
                 /*
                  * check if draging was finished
                  */
@@ -138,6 +140,24 @@ public class CoordinateAxesControl extends AbstractControl {
                     mouseOnAxisPosition = null;
                     rotationVector = null;
                     rotationOrbNode.setLocalRotation(Matrix3f.ZERO);
+                    appState.save();
+                }
+
+                /**
+                 * Check if manipulation with keys is finished and enable save
+                 */
+                if (!isPressed) {
+                    switch (name) {
+                        case "Up":
+                        case "Down":
+                        case "Left":
+                        case "Right":
+                        case "Forward":
+                        case "Backward":
+                        case "Scale Up":
+                        case "Scale Down":
+                            appState.save();
+                    }
                 }
             }
         }
