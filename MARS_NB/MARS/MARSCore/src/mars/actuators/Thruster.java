@@ -45,7 +45,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {BrushlessThruster.class,SeaBotixThruster.class} )
+@XmlSeeAlso( {BrushlessThruster.class,SeaBotixThruster.class,GeomarThruster.class} )
 public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
 
     //motor

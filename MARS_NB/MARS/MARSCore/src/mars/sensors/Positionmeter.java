@@ -13,6 +13,7 @@ import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -177,6 +178,13 @@ public class Positionmeter extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPosition(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

@@ -16,6 +16,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 import org.ros.message.Time;
@@ -202,6 +203,13 @@ public class AmpereMeter extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAmpere(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

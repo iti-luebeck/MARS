@@ -147,6 +147,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     protected boolean rosinit = false;
     
+    private long oldtime = 0;
+    
     /**
      * 
      * @param simState
@@ -558,4 +560,23 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param path
      */
     public abstract void updateState(TreePath path);
+    
+    /**
+     * 
+     */
+    public void publishData() {
+    }
+
+    /**
+     * 
+     */
+    public void publishDataUpdate() {
+        long curtime = System.currentTimeMillis();
+        if( ((curtime-oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
+            
+        }else{
+            oldtime = curtime;
+            publishData();
+        }
+    }
 }

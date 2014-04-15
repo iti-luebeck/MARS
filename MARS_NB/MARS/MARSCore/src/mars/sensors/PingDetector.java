@@ -24,6 +24,7 @@ import mars.ChartValue;
 import mars.Helper.Helper;
 import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -327,6 +328,13 @@ public class PingDetector extends Sensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPingerAngleRadiant("pingpong"), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

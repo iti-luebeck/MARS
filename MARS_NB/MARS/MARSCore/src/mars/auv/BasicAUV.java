@@ -94,6 +94,7 @@ import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
 import mars.LimitedRigidBodyControl;
 import mars.auv.example.Buoy;
+import mars.auv.example.ROMP;
 import mars.control.MyLodControl;
 import mars.control.MyR;
 import mars.control.MyRigidBodyControl;
@@ -123,7 +124,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class})
+@XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class})
 public class BasicAUV implements AUV, SceneProcessor {
 
     private Geometry MassCenterGeom;
@@ -2254,6 +2255,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
             element.publishUpdate();
+            element.publishDataUpdate();
         }
     }
 
@@ -2265,6 +2267,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
             element.publishUpdate();
+            element.publishDataUpdate();
         }
     }
 

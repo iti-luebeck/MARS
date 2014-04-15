@@ -28,6 +28,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 
 /**
  *
@@ -130,6 +131,13 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getDistance(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
     @Override

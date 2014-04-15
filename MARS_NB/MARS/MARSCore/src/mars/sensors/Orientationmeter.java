@@ -16,6 +16,7 @@ import mars.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -178,6 +179,13 @@ public class Orientationmeter extends Sensor implements ChartValue{
         }
     }    
     
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getOrientation(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+    }
+        
     @Override
     public Object getChartValue() {
         float[] bla = getOrientation().toAngles(null);

@@ -23,6 +23,7 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 
@@ -214,6 +215,14 @@ public class PressureSensor extends Sensor implements ChartValue{
             publisher.publish(fl);
         }
     }
+
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPressureMbar(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+    }
+ 
 
     @Override
     public Object getChartValue() {
