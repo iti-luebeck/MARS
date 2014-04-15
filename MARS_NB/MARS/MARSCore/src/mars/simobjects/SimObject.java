@@ -318,7 +318,7 @@ public class SimObject{
      *
      * @return
      */
-    public String getDNDIcon() {
+    public String getDND_Icon() {
         return (String)simob_variables.get("dnd_icon");
     }
 
@@ -326,7 +326,7 @@ public class SimObject{
      *
      * @param dnd_icon 
      */
-    public void setDNDIcon(String dnd_icon) {
+    public void setDND_Icon(String dnd_icon) {
         simob_variables.put("dnd_icon", dnd_icon);
     }
     

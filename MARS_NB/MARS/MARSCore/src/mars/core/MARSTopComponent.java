@@ -2234,17 +2234,17 @@ public final class MARSTopComponent extends TopComponent {
                     }else{
                         jme3_debug_auv_bounding_volume.setSelected(false);
                     }
-                    if(auv_param.isWaypoints_enabled()){
+                    if(auv_param.isWaypointsEnabled()){
                         jme3_waypoints_auv_enable.setSelected(true);
                     }else{
                         jme3_waypoints_auv_enable.setSelected(false);
                     }
-                    if(auv_param.isWaypoints_visible()){
+                    if(auv_param.isWaypointsVisiblity()){
                         jme3_waypoints_auv_visible.setSelected(true);
                     }else{
                         jme3_waypoints_auv_visible.setSelected(false);
                     }
-                    if(auv_param.isWaypoints_gradient()){
+                    if(auv_param.isWaypointsGradient()){
                         jme3_waypoints_auv_gradient.setSelected(true);
                     }else{
                         jme3_waypoints_auv_gradient.setSelected(false);

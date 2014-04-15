@@ -77,14 +77,14 @@ public class WayPoints extends Node{
     public void addWaypoint(Vector3f waypoint){
         if(waypoints.size() >= 1){//add a line if we have minimum two points
             if(auv_param.getMaxWaypoints() == 0){//unlimited waypoints
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypoints_color(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
+                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
             }else if(waypoints.size() >= auv_param.getMaxWaypoints()) {//limited waypoints
                 waypoints.remove(0);
                 waypoints_geom.remove(0);
                 destroyLine();
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypoints_color(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
+                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
             }else{
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypoints_color(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
+                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
             }
         }
         waypoints.add(waypoint);
@@ -103,7 +103,7 @@ public class WayPoints extends Node{
                 while(iter.hasNext() ) {
                     Geometry waypoint_geom = (Geometry)iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    ColorRGBA way_color = new ColorRGBA(auv_param.getWaypoints_color());
+                    ColorRGBA way_color = new ColorRGBA(auv_param.getWaypointsColor());
                     way_color.a = ((float)counter)/ways;
                     counter++;
                     auv_geom_mat.setColor("Color", way_color);
@@ -128,7 +128,7 @@ public class WayPoints extends Node{
                 while(iter.hasNext() ) {
                     Geometry waypoint_geom = (Geometry)iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    auv_geom_mat.setColor("Color", auv_param.getWaypoints_color());
+                    auv_geom_mat.setColor("Color", auv_param.getWaypointsColor());
                     waypoint_geom.setMaterial(auv_geom_mat);
                 }
                 return null;
@@ -199,8 +199,8 @@ public class WayPoints extends Node{
 
     private void createLine(String name, ColorRGBA color, Vector3f start, Vector3f end){
         Line line = new Line(start, end);
-        if(auv_param.getWayPointLineWidth() != null){
-            line.setLineWidth(auv_param.getWayPointLineWidth());
+        if(auv_param.getWaypointsLineWidth() != null){
+            line.setLineWidth(auv_param.getWaypointsLineWidth());
         }
         final Geometry geom = new Geometry(name, line);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

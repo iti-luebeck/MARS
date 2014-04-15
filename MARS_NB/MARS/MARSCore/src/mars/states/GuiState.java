@@ -833,10 +833,10 @@ public class GuiState extends AbstractAppState{
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
             switch(debug_mode){
-                case 0: selected_auv.getAuv_param().setWaypoints_enabled(selected);selected_auv.setWaypointsEnabled(selected);break;
-                case 1: selected_auv.getAuv_param().setWaypoints_visible(selected);selected_auv.setWayPointsVisible(selected);break;
+                case 0: selected_auv.getAuv_param().setWaypointsEnabled(selected);selected_auv.setWaypointsEnabled(selected);break;
+                case 1: selected_auv.getAuv_param().setWaypointsVisiblity(selected);selected_auv.setWayPointsVisible(selected);break;
                 case 2: selected_auv.getWaypoints().reset();break;
-                case 3: selected_auv.getAuv_param().setWaypoints_gradient(selected);if(!selected){selected_auv.getWaypoints().updateColor();}break;
+                case 3: selected_auv.getAuv_param().setWaypointsGradient(selected);if(!selected){selected_auv.getWaypoints().updateColor();}break;
                 default:;
             }                
         }
@@ -849,7 +849,7 @@ public class GuiState extends AbstractAppState{
     public void waypointsColorSelectedAUV(java.awt.Color newColor){
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if(selected_auv != null){
-            selected_auv.getAuv_param().setWaypoints_color(new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f));
+            selected_auv.getAuv_param().setWaypointsColor(new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f));
         }
     }
     
