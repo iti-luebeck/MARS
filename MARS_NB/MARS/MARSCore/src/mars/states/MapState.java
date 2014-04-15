@@ -148,7 +148,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                     Sphere auv_geom_sphere = new Sphere(16, 16, 0.025f);
                     Geometry auv_geom = new Geometry(auv.getName() + "-geom", auv_geom_sphere);
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    auv_geom_mat.setColor("Color", auv.getAuv_param().getMapColor());
+                    auv_geom_mat.setColor("Color", auv.getAuv_param().getMap_Color());
 
                     //don't forget transparency for depth
                     auv_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -385,10 +385,10 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                             
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
                             float alpha = 0f;
-                            if(auv.getAuv_param().getAlphaDepthScale() > 0f){
-                                alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getAlphaDepthScale()))*(1f/auv.getAuv_param().getAlphaDepthScale());
+                            if(auv.getAuv_param().getAlpha_Depth_Scale() > 0f){
+                                alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getAlpha_Depth_Scale()))*(1f/auv.getAuv_param().getAlpha_Depth_Scale());
                             }
-                            ColorRGBA auv_geom_color = auv.getAuv_param().getMapColor();
+                            ColorRGBA auv_geom_color = auv.getAuv_param().getMap_Color();
                             //Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                             geom.getMaterial().setColor("Color",  new ColorRGBA(auv_geom_color.getRed(), auv_geom_color.getGreen(), auv_geom_color.getBlue(), 1f-alpha));
                             

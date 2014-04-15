@@ -1,5 +1,0 @@
-body { background: url(/typo3conf/ext/timtab/res/kubrick/images/kubrickbgcolor.jpg); }
-    #page { background: url(/typo3conf/ext/timtab/res/kubrick/images/kubrickbgwide.jpg) repeat-y top; border: none; }
-    #header { background: url(/typo3conf/ext/timtab/res/kubrick/images/kubrickheader.jpg) no-repeat bottom center; margin: 0 !important; margin: 0 0 0 1px; padding: 1px; height: 198px; width: 758px; }
-    #headerimg { margin: 7px 9px 0; height: 192px; width: 740px; }
-    #footer { background: url(/typo3conf/ext/timtab/res/kubrick/images/kubrickfooter.jpg) no-repeat bottom; border: none;}

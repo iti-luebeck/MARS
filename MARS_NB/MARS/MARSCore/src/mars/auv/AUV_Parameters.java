@@ -66,7 +66,7 @@ public class AUV_Parameters{
     
     public void createDefault(){
         initAfterJAXB();
-        setAlphaDepthScale(3.0f);
+        setAlpha_Depth_Scale(3.0f);
         setAngular_factor(1.0f);
         setAuv_class(this.getClass().getName());
         setAuv_name("basicAUV");
@@ -75,13 +75,13 @@ public class AUV_Parameters{
         setBuoyancy_resolution(0.03125f);
         setBuoyancy_scale(0.9f);
         setBuoyancy_updaterate(1);
-        setBuoyancyDimensions(Vector3f.UNIT_XYZ);
-        setBuoyancyPosition(Vector3f.ZERO);
+        setBuoyancy_Dimensions(Vector3f.UNIT_XYZ);
+        setBuoyancy_Position(Vector3f.ZERO);
         setBuoyancyScale(Vector3f.UNIT_XYZ);
-        setBuoyancyType(0);
+        setBuoyancy_Type(0);
         setCentroid_center_distance(Vector3f.ZERO);
         setCollisionPosition(Vector3f.ZERO);
-        setDNDIcon("");
+        setDND_Icon("");
         setDamping_angular(0.1f);
         setDamping_linear(0.2f);
         setDebugBounding(false);
@@ -106,7 +106,7 @@ public class AUV_Parameters{
         setLodReduction1(0.3f);
         setLodReduction2(0.6f);
         setLodTrisPerPixel(0.5f);
-        setMapColor(ColorRGBA.Red);
+        setMap_Color(ColorRGBA.Red);
         setMass(1.0f);
         setMaxWaypoints(25);
         setModelFilePath("");
@@ -116,17 +116,17 @@ public class AUV_Parameters{
         setOffCamera_width(320);
         setPhysicalvalues_updaterate(0.0f);
         setPosition(Vector3f.ZERO);
-        setRayDetectable(false);
+        setRay_Detectable(false);
         setRotation(Vector3f.ZERO);
         setRotationQuaternion(Quaternion.IDENTITY);
         setSelection_color(ColorRGBA.Red);
         setType(1);
-        setWayPointLineWidth(5.0f);
-        setWaypoints_color(ColorRGBA.White);
-        setWaypoints_enabled(true);
-        setWaypoints_gradient(true);
-        setWaypoints_updaterate(1.0f);
-        setWaypoints_visible(true);
+        setWaypointsLineWidth(5.0f);
+        setWaypointsColor(ColorRGBA.White);
+        setWaypointsEnabled(true);
+        setWaypointsGradient(true);
+        setWaypointsUpdaterate(1.0f);
+        setWaypointsVisiblity(true);
    }
 
     /**
@@ -192,9 +192,9 @@ public class AUV_Parameters{
         }else if(target.equals("bounding") && hashmapname.equals("Debug")){
             auv.setBoundingBoxVisible(isDebugBounding());
         }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
-            auv.setWaypointsEnabled(isWaypoints_enabled());
+            auv.setWaypointsEnabled(isWaypointsEnabled());
         }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
-            auv.setWayPointsVisible(isWaypoints_visible());
+            auv.setWayPointsVisible(isWaypointsVisiblity());
         }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
             
         }else if(target.equals("mass_auv") && hashmapname.equals("")){
@@ -277,7 +277,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public String getDNDIcon() {
+    public String getDND_Icon() {
         return (String)params.get("dnd_icon");
     }
 
@@ -285,7 +285,7 @@ public class AUV_Parameters{
      *
      * @param dnd_icon 
      */
-    public void setDNDIcon(String dnd_icon) {
+    public void setDND_Icon(String dnd_icon) {
         params.put("dnd_icon", dnd_icon);
     }
 
@@ -346,7 +346,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public Float getWayPointLineWidth() {
+    public Float getWaypointsLineWidth() {
          return (Float)waypoints.get("lineWidth");
     }
 
@@ -354,7 +354,7 @@ public class AUV_Parameters{
      *
      * @param lineWidth 
      */
-    public void setWayPointLineWidth(float lineWidth) {
+    public void setWaypointsLineWidth(float lineWidth) {
         waypoints.put("lineWidth", lineWidth);
     }
     
@@ -378,7 +378,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public ColorRGBA getWaypoints_color() {
+    public ColorRGBA getWaypointsColor() {
          return (ColorRGBA)waypoints.get("color");
     }
 
@@ -386,7 +386,7 @@ public class AUV_Parameters{
      *
      * @param color
      */
-    public void setWaypoints_color(ColorRGBA color) {
+    public void setWaypointsColor(ColorRGBA color) {
         waypoints.put("color", color);
     }
 
@@ -394,7 +394,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public boolean isWaypoints_enabled() {
+    public boolean isWaypointsEnabled() {
          return (Boolean)waypoints.get("enabled");
     }
 
@@ -402,7 +402,7 @@ public class AUV_Parameters{
      *
      * @param enabled
      */
-    public void setWaypoints_enabled(boolean enabled) {
+    public void setWaypointsEnabled(boolean enabled) {
         waypoints.put("enabled", enabled);
     }
     
@@ -410,7 +410,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public boolean isWaypoints_gradient() {
+    public boolean isWaypointsGradient() {
          return (Boolean)waypoints.get("gradient");
     }
 
@@ -418,7 +418,7 @@ public class AUV_Parameters{
      *
      * @param gradient 
      */
-    public void setWaypoints_gradient(boolean gradient) {
+    public void setWaypointsGradient(boolean gradient) {
         waypoints.put("gradient", gradient);
     }
 
@@ -426,7 +426,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public float getWaypoints_updaterate() {
+    public float getWaypointsUpdaterate() {
          return (Float)waypoints.get("updaterate");
     }
 
@@ -434,7 +434,7 @@ public class AUV_Parameters{
      *
      * @param updaterate
      */
-    public void setWaypoints_updaterate(float updaterate) {
+    public void setWaypointsUpdaterate(float updaterate) {
         waypoints.put("updaterate", updaterate);
     }
 
@@ -442,7 +442,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public boolean isWaypoints_visible() {
+    public boolean isWaypointsVisiblity() {
          return (Boolean)waypoints.get("visiblity");
     }
 
@@ -450,7 +450,7 @@ public class AUV_Parameters{
      *
      * @param visiblity
      */
-    public void setWaypoints_visible(boolean visiblity) {
+    public void setWaypointsVisiblity(boolean visiblity) {
         waypoints.put("visiblity", visiblity);
     }
     
@@ -458,7 +458,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public boolean isRayDetectable() {
+    public boolean isRay_Detectable() {
         return (Boolean)params.get("ray_detectable");
     }
 
@@ -466,7 +466,7 @@ public class AUV_Parameters{
      *
      * @param sonar_detectable
      */
-    public void setRayDetectable(boolean ray_detectable) {
+    public void setRay_Detectable(boolean ray_detectable) {
         params.put("ray_detectable", ray_detectable);
     }
 
@@ -650,7 +650,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public Vector3f getBuoyancyDimensions() {
+    public Vector3f getBuoyancy_Dimensions() {
         return (Vector3f)buoyancy.get("buoyancy_dimensions");
     }
 
@@ -658,7 +658,7 @@ public class AUV_Parameters{
      *
      * @param dimensions
      */
-    public void setBuoyancyDimensions(Vector3f buoyancy_dimensions) {
+    public void setBuoyancy_Dimensions(Vector3f buoyancy_dimensions) {
         buoyancy.put("buoyancy_dimensions", buoyancy_dimensions);
     }
     
@@ -666,7 +666,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public Vector3f getBuoyancyPosition() {
+    public Vector3f getBuoyancy_Position() {
         return (Vector3f)buoyancy.get("buoyancy_position");
     }
 
@@ -674,7 +674,7 @@ public class AUV_Parameters{
      *
      * @param collision_position 
      */
-    public void setBuoyancyPosition(Vector3f buoyancy_position) {
+    public void setBuoyancy_Position(Vector3f buoyancy_position) {
         buoyancy.put("buoyancy_position", buoyancy_position);
     }
     
@@ -698,7 +698,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public int getBuoyancyType() {
+    public int getBuoyancy_Type() {
         return (Integer)buoyancy.get("buoyancy_type");
     }
 
@@ -706,7 +706,7 @@ public class AUV_Parameters{
      *
      * @param type
      */
-    public void setBuoyancyType(int buoyancy_type) {
+    public void setBuoyancy_Type(int buoyancy_type) {
         buoyancy.put("buoyancy_type", buoyancy_type);
     }
 
@@ -762,7 +762,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public ColorRGBA getMapColor() {
+    public ColorRGBA getMap_Color() {
          return (ColorRGBA)model.get("map_color");
     }
 
@@ -770,7 +770,7 @@ public class AUV_Parameters{
      *
      * @param color
      */
-    public void setMapColor(ColorRGBA color) {
+    public void setMap_Color(ColorRGBA color) {
         model.put("map_color", color);
     }
     
@@ -778,7 +778,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public float getAlphaDepthScale() {
+    public float getAlpha_Depth_Scale() {
         return (Float)model.get("alpha_depth_scale");
     }
 
@@ -786,7 +786,7 @@ public class AUV_Parameters{
      *
      * @param scale
      */
-    public void setAlphaDepthScale(float scale) {
+    public void setAlpha_Depth_Scale(float scale) {
         model.put("alpha_depth_scale", scale);
     }
 

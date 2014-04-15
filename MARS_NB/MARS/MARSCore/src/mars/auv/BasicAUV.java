@@ -606,7 +606,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //calculate the completeVolume one time exact as possible, ignore water height
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
         //used primarly for auftriebspunkt
-        if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
+        if(getAuv_param().getBuoyancy_Type() == BuoyancyType.NOSHAPE){
             float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
             completeVolume = vol[0];
         }else{
@@ -852,7 +852,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         if (buoyancy_updaterate == 1) {//take all buoyancy_updaterate times new values
   
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
-            if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
+            if(getAuv_param().getBuoyancy_Type() == BuoyancyType.NOSHAPE){
                 float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
                 actual_vol = vol[0] * auv_param.getBuoyancy_scale();
                 actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
@@ -1245,7 +1245,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      */
     private void initWaypoints() {
-        //if(auv_param.isWaypoints_enabled()){
+        //if(auv_param.isWaypointsEnabled()){
         WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param);
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -1346,24 +1346,24 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.attachChild(BuoyancyGeom);*/
         
         //add a buoyancy geom, needed for exact completeVolume calculation later
-        if (auv_param.getBuoyancyType() == BuoyancyType.BOXCOLLISIONSHAPE) {
-            Box buoyancyBox = new Box(auv_param.getBuoyancyDimensions().x,auv_param.getBuoyancyDimensions().y,auv_param.getBuoyancyDimensions().z);
+        if (auv_param.getBuoyancy_Type() == BuoyancyType.BOXCOLLISIONSHAPE) {
+            Box buoyancyBox = new Box(auv_param.getBuoyancy_Dimensions().x,auv_param.getBuoyancy_Dimensions().y,auv_param.getBuoyancy_Dimensions().z);
             BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
             BuoyancyGeom.setMaterial(BuoyancyGeomMat);
-            BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancyPosition());
+            BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancy_Position());
             BuoyancyGeom.updateModelBound();
             BuoyancyGeom.updateGeometricState();
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
-        } else if (auv_param.getBuoyancyType() == BuoyancyType.SPHERECOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.SPHERECOLLISIONSHAPE) {
             //collisionShape = new SphereCollisionShape(auv_param.getDimensions().x);
-        } else if (auv_param.getBuoyancyType() == BuoyancyType.CONECOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CONECOLLISIONSHAPE) {
            //collisionShape = new ConeCollisionShape(auv_param.getDimensions().x, auv_param.getDimensions().y);
-        } else if (auv_param.getBuoyancyType() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
             //collisionShape = new CylinderCollisionShape(auv_param.getDimensions(), 0);
-        } else if (auv_param.getBuoyancyType() == BuoyancyType.MESHACCURATE) {
+        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.MESHACCURATE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
-        } else if (auv_param.getBuoyancyType() == BuoyancyType.BOUNDINGBOX) {
+        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.BOUNDINGBOX) {
             Box buoyancyBox = new Box(bb.getXExtent(), bb.getYExtent(), bb.getZExtent());
             BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
             BuoyancyGeom.setMaterial(BuoyancyGeomMat);
@@ -1372,7 +1372,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             BuoyancyGeom.updateGeometricState();
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
-        }else if (auv_param.getBuoyancyType() == BuoyancyType.NOSHAPE) {
+        }else if (auv_param.getBuoyancy_Type() == BuoyancyType.NOSHAPE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else {
             //collisionShape = new BoxCollisionShape(auv_param.getDimensions());
@@ -2235,12 +2235,12 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     @Override
     public void updateWaypoints(float tpf) {
-        if (auv_param.isWaypoints_enabled() && WayPoints != null) {
+        if (auv_param.isWaypointsEnabled() && WayPoints != null) {
             WayPoints.incTime(tpf);
-            if (WayPoints.getTime() >= auv_param.getWaypoints_updaterate()) {
+            if (WayPoints.getTime() >= auv_param.getWaypointsUpdaterate()) {
                 WayPoints.clearTime();
                 WayPoints.addWaypoint(getMassCenterGeom().getWorldTranslation().clone());
-                if (auv_param.isWaypoints_gradient()) {
+                if (auv_param.isWaypointsGradient()) {
                     WayPoints.updateGradient();
                 }
             }
