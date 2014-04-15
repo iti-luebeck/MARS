@@ -2254,8 +2254,10 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishSensorsOfAUV() {
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
-            element.publishUpdate();
-            element.publishDataUpdate();
+            if(element.isEnabled()){
+                element.publishUpdate();
+                element.publishDataUpdate();
+            }
         }
     }
 
@@ -2266,8 +2268,10 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishActuatorsOfAUV() {
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
-            element.publishUpdate();
-            element.publishDataUpdate();
+            if(element.isEnabled()){
+                element.publishUpdate();
+                element.publishDataUpdate();
+            }
         }
     }
 

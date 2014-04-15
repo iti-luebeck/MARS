@@ -18,6 +18,9 @@
             </file>-->
         </folder>
     </folder>
+    <folder name="OptionsDialog">
+        <file name="General.instance_hidden"/>
+    </folder>
     <folder name="Services">
         <folder name="AutoupdateType">
             <file name="mars_core_update_center.instance">
