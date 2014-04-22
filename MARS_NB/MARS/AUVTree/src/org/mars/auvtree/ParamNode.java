@@ -177,9 +177,13 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
         }
         
         // create subchilds
-        if (!params.isEmpty()) {
+        // don't show them currently, because one has to use the property window
+        //when you want to activate it you need addtional code:
+        //https://blogs.oracle.com/geertjan/entry/no_expansion_key_when_no
+        //http://netbeans.dzone.com/nb-dynamic-icons-for-explorer-trees
+        /*if (params != null && !params.isEmpty()) {
             setChildren(Children.create(new ParamChildNodeFactory(params), true));
-        }
+        }*/
 
         setDisplayName(nodeName);
     }
