@@ -4,7 +4,11 @@
  */
 package mars.core;
 
-final class GraphicsPanel extends javax.swing.JPanel {
+import java.util.prefs.BackingStoreException;
+import org.openide.util.Exceptions;
+import org.openide.util.NbPreferences;
+
+public final class GraphicsPanel extends javax.swing.JPanel {
 
     private final GraphicsOptionsPanelController controller;
 
@@ -22,17 +26,42 @@ final class GraphicsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setLayout(new java.awt.GridLayout());
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
+        setLayout(new java.awt.GridLayout(1, 0));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(GraphicsPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(GraphicsPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        try {
+            // TODO read settings and initialize GUI
+            // Example:        
+            // someCheckBox.setSelected(Preferences.userNodeForPackage(GraphicsPanel.class).getBoolean("someFlag", false));
+            // or for org.openide.util with API spec. version >= 7.4:
+            // someCheckBox.setSelected(NbPreferences.forModule(GraphicsPanel.class).getBoolean("someFlag", false));
+            // or:
+            // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+            String[] childrenNames = NbPreferences.forModule(mars.core.GraphicsPanel.class).keys();
+            System.out.println("asas");
+        } catch (BackingStoreException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        System.out.println("asas");
     }
 
     void store() {
@@ -50,5 +79,7 @@ final class GraphicsPanel extends javax.swing.JPanel {
         return true;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

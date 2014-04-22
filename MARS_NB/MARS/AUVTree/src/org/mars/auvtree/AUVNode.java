@@ -53,6 +53,10 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
         auv = (BasicAUV) auv_manager.getAUV(name);
         iconName = auv.getAuv_param().getIcon();
+        
+        /*if(iconName.isEmpty()){
+            iconName = "yellow_submarine.png";
+        }*/
 
         setDisplayName(name);
     }

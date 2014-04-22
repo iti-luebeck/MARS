@@ -42,7 +42,9 @@ import org.openide.modules.InstalledFileLocator;
 /**
  * Used for custom icons on nodes and leafs
  * @author Thomas Tosik
+ * @deprecated see the new AUVTree module (NBP Explorer)
  */
+@Deprecated
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
 
     public MyTreeCellRenderer() {

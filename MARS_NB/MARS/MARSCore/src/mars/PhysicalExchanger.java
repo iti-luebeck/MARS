@@ -190,9 +190,11 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param name
      */
     public void setPhysicalExchangerName(String name){
+        String old = getPhysicalExchangerName();
         //PhysicalExchangerName = name;
         variables.put("name", name);
         PhysicalExchanger_Node.setName(name);
+        fire("name", old, name);
     }
 
     /**
@@ -225,7 +227,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      * @return
      */
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return (Boolean)variables.get("enabled");
     }
 
@@ -242,16 +244,18 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param enabled
      */
     public void setEnabled(Boolean enabled) {
+        boolean old = getEnabled();
         variables.put("enabled", enabled);
+        fire("enabled", old, enabled);
     }
     
     /**
      * 
      * @param enabled
      */
-    public void setEnabled(boolean enabled) {
+    /*public void setEnabled(boolean enabled) {
         variables.put("enabled", enabled);
-    }
+    }*/
 
     @Override
     public String toString(){
@@ -311,7 +315,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      * @return
      */
-    public int getRos_publish_rate() {
+    public Integer getRos_publish_rate() {
         return (Integer)variables.get("ros_publish_rate");
     }
 
@@ -320,14 +324,16 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param ros_publish_rate
      */
     public void setRos_publish_rate(int ros_publish_rate) {
+        int old = getRos_publish_rate();
         variables.put("ros_publish_rate",ros_publish_rate);
+        fire("ros_publish_rate", old, ros_publish_rate);
     }
     
     /**
      * 
      * @return
      */
-    public int getTFRos_publish_rate() {
+    public Integer getTFRos_publish_rate() {
         if((Integer)variables.get("tf_ros_publish_rate") == null){
             return 1000;
         }else{
@@ -340,7 +346,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param ros_publish_rate
      */
     public void setTFRos_publish_rate(int tf_ros_publish_rate) {
+        int old = getTFRos_publish_rate();
         variables.put("tf_ros_publish_rate",tf_ros_publish_rate);
+        fire("tf_ros_publish_rate", old, tf_ros_publish_rate);
     }
 
     /**
@@ -356,15 +364,17 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param ros_frame_id
      */
     public void setRos_frame_id(String ros_frame_id) {
+        String old = getRos_frame_id();
         //this.ros_frame_id = ros_frame_id;
         variables.put("ros_frame_id",ros_frame_id);
+        fire("ros_frame_id", old, ros_frame_id);
     }
     
     /**
      * 
      * @return
      */
-    public int getRos_queue_listener_size() {   
+    public Integer getRos_queue_listener_size() {   
         Integer ros_queue_listener_size = (Integer)variables.get("ros_queue_listener_size");
         if(ros_queue_listener_size != null){
             return ros_queue_listener_size;
@@ -378,8 +388,10 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param ros_frame_id
      */
     public void setRos_queue_listener_size(int ros_queue_listener_size) {
+        int old = getRos_queue_listener_size();
         //this.ros_frame_id = ros_frame_id;
         variables.put("ros_queue_listener_size",ros_queue_listener_size);
+        fire("ros_queue_listener_size", old, ros_queue_listener_size);
     }
     
     /**
@@ -454,7 +466,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param icon
      */
     public void setIcon(String icon){
+        String old = getIcon();
         variables.put("icon",icon);
+        fire("icon", old, icon);
     }
     
     /**
@@ -462,7 +476,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param dnd_icon
      */
     public void setIconDND(String dnd_icon){
+        String old = getIconDND();
         variables.put("dnd_icon",dnd_icon);
+        fire("dnd_icon", old, dnd_icon);
     }
 
     /**
@@ -478,7 +494,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param accumulator
      */
     public void setAccumulator(String accumulator){
+        String old = getAccumulator();
         variables.put("accumulator",accumulator);
+        fire("accumulator", old, accumulator);
     }
     
     /**
@@ -530,7 +548,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * @param currentConsumption
      */
     public void setCurrentConsumptio(float currentConsumption){
+        Float old = getCurrentConsumption();
         variables.put("currentConsumption",currentConsumption);
+        fire("currentConsumption", old, currentConsumption);
     }
 
     public void setAuv(AUV auv) {

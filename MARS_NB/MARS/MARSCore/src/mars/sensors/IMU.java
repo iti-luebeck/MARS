@@ -192,7 +192,7 @@ public class IMU extends Sensor{
      * @param enabled
      */
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         super.setEnabled(enabled);
         acc.setEnabled(enabled);
         gyro.setEnabled(enabled);

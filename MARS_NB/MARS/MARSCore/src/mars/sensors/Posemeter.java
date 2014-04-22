@@ -159,7 +159,7 @@ public class Posemeter extends Sensor implements ChartValue{
      * @param enabled
      */
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         super.setEnabled(enabled);
         pos.setEnabled(enabled);
         oro.setEnabled(enabled);

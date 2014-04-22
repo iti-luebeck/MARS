@@ -11,7 +11,28 @@ import java.util.Map;
 import mars.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
+import mars.actuators.Lamp;
+import mars.actuators.Teleporter;
+import mars.actuators.Thruster;
+import mars.actuators.servos.Servo;
+import mars.actuators.visualizer.VectorVisualizer;
+import mars.sensors.AmpereMeter;
+import mars.sensors.Compass;
+import mars.sensors.FlowMeter;
+import mars.sensors.GPSReceiver;
+import mars.sensors.Gyroscope;
+import mars.sensors.IMU;
+import mars.sensors.PingDetector;
+import mars.sensors.PollutionMeter;
+import mars.sensors.PressureSensor;
 import mars.sensors.Sensor;
+import mars.sensors.TemperatureSensor;
+import mars.sensors.TerrainSender;
+import mars.sensors.UnderwaterModem;
+import mars.sensors.VideoCamera;
+import mars.sensors.VoltageMeter;
+import mars.sensors.WiFi;
+import mars.sensors.sonar.Sonar;
 import org.openide.ErrorManager;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -23,7 +44,8 @@ import org.openide.util.lookup.Lookups;
  * This class is the presentation for actuators, accumulators and sensors of an
  * auv.
  *
- * @author Christian
+ * @author Christian Friedrich
+ * @author Thomas Tosik
  */
 public class ParamNode extends AbstractNode implements PropertyChangeListener {
 
@@ -102,7 +124,58 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             params = ((Sensor) (obj)).getAllVariables();
             icon = ((Sensor) (obj)).getIcon();
         }
-
+        
+        //no icon set, use default one
+        if(icon == null){
+            if(obj instanceof Sonar){
+                icon = "radar.png";
+            }else if(obj instanceof Compass){
+                icon = "compass.png";
+            }else if(obj instanceof VideoCamera){
+                icon = "cctv_camera.png";
+            }else if(obj instanceof PingDetector){
+                icon = "microphone.png";
+            }else if(obj instanceof IMU){
+                icon = "compass.png";
+            }else if(obj instanceof TemperatureSensor){
+                icon = "thermometer.png";
+            }else if(obj instanceof Gyroscope){
+                icon = "transform_rotate.png";
+            }else if(obj instanceof PressureSensor){
+                icon = "transform_perspective.png";
+            }else if(obj instanceof TerrainSender){
+                icon = "soil_layers.png";
+            }else if(obj instanceof Thruster){
+                icon = "thruster_seabotix.png";
+            }else if(obj instanceof VectorVisualizer){
+                icon = "arrow_up.png";
+            }else if(obj instanceof Servo){
+                icon = "AX-12.png";
+            }else if(obj instanceof UnderwaterModem){
+                icon = "speaker-volume.png";
+            }else if(obj instanceof WiFi){
+                icon = "radio_2.png";
+            }else if(obj instanceof Lamp){
+                icon = "flashlight-shine.png";
+            }else if(obj instanceof GPSReceiver){
+                icon = "satellite.png";
+            }else if(obj instanceof Lamp){
+                icon = "flashlight-shine.png";
+            }else if(obj instanceof VoltageMeter){
+                icon = "battery_charge.png";
+            }else if(obj instanceof AmpereMeter){
+                icon = "battery_charge.png";
+            }else if(obj instanceof FlowMeter){
+                icon = "breeze_small.png";
+            }else if(obj instanceof Teleporter){
+                icon = "transform_move.png";
+            }else if(obj instanceof PollutionMeter){
+                icon = "oil-barrel.png";
+            }else{//last resort
+                icon = "question-white.png";
+            }
+        }
+        
         // create subchilds
         if (!params.isEmpty()) {
             setChildren(Children.create(new ParamChildNodeFactory(params), true));

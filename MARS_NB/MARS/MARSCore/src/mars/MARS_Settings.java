@@ -8,6 +8,7 @@ package mars;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,6 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
+import org.openide.util.NbPreferences;
 
 /**
  * Holds the major of all settings that are useful for SIMAUV like
@@ -146,6 +148,25 @@ public class MARS_Settings implements UpdateState{
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
         Auto = (HashMap<String,Object>)Misc.get("Auto");
+        //initPreferences(Graphics,"Physics", mars.core.GraphicsPanel.class);
+        //initPreferences(Graphics,"Server");
+        initPreferences(Graphics,"Graphics",mars.core.GraphicsPanel.class);
+        //initPreferences(Graphics,"Gui");
+        //initPreferences(Graphics,"Misc");
+    }
+    
+    private void initPreferences(HashMap<String,Object> hashmap, String path, Class cla){
+        for (Map.Entry<String, Object> entry : hashmap.entrySet()) {
+            String string = entry.getKey();
+            Object object = entry.getValue();
+            if(object instanceof HashMap){
+                HashMap hasher = (HashMap)object;
+                initPreferences(hasher,path.concat(string),cla);
+            }
+            else if(object instanceof Boolean){
+                NbPreferences.forModule(cla).putBoolean(path.concat(string), (Boolean)object);
+            }
+        }
     }
     
     /**
