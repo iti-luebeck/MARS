@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
+import javax.swing.GrayFilter;
 import javax.swing.JOptionPane;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -24,7 +25,8 @@ import org.openide.nodes.Children;
 /**
  * This class is the representation for the auv's in the tree.
  *
- * @author Christian
+ * @author Christian Friedrich
+ * @author Thomas Tosik
  */
 public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
@@ -82,6 +84,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
+        this.fireIconChange();
     }
 
     /**
@@ -169,7 +172,11 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Image getIcon(int type) {
-        return TreeUtil.getImage(iconName);
+        if (auv.getAuv_param().isEnabled()) {
+            return TreeUtil.getImage(iconName);
+        }else{
+            return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
+        }
     }
 
     /**
@@ -181,6 +188,10 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Image getOpenedIcon(int type) {
-        return TreeUtil.getImage(iconName);
+        if (auv.getAuv_param().isEnabled()) {
+            return TreeUtil.getImage(iconName);
+        }else{
+            return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
+        }
     }
 }
