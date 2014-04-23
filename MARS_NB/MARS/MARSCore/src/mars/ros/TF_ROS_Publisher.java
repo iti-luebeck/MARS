@@ -66,7 +66,7 @@ public class TF_ROS_Publisher {
                 
         tf_tfs.setTransform(transform);  
         
-        tf_tfs.setChildFrameId(pe.getPhysicalExchangerName());
+        tf_tfs.setChildFrameId(pe.getName());
         
         List<geometry_msgs.TransformStamped> tfl = new ArrayList<geometry_msgs.TransformStamped>();
         tfl.add(tf_tfs);

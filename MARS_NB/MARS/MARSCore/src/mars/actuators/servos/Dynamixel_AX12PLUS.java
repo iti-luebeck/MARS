@@ -69,11 +69,11 @@ public class Dynamixel_AX12PLUS extends Servo{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final Servo self = this;
-        Subscriber<std_msgs.Float64> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), std_msgs.Float64._TYPE);
+        Subscriber<std_msgs.Float64> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), std_msgs.Float64._TYPE);
         subscriber.addMessageListener(new MessageListener<std_msgs.Float64>() {
                 @Override
                 public void onNewMessage(std_msgs.Float64 message) {
-                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((double)message.getData());
                 }
         },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());

@@ -1281,8 +1281,8 @@ public final class MARSTreeTopComponent extends TopComponent {
         
         win.repaint();
         if(lastSelectedRayBasedSensor != null){
-            rayBasedSensorList.put(lastSelectedRayBasedSensor.getPhysicalExchangerName(), imgP);
-            win.setName("Polar View of: " + lastSelectedRayBasedSensor.getPhysicalExchangerName());
+            rayBasedSensorList.put(lastSelectedRayBasedSensor.getName(), imgP);
+            win.setName("Polar View of: " + lastSelectedRayBasedSensor.getName());
         }
     }//GEN-LAST:event_viewSonarPolarActionPerformed
 
@@ -1300,8 +1300,8 @@ public final class MARSTreeTopComponent extends TopComponent {
         
         win.repaint();
         if(lastSelectedRayBasedSensor != null){
-            rayBasedSensorList.put(lastSelectedRayBasedSensor.getPhysicalExchangerName(), imgP);
-            win.setName("Planar View of: " + lastSelectedRayBasedSensor.getPhysicalExchangerName());
+            rayBasedSensorList.put(lastSelectedRayBasedSensor.getName(), imgP);
+            win.setName("Planar View of: " + lastSelectedRayBasedSensor.getName());
         }
 
         /*
@@ -1434,7 +1434,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         if(lastSelectedVideoCamera != null){
             MARSVideoCameraTopComponent video = new MARSVideoCameraTopComponent(lastSelectedVideoCamera,mars);
 
-            video.setName("Video of: " + lastSelectedVideoCamera.getPhysicalExchangerName());
+            video.setName("Video of: " + lastSelectedVideoCamera.getName());
             video.open();
             video.requestActive(); 
 
@@ -1446,7 +1446,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         if(lastSelectedCompass != null){
             MARSCompassTopComponent comp = new MARSCompassTopComponent(lastSelectedCompass);
 
-            comp.setName("Video of: " + lastSelectedCompass.getPhysicalExchangerName());
+            comp.setName("Video of: " + lastSelectedCompass.getName());
             comp.open();
             comp.requestActive(); 
 
@@ -1458,7 +1458,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         if(lastSelectedCommunicationDevice != null){
             MARSUnderwaterModemTopComponent uw = new MARSUnderwaterModemTopComponent(lastSelectedCommunicationDevice);
 
-            uw.setName("Data of: " + lastSelectedCommunicationDevice.getAuv().getName() + "/" + lastSelectedCommunicationDevice.getPhysicalExchangerName());
+            uw.setName("Data of: " + lastSelectedCommunicationDevice.getAuv().getName() + "/" + lastSelectedCommunicationDevice.getName());
             uw.open();
             uw.requestActive(); 
 
@@ -1695,7 +1695,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
+                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getName());
                     if(rayBasedSensorView != null){
                         rayBasedSensorView.updateData(data, lastHeadPosition, son.getScanning_resolution());  
                     }
@@ -1714,7 +1714,7 @@ public final class MARSTreeTopComponent extends TopComponent {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getPhysicalExchangerName());
+                    RayBasedSensorView rayBasedSensorView = (RayBasedSensorView)rayBasedSensorList.get(son.getName());
                     if(rayBasedSensorView != null){
                         rayBasedSensorView.updateInstantData(data, lastHeadPosition, son.getScanning_resolution());  
                     }

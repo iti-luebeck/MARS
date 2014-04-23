@@ -173,7 +173,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                     while (it.hasNext()) {
                         UnderwaterModem uw = (UnderwaterModem)it.next();
                         Cylinder uw_geom_sphere = new Cylinder(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true);
-                        Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom", uw_geom_sphere);
+                        Geometry uw_geom = new Geometry(auv.getName()+ "-" + uw.getName() + "-geom", uw_geom_sphere);
                         Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                         uw_geom_mat.setColor("Color", uw.getDebugColor());
 
@@ -202,7 +202,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         float beta = FastMath.HALF_PI-alpha;
                         float width = (FastMath.sin(alpha)/FastMath.sin(beta))*sonRange;
                         Dome son_geom_cone = new Dome(new Vector3f(0f,-sonRange,0f), 2, 4, sonRange,true);
-                        Geometry son_geom = new Geometry(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom", son_geom_cone);
+                        Geometry son_geom = new Geometry(auv.getName()+ "-" + son.getName() + "-geom", son_geom_cone);
                         Material son_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                         son_geom_mat.setColor("Color", son.getDebugColor());
 
@@ -335,7 +335,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         Iterator it = uws.iterator();
                         while (it.hasNext()) {
                             UnderwaterModem uw = (UnderwaterModem)it.next();
-                            Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getPhysicalExchangerName() + "-geom");
+                            Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getName() + "-geom");
                             if(uw.isDebug()){
                                 uwgeom.setCullHint(CullHint.Never);
                                 Cylinder cyl = (Cylinder)uwgeom.getMesh();
@@ -350,7 +350,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         it = sons.iterator();
                         while (it.hasNext()) {
                             Sonar son = (Sonar)it.next();
-                            Geometry songeom = (Geometry)node.getChild(auv.getName()+ "-" + son.getPhysicalExchangerName() + "-geom");
+                            Geometry songeom = (Geometry)node.getChild(auv.getName()+ "-" + son.getName() + "-geom");
                             if(son.isDebug()){
                                 songeom.setCullHint(CullHint.Never);
                                 Quaternion quat = new Quaternion();

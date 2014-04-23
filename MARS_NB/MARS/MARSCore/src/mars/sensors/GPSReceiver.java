@@ -210,9 +210,9 @@ public class GPSReceiver extends Sensor{
      * @param name
      */
     @Override
-    public void setPhysicalExchangerName(String name){
-        super.setPhysicalExchangerName(name);
-        pos.setPhysicalExchangerName(name + "_positionmeter");
+    public void setName(String name){
+        super.setName(name);
+        pos.setName(name + "_positionmeter");
     }
     
     /**
@@ -233,7 +233,7 @@ public class GPSReceiver extends Sensor{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.NavSatFix._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),sensor_msgs.NavSatFix._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatFix._TYPE);
         NavSatStatus = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatStatus._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);

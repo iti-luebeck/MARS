@@ -74,11 +74,11 @@ public class HanseBagPlayer extends Teleporter{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         final HanseBagPlayer self = this;
-        Subscriber<geometry_msgs.PoseStamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), geometry_msgs.PoseStamped._TYPE);
+        Subscriber<geometry_msgs.PoseStamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.PoseStamped._TYPE);
         subscriber.addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
                 @Override
                 public void onNewMessage(geometry_msgs.PoseStamped message) {
-                    //System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getPose().getPosition() + "\"");
+                    //System.out.println("I (" + getName()+ ") heard: \"" + message.getPose().getPosition() + "\"");
                     
                     Point pos = (Point)message.getPose().getPosition();
                     Vector3f v_pos = new Vector3f((float)pos.getX(), (float)pos.getZ(), (float)pos.getY());

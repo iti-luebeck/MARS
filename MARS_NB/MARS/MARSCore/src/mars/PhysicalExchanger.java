@@ -189,8 +189,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      *
      * @param name
      */
-    public void setPhysicalExchangerName(String name){
-        String old = getPhysicalExchangerName();
+    public void setName(String name){
+        String old = getName();
         //PhysicalExchangerName = name;
         variables.put("name", name);
         PhysicalExchanger_Node.setName(name);
@@ -201,7 +201,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      *
      * @return
      */
-    public String getPhysicalExchangerName(){
+    public String getName(){
         return (String)variables.get("name");
     }
 
@@ -259,7 +259,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
 
     @Override
     public String toString(){
-        return getPhysicalExchangerName();
+        return getName();
     }
     
     /**
@@ -439,7 +439,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
         tf_pub = new TF_ROS_Publisher(this);
        /* variables.put("noise_type", getNoise_type());
         variables.put("noise_value", getNoise_value());
-        variables.put("name",getPhysicalExchangerName());
+        variables.put("name",getName());
         variables.put("enabled", isEnabled());
         variables.put("ros_publish_rate", getRos_publish_rate());
         variables.put("ros_frame_id", getRos_frame_id());*/
@@ -457,7 +457,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      * @return
      */
-    public String getIconDND(){
+    public String getdnd_icon(){
         return (String)variables.get("dnd_icon");
     }
     
@@ -475,8 +475,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      * 
      * @param dnd_icon
      */
-    public void setIconDND(String dnd_icon){
-        String old = getIconDND();
+    public void setdnd_icon(String dnd_icon){
+        String old = getdnd_icon();
         variables.put("dnd_icon",dnd_icon);
         fire("dnd_icon", old, dnd_icon);
     }

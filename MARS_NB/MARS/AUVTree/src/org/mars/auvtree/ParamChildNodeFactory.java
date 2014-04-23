@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
@@ -17,7 +19,8 @@ import org.openide.nodes.Node;
 
 /**
  *
- * @author Christian
+ * @author Christian Friedrich
+ * @author Thomas Tosik
  */
 public class ParamChildNodeFactory extends ChildFactory<String> {
 
@@ -55,13 +58,20 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
     @Override
     protected boolean createKeys(List toPopulate) {
         if (type == CHILD) {
+
+            //sorted output
+            SortedSet<String> sortedset= new TreeSet<String>(params.keySet());
+            for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
+                String string = it2.next();
+                toPopulate.add(string);
+            }
             // iterate params and store keys in list
-            Iterator<Map.Entry<String, Object>> aI = params.entrySet().iterator();
+            /*Iterator<Map.Entry<String, Object>> aI = params.entrySet().iterator();
 
             for (Map.Entry<String, Object> mE; aI.hasNext();) {
                 mE = aI.next();
                 toPopulate.add(mE.getKey());
-            }
+            }*/
         } else if (type == PARAMROOT) {
             // create list for the main categories
             toPopulate.add("" + ACCUMULATORS);

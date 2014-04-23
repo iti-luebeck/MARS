@@ -226,7 +226,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             // Depending on the event the rotation or the translation is updated
             switch (evt.getPropertyName()) {
                 case "Position": {
-                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getPhysicalExchangerName());
+                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getName());
                     final Vector3f v = new Vector3f((Vector3f) evt.getNewValue());
                     app.enqueue(new Callable() {
                         @Override
@@ -241,7 +241,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
                     break;
                 }
                 case "Rotation": {
-                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getPhysicalExchangerName());
+                    final Node n = (Node) auvNode.getChild(((PhysicalExchanger) evt.getSource()).getName());
                     final Vector3f v = new Vector3f((Vector3f) evt.getNewValue());
                     app.enqueue(new Callable() {
                         @Override

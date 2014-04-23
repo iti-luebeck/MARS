@@ -148,7 +148,7 @@ public class Orientationmeter extends Sensor implements ChartValue{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.PoseStamped._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),geometry_msgs.PoseStamped._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

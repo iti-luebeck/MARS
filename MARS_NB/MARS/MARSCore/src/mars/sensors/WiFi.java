@@ -278,14 +278,14 @@ public class WiFi extends CommunicationDevice{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/out",std_msgs.String._TYPE);  
-        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName() + "/signal",std_msgs.Int8._TYPE); 
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out",std_msgs.String._TYPE);  
+        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal",std_msgs.Int8._TYPE); 
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
         flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
         
         final String fin_auv_name = auv_name;
         final WiFi fin_this = this;
-        Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName() + "/in", std_msgs.String._TYPE);
+        Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE);
         subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
                 @Override
                 public void onNewMessage(std_msgs.String message) {

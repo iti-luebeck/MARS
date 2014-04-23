@@ -268,7 +268,7 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
      */
     @Override
     public void updateRotation(float alpha){
-        /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
+        /*System.out.println("I(" + getName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
         System.out.println("My local rotation axis is:" + local_rotation_axis );
         System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
         Quaternion quat = new Quaternion();
@@ -312,7 +312,7 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
      */
     @Override
     public String getSlaveName(){
-        return getPhysicalExchangerName();
+        return getName();
     }
     
     /**

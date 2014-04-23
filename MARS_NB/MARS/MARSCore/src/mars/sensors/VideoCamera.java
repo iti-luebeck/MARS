@@ -266,7 +266,7 @@ public class VideoCamera extends Sensor implements Moveable{
 
         debugCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         //debugCamera.setViewPort(0f, 1f, 0f, 1f);
-        debugView = renderManager.createMainView("Debug View" + getPhysicalExchangerName(), debugCamera);
+        debugView = renderManager.createMainView("Debug View" + getName(), debugCamera);
         //initer.addFiltersToViewport(debugView);
         debugView.setBackgroundColor(ColorRGBA.Gray);
         //view3.setClearEnabled(true);
@@ -281,7 +281,7 @@ public class VideoCamera extends Sensor implements Moveable{
         offCamera = new Camera(getCameraWidth(),getCameraHeight());
         //offCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         // create a pre-view. a view that is rendered before the main view
-        offView = renderManager.createPreView("Offscreen View" + getPhysicalExchangerName(), offCamera);
+        offView = renderManager.createPreView("Offscreen View" + getName(), offCamera);
         //offView.setBackgroundColor(ColorRGBA.Black);
         //offView.setClearEnabled(true);
         offView.setClearFlags(true, true, true);
@@ -432,7 +432,7 @@ public class VideoCamera extends Sensor implements Moveable{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) { 
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.Image._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),sensor_msgs.Image._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
@@ -492,7 +492,7 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public void updateRotation(float alpha){
-        /*System.out.println("I(" + getPhysicalExchangerName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
+        /*System.out.println("I(" + getName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
         System.out.println("My local rotation axis is:" + local_rotation_axis );
         System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
         Quaternion quat = new Quaternion();
@@ -536,7 +536,7 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public String getSlaveName(){
-        return getPhysicalExchangerName();
+        return getName();
     }
 
     public ViewPort getDebugView() {
@@ -552,7 +552,7 @@ public class VideoCamera extends Sensor implements Moveable{
 
         //debugCamera.setViewPort(0f, 0.5f, 0f, 0.5f);
         //debugCamera.setViewPort(0f, 1f, 0f, 1f);
-        debugView = renderManager.createMainView("Debug View" + getPhysicalExchangerName(), debugCamera);
+        debugView = renderManager.createMainView("Debug View" + getName(), debugCamera);
         //initer.addFiltersToViewport(debugView);
         debugView.setBackgroundColor(ColorRGBA.Gray);
         //view3.setClearEnabled(true);

@@ -67,7 +67,7 @@ public class Hakuyo extends LaserScanner{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),sensor_msgs.LaserScan._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),sensor_msgs.LaserScan._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.LaserScan._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

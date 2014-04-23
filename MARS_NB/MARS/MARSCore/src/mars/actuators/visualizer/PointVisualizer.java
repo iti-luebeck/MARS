@@ -154,7 +154,7 @@ public class PointVisualizer extends Actuator implements ChartValue{
      */
     public void updateVector(final Vector3f vector){
         this.vector = vector;
-        System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + vector + "\"");
+        System.out.println("I (" + getName()+ ") heard: \"" + vector + "\"");
         Future fut = this.simauv.enqueue(new Callable() {
             public Void call() throws Exception {
                 VectorVisualizerStart.setLocalTranslation(vector);
@@ -173,11 +173,11 @@ public class PointVisualizer extends Actuator implements ChartValue{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final PointVisualizer self = this;
-        Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), geometry_msgs.Vector3Stamped._TYPE);
+        Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.Vector3Stamped._TYPE);
         subscriber.addMessageListener(new MessageListener<geometry_msgs.Vector3Stamped>() {
                 @Override
                 public void onNewMessage(geometry_msgs.Vector3Stamped message) {
-                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getVector() + "\"");
+                    System.out.println("I (" + getName()+ ") heard: \"" + message.getVector() + "\"");
                     Vector3 vec = (Vector3)message.getVector();
                     self.updateVector(new Vector3f((float)vec.getX(), (float)vec.getZ(), (float)vec.getY()));
                 }

@@ -88,11 +88,11 @@ public class GeomarThruster extends Thruster{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final GeomarThruster self = this;
-        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), hanse_msgs.sollSpeed._TYPE);
+        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
         subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
                 @Override
                 public void onNewMessage(hanse_msgs.sollSpeed message) {
-                    //System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    //System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.set_thruster_speed((int)message.getData());
                 }
         },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());

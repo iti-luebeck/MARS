@@ -148,10 +148,10 @@ public class Posemeter extends Sensor implements ChartValue{
      * @param name
      */
     @Override
-    public void setPhysicalExchangerName(String name){
-        super.setPhysicalExchangerName(name);
-        pos.setPhysicalExchangerName(name + "_positionmeter");
-        oro.setPhysicalExchangerName(name + "_orientationmeter");
+    public void setName(String name){
+        super.setName(name);
+        pos.setName(name + "_positionmeter");
+        oro.setName(name + "_orientationmeter");
     }
     
     /**
@@ -181,7 +181,7 @@ public class Posemeter extends Sensor implements ChartValue{
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getPhysicalExchangerName(),geometry_msgs.PoseStamped._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),geometry_msgs.PoseStamped._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

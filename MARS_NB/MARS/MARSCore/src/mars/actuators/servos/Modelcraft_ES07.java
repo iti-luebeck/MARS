@@ -69,11 +69,11 @@ public class Modelcraft_ES07 extends Servo{
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final Servo self = this;
-        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getPhysicalExchangerName(), smart_e_msgs.servoCam._TYPE);
+        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), smart_e_msgs.servoCam._TYPE);
         subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
                 @Override
                 public void onNewMessage(smart_e_msgs.servoCam message) {
-                    System.out.println("I (" + getPhysicalExchangerName()+ ") heard: \"" + message.getData() + "\"");
+                    System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((int)message.getData());
                 }
         },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
