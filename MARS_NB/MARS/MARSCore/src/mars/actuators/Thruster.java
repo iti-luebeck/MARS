@@ -212,15 +212,15 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
     @MARSPublicKeyBindingMethod(true)
     public void set_thruster_speed(int speed){
         this.motor_speed = speed;
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             MotorForce = calculateThrusterForce(speed);
             MotorCurrent = calculateThrusterCurrent(speed);
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             MotorForce = calculateThrusterForce(speed)+((float)((1f/100f)*noise));
             MotorCurrent = calculateThrusterCurrent(speed)+((float)((1f/100f)*noise));
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             MotorForce = calculateThrusterForce(speed)+((float)((1f/100f)*noise));
             MotorCurrent = calculateThrusterCurrent(speed)+((float)((1f/100f)*noise));
         }else{

@@ -107,13 +107,13 @@ public class PollutionMeter extends Sensor implements ChartValue{
      */
     public float getPollution(){
         float value = 0;
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             value = getRawPollution();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             value =  (getRawPollution()+((float)((1f/100f)*noise)));
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             value = (getRawPollution()+((float)((1f/100f)*noise)));
         }else{
             value = getRawPollution();

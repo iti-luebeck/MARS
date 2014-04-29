@@ -86,13 +86,13 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue{
      * @return The exact depth of the current auv
      */
     public float getDistance(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             return getRawDistance();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             return getRawDistance()+((float)((1f/100f)*noise));
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             return getRawDistance() + ((float)((1f/100f)*noise));
         }else{
             return getRawDistance();

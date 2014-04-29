@@ -92,14 +92,14 @@ public class Transformer extends Sensor{
      * @return
      */
     public Vector3f getPosition(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             return getPositionRaw();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             Vector3f noised = new Vector3f(getPositionRaw().x+((float)((1f/100f)*noise)),getPositionRaw().y+((float)((1f/100f)*noise)),getPositionRaw().z+((float)((1f/100f)*noise)));
             return noised;
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             Vector3f noised = new Vector3f(getPositionRaw().x+((float)((1f/100f)*noise)),getPositionRaw().y+((float)((1f/100f)*noise)),getPositionRaw().z+((float)((1f/100f)*noise)));
             return noised;
         }else{

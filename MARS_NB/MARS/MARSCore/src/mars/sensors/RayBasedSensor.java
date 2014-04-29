@@ -790,7 +790,7 @@ public class RayBasedSensor extends Sensor{
 
         scan_next();
 
-        if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
+        if(getNoiseType() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
         if(isFailure()){
@@ -835,7 +835,7 @@ public class RayBasedSensor extends Sensor{
 
         scan_next();
 
-        if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
+        if(getNoiseType() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
         if(isFailure()){
@@ -947,7 +947,7 @@ public class RayBasedSensor extends Sensor{
 
         scan_next();
 
-        if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
+        if(getNoiseType() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
         if(isFailure()){
@@ -1061,7 +1061,7 @@ public class RayBasedSensor extends Sensor{
 
         scan_next();
 
-        if(getNoise_type() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
+        if(getNoiseType() == NoiseType.OWN_NOISE_FUNCTION){//lets get noisy
             arr_ret = getNoisedData(arr_ret);
         }
         if(isFailure()){
@@ -1103,7 +1103,7 @@ public class RayBasedSensor extends Sensor{
             float son_max = getMaxRange();
             int son_reddat_length = getReturnDataLength();
             float x = i*(son_max/son_reddat_length);
-            int noise = (int)((getNoise_value()*calculateAverageNoiseFunction(x))+(random.nextGaussian()*(getNoise_value()*calculateStandardDeviationNoiseFunction(x))));
+            int noise = (int)((getNoiseValue()*calculateAverageNoiseFunction(x))+(random.nextGaussian()*(getNoiseValue()*calculateStandardDeviationNoiseFunction(x))));
             if(sondat[i] <= (byte)(127-noise)){//genug platz für full gain
                 sondat[i] = (byte) (sondat[i] + (byte) noise);
             }else{

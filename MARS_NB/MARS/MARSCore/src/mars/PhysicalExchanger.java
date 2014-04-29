@@ -39,15 +39,17 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {Actuator.class,Sensor.class} )
-public abstract class PhysicalExchanger extends Noise implements ROS{
+public abstract class PhysicalExchanger extends Noise implements ROS,PropertyChangeListenerSupport{
 
     @SuppressWarnings("FieldMayBeFinal")
     private List listeners = Collections.synchronizedList(new LinkedList());
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
-
+    
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
     }
@@ -437,8 +439,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS{
      */
     public void initAfterJAXB(){
         tf_pub = new TF_ROS_Publisher(this);
-       /* variables.put("noise_type", getNoise_type());
-        variables.put("noise_value", getNoise_value());
+       /* variables.put("noise_type", getNoiseType());
+        variables.put("noise_value", getNoiseValue());
         variables.put("name",getName());
         variables.put("enabled", isEnabled());
         variables.put("ros_publish_rate", getRos_publish_rate());

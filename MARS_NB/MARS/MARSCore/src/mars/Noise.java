@@ -28,49 +28,38 @@ public class Noise {
     /**
      *
      */
-    protected int noise_type = 0;
-    /**
-     *
-     */
-    protected float noise_value = 1.0f;
-    /*
-     *
-     */
-    /**
-     *
-     */
     protected Random random = new Random();
 
     /**
      *
      * @return
      */
-    public int getNoise_type() {
-        return (Integer)noises.get("noise_type");
+    public Integer getNoiseType() {
+        return (Integer)noises.get("NoiseType");
     }
 
     /**
      *
      * @param noise_type
      */
-    public void setNoise_type(int noise_type) {
-        noises.put("noise_type", noise_type);
+    public void setNoiseType(Integer NoiseType) {
+        noises.put("NoiseType", NoiseType);
     }
 
     /**
      * 
      * @return
      */
-    public float getNoise_value() {
-        return (Float)noises.get("noise_value");
+    public Float getNoiseValue() {
+        return (Float)noises.get("NoiseValue");
     }
 
     /**
      *
      * @param noise_value
      */
-    public void setNoise_value(float noise_value) {
-        noises.put("noise_value", noise_value);
+    public void setNoiseValue(Float NoiseValue) {
+        noises.put("NoiseValue", NoiseValue);
     }
 
     /**

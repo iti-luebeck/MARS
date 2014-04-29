@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -24,14 +25,16 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class Accumulator {
+public class Accumulator implements PropertyChangeListenerSupport{
 
     private List listeners = Collections.synchronizedList(new LinkedList());
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
     }
@@ -166,7 +169,7 @@ public class Accumulator {
      * @return
      */
     public Double getActualCurrent() {
-        return (Double) variables.get("actualCurrent");
+        return (Double) variables.get("ActualCurrent");
     }
 
     /**
@@ -186,8 +189,8 @@ public class Accumulator {
      * 
      * @param actualCurrent 
      */
-    public void setActualCurrent(Double actualCurrent) {
-        variables.put("actualCurrent", actualCurrent);
+    public void setActualCurrent(Double ActualCurrent) {
+        variables.put("ActualCurrent", ActualCurrent);
     }
 
     /**

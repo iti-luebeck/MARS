@@ -8,7 +8,9 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import mars.Manipulating;
 import mars.PhysicalExchanger;
+import mars.PropertyChangeListenerSupport;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.actuators.Lamp;
@@ -58,6 +60,11 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
      * Hashmap with paramaeters of object.
      */
     private HashMap params;
+    
+    /**
+     * Hashmap with noise paramaeters of object.
+     */
+    private HashMap noise;
     
     /**
      * Name of the image file on the harddisk.
@@ -119,9 +126,17 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             icon = "battery_charge.png";
         } else if (obj instanceof Actuator) {
             params = ((Actuator) (obj)).getAllVariables();
+            noise = ((Actuator) (obj)).getAllNoiseVariables();
+            if(obj instanceof Manipulating){
+                
+            }
             icon = ((Actuator) (obj)).getIcon();
         } else if (obj instanceof Sensor) {
             params = ((Sensor) (obj)).getAllVariables();
+            noise = ((Sensor) (obj)).getAllNoiseVariables();
+            if(obj instanceof AmpereMeter){
+                
+            }
             icon = ((Sensor) (obj)).getIcon();
         }
         
@@ -233,10 +248,15 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
+        Sheet.Set set2 = Sheet.createExpertSet();set2.setDisplayName("Noise");
         obj = getLookup().lookup(PhysicalExchanger.class);
+        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+            obj = getLookup().lookup(Accumulator.class);
+        }
         if (params != null) {
             Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
             Property prop;
+            Property prop2;
             String name;
             for (; i.hasNext();) {
                 Map.Entry<String, Object> mE = i.next();
@@ -245,7 +265,6 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                     name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
                     try {
                         prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
-
                         // set custom property editor for position and rotation params
                         if (mE.getValue() instanceof Vector3f) {
                             ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
@@ -262,8 +281,38 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             }
         }
         sheet.put(set);
+        
+        
+        if (noise != null) {
+            Iterator<Map.Entry<String, Object>> i = noise.entrySet().iterator();
+            Property prop;
+            String name;
+            for (; i.hasNext();) {
+                Map.Entry<String, Object> mE = i.next();
+
+                if (!mE.getKey().isEmpty()) {
+                    name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+                    try {
+                        prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
+                        // set custom property editor for position and rotation params
+                        if (mE.getValue() instanceof Vector3f) {
+                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                        } else if (mE.getValue() instanceof ColorRGBA) {
+                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+                        }
+
+                        prop.setName(name);
+                        set2.put(prop);
+                    } catch (NoSuchMethodException ex) {
+                        ErrorManager.getDefault();
+                    }
+                }
+            }
+        }
+        sheet.put(set2);
+        
         // add listener to react of changes from external editors (AUVEditor)
-        ((PhysicalExchanger) (obj)).addPropertyChangeListener(this);
+        ((PropertyChangeListenerSupport) (obj)).addPropertyChangeListener(this);
         return sheet;
     }
 

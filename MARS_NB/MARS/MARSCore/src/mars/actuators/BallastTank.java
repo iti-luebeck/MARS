@@ -148,32 +148,32 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
      * 
      * @return
      */
-    public float getMaxVolume() {
-        return (Float)variables.get("maxVolume");
+    public Float getMaxVolume() {
+        return (Float)variables.get("MaxVolume");
     }
 
     /**
      * 
      * @param maxVolume
      */
-    public void setMaxVolume(float maxVolume) {
-        variables.put("maxVolume", maxVolume);
+    public void setMaxVolume(Float MaxVolume) {
+        variables.put("MaxVolume", MaxVolume);
     }
 
     /**
      * 
      * @return
      */
-    public float getVolumePerSecond() {
-        return (Float)variables.get("volumePerSecond");
+    public Float getVolumePerSecond() {
+        return (Float)variables.get("VolumePerSecond");
     }
 
     /**
      * 
      * @param volumePerSecond
      */
-    public void setVolumePerSecond(float volumePerSecond) {
-        variables.put("volumePerSecond", volumePerSecond);
+    public void setVolumePerSecond(Float VolumePerSecond) {
+        variables.put("VolumePerSecond", VolumePerSecond);
     }
 
     /**

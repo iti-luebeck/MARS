@@ -78,13 +78,13 @@ public class VoltageMeter extends Sensor implements ChartValue{
      * @return The exact temperature of the current auv enviroemnt in C°
      */
     public float getVoltage(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             return getVoltageRaw();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             return getVoltageRaw()+((float)((1f/100f)*noise));
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             return getVoltageRaw() + ((float)((1f/100f)*noise));
         }else{
             return getVoltageRaw();

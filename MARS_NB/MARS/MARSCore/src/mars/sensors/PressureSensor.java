@@ -106,13 +106,13 @@ public class PressureSensor extends Sensor implements ChartValue{
      * @return The exact depth of the current auv
      */
     public float getDepth(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == (Integer)NoiseType.NO_NOISE){
             return getRawDepth();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == (Integer)NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             return getRawDepth()+((float)((1f/100f)*noise));
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == (Integer)NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             return getRawDepth() + ((float)((1f/100f)*noise));
         }else{
             return getRawDepth();

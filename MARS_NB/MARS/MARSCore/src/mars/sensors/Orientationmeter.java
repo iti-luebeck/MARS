@@ -109,14 +109,14 @@ public class Orientationmeter extends Sensor implements ChartValue{
      * @return
      */
     public Quaternion getOrientation(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             return getOrientationRaw();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             Quaternion noised = new Quaternion(getOrientationRaw().getX()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getW()+((float)((1f/100f)*noise)));
             return noised;
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             Quaternion noised = new Quaternion(getOrientationRaw().getX()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getZ()+((float)((1f/100f)*noise)),getOrientationRaw().getW()+((float)((1f/100f)*noise)));
             return noised;
         }else{

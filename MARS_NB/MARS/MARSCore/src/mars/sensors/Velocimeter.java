@@ -70,14 +70,14 @@ public class Velocimeter extends Sensor implements ChartValue{
      * @return
      */
     public Vector3f getLinearVelocity(){
-        if(getNoise_type() == NoiseType.NO_NOISE){
+        if(getNoiseType() == NoiseType.NO_NOISE){
             return getLinearVelocityRaw();
-        }else if(getNoise_type() == NoiseType.UNIFORM_DISTRIBUTION){
-            float noise = getUnifromDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+            float noise = getUnifromDistributionNoise(getNoiseValue());
             Vector3f noised = new Vector3f(getLinearVelocityRaw().x+((float)((1f/100f)*noise)),getLinearVelocityRaw().y+((float)((1f/100f)*noise)),getLinearVelocityRaw().z+((float)((1f/100f)*noise)));
             return noised;
-        }else if(getNoise_type() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
-            float noise = getGaussianDistributionNoise(getNoise_value());
+        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            float noise = getGaussianDistributionNoise(getNoiseValue());
             Vector3f noised = new Vector3f(getLinearVelocityRaw().x+((float)((1f/100f)*noise)),getLinearVelocityRaw().y+((float)((1f/100f)*noise)),getLinearVelocityRaw().z+((float)((1f/100f)*noise)));
             return noised;
         }else{

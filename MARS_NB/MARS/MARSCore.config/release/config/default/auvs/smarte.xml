@@ -263,10 +263,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="posemeter">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -286,10 +286,10 @@
                 </variables>
                 <Positionmeter>
                     <noise>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                         </entry>
                     </noise>
@@ -310,10 +310,10 @@
                 </Positionmeter>
                 <Orientationmeter>
                     <noise>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                         </entry>
                     </noise>
@@ -344,10 +344,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="press" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pressureSensor">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -387,7 +387,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure_deviation_position">
@@ -396,7 +396,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure_deviation_position_change">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">20</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure_threshold">
@@ -498,10 +498,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="transformer">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -524,10 +524,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="temperatureSensor">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -564,10 +564,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imu">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -587,10 +587,10 @@
                 </variables>
                 <Accelerometer>
                     <noise>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                         </entry>
                     </noise>
@@ -611,10 +611,10 @@
                 </Accelerometer>
                 <Gyroscope>
                     <noise>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                         </entry>
                     </noise>
@@ -635,10 +635,10 @@
                 </Gyroscope>
                 <Orientationmeter>
                     <noise>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                         </entry>
                     </noise>
@@ -669,10 +669,10 @@
         <entry xsi:type="myHashMapEntryTypeSensors" key="front_cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="videoCamera">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -733,10 +733,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="servoFrontCam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="modelcraftES07">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -803,10 +803,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterPrometheus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">3</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -863,10 +863,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterHyperion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">3</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -929,10 +929,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="titan_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -999,10 +999,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="hyperion_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -1069,10 +1069,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="prometheus_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -1135,10 +1135,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterTitan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">3</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -1201,10 +1201,10 @@
         <entry xsi:type="myHashMapEntryTypeActuators" key="vec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="vectorVisualizer">
                 <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="noise_value">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
                 </noise>
@@ -1266,7 +1266,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="type">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="actualCurrent">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ActualCurrent">
                         <value xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema">10.0</value>
                     </entry>
                 </variables>
