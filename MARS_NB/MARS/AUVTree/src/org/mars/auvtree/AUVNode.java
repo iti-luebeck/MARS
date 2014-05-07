@@ -8,19 +8,28 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import mars.MARS_Main;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import mars.gui.dnd.TransferHandlerObject;
 import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
+import mars.states.SimState;
+import org.openide.actions.DeleteAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.actions.Presenter;
+import org.openide.util.actions.SystemAction;
 
 /**
  * This class is the representation for the auv's in the tree.
@@ -39,6 +48,16 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      * AUV object from mars.
      */
     private final BasicAUV auv;
+    
+    /**
+     * 
+     */
+    private final MARS_Main mars;
+    
+    /**
+     * 
+     */
+    private final AUV_Manager auvManager;
 
     /**
      * Name of the auv. This is displayed as node name.
@@ -51,9 +70,10 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
         // use lookup to get auv out of mars
         CentralLookup cl = CentralLookup.getDefault();
-        AUV_Manager auv_manager = cl.lookup(AUV_Manager.class);
+        auvManager = cl.lookup(AUV_Manager.class);
+        mars = cl.lookup(MARS_Main.class);
 
-        auv = (BasicAUV) auv_manager.getAUV(name);
+        auv = (BasicAUV) auvManager.getAUV(name);
         iconName = auv.getAuv_param().getIcon();
         
         /*if(iconName.isEmpty()){
@@ -72,9 +92,15 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new EnableAction()};
+        //(SystemAction.get(DeleteAction.class))
+        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(DeleteAction.class),new DebugAction()};
     }
 
+    @Override
+    public boolean canDestroy() {
+         return true;
+    }
+ 
     /**
      * This method is called on every property change. It updates display of the
      * name.
@@ -85,6 +111,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
         this.fireIconChange();
+        this.fireNodeDestroyed();
     }
 
     /**
@@ -138,7 +165,139 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         }
 
     }
+    
+        /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable an auv.
+     */
+    private class ChaseAction extends AbstractAction {
 
+        public ChaseAction() {
+            putValue(NAME, "Chase");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+            Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.chaseAUV(auv);
+                }
+                return null;
+            }
+            });
+            JOptionPane.showMessageDialog(null, "Done!");
+        }
+
+    }
+    
+    /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable an auv.
+     */
+    private class ResetAction extends AbstractAction {
+
+        public ResetAction() {
+            putValue(NAME, "Reset");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+              Future simStateFuture = mars.enqueue(new Callable() {
+            public Void call() throws Exception {
+                if(mars.getStateManager().getState(SimState.class) != null){
+                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    simState.chaseAUV(auv);
+                }
+                return null;
+            }
+            });
+            JOptionPane.showMessageDialog(null, "Done!");
+        }
+
+    }
+    
+    
+    /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable an auv.
+     */
+    private class DebugAction extends AbstractAction implements Presenter.Popup {
+        
+        public DebugAction() {
+            putValue(NAME, "test");
+        }
+        
+        @Override
+        public JMenuItem getPopupPresenter() {
+            JMenu result = new JMenu("Add Debug Data to Chart");  //remember JMenu is a subclass of JMenuItem
+            result.add (new JMenuItem(this));
+            result.add (new JMenuItem(this));
+            return result;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+    }        
+    /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable an auv.
+     */
+    private class DeleteAction2 extends AbstractAction {
+
+        public DeleteAction2() {
+            putValue(NAME, "Delete");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+                    //Custom button text
+            /*Object[] options = {"Yes",
+                        "No"};
+            int delete = JOptionPane.showOptionDialog(this.getRootPane(),
+            "Are you sure you want to delete the auv: " + auv.getName(),
+            "AUV deletion",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[1]);
+            if(delete == 0){
+                Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                            if(mars.getStateManager().getState(SimState.class) != null){
+                                auvManager.deregisterAUVNoFuture(auv);
+                            }
+                        updateTrees();
+                        return null;
+                    }
+                });
+            }*/
+            Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                            if(mars.getStateManager().getState(SimState.class) != null){
+                                auvManager.deregisterAUVNoFuture(auv);
+                            }
+                        return null;
+                    }
+                });
+            propertyChange(new PropertyChangeEvent(this, "", null, null));
+            JOptionPane.showMessageDialog(null, "Done!");
+        }
+
+    }
+
+    @Override
+    public void destroy() throws IOException {
+        fireNodeDestroyed();
+    }
+    
     /**
      * Returns the display name
      *

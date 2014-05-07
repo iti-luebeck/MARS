@@ -6,18 +6,24 @@
 
 package org.mars.auvtree;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import mars.auv.AUV;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
 
 /**
  * Factory for creation of auv nodes.
  * 
  * @author Christian
  */
-public class AUVNodeFactory extends ChildFactory<String>{
+public class AUVNodeFactory extends ChildFactory<String> implements NodeListener{
 
     /**
      * Set of auv names.
@@ -52,7 +58,34 @@ public class AUVNodeFactory extends ChildFactory<String>{
      */
     @Override
     protected Node createNodeForKey(String key) {
-        return new AUVNode(key);
+        AUVNode auvNode = new AUVNode(key);
+        auvNode.addNodeListener(this);
+        return auvNode;
     }
-    
+
+    @Override
+    public void childrenAdded(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void childrenRemoved(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void childrenReordered(NodeReorderEvent nre) {
+    }
+
+    @Override
+    public void nodeDestroyed(NodeEvent ne) {
+        AUVNode lookup = ne.getNode().getLookup().lookup(AUVNode.class);
+        String name = lookup.getDisplayName();
+        auvNames.remove(name);
+        refresh(true);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        
+    }
+
 }

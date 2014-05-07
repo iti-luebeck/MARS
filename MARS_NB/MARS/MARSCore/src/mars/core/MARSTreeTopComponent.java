@@ -71,6 +71,7 @@ import org.openide.util.NbBundle.Messages;
 
 /**
  * Top component which displays something.
+ * @deprecated see the new AUVTree Module
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSTree//EN",
@@ -90,6 +91,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_MARSTreeTopComponent=MARSTree Window",
     "HINT_MARSTreeTopComponent=This is a MARSTree window"
 })
+@Deprecated
 public final class MARSTreeTopComponent extends TopComponent {
     
     private MARS_Settings mars_settings;

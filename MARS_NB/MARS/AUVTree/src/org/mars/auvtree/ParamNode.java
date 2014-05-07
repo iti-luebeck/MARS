@@ -5,6 +5,7 @@ import com.jme3.math.Vector3f;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,6 +41,7 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.Lookups;
 
 /**
@@ -66,6 +68,11 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
      */
     private HashMap noise;
     
+    /**
+     * 
+     */
+    private ArrayList slavesNames;
+            
     /**
      * Name of the image file on the harddisk.
      */
@@ -128,7 +135,7 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             params = ((Actuator) (obj)).getAllVariables();
             noise = ((Actuator) (obj)).getAllNoiseVariables();
             if(obj instanceof Manipulating){
-                
+                slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Actuator) (obj)).getIcon();
         } else if (obj instanceof Sensor) {
@@ -136,6 +143,9 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             noise = ((Sensor) (obj)).getAllNoiseVariables();
             if(obj instanceof AmpereMeter){
                 
+            }
+            if(obj instanceof Manipulating){
+                slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Sensor) (obj)).getIcon();
         }
@@ -247,75 +257,111 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
     @Override
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
-        Sheet.Set set = Sheet.createPropertiesSet();
-        Sheet.Set set2 = Sheet.createExpertSet();set2.setDisplayName("Noise");
         obj = getLookup().lookup(PhysicalExchanger.class);
         if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(Accumulator.class);
         }
+        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+            obj = getLookup().lookup(Manipulating.class);
+        }
         if (params != null) {
-            Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
-            Property prop;
-            Property prop2;
-            String name;
-            for (; i.hasNext();) {
-                Map.Entry<String, Object> mE = i.next();
-
-                if (!mE.getKey().isEmpty()) {
-                    name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
-                    try {
-                        prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
-                        // set custom property editor for position and rotation params
-                        if (mE.getValue() instanceof Vector3f) {
-                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                        } else if (mE.getValue() instanceof ColorRGBA) {
-                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
-                        }
-
-                        prop.setName(name);
-                        set.put(prop);
-                    } catch (NoSuchMethodException ex) {
-                        ErrorManager.getDefault();
-                    }
-                }
-            }
+            sheet.put(createPropertiesSet(obj,params,"Properties",false));
         }
-        sheet.put(set);
-        
-        
         if (noise != null) {
-            Iterator<Map.Entry<String, Object>> i = noise.entrySet().iterator();
-            Property prop;
-            String name;
-            for (; i.hasNext();) {
-                Map.Entry<String, Object> mE = i.next();
-
-                if (!mE.getKey().isEmpty()) {
-                    name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
-                    try {
-                        prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
-                        // set custom property editor for position and rotation params
-                        if (mE.getValue() instanceof Vector3f) {
-                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                        } else if (mE.getValue() instanceof ColorRGBA) {
-                            ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
-                        }
-
-                        prop.setName(name);
-                        set2.put(prop);
-                    } catch (NoSuchMethodException ex) {
-                        ErrorManager.getDefault();
-                    }
-                }
-            }
+            sheet.put(createPropertiesSet(obj,noise,"Noise",true));
         }
-        sheet.put(set2);
-        
+        if (slavesNames != null) {
+            sheet.put(createPropertiesSet(obj,slavesNames,"Slaves",true));
+        }
         // add listener to react of changes from external editors (AUVEditor)
-        ((PropertyChangeListenerSupport) (obj)).addPropertyChangeListener(this);
+        if(params != null && noise != null && slavesNames != null){
+            ((PropertyChangeListenerSupport) (obj)).addPropertyChangeListener(this);
+        }
         return sheet;
     }
+    
+    private Sheet.Set createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert){
+        Sheet.Set set;
+        if(expert){
+            set = Sheet.createExpertSet();
+        }else{
+            set = Sheet.createPropertiesSet();
+        }
+        Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
+        Property prop;
+        String name;
+        for (; i.hasNext();) {
+            Map.Entry<String, Object> mE = i.next();
 
+            if (!mE.getKey().isEmpty()) {
+                name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+                try {
+                    prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
+                    // set custom property editor for position and rotation params
+                    if (mE.getValue() instanceof Vector3f) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                    } else if (mE.getValue() instanceof ColorRGBA) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+                    }
+
+                    prop.setName(name);
+                    set.put(prop);
+                } catch (NoSuchMethodException ex) {
+                    ErrorManager.getDefault();
+                }
+            }
+        }
+        set.setDisplayName(displayName);
+        return set;
+    }
+
+    private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert){
+        Sheet.Set set;
+        if(expert){
+            set = Sheet.createExpertSet();
+        }else{
+            set = Sheet.createPropertiesSet();
+        }
+        
+        Property prop;
+        String name;
+        for (Iterator it = params.iterator(); it.hasNext();) {
+            String slaveName = (String)it.next();
+            try {
+                prop = new PropertySupport.Reflection(obj, String.class, "SlavesNames");
+                prop.setName(slaveName);
+                set.put(prop);
+            } catch (NoSuchMethodException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+        /*Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
+        
+        for (; i.hasNext();) {
+            Map.Entry<String, Object> mE = i.next();
+
+            if (!mE.getKey().isEmpty()) {
+                name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+                try {
+                    prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), "getSlavesNames");
+                    // set custom property editor for position and rotation params
+                    if (mE.getValue() instanceof Vector3f) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                    } else if (mE.getValue() instanceof ColorRGBA) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+                    }
+
+                    prop.setName(name);
+                    set.put(prop);
+                } catch (NoSuchMethodException ex) {
+                    ErrorManager.getDefault();
+                }
+            }
+        }*/
+        set.setDisplayName(displayName);
+        return set;
+    }
+        
     /**
      * This listerner is called on property changes. It updates the Property
      * Sheet to display adjusted values.

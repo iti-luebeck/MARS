@@ -7,6 +7,7 @@ package org.mars.auvtree;
 
 import java.awt.BorderLayout;
 import java.util.Set;
+import javax.swing.ActionMap;
 import mars.MARS_Main;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -51,12 +52,19 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
 
     public AUVTreeTopComponent() {
         initComponents();
-
+        
+        ActionMap actionMap = getActionMap();
+        
+        //enable global delete
+        actionMap.put("delete", ExplorerUtils.actionDelete(mgr, true));
+        
         // associate lookup with explorer manager
-        associateLookup(ExplorerUtils.createLookup(mgr, getActionMap()));
+        associateLookup(ExplorerUtils.createLookup(mgr, actionMap));
         setLayout(new BorderLayout());
         bTV.setRootVisible(false);
         add(bTV, BorderLayout.CENTER);
+        
+        
     }
 
     /**
