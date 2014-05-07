@@ -244,57 +244,17 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             
         }
     }        
-    /**
-     * Inner class for the actions on right click. Provides action to enable and
-     * disable an auv.
-     */
-    private class DeleteAction2 extends AbstractAction {
-
-        public DeleteAction2() {
-            putValue(NAME, "Delete");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-                    //Custom button text
-            /*Object[] options = {"Yes",
-                        "No"};
-            int delete = JOptionPane.showOptionDialog(this.getRootPane(),
-            "Are you sure you want to delete the auv: " + auv.getName(),
-            "AUV deletion",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[1]);
-            if(delete == 0){
-                Future simStateFuture = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                            if(mars.getStateManager().getState(SimState.class) != null){
-                                auvManager.deregisterAUVNoFuture(auv);
-                            }
-                        updateTrees();
-                        return null;
-                    }
-                });
-            }*/
-            Future simStateFuture = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                            if(mars.getStateManager().getState(SimState.class) != null){
-                                auvManager.deregisterAUVNoFuture(auv);
-                            }
-                        return null;
-                    }
-                });
-            propertyChange(new PropertyChangeEvent(this, "", null, null));
-            JOptionPane.showMessageDialog(null, "Done!");
-        }
-
-    }
 
     @Override
     public void destroy() throws IOException {
+        Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                            if(mars.getStateManager().getState(SimState.class) != null){
+                                auvManager.deregisterAUVNoFuture(auv);
+                            }
+                        return null;
+                    }
+                });
         fireNodeDestroyed();
     }
     
