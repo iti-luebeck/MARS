@@ -87,7 +87,7 @@ public final class LoadAUVWizardAction implements ActionListener {
                 basicAUV.createDefault();
                 AUV_Parameters auv_Parameters = new AUV_Parameters();
                 auv_Parameters.createDefault();
-                auv_Parameters.setModelFilePath(jTextField1.getText().substring(jTextField1.getText().lastIndexOf("Models")));
+                auv_Parameters.setModelFilepath(jTextField1.getText().substring(jTextField1.getText().lastIndexOf("Models")));
                 basicAUV.setAuv_param(auv_Parameters); // hier muss noch alles rein
                 basicAUV.setName(jTextField2.getText());
 

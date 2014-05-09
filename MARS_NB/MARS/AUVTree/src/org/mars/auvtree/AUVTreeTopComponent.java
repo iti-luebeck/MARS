@@ -62,6 +62,7 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         associateLookup(ExplorerUtils.createLookup(mgr, actionMap));
         setLayout(new BorderLayout());
         bTV.setRootVisible(false);
+        bTV.setDropTarget(false);
         add(bTV, BorderLayout.CENTER);
         
         

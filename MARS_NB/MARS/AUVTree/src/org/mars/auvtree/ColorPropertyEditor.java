@@ -8,6 +8,8 @@ package org.mars.auvtree;
 import com.jme3.math.ColorRGBA;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditorSupport;
@@ -64,6 +66,28 @@ public class ColorPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public boolean supportsCustomEditor() {
+        return true;
+    }
+
+    @Override
+    public void paintValue(Graphics gfx, Rectangle box) {
+        float red = ((ColorRGBA) (getValue())).getRed();
+        float green = ((ColorRGBA) (getValue())).getGreen();
+        float blue = ((ColorRGBA) (getValue())).getBlue();
+        float alpha = ((ColorRGBA) (getValue())).getAlpha();
+        
+        Rectangle r = gfx.getClipBounds();
+        gfx.setColor(new Color(red, green, blue));
+        //gfx.fillRoundRect(1, 1, 270, 16, 10, 10);
+        //gfx.drawRoundRect(1, 1, 270, 16, 10, 10);
+        gfx.fillRect(1, 1, 270, 16);
+        gfx.drawRect(1, 1, 270, 16);
+        gfx.setColor(Color.black);
+        gfx.drawString(getAsText(), box.x + 0, box.y + 13);
+    }
+
+    @Override
+    public boolean isPaintable() {
         return true;
     }
 }

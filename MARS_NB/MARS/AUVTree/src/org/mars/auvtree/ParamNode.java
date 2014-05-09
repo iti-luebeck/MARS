@@ -19,6 +19,7 @@ import mars.actuators.Teleporter;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.auv.AUV_Parameters;
 import mars.sensors.AmpereMeter;
 import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
@@ -109,6 +110,10 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                 nodeName = "Sensors";
                 icon = "eye.png";
                 break;
+            case ParamChildNodeFactory.PARAMETER:
+                nodeName = "Parameter";
+                icon = "gear_in.png";
+                break;
             default:
                 nodeName = "";
         }
@@ -148,6 +153,8 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                 slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Sensor) (obj)).getIcon();
+        } else if(obj instanceof AUV_Parameters){
+           params = ((AUV_Parameters) (obj)).getAllVariables();
         }
         
         //no icon set, use default one
@@ -264,23 +271,30 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
         if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(Manipulating.class);
         }
+        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+            obj = getLookup().lookup(AUV_Parameters.class);
+        }
+        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+            obj = getLookup().lookup(HashMap.class);
+        }
+        
         if (params != null) {
-            sheet.put(createPropertiesSet(obj,params,"Properties",false));
+            createPropertiesSet(obj,params,"Properties",false,sheet);
         }
         if (noise != null) {
-            sheet.put(createPropertiesSet(obj,noise,"Noise",true));
+            createPropertiesSet(obj,noise,"Noise",true,sheet);
         }
         if (slavesNames != null) {
             sheet.put(createPropertiesSet(obj,slavesNames,"Slaves",true));
         }
         // add listener to react of changes from external editors (AUVEditor)
-        if(params != null && noise != null && slavesNames != null){
+        if(params != null){
             ((PropertyChangeListenerSupport) (obj)).addPropertyChangeListener(this);
         }
         return sheet;
     }
     
-    private Sheet.Set createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert){
+    private void createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert, Sheet sheet){
         Sheet.Set set;
         if(expert){
             set = Sheet.createExpertSet();
@@ -293,7 +307,32 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
         for (; i.hasNext();) {
             Map.Entry<String, Object> mE = i.next();
 
-            if (!mE.getKey().isEmpty()) {
+            if(mE.getValue() instanceof HashMap){//make a new set 
+                Sheet.Set setHM = Sheet.createExpertSet();
+                HashMap hasher = (HashMap)mE.getValue();
+                Iterator<Map.Entry<String, Object>> ih = hasher.entrySet().iterator();
+                for (; ih.hasNext();) {
+                    Map.Entry<String, Object> mE2 = ih.next();
+                    String namehm = mE.getKey() + mE2.getKey().substring(0, 1).toUpperCase() + mE2.getKey().substring(1);
+                    try {
+                        Property prophm = new PropertySupport.Reflection(obj, mE2.getValue().getClass(), namehm);
+                        // set custom property editor for position and rotation params
+                        if (mE2.getValue() instanceof Vector3f) {
+                            ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                        } else if (mE2.getValue() instanceof ColorRGBA) {
+                            ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(ColorPropertyEditor.class);
+                        }
+
+                        prophm.setName(mE2.getKey());
+                        setHM.put(prophm);
+                    } catch (NoSuchMethodException ex) {
+                        ErrorManager.getDefault();
+                    }
+                }
+                setHM.setDisplayName(mE.getKey());
+                setHM.setName(mE.getKey());
+                sheet.put(setHM);
+            }else if (!mE.getKey().isEmpty()) {
                 name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
                 try {
                     prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
@@ -312,7 +351,8 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
             }
         }
         set.setDisplayName(displayName);
-        return set;
+        set.setName(displayName);
+        sheet.put(set);
     }
 
     private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert){

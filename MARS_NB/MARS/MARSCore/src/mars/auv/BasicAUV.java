@@ -1270,18 +1270,18 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      */
     private void loadModel() {
-        auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
+        auv_spatial = assetManager.loadModel(auv_param.getModelFilepath());
         
         optimizeSpatial(auv_spatial);
         
         //assetManager.unregisterLoader(OBJLoader.class);
         //assetManager.registerLoader(MyOBJLoader.class,"obj");
-        //auv_spatial = (Spatial)assetManager.loadAsset(new ModelKey(auv_param.getModelFilePath()));
+        //auv_spatial = (Spatial)assetManager.loadAsset(new ModelKey(auv_param.getModelFilepath()));
 
 
         /*assetManager.registerLoader(MyMTLLoader.class);
-         int index = auv_param.getModelFilePath().lastIndexOf(".");
-         String matPath = auv_param.getModelFilePath().substring(0, index).concat(".mtl");
+         int index = auv_param.getModelFilepath().lastIndexOf(".");
+         String matPath = auv_param.getModelFilepath().substring(0, index).concat(".mtl");
          Material auv_mat = (Material)assetManager.loadAsset(matPath);*/
 
         auv_spatial.setLocalScale(auv_param.getModel_scale());
@@ -1391,7 +1391,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      */
     public Spatial loadModelCopy() {
-        Spatial auv_spatial_copy = assetManager.loadModel(auv_param.getModelFilePath());
+        Spatial auv_spatial_copy = assetManager.loadModel(auv_param.getModelFilepath());
         
         optimizeSpatial(auv_spatial_copy);
 
@@ -1435,7 +1435,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     }
 
     private void createGhostAUV() {
-        ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilePath());
+        ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilepath());
         ghost_auv_spatial.setLocalScale(auv_param.getModel_scale());
         ghost_auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
         ghost_auv_spatial.updateGeometricState();

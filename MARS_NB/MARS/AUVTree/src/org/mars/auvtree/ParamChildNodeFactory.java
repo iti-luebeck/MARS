@@ -28,6 +28,7 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
     public static final int ACCUMULATORS = 0;
     public static final int ACTUATORS = 1;
     public static final int SENSORS = 2;
+    public static final int PARAMETER = 3;
     private final int type;
     private final static int CHILD = 1;
     private final static int PARAMROOT = 2;
@@ -74,9 +75,10 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
             }*/
         } else if (type == PARAMROOT) {
             // create list for the main categories
+            toPopulate.add("" + PARAMETER);
             toPopulate.add("" + ACCUMULATORS);
-            toPopulate.add("" + SENSORS);
             toPopulate.add("" + ACTUATORS);
+            toPopulate.add("" + SENSORS);
         }
         return true;
     }
@@ -99,6 +101,11 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
                     break;
                 case SENSORS:
                     n = new ParamNode(ikey, auv.getSensors());
+                    break;
+                case PARAMETER:
+                    HashMap hasher = new HashMap();
+                    hasher.put("Parmeter", auv.getAuv_param());
+                    n = new ParamNode(ikey, hasher);
                     break;
             }
         }

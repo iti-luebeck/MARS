@@ -12,12 +12,18 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -26,7 +32,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement(name="Parameters")
 @XmlAccessorType(XmlAccessType.NONE)
-public class AUV_Parameters{
+public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> params = new HashMap<String,Object> ();
@@ -38,6 +44,8 @@ public class AUV_Parameters{
     private HashMap<String,Object> optimize;
     private AUV auv;
 
+    private List listeners = Collections.synchronizedList(new LinkedList());
+    
     /**
      * 
      */
@@ -50,6 +58,26 @@ public class AUV_Parameters{
         cloner.dontCloneInstanceOf(AUV.class); 
         AUV_Parameters auvParamCopy = cloner.deepClone(this);
         return auvParamCopy;
+    }
+    
+        
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        for (int i = 0; i < pcls.length; i++) {
+            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
     }
     
     /**
@@ -109,7 +137,7 @@ public class AUV_Parameters{
         setMap_Color(ColorRGBA.Red);
         setMass(1.0f);
         setMaxWaypoints(25);
-        setModelFilePath("");
+        setModelFilepath("");
         setModel_name("");
         setModel_scale(0.1f);
         setOffCamera_height(240);
@@ -826,7 +854,7 @@ public class AUV_Parameters{
      *
      * @return
      */
-    public String getModelFilePath() {
+    public String getModelFilepath() {
         return (String)model.get("filepath");
     }
 
@@ -834,7 +862,7 @@ public class AUV_Parameters{
      *
      * @param filepath 
      */
-    public void setModelFilePath(String filepath) {
+    public void setModelFilepath(String filepath) {
         model.put("filepath", filepath);
     }
 
