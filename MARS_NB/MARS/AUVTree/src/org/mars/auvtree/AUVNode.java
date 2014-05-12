@@ -111,7 +111,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
         this.fireIconChange();
-        this.fireNodeDestroyed();
+       // this.fireNodeDestroyed();
     }
 
     /**
@@ -275,7 +275,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public String getHtmlDisplayName() {
-        if (auv.getAuv_param().isEnabled()) {
+        if (auv.getAuv_param().getEnabled()) {
             return "<font color='!textText'>" + name + "</font>";
         } else {
             // !controlShadow would be better than hardcoded but lookandfeel uses bold black for !controlShadow

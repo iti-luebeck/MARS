@@ -76,9 +76,9 @@ public class WayPoints extends Node{
      */
     public void addWaypoint(Vector3f waypoint){
         if(waypoints.size() >= 1){//add a line if we have minimum two points
-            if(auv_param.getMaxWaypoints() == 0){//unlimited waypoints
+            if(auv_param.getWaypointsMaxWaypoints() == 0){//unlimited waypoints
                 createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
-            }else if(waypoints.size() >= auv_param.getMaxWaypoints()) {//limited waypoints
+            }else if(waypoints.size() >= auv_param.getWaypointsMaxWaypoints()) {//limited waypoints
                 waypoints.remove(0);
                 waypoints_geom.remove(0);
                 destroyLine();

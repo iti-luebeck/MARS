@@ -334,7 +334,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
-        auv_node.setName(auv_param.getAuv_name() + "_physicnode");
+        auv_node.setName(auv_param.getName() + "_physicnode");
         if(WayPoints != null){
             WayPoints.setAuv_param(auv_param);
         }
@@ -408,7 +408,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public String getName() {
-        return auv_param.getAuv_name();
+        return auv_param.getName();
     }
 
     /**
@@ -417,7 +417,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void setName(String auv_name) {
-        auv_param.setAuv_name(auv_name);
+        auv_param.setName(auv_name);
         auv_node.setName(auv_name + "_physicnode");
     }
 
@@ -744,13 +744,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
             if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getAuv_name());
+                element.initROS(mars_node, auv_param.getName());
             }
         }
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
             if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getAuv_name());
+                element.initROS(mars_node, auv_param.getName());
             }
         }
     }
@@ -1284,7 +1284,7 @@ public class BasicAUV implements AUV, SceneProcessor {
          String matPath = auv_param.getModelFilepath().substring(0, index).concat(".mtl");
          Material auv_mat = (Material)assetManager.loadAsset(matPath);*/
 
-        auv_spatial.setLocalScale(auv_param.getModel_scale());
+        auv_spatial.setLocalScale(auv_param.getModelScale());
         auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
 
         //here should be somehow the fix for the gui rotation problem
@@ -1294,7 +1294,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         auv_spatial.updateModelBound();
         auv_spatial.updateGeometricState();
-        auv_spatial.setName(auv_param.getModel_name());
+        auv_spatial.setName(auv_param.getModelName());
         auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
@@ -1357,11 +1357,11 @@ public class BasicAUV implements AUV, SceneProcessor {
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
         } else if (auv_param.getBuoyancy_Type() == BuoyancyType.SPHERECOLLISIONSHAPE) {
-            //collisionShape = new SphereCollisionShape(auv_param.getDimensions().x);
+            //collisionShape = new SphereCollisionShape(auv_param.getCollisionDimensions().x);
         } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CONECOLLISIONSHAPE) {
-           //collisionShape = new ConeCollisionShape(auv_param.getDimensions().x, auv_param.getDimensions().y);
+           //collisionShape = new ConeCollisionShape(auv_param.getCollisionDimensions().x, auv_param.getCollisionDimensions().y);
         } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
-            //collisionShape = new CylinderCollisionShape(auv_param.getDimensions(), 0);
+            //collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions(), 0);
         } else if (auv_param.getBuoyancy_Type() == BuoyancyType.MESHACCURATE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else if (auv_param.getBuoyancy_Type() == BuoyancyType.BOUNDINGBOX) {
@@ -1376,7 +1376,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         }else if (auv_param.getBuoyancy_Type() == BuoyancyType.NOSHAPE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else {
-            //collisionShape = new BoxCollisionShape(auv_param.getDimensions());
+            //collisionShape = new BoxCollisionShape(auv_param.getCollisionDimensions());
         }
         
         if(BuoyancyGeom!= null){//for init
@@ -1395,11 +1395,11 @@ public class BasicAUV implements AUV, SceneProcessor {
         
         optimizeSpatial(auv_spatial_copy);
 
-        auv_spatial_copy.setLocalScale(auv_param.getModel_scale());
+        auv_spatial_copy.setLocalScale(auv_param.getModelScale());
 
         auv_spatial_copy.updateModelBound();
         auv_spatial_copy.updateGeometricState();
-        auv_spatial_copy.setName(auv_param.getModel_name() + "_copy");
+        auv_spatial_copy.setName(auv_param.getModelName() + "_copy");
         auv_spatial_copy.setUserData("auv_name", getName());
         auv_spatial_copy.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial_copy.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
@@ -1410,10 +1410,10 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void optimizeSpatial(Spatial auv_spatial){
         if(auv_spatial instanceof Node){
             Node auv = (Node)auv_spatial;
-            if(auv_param.isBatched()){
+            if(auv_param.isOptimizeBatched()){
                 jme3tools.optimize.GeometryBatchFactory.optimize(auv);
             }
-            if(auv_param.isLod()){
+            if(auv_param.isOptimizeLod()){
                 for (Spatial spatial : auv.getChildren()) {
                     if (spatial instanceof Geometry) {
                         listGeoms.add((Geometry) spatial);
@@ -1422,11 +1422,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
                 for (final Geometry geometry : listGeoms) {
                     LodGenerator lodGenerator = new LodGenerator(geometry);          
-                    lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, auv_param.getLodReduction1(), auv_param.getLodReduction2());
+                    lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, auv_param.getOptimizeLodReduction1(), auv_param.getOptimizeLodReduction2());
                     geometry.setLodLevel(0);
                     MyLodControl control = new MyLodControl();
-                    control.setDistTolerance(auv_param.getLodDistTolerance());
-                    control.setTrisPerPixel(auv_param.getLodTrisPerPixel());
+                    control.setDistTolerance(auv_param.getOptimizeLodDistTolerance());
+                    control.setTrisPerPixel(auv_param.getOptimizeLodTrisPerPixel());
                     control.setCam(mars.getCamera());
                     geometry.addControl(control);
                 }
@@ -1436,11 +1436,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     private void createGhostAUV() {
         ghost_auv_spatial = assetManager.loadModel(auv_param.getModelFilepath());
-        ghost_auv_spatial.setLocalScale(auv_param.getModel_scale());
+        ghost_auv_spatial.setLocalScale(auv_param.getModelScale());
         ghost_auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
         ghost_auv_spatial.updateGeometricState();
         ghost_auv_spatial.updateModelBound();
-        ghost_auv_spatial.setName(auv_param.getModel_name() + "_ghost");
+        ghost_auv_spatial.setName(auv_param.getModelName() + "_ghost");
         ghost_auv_spatial.setUserData("auv_name", getName());
         ghost_auv_spatial.setCullHint(CullHint.Always);
         Helper.setNodePickUserData(ghost_auv_spatial, PickHint.NoPick);
@@ -1486,18 +1486,18 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void createPhysicsNode() {
         CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
 
-        if (auv_param.getType() == CollisionType.BOXCOLLISIONSHAPE) {
-            collisionShape = new BoxCollisionShape(auv_param.getDimensions());
-        } else if (auv_param.getType() == CollisionType.SPHERECOLLISIONSHAPE) {
-            collisionShape = new SphereCollisionShape(auv_param.getDimensions().x);
-        } else if (auv_param.getType() == CollisionType.CONECOLLISIONSHAPE) {
-            collisionShape = new ConeCollisionShape(auv_param.getDimensions().x, auv_param.getDimensions().y);
-        } else if (auv_param.getType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
-            collisionShape = new CylinderCollisionShape(auv_param.getDimensions(), 0);
-        } else if (auv_param.getType() == CollisionType.MESHACCURATE) {
+        if (auv_param.getCollisionType() == CollisionType.BOXCOLLISIONSHAPE) {
+            collisionShape = new BoxCollisionShape(auv_param.getCollisionDimensions());
+        } else if (auv_param.getCollisionType() == CollisionType.SPHERECOLLISIONSHAPE) {
+            collisionShape = new SphereCollisionShape(auv_param.getCollisionDimensions().x);
+        } else if (auv_param.getCollisionType() == CollisionType.CONECOLLISIONSHAPE) {
+            collisionShape = new ConeCollisionShape(auv_param.getCollisionDimensions().x, auv_param.getCollisionDimensions().y);
+        } else if (auv_param.getCollisionType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
+            collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions(), 0);
+        } else if (auv_param.getCollisionType() == CollisionType.MESHACCURATE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else {
-            collisionShape = new BoxCollisionShape(auv_param.getDimensions());
+            collisionShape = new BoxCollisionShape(auv_param.getCollisionDimensions());
         }
 
         compoundCollisionShape1.addChildShape(collisionShape, auv_param.getCentroid_center_distance().add(auv_param.getCollisionPosition()));
@@ -1652,7 +1652,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
             }
             whites = (offCamera_width * offCamera_height) - whites;
-            //System.out.println(getAuv_param().getAuv_name() + " WHITES: " + whites);
+            //System.out.println(getAuv_param().getName() + " WHITES: " + whites);
             return whites * pixel_area;
         }
         return 0.0f;

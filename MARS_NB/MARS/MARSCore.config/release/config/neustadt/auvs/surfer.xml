@@ -208,7 +208,7 @@
 					</entry>
                 </value>
             </entry>
-            <entry xsi:type="myHashMapEntryTypeObject" key="auv_name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <entry xsi:type="myHashMapEntryTypeObject" key="name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">surfer</value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeObject" key="damping_angular" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

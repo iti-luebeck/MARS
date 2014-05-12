@@ -723,7 +723,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
                 Iterator iter2 = auvs.iterator();
                 while(iter2.hasNext() ) {
                     AUV aaa = (AUV)iter2.next();
-                    if(            aaa.getAuv_param().getAuv_name().equals("hanse2") ){
+                    if(            aaa.getAuv_param().getName().equals("hanse2") ){
                     hans = (Hanse)aaa;
                     }
                  }
@@ -735,7 +735,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
              while(iter.hasNext() ) {
                 BasicAUV bas_auv = (BasicAUV)iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
-                bas_auv.setName(bas_auv.getAuv_param().getAuv_name());
+                bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
              }
              simobs = xml.loadSimObjects();

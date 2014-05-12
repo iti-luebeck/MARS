@@ -96,9 +96,8 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         initAfterJAXB();
         setAlpha_Depth_Scale(3.0f);
         setAngular_factor(1.0f);
-        setAuv_class(this.getClass().getName());
-        setAuv_name("basicAUV");
-        setBatched(true);
+        setName("basicAUV");
+        setOptimizeBatched(true);
         setBuoyancy_distance(0.0f);
         setBuoyancy_resolution(0.03125f);
         setBuoyancy_scale(0.9f);
@@ -121,7 +120,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setDebugVisualizers(false);
         setDebugWireframe(false);
         setDebugBuoycancyVolume(false);
-        setDimensions(Vector3f.UNIT_XYZ);
+        setCollisionDimensions(Vector3f.UNIT_XYZ);
         setDrag_coefficient_angular(0.3f);
         setDrag_coefficient_linear(1.45f);
         setDrag_updaterate(1);
@@ -129,17 +128,17 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setFlow_updaterate(0);
         setIcon("");
         setLinear_factor(Vector3f.UNIT_XYZ);
-        setLod(true);
-        setLodDistTolerance(1.0f);
-        setLodReduction1(0.3f);
-        setLodReduction2(0.6f);
-        setLodTrisPerPixel(0.5f);
+        setOptimizeLod(true);
+        setOptimizeLodDistTolerance(1.0f);
+        setOptimizeLodReduction1(0.3f);
+        setOptimizeLodReduction2(0.6f);
+        setOptimizeLodTrisPerPixel(0.5f);
         setMap_Color(ColorRGBA.Red);
         setMass(1.0f);
-        setMaxWaypoints(25);
+        setWaypointsMaxWaypoints(25);
         setModelFilepath("");
-        setModel_name("");
-        setModel_scale(0.1f);
+        setModelName("");
+        setModelScale(0.1f);
         setOffCamera_height(240);
         setOffCamera_width(320);
         setPhysicalvalues_updaterate(0.0f);
@@ -148,7 +147,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setRotation(Vector3f.ZERO);
         setRotationQuaternion(Quaternion.IDENTITY);
         setSelection_color(ColorRGBA.Red);
-        setType(1);
+        setCollisionType(1);
         setWaypointsLineWidth(5.0f);
         setWaypointsColor(ColorRGBA.White);
         setWaypointsEnabled(true);
@@ -194,11 +193,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
                 physics_control.setPhysicsRotation(m_rot);
             }
         }else if(target.equals("scale") && hashmapname.equals("Model")){
-            auv.getAUVSpatial().setLocalScale(getModel_scale());
+            auv.getAUVSpatial().setLocalScale(getModelScale());
         }else if(target.equals("collisionbox")){
             /*if(physics_control != null ){
                 CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
-                BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getDimensions());
+                BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getCollisionDimensions());
                 compoundCollisionShape1.addChildShape(boxCollisionShape, getCentroid_center_distance());
                 RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass());
                 if(isDebugCollision()){
@@ -257,32 +256,16 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public String getAuv_class() {
-        return (String)params.get("auv_class");
-    }
-
-    /**
-     *
-     * @param auv_class
-     */
-    public void setAuv_class(String auv_class) {
-        params.put("auv_class", auv_class);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public String getAuv_name() {
-        return (String)params.get("auv_name");
+    public String getName() {
+        return (String)params.get("name");
     }
 
     /**
      *
      * @param auv_name
      */
-    public void setAuv_name(String auv_name) {
-        params.put("auv_name", auv_name);
+    public void setName(String name) {
+        params.put("name", name);
     }
     
     /**
@@ -337,7 +320,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getAngular_factor() {
+    public Float getAngular_factor() {
          return (Float)params.get("angular_factor");
     }
 
@@ -345,7 +328,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param angular_factor
      */
-    public void setAngular_factor(float angular_factor) {
+    public void setAngular_factor(Float angular_factor) {
         params.put("angular_factor", angular_factor);
     }
     
@@ -353,7 +336,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getThreatLevel() {
+    public Float getThreatLevel() {
         Float ret = (Float)params.get("ThreatLevel");
         if(ret != null){
             return ret;
@@ -366,7 +349,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param ThreatLevel
      */
-    public void setThreatLevel(float ThreatLevel) {
+    public void setThreatLevel(Float ThreatLevel) {
         params.put("ThreatLevel", ThreatLevel);
     }
     
@@ -382,7 +365,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param lineWidth 
      */
-    public void setWaypointsLineWidth(float lineWidth) {
+    public void setWaypointsLineWidth(Float lineWidth) {
         waypoints.put("lineWidth", lineWidth);
     }
     
@@ -390,7 +373,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getMaxWaypoints() {
+    public Integer getWaypointsMaxWaypoints() {
          return (Integer)waypoints.get("maxWaypoints");
     }
 
@@ -398,7 +381,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param maxWaypoints
      */
-    public void setMaxWaypoints(int maxWaypoints) {
+    public void setWaypointsMaxWaypoints(Integer maxWaypoints) {
         waypoints.put("maxWaypoints", maxWaypoints);
     }
 
@@ -422,7 +405,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isWaypointsEnabled() {
+    public Boolean isWaypointsEnabled() {
+         return (Boolean)waypoints.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWaypointsEnabled() {
          return (Boolean)waypoints.get("enabled");
     }
 
@@ -430,7 +421,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param enabled
      */
-    public void setWaypointsEnabled(boolean enabled) {
+    public void setWaypointsEnabled(Boolean enabled) {
         waypoints.put("enabled", enabled);
     }
     
@@ -438,7 +429,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isWaypointsGradient() {
+    public Boolean isWaypointsGradient() {
+         return (Boolean)waypoints.get("gradient");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWaypointsGradient() {
          return (Boolean)waypoints.get("gradient");
     }
 
@@ -446,7 +445,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param gradient 
      */
-    public void setWaypointsGradient(boolean gradient) {
+    public void setWaypointsGradient(Boolean gradient) {
         waypoints.put("gradient", gradient);
     }
 
@@ -454,7 +453,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getWaypointsUpdaterate() {
+    public Float getWaypointsUpdaterate() {
          return (Float)waypoints.get("updaterate");
     }
 
@@ -462,7 +461,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param updaterate
      */
-    public void setWaypointsUpdaterate(float updaterate) {
+    public void setWaypointsUpdaterate(Float updaterate) {
         waypoints.put("updaterate", updaterate);
     }
 
@@ -470,7 +469,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isWaypointsVisiblity() {
+    public Boolean isWaypointsVisiblity() {
+         return (Boolean)waypoints.get("visiblity");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWaypointsVisiblity() {
          return (Boolean)waypoints.get("visiblity");
     }
 
@@ -478,7 +485,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param visiblity
      */
-    public void setWaypointsVisiblity(boolean visiblity) {
+    public void setWaypointsVisiblity(Boolean visiblity) {
         waypoints.put("visiblity", visiblity);
     }
     
@@ -486,7 +493,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isRay_Detectable() {
+    public Boolean isRay_Detectable() {
         return (Boolean)params.get("ray_detectable");
     }
 
@@ -494,7 +501,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param sonar_detectable
      */
-    public void setRay_Detectable(boolean ray_detectable) {
+    public void setRay_Detectable(Boolean ray_detectable) {
         params.put("ray_detectable", ray_detectable);
     }
 
@@ -518,7 +525,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isBatched() {
+    public Boolean isOptimizeBatched() {
+        return (Boolean)optimize.get("batched");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getOptimizeBatched() {
         return (Boolean)optimize.get("batched");
     }
 
@@ -526,7 +541,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param sonar_detectable
      */
-    public void setBatched(boolean batched) {
+    public void setOptimizeBatched(Boolean batched) {
         optimize.put("batched", batched);
     }
     
@@ -534,7 +549,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isLod() {
+    public Boolean isOptimizeLod() {
+        return (Boolean)optimize.get("lod");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getOptimizeLod() {
         return (Boolean)optimize.get("lod");
     }
 
@@ -542,7 +565,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param sonar_detectable
      */
-    public void setLod(boolean lod) {
+    public void setOptimizeLod(Boolean lod) {
         optimize.put("lod", lod);
     }
     
@@ -550,7 +573,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Float getLodTrisPerPixel() {
+    public Float getOptimizeLodTrisPerPixel() {
         return (Float)optimize.get("LodTrisPerPixel");
     }
 
@@ -558,7 +581,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param LodTrisPerPixel
      */
-    public void setLodTrisPerPixel(float LodTrisPerPixel) {
+    public void setOptimizeLodTrisPerPixel(Float LodTrisPerPixel) {
         optimize.put("LodTrisPerPixel", LodTrisPerPixel);
     }
     
@@ -566,7 +589,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Float getLodDistTolerance() {
+    public Float getOptimizeLodDistTolerance() {
         return (Float)optimize.get("LodDistTolerance");
     }
 
@@ -574,7 +597,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param LodDistTolerance
      */
-    public void setLodDistTolerance(float LodDistTolerance) {
+    public void setOptimizeLodDistTolerance(Float LodDistTolerance) {
         optimize.put("LodDistTolerance", LodDistTolerance);
     }
     
@@ -582,7 +605,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Float getLodReduction1() {
+    public Float getOptimizeLodReduction1() {
         return (Float)optimize.get("LodReduction1");
     }
 
@@ -590,7 +613,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param LodReduction1
      */
-    public void setLodReduction1(float LodReduction1) {
+    public void setOptimizeLodReduction1(Float LodReduction1) {
         optimize.put("LodReduction1", LodReduction1);
     }
     
@@ -598,7 +621,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Float getLodReduction2() {
+    public Float getOptimizeLodReduction2() {
         return (Float)optimize.get("LodReduction2");
     }
 
@@ -606,7 +629,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param LodReduction2
      */
-    public void setLodReduction2(float LodReduction2) {
+    public void setOptimizeLodReduction2(Float LodReduction2) {
         optimize.put("LodReduction2", LodReduction2);
     }
 
@@ -614,7 +637,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getBuoyancy_updaterate() {
+    public Integer getBuoyancy_updaterate() {
         return (Integer)buoyancy.get("buoyancy_updaterate");
     }
 
@@ -622,7 +645,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoyancy_updaterate
      */
-    public void setBuoyancy_updaterate(int buoyancy_updaterate) {
+    public void setBuoyancy_updaterate(Integer buoyancy_updaterate) {
         buoyancy.put("buoyancy_updaterate", buoyancy_updaterate);
     }
 
@@ -638,7 +661,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoyancy_distance
      */
-    public void setBuoyancy_distance(float buoyancy_distance) {
+    public void setBuoyancy_distance(Float buoyancy_distance) {
         buoyancy.put("buoyancy_distance", buoyancy_distance);
     }
 
@@ -654,7 +677,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoyancy_scale
      */
-    public void setBuoyancy_scale(float buoyancy_scale) {
+    public void setBuoyancy_scale(Float buoyancy_scale) {
         buoyancy.put("buoyancy_scale", buoyancy_scale);
     }
     
@@ -670,7 +693,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoyancy_resolution 
      */
-    public void setBuoyancy_resolution(float buoyancy_resolution) {
+    public void setBuoyancy_resolution(Float buoyancy_resolution) {
         buoyancy.put("buoyancy_resolution", buoyancy_resolution);
     }
     
@@ -726,7 +749,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getBuoyancy_Type() {
+    public Integer getBuoyancy_Type() {
         return (Integer)buoyancy.get("buoyancy_type");
     }
 
@@ -734,7 +757,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param type
      */
-    public void setBuoyancy_Type(int buoyancy_type) {
+    public void setBuoyancy_Type(Integer buoyancy_type) {
         buoyancy.put("buoyancy_type", buoyancy_type);
     }
 
@@ -742,7 +765,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getDrag_updaterate() {
+    public Integer getDrag_updaterate() {
         return (Integer)params.get("drag_updaterate");
     }
 
@@ -750,7 +773,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param drag_updaterate
      */
-    public void setDrag_updaterate(int drag_updaterate) {
+    public void setDrag_updaterate(Integer drag_updaterate) {
         params.put("drag_updaterate", drag_updaterate);
     }
     
@@ -758,7 +781,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getFlow_updaterate() {
+    public Integer getFlow_updaterate() {
         return (Integer)params.get("flow_updaterate");
     }
 
@@ -766,7 +789,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param flow_updaterate 
      */
-    public void setFlow_updaterate(int flow_updaterate) {
+    public void setFlow_updaterate(Integer flow_updaterate) {
         params.put("flow_updaterate", flow_updaterate);
     }
     
@@ -806,7 +829,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getAlpha_Depth_Scale() {
+    public Float getAlpha_Depth_Scale() {
         return (Float)model.get("alpha_depth_scale");
     }
 
@@ -814,15 +837,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param scale
      */
-    public void setAlpha_Depth_Scale(float scale) {
-        model.put("alpha_depth_scale", scale);
+    public void setAlpha_Depth_Scale(Float alpha_depth_scale) {
+        model.put("alpha_depth_scale", alpha_depth_scale);
     }
 
     /**
      *
      * @return
      */
-    public String getModel_name() {
+    public String getModelName() {
         return (String)model.get("name");
     }
 
@@ -830,7 +853,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param name
      */
-    public void setModel_name(String name) {
+    public void setModelName(String name) {
         model.put("name", name);
     }
 
@@ -838,7 +861,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getModel_scale() {
+    public Float getModelScale() {
         return (Float)model.get("scale");
     }
 
@@ -846,7 +869,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param scale
      */
-    public void setModel_scale(float scale) {
+    public void setModelScale(Float scale) {
         model.put("scale", scale);
     }
 
@@ -870,7 +893,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getDrag_coefficient_angular() {
+    public Float getDrag_coefficient_angular() {
         return (Float)params.get("drag_coefficient_angular");
     }
 
@@ -878,7 +901,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param drag_coefficient_angular
      */
-    public void setDrag_coefficient_angular(float drag_coefficient_angular) {
+    public void setDrag_coefficient_angular(Float drag_coefficient_angular) {
         params.put("drag_coefficient_angular", drag_coefficient_angular);
     }
 
@@ -886,7 +909,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getDrag_coefficient_linear() {
+    public Float getDrag_coefficient_linear() {
         return (Float)params.get("drag_coefficient_linear");
     }
 
@@ -894,7 +917,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param drag_coefficient_linear
      */
-    public void setDrag_coefficient_linear(float drag_coefficient_linear) {
+    public void setDrag_coefficient_linear(Float drag_coefficient_linear) {
         params.put("drag_coefficient_linear", drag_coefficient_linear);
     }
 
@@ -918,7 +941,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getDamping_angular() {
+    public Float getDamping_angular() {
         return (Float)params.get("damping_angular");
     }
 
@@ -926,7 +949,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param damping_angular
      */
-    public void setDamping_angular(float damping_angular) {
+    public void setDamping_angular(Float damping_angular) {
         params.put("damping_angular", damping_angular);
     }
 
@@ -1003,7 +1026,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Vector3f getDimensions() {
+    public Vector3f getCollisionDimensions() {
         return (Vector3f)collision.get("dimensions");
     }
 
@@ -1011,7 +1034,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param dimensions
      */
-    public void setDimensions(Vector3f dimensions) {
+    public void setCollisionDimensions(Vector3f dimensions) {
         collision.put("dimensions", dimensions);
     }
     
@@ -1035,7 +1058,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getType() {
+    public Integer getCollisionType() {
         return (Integer)collision.get("type");
     }
 
@@ -1043,7 +1066,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param type
      */
-    public void setType(int type) {
+    public void setCollisionType(Integer type) {
         collision.put("type", type);
     }
 
@@ -1051,7 +1074,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public float getMass() {
+    public Float getMass() {
         return (Float)params.get("mass_auv");
     }
 
@@ -1059,7 +1082,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param mass_auv
      */
-    public void setMass(float mass_auv) {
+    public void setMass(Float mass_auv) {
         params.put("mass_auv", mass_auv);
     }
 
@@ -1067,7 +1090,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getOffCamera_height() {
+    public Integer getOffCamera_height() {
         return (Integer)params.get("offCamera_height");
     }
 
@@ -1075,7 +1098,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param offCamera_height
      */
-    public void setOffCamera_height(int offCamera_height) {
+    public void setOffCamera_height(Integer offCamera_height) {
         params.put("offCamera_height", offCamera_height);
     }
 
@@ -1083,7 +1106,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public int getOffCamera_width() {
+    public Integer getOffCamera_width() {
         return (Integer)params.get("offCamera_width");
     }
 
@@ -1091,7 +1114,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param offCamera_width
      */
-    public void setOffCamera_width(int offCamera_width) {
+    public void setOffCamera_width(Integer offCamera_width) {
         params.put("offCamera_width", offCamera_width);
     }
 
@@ -1099,7 +1122,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugDrag() {
+    public Boolean isDebugDrag() {
+         return (Boolean)debug.get("drag");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugDrag() {
          return (Boolean)debug.get("drag");
     }
 
@@ -1107,15 +1138,23 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param drag
      */
-    public void setDebugDrag(boolean drag) {
+    public void setDebugDrag(Boolean drag) {
         debug.put("drag", drag);
     }
     
-        /**
+    /**
      *
      * @return
      */
-    public boolean isDebugBounding() {
+    public Boolean isDebugBounding() {
+         return (Boolean)debug.get("bounding");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugBounding() {
          return (Boolean)debug.get("bounding");
     }
 
@@ -1123,7 +1162,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param bounding 
      */
-    public void setDebugBounding(boolean bounding) {
+    public void setDebugBounding(Boolean bounding) {
         debug.put("bounding", bounding);
     }
     
@@ -1131,7 +1170,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugWireframe() {
+    public Boolean isDebugWireframe() {
+         return (Boolean)debug.get("wireframe");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugWireframe() {
          return (Boolean)debug.get("wireframe");
     }
 
@@ -1139,7 +1186,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param wireframe 
      */
-    public void setDebugWireframe(boolean wireframe) {
+    public void setDebugWireframe(Boolean wireframe) {
         debug.put("wireframe", wireframe);
     }
 
@@ -1147,7 +1194,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugBuoycancy() {
+    public Boolean isDebugBuoycancy() {
+         return (Boolean)debug.get("buoycancy");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugBuoycancy() {
          return (Boolean)debug.get("buoycancy");
     }
 
@@ -1155,7 +1210,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoycancy
      */
-    public void setDebugBuoycancy(boolean buoycancy) {
+    public void setDebugBuoycancy(Boolean buoycancy) {
         debug.put("buoycancy", buoycancy);
     }
     
@@ -1163,7 +1218,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugBuoycancyVolume() {
+    public Boolean isDebugBuoycancyVolume() {
+         return (Boolean)debug.get("buoycancyVolume");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugBuoycancyVolume() {
          return (Boolean)debug.get("buoycancyVolume");
     }
 
@@ -1171,7 +1234,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param buoycancy
      */
-    public void setDebugBuoycancyVolume(boolean buoycancyVolume) {
+    public void setDebugBuoycancyVolume(Boolean buoycancyVolume) {
         debug.put("buoycancyVolume", buoycancyVolume);
     }
 
@@ -1179,7 +1242,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugPhysicalExchanger() {
+    public Boolean isDebugPhysicalExchanger() {
+         return (Boolean)debug.get("physical_exchanger");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugPhysicalExchanger() {
          return (Boolean)debug.get("physical_exchanger");
     }
 
@@ -1187,7 +1258,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param physical_exchanger
      */
-    public void setDebugPhysicalExchanger(boolean physical_exchanger) {
+    public void setDebugPhysicalExchanger(Boolean physical_exchanger) {
         debug.put("physical_exchanger", physical_exchanger);
     }
 
@@ -1195,7 +1266,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugCenters() {
+    public Boolean isDebugCenters() {
+         return (Boolean)debug.get("centers");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugCenters() {
          return (Boolean)debug.get("centers");
     }
 
@@ -1203,7 +1282,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param centers 
      */
-    public void setDebugCenters(boolean centers) {
+    public void setDebugCenters(Boolean centers) {
         debug.put("centers", centers);
     }
     
@@ -1211,7 +1290,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugVisualizers() {
+    public Boolean isDebugVisualizers() {
+         return (Boolean)debug.get("visualizer");
+    }
+    
+     /**
+     *
+     * @return
+     */
+    public Boolean getDebugVisualizers() {
          return (Boolean)debug.get("visualizer");
     }
 
@@ -1219,7 +1306,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param visualizer 
      */
-    public void setDebugVisualizers(boolean visualizer) {
+    public void setDebugVisualizers(Boolean visualizer) {
         debug.put("visualizer", visualizer);
     }
 
@@ -1227,7 +1314,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isDebugCollision() {
+    public Boolean isDebugCollision() {
+         return (Boolean)debug.get("collision");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDebugCollision() {
          return (Boolean)debug.get("collision");
     }
 
@@ -1235,7 +1330,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param collision
      */
-    public void setDebugCollision(boolean collision) {
+    public void setDebugCollision(Boolean collision) {
         debug.put("collision", collision);
     }
     
@@ -1243,7 +1338,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
+         return (Boolean)params.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getEnabled() {
          return (Boolean)params.get("enabled");
     }
 
@@ -1251,7 +1354,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param enabled 
      */
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         params.put("enabled", enabled);
     }
 

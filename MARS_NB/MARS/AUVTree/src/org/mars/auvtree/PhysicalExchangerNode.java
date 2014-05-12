@@ -68,7 +68,7 @@ import org.openide.util.lookup.Lookups;
  * @author Christian Friedrich
  * @author Thomas Tosik
  */
-public class ParamNode extends AbstractNode implements PropertyChangeListener {
+public class PhysicalExchangerNode extends AbstractNode implements PropertyChangeListener {
 
     /**
      * Object which is representated by the node
@@ -108,7 +108,7 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
      * @param key Used to determine the category of this node
      * @param auvParams HashMap of sensors, accumulators or actuators
      */
-    public ParamNode(Integer key, HashMap auvParams) {
+    public PhysicalExchangerNode(Integer key, HashMap auvParams) {
         // set ChildFactory for creating child nodes
         super(Children.create(new ParamChildNodeFactory(auvParams), true));
 
@@ -142,7 +142,7 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
      * @param obj This can be an accumulator, actuator or a sensor
      * @param nodeName
      */
-    public ParamNode(Object obj, String nodeName) {
+    public PhysicalExchangerNode(Object obj, String nodeName) {
         // initially this node is asumed to be a leaf
         super(Children.LEAF, Lookups.singleton(obj));
         this.nodeName = nodeName;
