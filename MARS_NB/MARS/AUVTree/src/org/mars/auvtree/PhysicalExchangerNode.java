@@ -101,42 +101,6 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private final String nodeName;
 
     /**
-     * This constructor is used to generate three nodes for the subcategories of
-     * the auv attachements. The subcategories are accumulators, actuators and
-     * sensors. For each of the an icon is displayed in the tree.
-     *
-     * @param key Used to determine the category of this node
-     * @param auvParams HashMap of sensors, accumulators or actuators
-     */
-    public PhysicalExchangerNode(Integer key, HashMap auvParams) {
-        // set ChildFactory for creating child nodes
-        super(Children.create(new ParamChildNodeFactory(auvParams), true));
-
-        // set node name and icon depending on the given type
-        switch (key) {
-            case ParamChildNodeFactory.ACCUMULATORS:
-                nodeName = "Accumulators";
-                icon = "battery_charge.png";
-                break;
-            case ParamChildNodeFactory.ACTUATORS:
-                nodeName = "Actuators";
-                icon = "hand.png";
-                break;
-            case ParamChildNodeFactory.SENSORS:
-                nodeName = "Sensors";
-                icon = "eye.png";
-                break;
-            case ParamChildNodeFactory.PARAMETER:
-                nodeName = "Parameter";
-                icon = "gear_in.png";
-                break;
-            default:
-                nodeName = "";
-        }
-        setDisplayName(nodeName);
-    }
-
-    /**
      * This is constructor is called to create a node for an attachement.
      *
      * @param obj This can be an accumulator, actuator or a sensor
