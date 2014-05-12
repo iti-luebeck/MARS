@@ -5,6 +5,7 @@
  */
 package org.mars.auvtree;
 
+import org.mars.auvtree.nodes.RootNode;
 import java.awt.BorderLayout;
 import java.util.Set;
 import javax.swing.ActionMap;

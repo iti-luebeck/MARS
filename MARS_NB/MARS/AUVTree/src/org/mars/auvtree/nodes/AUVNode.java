@@ -1,4 +1,4 @@
-package org.mars.auvtree;
+package org.mars.auvtree.nodes;
 
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -18,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import mars.MARS_Main;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
@@ -25,7 +26,9 @@ import mars.gui.dnd.TransferHandlerObject;
 import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
 import mars.states.SimState;
+import org.mars.auvtree.TreeUtil;
 import org.openide.actions.DeleteAction;
+import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.actions.Presenter;
@@ -62,7 +65,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     /**
      * Name of the auv. This is displayed as node name.
      */
-    private final String name;
+    private String name;
 
     public AUVNode(String name) {
         super(Children.create(new ParamChildNodeFactory(name), true));
@@ -93,12 +96,17 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     @Override
     public Action[] getActions(boolean popup) {
         //(SystemAction.get(DeleteAction.class))
-        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(DeleteAction.class),new DebugAction()};
+        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(DeleteAction.class),SystemAction.get(RenameAction.class),new DebugAction()};
     }
 
     @Override
     public boolean canDestroy() {
          return true;
+    }
+
+    @Override
+    public boolean canRename() {
+        return true;
     }
  
     /**
@@ -256,6 +264,24 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
                     }
                 });
         fireNodeDestroyed();
+    }
+
+    @Override
+    public void setName(final String s) {
+        final String oldName = this.name;
+        this.name = s;
+        Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                            if(mars.getStateManager().getState(SimState.class) != null){
+                                AUV auv = auvManager.getAUV(oldName);
+                                auv.setName(s);
+                                auvManager.updateAUVName(oldName,s);
+                            }
+                        return null;
+                    }
+                });
+        fireDisplayNameChange(oldName, s);
+        fireNameChange(oldName, s);
     }
     
     /**

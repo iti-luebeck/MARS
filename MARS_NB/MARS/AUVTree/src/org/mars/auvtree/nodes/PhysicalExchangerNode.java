@@ -1,4 +1,4 @@
-package org.mars.auvtree;
+package org.mars.auvtree.nodes;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -64,6 +64,9 @@ import mars.sensors.VoltageMeter;
 import mars.sensors.WiFi;
 import mars.sensors.sonar.Sonar;
 import mars.states.SimState;
+import org.mars.auvtree.ColorPropertyEditor;
+import org.mars.auvtree.TreeUtil;
+import org.mars.auvtree.Vector3fPropertyEditor;
 import org.openide.ErrorManager;
 import org.openide.actions.DeleteAction;
 import org.openide.modules.InstalledFileLocator;

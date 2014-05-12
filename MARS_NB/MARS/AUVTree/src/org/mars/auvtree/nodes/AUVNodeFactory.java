@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.mars.auvtree;
+package org.mars.auvtree.nodes;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Collections;
