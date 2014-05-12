@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.swing.AbstractAction;
@@ -20,6 +22,7 @@ import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
 import javax.swing.JOptionPane;
 import mars.ChartValue;
+import mars.MARS_Main;
 import mars.Manipulating;
 import mars.PhysicalExchanger;
 import mars.PropertyChangeListenerSupport;
@@ -30,8 +33,19 @@ import mars.actuators.Teleporter;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
+import mars.auv.BasicAUV;
+import mars.core.CentralLookup;
+import mars.core.MARSChartTopComponent;
+import mars.core.MARSCompassTopComponent;
+import mars.core.MARSUnderwaterModemTopComponent;
+import mars.core.MARSVideoCameraTopComponent;
+import mars.core.RayBasedSensorTopComponent;
+import mars.gui.sonarview.PlanarView;
+import mars.gui.sonarview.PolarView;
 import mars.sensors.AmpereMeter;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
@@ -289,46 +303,48 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         set.setDisplayName(displayName);
         set.setName(displayName);
         sheet.put(set);
-        
-        Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
         Property prop;
         String name;
-        for (; i.hasNext();) {
-            Map.Entry<String, Object> mE = i.next();
+        
+        SortedSet<String> sortedset = new TreeSet<String>(params.keySet());
+        for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
+            String key = it2.next();
+            Object value = params.get(key);
 
-            if(mE.getValue() instanceof HashMap){//make a new set 
+            if(value instanceof HashMap){//make a new set 
                 Sheet.Set setHM = Sheet.createExpertSet();
-                HashMap hasher = (HashMap)mE.getValue();
-                Iterator<Map.Entry<String, Object>> ih = hasher.entrySet().iterator();
-                for (; ih.hasNext();) {
-                    Map.Entry<String, Object> mE2 = ih.next();
-                    String namehm = mE.getKey() + mE2.getKey().substring(0, 1).toUpperCase() + mE2.getKey().substring(1);
+                HashMap hasher = (HashMap)value;
+                SortedSet<String> sortedset2 = new TreeSet<String>(hasher.keySet());
+                for (Iterator<String> it3 = sortedset2.iterator(); it3.hasNext();) {
+                    String key2 = it3.next();
+                    Object value2 = hasher.get(key2);
+                    String namehm = key + key2.substring(0, 1).toUpperCase() + key2.substring(1);
                     try {
-                        Property prophm = new PropertySupport.Reflection(obj, mE2.getValue().getClass(), namehm);
+                        Property prophm = new PropertySupport.Reflection(obj, value2.getClass(), namehm);
                         // set custom property editor for position and rotation params
-                        if (mE2.getValue() instanceof Vector3f) {
+                        if (value2 instanceof Vector3f) {
                             ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                        } else if (mE2.getValue() instanceof ColorRGBA) {
+                        } else if (value2 instanceof ColorRGBA) {
                             ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(ColorPropertyEditor.class);
                         }
 
-                        prophm.setName(mE2.getKey());
+                        prophm.setName(key2);
                         setHM.put(prophm);
                     } catch (NoSuchMethodException ex) {
                         ErrorManager.getDefault();
                     }
                 }
-                setHM.setDisplayName(mE.getKey());
-                setHM.setName(mE.getKey());
+                setHM.setDisplayName(key);
+                setHM.setName(key);
                 sheet.put(setHM);
-            }else if (!mE.getKey().isEmpty()) {
-                name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+            }else{//ueber set (properties)
+                name = key.substring(0, 1).toUpperCase() + key.substring(1);
                 try {
-                    prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), name);
+                    prop = new PropertySupport.Reflection(obj, value.getClass(), name);
                     // set custom property editor for position and rotation params
-                    if (mE.getValue() instanceof Vector3f) {
+                    if (value instanceof Vector3f) {
                         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                    } else if (mE.getValue() instanceof ColorRGBA) {
+                    } else if (value instanceof ColorRGBA) {
                         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
                     }
 
@@ -339,7 +355,6 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 }
             }
         }
-        
     }
 
     private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert){
@@ -468,16 +483,23 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
+
+            //sonarFrame.setSize(2*252+300, 2*252);
+
+            final PolarView imgP = new PolarView();
+            win.addRayBasedView(imgP);
+
+            win.setName("Polar View");
+            win.open();
+            win.requestActive(); 
+
+            win.repaint();
+            RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
+            if(lookup != null){
+                //rayBasedSensorList.put(lookup.getName(), imgP);
+                win.setName("Polar View of: " + lookup.getName());
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -495,16 +517,60 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            
+            RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
+
+            //sonarFrame.setSize(400+300, 252);
+
+            final PlanarView imgP = new PlanarView();
+            win.addRayBasedView(imgP);
+
+            win.setName("Planar View");
+            win.open();
+            win.requestActive(); 
+
+            win.repaint();
+            
+            RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
+            if(lookup != null){
+                //rayBasedSensorList.put(lookup.getName(), imgP);
+                win.setName("Planar View of: " + lookup.getName());
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
+
+            /*
+             //add Jpane for otherSTuff
+            JPanel optionsOther = new JPanel();
+            optionsOther.setMaximumSize(new Dimension(300, 100));
+            GridLayout gl2 = new GridLayout(1,1);
+            optionsOther.setLayout(gl2);
+            optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
+            options.add(optionsOther);
+
+
+            JLabel jlDataPoints = new JLabel("Data Points:");
+            optionsOther.add(jlDataPoints);
+            final JTextField jbDataPoints = new JTextField("400");
+            jbDataPoints.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
+            jbDataPoints.setMaximumSize(new Dimension(100, 30));
+
+            KeyListener kl = new KeyListener() {
+
+                public void keyTyped(KeyEvent e) {
+                }
+
+                public void keyPressed(KeyEvent e) {
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        imgP.setDataPoints(500);
+                    }
+                }
+
+                public void keyReleased(KeyEvent e) {
+                }
+
+            };
+            jbDataPoints.addKeyListener(kl);
+            optionsOther.add(jbDataPoints);
+            */
         }
 
     }
@@ -522,16 +588,16 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            ChartValue lookup = getLookup().lookup(ChartValue.class);
+            if(lookup != null){
+                MARSChartTopComponent chart = new MARSChartTopComponent(lookup);
+
+                chart.setName("Chart of: " + "...");
+                chart.open();
+                chart.requestActive(); 
+
+                chart.repaint();
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -549,16 +615,18 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            VideoCamera lookup = getLookup().lookup(VideoCamera.class);
+            CentralLookup cl = CentralLookup.getDefault();
+            MARS_Main mars = cl.lookup(MARS_Main.class);
+            if(lookup != null){
+                MARSVideoCameraTopComponent video = new MARSVideoCameraTopComponent(lookup,mars);
+
+                video.setName("Video of: " + lookup.getName());
+                video.open();
+                video.requestActive(); 
+
+                video.repaint();
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -576,16 +644,16 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            Compass lookup = getLookup().lookup(Compass.class);
+            if(lookup != null){
+                MARSCompassTopComponent comp = new MARSCompassTopComponent(lookup);
+
+                comp.setName("Video of: " + lookup.getName());
+                comp.open();
+                comp.requestActive(); 
+
+                comp.repaint();
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -603,16 +671,14 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            /*Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
+            CommunicationDevice lookup = getLookup().lookup(CommunicationDevice.class);
+            if(lookup != null){
+                MARSUnderwaterModemTopComponent uw = new MARSUnderwaterModemTopComponent(lookup);
+                uw.setName("Data of: " + lookup.getAuv().getName() + "/" + lookup.getName());
+                uw.open();
+                uw.requestActive();
+                uw.repaint();
             }
-            });*/
-            JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }

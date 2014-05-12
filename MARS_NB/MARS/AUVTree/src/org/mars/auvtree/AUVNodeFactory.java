@@ -7,9 +7,12 @@
 package org.mars.auvtree;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import mars.MARS_Main;
@@ -48,9 +51,9 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
      */
     @Override
     protected boolean createKeys(List toPopulate) {
-        Iterator<String> anI = auvNames.iterator();
-        for(int i=0;anI.hasNext();i++) {
-            String auvName = anI.next();
+        SortedSet<String> sortedset = new TreeSet<String>(auvNames);
+        for (Iterator<String> it = sortedset.iterator(); it.hasNext();) {
+            String auvName = it.next();
             toPopulate.add(auvName);
         }
         return true;
