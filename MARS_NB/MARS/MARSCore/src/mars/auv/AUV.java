@@ -29,6 +29,7 @@ import mars.actuators.Actuator;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
 import mars.CommunicationDeviceEvent;
+import mars.PhysicalExchanger;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.gui.tree.UpdateState;
 import mars.ros.MARSNodeMain;
@@ -395,4 +396,37 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     public void removeAllListener();
 
     public void notifyAdvertisement( ChartEvent event );
+    
+    /**
+     *
+     * @param name
+     * @param pex
+     */
+    public void registerPhysicalExchanger(String name, PhysicalExchanger pex);
+
+    /**
+     *
+     * @param pex
+     */
+    public void registerPhysicalExchanger(PhysicalExchanger pex);
+
+    /**
+     *
+     * @param arrlist
+     */
+    public void registerPhysicalExchangers(ArrayList arrlist);
+    
+    /**
+     *
+     * @param pex
+     */
+    public void deregisterPhysicalExchanger(PhysicalExchanger pex);
+    
+    /**
+     *
+     * @param pex
+     */
+    public void deregisterPhysicalExchanger(String name);
+    
+    
 }

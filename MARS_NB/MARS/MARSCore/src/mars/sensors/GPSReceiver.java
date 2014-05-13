@@ -91,7 +91,7 @@ public class GPSReceiver extends Sensor{
      *
      */
     public void init(Node auv_node){
-        this.auv_node = auv_node;
+        super.init(auv_node);
         pos.init(auv_node);
         
         Sphere sphere7 = new Sphere(16, 16, 0.04f);
@@ -103,7 +103,6 @@ public class GPSReceiver extends Sensor{
         PhysicalExchanger_Node.attachChild(GPSReceiverGeom);
         PhysicalExchanger_Node.setLocalTranslation(getReferencePointWorld());
         rootNode.attachChild(PhysicalExchanger_Node);
-        this.auv_node = auv_node;
     }
 
     /**

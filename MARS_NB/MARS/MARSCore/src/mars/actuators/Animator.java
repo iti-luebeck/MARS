@@ -68,7 +68,9 @@ public class Animator extends Actuator{
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
+    @Override
     public void init(Node auv_node){
+        super.init(auv_node);
     }
 
     public void update(){

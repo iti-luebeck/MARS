@@ -69,7 +69,7 @@ public abstract class CommunicationDevice extends Sensor{
 
     @Override
     public void init(Node auv_node) {
-        
+        super.init(auv_node);
     }
 
     @Override

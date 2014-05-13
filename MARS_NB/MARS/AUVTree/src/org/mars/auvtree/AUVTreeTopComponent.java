@@ -7,6 +7,7 @@ package org.mars.auvtree;
 
 import org.mars.auvtree.nodes.RootNode;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.Set;
 import javax.swing.ActionMap;
 import mars.MARS_Main;
@@ -28,7 +29,7 @@ import org.openide.util.LookupListener;
  */
 @TopComponent.Description(
         preferredID = "AUVTreeTopComponent",
-        //iconBase="SET/PATH/TO/ICON/HERE", 
+        iconBase = "org/mars/auvtree/yellow_submarine.png", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = true)
@@ -40,8 +41,8 @@ import org.openide.util.LookupListener;
 )
 @Messages({
     "CTL_AUVTreeAction=AUVTree",
-    "CTL_AUVTreeTopComponent=AUVTree Window",
-    "HINT_AUVTreeTopComponent=This is a AUVTree window"
+    "CTL_AUVTreeTopComponent=AUVTree",
+    "HINT_AUVTreeTopComponent=This is an AUVTree window"
 })
 
 public final class AUVTreeTopComponent extends TopComponent implements LookupListener, ExplorerManager.Provider {
@@ -54,6 +55,9 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
     public AUVTreeTopComponent() {
         initComponents();
         
+        setIcon(TreeUtil.getImage("yellow_submarine.png"));
+        setName("AUVTree");
+        setDisplayName("AUVTree");
         ActionMap actionMap = getActionMap();
         
         //enable global delete
@@ -65,8 +69,6 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         bTV.setRootVisible(false);
         bTV.setDropTarget(false);
         add(bTV, BorderLayout.CENTER);
-        
-        
     }
 
     /**

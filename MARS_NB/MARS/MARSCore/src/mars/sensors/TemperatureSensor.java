@@ -81,8 +81,9 @@ public class TemperatureSensor extends Sensor implements ChartValue{
 
     }
 
+    @Override
     public void init(Node auv_node){
-
+        super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
         TemperatureSensorStart = new Geometry("TemperatureStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -96,7 +97,6 @@ public class TemperatureSensor extends Sensor implements ChartValue{
         quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
-        this.auv_node = auv_node;
     }
 
      /**

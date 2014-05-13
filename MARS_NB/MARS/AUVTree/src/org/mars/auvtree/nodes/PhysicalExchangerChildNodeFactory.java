@@ -5,6 +5,7 @@
  */
 package org.mars.auvtree.nodes;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,13 +17,17 @@ import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
 
 /**
  *
  * @author Christian Friedrich
  * @author Thomas Tosik
  */
-public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> {
+public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> implements NodeListener{
 
     private HashMap params;
 
@@ -43,13 +48,6 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> {
             String string = it2.next();
             toPopulate.add(string);
         }
-        // iterate params and store keys in list
-        /*Iterator<Map.Entry<String, Object>> aI = params.entrySet().iterator();
-
-        for (Map.Entry<String, Object> mE; aI.hasNext();) {
-            mE = aI.next();
-            toPopulate.add(mE.getKey());
-        }*/
         return true;
     }
 
@@ -57,6 +55,32 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> {
     protected Node createNodeForKey(String key) {
         // create new node for every key
         Node n = new PhysicalExchangerNode(params.get(key), key);
+        n.addNodeListener(this);
         return n;
+    }
+    
+    @Override
+    public void childrenAdded(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void childrenRemoved(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void childrenReordered(NodeReorderEvent nre) {
+    }
+
+    @Override
+    public void nodeDestroyed(NodeEvent ne) {
+        PhysicalExchangerNode lookup = (PhysicalExchangerNode)ne.getNode();
+        String name = lookup.getDisplayName();
+        params.remove(name);
+        refresh(true);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        
     }
 }

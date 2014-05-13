@@ -66,7 +66,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      *
      * @param auv_node 
      */
-    public abstract void init(Node auv_node);
+    public void init(Node auv_node){
+        this.auv_node = auv_node;
+    }
     
     /**
      * 
@@ -223,7 +225,9 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
         noises = cloner.deepClone(noisevariablesOriginal);
     }
     
-    public abstract void cleanup();
+    public void cleanup(){
+        auv_node.detachChild(PhysicalExchanger_Node);
+    }
     
     /**
      * 
@@ -557,6 +561,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
 
     public void setAuv(AUV auv) {
         this.auv = auv;
+        this.auv_node = auv.getAUVNode();
     }
 
     public AUV getAuv() {

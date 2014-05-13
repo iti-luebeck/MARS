@@ -149,11 +149,6 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
     /**
      *
      */
-    public abstract void init(Node auv_node);
-    
-    /**
-     *
-     */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
         super.copyValuesFromPhysicalExchanger(pe);
@@ -179,6 +174,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
     
     @Override
     public void cleanup() {
+        super.cleanup();
     }
     
     /**

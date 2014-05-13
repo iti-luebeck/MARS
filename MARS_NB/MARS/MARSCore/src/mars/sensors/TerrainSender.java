@@ -75,8 +75,9 @@ public class TerrainSender extends Sensor{
     /**
      *
      */
+    @Override
     public void init(Node auv_node){
-        this.auv_node = auv_node;
+        super.init(auv_node);
     }
 
     /**

@@ -96,8 +96,9 @@ public class IMU extends Sensor{
     /**
      *
      */
+    @Override
     public void init(Node auv_node){
-        this.auv_node = auv_node;
+        super.init(auv_node);
         acc.init(auv_node);
         gyro.init(auv_node);
         oro.init(auv_node);

@@ -435,6 +435,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param name
      * @param pex
      */
+    @Override
     public void registerPhysicalExchanger(String name, PhysicalExchanger pex) {
         pex.setName(name);
         if (pex instanceof Sensor) {
@@ -450,6 +451,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      * @param pex
      */
+    @Override
     public void registerPhysicalExchanger(PhysicalExchanger pex) {
         pex.setName(pex.getName());
         if (pex instanceof Sensor) {
@@ -465,11 +467,38 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      * @param arrlist
      */
+    @Override
     public void registerPhysicalExchangers(ArrayList arrlist) {
         Iterator iter = arrlist.iterator();
         while (iter.hasNext()) {
             PhysicalExchanger pex = (PhysicalExchanger) iter.next();
             registerPhysicalExchanger(pex);
+        }
+    }
+
+    @Override
+    public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
+        Future fut = mars.enqueue(new Callable() {
+             public Void call() throws Exception {
+                sensors.remove(pex.getName());
+                actuators.remove(pex.getName());
+                accumulators.remove(pex.getName());
+                pex.cleanup();
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void deregisterPhysicalExchanger(String name) {
+        Sensor sens = sensors.get(name);
+        if(sens != null){
+            deregisterPhysicalExchanger(sens);
+        }
+        Actuator act = actuators.get(name);
+        if(act != null){
+            deregisterPhysicalExchanger(act);
         }
     }
 
@@ -635,8 +664,8 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
             element.setName(element.getName());
+            element.setAuv(this);
             if (element.isEnabled()) {
-                element.setAuv(this);
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
@@ -680,8 +709,8 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
             element.setName(element.getName());
+            element.setAuv(this);
             if (element.isEnabled()) {
-                element.setAuv(this);
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);

@@ -80,8 +80,9 @@ public class PressureSensor extends Sensor implements ChartValue{
     /**
      *
      */
+    @Override
     public void init(Node auv_node){
-
+        super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
         PressureSensorStart = new Geometry("PressureStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -94,7 +95,6 @@ public class PressureSensor extends Sensor implements ChartValue{
         PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(PressureSensorStart);
         auv_node.attachChild(PhysicalExchanger_Node);
-        this.auv_node = auv_node;
     }
 
     public void update(float tpf){

@@ -84,8 +84,9 @@ public class Posemeter extends Sensor implements ChartValue{
     /**
      *
      */
+    @Override
     public void init(Node auv_node){
-        this.auv_node = auv_node;
+        super.init(auv_node);
         pos.init(auv_node);
         oro.init(auv_node);
     }

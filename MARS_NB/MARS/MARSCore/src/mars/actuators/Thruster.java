@@ -130,7 +130,9 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
+    @Override
     public void init(Node auv_node){
+        super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
         MotorStart = new Geometry("MotorLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

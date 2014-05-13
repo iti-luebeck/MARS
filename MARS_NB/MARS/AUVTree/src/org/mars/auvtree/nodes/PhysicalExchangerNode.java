@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import mars.actuators.Teleporter;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
@@ -69,6 +71,7 @@ import org.mars.auvtree.TreeUtil;
 import org.mars.auvtree.Vector3fPropertyEditor;
 import org.openide.ErrorManager;
 import org.openide.actions.DeleteAction;
+import org.openide.actions.RenameAction;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -225,11 +228,12 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getIcon(int type) {
-        //if (auv.getAuv_param().isEnabled()) {
+        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+        if (pe.getEnabled()) {
             return TreeUtil.getImage(icon);
-        //}else{
-        //    return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
-        //}
+        }else{
+            return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
+        }
     }
 
     /**
@@ -241,7 +245,12 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getOpenedIcon(int type) {
-        return TreeUtil.getImage(icon);
+        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+        if (pe.getEnabled()) {
+            return TreeUtil.getImage(icon);
+        }else{
+            return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
+        }
     }
 
     /**
@@ -253,6 +262,21 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public String getDisplayName() {
         return nodeName;
+    }
+    
+    @Override
+    public boolean canDestroy() {
+         return true;
+    }
+
+    @Override
+    public boolean canRename() {
+        return true;
+    }
+
+    @Override
+    public void setName(String s) {
+        super.setName(s);
     }
 
     /**
@@ -422,6 +446,13 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }
     }
     
+    @Override
+    public void destroy() throws IOException {
+        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+        pe.getAuv().deregisterPhysicalExchanger(pe);
+        fireNodeDestroyed();
+    }
+    
     /**
      * This one is overridden to define left click actions.
      *
@@ -432,17 +463,17 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Action[] getActions(boolean popup) {
         if(obj instanceof Compass){
-            return new Action[]{new DataChartAction(), new ViewCompassAction(),new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new DataChartAction(), new ViewCompassAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof VideoCamera){
-            return new Action[]{new ViewCameraAction(),new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new ViewCameraAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof RayBasedSensor){
-            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(),new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof UnderwaterModem){
-            return new Action[]{new ViewCommunicationAction(),new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new ViewCommunicationAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof ChartValue){
-            return new Action[]{new DataChartAction(),new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new DataChartAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else{
-            return new Action[]{new EnableAction(),SystemAction.get(DeleteAction.class)};
+            return new Action[]{new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }
    }
     
@@ -465,9 +496,10 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //boolean auvEnabled = auv.getAuv_param().isEnabled();
-            //auv.getAuv_param().setEnabled(!auvEnabled);
-            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+            PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+            boolean peEnabled = pe.isEnabled();
+            pe.setEnabled(false);
+            propertyChange(new PropertyChangeEvent(this, "enabled", !peEnabled, peEnabled));
             JOptionPane.showMessageDialog(null, "Done!");
         }
 

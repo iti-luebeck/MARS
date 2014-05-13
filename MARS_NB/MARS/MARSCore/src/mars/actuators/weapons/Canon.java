@@ -161,7 +161,9 @@ public class Canon extends Actuator implements Moveable,Keys{
      * DON'T CALL THIS METHOD!
      * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
      */
+    @Override
     public void init(Node auv_node){
+        super.init(auv_node);
         bullet = new Sphere(32, 32, 0.1f, true, false);
         bullet.setTextureMode(TextureMode.Projected);
         bulletCollisionShape = new SphereCollisionShape(0.1f);

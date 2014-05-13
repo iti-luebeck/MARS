@@ -81,7 +81,9 @@ public class Compass extends Sensor{
 
     }
 
+    @Override
     public void init(Node auv_node){
+        super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.015f);
         CompassStart = new Geometry("CompassStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

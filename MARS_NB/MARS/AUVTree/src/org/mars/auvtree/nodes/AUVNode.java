@@ -77,11 +77,12 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         mars = cl.lookup(MARS_Main.class);
 
         auv = (BasicAUV) auvManager.getAUV(name);
-        iconName = auv.getAuv_param().getIcon();
-        
-        /*if(iconName.isEmpty()){
+
+        if(auv.getAuv_param().getIcon() == null){//default
             iconName = "yellow_submarine.png";
-        }*/
+        }else{
+            iconName = auv.getAuv_param().getIcon();
+        }
 
         setDisplayName(name);
     }
@@ -95,7 +96,6 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        //(SystemAction.get(DeleteAction.class))
         return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(DeleteAction.class),SystemAction.get(RenameAction.class),new DebugAction()};
     }
 

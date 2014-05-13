@@ -188,7 +188,9 @@ public class VideoCamera extends Sensor implements Moveable{
         variables.put("format",format);
     }
 
+    @Override
     public void init(Node auv_node){
+        super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
         CameraStart = new Geometry("CameraStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -239,7 +241,6 @@ public class VideoCamera extends Sensor implements Moveable{
         PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
-        this.auv_node = auv_node;
 
         cpuBuf = BufferUtils.createByteBuffer(getCameraWidth() * getCameraHeight() * 4);
         setupOffscreenView();
