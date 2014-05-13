@@ -428,5 +428,5 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      */
     public void deregisterPhysicalExchanger(String name);
     
-    
+    public void updatePhysicalExchangerName(String oldName, String newName);
 }

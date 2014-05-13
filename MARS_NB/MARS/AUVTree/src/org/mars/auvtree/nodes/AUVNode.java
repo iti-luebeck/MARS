@@ -273,8 +273,8 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         Future simStateFuture = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                             if(mars.getStateManager().getState(SimState.class) != null){
-                                AUV auv = auvManager.getAUV(oldName);
-                                auv.setName(s);
+                                //AUV auv = auvManager.getAUV(oldName);
+                                //auv.setName(s);
                                 auvManager.updateAUVName(oldName,s);
                             }
                         return null;

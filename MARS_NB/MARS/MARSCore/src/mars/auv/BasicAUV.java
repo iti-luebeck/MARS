@@ -501,6 +501,28 @@ public class BasicAUV implements AUV, SceneProcessor {
             deregisterPhysicalExchanger(act);
         }
     }
+    
+    @Override
+    public void updatePhysicalExchangerName(String oldName, String newName){
+        Sensor sens = sensors.get(oldName);
+        if(sens != null){
+            sens.setName(newName);
+            sensors.remove(oldName);
+            sensors.put(newName, sens);
+        }
+        Actuator act = actuators.get(oldName);
+        if(act != null){
+            act.setName(newName);
+            actuators.remove(oldName);
+            actuators.put(newName, act);
+        }
+        Accumulator acc = accumulators.get(oldName);
+        if(acc != null){
+            acc.setName(newName);
+            accumulators.remove(oldName);
+            accumulators.put(newName, acc);
+        }
+    }
 
     /**
      * disable the visible debug spheres that indicates the sensors/actuators

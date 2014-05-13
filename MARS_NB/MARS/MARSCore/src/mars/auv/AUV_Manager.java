@@ -116,6 +116,7 @@ public class AUV_Manager implements UpdateState{
     
     public void updateAUVName(String oldName, String newName){
         AUV auv = auvs.get(oldName);
+        auv.setName(newName);
         auvs.remove(oldName);
         auvs.put(newName, auv);
     }

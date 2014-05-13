@@ -118,7 +118,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     /**
      * Displayname of the node.
      */
-    private final String nodeName;
+    private String nodeName;
 
     /**
      * This is constructor is called to create a node for an attachement.
@@ -276,7 +276,12 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
 
     @Override
     public void setName(String s) {
-        super.setName(s);
+        final String oldName = this.nodeName;
+        this.nodeName = s;
+        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+        pe.getAuv().updatePhysicalExchangerName(oldName, s);
+        fireDisplayNameChange(oldName, s);
+        fireNameChange(oldName, s);
     }
 
     /**
