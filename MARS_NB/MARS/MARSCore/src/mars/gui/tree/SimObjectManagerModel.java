@@ -18,6 +18,7 @@ import mars.simobjects.SimObjectManager;
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
+@Deprecated
 public class SimObjectManagerModel extends GenericTreeModel{
 
     private final SimObjectManager simobManager;

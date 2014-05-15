@@ -16,6 +16,7 @@ import mars.xml.HashMapEntry;
  *
  * @author Thomas Tosik
  */
+@Deprecated
 public class PhysicalEnvironmentModel extends GenericTreeModel{
 
     private final PhysicalEnvironment penv;

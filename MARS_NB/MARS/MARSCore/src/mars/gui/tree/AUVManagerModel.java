@@ -19,6 +19,7 @@ import mars.auv.AUV_Parameters;
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
+@Deprecated
 public class AUVManagerModel extends GenericTreeModel{
 
     private final AUV_Manager auvManager;

@@ -36,6 +36,7 @@ import mars.xml.HashMapEntry;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class GenericTreeModel implements TreeModel{
     
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();

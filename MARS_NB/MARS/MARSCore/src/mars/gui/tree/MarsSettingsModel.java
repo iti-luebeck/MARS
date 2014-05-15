@@ -17,6 +17,7 @@ import mars.MARS_Settings;
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
  */
+@Deprecated
 public class MarsSettingsModel extends GenericTreeModel{
 
     private final MARS_Settings settings;

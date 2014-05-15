@@ -10,6 +10,7 @@ import javax.swing.tree.TreePath;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public interface UpdateState {
     public void updateState(TreePath path);
 }

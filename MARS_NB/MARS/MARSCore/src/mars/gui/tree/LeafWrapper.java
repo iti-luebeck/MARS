@@ -8,6 +8,7 @@ package mars.gui.tree;
  * We need this class so we can skip i.e. vector in the jtree
  * @author Thomas Tosik
  */
+@Deprecated
 public class LeafWrapper {
     private Object userData;
     
