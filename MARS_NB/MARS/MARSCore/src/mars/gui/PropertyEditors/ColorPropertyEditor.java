@@ -86,9 +86,9 @@ public class ColorPropertyEditor extends PropertyEditorSupport {
         gfx.drawString(getAsText(), box.x + 0, box.y + 13);*/
         Color oldColor = gfx.getColor();
         gfx.setColor(Color.black);
-        gfx.drawRect(box.x, box.y, 12, box.height-3);
+        gfx.drawRect(box.x, box.y, 14, box.height-3);
         gfx.setColor(new Color(red, green, blue));
-        gfx.fillRect(box.x+1, box.y+1, 12, box.height-6);
+        gfx.fillRect(box.x+1, box.y+1, 13, box.height-4);
         gfx.setColor(Color.black);
         gfx.drawString(getAsText(), box.x + 20, box.y + 13);
         gfx.setColor(oldColor);
