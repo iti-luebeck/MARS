@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.mars.auvtree;
+package mars.auvtree;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;

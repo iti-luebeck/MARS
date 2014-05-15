@@ -1098,7 +1098,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             updateAngularDragForces();
 
             //add the water_current
-            if(getMARS_Settings().isSetupFlow()){
+            if(getMARS_Settings().isFlowEnabled()){
                 updateWaterCurrentForce();
             }
             
@@ -1786,7 +1786,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         //water height for checking what is air and water completeVolume
         /*float waterheight = 0;
-         if(mars_settings.isSetupProjectedWavesWater()){
+         if(mars_settings.isProjectedWavesWaterEnabled()){
          waterheight = initer.getWhg().getHeight(start.x, start.z, mars.getTimer().getTimeInSeconds());
          }else{
          waterheight = physical_environment.getWater_height();

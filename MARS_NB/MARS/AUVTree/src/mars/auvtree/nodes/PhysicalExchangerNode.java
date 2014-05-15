@@ -1,4 +1,4 @@
-package org.mars.auvtree.nodes;
+package mars.auvtree.nodes;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -66,9 +66,9 @@ import mars.sensors.VoltageMeter;
 import mars.sensors.WiFi;
 import mars.sensors.sonar.Sonar;
 import mars.states.SimState;
-import org.mars.auvtree.ColorPropertyEditor;
-import org.mars.auvtree.TreeUtil;
-import org.mars.auvtree.Vector3fPropertyEditor;
+import mars.gui.PropertyEditors.ColorPropertyEditor;
+import mars.auvtree.TreeUtil;
+import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import org.openide.ErrorManager;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
@@ -113,7 +113,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     /**
      * Name of the image file on the harddisk.
      */
-    private String icon;
+    private String icon = "question-white.png";
     
     /**
      * Displayname of the node.
@@ -229,7 +229,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Image getIcon(int type) {
         PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe.getEnabled()) {
+        if (pe == null || pe.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
@@ -246,7 +246,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Image getOpenedIcon(int type) {
         PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe.getEnabled()) {
+        if (pe == null || pe.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));

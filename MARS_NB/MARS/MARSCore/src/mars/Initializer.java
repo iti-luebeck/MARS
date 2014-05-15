@@ -244,47 +244,47 @@ public class Initializer {
      * Calls this method once after you have added the MARS_Settings.
      */
     public void init(){
-        //if(mars_settings.isSetupAxis()){
+        //if(mars_settings.isAxisEnabled()){
             setupAxis();
         //}
             setupGrid();
-        if(mars_settings.isSetupFog()){
+        if(mars_settings.isFogEnabled()){
             setupFog();
         }
-        //if(mars_settings.isSetupLight()){
+        //if(mars_settings.isLightEnabled()){
             setupLight();
         //}
-        //if(mars_settings.isSetupPlaneWater()){
+        //if(mars_settings.isPlaneWaterEnabled()){
             setupPlaneWater();
         //}
-        if(mars_settings.isSetupTerrain() && !mars_settings.isSetupAdvancedTerrain()){
+        if(mars_settings.isTerrainEnabled() && !mars_settings.isTerrainAdvanced()){
             setupTerrain();
         }
-        if(mars_settings.isSetupTerrain() && mars_settings.isSetupAdvancedTerrain()){
+        if(mars_settings.isTerrainEnabled() && mars_settings.isTerrainAdvanced()){
             setupTerrain();
         }
-        if(mars_settings.isSetupGrass()){
+        if(mars_settings.isGrassEnabled()){
             setupGrass();
         }
-        if(mars_settings.isSetupWater()){
+        if(mars_settings.isWaterEnabled()){
             setupWater();
         }
-        if(mars_settings.isSetupWavesWater()){
+        if(mars_settings.isWavesWaterEnabled()){
             setupWavesWater();
         }
-        //if(mars_settings.isSetupProjectedWavesWater()){
+        //if(mars_settings.isProjectedWavesWaterEnabled()){
             setupProjectedWavesWater();
         //}
-        if(mars_settings.isSetupWireFrame()){
+        if(mars_settings.isWireFrameEnabled()){
             setupWireFrame();
         }
-        //if(mars_settings.isSetupCrossHairs()){
+        //if(mars_settings.isCrossHairsEnabled()){
             setupCrossHairs();
         //}
-        if(mars_settings.isSetupDepthOfField()){
+        if(mars_settings.isDepthOfFieldEnabled()){
             setupDepthOfField();
         }
-        if(mars_settings.isSetupShadow()){
+        if(mars_settings.isShadowEnabled()){
             setupShadow();
         }
         setupServer();
@@ -297,13 +297,13 @@ public class Initializer {
         setupPollution();
         setupTranslucentBucketFilter();
         
-        if(mars_settings.isSetupSimpleSkyBox()){
+        if(mars_settings.isSimpleSkyBoxEnabled()){
             setupSimpleSkyBox();
         }
-        if(mars_settings.isSetupSkyBox()){
+        if(mars_settings.isSkyBoxEnabled()){
             setupSkyBox();
         }
-        if(mars_settings.isSetupSkyDome()){
+        if(mars_settings.isSkyDomeEnabled()){
             setupSkyDome();
         }
         
@@ -335,10 +335,10 @@ public class Initializer {
      */
     public void addFiltersToViewport(ViewPort NewViewPort){
         FilterPostProcessor fppp = new FilterPostProcessor(assetManager);
-        if(mars_settings.isSetupFog()){
+        if(mars_settings.isFogEnabled()){
             fppp.addFilter(createFog());
         }
-        if(mars_settings.isSetupDepthOfField()){
+        if(mars_settings.isDepthOfFieldEnabled()){
             fppp.addFilter(createDepthOfField());
         }
         NewViewPort.addProcessor(fppp);
@@ -356,7 +356,7 @@ public class Initializer {
         settings.getWidth()/2 - guiFont.getCharSet().getRenderedSize()/3*2,
         settings.getHeight()/2 + ch.getLineHeight()/2, 0);
         guiNode.attachChild(ch);
-        hideCrossHairs(mars_settings.isSetupCrossHairs());
+        hideCrossHairs(mars_settings.isCrossHairsEnabled());
     }
 
     /*
@@ -546,15 +546,15 @@ public class Initializer {
 
     private void setupWireFrame(){
         //we want to see wireframes on all objects
-        new WireProcessor(assetManager,mars_settings.getWireframecolor());
+        new WireProcessor(assetManager,mars_settings.getWireFrameColor());
         viewPort.addProcessor(wireProcessor);
     }
 
     private DepthOfFieldFilter createDepthOfField(){
         DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
         dofFilter.setFocusDistance(0);
-        dofFilter.setFocusRange(mars_settings.getFocusRange());
-        dofFilter.setBlurScale(mars_settings.getBlurScale());
+        dofFilter.setFocusRange(mars_settings.getDepthOfFieldFocusRange());
+        dofFilter.setBlurScale(mars_settings.getDepthOfFieldBlurScale());
         return dofFilter;
     }
 
@@ -569,7 +569,7 @@ public class Initializer {
      * This creates water with waves.
      */
     private void setupWavesWater(){
-        water = new WaterFilter(rootNode, mars_settings.getLight_direction().normalizeLocal());
+        water = new WaterFilter(rootNode, mars_settings.getLightDirection().normalizeLocal());
         water.setWaterHeight(water_height);
         water.setWaveScale(0.003f);
         water.setMaxAmplitude(0.3f);
@@ -601,7 +601,7 @@ public class Initializer {
         bloom.setBloomIntensity(1.0f);
         fpp.addFilter(bloom);
         
-        LightScatteringFilter lsf = new LightScatteringFilter(mars_settings.getLight_direction().mult(-300f));
+        LightScatteringFilter lsf = new LightScatteringFilter(mars_settings.getLightDirection().mult(-300f));
         lsf.setLightDensity(1.0f);
         fpp.addFilter(lsf);
     }
@@ -622,7 +622,7 @@ public class Initializer {
         projectedGridGeometry.setMaterial(setWaterProcessor(cam,viewPort));
         projectedGridGeometry.setLocalTranslation(0, 0, 0);
         rootNode.attachChild(projectedGridGeometry);
-        hideProjectedWavesWater(mars_settings.isSetupProjectedWavesWater());
+        hideProjectedWavesWater(mars_settings.isProjectedWavesWaterEnabled());
     }
     
     /**
@@ -667,7 +667,7 @@ public class Initializer {
      * @return
      */
     public float getCurrentWaterHeight(float x, float z){
-        if(mars_settings.isSetupProjectedWavesWater()){
+        if(mars_settings.isProjectedWavesWaterEnabled()){
             return whg.getHeight(x, z, mars.getTimer().getTimeInSeconds());
         }else{
             return physical_environment.getWater_height();
@@ -704,7 +704,7 @@ public class Initializer {
         SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assetManager);
         waterProcessor.setReflectionScene(sceneReflectionNode);
         waterProcessor.setDebug(false);
-        waterProcessor.setLightPosition(mars_settings.getLight_direction().mult(-400f));
+        waterProcessor.setLightPosition(mars_settings.getLightDirection().mult(-400f));
 
         //setting the water plane
         Vector3f waterLocation=new Vector3f(0,water_height,0);
@@ -749,12 +749,12 @@ public class Initializer {
         water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
         Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
-        mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterfilepath()));
+        mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterFilepath()));
         mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         water_plane.setMaterial(mat_tt);
         water_plane.setQueueBucket(Bucket.Transparent);
         rootNode.attachChild(water_plane);*/
-        //hidePlaneWater(mars_settings.isSetupPlaneWater());
+        //hidePlaneWater(mars_settings.isPlaneWaterEnabled());
         
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -766,12 +766,12 @@ public class Initializer {
                 water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 //assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
-                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterfilepath()));
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterFilepath()));
                 mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
                 water_plane.setMaterial(mat_tt);
                 water_plane.setQueueBucket(Bucket.Transparent);
                 rootNode.attachChild(water_plane);
-                hidePlaneWater(mars_settings.isSetupPlaneWater());
+                hidePlaneWater(mars_settings.isPlaneWaterEnabled());
                 return null;
              }
         });
@@ -779,9 +779,9 @@ public class Initializer {
 
     private FogFilter createFog(){
         FogFilter fog = new FogFilter();
-        fog.setFogColor(mars_settings.getFogcolor());
-        fog.setFogDistance(mars_settings.getFogDistance());
-        fog.setFogDensity(mars_settings.getFogDensity());
+        fog.setFogColor(mars_settings.getFogColor());
+        fog.setFogDistance(mars_settings.getDepthOfFieldDistance());
+        fog.setFogDensity(mars_settings.getDepthOfFieldDensity());
         return fog;
     }
     /*
@@ -828,15 +828,15 @@ public class Initializer {
                     public Void call() throws Exception {
                         rootNodeMars.removeLight(sun);//remove all old stuff before
                         rootNodeMars.removeLight(ambLight);
-                        sun.setColor(mars_settings.getLight_color());
-                        //sun.setDirection(mars_settings.getLight_direction().normalize());
-                        ambLight.setColor(mars_settings.getAmbientColor());
-                        if(mars_settings.isSetupLight()){
+                        sun.setColor(mars_settings.getLightColor());
+                        //sun.setDirection(mars_settings.getLightDirection().normalize());
+                        ambLight.setColor(mars_settings.getLightAmbientColor());
+                        if(mars_settings.isLightEnabled()){
                             rootNodeMars.addLight(sun);
                         }else{
                             rootNodeMars.removeLight(sun);
                         }
-                        if(mars_settings.isSetupAmbient()){
+                        if(mars_settings.getLightAmbient()){
                             rootNodeMars.addLight(ambLight);
                         }else{
                             rootNodeMars.removeLight(ambLight);
@@ -845,7 +845,7 @@ public class Initializer {
                     }
                 });
        /* AmbientLight amb = new AmbientLight();
-        amb.setColor(mars_settings.getLight_color().multLocal(0.1f));
+        amb.setColor(mars_settings.getLightColor().multLocal(0.1f));
         rootNode.addLight(amb);*/
     }
 
@@ -853,7 +853,7 @@ public class Initializer {
      * A simple sky. Makes the background color of the viewport not black ;).
      */
     private void setupSimpleSkyBox(){
-        renderManager.getMainView("Default").setBackgroundColor( mars_settings.getSimpleskycolor() );
+        renderManager.getMainView("Default").setBackgroundColor( mars_settings.getSimpleskyColor() );
     }
 
     /*
@@ -861,7 +861,7 @@ public class Initializer {
      */
     private void setupSkyBox(){
         //assetManager.registerLocator("Assets/Textures/Sky", FileLocator.class);
-        Spatial sky = (SkyFactory.createSky(assetManager, mars_settings.getSkyboxfilepath(), false));
+        Spatial sky = (SkyFactory.createSky(assetManager, mars_settings.getSkyboxFilepath(), false));
         sky.setLocalScale(100);
         sceneReflectionNode.attachChild(sky);
     }
@@ -975,7 +975,7 @@ public class Initializer {
          //length_axis.setLocalTranslation(new Vector3f(0f,0f,-0.615f));
          length_axis.updateGeometricState();
          rootNode.attachChild(length_axis);*/
-        hideAxis(mars_settings.isSetupAxis());
+        hideAxis(mars_settings.isAxisEnabled());
     }
     
     /**
@@ -985,7 +985,7 @@ public class Initializer {
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 gridNode.detachAllChildren();
-                Geometry grid = new Geometry("wireframe grid", new Grid(mars_settings.getSizeX(), mars_settings.getSizeY(), mars_settings.getGridLineDistance()));
+                Geometry grid = new Geometry("wireframe grid", new Grid(mars_settings.getGridSizeX(), mars_settings.getGridSizeY(), mars_settings.getGridLineDistance()));
                 Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 mat.getAdditionalRenderState().setWireframe(true);
                 mat.setColor("Color", mars_settings.getGridColor());
@@ -996,7 +996,7 @@ public class Initializer {
                 grid.setLocalRotation(quat);
                 gridNode.attachChild(grid);
                 rootNode.attachChild(gridNode);
-                hideGrid(mars_settings.isSetupGrid());
+                hideGrid(mars_settings.isGridEnabled());
                 return null;
              }
         });
@@ -1138,13 +1138,13 @@ public class Initializer {
 
         // ALPHA map (for splat textures)
         //terrainMat.setTexture("AlphaMap", assetManager.loadTexture("Textures/Sea/sea_alphamap2.png"));
-        //terrainMat.setTexture("AlphaMap", assetManager.loadTexture(mars_settings.getTerrainfilepath_am()));
+        //terrainMat.setTexture("AlphaMap", assetManager.loadTexture(mars_settings.getTerrainAlphaMap()));
 
         //Vector4f texScales = new Vector4f();
         
         // GRASS texture
         //Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
-        //Texture grass = assetManager.loadTexture(mars_settings.getTerrainfilepath_cm());
+        //Texture grass = assetManager.loadTexture(mars_settings.getTerrainColorMap());
         /*Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
         terrainMat.setTexture("TextureRed", grass);
@@ -1321,7 +1321,7 @@ public class Initializer {
         //assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
         //assetManager.registerLocator("Assets/Forester", FileLocator.class);
         Texture alphaMapImage = assetManager.loadTexture(
-                mars_settings.getTerrainfilepath_am());
+                mars_settings.getTerrainAlphaMap());
         //alphaMapImage.getImage().setFormat(Format.RGBA8);
         //mat_terrain.setTexture("Alpha", alphaMapImage);
         mat_terrain.setTexture("AlphaMap", alphaMapImage);
@@ -1330,7 +1330,7 @@ public class Initializer {
         /*Texture grass = assetManager.loadTexture(
                 "Textures/Terrain/splat/grass.jpg");*/
         Texture grass = assetManager.loadTexture(
-                mars_settings.getTerrainfilepath_cm());
+                mars_settings.getTerrainColorMap());
        /* assetManager.registerLocator("Assets/Forester", FileLocator.class);
         Texture grass = assetManager.loadTexture("Textures/Sea/seamless_beach_sand.jpg");
         grass.setWrap(WrapMode.Repeat);
@@ -1363,7 +1363,7 @@ public class Initializer {
         /*Texture heightMapImage = assetManager.loadTexture(
                 "Textures/Terrain/splat/mountains512.png");*/
         Texture heightMapImage = assetManager.loadTexture(
-                mars_settings.getTerrainfilepath_hm());
+                mars_settings.getTerrainHeightMap());
         //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
         heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
         terrain_image_heigth = heightMapImage.getImage().getHeight();
@@ -1399,12 +1399,12 @@ public class Initializer {
 
         /** 4. We give the terrain its material, position & scale it, and attach it. */
         terrain.setMaterial(mat_terrain);
-        terrain.setLocalTranslation(mars_settings.getTerrain_position());
-        terrain.setLocalScale(mars_settings.getTerrain_scale());
+        terrain.setLocalTranslation(mars_settings.getTerrainPosition());
+        terrain.setLocalScale(mars_settings.getTerrainScale());
         float[] rots = new float[3];
-        rots[0] = mars_settings.getTerrain_rotation().getX();
-        rots[1] = mars_settings.getTerrain_rotation().getY();
-        rots[2] = mars_settings.getTerrain_rotation().getZ();
+        rots[0] = mars_settings.getTerrainRotation().getX();
+        rots[1] = mars_settings.getTerrainRotation().getY();
+        rots[2] = mars_settings.getTerrainRotation().getZ();
         Quaternion rot = new Quaternion(rots);
         terrain.setLocalRotation(rot);
         //rootNode.attachChild(terrain);
@@ -1413,17 +1413,17 @@ public class Initializer {
         TerrainLodControl control = new TerrainLodControl(terrain, mars.getCamera());
         control.setLodCalculator(new DistanceLodCalculator(65, 2.7f));
         terrain.addControl(control);
-        control.setEnabled(mars_settings.isTerrainLod());
+        control.setEnabled(mars_settings.getTerrainLod());
         
         terrain_node = new Node("terrain");
-        /*terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
+        /*terrain_node.setLocalTranslation(mars_settings.getTerrainPosition());
         float[] rots = new float[3];
-        rots[0] = mars_settings.getTerrain_rotation().getX();
-        rots[1] = mars_settings.getTerrain_rotation().getY();
-        rots[2] = mars_settings.getTerrain_rotation().getZ();
+        rots[0] = mars_settings.getTerrainRotation().getX();
+        rots[1] = mars_settings.getTerrainRotation().getY();
+        rots[2] = mars_settings.getTerrainRotation().getZ();
         Quaternion rot = new Quaternion(rots);
         terrain_node.setLocalRotation(rot);
-        terrain_node.setLocalScale(mars_settings.getTerrain_scale());
+        terrain_node.setLocalScale(mars_settings.getTerrainScale());
         terrain_node.updateGeometricState();*/
         
         /** 6. Add physics: */ 
@@ -1471,15 +1471,15 @@ public class Initializer {
         Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         if(terrain_node != null){
-                            terrain_node.setLocalTranslation(mars_settings.getTerrain_position());
+                            terrain_node.setLocalTranslation(mars_settings.getTerrainPosition());
                             float[] rots = new float[3];
-                            rots[0] = mars_settings.getTerrain_rotation().getX();
-                            rots[1] = mars_settings.getTerrain_rotation().getY();
-                            rots[2] = mars_settings.getTerrain_rotation().getZ();
+                            rots[0] = mars_settings.getTerrainRotation().getX();
+                            rots[1] = mars_settings.getTerrainRotation().getY();
+                            rots[2] = mars_settings.getTerrainRotation().getZ();
                             Quaternion rot = new Quaternion(rots);
                             terrain_node.setLocalRotation(rot);
-                            terrain_node.setLocalScale(mars_settings.getTerrain_scale());
-                            //terrain_physics_control.setPhysicsLocation(mars_settings.getTerrain_position());
+                            terrain_node.setLocalScale(mars_settings.getTerrainScale());
+                            //terrain_physics_control.setPhysicsLocation(mars_settings.getTerrainPosition());
                             //terrain_physics_control.setPhysicsRotation(rot);
                         }
                         return null;
@@ -1491,7 +1491,7 @@ public class Initializer {
         //assetManager.registerLocator("Assets/Textures/Flow", FileLocator.class);
 
         Texture heightMapImage = assetManager.loadTexture(
-                mars_settings.getFlowfilepath_x());
+                mars_settings.getFlowMapX());
         heightMapImage.getImage().setFormat(Format.Luminance16);//fix for format problems
         
         int w = heightMapImage.getImage().getWidth();
@@ -1504,7 +1504,7 @@ public class Initializer {
         
         
         Texture heightMapImage2 = assetManager.loadTexture(
-                mars_settings.getFlowfilepath_y());
+                mars_settings.getFlowMapY());
         heightMapImage2.getImage().setFormat(Format.Luminance16);//fix for format problems
 
         int w2 = heightMapImage2.getImage().getWidth();
@@ -1515,10 +1515,10 @@ public class Initializer {
 
         flowNode = new Node("flow");
 
-        //flowNode.setLocalTranslation(mars_settings.getTerrain_position());
+        //flowNode.setLocalTranslation(mars_settings.getTerrainPosition());
         flowNode.updateGeometricState();
 
-        Geometry grid = new Geometry("flow grid", new Grid(h, w, mars_settings.getTerrain_scale().x));
+        Geometry grid = new Geometry("flow grid", new Grid(h, w, mars_settings.getTerrainScale().x));
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", mars_settings.getGridColor());
@@ -1532,12 +1532,12 @@ public class Initializer {
         //add vectors to grid
         /*for (int i = 0; i < 250; i++) {
             for (int j = 0; j < w; j++) {
-                Vector3f ray_start = new Vector3f(j*mars_settings.getTerrain_scale().x+(mars_settings.getTerrain_scale().x/2f), 0f, i*mars_settings.getTerrain_scale().x+(mars_settings.getTerrain_scale().x/2f));
+                Vector3f ray_start = new Vector3f(j*mars_settings.getTerrainScale().x+(mars_settings.getTerrainScale().x/2f), 0f, i*mars_settings.getTerrainScale().x+(mars_settings.getTerrainScale().x/2f));
                 float flowX = pixelSamplesFlowX[i*(h)+j];
                 float flowY = pixelSamplesFlowY[i*(h)+j];
                 Vector3f ray_direction = new Vector3f(flowX, 0f, flowY);
                 ray_direction.normalizeLocal();
-                ray_direction.multLocal(mars_settings.getTerrain_scale().x/2f);
+                ray_direction.multLocal(mars_settings.getTerrainScale().x/2f);
                 Arrow arrow = new Arrow(ray_direction);
                 arrow.setLineWidth(4f);
                 Geometry ArrowGeom = new Geometry("VectorVisualizer_Arrow", arrow);
@@ -1566,7 +1566,7 @@ public class Initializer {
         
        /** 2. Create the height map */
         Texture pollutionMapImage = assetManager.loadTexture(
-                mars_settings.getPollutionFilepath());
+                mars_settings.getPollutionPollutionMap());
         //heightMapImage.getImage().setFormat(Format.RGB8);//fix for format problems
         pollutionmap = new ImageBasedHeightMap(pollutionMapImage.getImage());
         int h = pollutionMapImage.getImage().getHeight();
@@ -1578,10 +1578,10 @@ public class Initializer {
         float[] heightMap = pollutionmap.getHeightMap();
         pollutionNode = new Node("pollution");
 
-        //flowNode.setLocalTranslation(mars_settings.getTerrain_position());
+        //flowNode.setLocalTranslation(mars_settings.getTerrainPosition());
         pollutionNode.updateGeometricState();
 
-        Geometry grid = new Geometry("pollution grid", new Grid(h, w, mars_settings.getTerrain_scale().x));
+        Geometry grid = new Geometry("pollution grid", new Grid(h, w, mars_settings.getTerrainScale().x));
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", mars_settings.getGridColor());
@@ -1610,7 +1610,7 @@ public class Initializer {
                 pollution_plane.setLocalTranslation(-mars_settings.getPollutionScale().x*pollution_image_heigth/2f+mars_settings.getPollutionPosition().x, water_height+0.02f, mars_settings.getPollutionScale().z*pollution_image_width/2f+mars_settings.getPollutionPosition().z);
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 mat_tt.setColor("Color", new ColorRGBA(1.0f,1.0f,1.0f,1.0f));
-                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionFilepath()));
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionPollutionMap()));
                 mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
                 mat_tt.getAdditionalRenderState().setDepthWrite(false);
                 mat_tt.getAdditionalRenderState().setAlphaTest(true);
@@ -1635,7 +1635,7 @@ public class Initializer {
                 }
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 mat_tt.setColor("Color", new ColorRGBA(1.0f,1.0f,1.0f,1.0f));
-                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionFilepath()));
+                mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPollutionPollutionMap()));
                 mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Modulate);
                 mat_tt.getAdditionalRenderState().setDepthWrite(false);
                 mat_tt.getAdditionalRenderState().setAlphaTest(true);

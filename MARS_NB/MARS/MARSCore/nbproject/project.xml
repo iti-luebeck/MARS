@@ -254,6 +254,14 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.openide.explorer</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>6.50.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.openide.filesystems</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -283,6 +291,14 @@
                     <compile-dependency/>
                     <run-dependency>
                         <specification-version>7.35.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.nodes</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>7.33.1</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -326,6 +342,7 @@
                 <package>mars.filter</package>
                 <package>mars.geodesy</package>
                 <package>mars.gui</package>
+                <package>mars.gui.PropertyEditors</package>
                 <package>mars.gui.dnd</package>
                 <package>mars.gui.plot</package>
                 <package>mars.gui.sonarview</package>

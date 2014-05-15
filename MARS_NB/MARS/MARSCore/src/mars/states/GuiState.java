@@ -486,7 +486,7 @@ public class GuiState extends AbstractAppState{
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
         mars.setStatsStateDark(false);
-        if(mars_settings.isFPS()){
+        if(mars_settings.isFPSEnabled()){
             mars.setDisplayFps(true);
             mars.setDisplayStatView(true);
         }else{

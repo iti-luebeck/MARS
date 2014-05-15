@@ -612,7 +612,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     private void initMap(){
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
-                mapState.loadMap(mars_settings.getTerrainfilepath_cm());
+                mapState.loadMap(mars_settings.getTerrainColorMap());
                 mapState.setMars_settings(mars_settings);
                 mapState.setAuv_manager(auvManager);
                 return null;
@@ -873,15 +873,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             System.out.println("MARSTopComp is NULL");
         }
         
-        if(mars_settings.isSetupWavesWater()){
+        if(mars_settings.isWavesWaterEnabled()){
             initer.updateWavesWater(tpf);
         }
 
-        if(mars_settings.isSetupProjectedWavesWater()){
+        if(mars_settings.isProjectedWavesWaterEnabled()){
             initer.updateProjectedWavesWater(tpf);
         }
         
-        if(mars_settings.isSetupGrass()){
+        if(mars_settings.isGrassEnabled()){
             initer.updateGrass(tpf);
         }
         

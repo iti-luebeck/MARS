@@ -104,10 +104,10 @@
             <value>
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Flow">
                     <value>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="flowScale">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="forceScale">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">20.0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_flowmap_x">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="MapX">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">flow_x.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
@@ -127,7 +127,7 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_flowmap_y">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="MapY">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">flow_y.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="rotation">
@@ -141,10 +141,10 @@
                 </entry>
 				<entry xsi:type="myHashMapEntryTypeHashMap" key="Pollution">
                     <value>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="pollutionScale">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="scaleFactor">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">20.0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_pollutionmap">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="pollutionMap">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">neustadt_pm.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
@@ -445,7 +445,7 @@
                                 <r>1.0</r>
                             </value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeColorRGBA" key="ambient_color">
+                        <entry xsi:type="myHashMapEntryTypeColorRGBA" key="ambientColor">
                             <value>
                                 <a>0.2</a>
                                 <b>1.0</b>
@@ -514,13 +514,13 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileLength">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.15625</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_heightmap">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="HeightMap">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">neustadt_hm.png</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_color">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="ColorMap">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">neustadt_cm.png</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="filepath_alphamap">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="AlphaMap">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_2_am.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">

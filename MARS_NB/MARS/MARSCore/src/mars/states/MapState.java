@@ -155,8 +155,8 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                     auv_geom.setQueueBucket(Bucket.Transparent);
 
                     auv_geom.setMaterial(auv_geom_mat);
-                    Vector3f ter_pos = mars_settings.getTerrain_position();
-                    float tile_length = mars_settings.getTerrain_scale().x;
+                    Vector3f ter_pos = mars_settings.getTerrainPosition();
+                    float tile_length = mars_settings.getTerrainScale().x;
                     int terx_px = tex_ml.getImage().getWidth();
                     int tery_px = tex_ml.getImage().getHeight();
                     //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
@@ -324,9 +324,9 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                 AUV auv = auv_manager.getAUV(elem);
                     if(auv != null && auv.getAuv_param().isEnabled()){   
                         
-                        Vector3f ter_pos = mars_settings.getTerrain_position();
+                        Vector3f ter_pos = mars_settings.getTerrainPosition();
                         //float tile_length = mars_settings.getTileLength();
-                        float tile_length = mars_settings.getTerrain_scale().getX();
+                        float tile_length = mars_settings.getTerrainScale().getX();
                         int terx_px = tex_ml.getImage().getWidth();
                         int tery_px = tex_ml.getImage().getHeight(); 
                             
@@ -422,8 +422,8 @@ public class MapState extends AbstractAppState implements AppStateExtension{
             Vector3f click3d = mars.getMapCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getMapCamera().getHeight()-pos.y), 0f).clone();
             Vector3f dir = mars.getMapCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getMapCamera().getHeight()-pos.y), 1f).subtractLocal(click3d);
 
-            Vector3f ter_pos = mars_settings.getTerrain_position();
-            float tile_length = mars_settings.getTerrain_scale().x;
+            Vector3f ter_pos = mars_settings.getTerrainPosition();
+            float tile_length = mars_settings.getTerrainScale().x;
             int terx_px = tex_ml.getImage().getWidth();
             int tery_px = tex_ml.getImage().getHeight();
                 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mars.auvtree;
+package mars.gui.PropertyEditors;
 
 import com.jme3.math.ColorRGBA;
 import java.awt.Color;
@@ -18,7 +18,7 @@ import javax.swing.JColorChooser;
 /**
  * This custom editor is used for colors in the property sheet.
  *
- * @author Christian
+ * @author Christian Friedrich
  */
 public class ColorPropertyEditor extends PropertyEditorSupport {
 
@@ -76,14 +76,22 @@ public class ColorPropertyEditor extends PropertyEditorSupport {
         float blue = ((ColorRGBA) (getValue())).getBlue();
         float alpha = ((ColorRGBA) (getValue())).getAlpha();
         
-        Rectangle r = gfx.getClipBounds();
+        /*Rectangle r = gfx.getClipBounds();
         gfx.setColor(new Color(red, green, blue));
         //gfx.fillRoundRect(1, 1, 270, 16, 10, 10);
         //gfx.drawRoundRect(1, 1, 270, 16, 10, 10);
         gfx.fillRect(1, 1, 270, 16);
         gfx.drawRect(1, 1, 270, 16);
         gfx.setColor(Color.black);
-        gfx.drawString(getAsText(), box.x + 0, box.y + 13);
+        gfx.drawString(getAsText(), box.x + 0, box.y + 13);*/
+        Color oldColor = gfx.getColor();
+        gfx.setColor(Color.black);
+        gfx.drawRect(box.x, box.y, 12, box.height-3);
+        gfx.setColor(new Color(red, green, blue));
+        gfx.fillRect(box.x+1, box.y+1, 12, box.height-6);
+        gfx.setColor(Color.black);
+        gfx.drawString(getAsText(), box.x + 20, box.y + 13);
+        gfx.setColor(oldColor);
     }
 
     @Override

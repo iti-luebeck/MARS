@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mars.auvtree.nodes;
+package mars.auvtree.nodes;
 
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;

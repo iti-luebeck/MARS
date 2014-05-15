@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mars.auvtree;
+package mars.gui.PropertyEditors;
 
 import com.jme3.math.Vector3f;
 import java.awt.Component;
@@ -22,7 +22,7 @@ import org.openide.explorer.propertysheet.PropertyModel;
  * used an inplace editor which consist of three simple text fields to edit x, y
  * and z. The inplace editor is instance of VectorEditor.
  *
- * @author Christian
+ * @author Christian Friedrich
  */
 public class Vector3fPropertyEditor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 

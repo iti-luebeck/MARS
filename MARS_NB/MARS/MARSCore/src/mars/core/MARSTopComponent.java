@@ -1959,8 +1959,8 @@ public final class MARSTopComponent extends TopComponent {
                         try {
                             XML_JAXB_ConfigReaderWriter xml = new XML_JAXB_ConfigReaderWriter();
                             MARS_Settings mars_settings = xml.loadMARS_Settings();
-                            resolution_height = mars_settings.getResolution_Height();
-                            resolution_width = mars_settings.getResolution_Width();
+                            resolution_height = mars_settings.getResolutionHeight();
+                            resolution_width = mars_settings.getResolutionWidth();
                             framelimit = mars_settings.getFrameLimit();
                             headless = mars_settings.isHeadless();
                         } catch (Exception ex) {

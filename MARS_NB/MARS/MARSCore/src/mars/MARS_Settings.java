@@ -7,7 +7,12 @@ package mars;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,7 +31,7 @@ import org.openide.util.NbPreferences;
  */
 @XmlRootElement(name="Settings")
 @XmlAccessorType(XmlAccessType.NONE)
-public class MARS_Settings implements UpdateState{
+public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> settings;
@@ -64,6 +69,8 @@ public class MARS_Settings implements UpdateState{
 
     @XmlTransient
     private Initializer initer;
+    @XmlTransient
+    private List listeners = Collections.synchronizedList(new LinkedList());
 
     private boolean setupAxis = true;
     private boolean setupFog = false;
@@ -150,11 +157,12 @@ public class MARS_Settings implements UpdateState{
         Auto = (HashMap<String,Object>)Misc.get("Auto");
         //initPreferences(Graphics,"Physics", mars.core.GraphicsPanel.class);
         //initPreferences(Graphics,"Server");
-        initPreferences(Graphics,"Graphics",mars.core.GraphicsPanel.class);
+        //initPreferences(Graphics,"Graphics",mars.core.GraphicsPanel.class);
         //initPreferences(Graphics,"Gui");
         //initPreferences(Graphics,"Misc");
     }
     
+    @Deprecated
     private void initPreferences(HashMap<String,Object> hashmap, String path, Class cla){
         for (Map.Entry<String, Object> entry : hashmap.entrySet()) {
             String string = entry.getKey();
@@ -169,6 +177,24 @@ public class MARS_Settings implements UpdateState{
         }
     }
     
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        for (int i = 0; i < pcls.length; i++) {
+            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
+    }
+    
     /**
      * 
      * @param target
@@ -176,32 +202,32 @@ public class MARS_Settings implements UpdateState{
      */
     public void updateState(String target, String hashmapname){
         if(target.equals("enabled") && hashmapname.equals("Axis")){
-            initer.hideAxis(isSetupAxis());
+            initer.hideAxis(isAxisEnabled());
         }else if(target.equals("enabled") && hashmapname.equals("FPS")){
-            initer.hideFPS(isFPS());
+            initer.hideFPS(isFPSEnabled());
         }else if(target.equals("FrameLimit") && hashmapname.equals("Graphics")){
             initer.changeFrameLimit(getFrameLimit());
         }else if(hashmapname.equals("Light")){
             initer.setupLight();
         }else if(target.equals("enabled") && hashmapname.equals("CrossHairs")){
-            initer.hideCrossHairs(isSetupCrossHairs());
+            initer.hideCrossHairs(isCrossHairsEnabled());
         }else if(target.equals("enabled") && hashmapname.equals("PlaneWater")){
-            initer.hidePlaneWater(isSetupPlaneWater());
+            initer.hidePlaneWater(isPlaneWaterEnabled());
         }else if(hashmapname.equals("PlaneWater")){
             initer.setupPlaneWater();
         }else if(target.equals("enabled") && hashmapname.equals("ProjectedWavesWater")){
-            initer.hideProjectedWavesWater(isSetupProjectedWavesWater());
+            initer.hideProjectedWavesWater(isProjectedWavesWaterEnabled());
         }else if(hashmapname.equals("ProjectedWavesWater")){
             initer.updateProjectedWavesWater();
         }/*else if(target.equals("position") && hashmapname.equals("Terrain")){
-            initer.getTerrainNode().setLocalTranslation(getTerrain_position());
+            initer.getTerrainNode().setLocalTranslation(getTerrainPosition());
         }*/
         else if(hashmapname.equals("Terrain")){
             //initer.updateTerrain();
         }else if(hashmapname.equals("Grass")){
             initer.updateGrass();
         }else if(target.equals("enabled") && hashmapname.equals("Grid")){
-            initer.hideGrid(isSetupGrid());
+            initer.hideGrid(isGridEnabled());
         }else if(hashmapname.equals("Grid")){
             initer.setupGrid();
         }else if(target.equals("speed") && hashmapname.equals("Physics")){
@@ -252,7 +278,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getResolution_Height() {
+    public Integer getResolutionHeight() {
         return (Integer)Resolution.get("height");
     }
 
@@ -260,7 +286,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param height
      */
-    public void setResolution_Height(int height) {
+    public void setResolutionHeight(Integer height) {
         Resolution.put("height", height);
     }
 
@@ -268,7 +294,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getResolution_Width() {
+    public Integer getResolutionWidth() {
         return (Integer)Resolution.get("width");
     }
 
@@ -276,7 +302,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param width
      */
-    public void setResolution_Width(int width) {
+    public void setResolutionWidth(Integer width) {
         Resolution.put("width", width);
     }
 
@@ -284,7 +310,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getFrameLimit() {
+    public Integer getFrameLimit() {
         return (Integer)Graphics.get("FrameLimit");
     }
 
@@ -292,7 +318,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FrameLimit
      */
-    public void setFrameLimit(int FrameLimit) {
+    public void setFrameLimit(Integer FrameLimit) {
         Graphics.put("FrameLimit", FrameLimit);
     }
 
@@ -300,7 +326,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isFPS() {
+    public Boolean isFPSEnabled() {
+        return (Boolean)FPS.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getFPSEnabled() {
         return (Boolean)FPS.get("enabled");
     }
 
@@ -308,7 +342,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setFPS(boolean enabled) {
+    public void setFPSEnabled(Boolean enabled) {
         FPS.put("enabled", enabled);
     }
 
@@ -316,7 +350,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isPhysicsDebug() {
+    public Boolean isPhysicsDebug() {
         return (Boolean)Physics.get("debug");
     }
 
@@ -324,7 +358,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setPhysicsDebug(boolean enabled) {
+    public void setPhysicsDebug(Boolean enabled) {
         Physics.put("debug", enabled);
     }
 
@@ -332,7 +366,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getPhysicsFramerate() {
+    public Integer getPhysicsFramerate() {
         return (Integer)Physics.get("framerate");
     }
 
@@ -340,7 +374,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param framerate 
      */
-    public void setPhysicsFramerate(int framerate) {
+    public void setPhysicsFramerate(Integer framerate) {
         Physics.put("framerate", framerate);
     }
     
@@ -348,7 +382,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getPhysicsMaxSubSteps() {
+    public Integer getPhysicsMaxSubSteps() {
         return (Integer)Physics.get("maxsubsteps");
     }
 
@@ -356,7 +390,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param maxsubsteps 
      */
-    public void setPhysicsMaxSubSteps(int maxsubsteps) {
+    public void setPhysicsMaxSubSteps(Integer maxsubsteps) {
         Physics.put("maxsubsteps", maxsubsteps);
     }
     
@@ -364,7 +398,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getPhysicsSpeed() {
+    public Float getPhysicsSpeed() {
         return (Float)Physics.get("speed");
     }
 
@@ -372,7 +406,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param speed 
      */
-    public void setPhysicsSpeed(float speed) {
+    public void setPhysicsSpeed(Float speed) {
         Physics.put("speed", speed);
     }
 
@@ -380,7 +414,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getFlyCamMoveSpeed() {
+    public Integer getFlyCamMoveSpeed() {
         return (Integer)Camera.get("FlyCamMoveSpeed");
     }
 
@@ -388,7 +422,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FlyCamMoveSpeed
      */
-    public void setFlyCamMoveSpeed(int FlyCamMoveSpeed) {
+    public void setFlyCamMoveSpeed(Integer FlyCamMoveSpeed) {
         Camera.put("FlyCamMoveSpeed", FlyCamMoveSpeed);
     }
     
@@ -428,7 +462,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getChaseCamZoomSensitivity() {
+    public Float getChaseCamZoomSensitivity() {
         return (Float)Camera.get("ChaseCamZoomSensitivity");
     }
 
@@ -436,7 +470,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param speed 
      */
-    public void setChaseCamZoomSensitivity(float ChaseCamZoomSensitivity) {
+    public void setChaseCamZoomSensitivity(Float ChaseCamZoomSensitivity) {
         Camera.put("ChaseCamZoomSensitivity", ChaseCamZoomSensitivity);
     }
     
@@ -480,7 +514,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupCrossHairs() {
+    public Boolean isCrossHairsEnabled() {
+         return (Boolean)CrossHairs.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getCrossHairsEnabled() {
          return (Boolean)CrossHairs.get("enabled");
     }
 
@@ -488,15 +530,56 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupCrossHairs(boolean enabled) {
+    public void setCrossHairsEnabled(Boolean enabled) {
         CrossHairs.put("enabled", enabled);
+    }
+    
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean isLightEnabled() {
+        return (Boolean)Light.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getLightEnabled() {
+        return (Boolean)Light.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setLightEnabled(Boolean enabled) {
+        Light.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getLightAmbient() {
+        return (Boolean)Light.get("ambient");
+    }
+
+    /**
+     *
+     * @param ambient 
+     */
+    public void setLightAmbient(Boolean ambient) {
+        Light.put("ambient", ambient);
     }
 
     /**
      *
      * @return
      */
-    public ColorRGBA getLight_color() {
+    public ColorRGBA getLightColor() {
         return (ColorRGBA)Light.get("color");
     }
 
@@ -504,23 +587,23 @@ public class MARS_Settings implements UpdateState{
      *
      * @param ambient_color 
      */
-    public void setAmbientColor(ColorRGBA ambient_color) {
-        Light.put("ambient_color", ambient_color);
+    public void setLightAmbientColor(ColorRGBA ambientColor) {
+        Light.put("ambientColor", ambientColor);
     }
     
     /**
      *
      * @return
      */
-    public ColorRGBA getAmbientColor() {
-        return (ColorRGBA)Light.get("ambient_color");
+    public ColorRGBA getLightAmbientColor() {
+        return (ColorRGBA)Light.get("ambientColor");
     }
 
     /**
      *
      * @param color
      */
-    public void setLight_color(ColorRGBA color) {
+    public void setLightColor(ColorRGBA color) {
         Light.put("color", color);
     }
 
@@ -545,7 +628,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Vector3f getLight_direction() {
+    public Vector3f getLightDirection() {
         return (Vector3f)Light.get("direction");
     }
 
@@ -553,7 +636,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param direction
      */
-    public void setLight_direction(Vector3f direction) {
+    public void setLightDirection(Vector3f direction) {
         Light.put("direction", direction);
     }
     
@@ -561,7 +644,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Boolean isSetupShadow() {
+    public Boolean isShadowEnabled() {
+        return (Boolean)Shadow.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getShadowEnabled() {
         return (Boolean)Shadow.get("enabled");
     }
 
@@ -569,7 +660,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled 
      */
-    public void setSetupShadow(boolean enabled) {
+    public void setShadowEnabled(Boolean enabled) {
         Shadow.put("enabled", enabled);
     }
 
@@ -577,7 +668,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupWavesWater() {
+    public Boolean isWavesWaterEnabled() {
+        return (Boolean)WavesWater.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWavesWaterEnabled() {
         return (Boolean)WavesWater.get("enabled");
     }
 
@@ -585,7 +684,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupWavesWater(boolean enabled) {
+    public void setWavesWaterEnabled(Boolean enabled) {
         WavesWater.put("enabled", enabled);
     }
     
@@ -593,7 +692,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupProjectedWavesWater() {
+    public Boolean isProjectedWavesWaterEnabled() {
+        return (Boolean)ProjectedWavesWater.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getProjectedWavesWaterEnabled() {
         return (Boolean)ProjectedWavesWater.get("enabled");
     }
 
@@ -601,7 +708,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupProjectedWavesWater(boolean enabled) {
+    public void setProjectedWavesWaterEnabled(Boolean enabled) {
         ProjectedWavesWater.put("enabled", enabled);
     }
     
@@ -609,7 +716,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getProjectedWavesWaterOctaves() {
+    public Integer getProjectedWavesWaterOctaves() {
         return (Integer)ProjectedWavesWater.get("Octaves");
     }
 
@@ -617,7 +724,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Octaves 
      */
-    public void setProjectedWavesWaterOctaves(int Octaves) {
+    public void setProjectedWavesWaterOctaves(Integer Octaves) {
         ProjectedWavesWater.put("Octaves", Octaves);
     }
     
@@ -625,7 +732,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterScaleybig() {
+    public Float getProjectedWavesWaterScaleybig() {
         return (Float)ProjectedWavesWater.get("Scaleybig");
     }
 
@@ -633,7 +740,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Scaleybig 
      */
-    public void setProjectedWavesWaterScaleybig(float Scaleybig) {
+    public void setProjectedWavesWaterScaleybig(Float Scaleybig) {
         ProjectedWavesWater.put("Scaleybig", Scaleybig);
     }
     
@@ -641,7 +748,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterScaleysmall() {
+    public Float getProjectedWavesWaterScaleysmall() {
         return (Float)ProjectedWavesWater.get("Scaleysmall");
     }
 
@@ -649,7 +756,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Scaleysmall 
      */
-    public void setProjectedWavesWaterScaleysmall(float Scaleysmall) {
+    public void setProjectedWavesWaterScaleysmall(Float Scaleysmall) {
         ProjectedWavesWater.put("Scaleysmall", Scaleysmall);
     }
     
@@ -657,7 +764,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterScalexbig() {
+    public Float getProjectedWavesWaterScalexbig() {
         return (Float)ProjectedWavesWater.get("Scalexbig");
     }
 
@@ -665,7 +772,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Scalexbig 
      */
-    public void setProjectedWavesWaterScalexbig(float Scalexbig) {
+    public void setProjectedWavesWaterScalexbig(Float Scalexbig) {
         ProjectedWavesWater.put("Scalexbig", Scalexbig);
     }
     
@@ -673,7 +780,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterScalexsmall() {
+    public Float getProjectedWavesWaterScalexsmall() {
         return (Float)ProjectedWavesWater.get("Scalexsmall");
     }
 
@@ -681,7 +788,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Scalexsmall 
      */
-    public void setProjectedWavesWaterScalexsmall(float Scalexsmall) {
+    public void setProjectedWavesWaterScalexsmall(Float Scalexsmall) {
         ProjectedWavesWater.put("Scalexsmall", Scalexsmall);
     }
     
@@ -689,7 +796,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterHeightsmall() {
+    public Float getProjectedWavesWaterHeightsmall() {
         return (Float)ProjectedWavesWater.get("Heightsmall");
     }
 
@@ -697,7 +804,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Heightsmall 
      */
-    public void setProjectedWavesWaterHeightsmall(float Heightsmall) {
+    public void setProjectedWavesWaterHeightsmall(Float Heightsmall) {
         ProjectedWavesWater.put("Heightsmall", Heightsmall);
     }
     
@@ -705,7 +812,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterHeightbig() {
+    public Float getProjectedWavesWaterHeightbig() {
         return (Float)ProjectedWavesWater.get("Heightbig");
     }
 
@@ -713,7 +820,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Heightbig 
      */
-    public void setProjectedWavesWaterHeightbig(float Heightbig) {
+    public void setProjectedWavesWaterHeightbig(Float Heightbig) {
         ProjectedWavesWater.put("Heightbig", Heightbig);
     }
     
@@ -721,7 +828,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterSpeedbig() {
+    public Float getProjectedWavesWaterSpeedbig() {
         return (Float)ProjectedWavesWater.get("Speedbig");
     }
 
@@ -729,7 +836,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Speedbig 
      */
-    public void setProjectedWavesWaterSpeedbig(float Speedbig) {
+    public void setProjectedWavesWaterSpeedbig(Float Speedbig) {
         ProjectedWavesWater.put("Speedbig", Speedbig);
     }
     
@@ -737,7 +844,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getProjectedWavesWaterSpeedsmall() {
+    public Float getProjectedWavesWaterSpeedsmall() {
         return (Float)ProjectedWavesWater.get("Speedsmall");
     }
 
@@ -745,47 +852,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Speedsmall 
      */
-    public void setProjectedWavesWaterSpeedsmall(float Speedsmall) {
+    public void setProjectedWavesWaterSpeedsmall(Float Speedsmall) {
         ProjectedWavesWater.put("Speedsmall", Speedsmall);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isSetupLight() {
-        return (Boolean)Light.get("enabled");
-    }
-
-    /**
-     *
-     * @param enabled
-     */
-    public void setSetupLight(boolean enabled) {
-        Light.put("enabled", enabled);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public boolean isSetupAmbient() {
-        return (Boolean)Light.get("ambient");
-    }
-
-    /**
-     *
-     * @param ambient 
-     */
-    public void setSetupAmbient(boolean ambient) {
-        Light.put("ambient", ambient);
     }
 
      /**
      *
      * @return
      */
-    public int getRAW_Server_port() {
+    public Integer getRAW_Server_port() {
         return (Integer)RAW.get("port");
     }
 
@@ -793,7 +868,7 @@ public class MARS_Settings implements UpdateState{
      * 
      * @param port
      */
-    public void setRAW_Server_port(int port) {
+    public void setRAW_Server_port(Integer port) {
         RAW.put("port", port);
     }
     
@@ -801,7 +876,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isRAW_Server_enabled() {
+    public Boolean isRAW_Server_enabled() {
         return (Boolean)RAW.get("enabled");
     }
 
@@ -809,7 +884,7 @@ public class MARS_Settings implements UpdateState{
      * 
      * @param raw_enabled 
      */
-    public void setRAW_Server_enabled(boolean raw_enabled) {
+    public void setRAW_Server_enabled(Boolean raw_enabled) {
         RAW.put("enabled", raw_enabled);
     }
 
@@ -817,7 +892,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getRAW_Server_backlog() {
+    public Integer getRAW_Server_backlog() {
         return (Integer)RAW.get("backlog");
     }
 
@@ -825,7 +900,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param backlog
      */
-    public void setRAW_Server_backlog(int backlog) {
+    public void setRAW_Server_backlog(Integer backlog) {
         RAW.put("backlog", backlog);
     }
 
@@ -833,7 +908,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getRAW_Server_OutputStreamSize() {
+    public Integer getRAW_Server_OutputStreamSize() {
         return (Integer)RAW.get("OutputStreamSize");
     }
 
@@ -841,7 +916,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param OutputStreamSize
      */
-    public void setRAW_Server_OutputStreamSize(int OutputStreamSize) {
+    public void setRAW_Server_OutputStreamSize(Integer OutputStreamSize) {
         RAW.put("OutputStreamSize", OutputStreamSize);
     }
     
@@ -849,7 +924,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getROS_Server_port() {
+    public Integer getROS_Server_port() {
         return (Integer)ROS.get("masterport");
     }
 
@@ -857,7 +932,7 @@ public class MARS_Settings implements UpdateState{
      * 
      * @param master_port 
      */
-    public void setROS_Server_port(int master_port) {
+    public void setROS_Server_port(Integer master_port) {
         ROS.put("masterport", master_port);
     }
     
@@ -897,7 +972,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public int getROS_Gloabl_Queue_Size() {
+    public Integer getROS_Gloabl_Queue_Size() {
         return (Integer)ROS.get("GlobalQueueSize");
     }
 
@@ -905,7 +980,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FrameLimit
      */
-    public void setROS_Gloabl_Queue_Size(int GlobalQueueSize) {
+    public void setROS_Gloabl_Queue_Size(Integer GlobalQueueSize) {
         ROS.put("GlobalQueueSize", GlobalQueueSize);
     }
     
@@ -913,7 +988,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isROS_Server_enabled() {
+    public Boolean isROS_Server_enabled() {
         return (Boolean)ROS.get("enabled");
     }
 
@@ -921,7 +996,7 @@ public class MARS_Settings implements UpdateState{
      * 
      * @param enabled 
      */
-    public void setROS_Server_enabled(boolean enabled) {
+    public void setROS_Server_enabled(Boolean enabled) {
         ROS.put("enabled", enabled);
     }
     
@@ -929,7 +1004,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isROS_Server_publish() {
+    public Boolean isROS_Server_publish() {
         return (Boolean)ROS.get("publish");
     }
 
@@ -937,7 +1012,7 @@ public class MARS_Settings implements UpdateState{
      * 
      * @param enabled 
      */
-    public void setROS_Server_publish(boolean publish) {
+    public void setROS_Server_publish(Boolean publish) {
         ROS.put("publish", publish);
     }
 
@@ -945,7 +1020,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupAxis() {
+    public Boolean isAxisEnabled() {
+        return (Boolean)Axis.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getAxisEnabled() {
         return (Boolean)Axis.get("enabled");
     }
 
@@ -953,7 +1036,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupAxis(boolean enabled) {
+    public void setAxisEnabled(Boolean enabled) {
         Axis.put("enabled", enabled);
     }
     
@@ -961,7 +1044,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupGrid() {
+    public Boolean isGridEnabled() {
+        return (Boolean)Grid.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getGridEnabled() {
         return (Boolean)Grid.get("enabled");
     }
 
@@ -969,7 +1060,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupGrid(boolean enabled) {
+    public void setGridEnabled(Boolean enabled) {
         Grid.put("enabled", enabled);
     }
 
@@ -985,7 +1076,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param LineDistance 
      */
-    public void setGridLineDistance(float LineDistance) {
+    public void setGridLineDistance(Float LineDistance) {
         Grid.put("LineDistance", LineDistance);
     }
     
@@ -993,7 +1084,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Integer getSizeX() {
+    public Integer getGridSizeX() {
         return (Integer)Grid.get("SizeX");
     }
 
@@ -1001,7 +1092,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param SizeX 
      */
-    public void setSizeX(int SizeX) {
+    public void setGridSizeX(Integer SizeX) {
         Grid.put("SizeX", SizeX);
     }
     
@@ -1009,7 +1100,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Integer getSizeY() {
+    public Integer getGridSizeY() {
         return (Integer)Grid.get("SizeY");
     }
 
@@ -1017,7 +1108,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param SizeY 
      */
-    public void setSizeY(int SizeY) {
+    public void setGridSizeY(Integer SizeY) {
         Grid.put("SizeY", SizeY);
     }
     
@@ -1073,7 +1164,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Float getBlurScale() {
+    public Float getDepthOfFieldBlurScale() {
         return (Float)DepthOfField.get("BlurScale");
     }
 
@@ -1081,7 +1172,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param BlurScale
      */
-    public void setBlurScale(float BlurScale) {
+    public void setDepthOfFieldBlurScale(Float BlurScale) {
         DepthOfField.put("BlurScale", BlurScale);
     }
 
@@ -1089,7 +1180,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Float getFocusDistance() {
+    public Float getDepthOfFieldFocusDistance() {
         return (Float)DepthOfField.get("FocusDistance");
     }
 
@@ -1097,7 +1188,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FocusDistance
      */
-    public void setFocusDistance(float FocusDistance) {
+    public void setDepthOfFieldFocusDistance(Float FocusDistance) {
         DepthOfField.put("FocusDistance", FocusDistance);
     }
 
@@ -1105,7 +1196,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Float getFocusRange() {
+    public Float getDepthOfFieldFocusRange() {
         return (Float)DepthOfField.get("FocusRange");
     }
 
@@ -1113,7 +1204,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param FocusRange
      */
-    public void setFocusRange(float FocusRange) {
+    public void setDepthOfFieldFocusRange(Float FocusRange) {
         DepthOfField.put("FocusRange", FocusRange);
     }
 
@@ -1121,7 +1212,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupDepthOfField() {
+    public Boolean isDepthOfFieldEnabled() {
+        return (Boolean)DepthOfField.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getDepthOfFieldEnabled() {
         return (Boolean)DepthOfField.get("enabled");
     }
 
@@ -1129,7 +1228,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupDepthOfField(boolean enabled) {
+    public void setDepthOfFieldEnabled(Boolean enabled) {
         DepthOfField.put("enabled", enabled);
     }
 
@@ -1137,7 +1236,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupFog() {
+    public Boolean isFogEnabled() {
+        return (Boolean)Fog.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getFogEnabled() {
         return (Boolean)Fog.get("enabled");
     }
 
@@ -1145,7 +1252,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupFog(boolean enabled) {
+    public void setFogEnabled(Boolean enabled) {
         Fog.put("enabled", enabled);
     }
 
@@ -1153,7 +1260,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public ColorRGBA getFogcolor() {
+    public ColorRGBA getFogColor() {
         return (ColorRGBA)Fog.get("color");
     }
 
@@ -1161,7 +1268,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param color
      */
-    public void setFogcolor(ColorRGBA color) {
+    public void setFogColor(ColorRGBA color) {
         color.a = 1.0f;
         Fog.put("color", color);
     }
@@ -1170,7 +1277,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Float getFogDistance() {
+    public Float getDepthOfFieldDistance() {
         return (Float)DepthOfField.get("Distance");
     }
 
@@ -1178,7 +1285,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Distance
      */
-    public void setFogDistance(float Distance) {
+    public void setDepthOfFieldDistance(Float Distance) {
         DepthOfField.put("Distance", Distance);
     }
 
@@ -1186,7 +1293,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Float getFogDensity() {
+    public Float getDepthOfFieldDensity() {
         return (Float)DepthOfField.get("Density");
     }
 
@@ -1194,7 +1301,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param Density
      */
-    public void setFogDensity(float Density) {
+    public void setDepthOfFieldDensity(Float Density) {
         DepthOfField.put("Density", Density);
     }
 
@@ -1202,7 +1309,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupPlaneWater() {
+    public Boolean isPlaneWaterEnabled() {
+        return (Boolean)PlaneWater.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getPlaneWaterEnabled() {
         return (Boolean)PlaneWater.get("enabled");
     }
 
@@ -1210,7 +1325,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupPlainWater(boolean enabled) {
+    public void setPlaneWaterEnabled(Boolean enabled) {
         PlaneWater.put("enabled", enabled);
     }
 
@@ -1218,7 +1333,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public String getPlanewaterfilepath() {
+    public String getPlanewaterFilepath() {
         return (String)PlaneWater.get("filepath");
     }
 
@@ -1226,7 +1341,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param filepath
      */
-    public void setPlanewaterfilepath(String filepath) {
+    public void setPlanewaterFilepath(String filepath) {
         PlaneWater.put("filepath", filepath);
     }
 
@@ -1234,7 +1349,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupSimpleSkyBox() {
+    public Boolean isSimpleSkyBoxEnabled() {
+        return (Boolean)SimpleSkyBox.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getSimpleSkyBoxEnabled() {
         return (Boolean)SimpleSkyBox.get("enabled");
     }
 
@@ -1242,7 +1365,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupSimpleSkyBox(boolean enabled) {
+    public void setSimpleSkyBoxEnabled(Boolean enabled) {
         SimpleSkyBox.put("enabled", enabled);
     }
 
@@ -1250,7 +1373,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public ColorRGBA getSimpleskycolor() {
+    public ColorRGBA getSimpleskyColor() {
         return (ColorRGBA)SimpleSkyBox.get("color");
     }
 
@@ -1258,7 +1381,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param color
      */
-    public void setSimpleskycolor(ColorRGBA color) {
+    public void setSimpleskyColor(ColorRGBA color) {
         SimpleSkyBox.put("color", color);
     }
 
@@ -1266,7 +1389,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupSkyBox() {
+    public Boolean isSkyBoxEnabled() {
+        return (Boolean)SkyBox.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getSkyBoxEnabled() {
         return (Boolean)SkyBox.get("enabled");
     }
 
@@ -1274,7 +1405,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupSkyBox(boolean enabled) {
+    public void setSkyBoxEnabled(Boolean enabled) {
         SkyBox.put("enabled", enabled);
     }
     
@@ -1282,7 +1413,31 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupSkyDome() {
+    public String getSkyboxFilepath() {
+        return (String)SkyBox.get("filepath");
+    }
+
+    /**
+     *
+     * @param filepath
+     */
+    public void setSkyboxFilepath(String filepath) {
+        SkyBox.put("filepath", filepath);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean isSkyDomeEnabled() {
+        return (Boolean)SkyDome.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getSkyDomeEnabled() {
         return (Boolean)SkyDome.get("enabled");
     }
 
@@ -1290,7 +1445,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupSkyDome(boolean enabled) {
+    public void setSkyDomeEnabled(Boolean enabled) {
         SkyDome.put("enabled", enabled);
     }
     
@@ -1298,7 +1453,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSkyDomeCloudModulation() {
+    public Boolean isSkyDomeCloudModulation() {
+        return (Boolean)SkyDome.get("cloudModulation");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getSkyDomeCloudModulation() {
         return (Boolean)SkyDome.get("cloudModulation");
     }
 
@@ -1306,7 +1469,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSkyDomeCloudModulation(boolean cloudModulation) {
+    public void setSkyDomeCloudModulation(Boolean cloudModulation) {
         SkyDome.put("cloudModulation", cloudModulation);
     }
     
@@ -1322,7 +1485,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeSpeed(float speed) {
+    public void setSkyDomeSpeed(Float speed) {
         SkyDome.put("speed", speed);
     }
     
@@ -1338,7 +1501,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeDirection(float direction) {
+    public void setSkyDomeDirection(Float direction) {
         SkyDome.put("direction", direction);
     }
     
@@ -1354,7 +1517,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeCloudiness(float cloudiness) {
+    public void setSkyDomeCloudiness(Float cloudiness) {
         SkyDome.put("cloudiness", cloudiness);
     }
     
@@ -1370,7 +1533,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeCloudRate(float cloudRate) {
+    public void setSkyDomeCloudRate(Float cloudRate) {
         SkyDome.put("cloudRate", cloudRate);
     }
     
@@ -1386,7 +1549,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeHour(float hour) {
+    public void setSkyDomeHour(Float hour) {
         SkyDome.put("hour", hour);
     }
     
@@ -1402,7 +1565,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeObserverLatitude(float observerLatitude) {
+    public void setSkyDomeObserverLatitude(Float observerLatitude) {
         SkyDome.put("observerLatitude", observerLatitude);
     }
     
@@ -1418,7 +1581,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeLunarDiameter(float lunarDiameter) {
+    public void setSkyDomeLunarDiameter(Float lunarDiameter) {
         SkyDome.put("lunarDiameter", lunarDiameter);
     }
     
@@ -1434,7 +1597,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeSolarLongitude(float solarLongitude) {
+    public void setSkyDomeSolarLongitude(Float solarLongitude) {
         SkyDome.put("solarLongitude", solarLongitude);
     }
     
@@ -1450,31 +1613,25 @@ public class MARS_Settings implements UpdateState{
      *
      * @param flowScale 
      */
-    public void setSkyDomeLunarPhase(int lunarPhase) {
+    public void setSkyDomeLunarPhase(Integer lunarPhase) {
         SkyDome.put("lunarPhase", lunarPhase);
     }
 
+
+    
     /**
      *
      * @return
      */
-    public String getSkyboxfilepath() {
-        return (String)SkyBox.get("filepath");
-    }
-
-    /**
-     *
-     * @param filepath
-     */
-    public void setSkyboxfilepath(String filepath) {
-        SkyBox.put("filepath", filepath);
+    public Boolean isGrassEnabled() {
+        return (Boolean)Grass.get("enabled");
     }
     
     /**
      *
      * @return
      */
-    public boolean isSetupGrass() {
+    public Boolean getGrassEnabled() {
         return (Boolean)Grass.get("enabled");
     }
 
@@ -1482,7 +1639,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupGrass(boolean enabled) {
+    public void setGrassEnabled(Boolean enabled) {
         Grass.put("enabled", enabled);
     }
     
@@ -1498,7 +1655,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param farViewingDistance 
      */
-    public void setGrassFarViewingDistance(float farViewingDistance) {
+    public void setGrassFarViewingDistance(Float farViewingDistance) {
         Grass.put("farViewingDistance", farViewingDistance);
     }
     
@@ -1514,7 +1671,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param fadingRange 
      */
-    public void setGrassFadingRange(float fadingRange) {
+    public void setGrassFadingRange(Float fadingRange) {
         Grass.put("fadingRange", fadingRange);
     }
     
@@ -1530,7 +1687,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param pagesizeResolution 
      */
-    public void setGrassPagesizeResolution(int pagesizeResolution) {
+    public void setGrassPagesizeResolution(Integer pagesizeResolution) {
         Grass.put("pagesizeResolution", pagesizeResolution);
     }
 
@@ -1538,7 +1695,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupTerrain() {
+    public Boolean isTerrainEnabled() {
+        return (Boolean)Terrain.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getTerrainEnabled() {
         return (Boolean)Terrain.get("enabled");
     }
 
@@ -1546,15 +1711,23 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupTerrain(boolean enabled) {
+    public void setTerrainEnabled(Boolean enabled) {
         Terrain.put("enabled", enabled);
     }
     
-        /**
+    /**
      *
      * @return
      */
-    public boolean isSetupAdvancedTerrain() {
+    public Boolean isTerrainAdvanced() {
+        return (Boolean)Terrain.get("advanced");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getTerrainAdvanced() {
         return (Boolean)Terrain.get("advanced");
     }
 
@@ -1562,7 +1735,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param advanced 
      */
-    public void setSetupAdvancedTerrain(boolean advanced) {
+    public void setTerrainAdvanced(Boolean advanced) {
         Terrain.put("advanced", advanced);
     }
     
@@ -1570,7 +1743,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isTerrainLod() {
+    public Boolean getTerrainLod() {
         return (Boolean)Terrain.get("lod");
     }
 
@@ -1578,7 +1751,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param lod 
      */
-    public void setTerrainLod(boolean lod) {
+    public void setTerrainLod(Boolean lod) {
         Terrain.put("lod", lod);
     }
 
@@ -1588,7 +1761,7 @@ public class MARS_Settings implements UpdateState{
      * @deprecated 
      */
     @Deprecated
-    public Float getTileHeigth() {
+    public Float getTerrainTileHeigth() {
         return (Float)Terrain.get("tileHeigth");
     }
 
@@ -1598,7 +1771,7 @@ public class MARS_Settings implements UpdateState{
      * @deprecated 
      */
     @Deprecated
-    public void setTileHeigth(float tileHeigth) {
+    public void setTerrainTileHeigth(Float tileHeigth) {
         Terrain.put("tileHeigth", tileHeigth);
     }
 
@@ -1606,55 +1779,55 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public String getTerrainfilepath_cm() {
-        return (String)Terrain.get("filepath_color");
+    public String getTerrainColorMap() {
+        return (String)Terrain.get("ColorMap");
     }
 
     /**
      *
      * @param filepath_color
      */
-    public void setTerrainfilepath_cm(String filepath_color) {
-        Terrain.put("filepath_color", filepath_color);
+    public void setTerrainColorMap(String ColorMap) {
+        Terrain.put("ColorMap", ColorMap);
     }
 
     /**
      *
      * @return
      */
-    public String getTerrainfilepath_hm() {
-        return (String)Terrain.get("filepath_heightmap");
+    public String getTerrainHeightMap() {
+        return (String)Terrain.get("HeightMap");
     }
 
     /**
      *
      * @param filepath_heightmap
      */
-    public void setTerrainfilepath_hm(String filepath_heightmap) {
-        Terrain.put("filepath_heightmap", filepath_heightmap);
+    public void setTerrainHeightMap(String HeightMap) {
+        Terrain.put("HeightMap", HeightMap);
     }
     
         /**
      *
      * @return
      */
-    public String getTerrainfilepath_am() {
-        return (String)Terrain.get("filepath_alphamap");
+    public String getTerrainAlphaMap() {
+        return (String)Terrain.get("AlphaMap");
     }
 
     /**
      *
      * @param filepath_alphamap
      */
-    public void setTerrainfilepath_am(String filepath_alphamap) {
-        Terrain.put("filepath_alphamap", filepath_alphamap);
+    public void setTerrainAlphaMap(String AlphaMap) {
+        Terrain.put("AlphaMap", AlphaMap);
     }
     
     /**
      *
      * @return
      */
-    public int getTerrainPatchSize() {
+    public Integer getTerrainPatchSize() {
         return (Integer)Terrain.get("patchSize");
     }
 
@@ -1662,7 +1835,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param patchSize 
      */
-    public void setTerrainPatchSize(int patchSize) {
+    public void setTerrainPatchSize(Integer patchSize) {
         Terrain.put("patchSize", patchSize);
     }
 
@@ -1670,7 +1843,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Vector3f getTerrain_position() {
+    public Vector3f getTerrainPosition() {
         return (Vector3f)Terrain.get("position");
     }
 
@@ -1678,7 +1851,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param position
      */
-    public void setTerrain_position(Vector3f position) {
+    public void setTerrainPosition(Vector3f position) {
         Terrain.put("position", position);
     }
     
@@ -1686,7 +1859,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Vector3f getTerrain_scale() {
+    public Vector3f getTerrainScale() {
         return (Vector3f)Terrain.get("scale");
     }
 
@@ -1694,7 +1867,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param scale 
      */
-    public void setTerrain_scale(Vector3f scale) {
+    public void setTerrainScale(Vector3f scale) {
         Terrain.put("scale", scale);
     }
     
@@ -1702,7 +1875,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public Vector3f getTerrain_rotation() {
+    public Vector3f getTerrainRotation() {
         return (Vector3f)Terrain.get("rotation");
     }
 
@@ -1710,7 +1883,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param rotation 
      */
-    public void setTerrain_rotation(Vector3f rotation) {
+    public void setTerrainRotation(Vector3f rotation) {
         Terrain.put("rotation", rotation);
     }
     
@@ -1718,32 +1891,32 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public String getFlowfilepath_x() {
-        return (String)Flow.get("filepath_flowmap_x");
+    public String getFlowMapX() {
+        return (String)Flow.get("MapX");
     }
 
     /**
      *
      * @param filepath_flowmap_x 
      */
-    public void setFlowfilepath_x(String filepath_flowmap_x) {
-        Flow.put("filepath_flowmap_x", filepath_flowmap_x);
+    public void setFlowMapX(String MapX) {
+        Flow.put("MapX", MapX);
     }
     
     /**
      *
      * @return
      */
-    public String getFlowfilepath_y() {
-        return (String)Flow.get("filepath_flowmap_y");
+    public String getFlowMapY() {
+        return (String)Flow.get("MapY");
     }
 
     /**
      *
      * @param filepath_flowmap_y 
      */
-    public void setFlowfilepath_y(String filepath_flowmap_y) {
-        Flow.put("filepath_flowmap_y", filepath_flowmap_y);
+    public void setFlowMapY(String MapY) {
+        Flow.put("MapY", MapY);
     }
     
     /**
@@ -1751,22 +1924,30 @@ public class MARS_Settings implements UpdateState{
      * @return
      */
     public Float getFlowForceScale() {
-        return (Float)Flow.get("flowScale");
+        return (Float)Flow.get("forceScale");
     }
 
     /**
      *
      * @param flowScale 
      */
-    public void setFlowForceScale(float flowScale) {
-        Flow.put("flowScale", flowScale);
+    public void setFlowForceScale(Float forceScale) {
+        Flow.put("forceScale", forceScale);
     }
     
     /**
      *
      * @return
      */
-    public Boolean isSetupFlow() {
+    public Boolean isFlowEnabled() {
+        return (Boolean)Flow.get("enabled");
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getFlowEnabled() {
         return (Boolean)Flow.get("enabled");
     }
 
@@ -1774,7 +1955,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled 
      */
-    public void setSetupFlow(boolean enabled) {
+    public void setFlowEnabled(Boolean enabled) {
         Flow.put("enabled", enabled);
     }
     
@@ -1830,16 +2011,16 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public String getPollutionFilepath() {
-        return (String)Pollution.get("filepath_pollutionmap");
+    public String getPollutionPollutionMap() {
+        return (String)Pollution.get("pollutionMap");
     }
 
     /**
      *
      * @param filepath_flowmap_x 
      */
-    public void setPollutionFilepath(String filepath_pollutionmap) {
-        Pollution.put("filepath_pollutionmap", filepath_pollutionmap);
+    public void setPollutionPollutionMap(String pollutionMap) {
+        Pollution.put("pollutionMap", pollutionMap);
     }
     
     /**
@@ -1847,15 +2028,15 @@ public class MARS_Settings implements UpdateState{
      * @return
      */
     public Float getPollutionScaleFactor() {
-        return (Float)Pollution.get("pollutionScale");
+        return (Float)Pollution.get("scaleFactor");
     }
 
     /**
      *
      * @param flowScale 
      */
-    public void setPollutionScaleFactor(float pollutionScale) {
-        Pollution.put("pollutionScale", pollutionScale);
+    public void setPollutionScaleFactor(Float scaleFactor) {
+        Pollution.put("scaleFactor", scaleFactor);
     }
     
     /**
@@ -1863,22 +2044,30 @@ public class MARS_Settings implements UpdateState{
      * @return
      */
     public Float getPollutionAlpha() {
-        return (Float)Pollution.get("pollutionAlpha");
+        return (Float)Pollution.get("Alpha");
     }
 
     /**
      *
      * @param flowScale 
      */
-    public void setpollutionAlpha(float pollutionAlpha) {
-        Pollution.put("pollutionAlpha", pollutionAlpha);
+    public void setpollutionAlpha(Float Alpha) {
+        Pollution.put("Alpha", Alpha);
     }
     
     /**
      *
      * @return
      */
-    public Boolean isSetupPollution() {
+    public Boolean isPollutionEnabled() {
+        return (Boolean)Pollution.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getPollutionEnabled() {
         return (Boolean)Pollution.get("enabled");
     }
 
@@ -1886,7 +2075,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled 
      */
-    public void setSetupPollution(boolean enabled) {
+    public void setPollutionEnabled(Boolean enabled) {
         Pollution.put("enabled", enabled);
     }
     
@@ -1897,12 +2086,20 @@ public class MARS_Settings implements UpdateState{
     public Boolean isPollutionVisible() {
         return (Boolean)Pollution.get("visible");
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getPollutionVisible() {
+        return (Boolean)Pollution.get("visible");
+    }
 
     /**
      *
      * @param enabled 
      */
-    public void setPollutionVisible(boolean visible) {
+    public void setPollutionVisible(Boolean visible) {
         Pollution.put("visible", visible);
     }
     
@@ -1913,12 +2110,20 @@ public class MARS_Settings implements UpdateState{
     public Boolean isPollutionDetectable() {
         return (Boolean)Pollution.get("detectable");
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getPollutionDetectable() {
+        return (Boolean)Pollution.get("detectable");
+    }
 
     /**
      *
      * @param enabled 
      */
-    public void setPollutionDetectable(boolean detectable) {
+    public void setPollutionDetectable(Boolean detectable) {
         Pollution.put("detectable", detectable);
     }
 
@@ -1974,7 +2179,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupWater() {
+    public Boolean isWaterEnabled() {
+        return (Boolean)Water.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWaterEnabled() {
         return (Boolean)Water.get("enabled");
     }
 
@@ -1982,7 +2195,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupWater(boolean enabled) {
+    public void setWaterEnabled(Boolean enabled) {
         Water.put("enabled", enabled);
     }
 
@@ -1990,7 +2203,15 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isSetupWireFrame() {
+    public Boolean isWireFrameEnabled() {
+        return (Boolean)WireFrame.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getWireFrameEnabled() {
         return (Boolean)WireFrame.get("enabled");
     }
 
@@ -1998,7 +2219,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param enabled
      */
-    public void setSetupWireFrame(boolean enabled) {
+    public void setWireFrameEnabled(Boolean enabled) {
         WireFrame.put("enabled", enabled);
     }
 
@@ -2006,7 +2227,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public ColorRGBA getWireframecolor() {
+    public ColorRGBA getWireFrameColor() {
         return (ColorRGBA)WireFrame.get("color");
     }
 
@@ -2014,7 +2235,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param color
      */
-    public void setWireframecolor(ColorRGBA color) {
+    public void setWireFrameColor(ColorRGBA color) {
         WireFrame.put("color", color);
     }
     
@@ -2054,7 +2275,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isAmbientSelection() {
+    public Boolean isAmbientSelection() {
         return (Boolean)Gui.get("AmbientSelection");
     }
 
@@ -2062,7 +2283,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param AmbientSelection 
      */
-    public void setAmbientSelection(boolean AmbientSelection) {
+    public void setAmbientSelection(Boolean AmbientSelection) {
         Gui.put("AmbientSelection", AmbientSelection);
     }
     
@@ -2070,7 +2291,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isGlowSelection() {
+    public Boolean isGlowSelection() {
         return (Boolean)Gui.get("GlowSelection");
     }
 
@@ -2078,7 +2299,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param GlowSelection 
      */
-    public void setGlowSelection(boolean GlowSelection) {
+    public void setGlowSelection(Boolean GlowSelection) {
         Gui.put("GlowSelection", GlowSelection);
     }
     
@@ -2086,7 +2307,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isPopUpAUVName() {
+    public Boolean isPopUpAUVName() {
         return (Boolean)Gui.get("PopUpAUVName");
     }
 
@@ -2094,7 +2315,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param GlowSelection 
      */
-    public void setPopUpAUVName(boolean PopUpAUVName) {
+    public void setPopUpAUVName(Boolean PopUpAUVName) {
         Gui.put("PopUpAUVName", PopUpAUVName);
     }
     
@@ -2102,7 +2323,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public float getPopUpAUVNameDistance() {
+    public Float getPopUpAUVNameDistance() {
         return (Float)Gui.get("PopUpAUVNameDistance");
     }
 
@@ -2110,7 +2331,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param speed 
      */
-    public void setPopUpAUVNameDistance(float PopUpAUVNameDistance) {
+    public void setPopUpAUVNameDistance(Float PopUpAUVNameDistance) {
         Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
     }
     
@@ -2118,7 +2339,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param GlowSelection 
      */
-    public void setMouseUpdateFollow(boolean MouseUpdateFollow) {
+    public void setMouseUpdateFollow(Boolean MouseUpdateFollow) {
         Gui.put("MouseUpdateFollow", MouseUpdateFollow);
     }
     
@@ -2126,7 +2347,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isMouseUpdateFollow() {
+    public Boolean isMouseUpdateFollow() {
         return (Boolean)Gui.get("MouseUpdateFollow");
     }
 
@@ -2134,7 +2355,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @return
      */
-    public boolean isHeadless() {
+    public Boolean isHeadless() {
         return (Boolean)Misc.get("headless");
     }
 
@@ -2142,7 +2363,7 @@ public class MARS_Settings implements UpdateState{
      *
      * @param headless 
      */
-    public void setHeadless(boolean headless) {
+    public void setHeadless(Boolean headless) {
         Misc.put("headless", headless);
     }
     

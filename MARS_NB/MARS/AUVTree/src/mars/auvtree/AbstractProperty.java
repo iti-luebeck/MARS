@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mars.auvtree;
+package mars.auvtree;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

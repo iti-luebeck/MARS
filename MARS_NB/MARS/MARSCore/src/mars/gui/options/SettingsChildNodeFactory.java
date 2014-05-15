@@ -3,23 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package org.mars.auvtree.nodes;
+package mars.gui.options;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import mars.MARS_Main;
-import mars.auv.AUV;
+import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
+import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
-import mars.states.SimState;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeEvent;
@@ -28,50 +24,43 @@ import org.openide.nodes.NodeMemberEvent;
 import org.openide.nodes.NodeReorderEvent;
 
 /**
- * Factory for creation of auv nodes.
- * 
- * @author Christian
+ *
+ * @author Christian Friedrich
+ * @author Thomas Tosik
  */
-public class AUVNodeFactory extends ChildFactory<String> implements NodeListener{
+public class SettingsChildNodeFactory extends ChildFactory<String> implements NodeListener{
+
+    private MARS_Settings settings;
 
     /**
-     * Set of auv names.
+     * Constructor for every child node under accumulator, actuator and sensor
+     *
+     * @param params
      */
-    private Set auvNames;
-    
-    public AUVNodeFactory(Set auvNames) {
-        this.auvNames = auvNames;
+    public SettingsChildNodeFactory(MARS_Settings settings) {
+        this.settings = settings;
     }
-    
-    /**
-     * Creates list of keys.
-     * 
-     * @param toPopulate List of created keys.
-     * @return always true
-     */
+
     @Override
     protected boolean createKeys(List toPopulate) {
-        SortedSet<String> sortedset = new TreeSet<String>(auvNames);
-        for (Iterator<String> it = sortedset.iterator(); it.hasNext();) {
-            String auvName = it.next();
-            toPopulate.add(auvName);
-        }
+        //sorted output
+        /*SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());
+        for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
+            String string = it2.next();
+            toPopulate.add(string);
+        }*/
+        toPopulate.add("Settings");
         return true;
     }
-    
-    /**
-     * This method creates a node for a given key.
-     * 
-     * @param key
-     * @return Instance of AUVNode.
-     */
+
     @Override
     protected Node createNodeForKey(String key) {
-        AUVNode auvNode = new AUVNode(key);
-        auvNode.addNodeListener(this);
-        return auvNode;
+        // create new node for every key
+        Node n = new SettingsNode(settings, key);
+        n.addNodeListener(this);
+        return n;
     }
-
+    
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
     }
@@ -86,9 +75,9 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
 
     @Override
     public void nodeDestroyed(NodeEvent ne) {
-        AUVNode lookup = ne.getNode().getLookup().lookup(AUVNode.class);
+        SettingsNode lookup = (SettingsNode)ne.getNode();
         String name = lookup.getDisplayName();
-        auvNames.remove(name);
+        //params.remove(name);
         refresh(true);
     }
 
@@ -96,5 +85,4 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
     public void propertyChange(PropertyChangeEvent evt) {
         
     }
-
 }

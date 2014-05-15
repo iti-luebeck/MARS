@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mars.auvtree;
+package mars.gui.PropertyEditors;
 
 import com.jme3.math.Vector3f;
 import java.awt.Dimension;
@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 /**
  * Editor with three textfields to edit x, y and z.
  *
- * @author Christian
+ * @author Christian Friedrich
  */
 public class VectorEditor extends JPanel {
 

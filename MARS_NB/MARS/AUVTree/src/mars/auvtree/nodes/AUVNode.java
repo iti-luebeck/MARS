@@ -1,4 +1,4 @@
-package org.mars.auvtree.nodes;
+package mars.auvtree.nodes;
 
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -26,7 +26,7 @@ import mars.gui.dnd.TransferHandlerObject;
 import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
 import mars.states.SimState;
-import org.mars.auvtree.TreeUtil;
+import mars.auvtree.TreeUtil;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;

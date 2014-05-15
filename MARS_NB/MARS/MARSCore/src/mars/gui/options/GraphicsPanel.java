@@ -2,20 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.core;
+package mars.gui.options;
 
-import java.util.prefs.BackingStoreException;
-import org.openide.util.Exceptions;
-import org.openide.util.NbPreferences;
+import mars.MARS_Settings;
+import mars.core.CentralLookup;
+import mars.states.SimState;
+import org.openide.explorer.propertysheet.PropertySheet;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Node;
 
 public final class GraphicsPanel extends javax.swing.JPanel {
 
     private final GraphicsOptionsPanelController controller;
+    private final PropertySheet ps = new PropertySheet();
 
     GraphicsPanel(GraphicsOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
         // TODO listen to changes in form fields and call controller.changed()
+       
+        this.add(ps);
     }
 
     /**
@@ -26,42 +32,26 @@ public final class GraphicsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-
         setLayout(new java.awt.GridLayout(1, 0));
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
 
     void load() {
-        try {
-            // TODO read settings and initialize GUI
-            // Example:        
-            // someCheckBox.setSelected(Preferences.userNodeForPackage(GraphicsPanel.class).getBoolean("someFlag", false));
-            // or for org.openide.util with API spec. version >= 7.4:
-            // someCheckBox.setSelected(NbPreferences.forModule(GraphicsPanel.class).getBoolean("someFlag", false));
-            // or:
-            // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
-            String[] childrenNames = NbPreferences.forModule(mars.core.GraphicsPanel.class).keys();
-            System.out.println("asas");
-        } catch (BackingStoreException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-        System.out.println("asas");
+        //try {
+        // TODO read settings and initialize GUI
+        // Example:
+        // someCheckBox.setSelected(Preferences.userNodeForPackage(GraphicsPanel.class).getBoolean("someFlag", false));
+        // or for org.openide.util with API spec. version >= 7.4:
+        // someCheckBox.setSelected(NbPreferences.forModule(GraphicsPanel.class).getBoolean("someFlag", false));
+        // or:
+        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        
+        CentralLookup cl = CentralLookup.getDefault();
+        SimState state = cl.lookup(SimState.class);
+        MARS_Settings settings = state.getMARSSettings();
+        AbstractNode abstractNode = new SettingsNode(settings, "Graphics");
+        Node[] nodes = new Node[1];
+        nodes[0] = abstractNode;
+        ps.setNodes(nodes);
     }
 
     void store() {
@@ -79,7 +69,5 @@ public final class GraphicsPanel extends javax.swing.JPanel {
         return true;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
