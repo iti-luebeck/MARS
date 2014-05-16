@@ -1962,7 +1962,7 @@ public final class MARSTopComponent extends TopComponent {
                             resolution_height = mars_settings.getResolutionHeight();
                             resolution_width = mars_settings.getResolutionWidth();
                             framelimit = mars_settings.getFrameLimit();
-                            headless = mars_settings.isHeadless();
+                            headless = mars_settings.getMiscHeadless();
                         } catch (Exception ex) {
                             Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
                         }

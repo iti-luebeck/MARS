@@ -35,7 +35,7 @@ public class MyDebugAppStateFilter implements DebugAppStateFilter{
     @Override
     public boolean displayObject(Object o) {
         //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Try to display DebugObject: " + o, "");
-        if(mars_settings.isPhysicsDebug()){
+        if(mars_settings.getPhysicsDebug()){
             return true;
         }else{
             if(o instanceof MyCustomGhostControl){//we dont want to see them..ever

@@ -37,7 +37,7 @@ public class PopupControl extends AbstractControl{
 
     @Override
     protected void controlUpdate(float f) {
-        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getPopUpAUVNameDistance() && auv.getMARS_Settings().isPopUpAUVName()){
+        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getGuiPopUpAUVNameDistance() && auv.getMARS_Settings().getGuiPopUpAUVName()){
             if(stateManager.getState(NiftyState.class) != null){
                 NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
                 //System.out.println("cam " + auv.getName() + ": " + cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation()));

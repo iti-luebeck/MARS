@@ -10,6 +10,7 @@ import com.jme3.input.InputManager;
  *
  * @author Tosik
  */
+@Deprecated
 public interface  Keys {
     /**
      * 

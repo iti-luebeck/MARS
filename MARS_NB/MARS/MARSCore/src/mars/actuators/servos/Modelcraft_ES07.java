@@ -76,6 +76,6 @@ public class Modelcraft_ES07 extends Servo{
                     System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((int)message.getData());
                 }
-        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
+        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 }

@@ -258,7 +258,7 @@ public class SimObject{
      */
     public void setSelected(boolean selected){
         if(selected && this.selected==false){
-            ambient_light.setColor(mars_settings.getSelectionColor());
+            ambient_light.setColor(mars_settings.getGuiSelectionColor());
             simObNode.addLight(ambient_light); 
         }else if(selected == false){
             simObNode.removeLight(ambient_light);

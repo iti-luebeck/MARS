@@ -96,7 +96,7 @@ public class HanseBagPlayer extends Teleporter{
                     setPos2d(v_pos);
                     self.teleport(v_pos,quat);
                 }
-        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
+        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
         
         Subscriber<hanse_msgs.pressure> subscriberDepth = ros_node.newSubscriber(auv_name + "/" + "pressure/depth", hanse_msgs.pressure._TYPE);
         subscriberDepth.addMessageListener(new MessageListener<hanse_msgs.pressure>() {
@@ -108,6 +108,6 @@ public class HanseBagPlayer extends Teleporter{
                     dep = (getPressureRelative()-pos)/(float)(pe.getFluid_density() * pe.getGravitational_acceleration()) * 100f;
                     setDepth(dep);
                 }
-        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
+        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 }

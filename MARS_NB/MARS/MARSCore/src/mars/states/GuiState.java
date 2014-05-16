@@ -284,7 +284,7 @@ public class GuiState extends AbstractAppState{
                     guiControlState.setMove_auv(true);
                     guiControlState.setGhostObject(selected_auv.getGhostAUV());
                     //guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
-                    if(mars_settings.isMouseUpdateFollow()){
+                    if(mars_settings.getGuiMouseUpdateFollow()){
                         selected_auv.hideGhostAUV(true);
                     }else{
                         selected_auv.hideGhostAUV(false);
@@ -437,7 +437,7 @@ public class GuiState extends AbstractAppState{
                     AUV selected_auv = auvManager.getSelectedAUV();
                     if(selected_auv != null){
                         moveSelectedGhostAUV(selected_auv);
-                        if(mars_settings.isMouseUpdateFollow()){
+                        if(mars_settings.getGuiMouseUpdateFollow()){
                             selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f,guiControlState.getDepth_factor()*guiControlState.getDepth_iteration(),0f)));//set end postion
                         }
                     }

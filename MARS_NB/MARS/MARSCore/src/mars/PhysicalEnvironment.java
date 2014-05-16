@@ -7,11 +7,17 @@ package mars;
 
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
@@ -23,11 +29,14 @@ import mars.xml.HashMapEntry;
  */
 @XmlRootElement(name="PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment implements UpdateState{
+public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSupport{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> environment;
     private BulletAppState bulletAppState;
+    
+    @XmlTransient
+    private List listeners = Collections.synchronizedList(new LinkedList());
     
     //physics
     private float fluid_density = 998.2071f;//kg/m³
@@ -65,6 +74,24 @@ public class PhysicalEnvironment implements UpdateState{
      */
     public void initAfterJAXB(){
         
+    }
+    
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        for (int i = 0; i < pcls.length; i++) {
+            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
     }
     
     /**

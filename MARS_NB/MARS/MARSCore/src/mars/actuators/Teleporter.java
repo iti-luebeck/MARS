@@ -130,7 +130,7 @@ public class Teleporter extends Actuator{
 
                     self.teleport(v_pos,quat);
                 }
-        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
+        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 }
 

@@ -378,7 +378,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
                             //System.out.println("auv_dist.x: " + auv_dist.x*(2f/(terx_px*tile_length)) + "auv_dist.y: " + (-1)*auv_dist.z*(2f/(tery_px*tile_length)));
                             //Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
-                            geom.getMaterial().setColor("Color", mars_settings.getSelectionColor());
+                            geom.getMaterial().setColor("Color", mars_settings.getGuiSelectionColor());
                         }else{
                             //Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos.add(new Vector3f((terx_px*tile_length)/2f, 0f, (tery_px*tile_length)/2f)));
                             Vector3f auv_dist = (auv.getPhysicsControl().getPhysicsLocation()).subtract(ter_pos);

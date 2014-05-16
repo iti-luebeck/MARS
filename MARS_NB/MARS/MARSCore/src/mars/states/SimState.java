@@ -333,7 +333,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             
             comManager.setServer(initer.getRAW_Server());
 
-            if(mars_settings.isROS_Server_enabled()){
+            if(mars_settings.getROSEnabled()){
                 if(initer.checkROSServer()){//Waiting for ROS Server to be ready
                 
                 }
@@ -490,7 +490,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             TreeTopComp.updateTrees();
             MARSMapComp.initDND();
 
-        if(mars_settings.isROS_Server_enabled()){
+        if(mars_settings.getROSEnabled()){
                 /*Logger.getLogger(SimState.class.getName()).log(Level.INFO, "Waiting for ROS Server to be ready...", "");
                 while(!initer.isROS_ServerReady()){
                     
@@ -527,7 +527,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * 
      */
     public void connectToServer(){
-        mars_settings.setROS_Server_enabled(true);
+        mars_settings.setROSEnabled(true);
         initer.setupServer();
         if(initer.checkROSServer()){
                 MARSTopComp.allowServerInteraction(true);
@@ -540,7 +540,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * 
      */
     public void disconnectFromServer(){
-        mars_settings.setROS_Server_enabled(false);
+        mars_settings.setROSEnabled(false);
         MARSTopComp.enableServerInteraction(false);
         initer.killServer();
         MARSTopComp.allowServerInteraction(false);
@@ -551,7 +551,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      * @param enable
      */
     public void enablePublishing(boolean enable){
-        mars_settings.setROS_Server_publish(enable);
+        mars_settings.setROSPublish(enable);
     }
     
     /**
@@ -628,14 +628,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
-        bulletAppState.getPhysicsSpace().setMaxSubSteps(mars_settings.getPhysicsMaxSubSteps());
+        bulletAppState.getPhysicsSpace().setMaxSubSteps(mars_settings.getPhysicsMaxsubsteps());
         
         //setting Filter in the DebugState so we can show specific collision boxes
         /*if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
             mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
         }*/ //doesnt work here because DebugAppState suuuuuucks
         
-        if(mars_settings.isPhysicsDebug()){
+        if(mars_settings.getPhysicsDebug()){
             bulletAppState.setDebugEnabled(true);
         }
             
@@ -648,17 +648,17 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     }
 
     private void setupCams(){
-        mars.getFlyByCamera().setMoveSpeed(mars_settings.getFlyCamMoveSpeed());
+        mars.getFlyByCamera().setMoveSpeed(mars_settings.getCameraFlyCamMoveSpeed());
         mars.getFlyByCamera().setEnabled(true);
         chaseCam = new ChaseCamera(mars.getCamera(),rootNode,inputManager);
         chaseCam.setInvertVerticalAxis(true);
-        chaseCam.setZoomSensitivity(mars_settings.getChaseCamZoomSensitivity());
+        chaseCam.setZoomSensitivity(mars_settings.getCameraChaseCamZoomSensitivity());
         chaseCam.setEnabled(false);
     }
     
     private void setupCamPos(){
-        moveCamera(mars_settings.getCamDefaultPosition(), false);
-        rotateCamera(mars_settings.getCamDefaultRotation(), false);
+        moveCamera(mars_settings.getCameraDefaultPosition(), false);
+        rotateCamera(mars_settings.getCameraDefaultRotation(), false);
     }
     
     /*
@@ -753,7 +753,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         auvManager.setSimauv_settings(mars_settings);
         auvManager.setCommunicationManager(com_manager);
         auvManager.setRecManager(recordManager);
-        if(mars_settings.isROS_Server_enabled()){
+        if(mars_settings.getROSEnabled()){
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
         }
         auvManager.registerAUVs(auvs);

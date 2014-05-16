@@ -2463,15 +2463,15 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setSelected(boolean selected) {
         if (selected && this.selected == false) {
-            if (mars_settings.isAmbientSelection()) {
-                ambient_light.setColor(mars_settings.getSelectionColor());
+            if (mars_settings.getGuiAmbientSelection()) {
+                ambient_light.setColor(mars_settings.getGuiSelectionColor());
                 selectionNode.addLight(ambient_light);
             }
-            if (mars_settings.isGlowSelection()) {
+            if (mars_settings.getGuiGlowSelection()) {
                 /*Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
                  mat_white.setColor("GlowColor", ColorRGBA.Blue); 
                  auv_spatial.setMaterial(mat_white);*/
-                setGlowColor(ghost_auv_spatial, mars_settings.getSelectionColor());
+                setGlowColor(ghost_auv_spatial, mars_settings.getGuiSelectionColor());
             }
         } else if (selected == false) {
             selectionNode.removeLight(ambient_light);

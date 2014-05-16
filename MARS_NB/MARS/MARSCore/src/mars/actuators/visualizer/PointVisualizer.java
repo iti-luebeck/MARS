@@ -183,7 +183,7 @@ public class PointVisualizer extends Actuator implements ChartValue{
                     Vector3 vec = (Vector3)message.getVector();
                     self.updateVector(new Vector3f((float)vec.getX(), (float)vec.getZ(), (float)vec.getY()));
                 }
-        },( simState.getMARSSettings().getROS_Gloabl_Queue_Size() > 0) ? simState.getMARSSettings().getROS_Gloabl_Queue_Size() : getRos_queue_listener_size());
+        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
     
     @Override

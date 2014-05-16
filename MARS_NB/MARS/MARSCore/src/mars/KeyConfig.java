@@ -22,6 +22,7 @@ import mars.gui.tree.UpdateState;
  */
 @XmlRootElement(name="KeyConfig")
 @XmlAccessorType(XmlAccessType.NONE)
+@Deprecated
 public class KeyConfig implements UpdateState{
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)

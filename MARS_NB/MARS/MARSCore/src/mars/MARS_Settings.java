@@ -64,7 +64,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     private HashMap<String,Object> CrossHairs;
     private HashMap<String,Object> Misc;
     private HashMap<String,Object> Camera;
-    private HashMap<String,Object> Auto;
+    private HashMap<String,Object> Record;
     //private HashMap<String,Object> FPS;
 
     @XmlTransient
@@ -154,7 +154,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
         WireFrame = (HashMap<String,Object>)Graphics.get("WireFrame");
         CrossHairs = (HashMap<String,Object>)Graphics.get("CrossHairs");
         Camera = (HashMap<String,Object>)Misc.get("Camera");
-        Auto = (HashMap<String,Object>)Misc.get("Auto");
+        Record = (HashMap<String,Object>)Misc.get("Record");
         //initPreferences(Graphics,"Physics", mars.core.GraphicsPanel.class);
         //initPreferences(Graphics,"Server");
         //initPreferences(Graphics,"Graphics",mars.core.GraphicsPanel.class);
@@ -233,7 +233,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
         }else if(target.equals("speed") && hashmapname.equals("Physics")){
             initer.changeSpeed(getPhysicsSpeed());
         }else if(target.equals("debug") && hashmapname.equals("Physics")){
-            initer.showPhysicsDebug(isPhysicsDebug());
+            initer.showPhysicsDebug(getPhysicsDebug());
         }else if(target.equals("visible") && hashmapname.equals("Pollution")){
             initer.hidePollution(isPollutionVisible());
         }else if(target.equals("hour") && hashmapname.equals("SkyDome")){
@@ -350,7 +350,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isPhysicsDebug() {
+    public Boolean getPhysicsDebug() {
         return (Boolean)Physics.get("debug");
     }
 
@@ -382,7 +382,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getPhysicsMaxSubSteps() {
+    public Integer getPhysicsMaxsubsteps() {
         return (Integer)Physics.get("maxsubsteps");
     }
 
@@ -390,7 +390,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param maxsubsteps 
      */
-    public void setPhysicsMaxSubSteps(Integer maxsubsteps) {
+    public void setPhysicsMaxsubsteps(Integer maxsubsteps) {
         Physics.put("maxsubsteps", maxsubsteps);
     }
     
@@ -414,7 +414,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getFlyCamMoveSpeed() {
+    public Integer getCameraFlyCamMoveSpeed() {
         return (Integer)Camera.get("FlyCamMoveSpeed");
     }
 
@@ -422,7 +422,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param FlyCamMoveSpeed
      */
-    public void setFlyCamMoveSpeed(Integer FlyCamMoveSpeed) {
+    public void setCameraFlyCamMoveSpeed(Integer FlyCamMoveSpeed) {
         Camera.put("FlyCamMoveSpeed", FlyCamMoveSpeed);
     }
     
@@ -430,39 +430,39 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Vector3f getCamDefaultPosition() {
-        return (Vector3f)Camera.get("CamDefaultPosition");
+    public Vector3f getCameraDefaultPosition() {
+        return (Vector3f)Camera.get("DefaultPosition");
     }
 
     /**
      *
      * @param CamDefaultPosition
      */
-    public void setCamDefaultPosition(Vector3f CamDefaultPosition) {
-        Camera.put("CamDefaultPosition", CamDefaultPosition);
+    public void setCameraDefaultPosition(Vector3f DefaultPosition) {
+        Camera.put("DefaultPosition", DefaultPosition);
     }
     
     /**
      *
      * @return
      */
-    public Vector3f getCamDefaultRotation() {
-        return (Vector3f)Camera.get("CamDefaultRotation");
+    public Vector3f getCameraDefaultRotation() {
+        return (Vector3f)Camera.get("DefaultRotation");
     }
 
     /**
      *
      * @param CamDefaultRotation
      */
-    public void setCamDefaultRotation(Vector3f CamDefaultRotation) {
-        Camera.put("CamDefaultRotation", CamDefaultRotation);
+    public void setCameraDefaultRotation(Vector3f DefaultRotation) {
+        Camera.put("DefaultRotation", DefaultRotation);
     }
     
     /**
      *
      * @return
      */
-    public Float getChaseCamZoomSensitivity() {
+    public Float getCameraChaseCamZoomSensitivity() {
         return (Float)Camera.get("ChaseCamZoomSensitivity");
     }
 
@@ -470,7 +470,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param speed 
      */
-    public void setChaseCamZoomSensitivity(Float ChaseCamZoomSensitivity) {
+    public void setCameraChaseCamZoomSensitivity(Float ChaseCamZoomSensitivity) {
         Camera.put("ChaseCamZoomSensitivity", ChaseCamZoomSensitivity);
     }
     
@@ -478,36 +478,16 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    @Deprecated
-    public String getAutoConfigName() {
-        return (String)Auto.get("config");
+    public Boolean getRecordEnabled() {
+        return (Boolean)Record.get("enabled");
     }
 
     /**
      *
-     * @param FlyCamMoveSpeed
+     * @param speed 
      */
-    @Deprecated
-    public void setAutoConfigName(String config) {
-        Auto.put("config", config);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public boolean isAutoEnabled() {
-         return (Boolean)Auto.get("enabled");
-    }
-
-    /**
-     *
-     * @param enabled
-     */
-    @Deprecated
-    public void setAutoEnabled(boolean enabled) {
-        Auto.put("enabled", enabled);
+    public void setRecordEnabled(Boolean enabled) {
+        Record.put("enabled", enabled);
     }
     
     /**
@@ -860,7 +840,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getRAW_Server_port() {
+    public Integer getRAWPort() {
         return (Integer)RAW.get("port");
     }
 
@@ -868,7 +848,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      * 
      * @param port
      */
-    public void setRAW_Server_port(Integer port) {
+    public void setRAWPort(Integer port) {
         RAW.put("port", port);
     }
     
@@ -876,7 +856,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isRAW_Server_enabled() {
+    public Boolean getRAWEnabled() {
         return (Boolean)RAW.get("enabled");
     }
 
@@ -884,15 +864,15 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      * 
      * @param raw_enabled 
      */
-    public void setRAW_Server_enabled(Boolean raw_enabled) {
-        RAW.put("enabled", raw_enabled);
+    public void setRAWEnabled(Boolean enabled) {
+        RAW.put("enabled", enabled);
     }
 
     /**
      *
      * @return
      */
-    public Integer getRAW_Server_backlog() {
+    public Integer getRAWBacklog() {
         return (Integer)RAW.get("backlog");
     }
 
@@ -900,7 +880,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param backlog
      */
-    public void setRAW_Server_backlog(Integer backlog) {
+    public void setRAWBacklog(Integer backlog) {
         RAW.put("backlog", backlog);
     }
 
@@ -908,7 +888,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getRAW_Server_OutputStreamSize() {
+    public Integer getRAWOutputStreamSize() {
         return (Integer)RAW.get("OutputStreamSize");
     }
 
@@ -916,7 +896,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param OutputStreamSize
      */
-    public void setRAW_Server_OutputStreamSize(Integer OutputStreamSize) {
+    public void setRAWOutputStreamSize(Integer OutputStreamSize) {
         RAW.put("OutputStreamSize", OutputStreamSize);
     }
     
@@ -924,7 +904,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getROS_Server_port() {
+    public Integer getROSMasterport() {
         return (Integer)ROS.get("masterport");
     }
 
@@ -932,7 +912,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      * 
      * @param master_port 
      */
-    public void setROS_Server_port(Integer master_port) {
+    public void setROSMasterport(Integer master_port) {
         ROS.put("masterport", master_port);
     }
     
@@ -940,7 +920,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public String getROS_Master_IP() {
+    public String getROSMasterip() {
         return (String)ROS.get("masterip");
     }
 
@@ -948,7 +928,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param master_ip 
      */
-    public void setROS_Master_IP(String master_ip) {
+    public void setROSMasterip(String master_ip) {
         ROS.put("masterip", master_ip);
     }
     
@@ -956,7 +936,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public String getROS_Local_IP() {
+    public String getROSLocalip() {
         return (String)ROS.get("localip");
     }
 
@@ -964,7 +944,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param localip 
      */
-    public void setROS_Local_IP(String localip) {
+    public void setROSLocalip(String localip) {
         ROS.put("localip", localip);
     }
     
@@ -972,7 +952,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Integer getROS_Gloabl_Queue_Size() {
+    public Integer getROSGlobalQueueSize() {
         return (Integer)ROS.get("GlobalQueueSize");
     }
 
@@ -980,7 +960,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param FrameLimit
      */
-    public void setROS_Gloabl_Queue_Size(Integer GlobalQueueSize) {
+    public void setROSGlobalQueueSize(Integer GlobalQueueSize) {
         ROS.put("GlobalQueueSize", GlobalQueueSize);
     }
     
@@ -988,7 +968,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isROS_Server_enabled() {
+    public Boolean getROSEnabled() {
         return (Boolean)ROS.get("enabled");
     }
 
@@ -996,7 +976,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      * 
      * @param enabled 
      */
-    public void setROS_Server_enabled(Boolean enabled) {
+    public void setROSEnabled(Boolean enabled) {
         ROS.put("enabled", enabled);
     }
     
@@ -1004,7 +984,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isROS_Server_publish() {
+    public Boolean getROSPublish() {
         return (Boolean)ROS.get("publish");
     }
 
@@ -1012,7 +992,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      * 
      * @param enabled 
      */
-    public void setROS_Server_publish(Boolean publish) {
+    public void setROSPublish(Boolean publish) {
         ROS.put("publish", publish);
     }
 
@@ -2243,39 +2223,39 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public ColorRGBA getSelectionColor() {
-        return (ColorRGBA)Gui.get("selection_color");
+    public ColorRGBA getGuiSelectionColor() {
+        return (ColorRGBA)Gui.get("selectionColor");
     }
 
     /**
      *
      * @param color
      */
-    public void setSelectionColor(ColorRGBA color) {
-        Gui.put("selection_color", color);
+    public void setGuiSelectionColor(ColorRGBA selectionColor) {
+        Gui.put("selectionColor", selectionColor);
     }
     
         /**
      *
      * @return
      */
-    public ColorRGBA getCollisionColor() {
-        return (ColorRGBA)Gui.get("collision_color");
+    public ColorRGBA getGuiCollisionColor() {
+        return (ColorRGBA)Gui.get("collisionColor");
     }
 
     /**
      *
      * @param color
      */
-    public void setCollisionColor(ColorRGBA color) {
-        Gui.put("collision_color", color);
+    public void setGuiCollisionColor(ColorRGBA collisionColor) {
+        Gui.put("collisionColor", collisionColor);
     }
     
     /**
      *
      * @return
      */
-    public Boolean isAmbientSelection() {
+    public Boolean getGuiAmbientSelection() {
         return (Boolean)Gui.get("AmbientSelection");
     }
 
@@ -2283,7 +2263,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param AmbientSelection 
      */
-    public void setAmbientSelection(Boolean AmbientSelection) {
+    public void setGuiAmbientSelection(Boolean AmbientSelection) {
         Gui.put("AmbientSelection", AmbientSelection);
     }
     
@@ -2291,7 +2271,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isGlowSelection() {
+    public Boolean getGuiGlowSelection() {
         return (Boolean)Gui.get("GlowSelection");
     }
 
@@ -2299,7 +2279,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param GlowSelection 
      */
-    public void setGlowSelection(Boolean GlowSelection) {
+    public void setGuiGlowSelection(Boolean GlowSelection) {
         Gui.put("GlowSelection", GlowSelection);
     }
     
@@ -2307,7 +2287,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isPopUpAUVName() {
+    public Boolean getGuiPopUpAUVName() {
         return (Boolean)Gui.get("PopUpAUVName");
     }
 
@@ -2315,7 +2295,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param GlowSelection 
      */
-    public void setPopUpAUVName(Boolean PopUpAUVName) {
+    public void setGuiPopUpAUVName(Boolean PopUpAUVName) {
         Gui.put("PopUpAUVName", PopUpAUVName);
     }
     
@@ -2323,7 +2303,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Float getPopUpAUVNameDistance() {
+    public Float getGuiPopUpAUVNameDistance() {
         return (Float)Gui.get("PopUpAUVNameDistance");
     }
 
@@ -2331,7 +2311,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param speed 
      */
-    public void setPopUpAUVNameDistance(Float PopUpAUVNameDistance) {
+    public void setGuiPopUpAUVNameDistance(Float PopUpAUVNameDistance) {
         Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
     }
     
@@ -2339,7 +2319,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param GlowSelection 
      */
-    public void setMouseUpdateFollow(Boolean MouseUpdateFollow) {
+    public void setGuiMouseUpdateFollow(Boolean MouseUpdateFollow) {
         Gui.put("MouseUpdateFollow", MouseUpdateFollow);
     }
     
@@ -2347,7 +2327,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isMouseUpdateFollow() {
+    public Boolean getGuiMouseUpdateFollow() {
         return (Boolean)Gui.get("MouseUpdateFollow");
     }
 
@@ -2355,7 +2335,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @return
      */
-    public Boolean isHeadless() {
+    public Boolean getMiscHeadless() {
         return (Boolean)Misc.get("headless");
     }
 
@@ -2363,7 +2343,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param headless 
      */
-    public void setHeadless(Boolean headless) {
+    public void setMiscHeadless(Boolean headless) {
         Misc.put("headless", headless);
     }
     

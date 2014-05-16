@@ -366,17 +366,17 @@ public class Initializer {
      * 
      */
     public void setupServer(){
-        if(mars_settings.isRAW_Server_enabled()){
+        if(mars_settings.getRAWEnabled()){
             raw_server = new MARS_Server( mars, auv_manager, com_manager );
-            raw_server.setServerPort(mars_settings.getRAW_Server_port());
+            raw_server.setServerPort(mars_settings.getRAWPort());
             raw_server_thread = new Thread( raw_server );
             raw_server_thread.start();
         }
-        if(mars_settings.isROS_Server_enabled()){
+        if(mars_settings.getROSEnabled()){
             ros_server = new ROS_Node( mars, auv_manager, mars_settings );
-            ros_server.setMaster_port(mars_settings.getROS_Server_port());
-            ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
-            ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
+            ros_server.setMaster_port(mars_settings.getROSMasterport());
+            ros_server.setMaster_ip(mars_settings.getROSMasterip());
+            ros_server.setLocal_ip(mars_settings.getROSLocalip());
             ros_server.init();
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
@@ -479,11 +479,11 @@ public class Initializer {
      */
     @Deprecated
     public void setupROS_Server(){
-        if(mars_settings.isROS_Server_enabled()){
+        if(mars_settings.getROSEnabled()){
             ros_server = new ROS_Node( mars, auv_manager, mars_settings );
-            ros_server.setMaster_port(mars_settings.getROS_Server_port());
-            ros_server.setMaster_ip(mars_settings.getROS_Master_IP());
-            ros_server.setLocal_ip(mars_settings.getROS_Local_IP());
+            ros_server.setMaster_port(mars_settings.getROSMasterport());
+            ros_server.setMaster_ip(mars_settings.getROSMasterip());
+            ros_server.setLocal_ip(mars_settings.getROSLocalip());
             ros_server.init();
             ros_server_thread = new Thread( ros_server );
             ros_server_thread.start();
