@@ -4,7 +4,6 @@
  */
 package mars.control;
 
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -17,6 +16,7 @@ import java.util.HashMap;
 /**
  * This is calss used for controlling the lod of spatials. We perform so called manual lod which isnt supported in jme3 yet.
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @deprecated 
  */
 @Deprecated
 public class SpatialLodControl extends AbstractControl{
@@ -42,7 +42,9 @@ public class SpatialLodControl extends AbstractControl{
       } 
 
       /** This is your init method. Optionally, you can modify 
-        * the spatial from here (transform it, initialize userdata, etc). */
+       * the spatial from here (transform it, initialize userdata, etc).
+       * @param spatial 
+       */
       @Override
       public void setSpatial(Spatial spatial) {
         super.setSpatial(spatial);
@@ -65,7 +67,12 @@ public class SpatialLodControl extends AbstractControl{
         }
       }
 
-      @Override
+      /**
+     *
+     * @param spatial
+     * @return
+     */
+    @Override
       public Control cloneForSpatial(Spatial spatial){
         final SpatialLodControl control = new SpatialLodControl();
         /* Optional: use setters to copy userdata into the cloned control */
@@ -74,7 +81,12 @@ public class SpatialLodControl extends AbstractControl{
         return control;
       }
 
-      @Override
+      /**
+     *
+     * @param rm
+     * @param vp
+     */
+    @Override
       protected void controlRender(RenderManager rm, ViewPort vp){
          /* Optional: rendering manipulation (for advanced users) */
       } 

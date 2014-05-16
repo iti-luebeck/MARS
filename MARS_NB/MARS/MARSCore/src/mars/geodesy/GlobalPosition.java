@@ -108,7 +108,6 @@ public class GlobalPosition extends GlobalCoordinates
    /**
     * Compare this position to another object for equality.
     * 
-    * @param other
     * @return
     */
    @Override

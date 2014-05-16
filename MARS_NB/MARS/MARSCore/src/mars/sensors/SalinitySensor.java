@@ -63,10 +63,18 @@ public class SalinitySensor extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public SalinitySensor(SalinitySensor sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         SalinitySensor sensor = new SalinitySensor(this);
@@ -178,11 +186,19 @@ public class SalinitySensor extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getSalinity();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

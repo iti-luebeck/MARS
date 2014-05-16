@@ -10,10 +10,8 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.recorder.Recording;
 import mars.accumulators.Accumulator;
-import mars.actuators.servos.Servo;
 import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
-import mars.sensors.Sensor;
 import mars.simobjects.SimObject;
 
 /**

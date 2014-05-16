@@ -24,6 +24,10 @@ public class AdvancedFlyByCamera extends FlyByCamera{
         super(cam);
     }
 
+    /**
+     *
+     * @param cam
+     */
     public void setCam(Camera cam) {
         this.cam = cam;
         initialUpVec = cam.getUp().clone();
@@ -63,6 +67,12 @@ public class AdvancedFlyByCamera extends FlyByCamera{
             }
     }
     
+    /**
+     *
+     * @param name
+     * @param value
+     * @param tpf
+     */
     @Override
     public void onAction(String name, boolean value, float tpf) {
         if (!enabled)

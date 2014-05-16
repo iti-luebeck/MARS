@@ -39,6 +39,9 @@ public final class MARSMapTopComponent extends TopComponent {
 
     private MARS_Main mars;
     
+    /**
+     *
+     */
     public MARSMapTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSMapTopComponent());
@@ -73,12 +76,18 @@ public final class MARSMapTopComponent extends TopComponent {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel MapPanel;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         //System.out.println("TEST!!!!!!!!!!!!!!!!!!");
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         //this.MapPanel.removeAll();

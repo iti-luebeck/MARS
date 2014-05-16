@@ -43,10 +43,18 @@ public class Velocimeter extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Velocimeter(Velocimeter sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Velocimeter sensor = new Velocimeter(this);
@@ -156,11 +164,19 @@ public class Velocimeter extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getLinearVelocity().length();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

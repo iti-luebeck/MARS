@@ -39,11 +39,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.control.LodControl;
-import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Line;
 import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
@@ -97,8 +94,6 @@ import mars.auv.example.Buoy;
 import mars.auv.example.Manta;
 import mars.auv.example.ROMP;
 import mars.control.MyLodControl;
-import mars.control.MyR;
-import mars.control.MyRigidBodyControl;
 import mars.control.PopupControl;
 import mars.gui.tree.HashMapWrapper;
 import mars.ros.MARSNodeMain;
@@ -111,7 +106,6 @@ import mars.sensors.PingDetector;
 import mars.sensors.PollutionMeter;
 import mars.sensors.RayBasedSensor;
 import mars.sensors.TerrainSender;
-import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.xml.HashMapAdapter;
 
@@ -293,6 +287,9 @@ public class BasicAUV implements AUV, SceneProcessor {
         selectionNode.attachChild(auv_node);
     }
 
+    /**
+     *
+     */
     @Override
     public void createDefault() {
         initAfterJAXB();
@@ -502,6 +499,11 @@ public class BasicAUV implements AUV, SceneProcessor {
         }
     }
     
+    /**
+     *
+     * @param oldName
+     * @param newName
+     */
     @Override
     public void updatePhysicalExchangerName(String oldName, String newName){
         Sensor sens = sensors.get(oldName);
@@ -1440,6 +1442,10 @@ public class BasicAUV implements AUV, SceneProcessor {
     
         /*
      *
+     */
+    /**
+     *
+     * @return
      */
     public Spatial loadModelCopy() {
         Spatial auv_spatial_copy = assetManager.loadModel(auv_param.getModelFilepath());

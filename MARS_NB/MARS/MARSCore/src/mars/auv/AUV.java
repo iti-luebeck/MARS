@@ -7,7 +7,6 @@ package mars.auv;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -28,9 +27,7 @@ import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.CommunicationDeviceEvent;
 import mars.PhysicalExchanger;
-import mars.gui.plot.PhysicalExchangerListener;
 import mars.gui.tree.UpdateState;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeListener;
@@ -111,6 +108,10 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+    /**
+     *
+     * @return
+     */
     public MyCustomGhostControl getGhostControl();
     /**
      *
@@ -137,6 +138,9 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      */
     public void init();
     /*
+     *
+     */
+    /**
      *
      */
     public void createDefault();
@@ -178,7 +182,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     public AUV_Parameters getAuv_param();
     /**
      *
-     * @return
+     * @param auvParam 
      */
     public void setAuv_param(AUV_Parameters auvParam);
     /**
@@ -251,6 +255,9 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      */
     public void cleanupOffscreenView();
     
+    /**
+     *
+     */
     public void cleanupAUV();
     /*
      *
@@ -389,12 +396,27 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     @Override
     public void updateState(TreePath path);
     
+    /**
+     *
+     * @param listener
+     */
     public void addAdListener( AUVListener listener );
 
+    /**
+     *
+     * @param listener
+     */
     public void removeAdListener( AUVListener listener );
     
+    /**
+     *
+     */
     public void removeAllListener();
 
+    /**
+     *
+     * @param event
+     */
     public void notifyAdvertisement( ChartEvent event );
     
     /**
@@ -424,9 +446,14 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     
     /**
      *
-     * @param pex
+     * @param name 
      */
     public void deregisterPhysicalExchanger(String name);
     
+    /**
+     *
+     * @param oldName
+     * @param newName
+     */
     public void updatePhysicalExchangerName(String oldName, String newName);
 }

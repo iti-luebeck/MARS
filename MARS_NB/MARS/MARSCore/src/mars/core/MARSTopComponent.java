@@ -142,6 +142,9 @@ public final class MARSTopComponent extends TopComponent {
     private final InstanceContent content = new InstanceContent();
     private Lookup.Result res;
 
+    /**
+     *
+     */
     public MARSTopComponent() {
         associateLookup (new AbstractLookup (content)); 
         
@@ -157,6 +160,10 @@ public final class MARSTopComponent extends TopComponent {
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canClose() {
         return false; //To change body of generated methods, choose Tools | Templates.
@@ -1939,6 +1946,9 @@ public final class MARSTopComponent extends TopComponent {
     private javax.swing.JTextField vectorDialog_z;
     private javax.swing.JDialog vector_dialog;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -2109,6 +2119,9 @@ public final class MARSTopComponent extends TopComponent {
         t.start();
     }
 
+    /**
+     *
+     */
     @Override
     protected void componentShowing() {
         super.componentShowing(); //To change body of generated methods, choose Tools | Templates.
@@ -2119,18 +2132,28 @@ public final class MARSTopComponent extends TopComponent {
         }
     }
 
+    /**
+     *
+     */
     @Override
     protected void componentHidden() {
         super.componentHidden(); //To change body of generated methods, choose Tools | Templates.
         System.out.println(getName() + " hidden");
     }
  
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
         //app.stop();
     }
     
+    /**
+     *
+     * @param sim_panel
+     */
     public void addAWTMainPanel(AwtPanel sim_panel){
         this.JMEPanel.add(sim_panel);
     }
@@ -2478,12 +2501,16 @@ public final class MARSTopComponent extends TopComponent {
     
         /**
      * 
-     * @param auvManager
+     * @param auv_manager 
      */
     public void setAuv_manager(AUV_Manager auv_manager) {
         this.auvManager = auv_manager;
     }
 
+    /**
+     *
+     * @param simob_manager
+     */
     public void setSimob_manager(SimObjectManager simob_manager) {
         this.simob_manager = simob_manager;
     }
@@ -2498,7 +2525,7 @@ public final class MARSTopComponent extends TopComponent {
     
     /**
      * 
-     * @param simauv_settings
+     * @param configManager 
      */
     public void setConfigManager(ConfigManager configManager){
         this.configManager = configManager;
@@ -2535,30 +2562,52 @@ public final class MARSTopComponent extends TopComponent {
         );
     }
     
+    /**
+     *
+     * @return
+     */
     public JDialog getAN(){
         return auv_name;
     }
     
+    /**
+     *
+     */
     public void updateANAutoComplete(){
         auv_name_items.clear();
         auv_name_items.addAll(auvManager.getAUVs().keySet());
         AutoCompleteDecorator.decorate(auv_name_text, auv_name_items, false);
     }
     
+    /**
+     *
+     * @return
+     */
     public JDialog getSN(){
         return simob_name;
     }
     
+    /**
+     *
+     */
     public void updateSNAutoComplete(){
         simob_name_items.clear();
         simob_name_items.addAll(simob_manager.getSimObjects().keySet());
         AutoCompleteDecorator.decorate(simob_name_text, simob_name_items, false);
     }
     
+    /**
+     *
+     * @return
+     */
     public JTextField getANText(){
         return auv_name_text;
     }
     
+    /**
+     *
+     * @return
+     */
     public JTextField getSNText(){
         return simob_name_text;
     }
@@ -2642,6 +2691,10 @@ public final class MARSTopComponent extends TopComponent {
         );
     }
     
+    /**
+     *
+     * @param f
+     */
     public void loadSimState(final File f){
         Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -2652,6 +2705,9 @@ public final class MARSTopComponent extends TopComponent {
         });
     }
     
+    /**
+     *
+     */
     public void activateFlyByCam(){
         Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -2662,6 +2718,9 @@ public final class MARSTopComponent extends TopComponent {
         });
     }
     
+    /**
+     *
+     */
     public void saveConfig(){
         File basePath = InstalledFileLocator.getDefault().locate("config", "mars.core", false);
         File f = new File(basePath.getAbsolutePath() + "/" + configManager.getConfigName());
@@ -2686,6 +2745,10 @@ public final class MARSTopComponent extends TopComponent {
         }
     }
     
+    /**
+     *
+     * @param f
+     */
     public void saveConfigTo(File f){
         if(f != null){
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
@@ -2703,6 +2766,9 @@ public final class MARSTopComponent extends TopComponent {
         }
     }
     
+    /**
+     *
+     */
     public void restartSimState(){
         if(mars != null){
             Future simStateFuture = mars.enqueue(new Callable() {
@@ -2714,6 +2780,9 @@ public final class MARSTopComponent extends TopComponent {
         }
     }
     
+    /**
+     *
+     */
     public void startSimState(){
         if(mars != null){
             mars.startSimState();

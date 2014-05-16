@@ -98,6 +98,10 @@ public class Canon extends Actuator implements Moveable,Keys{
         super(simstate);
     }
     
+    /**
+     *
+     * @param canon
+     */
     public Canon(Canon canon){
         super(canon);
         HashMap<String, String> actionsOriginal = canon.getAllActions();
@@ -105,6 +109,10 @@ public class Canon extends Actuator implements Moveable,Keys{
         action_mapping = cloner.deepClone(actionsOriginal);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Canon actuator = new Canon(this);
@@ -114,6 +122,7 @@ public class Canon extends Actuator implements Moveable,Keys{
     
     /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){

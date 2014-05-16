@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,7 +40,6 @@ import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.xml.HashMapAdapter;
-import mars.xml.Vector3fAdapter;
 
 /**
  * This is the default servo class. It uses the Dynamixel AX-12 servos as it basis.
@@ -144,6 +142,10 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         } catch (IOException e) { }
     }
     
+    /**
+     *
+     * @param servo
+     */
     public Servo(Servo servo){
         super(servo);
         HashMap<String, String> actionsOriginal = servo.getAllActions();
@@ -151,6 +153,10 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         action_mapping = cloner.deepClone(actionsOriginal);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Servo actuator = new Servo(this);
@@ -160,6 +166,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
     
    /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -548,11 +555,19 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         }
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return (float)desired_angle;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

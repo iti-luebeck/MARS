@@ -66,10 +66,18 @@ public class Compass extends Sensor{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Compass(Compass sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Compass sensor = new Compass(this);

@@ -61,10 +61,18 @@ public class Transformer extends Sensor{
         super(simstate);
     }
     
+    /**
+     *
+     * @param transformer
+     */
     public Transformer(Transformer transformer){
         super(transformer);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Transformer sensor = new Transformer(this);

@@ -19,6 +19,7 @@ import mars.gui.tree.UpdateState;
 /**
  * This class stores the mapping between the keyboard input and an action that you want to perform with a class that extends the KEYS interface.
  * @author Thomas Tosik
+ * @deprecated 
  */
 @XmlRootElement(name="KeyConfig")
 @XmlAccessorType(XmlAccessType.NONE)

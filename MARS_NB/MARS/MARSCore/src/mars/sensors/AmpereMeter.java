@@ -65,6 +65,10 @@ public class AmpereMeter extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param ampereMeter
+     */
     public AmpereMeter(AmpereMeter ampereMeter){
         super(ampereMeter);
         
@@ -74,6 +78,10 @@ public class AmpereMeter extends Sensor implements ChartValue{
         accumulators = cloner.deepClone(accumulatorsOriginal);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         AmpereMeter sensor = new AmpereMeter(this);
@@ -92,6 +100,7 @@ public class AmpereMeter extends Sensor implements ChartValue{
     
     /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -213,11 +222,19 @@ public class AmpereMeter extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return (float)getAmpere();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

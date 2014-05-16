@@ -13,20 +13,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import geometry_msgs.Vector3;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.ChartValue;
 import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import mars.xml.ColorRGBAAdapter;
-import mars.xml.Vector3fAdapter;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
 
@@ -70,10 +65,18 @@ public class VectorVisualizer extends Actuator implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param vectorVisualizer
+     */
     public VectorVisualizer(VectorVisualizer vectorVisualizer){
         super(vectorVisualizer);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         VectorVisualizer actuator = new VectorVisualizer(this);
@@ -193,11 +196,19 @@ public class VectorVisualizer extends Actuator implements ChartValue{
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return vector;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

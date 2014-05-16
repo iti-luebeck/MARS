@@ -49,10 +49,18 @@ public class Modelcraft_ES07 extends Servo{
         setSpeedPerDegree(0.003266f);
     }
     
+    /**
+     *
+     * @param servo
+     */
     public Modelcraft_ES07(Modelcraft_ES07 servo){
         super(servo);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Modelcraft_ES07 copy() {
         Modelcraft_ES07 actuator = new Modelcraft_ES07(this);

@@ -181,6 +181,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         return rootNode;
     }
 
+    /**
+     *
+     * @param cam
+     */
     @Override
     public void setCamera(Camera cam) {
         
@@ -905,6 +909,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         return simobManager;
     }
 
+    /**
+     *
+     * @return
+     */
     public AUV_Manager getAuvManager() {
         return auvManager;
     }

@@ -54,10 +54,18 @@ public class VoltageMeter extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public VoltageMeter(VoltageMeter sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         VoltageMeter sensor = new VoltageMeter(this);
@@ -160,11 +168,19 @@ public class VoltageMeter extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getVoltage();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

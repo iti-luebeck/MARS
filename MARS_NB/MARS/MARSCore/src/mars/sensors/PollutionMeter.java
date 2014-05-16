@@ -65,10 +65,18 @@ public class PollutionMeter extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public PollutionMeter(PollutionMeter sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         PollutionMeter sensor = new PollutionMeter(this);
@@ -214,11 +222,19 @@ public class PollutionMeter extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getPollution();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

@@ -17,6 +17,13 @@ public class CommunicationDeviceEvent extends EventObject{
     private long time = 0;
     private int type = CommunicationDeviceEventType.IN;
     
+    /**
+     *
+     * @param source
+     * @param msg
+     * @param time
+     * @param type
+     */
     public CommunicationDeviceEvent( CommunicationDevice source, String msg, long time, int type )
     {
       super( source );
@@ -25,14 +32,26 @@ public class CommunicationDeviceEvent extends EventObject{
       this.type = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMsg() {
         return msg;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getType() {
         return type;
     }

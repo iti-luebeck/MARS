@@ -15,6 +15,10 @@ import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.actions.Presenter;
 
+/**
+ *
+ * @author Tosik
+ */
 @ActionID(
         category = "Simulation",
         id = "mars.core.StartSimulationAction")
@@ -25,6 +29,10 @@ import org.openide.util.actions.Presenter;
 @Messages("CTL_StartSimulationAction=Start Simulation")
 public final class StartSimulationAction extends AbstractAction implements Presenter.Toolbar {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Component getToolbarPresenter() {
         return new StartSimulationJPanel();

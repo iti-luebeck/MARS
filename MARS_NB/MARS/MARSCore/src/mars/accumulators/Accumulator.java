@@ -29,11 +29,19 @@ public class Accumulator implements PropertyChangeListenerSupport{
 
     private List listeners = Collections.synchronizedList(new LinkedList());
 
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
 
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
@@ -70,6 +78,10 @@ public class Accumulator implements PropertyChangeListenerSupport{
 
     ;
     
+    /**
+     *
+     * @param acc
+     */
     public void copyValuesFromAccumulator(Accumulator acc) {
         HashMap<String, Object> variablesOriginal = acc.getAllVariables();
         Cloner cloner = new Cloner();
@@ -84,6 +96,9 @@ public class Accumulator implements PropertyChangeListenerSupport{
         return variables;
     }
 
+    /**
+     *
+     */
     public void reset() {
         setActualCurrent(new Double(getCapacity()));
     }
@@ -187,7 +202,7 @@ public class Accumulator implements PropertyChangeListenerSupport{
 
     /**
      * 
-     * @param actualCurrent 
+     * @param ActualCurrent 
      */
     public void setActualCurrent(Double ActualCurrent) {
         variables.put("ActualCurrent", ActualCurrent);

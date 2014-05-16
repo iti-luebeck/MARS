@@ -25,11 +25,19 @@ public class RayBasedSensorTopComponent extends TopComponent {
         initComponents();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getPersistenceType() {
         return PERSISTENCE_NEVER;
     } 
     
+    /**
+     *
+     * @param view
+     */
     public void addRayBasedView(JPanel view){
         viewPanel.add(view);
         viewPanel.repaint();

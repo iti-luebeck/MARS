@@ -25,6 +25,10 @@ public class StartROSJPanel extends javax.swing.JPanel {
         initComponents();
     }
     
+    /**
+     *
+     * @param mars
+     */
     public void setMars(MARS_Main mars) {
         this.mars = mars;
     }

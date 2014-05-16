@@ -9,6 +9,14 @@ package mars;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public interface ChartValue {
+    /**
+     *
+     * @return
+     */
     public Object getChartValue();
+    /**
+     *
+     * @return
+     */
     public long getSleepTime();
 }

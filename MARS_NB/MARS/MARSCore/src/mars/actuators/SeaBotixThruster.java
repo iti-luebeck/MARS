@@ -46,11 +46,19 @@ public class SeaBotixThruster extends Thruster{
         motor_increment = 5f;
     }
     
+    /**
+     *
+     * @param thruster
+     */
     public SeaBotixThruster(SeaBotixThruster thruster){
         super(thruster);
         motor_increment = 5f;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public SeaBotixThruster copy() {
         SeaBotixThruster actuator = new SeaBotixThruster(this);

@@ -4,8 +4,6 @@
  */
 package mars.sensors;
 
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -61,10 +59,18 @@ public class Orientationmeter extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Orientationmeter(Orientationmeter sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Orientationmeter sensor = new Orientationmeter(this);
@@ -187,12 +193,20 @@ public class Orientationmeter extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
         
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         float[] bla = getOrientation().toAngles(null);
         return new Vector3f(bla[0],bla[1],bla[2]);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

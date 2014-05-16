@@ -66,10 +66,18 @@ public class PingDetector extends Sensor implements ChartValue{
         this.simob_manager = simstate.getSimob_manager();
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public PingDetector(PingDetector sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         PingDetector sensor = new PingDetector(this);
@@ -338,11 +346,19 @@ public class PingDetector extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getPingerAngleRadiant("pingpong");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

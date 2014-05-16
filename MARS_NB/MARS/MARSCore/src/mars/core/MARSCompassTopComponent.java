@@ -57,6 +57,9 @@ public final class MARSCompassTopComponent extends TopComponent {
     private DefaultValueDataset compassDataY = new DefaultValueDataset(new Double(0.0));
     private DefaultValueDataset compassDataZ = new DefaultValueDataset(new Double(0.0));
     
+    /**
+     *
+     */
     public MARSCompassTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSCompassTopComponent());
@@ -64,6 +67,10 @@ public final class MARSCompassTopComponent extends TopComponent {
         createJFreeChart();
     }
     
+    /**
+     *
+     * @param lastSelectedCompass
+     */
     public MARSCompassTopComponent(Compass lastSelectedCompass) {
         this.lastSelectedCompass = lastSelectedCompass;
         initComponents();
@@ -86,11 +93,17 @@ public final class MARSCompassTopComponent extends TopComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing

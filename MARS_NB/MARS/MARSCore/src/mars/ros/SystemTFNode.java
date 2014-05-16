@@ -26,13 +26,24 @@ public class SystemTFNode implements RosNodeListener{
     private boolean init = false;
     private MARSNodeMain systemNode;
     
+    /**
+     *
+     */
     public SystemTFNode() {
     }
 
+    /**
+     *
+     * @param systemNode
+     */
     public void setSystemNode(MARSNodeMain systemNode) {
         this.systemNode = systemNode;
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSNodeMain getSystemNode() {
         return systemNode;
     }
@@ -47,6 +58,9 @@ public class SystemTFNode implements RosNodeListener{
         }
     }
     
+    /**
+     *
+     */
     public void publishSystemTF(){
         if(init){
             //root

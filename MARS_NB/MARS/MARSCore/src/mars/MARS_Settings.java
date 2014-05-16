@@ -177,11 +177,19 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
         }
     }
     
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
 
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
@@ -436,7 +444,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param CamDefaultPosition
+     * @param DefaultPosition 
      */
     public void setCameraDefaultPosition(Vector3f DefaultPosition) {
         Camera.put("DefaultPosition", DefaultPosition);
@@ -452,7 +460,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param CamDefaultRotation
+     * @param DefaultRotation 
      */
     public void setCameraDefaultRotation(Vector3f DefaultRotation) {
         Camera.put("DefaultRotation", DefaultRotation);
@@ -468,7 +476,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param speed 
+     * @param ChaseCamZoomSensitivity 
      */
     public void setCameraChaseCamZoomSensitivity(Float ChaseCamZoomSensitivity) {
         Camera.put("ChaseCamZoomSensitivity", ChaseCamZoomSensitivity);
@@ -484,7 +492,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param speed 
+     * @param enabled 
      */
     public void setRecordEnabled(Boolean enabled) {
         Record.put("enabled", enabled);
@@ -565,7 +573,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param ambient_color 
+     * @param ambientColor 
      */
     public void setLightAmbientColor(ColorRGBA ambientColor) {
         Light.put("ambientColor", ambientColor);
@@ -862,7 +870,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      * 
-     * @param raw_enabled 
+     * @param enabled 
      */
     public void setRAWEnabled(Boolean enabled) {
         RAW.put("enabled", enabled);
@@ -958,7 +966,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param FrameLimit
+     * @param GlobalQueueSize 
      */
     public void setROSGlobalQueueSize(Integer GlobalQueueSize) {
         ROS.put("GlobalQueueSize", GlobalQueueSize);
@@ -990,7 +998,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      * 
-     * @param enabled 
+     * @param publish 
      */
     public void setROSPublish(Boolean publish) {
         ROS.put("publish", publish);
@@ -1447,7 +1455,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param enabled
+     * @param cloudModulation 
      */
     public void setSkyDomeCloudModulation(Boolean cloudModulation) {
         SkyDome.put("cloudModulation", cloudModulation);
@@ -1463,7 +1471,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param speed 
      */
     public void setSkyDomeSpeed(Float speed) {
         SkyDome.put("speed", speed);
@@ -1479,7 +1487,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param direction 
      */
     public void setSkyDomeDirection(Float direction) {
         SkyDome.put("direction", direction);
@@ -1495,7 +1503,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param cloudiness 
      */
     public void setSkyDomeCloudiness(Float cloudiness) {
         SkyDome.put("cloudiness", cloudiness);
@@ -1511,7 +1519,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param cloudRate 
      */
     public void setSkyDomeCloudRate(Float cloudRate) {
         SkyDome.put("cloudRate", cloudRate);
@@ -1527,7 +1535,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param hour 
      */
     public void setSkyDomeHour(Float hour) {
         SkyDome.put("hour", hour);
@@ -1543,7 +1551,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param observerLatitude 
      */
     public void setSkyDomeObserverLatitude(Float observerLatitude) {
         SkyDome.put("observerLatitude", observerLatitude);
@@ -1559,7 +1567,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param lunarDiameter 
      */
     public void setSkyDomeLunarDiameter(Float lunarDiameter) {
         SkyDome.put("lunarDiameter", lunarDiameter);
@@ -1575,7 +1583,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param solarLongitude 
      */
     public void setSkyDomeSolarLongitude(Float solarLongitude) {
         SkyDome.put("solarLongitude", solarLongitude);
@@ -1591,7 +1599,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param lunarPhase 
      */
     public void setSkyDomeLunarPhase(Integer lunarPhase) {
         SkyDome.put("lunarPhase", lunarPhase);
@@ -1765,7 +1773,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_color
+     * @param ColorMap 
      */
     public void setTerrainColorMap(String ColorMap) {
         Terrain.put("ColorMap", ColorMap);
@@ -1781,7 +1789,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_heightmap
+     * @param HeightMap 
      */
     public void setTerrainHeightMap(String HeightMap) {
         Terrain.put("HeightMap", HeightMap);
@@ -1797,7 +1805,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_alphamap
+     * @param AlphaMap 
      */
     public void setTerrainAlphaMap(String AlphaMap) {
         Terrain.put("AlphaMap", AlphaMap);
@@ -1877,7 +1885,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_flowmap_x 
+     * @param MapX 
      */
     public void setFlowMapX(String MapX) {
         Flow.put("MapX", MapX);
@@ -1893,7 +1901,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_flowmap_y 
+     * @param MapY 
      */
     public void setFlowMapY(String MapY) {
         Flow.put("MapY", MapY);
@@ -1909,7 +1917,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param forceScale 
      */
     public void setFlowForceScale(Float forceScale) {
         Flow.put("forceScale", forceScale);
@@ -1997,7 +2005,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param filepath_flowmap_x 
+     * @param pollutionMap 
      */
     public void setPollutionPollutionMap(String pollutionMap) {
         Pollution.put("pollutionMap", pollutionMap);
@@ -2013,7 +2021,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param scaleFactor 
      */
     public void setPollutionScaleFactor(Float scaleFactor) {
         Pollution.put("scaleFactor", scaleFactor);
@@ -2029,7 +2037,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param flowScale 
+     * @param Alpha 
      */
     public void setpollutionAlpha(Float Alpha) {
         Pollution.put("Alpha", Alpha);
@@ -2077,7 +2085,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param enabled 
+     * @param visible 
      */
     public void setPollutionVisible(Boolean visible) {
         Pollution.put("visible", visible);
@@ -2101,7 +2109,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param enabled 
+     * @param detectable 
      */
     public void setPollutionDetectable(Boolean detectable) {
         Pollution.put("detectable", detectable);
@@ -2229,7 +2237,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param color
+     * @param selectionColor 
      */
     public void setGuiSelectionColor(ColorRGBA selectionColor) {
         Gui.put("selectionColor", selectionColor);
@@ -2245,7 +2253,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param color
+     * @param collisionColor 
      */
     public void setGuiCollisionColor(ColorRGBA collisionColor) {
         Gui.put("collisionColor", collisionColor);
@@ -2293,7 +2301,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param GlowSelection 
+     * @param PopUpAUVName 
      */
     public void setGuiPopUpAUVName(Boolean PopUpAUVName) {
         Gui.put("PopUpAUVName", PopUpAUVName);
@@ -2309,7 +2317,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
 
     /**
      *
-     * @param speed 
+     * @param PopUpAUVNameDistance 
      */
     public void setGuiPopUpAUVNameDistance(Float PopUpAUVNameDistance) {
         Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
@@ -2317,7 +2325,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     
     /**
      *
-     * @param GlowSelection 
+     * @param MouseUpdateFollow 
      */
     public void setGuiMouseUpdateFollow(Boolean MouseUpdateFollow) {
         Gui.put("MouseUpdateFollow", MouseUpdateFollow);

@@ -7,18 +7,15 @@ package mars.filter;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.post.Filter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.texture.FrameBuffer;
-import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.MagFilter;
 import com.jme3.texture.Texture.MinFilter;
 import com.jme3.texture.Texture.WrapMode;
-import com.jme3.texture.Texture2D;
 import java.util.ArrayList;
 
 /**
@@ -47,11 +44,23 @@ public class LensFlareFilter extends Filter{
         this.dirtTexture = lensDirt;
     }
   
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRequiresDepthTexture() {
         return false;
     }
   
+    /**
+     *
+     * @param manager
+     * @param renderManager
+     * @param vp
+     * @param w
+     * @param h
+     */
     @Override
     public void initFilter(AssetManager manager, RenderManager renderManager, ViewPort vp, int w, int h) {
         am = manager;
@@ -160,13 +169,28 @@ public class LensFlareFilter extends Filter{
         return this.threshold;
     }
      
+    /**
+     *
+     * @return
+     */
     @Override
     public Material getMaterial() {
         return material;
     }
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void preFrame(float tpf) {
     }
+    /**
+     *
+     * @param renderManager
+     * @param viewPort
+     * @param prevFilterBuffer
+     * @param sceneBuffer
+     */
     @Override
     protected void postFrame(RenderManager renderManager, ViewPort viewPort, FrameBuffer prevFilterBuffer, FrameBuffer sceneBuffer) {
     }

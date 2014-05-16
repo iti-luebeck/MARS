@@ -364,6 +364,10 @@ public class SimObjectManager implements UpdateState{
         return "SimObjects";
     }
 
+    /**
+     *
+     * @param path
+     */
     @Override
     public void updateState(TreePath path) {
         SimObject simob = (SimObject)path.getPathComponent(1);

@@ -188,10 +188,18 @@ public class GuiControlState {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSelect_auv() {
         return select_auv;
     }
 
+    /**
+     *
+     * @param select_auv
+     */
     public void setSelect_auv(boolean select_auv) {
         this.select_auv = select_auv;
     }

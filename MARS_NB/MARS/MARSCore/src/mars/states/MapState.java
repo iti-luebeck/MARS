@@ -8,8 +8,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
-import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -24,27 +22,23 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
 import com.jme3.scene.shape.Dome;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.sonar.Sonar;
-import org.openide.modules.InstalledFileLocator;
 
 /**
  * This state is for updating the map in the gui.
@@ -82,6 +76,9 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         return rootNode;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -95,16 +92,28 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         });*/
     }
     
+    /**
+     *
+     */
     public void clear(){
         auvsNode.detachAllChildren();
         auv_nodes.clear();
     }
 
+    /**
+     *
+     * @param cam
+     */
     @Override
     public void setCamera(Camera cam) {
         
     }
  
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
@@ -131,6 +140,9 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         //init();
     }
     
+    /**
+     *
+     */
     public void init(){
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for ( String elem : auvs.keySet() ){
@@ -139,6 +151,10 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         }
     }
     
+    /**
+     *
+     * @param auv
+     */
     public void addAUV(final AUV auv){
         Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
@@ -265,16 +281,27 @@ public class MapState extends AbstractAppState implements AppStateExtension{
        map_geom.setMaterial(mat_stl);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -283,6 +310,10 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -291,6 +322,10 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -301,16 +336,28 @@ public class MapState extends AbstractAppState implements AppStateExtension{
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {

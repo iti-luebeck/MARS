@@ -6,17 +6,8 @@
 package mars.gui.options;
 
 import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.auv.AUV_Manager;
-import mars.auv.BasicAUV;
-import mars.core.CentralLookup;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeEvent;
@@ -26,7 +17,6 @@ import org.openide.nodes.NodeReorderEvent;
 
 /**
  *
- * @author Christian Friedrich
  * @author Thomas Tosik
  */
 public class EnvChildNodeFactory extends ChildFactory<String> implements NodeListener{

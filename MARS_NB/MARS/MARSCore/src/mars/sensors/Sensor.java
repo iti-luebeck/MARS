@@ -90,6 +90,10 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
         variables = new HashMap<String,Object> ();
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Sensor(Sensor sensor){
         HashMap<String, Object> variablesOriginal = sensor.getAllVariables();
         Cloner cloner = new Cloner();
@@ -113,6 +117,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
 
     /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -127,6 +132,9 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     public void updateState(TreePath path) {
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();

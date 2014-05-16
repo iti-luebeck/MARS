@@ -37,11 +37,19 @@ public class Vector3fPropertyEditor extends PropertyEditorSupport implements ExP
         return "X: " + v.x + " Y: " + v.y + " Z: " + v.z;
     }
 
+    /**
+     *
+     * @param env
+     */
     @Override
     public void attachEnv(PropertyEnv env) {
         env.registerInplaceEditorFactory(this);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public InplaceEditor getInplaceEditor() {
         if (ed == null) {

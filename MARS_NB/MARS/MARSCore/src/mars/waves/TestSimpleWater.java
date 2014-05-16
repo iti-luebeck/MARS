@@ -154,6 +154,12 @@ public class TestSimpleWater extends SimpleApplication implements ActionListener
         waterProcessor.setLightPosition(lightPos);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     * @param tpf
+     */
     public void onAction(String name, boolean value, float tpf) {
         if (name.equals("use_water") && value) {
             if (!useWater) {

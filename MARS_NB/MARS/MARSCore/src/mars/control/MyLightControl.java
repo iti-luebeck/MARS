@@ -141,6 +141,10 @@ public class MyLightControl extends AbstractControl {
     }
 
     // fields used, when inversing ControlDirection:
+    /**
+     *
+     * @param tpf
+     */
     @Override
     protected void controlUpdate(float tpf) {
         if (spatial != null && light != null) {
@@ -195,11 +199,21 @@ public class MyLightControl extends AbstractControl {
 
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
         // nothing to do
     }
 
+    /**
+     *
+     * @param newSpatial
+     * @return
+     */
     @Override
     public Control cloneForSpatial(Spatial newSpatial) {
         MyLightControl control = new MyLightControl(light, controlDir);

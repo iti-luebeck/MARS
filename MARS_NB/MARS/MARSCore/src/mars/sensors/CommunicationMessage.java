@@ -13,20 +13,38 @@ public class CommunicationMessage {
     String msg = ""; 
     int communicationType = 0;
     
+    /**
+     *
+     * @param auvName
+     * @param msg
+     * @param communicationType
+     */
     public CommunicationMessage(String auvName, String msg, int communicationType) {
         this.auvName = auvName;
         this.msg = msg;
         this.communicationType = communicationType;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getAuvName() {
         return auvName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMsg() {
         return msg;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCommunicationType() {
         return communicationType;
     }

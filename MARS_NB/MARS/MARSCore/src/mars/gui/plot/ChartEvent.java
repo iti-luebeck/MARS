@@ -15,6 +15,12 @@ public class ChartEvent extends EventObject{
     private Object msg = "";
     private long time = 0;
     
+    /**
+     *
+     * @param auv
+     * @param msg
+     * @param time
+     */
     public ChartEvent( AUV auv, Object msg, long time )
     {
       super( auv );
@@ -22,10 +28,18 @@ public class ChartEvent extends EventObject{
       this.time = time;
     }
 
+    /**
+     *
+     * @return
+     */
     public Object getObject() {
         return msg;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getTime() {
         return time;
     }

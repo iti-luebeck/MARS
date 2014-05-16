@@ -5,33 +5,14 @@
 package mars.sensors;
 
 import com.jme3.collision.CollisionResults;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Sphere;
 import java.io.IOException;
-import java.nio.ByteOrder;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.NoiseType;
-import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
-import mars.PickHint;
-import mars.states.SimState;
-import mars.ros.MARSNodeMain;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 
 /**
@@ -57,10 +38,18 @@ public class LaserScanner extends RayBasedSensor{
         } catch (IOException e) { }
     }
     
+    /**
+     *
+     * @param sonar
+     */
     public LaserScanner(LaserScanner sonar){
         super(sonar);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         LaserScanner sensor = new LaserScanner(this);
@@ -68,6 +57,14 @@ public class LaserScanner extends RayBasedSensor{
         return sensor;
     }
 
+    /**
+     *
+     * @param results
+     * @param i
+     * @param distance
+     * @param direction
+     * @return
+     */
     @Override
     protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction){
         if(distance >= getMaxRange()){//too far away

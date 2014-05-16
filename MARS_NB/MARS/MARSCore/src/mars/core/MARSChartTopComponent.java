@@ -61,12 +61,19 @@ public final class MARSChartTopComponent extends TopComponent {
     private ChartValue chartValue;
     private AUV auv;
 
+    /**
+     *
+     */
     public MARSChartTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSChartTopComponent());
         setToolTipText(Bundle.HINT_MARSChartTopComponent());
     }
     
+    /**
+     *
+     * @param chartValue
+     */
     public MARSChartTopComponent(ChartValue chartValue) {
         this.chartValue = chartValue;
         
@@ -79,6 +86,10 @@ public final class MARSChartTopComponent extends TopComponent {
         new ChartGenerator(traces,chartValue).start();
     }
     
+    /**
+     *
+     * @param auv
+     */
     public MARSChartTopComponent(AUV auv) {
         this.auv = auv;
         
@@ -102,11 +113,17 @@ public final class MARSChartTopComponent extends TopComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing

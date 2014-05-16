@@ -17,6 +17,7 @@ import mars.KeyConfig;
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public class KeyConfigModel extends GenericTreeModel{

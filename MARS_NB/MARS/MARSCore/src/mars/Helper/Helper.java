@@ -15,10 +15,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Set;
 import mars.PickHint;
-import mars.auv.BasicAUV;
-import org.openide.util.Lookup;
 
 /**
  * This class has various basic static methods that are used everywhere.
@@ -39,6 +36,11 @@ public class Helper {
         return concat;
     }
     
+    /**
+     *
+     * @param vec
+     * @return
+     */
     public static boolean infinityCheck(Vector3f vec) {
         if ( Float.isNaN(vec.x) || Float.isNaN(vec.y) || Float.isNaN(vec.z) || Float.isInfinite(vec.x) || Float.isInfinite(vec.y) || Float.isInfinite(vec.z)) {
             return true;
@@ -124,6 +126,12 @@ public class Helper {
         }
     }
     
+    /**
+     *
+     * @param spatial
+     * @param name
+     * @param hint
+     */
     public static void setNodeUserData(Spatial spatial, String name, int hint){
         if(spatial instanceof Node){
             Node node = (Node)spatial;
@@ -137,10 +145,25 @@ public class Helper {
         }
     }
     
+    /**
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
     public static float calculatePolyederVolume(Vector3f a, Vector3f b, Vector3f c){
         return (1f/6f)*((-1)*(c.getX()*b.getY()*a.getZ())+(b.getX()*c.getY()*a.getZ())+(c.getX()*a.getY()*b.getZ())+(-1)*(a.getX()*c.getY()*b.getZ())+(-1)*(b.getX()*a.getY()*c.getZ())+(a.getX()*b.getY()*c.getZ()));
     }
     
+    /**
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @param sign
+     * @return
+     */
     public static float calculatePolyederVolume(Vector3f a, Vector3f b, Vector3f c, float sign){
         return sign * Math.abs((1f/6f)*((-1)*(c.getX()*b.getY()*a.getZ())+(b.getX()*c.getY()*a.getZ())+(c.getX()*a.getY()*b.getZ())+(-1)*(a.getX()*c.getY()*b.getZ())+(-1)*(b.getX()*a.getY()*c.getZ())+(a.getX()*b.getY()*c.getZ())));
     }
@@ -151,6 +174,12 @@ public class Helper {
     *          Point N = a normal vector of the polygon's plane
     *  Return: the (float) area of the polygon
     */
+    /**
+     *
+     * @param V
+     * @param N
+     * @return
+     */
     public static float area3D_Polygon( ArrayList<Vector3f> V, Vector3f N )
     {
         float area = 0;
@@ -213,6 +242,13 @@ public class Helper {
         return area;
     }
     
+    /**
+     *
+     * @param <T>
+     * @param arr
+     * @param lastElement
+     * @return
+     */
     public static <T> T[] append(T[] arr, T lastElement) {
         final int N = arr.length;
         arr = java.util.Arrays.copyOf(arr, N+1);
@@ -220,6 +256,13 @@ public class Helper {
         return arr;
     }
     
+    /**
+     *
+     * @param <T>
+     * @param arr
+     * @param firstElement
+     * @return
+     */
     public static <T> T[] prepend(T[] arr, T firstElement) {
         final int N = arr.length;
         arr = java.util.Arrays.copyOf(arr, N+1);
@@ -228,6 +271,12 @@ public class Helper {
         return arr;
     }
     
+    /**
+     *
+     * @param a
+     * @param b
+     * @return
+     */
     public static Class[] concatClassArrays(Class[] a, Class[] b){
         Class[] concat = new Class[a.length + b.length];
         System.arraycopy(a, 0, concat, 0, a.length);
@@ -248,6 +297,11 @@ public class Helper {
         return toArray;
     }*/
     
+    /**
+     *
+     * @param key
+     * @return
+     */
     public static String getROSEncoding(Format key){
         EnumMap<Format, String> stateMap = new EnumMap<Format, String>(Format.class);
         stateMap.put(Format.RGB8, "rgb8");

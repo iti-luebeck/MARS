@@ -6,7 +6,6 @@ package mars.gui.dnd;
 
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
@@ -17,7 +16,6 @@ import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
-import mars.auv.AUV;
 import mars.simobjects.SimObject;
 import org.openide.modules.InstalledFileLocator;
 

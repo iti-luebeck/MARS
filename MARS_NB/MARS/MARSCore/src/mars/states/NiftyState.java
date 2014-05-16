@@ -5,24 +5,16 @@
 package mars.states;
 
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
-import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.dynamic.PanelCreator;
 import de.lessvoid.nifty.controls.dynamic.TextCreator;
-import de.lessvoid.nifty.controls.dynamic.attributes.ControlEffectAttributes;
-import de.lessvoid.nifty.effects.Effect;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -279,6 +271,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     *
+     * @param visible
+     */
     public void setSpeedMenu(boolean visible){
         Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("speed");
         if( niftyElement != null){
@@ -294,6 +290,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     *
+     * @param visible
+     */
     public void setPopupMenu(boolean visible){
         /*Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
         if( niftyElement != null){
@@ -318,6 +318,11 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     *
+     * @param auv
+     * @param visible
+     */
     public void setPopupMenu(AUV auv, boolean visible){
         /*Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("popup");
         if( niftyElement != null){
@@ -342,6 +347,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     *
+     * @param visible
+     */
     public void setSpeedUp(boolean visible){
 
         Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("speed");
@@ -363,6 +372,9 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         }
     }
     
+    /**
+     *
+     */
     public void show(){
         Element niftyElement = nifty.getScreen("hoverMenu").findElementByName("background");
         if(niftyElement != null){
@@ -411,7 +423,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
      */
     public void onEndScreen() { }
 
-    /** jME3 AppState methods */ 
+    /** jME3 AppState methods
+     * @param stateManager
+     * @param app  
+     */ 
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -427,12 +442,19 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         super.initialize(stateManager, app);
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
         mars.getRootNode().detachChild(getRootNode());
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) { 
         if (!super.isEnabled()) {
@@ -444,26 +466,45 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         rootNode.updateGeometricState();
     }
     
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
  
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -472,6 +513,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -480,6 +525,10 @@ public class NiftyState extends AbstractAppState implements ScreenController{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);

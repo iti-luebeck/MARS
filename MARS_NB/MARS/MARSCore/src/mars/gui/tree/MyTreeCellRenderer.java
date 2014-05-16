@@ -47,6 +47,9 @@ import org.openide.modules.InstalledFileLocator;
 @Deprecated
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
 
+    /**
+     *
+     */
     public MyTreeCellRenderer() {
     }
     

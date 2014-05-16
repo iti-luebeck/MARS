@@ -234,10 +234,18 @@ public class WayPoints extends Node{
         });
     }
 
+    /**
+     *
+     * @param auv_param
+     */
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
     }
 
+    /**
+     *
+     * @return
+     */
     public AUV_Parameters getAuv_param() {
         return auv_param;
     }

@@ -4,11 +4,7 @@
  */
 package mars.server;
 
-import com.google.common.base.Preconditions;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -16,14 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.ros.MARSNodeMain;
-import mars.ros.SystemTFNode;
-import mars.server.ros.ROS_Node;
-import org.ros.node.DefaultNodeMainExecutor;
-import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeMainExecutor;
 
 /**
  *
@@ -43,6 +32,7 @@ public class PhysicalExchangerPublisher implements Runnable{
      * 
      * @param mars
      * @param auv_manager
+     * @param marsSettings  
      */
     public PhysicalExchangerPublisher(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging

@@ -50,12 +50,20 @@ public class ModelWindowState extends AbstractAppState{
         return rootNode;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         rootNode.detachAllChildren();
         super.cleanup();
     }
 
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
@@ -88,16 +96,27 @@ public class ModelWindowState extends AbstractAppState{
         this.mars_settings = mars_settings;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -106,6 +125,10 @@ public class ModelWindowState extends AbstractAppState{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -114,6 +137,10 @@ public class ModelWindowState extends AbstractAppState{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -124,16 +151,28 @@ public class ModelWindowState extends AbstractAppState{
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {

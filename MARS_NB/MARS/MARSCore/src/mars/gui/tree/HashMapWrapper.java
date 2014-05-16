@@ -7,6 +7,7 @@ package mars.gui.tree;
 /**
  * So the treemodel of JTree displays the name of the hashmap correctly
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public class HashMapWrapper {

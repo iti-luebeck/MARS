@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchanger;
 import mars.control.MyLightControl;
-import mygame.VolumeLightFilter;
 
 /**
  * This is a simple lamp to illuminate underwater scenes.
@@ -41,10 +40,18 @@ public class Lamp extends Actuator{
         super();
     }
     
+    /**
+     *
+     * @param lamp
+     */
     public Lamp(Lamp lamp){
         super(lamp);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Lamp actuator = new Lamp(this);

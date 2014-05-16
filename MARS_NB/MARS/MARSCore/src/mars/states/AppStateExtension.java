@@ -12,6 +12,14 @@ import com.jme3.scene.Node;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public interface AppStateExtension {
-     public Node getRootNode();
-     public void setCamera(Camera cam);
+     /**
+     *
+     * @return
+     */
+    public Node getRootNode();
+     /**
+     *
+     * @param cam
+     */
+    public void setCamera(Camera cam);
 }

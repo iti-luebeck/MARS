@@ -4,20 +4,16 @@
  */
 package mars.gui.tree;
 
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.swing.tree.TreePath;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.auv.AUV_Parameters;
 
 /**
  * This is a TreeModel for the JTree
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public class AUVManagerModel extends GenericTreeModel{

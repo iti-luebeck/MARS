@@ -24,7 +24,6 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
-import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -43,7 +42,6 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.MARSTopComponent;
-import mars.recorder.RecordManager;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import org.openide.windows.TopComponent;
@@ -82,6 +80,9 @@ public class GuiState extends AbstractAppState{
         this.assetManager = assetManager;
     }
     
+    /**
+     *
+     */
     public GuiState() {
     }
 
@@ -93,6 +94,9 @@ public class GuiState extends AbstractAppState{
         return rootNode;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         rootNode.detachAllChildren();
@@ -103,6 +107,11 @@ public class GuiState extends AbstractAppState{
         inputManager.removeListener(actionListener);
     }
 
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
@@ -134,10 +143,18 @@ public class GuiState extends AbstractAppState{
         this.auvManager = auvManager;
     }
 
+    /**
+     *
+     * @param simobManager
+     */
     public void setSimobManager(SimObjectManager simobManager) {
         this.simobManager = simobManager;
     }
 
+    /**
+     *
+     * @param initer
+     */
     public void setIniter(Initializer initer) {
         this.initer = initer;
     }
@@ -150,24 +167,43 @@ public class GuiState extends AbstractAppState{
         this.mars_settings = mars_settings;
     }
 
+    /**
+     *
+     * @param AUVsNode
+     */
     public void setAUVsNode(Node AUVsNode) {
         this.AUVsNode = AUVsNode;
     }
 
+    /**
+     *
+     * @param SimObNode
+     */
     public void setSimObNode(Node SimObNode) {
         this.SimObNode = SimObNode;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -176,6 +212,10 @@ public class GuiState extends AbstractAppState{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -184,6 +224,10 @@ public class GuiState extends AbstractAppState{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -194,16 +238,28 @@ public class GuiState extends AbstractAppState{
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {

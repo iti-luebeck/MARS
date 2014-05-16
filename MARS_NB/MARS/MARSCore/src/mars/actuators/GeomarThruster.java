@@ -5,7 +5,6 @@
 package mars.actuators;
 
 import com.jme3.scene.Geometry;
-import hanse_msgs.sollSpeed;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
@@ -47,11 +46,19 @@ public class GeomarThruster extends Thruster{
         motor_increment = 0.6f;
     }
     
+    /**
+     *
+     * @param thruster
+     */
     public GeomarThruster(GeomarThruster thruster){
         super(thruster);
         motor_increment = 5f;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public GeomarThruster copy() {
         GeomarThruster actuator = new GeomarThruster(this);

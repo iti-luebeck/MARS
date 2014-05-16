@@ -16,11 +16,22 @@ import com.jme3.util.SafeArrayList;
  */
 public class Collider{
 
+    /**
+     *
+     */
     protected SafeArrayList<Spatial> children = new SafeArrayList<Spatial>(Spatial.class);
 
+    /**
+     *
+     */
     public Collider() {
     }
     
+    /**
+     *
+     * @param child
+     * @return
+     */
     public int attachChild(Spatial child) {
         if (child == null)
             throw new IllegalArgumentException("child cannot be null");
@@ -97,6 +108,12 @@ public class Collider{
         return child;
     }
     
+    /**
+     *
+     * @param other
+     * @param results
+     * @return
+     */
     public int collideWith(Collidable other, CollisionResults results){
         int total = 0;
         for (Spatial child : children.getArray()){

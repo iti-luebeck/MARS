@@ -7,20 +7,17 @@ package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
-import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,11 +25,9 @@ import mars.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
-import mars.auv.CommunicationManager;
 import mars.CommunicationDeviceEvent;
 import mars.CommunicationDeviceEventType;
 import mars.CommunicationType;
-import mars.gui.plot.PhysicalExchangerListener;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 
@@ -70,10 +65,18 @@ public class UnderwaterModem extends CommunicationDevice{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public UnderwaterModem(UnderwaterModem sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         UnderwaterModem sensor = new UnderwaterModem(this);

@@ -7,8 +7,6 @@ package mars.simobjects;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
-import com.jme3.effect.shapes.EmitterPointShape;
-import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -19,7 +17,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Helper.Helper;
 import mars.PickHint;
 
@@ -31,13 +28,24 @@ import mars.PickHint;
 @XmlAccessorType(XmlAccessType.NONE)
 public class OilBurst extends SimObject{
 
+    /**
+     *
+     */
     public OilBurst() {
     }
 
+    /**
+     *
+     * @param simob
+     */
     public OilBurst(SimObject simob) {
         super(simob);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public SimObject copy() {
         OilBurst oilBurst = new OilBurst(this);

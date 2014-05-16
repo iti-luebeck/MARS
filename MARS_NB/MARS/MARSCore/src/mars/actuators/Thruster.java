@@ -37,7 +37,6 @@ import mars.PhysicalExchanger;
 import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
-import org.openide.util.lookup.ServiceProvider;
 
 /**
  * This a basic thruster implementation that you can use for your own thrusters.
@@ -99,6 +98,10 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param thruster
+     */
     public Thruster(Thruster thruster){
         super(thruster);
         HashMap<String, String> actionsOriginal = thruster.getAllActions();
@@ -106,6 +109,10 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
         action_mapping = cloner.deepClone(actionsOriginal);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Thruster actuator = new Thruster(this);
@@ -115,6 +122,7 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
     
     /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -361,11 +369,19 @@ public class Thruster extends Actuator implements Moveable,Keys,ChartValue{
         }
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return motor_speed;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

@@ -3,71 +3,27 @@ package mars.gui.options;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import static javax.swing.Action.NAME;
-import javax.swing.JOptionPane;
-import mars.ChartValue;
-import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.Manipulating;
-import mars.PhysicalExchanger;
 import mars.PropertyChangeListenerSupport;
-import mars.accumulators.Accumulator;
-import mars.actuators.Actuator;
-import mars.actuators.Lamp;
-import mars.actuators.Teleporter;
-import mars.actuators.Thruster;
-import mars.actuators.servos.Servo;
-import mars.actuators.visualizer.VectorVisualizer;
-import mars.auv.AUV_Parameters;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
 import mars.gui.PropertyEditors.Vector3fPropertyEditor;
-import mars.gui.sonarview.PlanarView;
-import mars.gui.sonarview.PolarView;
-import mars.sensors.AmpereMeter;
-import mars.sensors.CommunicationDevice;
-import mars.sensors.Compass;
-import mars.sensors.FlowMeter;
-import mars.sensors.GPSReceiver;
-import mars.sensors.Gyroscope;
-import mars.sensors.IMU;
-import mars.sensors.PingDetector;
-import mars.sensors.PollutionMeter;
-import mars.sensors.PressureSensor;
-import mars.sensors.RayBasedSensor;
-import mars.sensors.Sensor;
-import mars.sensors.TemperatureSensor;
-import mars.sensors.TerrainSender;
-import mars.sensors.UnderwaterModem;
-import mars.sensors.VideoCamera;
-import mars.sensors.VoltageMeter;
-import mars.sensors.WiFi;
-import mars.sensors.sonar.Sonar;
 import org.openide.ErrorManager;
-import org.openide.actions.DeleteAction;
-import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
-import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.Lookups;
 
 /**
  * This class is the presentation for actuators, accumulators and sensors of an
  * auv.
  *
- * @author Christian Friedrich
  * @author Thomas Tosik
  */
 public class SettingsNode extends AbstractNode implements PropertyChangeListener {

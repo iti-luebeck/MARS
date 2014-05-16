@@ -5,7 +5,6 @@
 
 package mars.auv;
 
-import mars.CollisionType;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
@@ -53,6 +52,10 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         
     }
     
+    /**
+     *
+     * @return
+     */
     public AUV_Parameters copy(){
         Cloner cloner = new Cloner();
         cloner.dontCloneInstanceOf(AUV.class); 
@@ -62,11 +65,19 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
     
         
 
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
 
+    /**
+     *
+     * @param pcl
+     */
     @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
@@ -92,6 +103,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         optimize = (HashMap<String,Object>)params.get("Optimize");
     }
     
+    /**
+     *
+     */
     public void createDefault(){
         initAfterJAXB();
         setAlpha_Depth_Scale(3.0f);
@@ -262,7 +276,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param auv_name
+     * @param name 
      */
     public void setName(String name) {
         params.put("name", name);
@@ -499,7 +513,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param sonar_detectable
+     * @param ray_detectable 
      */
     public void setRay_Detectable(Boolean ray_detectable) {
         params.put("ray_detectable", ray_detectable);
@@ -539,7 +553,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param sonar_detectable
+     * @param batched 
      */
     public void setOptimizeBatched(Boolean batched) {
         optimize.put("batched", batched);
@@ -563,7 +577,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param sonar_detectable
+     * @param lod 
      */
     public void setOptimizeLod(Boolean lod) {
         optimize.put("lod", lod);
@@ -707,7 +721,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param dimensions
+     * @param buoyancy_dimensions 
      */
     public void setBuoyancy_Dimensions(Vector3f buoyancy_dimensions) {
         buoyancy.put("buoyancy_dimensions", buoyancy_dimensions);
@@ -723,7 +737,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param collision_position 
+     * @param buoyancy_position 
      */
     public void setBuoyancy_Position(Vector3f buoyancy_position) {
         buoyancy.put("buoyancy_position", buoyancy_position);
@@ -739,7 +753,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param collision_position 
+     * @param buoyancyScale 
      */
     public void setBuoyancyScale(Vector3f buoyancyScale) {
         buoyancy.put("buoyancyScale", buoyancyScale);
@@ -755,7 +769,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param type
+     * @param buoyancy_type 
      */
     public void setBuoyancy_Type(Integer buoyancy_type) {
         buoyancy.put("buoyancy_type", buoyancy_type);
@@ -835,7 +849,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param scale
+     * @param alpha_depth_scale 
      */
     public void setAlpha_Depth_Scale(Float alpha_depth_scale) {
         model.put("alpha_depth_scale", alpha_depth_scale);
@@ -1014,7 +1028,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param rotation
+     * @param quaternion 
      */
     public void setRotationQuaternion(Quaternion quaternion) {
         Vector3f axis = new Vector3f();
@@ -1232,7 +1246,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
 
     /**
      *
-     * @param buoycancy
+     * @param buoycancyVolume 
      */
     public void setDebugBuoycancyVolume(Boolean buoycancyVolume) {
         debug.put("buoycancyVolume", buoycancyVolume);

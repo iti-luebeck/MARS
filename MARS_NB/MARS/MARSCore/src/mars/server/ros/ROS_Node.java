@@ -5,16 +5,10 @@
 package mars.server.ros;
 
 import com.google.common.base.Preconditions;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -22,17 +16,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
 //import org.ros.node.DefaultNodeFactory;
-import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
-import org.ros.node.topic.Publisher;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
 import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeEvent;
-import mars.ros.RosNodeListener;
 import mars.ros.SystemTFNode;
-import org.ros.message.Time;
 import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeMainExecutor;
 
@@ -68,6 +57,7 @@ public class ROS_Node implements Runnable{
      * 
      * @param mars
      * @param auv_manager
+     * @param marsSettings  
      */
     public ROS_Node(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging
@@ -261,6 +251,10 @@ public class ROS_Node implements Runnable{
         nodeMainExecutor.execute(marsnode, nodeConf);
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSNodeMain getSystemNode() {
         return systemNode;
     }

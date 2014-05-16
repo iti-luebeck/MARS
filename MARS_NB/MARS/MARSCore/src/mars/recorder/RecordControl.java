@@ -29,8 +29,17 @@ public class RecordControl extends AbstractControl{
     private float time = 0f;
     private float oldRecTime = 0f;
     
+    /**
+     *
+     */
     public RecordControl(){} // empty serialization constructor
     
+    /**
+     *
+     * @param recordManager
+     * @param auv
+     * @param logTop
+     */
     public RecordControl(RecordManager recordManager, AUV auv, MARSLogTopComponent logTop){
         this.recordManager = recordManager;
         this.auv = auv;
@@ -43,12 +52,19 @@ public class RecordControl extends AbstractControl{
     }
  
     /** This is your init method. Optionally, you can modify 
-    * the spatial from here (transform it, initialize userdata, etc). */
+     * the spatial from here (transform it, initialize userdata, etc).
+     * @param spatial 
+     */
     @Override
     public void setSpatial(Spatial spatial) {
         super.setSpatial(spatial);
     }
  
+    /**
+     *
+     * @param spatial
+     * @return
+     */
     @Override
     public Control cloneForSpatial(Spatial spatial){
         final RecordControl control = new RecordControl();
@@ -60,7 +76,9 @@ public class RecordControl extends AbstractControl{
     /** Implement your spatial's behaviour here.
     * From here you can modify the scene graph and the spatial
     * (transform them, get and set userdata, etc).
-    * This loop controls the spatial while the Control is enabled. */
+    * This loop controls the spatial while the Control is enabled.
+    * @param tpf 
+    */
     @Override
     protected void controlUpdate(float tpf){
         time = time + tpf;
@@ -88,6 +106,11 @@ public class RecordControl extends AbstractControl{
         }
     }
  
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp){
      /* Optional: rendering manipulation (for advanced users) */

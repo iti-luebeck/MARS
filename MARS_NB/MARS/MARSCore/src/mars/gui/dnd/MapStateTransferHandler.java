@@ -5,7 +5,6 @@
 package mars.gui.dnd;
 
 import com.jme3.math.Vector3f;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -33,6 +32,7 @@ public class MapStateTransferHandler extends TransferHandler{
     /**
      * 
      * @param mars
+     * @param MapPanel  
      */
     public MapStateTransferHandler(MARS_Main mars, JPanel MapPanel) {
         super();

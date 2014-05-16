@@ -5,7 +5,6 @@
 package mars.actuators;
 
 import com.jme3.scene.Geometry;
-import hanse_msgs.sollSpeed;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import org.ros.message.MessageListener;
@@ -47,11 +46,19 @@ public class BrushlessThruster extends Thruster{
         motor_increment = 0.6f;
     }
     
+    /**
+     *
+     * @param thruster
+     */
     public BrushlessThruster(BrushlessThruster thruster){
         super(thruster);
         motor_increment = 5f;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public BrushlessThruster copy() {
         BrushlessThruster actuator = new BrushlessThruster(this);

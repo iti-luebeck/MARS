@@ -41,6 +41,9 @@ public final class MARSLogTopComponent extends TopComponent {
 
     private MARS_Main mars;
     
+    /**
+     *
+     */
     public MARSLogTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSLogTopComponent());
@@ -288,11 +291,17 @@ public final class MARSLogTopComponent extends TopComponent {
     private javax.swing.JTextField jTextFieldLogTime;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
@@ -318,6 +327,10 @@ public final class MARSLogTopComponent extends TopComponent {
         this.mars = mars;
     }
     
+    /**
+     *
+     * @param timeStep
+     */
     public void initTimeline(final int timeStep){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -328,6 +341,10 @@ public final class MARSLogTopComponent extends TopComponent {
         );
     }
     
+    /**
+     *
+     * @param timeStep
+     */
     public void setTimeline(final int timeStep){
         EventQueue.invokeLater(new Runnable(){
                 @Override
@@ -338,6 +355,10 @@ public final class MARSLogTopComponent extends TopComponent {
         );
     }
     
+    /**
+     *
+     * @param time
+     */
     public void setTimelineTime(final float time){
         EventQueue.invokeLater(new Runnable(){
                 @Override

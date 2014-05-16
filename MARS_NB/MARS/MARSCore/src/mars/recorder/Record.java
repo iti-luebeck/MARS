@@ -27,42 +27,81 @@ public class Record implements Comparable<Record>{
     @XmlJavaTypeAdapter(Vector3fAdapter.class)
     public Vector3f position;
     
+    /**
+     *
+     */
     @XmlElement
     @XmlJavaTypeAdapter(Vector3fAdapter.class)
     public Vector3f rotation;
     
+    /**
+     *
+     */
     @XmlElement
     public float time;
 
+    /**
+     *
+     */
     public Record() {
     }
     
+    /**
+     *
+     * @param time
+     * @param postion
+     * @param rotation
+     */
     public Record(float time, Vector3f postion, Vector3f rotation) {
         this.time = time;
         this.position = postion;
         this.rotation = rotation;
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getPosition() {
         return position;
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getRotation() {
         return rotation;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getTime() {
         return time;
     }
 
+    /**
+     *
+     * @param position
+     */
     public void setPosition(Vector3f position) {
         this.position = position;
     }
 
+    /**
+     *
+     * @param rotation
+     */
     public void setRotation(Vector3f rotation) {
         this.rotation = rotation;
     }
 
+    /**
+     *
+     * @param time
+     */
     public void setTime(float time) {
         this.time = time;
     }

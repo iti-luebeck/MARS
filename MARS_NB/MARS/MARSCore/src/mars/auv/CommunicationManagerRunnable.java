@@ -4,8 +4,6 @@
  */
 package mars.auv;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,13 +17,24 @@ public class CommunicationManagerRunnable implements Runnable{
     private boolean running = true;
     CommunicationManager comManager;
     
+    /**
+     *
+     */
     public CommunicationManagerRunnable() {
     }
     
+    /**
+     *
+     * @param comManager
+     */
     public CommunicationManagerRunnable(CommunicationManager comManager) {
         this.comManager = comManager;
     }
 
+    /**
+     *
+     * @param running
+     */
     public void setRunning(boolean running) {
         this.running = running;
     }

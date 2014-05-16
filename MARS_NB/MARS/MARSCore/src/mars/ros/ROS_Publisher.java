@@ -7,6 +7,7 @@ package mars.ros;
 /**
  *
  * @author Thomas Tosik
+ * @deprecated 
  */
 @Deprecated
 public interface ROS_Publisher{   

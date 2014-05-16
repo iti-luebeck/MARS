@@ -13,18 +13,34 @@ import com.jme3.bullet.control.RigidBodyControl;
  */
 public class MyR extends RigidBodyControl{
 
+    /**
+     *
+     */
     public MyR() {
         super();
     }
 
+    /**
+     *
+     * @param shape
+     */
     public MyR(CollisionShape shape) {
         super(shape);
     }
 
+    /**
+     *
+     * @param mass
+     */
     public MyR(float mass) {
         super(mass);
     }
 
+    /**
+     *
+     * @param shape
+     * @param mass
+     */
     public MyR(CollisionShape shape, float mass) {
         super(shape, mass);
     }

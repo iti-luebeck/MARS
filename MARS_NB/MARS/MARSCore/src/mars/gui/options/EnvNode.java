@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.PropertyChangeListenerSupport;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
@@ -25,7 +24,6 @@ import org.openide.util.lookup.Lookups;
  * This class is the presentation for actuators, accumulators and sensors of an
  * auv.
  *
- * @author Christian Friedrich
  * @author Thomas Tosik
  */
 public class EnvNode extends AbstractNode implements PropertyChangeListener {

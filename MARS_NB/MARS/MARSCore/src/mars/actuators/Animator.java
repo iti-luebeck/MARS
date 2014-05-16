@@ -10,12 +10,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import geometry_msgs.Point;
 import geometry_msgs.Quaternion;
-import geometry_msgs.Vector3;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
@@ -53,10 +51,18 @@ public class Animator extends Actuator{
         super(simstate);
     }
     
+    /**
+     *
+     * @param teleporter
+     */
     public Animator(Animator teleporter){
         super(teleporter);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Animator actuator = new Animator(this);
@@ -91,6 +97,7 @@ public class Animator extends Actuator{
     /**
      * 
      * @param vector
+     * @param quat  
      */
     public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat){
         Future simStateFuture = this.simauv.enqueue(new Callable() {

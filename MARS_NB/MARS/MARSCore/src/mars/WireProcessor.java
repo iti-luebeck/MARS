@@ -33,28 +33,58 @@ public class WireProcessor implements SceneProcessor {
         wireMaterial.setColor("Color", color);
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     public void initialize(RenderManager rm, ViewPort vp) {
         renderManager = rm;
     }
 
+    /**
+     *
+     * @param vp
+     * @param w
+     * @param h
+     */
     public void reshape(ViewPort vp, int w, int h) {
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized() {
         return renderManager != null;
     }
 
+    /**
+     *
+     * @param tpf
+     */
     public void preFrame(float tpf) {
     }
 
+    /**
+     *
+     * @param rq
+     */
     public void postQueue(RenderQueue rq) {
         renderManager.setForcedMaterial(wireMaterial);
     }
 
+    /**
+     *
+     * @param out
+     */
     public void postFrame(FrameBuffer out) {
         renderManager.setForcedMaterial(null);
     }
 
+    /**
+     *
+     */
     public void cleanup() {
         renderManager.setForcedMaterial(null);
     }

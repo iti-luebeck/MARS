@@ -21,14 +21,27 @@ public class MyLodControl extends LodControl {
     public MyLodControl(){
     }
 
+    /**
+     *
+     * @param cam
+     */
     public void setCam(Camera cam) {
         this.controlCam = cam;
     }
 
+    /**
+     *
+     * @return
+     */
     public Camera getCam() {
         return controlCam;
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp){
         Camera cam = vp.getCamera();

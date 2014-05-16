@@ -159,10 +159,18 @@ public class RayBasedSensor extends Sensor{
         rootNode.attachChild(debug_node);
     }
     
+    /**
+     *
+     * @param raybased
+     */
     public RayBasedSensor(RayBasedSensor raybased){
         super(raybased);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         RayBasedSensor sensor = new RayBasedSensor(this);
@@ -170,6 +178,9 @@ public class RayBasedSensor extends Sensor{
         return sensor;
     }
 
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -258,7 +269,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param ConeType 
+     * @param SonarConeType 
      */
     public void setConeType(int SonarConeType) {
         variables.put("SonarConeType", SonarConeType);
@@ -354,7 +365,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      * 
-     * @param detectable
+     * @param RayDetectable 
      */
     public void setCollider(Collider RayDetectable) {
         this.RayDetectable = RayDetectable;
@@ -434,7 +445,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param Scanning 
+     * @param ScanInstant 
      */
     public void setScanInstant(boolean ScanInstant) {
         variables.put("ScanInstant", ScanInstant);
@@ -482,7 +493,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param SonarMaxRange
+     * @param scanning_angle_max 
      */
     public void setScanningAngleMax(float scanning_angle_max) {
         variables.put("scanning_angle_max", scanning_angle_max);
@@ -498,7 +509,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param SonarMaxRange
+     * @param scanning_angle_min 
      */
     public void setScanningAngleMin(float scanning_angle_min) {
         variables.put("scanning_angle_min", scanning_angle_min);
@@ -616,6 +627,14 @@ public class RayBasedSensor extends Sensor{
         this.ReturnDataLength = ReturnDataLength;
     }
     
+    /**
+     *
+     * @param results
+     * @param i
+     * @param distance
+     * @param direction
+     * @return
+     */
     protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction){
         if(distance >= getMaxRange()){//too far away
             //System.out.println("too far away");
@@ -645,6 +664,12 @@ public class RayBasedSensor extends Sensor{
         }
     }
 
+    /**
+     *
+     * @param start
+     * @param direction
+     * @return
+     */
     protected float[] getRawRayData(Vector3f start, Vector3f direction){
         if(RayDetectable == null){
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "No detectable Node/Object added...", "");
@@ -723,6 +748,10 @@ public class RayBasedSensor extends Sensor{
         return null;//getInstantData();
     }
     
+    /**
+     *
+     * @return
+     */
     public float[] getInstantData(){
         if(getConeType() == ConeType.ONE_RAY){
             return getOneRayInstantData();
@@ -1237,7 +1266,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param failure_switch 
+     * @param DepthBufferUsage 
      */
     public void setDepthBufferUsage(boolean DepthBufferUsage) {
         variables.put("DepthBufferUsage", DepthBufferUsage);
@@ -1253,7 +1282,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param failure_threshold 
+     * @param DepthBufferWidth 
      */
     public void setDepthBufferWidth(int DepthBufferWidth) {
         variables.put("DepthBufferWidth", DepthBufferWidth);
@@ -1269,7 +1298,7 @@ public class RayBasedSensor extends Sensor{
 
     /**
      *
-     * @param failure_threshold 
+     * @param DepthBufferHeigth 
      */
     public void setDepthBufferHeigth(int DepthBufferHeigth) {
         variables.put("DepthBufferHeigth", DepthBufferHeigth);

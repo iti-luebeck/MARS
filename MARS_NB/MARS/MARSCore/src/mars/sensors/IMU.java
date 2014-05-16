@@ -79,6 +79,10 @@ public class IMU extends Sensor{
         oro.setSimState(simState);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public IMU(IMU sensor){
         super(sensor);
         oro = (Orientationmeter)sensor.getOrientationmeter().copy();
@@ -86,6 +90,10 @@ public class IMU extends Sensor{
         acc = (Accelerometer)sensor.getAccelerometer().copy();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         IMU sensor = new IMU(this);
@@ -200,14 +208,26 @@ public class IMU extends Sensor{
         oro.setEnabled(enabled);
     }
 
+    /**
+     *
+     * @return
+     */
     public Gyroscope getGyroscope() {
         return gyro;
     }
 
+    /**
+     *
+     * @return
+     */
     public Accelerometer getAccelerometer() {
         return acc;
     }
 
+    /**
+     *
+     * @return
+     */
     public Orientationmeter getOrientationmeter() {
         return oro;
     }

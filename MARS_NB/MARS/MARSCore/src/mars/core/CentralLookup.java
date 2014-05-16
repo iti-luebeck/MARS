@@ -4,8 +4,6 @@
  */
 package mars.core;
 
-import java.util.Collection;
-import org.openide.util.Lookup.Result;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
@@ -36,23 +34,42 @@ public class CentralLookup extends AbstractLookup {
     private InstanceContent content = null;
     private static CentralLookup def = new CentralLookup();
 
+    /**
+     *
+     * @param content
+     */
     public CentralLookup(InstanceContent content) {
         super(content);
         this.content = content;
     }
 
+    /**
+     *
+     */
     public CentralLookup() {
         this(new InstanceContent());
     }
 
+    /**
+     *
+     * @param instance
+     */
     public void add(Object instance) {
         content.add(instance);
     }
 
+    /**
+     *
+     * @param instance
+     */
     public void remove(Object instance) {
         content.remove(instance);
     }
 
+    /**
+     *
+     * @return
+     */
     public static CentralLookup getDefault() {
         return def;
     }

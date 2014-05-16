@@ -42,10 +42,18 @@ public class Gyroscope extends Sensor{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Gyroscope(Gyroscope sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Gyroscope sensor = new Gyroscope(this);

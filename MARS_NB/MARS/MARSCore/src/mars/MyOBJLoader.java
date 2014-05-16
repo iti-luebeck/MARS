@@ -666,6 +666,12 @@ public final class MyOBJLoader implements AssetLoader {
         return m;
     }
 
+    /**
+     *
+     * @param info
+     * @return
+     * @throws IOException
+     */
     @SuppressWarnings("empty-statement")
     public Object load(AssetInfo info) throws IOException{
         reset();

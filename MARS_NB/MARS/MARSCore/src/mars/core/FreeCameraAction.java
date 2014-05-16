@@ -13,6 +13,10 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
+/**
+ *
+ * @author Tosik
+ */
 @ActionID(
         category = "View",
         id = "mars.core.FreeCameraAction")

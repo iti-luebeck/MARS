@@ -4,19 +4,10 @@
  */
 package mars.sensors;
 
-import com.jme3.collision.CollisionResults;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Sphere;
 import java.io.IOException;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +15,6 @@ import mars.ChartValue;
 import mars.Collider;
 import org.ros.node.topic.Publisher;
 import mars.NoiseType;
-import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
@@ -70,10 +60,18 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue{
         this.RayDetectable = simstate.getCollider();
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public InfraRedSensor(InfraRedSensor sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         InfraRedSensor sensor = new InfraRedSensor(this);
@@ -140,11 +138,19 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getDistance();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

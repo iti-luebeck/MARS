@@ -68,12 +68,20 @@ public class Posemeter extends Sensor implements ChartValue{
         oro.setSimState(simState);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public Posemeter(Posemeter sensor){
         super(sensor);
         oro = (Orientationmeter)sensor.getOrientationmeter().copy();
         pos = (Positionmeter)sensor.getPositionmeter().copy();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Posemeter sensor = new Posemeter(this);
@@ -166,10 +174,18 @@ public class Posemeter extends Sensor implements ChartValue{
         oro.setEnabled(enabled);
     }
 
+    /**
+     *
+     * @return
+     */
     public Positionmeter getPositionmeter() {
         return pos;
     }
 
+    /**
+     *
+     * @return
+     */
     public Orientationmeter getOrientationmeter() {
         return oro;
     }
@@ -237,12 +253,20 @@ public class Posemeter extends Sensor implements ChartValue{
         }
     }    
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         float[] bla = oro.getOrientation().toAngles(null);
         return new Vector3f(bla[0],bla[1],bla[2]);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

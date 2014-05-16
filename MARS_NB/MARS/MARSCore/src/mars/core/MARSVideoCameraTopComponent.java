@@ -44,12 +44,20 @@ public final class MARSVideoCameraTopComponent extends TopComponent {
     private VideoCamera lastSelectedVideoCamera;
     private MARS_Main mars;
     
+    /**
+     *
+     */
     public MARSVideoCameraTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSVideoCameraTopComponent());
         setToolTipText(Bundle.HINT_MARSVideoCameraTopComponent());
     }
     
+    /**
+     *
+     * @param lastSelectedVideoCamera
+     * @param mars
+     */
     public MARSVideoCameraTopComponent(final VideoCamera lastSelectedVideoCamera, MARS_Main mars) {
         this.lastSelectedVideoCamera = lastSelectedVideoCamera;
         this.mars = mars;
@@ -89,11 +97,17 @@ public final class MARSVideoCameraTopComponent extends TopComponent {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel VideoPanel;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         //there should be a list of opened windows so we dont need to clean the tc every time we close it

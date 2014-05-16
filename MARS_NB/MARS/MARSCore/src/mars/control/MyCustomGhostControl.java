@@ -22,14 +22,25 @@ public class MyCustomGhostControl extends GhostControl implements PhysicsCollisi
     private boolean col1 = false;
     private boolean col2 = false;
     
+    /**
+     *
+     */
     public MyCustomGhostControl() {
         super();
     }
 
+    /**
+     *
+     * @param shape
+     */
     public MyCustomGhostControl(CollisionShape shape) {
         super(shape);
     }
 
+    /**
+     *
+     * @param event
+     */
     @Override
     public void collision(PhysicsCollisionEvent event) {
         Spatial nodeA = event.getNodeA();
@@ -39,6 +50,11 @@ public class MyCustomGhostControl extends GhostControl implements PhysicsCollisi
         System.out.println(System.currentTimeMillis() + ": collision " + nodeA.getName() + " " + nodeB.getName());
     }
     
+    /**
+     *
+     * @param space
+     * @param tpf
+     */
     @Override
     public void prePhysicsTick(PhysicsSpace space, float tpf){
       // apply state changes ...
@@ -46,6 +62,11 @@ public class MyCustomGhostControl extends GhostControl implements PhysicsCollisi
         System.out.println(System.currentTimeMillis() + ": prePhysicsTick");
     }
     
+    /**
+     *
+     * @param space
+     * @param tpf
+     */
     @Override
     public void physicsTick(PhysicsSpace space, float tpf){
         col2 = col1;

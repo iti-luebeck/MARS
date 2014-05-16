@@ -66,10 +66,18 @@ public class PressureSensor extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public PressureSensor(PressureSensor sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         PressureSensor sensor = new PressureSensor(this);
@@ -224,11 +232,19 @@ public class PressureSensor extends Sensor implements ChartValue{
     }
  
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getDepth();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

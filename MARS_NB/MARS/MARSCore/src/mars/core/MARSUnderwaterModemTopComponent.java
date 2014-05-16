@@ -42,12 +42,19 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
 
     private CommunicationDevice comDev;
     
+    /**
+     *
+     */
     public MARSUnderwaterModemTopComponent() {
         initComponents();
         setName(Bundle.CTL_MARSUnderwaterModemTopComponent());
         setToolTipText(Bundle.HINT_MARSUnderwaterModemTopComponent());
     }
     
+    /**
+     *
+     * @param comDev
+     */
     public MARSUnderwaterModemTopComponent(CommunicationDevice comDev) {
         this.comDev = comDev;
         initComponents();
@@ -146,11 +153,17 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea out;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         if(comDev != null){

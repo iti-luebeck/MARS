@@ -29,10 +29,19 @@ public class TF_ROS_Publisher {
     
     private PhysicalExchanger pe;
     
+    /**
+     *
+     * @param pe
+     */
     public TF_ROS_Publisher(PhysicalExchanger pe){
         this.pe = pe;
     }
     
+    /**
+     *
+     * @param ros_node
+     * @param auv_name
+     */
     public void initROS(MARSNodeMain ros_node, String auv_name) { 
         tf_publisher = ros_node.newPublisher("/tf",tf.tfMessage._TYPE);  
         tf_fl = pe.getMARS_Node().getMessageFactory().newFromType(tf.tfMessage._TYPE);

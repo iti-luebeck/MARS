@@ -459,6 +459,10 @@ public class MyProjectedGrid extends Mesh {
     }
 
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getVertexCount() {
         return sizeX * sizeY;

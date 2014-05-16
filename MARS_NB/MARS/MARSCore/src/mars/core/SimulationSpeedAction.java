@@ -14,6 +14,10 @@ import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.actions.Presenter;
 
+/**
+ *
+ * @author Tosik
+ */
 @ActionID(
         category = "Speed",
         id = "mars.core.SimulationSpeedAction")
@@ -24,6 +28,10 @@ import org.openide.util.actions.Presenter;
 @Messages("CTL_SimulationSpeedAction=Simulation Speed")
 public final class SimulationSpeedAction extends AbstractAction implements Presenter.Toolbar {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Component getToolbarPresenter() {
         return new StartSimulationSpeedJPanel();

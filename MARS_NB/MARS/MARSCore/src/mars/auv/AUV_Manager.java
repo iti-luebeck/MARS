@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -23,14 +22,10 @@ import mars.Collider;
 import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
 import mars.MARS_Main;
-import mars.PhysicalExchanger;
 import mars.gui.tree.UpdateState;
 import mars.recorder.RecordManager;
-import mars.recorder.Recording;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
-import mars.sensors.InfraRedSensor;
-import mars.sensors.sonar.Sonar;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
 import mars.states.MapState;
@@ -86,6 +81,9 @@ public class AUV_Manager implements UpdateState{
         this.bulletAppState = simstate.getBulletAppState();
     }
 
+    /**
+     *
+     */
     public AUV_Manager() {
     }
 
@@ -114,6 +112,11 @@ public class AUV_Manager implements UpdateState{
         return auvs;
     }
     
+    /**
+     *
+     * @param oldName
+     * @param newName
+     */
     public void updateAUVName(String oldName, String newName){
         AUV auv = auvs.get(oldName);
         auv.setName(newName);
@@ -157,6 +160,11 @@ public class AUV_Manager implements UpdateState{
         return ret;
     }
     
+    /**
+     *
+     * @param classNameString
+     * @return
+     */
     public boolean hasAUVsOfClass(String classNameString){
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -201,6 +209,10 @@ public class AUV_Manager implements UpdateState{
         this.com_manager = com_manager;
     }
 
+    /**
+     *
+     * @param recManager
+     */
     public void setRecManager(RecordManager recManager) {
         this.recManager = recManager;
     }
@@ -506,6 +518,10 @@ public class AUV_Manager implements UpdateState{
         });
     }
     
+    /**
+     *
+     * @param auv
+     */
     public void deregisterAUVNoFuture( AUV auv ){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
         final AUV fin_auv = auv;
@@ -648,6 +664,10 @@ public class AUV_Manager implements UpdateState{
         }
     }
     
+    /**
+     *
+     * @param auv
+     */
     public void addAUVtoMap(AUV auv){
         if(mars.getStateManager().getState(MapState.class) != null){
             MapState mapState = (MapState)mars.getStateManager().getState(MapState.class);
@@ -690,12 +710,16 @@ public class AUV_Manager implements UpdateState{
     
     /**
      *
+     * @param auv 
      */
     public void deselectAUV(AUV auv){
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
         auv.setSelected(false);
     }
     
+    /**
+     *
+     */
     public void cleanup(){
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
@@ -724,6 +748,10 @@ public class AUV_Manager implements UpdateState{
         return "AUVs";
     }
 
+    /**
+     *
+     * @param path
+     */
     @Override
     public void updateState(TreePath path) {
         AUV auv = (AUV)path.getPathComponent(1);

@@ -79,6 +79,10 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param ballastTank
+     */
     public BallastTank(BallastTank ballastTank){
         super(ballastTank);
         HashMap<String, String> actionsOriginal = ballastTank.getAllActions();
@@ -86,6 +90,10 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
         action_mapping = cloner.deepClone(actionsOriginal);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         BallastTank actuator = new BallastTank(this);
@@ -95,6 +103,7 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
     
    /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -154,7 +163,7 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
 
     /**
      * 
-     * @param maxVolume
+     * @param MaxVolume 
      */
     public void setMaxVolume(Float MaxVolume) {
         variables.put("MaxVolume", MaxVolume);
@@ -170,7 +179,7 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
 
     /**
      * 
-     * @param volumePerSecond
+     * @param VolumePerSecond 
      */
     public void setVolumePerSecond(Float VolumePerSecond) {
         variables.put("VolumePerSecond", VolumePerSecond);
@@ -275,11 +284,19 @@ public class BallastTank extends Actuator implements Keys,ChartValue{
         }
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getCurrentVolume();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

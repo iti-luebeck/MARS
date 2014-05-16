@@ -30,6 +30,7 @@ public class SimStateTransferHandler extends TransferHandler{
     /**
      * 
      * @param mars
+     * @param JMEPanel1  
      */
     public SimStateTransferHandler(MARS_Main mars, JPanel JMEPanel1) {
         super();

@@ -33,12 +33,30 @@ import java.io.IOException;
  */
 public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsControl {
 
+    /**
+     *
+     */
     protected Spatial spatial;
+    /**
+     *
+     */
     protected boolean enabled = true;
+    /**
+     *
+     */
     protected boolean added = false;
+    /**
+     *
+     */
     protected PhysicsSpace space = null;
+    /**
+     *
+     */
     protected boolean kinematicSpatial = true;
 
+    /**
+     *
+     */
     public MyRigidBodyControl() {
     }
 
@@ -59,10 +77,20 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         super(shape);
     }
 
+    /**
+     *
+     * @param shape
+     * @param mass
+     */
     public MyRigidBodyControl(CollisionShape shape, float mass) {
         super(shape, mass);
     }
 
+    /**
+     *
+     * @param spatial
+     * @return
+     */
     public Control cloneForSpatial(Spatial spatial) {
         com.jme3.bullet.control.RigidBodyControl control = new com.jme3.bullet.control.RigidBodyControl(collisionShape, mass);
         control.setAngularFactor(getAngularFactor());
@@ -89,6 +117,10 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         return control;
     }
 
+    /**
+     *
+     * @param spatial
+     */
     public void setSpatial(Spatial spatial) {
         this.spatial = spatial;
         setUserObject(spatial);
@@ -103,6 +135,9 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         setPhysicsRotation(getSpatialRotation());
     }
 
+    /**
+     *
+     */
     protected void createCollisionShape() {
         if (spatial == null) {
             return;
@@ -125,6 +160,10 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         }
     }
 
+    /**
+     *
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (space != null) {
@@ -142,6 +181,10 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEnabled() {
         return enabled;
     }
@@ -163,6 +206,10 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         this.kinematicSpatial = kinematicSpatial;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isApplyPhysicsLocal() {
         return motionState.isApplyPhysicsLocal();
     }
@@ -190,6 +237,10 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         return spatial.getWorldRotation();
     }
 
+    /**
+     *
+     * @param tpf
+     */
     public void update(float tpf) {
         if (enabled && spatial != null) {
             if (isKinematic() && kinematicSpatial) {
@@ -201,9 +252,18 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         }
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     public void render(RenderManager rm, ViewPort vp) {
     }
 
+    /**
+     *
+     * @param space
+     */
     public void setPhysicsSpace(PhysicsSpace space) {
         if (space == null) {
             if (this.space != null) {
@@ -218,10 +278,19 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         this.space = space;
     }
 
+    /**
+     *
+     * @return
+     */
     public PhysicsSpace getPhysicsSpace() {
         return space;
     }
 
+    /**
+     *
+     * @param ex
+     * @throws IOException
+     */
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
@@ -232,6 +301,11 @@ public class MyRigidBodyControl extends PhysicsRigidBody implements PhysicsContr
         oc.write(spatial, "spatial", null);
     }
 
+    /**
+     *
+     * @param im
+     * @throws IOException
+     */
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);

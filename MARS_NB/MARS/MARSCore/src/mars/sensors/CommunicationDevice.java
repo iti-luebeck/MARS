@@ -26,21 +26,43 @@ import mars.states.SimState;
 @XmlSeeAlso( {UnderwaterModem.class,WiFi.class} )
 public abstract class CommunicationDevice extends Sensor{
 
+    /**
+     *
+     */
     protected CommunicationManager com_manager;
+    /**
+     *
+     */
     protected EventListenerList listeners = new EventListenerList();
     
+    /**
+     *
+     */
     public CommunicationDevice() {
         super();
     }
 
+    /**
+     *
+     * @param sensor
+     */
     public CommunicationDevice(Sensor sensor) {
         super(sensor);
     }
 
+    /**
+     *
+     * @param simstate
+     */
     public CommunicationDevice(SimState simstate) {
         super(simstate);
     }
 
+    /**
+     *
+     * @param mars
+     * @param pe
+     */
     public CommunicationDevice(MARS_Main mars, PhysicalEnvironment pe) {
         super(mars, pe);
     }
@@ -76,6 +98,10 @@ public abstract class CommunicationDevice extends Sensor{
     public void update(float tpf) {
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
        return null;
@@ -85,26 +111,53 @@ public abstract class CommunicationDevice extends Sensor{
     public void reset() {
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract Vector3f getWorldPosition();
     
+    /**
+     *
+     * @return
+     */
     public abstract float getPropagationDistance();
     
+    /**
+     *
+     * @param msg
+     */
     public abstract void publish(String msg);
     
+    /**
+     *
+     * @param listener
+     */
     public void addAdListener( PhysicalExchangerListener listener )
     {
       listeners.add( PhysicalExchangerListener.class, listener );
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void removeAdListener( PhysicalExchangerListener listener )
     {
       listeners.remove( PhysicalExchangerListener.class, listener );
     }
     
+    /**
+     *
+     */
     public void removeAllListener(){
         //listeners.
     }
 
+    /**
+     *
+     * @param event
+     */
     protected synchronized void notifyAdvertisement( CommunicationDeviceEvent event )
     {
       for ( PhysicalExchangerListener l : listeners.getListeners( PhysicalExchangerListener.class ) )

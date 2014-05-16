@@ -108,6 +108,10 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
         variables = new HashMap<String,Object> ();
     }
     
+    /**
+     *
+     * @param actuator
+     */
     public Actuator(Actuator actuator){
         HashMap<String, Object> variablesOriginal = actuator.getAllVariables();
         Cloner cloner = new Cloner();
@@ -148,6 +152,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
 
     /**
      *
+     * @param pe 
      */
     @Override
     public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
@@ -172,6 +177,9 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Subscrib
      */
     public abstract void reset();
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();

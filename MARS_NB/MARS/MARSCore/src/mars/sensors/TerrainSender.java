@@ -61,10 +61,18 @@ public class TerrainSender extends Sensor{
         super(simstate);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public TerrainSender(TerrainSender sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         TerrainSender sensor = new TerrainSender(this);

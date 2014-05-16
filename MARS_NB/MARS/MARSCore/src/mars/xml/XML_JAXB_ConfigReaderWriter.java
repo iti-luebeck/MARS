@@ -4,25 +4,20 @@
  */
 package mars.xml;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.tools.FileObject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -32,19 +27,14 @@ import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
-import mars.actuators.Actuator;
-import mars.actuators.Thruster;
 import mars.recorder.Recording;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
-import org.openide.filesystems.FileUtil;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Lookup;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
 
 /**
  * This Class is responsible for reading and writing java objects to an configName file
@@ -55,17 +45,32 @@ public class XML_JAXB_ConfigReaderWriter {
 
     private String configName = "default";
     
+    /**
+     *
+     */
     public XML_JAXB_ConfigReaderWriter() {
     }
     
+    /**
+     *
+     * @param config
+     */
     public XML_JAXB_ConfigReaderWriter(String config) {
         this.configName = config;
     }
 
+    /**
+     *
+     * @param configName
+     */
     public void setConfigName(String configName) {
         this.configName = configName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getConfigName() {
         return configName;
     }
@@ -444,7 +449,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param mars_settings
-     * @param file  
+     * @param file
+     * @return  
      */
     public static String saveMARS_Settings(MARS_Settings mars_settings,File file){
         try {
@@ -491,8 +497,9 @@ public class XML_JAXB_ConfigReaderWriter {
     
     /**
      * 
-     * @param mars_settings
-     * @param file  
+     * @param config 
+     * @param file
+     * @return  
      */
     public static String saveConfigManager(ConfigManager config,File file){
         try {
@@ -630,7 +637,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param pe
-     * @param file  
+     * @param file
+     * @return  
      */
     public static String savePhysicalEnvironment(PhysicalEnvironment pe, File file){
         try {
@@ -679,7 +687,8 @@ public class XML_JAXB_ConfigReaderWriter {
     /**
      * 
      * @param keyconfig
-     * @param file  
+     * @param file
+     * @return  
      */
     public static String saveKeyConfig(KeyConfig keyconfig, File file){
         try {
@@ -701,6 +710,12 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+    /**
+     *
+     * @param rec
+     * @param file
+     * @return
+     */
     public String saveRecording(Recording rec, File file){
         try {
             JAXBContext context = JAXBContext.newInstance( Recording.class );
@@ -723,6 +738,11 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+    /**
+     *
+     * @param file
+     * @return
+     */
     public Recording loadRecording(File file){
         try {
             //File file2 = new File("./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");

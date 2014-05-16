@@ -189,6 +189,11 @@ public class FlatWaterProcessor implements SceneProcessor {
         updateClipPlanes();
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     public void initialize(RenderManager rm, ViewPort vp) {
         this.rm = rm;
         this.vp = vp;
@@ -261,15 +266,29 @@ public class FlatWaterProcessor implements SceneProcessor {
 
     }
 
+    /**
+     *
+     * @param vp
+     * @param w
+     * @param h
+     */
     public void reshape(ViewPort vp, int w, int h) {
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized() {
         return rm != null;
     }
     float time = 0;
     float savedTpf = 0;
 
+    /**
+     *
+     * @param tpf
+     */
     public void preFrame(float tpf) {
         time = time + (tpf * speed);
         if (time > 1f) {
@@ -310,6 +329,10 @@ public class FlatWaterProcessor implements SceneProcessor {
 
     }
 
+    /**
+     *
+     * @param rq
+     */
     public void postQueue(RenderQueue rq) {
         Camera sceneCam = rm.getCurrentCamera();
 
@@ -351,12 +374,19 @@ public class FlatWaterProcessor implements SceneProcessor {
 
     }
 
+    /**
+     *
+     * @param out
+     */
     public void postFrame(FrameBuffer out) {
         if (debug) {
             displayMap(rm.getRenderer(), dispReflection, 256);
         }
     }
 
+    /**
+     *
+     */
     public void cleanup() {
     }
 

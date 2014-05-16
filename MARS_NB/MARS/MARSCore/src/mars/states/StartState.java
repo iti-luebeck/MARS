@@ -8,12 +8,9 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
-import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -21,40 +18,18 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.tools.SizeValue;
-import java.nio.FloatBuffer;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import mars.Helper.SoundHelper;
 import mars.MARS_Main;
-import mars.xml.XML_JAXB_ConfigReaderWriter;
-//import com.amd.aparapi.Kernel;
-//import com.amd.aparapi.Range;
-import com.jme3.scene.mesh.IndexBuffer;
-import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import jme3tools.optimize.GeometryBatchFactory;
 //import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
@@ -98,17 +73,29 @@ public class StartState extends AbstractAppState implements AppStateExtension{
         return rootNode;
     }
 
+    /**
+     *
+     * @param cam
+     */
     @Override
     public void setCamera(Camera cam) {
        
     }
  
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
         mars.getRootNode().detachChild(getRootNode());
     }
 
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if(!super.isInitialized()){
@@ -252,16 +239,27 @@ public class StartState extends AbstractAppState implements AppStateExtension{
         textRenderer.setText(loadingText);
     }*/
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return super.isEnabled();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -270,6 +268,10 @@ public class StartState extends AbstractAppState implements AppStateExtension{
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -278,6 +280,10 @@ public class StartState extends AbstractAppState implements AppStateExtension{
         super.render(rm);
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -288,16 +294,28 @@ public class StartState extends AbstractAppState implements AppStateExtension{
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         if (!super.isEnabled()) {

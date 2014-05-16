@@ -58,10 +58,18 @@ public class Accelerometer extends Sensor implements ChartValue{
         super(simstate);
     }
     
+    /**
+     *
+     * @param accelerometer
+     */
     public Accelerometer(Accelerometer accelerometer){
         super(accelerometer);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Accelerometer sensor = new Accelerometer(this);
@@ -181,11 +189,19 @@ public class Accelerometer extends Sensor implements ChartValue{
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public Object getChartValue() {
         return getAcceleration().length();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long getSleepTime() {
         return getRos_publish_rate();

@@ -11,6 +11,7 @@ import mars.states.SimState;
 /**
  *
  * @author Thomas Tosik
+ * @deprecated 
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @Deprecated

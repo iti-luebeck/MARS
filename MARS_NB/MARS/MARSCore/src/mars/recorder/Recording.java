@@ -8,9 +8,6 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.auv.AUV;
@@ -26,16 +23,30 @@ public class Recording {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,List<Record>> records = new HashMap<String, List<Record>>();
 
+    /**
+     *
+     */
     public Recording() {
     }
     
+    /**
+     *
+     */
     public void initAfterJAXB(){
     }
     
+    /**
+     *
+     */
     public void clear(){
         records.clear();
     }
     
+    /**
+     *
+     * @param auv
+     * @param time
+     */
     public void addRecord(AUV auv, float time){
         if(!records.containsKey(auv.getName())){//noch kein auv drin, also erstell neue list
             List<Record> entry = new ArrayList<Record>();
@@ -48,6 +59,11 @@ public class Recording {
         record.add(new Record(time,auv.getPhysicsControl().getPhysicsLocation(),rot));
     }
     
+    /**
+     *
+     * @param auvName
+     * @return
+     */
     public List<Record> getRecords(String auvName){
         return records.get(auvName);
     }

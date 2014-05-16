@@ -21,24 +21,17 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
-import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.Initializer;
-import mars.MARS_Main;
 import mars.Moveable;
 import mars.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
-import mars.xml.Vector3fAdapter;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
@@ -95,10 +88,18 @@ public class VideoCamera extends Sensor implements Moveable{
         this.initer = simstate.getIniter();*/
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public VideoCamera(VideoCamera sensor){
         super(sensor);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         VideoCamera sensor = new VideoCamera(this);
@@ -106,6 +107,9 @@ public class VideoCamera extends Sensor implements Moveable{
         return sensor;
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -182,7 +186,7 @@ public class VideoCamera extends Sensor implements Moveable{
     
     /**
      * 
-     * @param icon
+     * @param format 
      */
     public void setFormat(String format){
         variables.put("format",format);
@@ -319,6 +323,9 @@ public class VideoCamera extends Sensor implements Moveable{
         initer.addFiltersToViewport(offView);
     }
     
+    /**
+     *
+     */
     public void cleanupOffscreenView(){
         if(offView != null){
             offView.setEnabled(false);
@@ -334,6 +341,9 @@ public class VideoCamera extends Sensor implements Moveable{
         }
     }
     
+    /**
+     *
+     */
     public void cleanupDebugView(){
         if(debugView != null){
             debugView.setEnabled(false);
@@ -540,6 +550,10 @@ public class VideoCamera extends Sensor implements Moveable{
         return getName();
     }
 
+    /**
+     *
+     * @return
+     */
     public ViewPort getDebugView() {
         debugCamera = new Camera(getCameraWidth(),getCameraHeight());
         

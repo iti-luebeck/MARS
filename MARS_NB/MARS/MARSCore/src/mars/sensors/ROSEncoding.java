@@ -9,12 +9,18 @@ package mars.sensors;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public enum ROSEncoding {
+    /**
+     *
+     */
     RGB8 {
             @Override
             public String toString() {
                 return "rgb8";
             }
         },
+    /**
+     *
+     */
     BGRA8 {
             @Override
             public String toString() {

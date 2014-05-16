@@ -40,6 +40,11 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
         return flyCam;
     }
 
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -56,6 +61,10 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
         }               
     }
             
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -63,6 +72,9 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
         flyCam.setEnabled(enabled);
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();

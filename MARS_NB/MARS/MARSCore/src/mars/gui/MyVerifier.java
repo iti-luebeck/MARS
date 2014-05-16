@@ -40,17 +40,30 @@ public class MyVerifier extends InputVerifier implements ActionListener {
     private Point point;
     private Dimension cDim;
     
+    /**
+     *
+     */
     public MyVerifier(){
         super();
         messageLabel = new JLabel("This name is already taken!");
         image = new JLabel(new ImageIcon(".//Assets/Icons/"+"cancel.png"));
     }
     
+    /**
+     *
+     * @param type
+     */
     public MyVerifier(int type){
         this();
         this.type = type;
     }
     
+    /**
+     *
+     * @param type
+     * @param auvManager
+     * @param parent
+     */
     public MyVerifier(int type,AUV_Manager auvManager, JDialog parent){
         this();
         this.type = type;
@@ -59,6 +72,12 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         initComponents();
     }
     
+    /**
+     *
+     * @param type
+     * @param simobManager
+     * @param parent
+     */
     public MyVerifier(int type,SimObjectManager simobManager, JDialog parent){
         this();
         this.type = type;
@@ -88,6 +107,9 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         }
     }
 
+    /**
+     *
+     */
     protected void updateObject() {
 
     }
@@ -118,6 +140,11 @@ public class MyVerifier extends InputVerifier implements ActionListener {
         return true;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     protected boolean checkField(JComponent input) {
         if(input instanceof MyTextField){
             MyTextField mytext = (MyTextField)input;
@@ -325,6 +352,11 @@ public class MyVerifier extends InputVerifier implements ActionListener {
     //value to the minimum or maximum value if necessary and (even if not) sets it to the
     //parsed number so that it looks good -- no letters,
     //for example.
+    /**
+     *
+     * @param change
+     * @return
+     */
     protected boolean checkAmountField(boolean change) {
         return true;
     }

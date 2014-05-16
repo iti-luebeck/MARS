@@ -13,21 +13,41 @@ import com.jme3.bullet.control.RigidBodyControl;
  */
 public class LimitedRigidBodyControl extends RigidBodyControl{
 
+    /**
+     *
+     */
     public LimitedRigidBodyControl() {
     }
 
+    /**
+     *
+     * @param shape
+     */
     public LimitedRigidBodyControl(CollisionShape shape) {
         super(shape);
     }
 
+    /**
+     *
+     * @param mass
+     */
     public LimitedRigidBodyControl(float mass) {
         super(mass);
     }
 
+    /**
+     *
+     * @param shape
+     * @param mass
+     */
     public LimitedRigidBodyControl(CollisionShape shape, float mass) {
         super(shape, mass);
     }
     
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         

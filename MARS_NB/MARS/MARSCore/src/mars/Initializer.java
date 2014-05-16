@@ -5,17 +5,13 @@
 
 package mars;
 
-import com.jme3.app.state.AbstractAppState;
 import java.nio.ShortBuffer;
 import mars.states.SimState;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.TextureKey;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
@@ -43,15 +39,10 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import mars.auv.AUV_Manager;
 import mars.server.MARS_Server;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
-import com.jme3.math.Vector4f;
 import com.jme3.post.Filter;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
@@ -65,32 +56,24 @@ import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PssmShadowRenderer;
-import com.jme3.shadow.PssmShadowRenderer.FilterMode;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
-import com.jme3.terrain.heightmap.HillHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
-import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
-import com.shaderblow.skydome.SkyDomeControl;
 import forester.Forester;
 import forester.grass.GrassLayer;
 import forester.grass.GrassLayer.MeshType;
 import forester.grass.GrassLoader;
-import forester.grass.algorithms.GPAUniform;
 import forester.grass.datagrids.MapGrid;
 import forester.image.DensityMap.Channel;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -98,7 +81,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
-import mars.Helper.Helper;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
 import mars.filter.FishEyeFilter;
@@ -106,11 +88,9 @@ import mars.filter.LensFlareFilter;
 import mars.server.MARSClient;
 import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
-import mars.simobjects.SimObject;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
-import mygame.MaterialSP;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.openide.util.Exceptions;
@@ -311,6 +291,9 @@ public class Initializer {
         viewPort.addProcessor(fpp);
     }
     
+    /**
+     *
+     */
     public void cleanup(){  
         if(fppS != null){
             fppS.removeAllFilters();
@@ -387,6 +370,9 @@ public class Initializer {
         }
     }
     
+    /**
+     *
+     */
     public void setupAdvServer(){
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
         Lookup bag = Lookup.getDefault();
@@ -413,6 +399,9 @@ public class Initializer {
         }
     }
     
+    /**
+     *
+     */
     public void setupPublisher(){
         
     }
@@ -476,6 +465,7 @@ public class Initializer {
     
     /**
      * 
+     * @deprecated 
      */
     @Deprecated
     public void setupROS_Server(){
@@ -519,10 +509,18 @@ public class Initializer {
         return ros_server;
     }
 
+    /**
+     *
+     * @return
+     */
     public CommunicationManagerRunnable getCom_server() {
         return com_server;
     }
 
+    /**
+     *
+     * @return
+     */
     public Thread getCom_server_thread() {
         return com_server_thread;
     }
@@ -815,6 +813,10 @@ public class Initializer {
         fpp.addFilter(lf);
     }
     
+    /**
+     *
+     * @param filter
+     */
     public void addFilter(Filter filter){
         fpp.addFilter(filter);
     }
@@ -1107,6 +1109,10 @@ public class Initializer {
         mars.restart();
     }
     
+    /**
+     *
+     * @param speed
+     */
     public void changeSpeed(float speed){
         mars.setSpeed(speed);
     }
@@ -1849,18 +1855,35 @@ public class Initializer {
         return flowVector;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPollution_image_width() {
         return pollution_image_width;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPollution_image_heigth() {
         return pollution_image_heigth;
     }
 
+    /**
+     *
+     * @return
+     */
     public ImageBasedHeightMap getPollutionmap() {
         return pollutionmap;
     }
 
+    /**
+     *
+     * @param position
+     * @return
+     */
     public float getPollution(Vector3f position){
         if(!mars_settings.isPollutionDetectable()){
             return 0f;
@@ -1893,14 +1916,26 @@ public class Initializer {
         this.flowVector = flowVector;
     }
 
+    /**
+     *
+     * @return
+     */
     public SkyControl getSkyControl() {
         return skyControl;
     }
 
+    /**
+     *
+     * @return
+     */
     public TimeOfDay getTimeOfDay() {
         return timeOfDay;
     }
     
+    /**
+     *
+     * @param hour
+     */
     public void resetTimeOfDay(float hour){
         timeOfDay = new TimeOfDay(hour);
     }

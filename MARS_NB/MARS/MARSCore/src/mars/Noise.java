@@ -40,7 +40,7 @@ public class Noise {
 
     /**
      *
-     * @param noise_type
+     * @param NoiseType 
      */
     public void setNoiseType(Integer NoiseType) {
         noises.put("NoiseType", NoiseType);
@@ -56,7 +56,7 @@ public class Noise {
 
     /**
      *
-     * @param noise_value
+     * @param NoiseValue 
      */
     public void setNoiseValue(Float NoiseValue) {
         noises.put("NoiseValue", NoiseValue);

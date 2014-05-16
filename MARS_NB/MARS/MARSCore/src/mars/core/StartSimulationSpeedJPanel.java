@@ -22,10 +22,17 @@ public class StartSimulationSpeedJPanel extends javax.swing.JPanel {
         initComponents();
     }
     
+    /**
+     *
+     * @param mars
+     */
     public void setMars(MARS_Main mars) {
         this.mars = mars;
     }
-        public void allowSimInteraction(){
+        /**
+     *
+     */
+    public void allowSimInteraction(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {

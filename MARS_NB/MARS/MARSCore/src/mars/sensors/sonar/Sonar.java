@@ -40,10 +40,18 @@ public class Sonar extends RayBasedSensor{
         } catch (IOException e) { }
     }
 
+    /**
+     *
+     * @param sonar
+     */
     public Sonar(Sonar sonar){
         super(sonar);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Sonar sensor = new Sonar(this);
@@ -63,6 +71,14 @@ public class Sonar extends RayBasedSensor{
         return sondat;
     }
     
+    /**
+     *
+     * @param results
+     * @param i
+     * @param distance
+     * @param direction
+     * @return
+     */
     @Override
     protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction){
         if(distance >= getMaxRange()){//too far away

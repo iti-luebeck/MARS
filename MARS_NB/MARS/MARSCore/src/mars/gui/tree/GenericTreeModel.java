@@ -35,6 +35,7 @@ import mars.xml.HashMapEntry;
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @deprecated 
  */
 @Deprecated
 public class GenericTreeModel implements TreeModel{
@@ -467,6 +468,12 @@ public class GenericTreeModel implements TreeModel{
         }
     }
     
+    /**
+     *
+     * @param originalPath
+     * @param path
+     * @param value
+     */
     protected void saveValue(TreePath originalPath, TreePath path, Object value){
         Object obj = path.getLastPathComponent();
         if(obj instanceof AUV_Parameters){// in the case of a save in not a leaf but higher we need to check it here

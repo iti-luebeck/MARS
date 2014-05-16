@@ -20,9 +20,15 @@ public class ConfigManager {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String,Object> config;
 
+    /**
+     *
+     */
     public ConfigManager() {
     }
     
+    /**
+     *
+     */
     public void initAfterJAXB(){
 
     }
@@ -37,7 +43,7 @@ public class ConfigManager {
 
     /**
      *
-     * @param FlyCamMoveSpeed
+     * @param defaultConfig 
      */
     public void setConfigName(String defaultConfig) {
         config.put("defaultConfig", defaultConfig);

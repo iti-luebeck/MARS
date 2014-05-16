@@ -307,6 +307,11 @@ public class MARS_Main extends SimpleApplication{
     }
     
     
+    /**
+     *
+     * @param state
+     * @return
+     */
     public ViewPort addState(final AbstractAppState state){
         Camera stateCam = cam.clone();
         
@@ -374,6 +379,9 @@ public class MARS_Main extends SimpleApplication{
     public void simpleRender(RenderManager rm) {
     }
 
+    /**
+     *
+     */
     @Override
     public void stop() {
         //make sure to release ros connection
@@ -428,7 +436,7 @@ public class MARS_Main extends SimpleApplication{
     
     /**
      *
-     * @param view
+     * @param TreeTopComp 
      */
     public void setTreeTopComp(MARSTreeTopComponent TreeTopComp){
         this.TreeTopComp = TreeTopComp;
@@ -442,26 +450,50 @@ public class MARS_Main extends SimpleApplication{
         return TreeTopComp;
     }
 
+    /**
+     *
+     * @param MARSMapComp
+     */
     public void setMARSMapComp(MARSMapTopComponent MARSMapComp) {
         this.MARSMapComp = MARSMapComp;
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSMapTopComponent getMARSMapComp() {
         return MARSMapComp;
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSLogTopComponent getMARSLogComp() {
         return MARSLogComp;
     }
 
+    /**
+     *
+     * @param MARSLogComp
+     */
     public void setMARSLogComp(MARSLogTopComponent MARSLogComp) {
         this.MARSLogComp = MARSLogComp;
     }
 
+    /**
+     *
+     * @param MARSTopComp
+     */
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
     }
 
+    /**
+     *
+     * @return
+     */
     public MARSTopComponent getMARSTopComp() {
         return MARSTopComp;
     }
@@ -549,6 +581,10 @@ public class MARS_Main extends SimpleApplication{
         });
     }
     
+    /**
+     *
+     * @param visible
+     */
     public void setSpeedMenu(final boolean visible){
         simStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -667,6 +703,9 @@ public class MARS_Main extends SimpleApplication{
         setSpeedMenu(true);
     }
     
+    /**
+     *
+     */
     public void defaultSpeedSimulation(){
         speedsCount = 3;
         speed = speeds[speedsCount];
@@ -682,11 +721,19 @@ public class MARS_Main extends SimpleApplication{
         setSpeedMenu(true);
     }
     
+    /**
+     *
+     * @param speed
+     */
     public void setSpeed(float speed){
         this.speed = speed;
         setSpeedMenu(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSpeed() {
         return speed;
     }
@@ -737,6 +784,10 @@ public class MARS_Main extends SimpleApplication{
         return mapstate;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public FlyByCamera getFlyByCamera(){
         return advFlyCam;
@@ -789,10 +840,18 @@ public class MARS_Main extends SimpleApplication{
         startSimState();
     }
     
+    /**
+     *
+     * @param configName
+     */
     public void setConfigName(String configName){
         configManager.setConfigName(configName);
     }
     
+    /**
+     *
+     * @param progr
+     */
     public void setProgressHandle(ProgressHandle progr){
         //this.progr = progr;
     }

@@ -119,6 +119,9 @@ public final class MARSTreeTopComponent extends TopComponent {
     private TreePath ExpandedPath = null;
     private TreePath CollapsedPath = null;
     
+    /**
+     *
+     */
     public MARSTreeTopComponent() {
         //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
         ToolTipManager ttm = ToolTipManager.sharedInstance();
@@ -1571,11 +1574,17 @@ public final class MARSTreeTopComponent extends TopComponent {
     private javax.swing.JMenuItem viewSonarPlanar;
     private javax.swing.JMenuItem viewSonarPolar;
     // End of variables declaration//GEN-END:variables
+    /**
+     *
+     */
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
 
+    /**
+     *
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
@@ -1735,7 +1744,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     
     /**
      * 
-     * @param auvManager
+     * @param auv_manager 
      */
     public void setAuv_manager(AUV_Manager auv_manager) {
         this.auvManager = auv_manager;
@@ -1759,7 +1768,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     
     /**
      * 
-     * @param simauv_settings
+     * @param configManager 
      */
     public void setConfigManager(ConfigManager configManager){
         this.configManager = configManager;
@@ -1864,6 +1873,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     
         /**
      * 
+     * @param auvManager 
      */
     public void initPopUpMenues(final AUV_Manager auvManager){
         EventQueue.invokeLater(new Runnable(){

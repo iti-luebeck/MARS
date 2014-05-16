@@ -23,6 +23,9 @@ public class VectorEditor extends JPanel {
     private final JTextField y;
     private final JTextField z;
 
+    /**
+     *
+     */
     public VectorEditor() {
         setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
@@ -47,10 +50,18 @@ public class VectorEditor extends JPanel {
         add(z);
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getCoordinates() {
         return new Vector3f(Float.parseFloat(x.getText()), Float.parseFloat(y.getText()), Float.parseFloat(z.getText()));
     }
 
+    /**
+     *
+     * @param v
+     */
     public void setCoordinates(Vector3f v) {
         x.setText("" + v.x);
         y.setText("" + v.y);

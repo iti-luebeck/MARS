@@ -6,7 +6,6 @@
 package mars.filter;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.post.Filter;
 import com.jme3.material.Material;
 import com.jme3.renderer.RenderManager;
@@ -34,22 +33,42 @@ public class FishEyeFilter extends Filter {
         super("FishEyeFilter");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRequiresDepthTexture() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected boolean isRequiresSceneTexture() {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Material getMaterial() {
 
         return material;
     }
 
+    /**
+     *
+     * @param assetManager
+     * @param renderManager
+     * @param vp
+     * @param w
+     * @param h
+     */
     @Override
     public void initFilter(AssetManager assetManager, RenderManager renderManager,
             ViewPort vp, int w, int h) {
@@ -66,6 +85,10 @@ public class FishEyeFilter extends Filter {
        // material.setFloat("YScale", blurScale * yScale);
     }
 
+    /**
+     *
+     * @param r
+     */
     @Override
     public void cleanUpFilter(Renderer r) {
     }

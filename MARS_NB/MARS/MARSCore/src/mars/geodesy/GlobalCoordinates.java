@@ -154,7 +154,6 @@ public class GlobalCoordinates implements Comparable<GlobalCoordinates>, Seriali
    /**
     * Compare these coordinates to another object for equality.
     * 
-    * @param other
     * @return
     */
    @Override

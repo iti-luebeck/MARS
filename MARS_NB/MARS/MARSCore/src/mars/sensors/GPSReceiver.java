@@ -75,11 +75,19 @@ public class GPSReceiver extends Sensor{
         pos.setSimState(simState);
     }
     
+    /**
+     *
+     * @param sensor
+     */
     public GPSReceiver(GPSReceiver sensor){
         super(sensor);
         pos = (Positionmeter)sensor.getPositionMeter().copy();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         GPSReceiver sensor = new GPSReceiver(this);
@@ -120,6 +128,10 @@ public class GPSReceiver extends Sensor{
         pos.reset();
     }
 
+    /**
+     *
+     * @return
+     */
     public Positionmeter getPositionMeter() {
         return pos;
     }

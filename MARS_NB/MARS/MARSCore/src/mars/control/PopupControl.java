@@ -27,14 +27,26 @@ public class PopupControl extends AbstractControl{
     private AUV auv;
     private MARS_Settings mars_settings;
     
+    /**
+     *
+     */
     public PopupControl() {
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
         
     }
 
+    /**
+     *
+     * @param f
+     */
     @Override
     protected void controlUpdate(float f) {
         if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getGuiPopUpAUVNameDistance() && auv.getMARS_Settings().getGuiPopUpAUVName()){
@@ -54,23 +66,44 @@ public class PopupControl extends AbstractControl{
         }
     }
 
+    /**
+     *
+     * @param spatial
+     * @return
+     */
     @Override
     public Control cloneForSpatial(Spatial spatial) {
         return super.cloneForSpatial(spatial); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param cam
+     */
     public void setCam(Camera cam) {
         this.cam = cam;
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     public void setStateManager(AppStateManager stateManager) {
         this.stateManager = stateManager;
     }
 
+    /**
+     *
+     * @param auv
+     */
     public void setAuv(AUV auv) {
         this.auv = auv;
     }
 
+    /**
+     *
+     * @param mars_settings
+     */
     public void setMars_settings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }

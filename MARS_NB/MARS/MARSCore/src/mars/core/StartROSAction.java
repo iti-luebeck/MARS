@@ -14,6 +14,10 @@ import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.actions.Presenter;
 
+/**
+ *
+ * @author Tosik
+ */
 @ActionID(
         category = "ROS",
         id = "mars.core.StartROSAction")
@@ -24,6 +28,10 @@ import org.openide.util.actions.Presenter;
 @Messages("CTL_StartROSAction=ROS")
 public final class StartROSAction extends AbstractAction implements Presenter.Toolbar {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Component getToolbarPresenter() {
         return new StartROSJPanel();

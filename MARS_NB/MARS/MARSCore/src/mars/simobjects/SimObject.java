@@ -52,6 +52,9 @@ import mars.xml.HashMapAdapter;
 @XmlSeeAlso( {OilBurst.class} )
 public class SimObject{
 
+    /**
+     *
+     */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name="")
     protected HashMap<String,Object> simob_variables;
@@ -61,11 +64,23 @@ public class SimObject{
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
     private Spatial ghost_simob_spatial;
+    /**
+     *
+     */
     protected Node simObNode = new Node("simObNode");
+    /**
+     *
+     */
     protected Node debugNode = new Node("debugNode");
+    /**
+     *
+     */
     protected Node renderNode = new Node("renderNode");
 
     private MARS_Main simauv;
+    /**
+     *
+     */
     protected AssetManager assetManager;
     private Spatial spatial;
     private Material spatialMaterial;
@@ -80,12 +95,20 @@ public class SimObject{
         
     }
     
+    /**
+     *
+     * @param simob
+     */
     public SimObject(SimObject simob){
         HashMap<String, Object> variablesOriginal = simob.getAllVariables();
         Cloner cloner = new Cloner();
         simob_variables = cloner.deepClone(variablesOriginal);
     }
     
+    /**
+     *
+     * @return
+     */
     public SimObject copy() {
         SimObject simob = new SimObject(this);
         simob.initAfterJAXB();
@@ -397,6 +420,7 @@ public class SimObject{
     /**
      *
      * @return
+     * @deprecated 
      */
     @Deprecated
     public boolean isSonar_detectable() {
@@ -406,6 +430,7 @@ public class SimObject{
     /**
      *
      * @param sonar_detectable
+     * @deprecated 
      */
     @Deprecated
     public void setSonar_detectable(boolean sonar_detectable) {
@@ -422,7 +447,7 @@ public class SimObject{
 
     /**
      *
-     * @param sonar_detectable
+     * @param ray_detectable 
      */
     public void setRayDetectable(boolean ray_detectable) {
         simob_variables.put("ray_detectable", ray_detectable);
@@ -582,7 +607,7 @@ public class SimObject{
 
     /**
      *
-     * @param position
+     * @param scale 
      */
     public void setScale(Vector3f scale) {
         simob_variables.put("scale", scale);

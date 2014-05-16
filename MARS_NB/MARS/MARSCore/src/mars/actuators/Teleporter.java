@@ -10,7 +10,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import geometry_msgs.Point;
 import geometry_msgs.Quaternion;
-import geometry_msgs.Vector3;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -54,10 +53,18 @@ public class Teleporter extends Actuator{
         super(simstate);
     }
     
+    /**
+     *
+     * @param teleporter
+     */
     public Teleporter(Teleporter teleporter){
         super(teleporter);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PhysicalExchanger copy() {
         Teleporter actuator = new Teleporter(this);
@@ -92,6 +99,7 @@ public class Teleporter extends Actuator{
     /**
      * 
      * @param vector
+     * @param quat  
      */
     public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat){
         Future simStateFuture = this.simauv.enqueue(new Callable() {

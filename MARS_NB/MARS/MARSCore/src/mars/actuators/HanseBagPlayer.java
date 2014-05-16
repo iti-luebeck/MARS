@@ -8,8 +8,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import geometry_msgs.Point;
 import geometry_msgs.Quaternion;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import mars.ros.MARSNodeMain;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
@@ -26,26 +24,50 @@ public class HanseBagPlayer extends Teleporter{
     private float depth = 0f;
     private com.jme3.math.Quaternion quat = com.jme3.math.Quaternion.IDENTITY;
 
+    /**
+     *
+     * @param depth
+     */
     public void setDepth(float depth) {
         this.depth = depth;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDepth() {
         return depth;
     }
 
+    /**
+     *
+     * @param pos2d
+     */
     public void setPos2d(Vector3f pos2d) {
         this.pos2d = pos2d;
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getPos2d() {
         return pos2d;
     }
 
+    /**
+     *
+     * @return
+     */
     public com.jme3.math.Quaternion getQuat() {
         return quat;
     }
 
+    /**
+     *
+     * @param quat
+     */
     public void setQuat(com.jme3.math.Quaternion quat) {
         this.quat = quat;
     }
@@ -60,7 +82,7 @@ public class HanseBagPlayer extends Teleporter{
 
     /**
      * 
-     * @param ros_publish_rate
+     * @param PressureRelative 
      */
     public void setPressureRelative(int PressureRelative) {
         variables.put("PressureRelative",PressureRelative);

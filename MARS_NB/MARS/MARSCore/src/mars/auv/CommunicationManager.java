@@ -156,6 +156,7 @@ public class CommunicationManager {
      * 
      * @param auv_name
      * @param msg
+     * @param communicationType  
      */
     public synchronized void putMsg(String auv_name,String msg,int communicationType){
         msgQueue.offer(new CommunicationMessage(auv_name, msg, communicationType));
