@@ -344,9 +344,9 @@
                 <package>mars.gui</package>
                 <package>mars.gui.PropertyEditors</package>
                 <package>mars.gui.dnd</package>
+                <package>mars.gui.options</package>
                 <package>mars.gui.plot</package>
                 <package>mars.gui.sonarview</package>
-                <package>mars.gui.table</package>
                 <package>mars.gui.tree</package>
                 <package>mars.hardware</package>
                 <package>mars.recorder</package>

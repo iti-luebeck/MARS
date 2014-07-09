@@ -145,7 +145,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getWater_height() {
+    public Float getWater_height() {
         return (Float)((HashMapEntry)environment.get("water_height")).getValue();
     }
 
@@ -153,7 +153,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param water_height
      */
-    public void setWater_height(float water_height) {
+    public void setWater_height(Float water_height) {
         environment.put("water_height", new HashMapEntry("m", water_height));
     }
 
@@ -161,7 +161,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getAir_density() {
+    public Float getAir_density() {
         return (Float)((HashMapEntry)environment.get("air_density")).getValue();
     }
 
@@ -169,7 +169,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param air_density
      */
-    public void setAir_density(float air_density) {
+    public void setAir_density(Float air_density) {
         environment.put("air_density", new HashMapEntry("kg/m³", air_density));
     }
 
@@ -177,7 +177,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getAir_temp() {
+    public Float getAir_temp() {
         return (Float)((HashMapEntry)environment.get("air_temp")).getValue();
     }
 
@@ -185,7 +185,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param air_temp
      */
-    public void setAir_temp(float air_temp) {
+    public void setAir_temp(Float air_temp) {
         environment.put("air_temp", new HashMapEntry("C°", air_temp));
     }
 
@@ -193,7 +193,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getFluid_density() {
+    public Float getFluid_density() {
         return (Float)((HashMapEntry)environment.get("fluid_density")).getValue();
     }
 
@@ -201,7 +201,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param fluid_density
      */
-    public void setFluid_density(float fluid_density) {
+    public void setFluid_density(Float fluid_density) {
         environment.put("fluid_density", new HashMapEntry("kg/m³", fluid_density));
     }
 
@@ -209,7 +209,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getFluid_salinity() {
+    public Float getFluid_salinity() {
         return (Float)((HashMapEntry)environment.get("fluid_salinity")).getValue();
     }
 
@@ -217,7 +217,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param fluid_salinity
      */
-    public void setFluid_salinity(float fluid_salinity) {
+    public void setFluid_salinity(Float fluid_salinity) {
         environment.put("fluid_salinity", new HashMapEntry("", fluid_salinity));
     }
 
@@ -225,7 +225,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getFluid_temp() {
+    public Float getFluid_temp() {
         return (Float)((HashMapEntry)environment.get("fluid_temp")).getValue();
     }
 
@@ -233,7 +233,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param fluid_temp
      */
-    public void setFluid_temp(float fluid_temp) {
+    public void setFluid_temp(Float fluid_temp) {
         environment.put("fluid_temp", new HashMapEntry("C°", fluid_temp));
     }
 
@@ -241,7 +241,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getFluid_viscosity() {
+    public Float getFluid_viscosity() {
         return (Float)((HashMapEntry)environment.get("fluid_viscosity")).getValue();
     }
 
@@ -249,7 +249,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param fluid_viscosity
      */
-    public void setFluid_viscosity(float fluid_viscosity) {
+    public void setFluid_viscosity(Float fluid_viscosity) {
         environment.put("fluid_viscosity", new HashMapEntry("mPa*s", fluid_viscosity));
     }
 
@@ -273,7 +273,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getGravitational_acceleration() {
+    public Float getGravitational_acceleration() {
         //return (float)((Vector3f)environment.get("gravitational_acceleration_vector")).length();
         return (Float)((Vector3f)((HashMapEntry)environment.get("gravitational_acceleration_vector")).getValue()).length();
     }
@@ -282,7 +282,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param gravitational_acceleration
      */
-    public void setGravitational_acceleration(float gravitational_acceleration) {
+    public void setGravitational_acceleration(Float gravitational_acceleration) {
         //environment.put("gravitational_acceleration_vector", getGravitational_acceleration_vector().normalize().mult(gravitational_acceleration));
         environment.put("gravitational_acceleration_vector", new HashMapEntry("m/s²", getGravitational_acceleration_vector().normalize().mult(gravitational_acceleration)));
     }
@@ -339,7 +339,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @return
      */
-    public float getPressure_water_height() {
+    public Float getPressure_water_height() {
         return (Float)((HashMapEntry)environment.get("pressure_water_height")).getValue();
     }
 
@@ -347,7 +347,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      *
      * @param pressure_water_height
      */
-    public void setPressure_water_height(float pressure_water_height) {
+    public void setPressure_water_height(Float pressure_water_height) {
         environment.put("pressure_water_height", new HashMapEntry("mbar", pressure_water_height));
     }
 

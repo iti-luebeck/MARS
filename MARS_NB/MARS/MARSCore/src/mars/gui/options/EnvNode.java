@@ -13,6 +13,7 @@ import mars.PhysicalEnvironment;
 import mars.PropertyChangeListenerSupport;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
 import mars.gui.PropertyEditors.Vector3fPropertyEditor;
+import mars.xml.HashMapEntry;
 import org.openide.ErrorManager;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -62,7 +63,7 @@ public class EnvNode extends AbstractNode implements PropertyChangeListener {
 
         // depending on type of object cast it and get its variables
         if (obj instanceof PhysicalEnvironment) {
-            params = (HashMap)(((PhysicalEnvironment) (obj)).getAllEnvironment().get(nodeName));
+            params = (HashMap)(((PhysicalEnvironment) (obj)).getAllEnvironment());
             icon = "battery_charge.png";
         }
         
@@ -197,14 +198,14 @@ public class EnvNode extends AbstractNode implements PropertyChangeListener {
                 setHM.setDisplayName(key);
                 setHM.setName(key);
                 sheet.put(setHM);
-            }else{//ueber set (properties)
-                name = nodeName + key.substring(0, 1).toUpperCase() + key.substring(1);
+            }else if(value instanceof HashMapEntry){//ueber set (properties)
+                name = key.substring(0, 1).toUpperCase() + key.substring(1);
                 try {
-                    prop = new PropertySupport.Reflection(obj, value.getClass(), name);
+                    prop = new PropertySupport.Reflection(obj, ((HashMapEntry)value).getValue().getClass(), name);
                     // set custom property editor for position and rotation params
-                    if (value instanceof Vector3f) {
+                    if (((HashMapEntry)value).getValue() instanceof Vector3f) {
                         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                    } else if (value instanceof ColorRGBA) {
+                    } else if (((HashMapEntry)value).getValue() instanceof ColorRGBA) {
                         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
                     }
 

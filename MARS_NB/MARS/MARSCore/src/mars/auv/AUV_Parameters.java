@@ -89,6 +89,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         for (int i = 0; i < pcls.length; i++) {
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
+        updateVariable(propertyName);
     }
     
     /**
@@ -174,6 +175,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * 
      * @param path
      */
+    @Deprecated
     public void updateState(TreePath path){
         System.out.println("TREEPATH: " + path);
         if(path.getPathComponent(2).equals(this)){//make sure we want to change auv params
@@ -190,6 +192,72 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @param target
      * @param hashmapname
      */
+    public void updateVariable(String target){
+        RigidBodyControl physics_control = auv.getPhysicsControl();
+        if(target.equals("position")){
+            if(physics_control != null ){
+                physics_control.setPhysicsLocation(getPosition());
+            }
+        }/*else if(target.equals("collision") && hashmapname.equals("Debug")){
+            auv.setCollisionVisible(isDebugCollision());
+        }else if(target.equals("rotation") && hashmapname.equals("")){
+            if(physics_control != null ){
+                Matrix3f m_rot = new Matrix3f();
+                Quaternion q_rot = new Quaternion();
+                q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
+                m_rot.set(q_rot);
+                physics_control.setPhysicsRotation(m_rot);
+            }
+        }else if(target.equals("scale") && hashmapname.equals("Model")){
+            auv.getAUVSpatial().setLocalScale(getModelScale());
+        }else if(target.equals("collisionbox")){*/
+            /*if(physics_control != null ){
+                CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
+                BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getCollisionDimensions());
+                compoundCollisionShape1.addChildShape(boxCollisionShape, getCentroid_center_distance());
+                RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass());
+                if(isDebugCollision()){
+                    Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
+                    debug_mat.setColor("Color", ColorRGBA.Red);
+                    physics_control.attachDebugShape(debug_mat);
+                }
+                new_physics_control.setCollisionGroup(1);
+                new_physics_control.setCollideWithGroups(1);
+                new_physics_control.setDamping(getDamping_linear(), getDamping_angular());
+                auv.setPhysicsControl(new_physics_control);
+            }*/
+        /*}else if(target.equals("physical_exchanger") && hashmapname.equals("Debug")){
+            auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
+        }else if(target.equals("centers") && hashmapname.equals("Debug")){
+            auv.setCentersVisible(isDebugCenters());
+        }else if(target.equals("visualizer") && hashmapname.equals("Debug")){
+            auv.setVisualizerVisible(isDebugVisualizers());
+        }else if(target.equals("bounding") && hashmapname.equals("Debug")){
+            auv.setBoundingBoxVisible(isDebugBounding());
+        }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
+            auv.setWaypointsEnabled(isWaypointsEnabled());
+        }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
+            auv.setWayPointsVisible(isWaypointsVisiblity());
+        }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
+            
+        }else if(target.equals("mass_auv") && hashmapname.equals("")){
+            if(physics_control != null ){
+                physics_control.setMass(getMass());
+            }
+        }else if(target.equals("enabled") && hashmapname.equals("")){
+            if(!isEnabled()){
+                //check if it exist before removing
+
+            }
+        }     */  
+    }
+    
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
+    @Deprecated
     public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision") && hashmapname.equals("Debug")){
@@ -996,7 +1064,10 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @param position
      */
     public void setPosition(Vector3f position) {
+        Vector3f old = getPosition();
+        //PhysicalExchangerName = name;
         params.put("position", position);
+        fire("position", old, position);
     }
 
     /**
