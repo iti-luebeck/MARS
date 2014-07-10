@@ -1441,6 +1441,7 @@ public class Initializer {
 
         //terrain_node = new Node("terrain");
         terrain_physics_control = new RigidBodyControl(terrainShape, 0);
+        //terrain_physics_control = new RigidBodyControl(0);
 
         /*Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
@@ -1450,13 +1451,13 @@ public class Initializer {
         
         
         terrain_physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
         terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
+        terrain_physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        terrain_physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
         //terrain_physics_control.setFriction(0f);
         //terrain_physics_control.setRestitution(1f);
         //terrain_node.attachChild(terrain);
+        terrain_physics_control.setEnabled(true);
         terrain.addControl(terrain_physics_control);
         
         //set shadwos for terrain
@@ -1466,8 +1467,8 @@ public class Initializer {
         //SonarDetectableNode.attachChild(terrain_node);
         sceneReflectionNode.attachChild(terrain_node);
         RayDetectable.attachChild(terrain_node);
-        //bulletAppState.getPhysicsSpace().add(terrain);
-        bulletAppState.getPhysicsSpace().add(terrain_physics_control);
+        bulletAppState.getPhysicsSpace().add(terrain);
+        //bulletAppState.getPhysicsSpace().add(terrain_physics_control);
     }
 
     /**

@@ -1562,12 +1562,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         physics_control = new LimitedRigidBodyControl(compoundCollisionShape1, auv_param.getMass());
         physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
         physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
         physics_control.setDamping(auv_param.getDamping_linear(), auv_param.getDamping_angular());
         physics_control.setAngularFactor(auv_param.getAngular_factor());
         physics_control.setSleepingThresholds(0f, 0f);// so the physics node doesn't get deactivated
+        physics_control.setEnabled(true);
         //physics_control.setApplyPhysicsLocal(true);
         //physics_control.setFriction(0f);
         //physics_control.setRestitution(0.3f);

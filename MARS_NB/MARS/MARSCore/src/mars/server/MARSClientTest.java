@@ -117,7 +117,7 @@ public class MARSClientTest implements MARSClient{
      */
     @Override
     public void onNewData(MARSClientEvent e) {
-        System.out.println(System.currentTimeMillis() + " GOT DATA: " + e);
+        //System.out.println(System.currentTimeMillis() + " GOT DATA: " + e);
     }
 
     /**
