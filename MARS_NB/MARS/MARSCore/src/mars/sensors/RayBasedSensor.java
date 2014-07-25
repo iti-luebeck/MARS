@@ -184,7 +184,9 @@ public class RayBasedSensor extends Sensor{
     @Override
     public void cleanup() {
         super.cleanup();
-        rootNode.detachChild(debug_node);
+        if(rootNode != null){//cleanup occurs also when not initialised
+            rootNode.detachChild(debug_node);
+        }
     }
 
     @Override

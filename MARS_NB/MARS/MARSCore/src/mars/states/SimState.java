@@ -197,10 +197,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     public void cleanup() {
         super.cleanup();
         
-        //deattach the state root node from the main 
-        mars.getRootNode().detachChild(getRootNode());
-        getRootNode().detachAllChildren();
-        
         //cleanup the initer (viewport, filters)
         initer.cleanup();
         
@@ -212,6 +208,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         //clean the cameras
         chaseCam.setEnabled(false);
         chaseCam = null;
+        
+        //deattach the state root node from the main 
+        mars.getRootNode().detachChild(getRootNode());
+        getRootNode().detachAllChildren();
     }
 
     /**
