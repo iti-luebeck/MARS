@@ -201,7 +201,7 @@
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="LodTrisPerPixel">
-						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.5</value>
+						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">5.0</value>
 					</entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="LodDistTolerance">
 						<value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>

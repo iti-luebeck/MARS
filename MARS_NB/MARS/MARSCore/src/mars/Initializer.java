@@ -896,14 +896,6 @@ public class Initializer {
 
                        skyControl = new SkyControl(assetManager, mars.getCamera(), cloudFlattening, starMotion,
                                bottomDome);
-                       /*
-                        * Put SkyControl in charge of the lights, the
-                        * shadow renderer, and the viewport background. (optional)
-                        */
-                       skyControl.addViewPort(viewPort);
-                       skyControl.setAmbientLight(ambLight);
-                       skyControl.setMainLight(sun);
-                       skyControl.setShadowRenderer(dlsr);
                        
                        skyControl.getSunAndStars().setHour(mars_settings.getSkyDomeHour());
                        skyControl.getSunAndStars().setObserverLatitude(mars_settings.getSkyDomeObserverLatitude());
@@ -913,13 +905,27 @@ public class Initializer {
                        skyControl.setCloudiness(mars_settings.getSkyDomeCloudiness());
                        skyControl.setCloudModulation(mars_settings.isSkyDomeCloudModulation());
                        skyControl.setLunarDiameter(mars_settings.getSkyDomeLunarDiameter());
+                       skyControl.getUpdater().addViewPort(viewPort);
+                       skyControl.getUpdater().addShadowRenderer(dlsr);
+                       skyControl.getUpdater().addShadowFilter(dlsf);
+                       skyControl.getUpdater().setAmbientLight(ambLight);
+                       //skyControl.getUpdater().setAmbientMultiplier(2f);
+                       skyControl.getUpdater().setMainLight(sun);
+                       skyControl.getUpdater().setMainMultiplier(5f);
+                       skyControl.getUpdater().setShadowFiltersEnabled(true);
+                               
+                       //add bloom filter for a better sun
+                       BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+                       bloom.setBlurScale(2.5f);
+                       bloom.setExposurePower(1f);
+                       fpp.addFilter(bloom);
+                       skyControl.getUpdater().addBloomFilter(bloom);
                        
                        /*
                         * Add SkyControl to the scene and enable it.
                         */
                        final Node rootNodeMars = mars.getRootNode();
                        rootNodeMars.addControl(skyControl);
-                       //sceneReflectionNode.addControl(skyControl);
                        skyControl.setEnabled(true);
                        
                        timeOfDay = new TimeOfDay(mars_settings.getSkyDomeHour());
@@ -1937,8 +1943,13 @@ public class Initializer {
      *
      * @param hour
      */
-    public void resetTimeOfDay(float hour){
-        timeOfDay = new TimeOfDay(hour);
+    public void resetTimeOfDay(final float hour){
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                       timeOfDay = new TimeOfDay(hour);
+                       return null;
+                    }
+                });
     }
 
 }

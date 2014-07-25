@@ -891,9 +891,11 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         
         if(initer != null && initer.getSkyControl() != null){
             if(getMARSSettings().getSkyDomeSpeed() != 0f){
-                initer.getTimeOfDay().update(tpf);
-                initer.getTimeOfDay().setRate(getMARSSettings().getSkyDomeSpeed() * getMARSSettings().getSkyDomeDirection());
-                initer.getSkyControl().getSunAndStars().setHour(initer.getTimeOfDay().getHour());
+                if(initer.getTimeOfDay().isInitialized()){
+                    initer.getTimeOfDay().update(tpf);
+                    initer.getTimeOfDay().setRate(getMARSSettings().getSkyDomeSpeed() * getMARSSettings().getSkyDomeDirection());
+                    initer.getSkyControl().getSunAndStars().setHour(initer.getTimeOfDay().getHour());
+                }
             }
         }
         

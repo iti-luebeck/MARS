@@ -17,8 +17,19 @@
             </module-dependencies>
             <public-packages>
                 <package>jme3utilities</package>
+                <package>jme3utilities.controls</package>
+                <package>jme3utilities.debug</package>
+                <package>jme3utilities.debug.test</package>
+                <package>jme3utilities.math</package>
+                <package>jme3utilities.navigation</package>
+                <package>jme3utilities.nifty</package>
+                <package>jme3utilities.nifty.test</package>
+                <package>jme3utilities.physics</package>
                 <package>jme3utilities.sky</package>
                 <package>jme3utilities.sky.test</package>
+                <package>jme3utilities.sky.textures</package>
+                <package>jme3utilities.ui</package>
+                <package>jme3utilities.xml</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/jME3-utilities.jar</runtime-relative-path>

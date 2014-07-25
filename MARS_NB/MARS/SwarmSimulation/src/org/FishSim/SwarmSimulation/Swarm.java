@@ -1,5 +1,6 @@
 package org.FishSim.SwarmSimulation;
 
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
@@ -138,16 +139,16 @@ public class Swarm implements IFoodSource{
     private void initCollidable(){
         SphereCollisionShape colSphere = new SphereCollisionShape(colRadius);
         colCont = new SwarmColControl(colSphere, this);
-        colCont.setCollisionGroup(4);
-        colCont.setCollideWithGroups(1);
-        colCont.setCollideWithGroups(2);
-        colCont.setCollideWithGroups(3);
-        colCont.setCollideWithGroups(4);
+        colCont.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
+        colCont.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
+        colCont.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+        colCont.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        colCont.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
         colCont.setKinematic(true);
         SphereCollisionShape viewSphere = new SphereCollisionShape(viewRadius);
         viewCont = new SwarmViewControl(viewSphere, this);
-        viewCont.setCollisionGroup(5);
-        viewCont.setCollideWithGroups(4);
+        viewCont.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_05);
+        viewCont.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
         viewCont.setKinematic(true);
         enableCol();
     }
