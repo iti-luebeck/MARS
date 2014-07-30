@@ -658,7 +658,7 @@ public class GuiState extends AbstractAppState{
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
 
         // Aim the ray from the clicked spot forwards.
-        Ray ray = new Ray(click3d, dir);
+        Ray ray = new Ray(click3d, dir.normalizeLocal());
         // Collect intersections between ray and all nodes in results list.
         AUVsNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.

@@ -460,7 +460,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             Lookup lkp = Lookup.getDefault();
             AbstractAppState state = lkp.lookup(AbstractAppState.class);
             if(state != null){
-                //stateManager.attach(state);
+                stateManager.attach(state);
             }
         }
         progr.progress( "Init Super" );
@@ -899,8 +899,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             }
         }
         
-        rootNode.updateLogicalState(tpf);
-        rootNode.updateGeometricState();
+        /*Quaternion localRotation = rootNode.getLocalRotation();
+        Quaternion quaternion = new Quaternion();
+        Quaternion quaternion2 = new Quaternion();
+        quaternion2.fromAngles(2f,2f,1f);
+        localRotation.slerp(quaternion2, 0.0001f);
+        rootNode.setLocalRotation(localRotation);*/
+        
+        //rootNode.updateLogicalState(tpf);
+        //rootNode.updateGeometricState();
     }
     
     /**

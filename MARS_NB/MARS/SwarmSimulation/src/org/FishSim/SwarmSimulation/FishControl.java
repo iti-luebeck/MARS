@@ -38,14 +38,15 @@ public class FishControl {
        steerVec = collision(steerVec);
        steerVec = waterHeight(steerVec);
 
-       fish.rotation.lookAt(steerVec, fish.getLocalRotation().multLocal(Vector3f.UNIT_Y));
+       fish.rotation.lookAt(steerVec, fish.getLocalRotation().mult(Vector3f.UNIT_Y));
        Quaternion localRotation = fish.getLocalRotation();
        float slerpTime = tpf*(fish.swarm.rotationSpeed + fish.rotationSpeed);
-       if(slerpTime > 1){
-           slerpTime = 1;
+       if(slerpTime > 1f){
+           slerpTime = 1f;
        }
        localRotation.slerp(fish.rotation, slerpTime);
        fish.setLocalRotation(localRotation);
+       
        Vector3f moveVec = fish.getLocalRotation().mult(Vector3f.UNIT_Z);
        moveVec.multLocal(fish.moveSpeed + fish.swarm.moveSpeed + fish.swarm.escapeInc);
        moveVec.multLocal(steerVec.length());
@@ -60,7 +61,9 @@ public class FishControl {
            moveVec.normalizeLocal().multLocal(fish.lastMove.length() + fish.lastMove.length()*tpf);
        }
        fish.lastMove = moveVec;
-       fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec));        
+       fish.setLocalTranslation(fish.getLocalTranslation().add(moveVec));  
+       
+       fish.updateGeometricState();
    }
     
     private Vector3f basicRules(Vector3f steerVec){

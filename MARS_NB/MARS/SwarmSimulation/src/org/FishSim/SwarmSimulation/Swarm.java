@@ -101,10 +101,10 @@ public class Swarm implements IFoodSource{
         
         float rand;
         
-        Fish fish;
         for(int i = 0; i < size; i++){
             rand = getGaussianDistributionNoise(deviation);
-            fish = new Fish(sim, scale.add(rand*scale.x, rand*scale.y, rand*scale.z), spawn, this, path, animation);
+            Fish fish = new Fish(sim, scale.add(rand*scale.x, rand*scale.y, rand*scale.z), spawn, this, path, animation);
+            fish.setName("fish_" + i);
             swarm.add(fish);
             sim.getRootNode().attachChild(fish);
         }

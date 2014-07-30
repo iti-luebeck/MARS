@@ -210,8 +210,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         removeSwarms();
         removeFoodSources();
         
-        rootNode.updateLogicalState(tpf);
-        rootNode.updateGeometricState();
+        //rootNode.updateLogicalState(tpf);
+        //rootNode.updateGeometricState();
     }
     
     /**
