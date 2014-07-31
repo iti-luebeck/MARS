@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 
 public class FishControl {

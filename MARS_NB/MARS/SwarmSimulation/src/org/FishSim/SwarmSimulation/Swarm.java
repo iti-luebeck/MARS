@@ -10,6 +10,7 @@ import java.util.Random;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 
 public class Swarm implements IFoodSource{

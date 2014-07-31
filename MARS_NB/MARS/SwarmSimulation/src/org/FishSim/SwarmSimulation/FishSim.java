@@ -21,6 +21,7 @@ import mars.states.SimState;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 @ServiceProvider(service=AbstractAppState.class)
 public class FishSim extends AbstractAppState implements AppStateExtension {

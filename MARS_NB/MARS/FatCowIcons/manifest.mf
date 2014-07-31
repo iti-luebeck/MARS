@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.core.fatcow
+OpenIDE-Module-Localizing-Bundle: mars/core/fatcow/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

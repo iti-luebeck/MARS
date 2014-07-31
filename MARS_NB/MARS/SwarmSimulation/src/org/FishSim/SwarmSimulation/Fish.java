@@ -17,6 +17,7 @@ import mars.control.MyLodControl;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 
 public class Fish extends Node{
