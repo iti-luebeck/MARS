@@ -86,6 +86,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         }
 
         setDisplayName(name);
+        setShortDescription(auv.getClass().toString());
     }
 
     /**

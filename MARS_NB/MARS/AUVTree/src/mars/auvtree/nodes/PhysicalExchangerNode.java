@@ -79,6 +79,7 @@ import org.openide.nodes.Children;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
+import org.openide.util.HelpCtx;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.Lookups;
 
@@ -219,6 +220,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }*/
 
         setDisplayName(nodeName);
+        setShortDescription(obj.getClass().toString());
     }
 
     /**
@@ -382,6 +384,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                     }
 
                     prop.setName(name);
+                    prop.setShortDescription("test lirum ipsum");
                     set.put(prop);
                 } catch (NoSuchMethodException ex) {
                     ErrorManager.getDefault();
@@ -482,7 +485,12 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             return new Action[]{new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }
    }
-    
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx(obj.getClass().getCanonicalName());
+    }
+
     /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
