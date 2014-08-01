@@ -833,7 +833,7 @@ public class GuiState extends AbstractAppState{
                 case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
                 case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
                 case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
-                case 7: selected_auv.getAuv_param().setDebugVisualizers(selected);selected_auv.setVisualizerVisible(selected);break;
+                case 7: selected_auv.getAuv_param().setDebugVisualizer(selected);selected_auv.setVisualizerVisible(selected);break;
                 case 8: selected_auv.getAuv_param().setDebugBuoycancyVolume(selected);selected_auv.setBuoyancyVolumeVisible(selected);break;
                 default:;
             }                

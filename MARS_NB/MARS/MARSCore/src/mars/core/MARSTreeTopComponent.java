@@ -1839,7 +1839,7 @@ public final class MARSTreeTopComponent extends TopComponent {
                 newParam.setAuv(auv);
                 newParam.setName(auv.getName());
                 if(saveIdentity.isSelected()){//extra identity save
-                    newParam.setDND_Icon(auv.getAuv_param().getDND_Icon());
+                    newParam.setDndIcon(auv.getAuv_param().getDndIcon());
                     newParam.setIcon(auv.getAuv_param().getIcon());
                 }
                 mod.valueForPathChanged(newPath, newParam);

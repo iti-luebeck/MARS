@@ -39,7 +39,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {Actuator.class,Sensor.class} )
-public abstract class PhysicalExchanger extends Noise implements ROS,PropertyChangeListenerSupport{
+public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,PropertyChangeListenerSupport{
 
     @SuppressWarnings("FieldMayBeFinal")
     private List listeners = Collections.synchronizedList(new LinkedList());
@@ -204,6 +204,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      *
      * @param name
      */
+    @Override
     public void setName(String name){
         String old = getName();
         //PhysicalExchangerName = name;
@@ -216,6 +217,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      *
      * @return
      */
+    @Override
     public String getName(){
         return (String)variables.get("name");
     }
@@ -263,6 +265,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @return
      */
+    @Override
     public Boolean getEnabled() {
         return (Boolean)variables.get("enabled");
     }
@@ -271,6 +274,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param enabled
      */
+    @Override
     public void setEnabled(Boolean enabled) {
         boolean old = getEnabled();
         variables.put("enabled", enabled);
@@ -574,7 +578,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param currentConsumption
      */
-    public void setCurrentConsumptio(float currentConsumption){
+    public void setCurrentConsumption(float currentConsumption){
         Float old = getCurrentConsumption();
         variables.put("currentConsumption",currentConsumption);
         fire("currentConsumption", old, currentConsumption);

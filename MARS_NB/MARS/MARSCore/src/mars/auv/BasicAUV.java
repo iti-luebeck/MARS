@@ -328,7 +328,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
         this.auv_param.setAuv(this);
-        buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
+        buoyancy_updaterate = auv_param.getBuoyancyUpdaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
         auv_node.setName(auv_param.getName() + "_physicnode");
@@ -660,7 +660,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //calculate the completeVolume one time exact as possible, ignore water height
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
         //used primarly for auftriebspunkt
-        if(getAuv_param().getBuoyancy_Type() == BuoyancyType.NOSHAPE){
+        if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
             float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
             completeVolume = vol[0];
         }else{
@@ -902,18 +902,18 @@ public class BasicAUV implements AUV, SceneProcessor {
         Vector3f brick_vec = OldCenterGeom.getWorldTranslation();
         float distance_to_surface = 1.0f;
         float epsilon = 0.5f;
-        buoyancy_updaterate = auv_param.getBuoyancy_updaterate();
+        buoyancy_updaterate = auv_param.getBuoyancyUpdaterate();
         if (buoyancy_updaterate == 1) {//take all buoyancy_updaterate times new values
   
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
-            if(getAuv_param().getBuoyancy_Type() == BuoyancyType.NOSHAPE){
+            if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
                 float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
-                actual_vol = vol[0] * auv_param.getBuoyancy_scale();
-                actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
+                actual_vol = vol[0] * auv_param.getBuoyancyFactor();
+                actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
             }else{
                 float[] vol = (float[]) calculateVolumeExcact(auv_spatial, false);
-                actual_vol = vol[0] * auv_param.getBuoyancy_scale();
-                actual_vol_air = vol[1] * auv_param.getBuoyancy_scale();
+                actual_vol = vol[0] * auv_param.getBuoyancyFactor();
+                actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
             }
             
 
@@ -930,11 +930,11 @@ public class BasicAUV implements AUV, SceneProcessor {
             //addValueToSeries(OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()),0);
             //addValueToSeries((float)Math.sqrt(Math.pow(this.AUVPhysicsNode.get.getContinuousForce().x, 2)+Math.pow(this.AUVPhysicsNode.getContinuousForce().y, 2)+Math.pow(this.AUVPhysicsNode.getContinuousForce().z,2)),2);
             //addValueToSeries(buoyancy_force_water+buoyancy_force_air,2);
-        } else if (auv_param.getBuoyancy_updaterate() == 0) {//dont compute everytime the buoyancy, use the computed once
-            if (brick_vec.y <= (physical_environment.getWater_height() - auv_param.getBuoyancy_distance())) {//under water
+        } else if (auv_param.getBuoyancyUpdaterate() == 0) {//dont compute everytime the buoyancy, use the computed once
+            if (brick_vec.y <= (physical_environment.getWater_height() - auv_param.getBuoyancyDistance())) {//under water
                 buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume;
             } else {//at water surface
-                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume * auv_param.getBuoyancy_scale();
+                buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume * auv_param.getBuoyancyFactor();
             }
         } else {
             buoyancy_force = (physical_environment.getFluid_density() * actual_vol + physical_environment.getAir_density() * actual_vol_air) * physical_environment.getGravitational_acceleration();
@@ -1400,24 +1400,24 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.attachChild(BuoyancyGeom);*/
         
         //add a buoyancy geom, needed for exact completeVolume calculation later
-        if (auv_param.getBuoyancy_Type() == BuoyancyType.BOXCOLLISIONSHAPE) {
-            Box buoyancyBox = new Box(auv_param.getBuoyancy_Dimensions().x,auv_param.getBuoyancy_Dimensions().y,auv_param.getBuoyancy_Dimensions().z);
+        if (auv_param.getBuoyancyType() == BuoyancyType.BOXCOLLISIONSHAPE) {
+            Box buoyancyBox = new Box(auv_param.getBuoyancyDimensions().x,auv_param.getBuoyancyDimensions().y,auv_param.getBuoyancyDimensions().z);
             BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
             BuoyancyGeom.setMaterial(BuoyancyGeomMat);
-            BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancy_Position());
+            BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancyPosition());
             BuoyancyGeom.updateModelBound();
             BuoyancyGeom.updateGeometricState();
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
-        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.SPHERECOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.SPHERECOLLISIONSHAPE) {
             //collisionShape = new SphereCollisionShape(auv_param.getCollisionDimensions().x);
-        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CONECOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.CONECOLLISIONSHAPE) {
            //collisionShape = new ConeCollisionShape(auv_param.getCollisionDimensions().x, auv_param.getCollisionDimensions().y);
-        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
             //collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions(), 0);
-        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.MESHACCURATE) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.MESHACCURATE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
-        } else if (auv_param.getBuoyancy_Type() == BuoyancyType.BOUNDINGBOX) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.BOUNDINGBOX) {
             Box buoyancyBox = new Box(bb.getXExtent(), bb.getYExtent(), bb.getZExtent());
             BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
             BuoyancyGeom.setMaterial(BuoyancyGeomMat);
@@ -1426,7 +1426,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             BuoyancyGeom.updateGeometricState();
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
-        }else if (auv_param.getBuoyancy_Type() == BuoyancyType.NOSHAPE) {
+        }else if (auv_param.getBuoyancyType() == BuoyancyType.NOSHAPE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else {
             //collisionShape = new BoxCollisionShape(auv_param.getCollisionDimensions());

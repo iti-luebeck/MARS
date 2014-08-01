@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.AUVObject;
 import mars.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
@@ -25,7 +26,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class Accumulator implements PropertyChangeListenerSupport{
+public class Accumulator implements AUVObject,PropertyChangeListenerSupport{
 
     private List listeners = Collections.synchronizedList(new LinkedList());
 
@@ -110,11 +111,32 @@ public class Accumulator implements PropertyChangeListenerSupport{
     public void updateState(TreePath path) {
 
     }
+    
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public Boolean getEnabled() {
+        return (Boolean)variables.get("enabled");
+    }
+    
+    /**
+     * 
+     * @param enabled
+     */
+    @Override
+    public void setEnabled(Boolean enabled) {
+        boolean old = getEnabled();
+        variables.put("enabled", enabled);
+        fire("enabled", old, enabled);
+    }
 
     /**
      *
      * @param name
      */
+    @Override
     public void setName(String name) {
         variables.put("name", name);
     }
@@ -123,6 +145,7 @@ public class Accumulator implements PropertyChangeListenerSupport{
      *
      * @return
      */
+    @Override
     public String getName() {
         return (String) variables.get("name");
     }

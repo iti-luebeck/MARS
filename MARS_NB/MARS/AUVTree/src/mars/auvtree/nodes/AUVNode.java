@@ -27,6 +27,7 @@ import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
 import mars.states.SimState;
 import mars.auvtree.TreeUtil;
+import mars.core.MARSChartTopComponent;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
@@ -169,7 +170,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             boolean auvEnabled = auv.getAuv_param().isEnabled();
             auv.getAuv_param().setEnabled(!auvEnabled);
             propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -196,7 +197,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
                 return null;
             }
             });
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -216,14 +217,11 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
               Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
+                auv.reset();
                 return null;
             }
             });
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -236,20 +234,25 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     private class DebugAction extends AbstractAction implements Presenter.Popup {
         
         public DebugAction() {
-            putValue(NAME, "test");
+            putValue(NAME, "Buoyancy");
         }
         
         @Override
         public JMenuItem getPopupPresenter() {
             JMenu result = new JMenu("Add Debug Data to Chart");  //remember JMenu is a subclass of JMenuItem
             result.add (new JMenuItem(this));
-            result.add (new JMenuItem(this));
             return result;
         }
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            MARSChartTopComponent chart = new MARSChartTopComponent(auv);
+
+            chart.setName("Chart of: " + auv.getName());
+            chart.open();
+            chart.requestActive(); 
+
+            chart.repaint();
         }
     }        
 

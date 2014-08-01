@@ -23,7 +23,7 @@
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeHashMap" key="Collision">
             <value>
-                <entry xsi:type="myHashMapEntryTypeVector3F" key="collision_position">
+                <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                     <value>
                         <x>0.0</x>
                         <y>0.0</y>
@@ -66,7 +66,7 @@
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="name">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate_boden</value>
         </entry>
-        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="ray_detectable">
+        <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="rayDetectable">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
         </entry>
         <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="pinger">
@@ -78,7 +78,7 @@
 		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="icon">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate.png</value>
         </entry>
-		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+		<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="myHashMapEntryTypeObject" key="dndIcon">
             <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">testgate_dnd.png</value>
         </entry>
     </simob_variables>

@@ -9,7 +9,7 @@
                     <z>1.0</z>
                 </value>
             </entry>
-            <entry xsi:type="myHashMapEntryTypeObject" key="dnd_icon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <entry xsi:type="myHashMapEntryTypeObject" key="dndIcon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeHashMap" key="Model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -20,10 +20,10 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="filepath">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">ASV/asv_very_low.obj</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="alpha_depth_scale">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="alphaDepthScale">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">3.0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="selection_color">
+                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="selectionColor">
                         <value>
                             <a>1.0</a>
                             <b>0.0</b>
@@ -31,7 +31,7 @@
                             <r>1.0</r>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="map_color">
+                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="mapColor">
                         <value>
                             <a>1.0</a>
                             <b>0.0</b>
@@ -90,7 +90,7 @@
                     <z>0.0</z>
                 </value>
             </entry>
-            <entry xsi:type="myHashMapEntryTypeObject" key="mass_auv" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <entry xsi:type="myHashMapEntryTypeObject" key="mass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">15.5</value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeVector3F" key="linear_factor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -102,40 +102,40 @@
             </entry>
             <entry xsi:type="myHashMapEntryTypeHashMap" key="Buoyancy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_distance">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="distance">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_updaterate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="updaterate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_resolution">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="resolution">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.03125</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_scale">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="factor">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.8</value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancy_dimensions">
+					<entry xsi:type="myHashMapEntryTypeVector3F" key="dimensions">
                         <value>
                             <x>1.0</x>
                             <y>1.0</y>
                             <z>1.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancy_position">
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                         <value>
                             <x>0.0</x>
                             <y>0.0</y>
                             <z>0.0</z>
                         </value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeVector3F" key="buoyancyScale">
+					<entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
                         <value>
                             <x>1.0</x>
                             <y>1.0</y>
                             <z>1.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="buoyancy_type">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="type">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">6</value>
                     </entry>
                 </value>
@@ -222,7 +222,7 @@
             </entry>
             <entry xsi:type="myHashMapEntryTypeHashMap" key="Collision" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value>
-                    <entry xsi:type="myHashMapEntryTypeVector3F" key="collision_position">
+                    <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                         <value>
                             <x>0.0</x>
                             <y>0.0</y>
@@ -254,7 +254,7 @@
             <entry xsi:type="myHashMapEntryTypeObject" key="drag_coefficient_angular" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.3</value>
             </entry>
-			<entry xsi:type="myHashMapEntryTypeObject" key="ray_detectable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<entry xsi:type="myHashMapEntryTypeObject" key="rayDetectable" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 				<value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
 			</entry>
         </params>
@@ -1315,7 +1315,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="Resolution">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.005061</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="dnd_icon">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="dndIcon">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">AX-12_dnd.png</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
@@ -1430,6 +1430,9 @@
         <entry xsi:type="myHashMapEntryTypeAccumulators" key="main2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <variables>
+					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">main2</value>
                     </entry>

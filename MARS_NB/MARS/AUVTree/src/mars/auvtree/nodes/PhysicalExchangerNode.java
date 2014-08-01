@@ -22,6 +22,7 @@ import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
 import javax.swing.JOptionPane;
+import mars.AUVObject;
 import mars.ChartValue;
 import mars.MARS_Main;
 import mars.Manipulating;
@@ -228,8 +229,8 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getIcon(int type) {
-        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe == null || pe.getEnabled()) {
+        AUVObject auvObject = getLookup().lookup(AUVObject.class);
+        if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
@@ -245,8 +246,8 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getOpenedIcon(int type) {
-        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe == null || pe.getEnabled()) {
+        AUVObject auvObject = getLookup().lookup(AUVObject.class);
+        if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
@@ -489,23 +490,23 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
-            if(obj instanceof PhysicalExchanger){
-                PhysicalExchanger objpe = (PhysicalExchanger) obj;
-                if (objpe.getEnabled()) {
+            if(obj instanceof AUVObject){
+                AUVObject auvObject = (AUVObject) obj;
+                if (auvObject.getEnabled()) {
                     putValue(NAME, "Disable");
                 } else {
                     putValue(NAME, "Enable");
                 }
-            }  
+            }
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-            boolean peEnabled = pe.isEnabled();
-            pe.setEnabled(false);
+            AUVObject auvObject = getLookup().lookup(AUVObject.class);
+            boolean peEnabled = auvObject.getEnabled();
+            auvObject.setEnabled(!peEnabled);
             propertyChange(new PropertyChangeEvent(this, "enabled", !peEnabled, peEnabled));
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
