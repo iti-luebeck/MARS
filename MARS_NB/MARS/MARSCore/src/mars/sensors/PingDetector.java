@@ -131,7 +131,7 @@ public class PingDetector extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getDetection_range() {
+    public Float getDetection_range() {
         return (Float)variables.get("detection_range");
     }
 
@@ -139,7 +139,7 @@ public class PingDetector extends Sensor implements ChartValue{
      *
      * @param detection_range
      */
-    public void setDetection_range(float detection_range) {
+    public void setDetection_range(Float detection_range) {
         variables.put("detection_range", detection_range);
     }
 

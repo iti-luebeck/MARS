@@ -741,7 +741,7 @@ public final class MARSTreeTopComponent extends TopComponent {
                                     //addDataToChart.setVisible(false);
                                     RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
                                     lastSelectedRayBasedSensor = rays;
-                                    if(rays.isScanning()){
+                                    if(rays.getScanning()){
                                         viewSonarPolar.setEnabled(true);
                                         viewSonarPlanar.setEnabled(true);
                                     }else{

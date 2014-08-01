@@ -201,7 +201,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         uw_geom.setLocalTranslation(0f,0f, -0.5f);
                         uw_geom.updateGeometricState();
                         auvNode.attachChild(uw_geom);
-                        if(uw.isDebug()){
+                        if(uw.getDebug()){
                             uw_geom.setCullHint(CullHint.Never);
                         }else{
                             uw_geom.setCullHint(CullHint.Always);
@@ -234,7 +234,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         son_geom.setLocalRotation(quat);
                         son_geom.updateGeometricState();
                         auvNode.attachChild(son_geom);
-                        if(son.isDebug()){
+                        if(son.getDebug()){
                             son_geom.setCullHint(CullHint.Never);
                         }else{
                             son_geom.setCullHint(CullHint.Always);
@@ -383,7 +383,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         while (it.hasNext()) {
                             UnderwaterModem uw = (UnderwaterModem)it.next();
                             Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getName() + "-geom");
-                            if(uw.isDebug()){
+                            if(uw.getDebug()){
                                 uwgeom.setCullHint(CullHint.Never);
                                 Cylinder cyl = (Cylinder)uwgeom.getMesh();
                                 cyl.updateGeometry(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true,false);
@@ -398,7 +398,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         while (it.hasNext()) {
                             Sonar son = (Sonar)it.next();
                             Geometry songeom = (Geometry)node.getChild(auv.getName()+ "-" + son.getName() + "-geom");
-                            if(son.isDebug()){
+                            if(son.getDebug()){
                                 songeom.setCullHint(CullHint.Never);
                                 Quaternion quat = new Quaternion();
                                 quat.fromAngles(0f, 0f, -son.getCurrentHeadPosition());

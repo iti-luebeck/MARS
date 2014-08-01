@@ -108,7 +108,7 @@ public class PointVisualizer extends Actuator implements ChartValue{
      * 
      * @param Radius
      */
-    public void setRadius(float Radius) {
+    public void setRadius(Float Radius) {
         variables.put("Radius", Radius);
     }
 

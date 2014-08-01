@@ -132,7 +132,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @return
      */
-    public float getCameraAngle() {
+    public Float getCameraAngle() {
          return (Float)variables.get("CameraAngle");
     }
 
@@ -140,7 +140,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @param CameraAngle
      */
-    public void setCameraAngle(float CameraAngle) {
+    public void setCameraAngle(Float CameraAngle) {
         variables.put("CameraAngle", CameraAngle);
     }
 
@@ -148,7 +148,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @return
      */
-    public int getCameraHeight() {
+    public Integer getCameraHeight() {
         return (Integer)variables.get("CameraHeight");
     }
 
@@ -156,7 +156,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @param CameraHeight
      */
-    public void setCameraHeight(int CameraHeight) {
+    public void setCameraHeight(Integer CameraHeight) {
         variables.put("CameraHeight", CameraHeight);
     }
 
@@ -164,7 +164,7 @@ public class VideoCamera extends Sensor implements Moveable{
      * 
      * @return
      */
-    public int getCameraWidth() {
+    public Integer getCameraWidth() {
         return (Integer)variables.get("CameraWidth");
     }
 
@@ -172,7 +172,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @param CameraWidth
      */
-    public void setCameraWidth(int CameraWidth) {
+    public void setCameraWidth(Integer CameraWidth) {
          variables.put("CameraWidth", CameraWidth);
     }
     
@@ -248,7 +248,7 @@ public class VideoCamera extends Sensor implements Moveable{
 
         cpuBuf = BufferUtils.createByteBuffer(getCameraWidth() * getCameraHeight() * 4);
         setupOffscreenView();
-        /*if(isDebug()){
+        /*if(getDebug()){
             setupDebugCam();
         }*/
         update(0f);
@@ -387,7 +387,7 @@ public class VideoCamera extends Sensor implements Moveable{
         offCamera.setLocation(CameraStart.getWorldTranslation());
         offCamera.lookAt( CameraEnd.getWorldTranslation()
                 , CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
-        if(isDebug()){
+        if(getDebug()){
             if(debugCamera != null){
                 debugCamera.setLocation(CameraStart.getWorldTranslation());
                 debugCamera.lookAt( CameraEnd.getWorldTranslation()
@@ -400,7 +400,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @return
      */
-    public boolean isDebug() {
+    public Boolean getDebug() {
         return (Boolean)variables.get("debug");
     }
 
@@ -408,7 +408,7 @@ public class VideoCamera extends Sensor implements Moveable{
      *
      * @param debug
      */
-    public void setDebug(boolean debug) {
+    public void setDebug(Boolean debug) {
          variables.put("debug", debug);
     }
 

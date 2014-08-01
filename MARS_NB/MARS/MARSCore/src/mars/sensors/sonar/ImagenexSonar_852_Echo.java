@@ -140,8 +140,8 @@ public class ImagenexSonar_852_Echo extends Sonar{
         byte[] sonData = getRawData();
         this.mars.getTreeTopComp().initRayBasedData(sonData,0f,this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
-        fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getMaxRange());
+        fl.setStartGain((byte)getScanningGain().shortValue());
+        fl.setRange((byte)getMaxRange().shortValue());
         
         if( publisher != null ){
             publisher.publish(fl);

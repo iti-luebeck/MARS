@@ -280,7 +280,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="debug_color">
+                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="debugColor">
                         <value>
                             <a>0.3</a>
                             <b>0.0</b>
@@ -314,7 +314,7 @@
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="propagation_distance">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="propagationDistance">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">100.0</value>
                     </entry>
                 </variables>

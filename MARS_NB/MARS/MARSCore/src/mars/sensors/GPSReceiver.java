@@ -180,7 +180,7 @@ public class GPSReceiver extends Sensor{
      *
      * @param LatitudeFactor 
      */
-    public void setLatitudeFactor(float LatitudeFactor) {
+    public void setLatitudeFactor(Float LatitudeFactor) {
         variables.put("LatitudeFactor", LatitudeFactor);
     }
     

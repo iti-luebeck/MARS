@@ -154,7 +154,7 @@ public class Lamp extends Actuator{
      *
      * @param Range 
      */
-    public void setRange(float Range){
+    public void setRange(Float Range){
         variables.put("Range", Range);
     }
     
@@ -170,7 +170,7 @@ public class Lamp extends Actuator{
      *
      * @param InnerAngle 
      */
-    public void setInnerAngle(float InnerAngle){
+    public void setInnerAngle(Float InnerAngle){
         variables.put("InnerAngle", InnerAngle);
     }
     
@@ -186,7 +186,7 @@ public class Lamp extends Actuator{
      *
      * @param OuterAngle 
      */
-    public void setOuterAngle(float OuterAngle){
+    public void setOuterAngle(Float OuterAngle){
         variables.put("OuterAngle", OuterAngle);
     }
     

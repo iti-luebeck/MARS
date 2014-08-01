@@ -265,23 +265,23 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public int getConeType() {
-        return (Integer)variables.get("SonarConeType");
+    public Integer getConeType() {
+        return (Integer)variables.get("ConeType");
     }
 
     /**
      *
      * @param SonarConeType 
      */
-    public void setConeType(int SonarConeType) {
-        variables.put("SonarConeType", SonarConeType);
+    public void setConeType(Integer ConeType) {
+        variables.put("ConeType", ConeType);
     }
 
     /**
      *
      * @return
      */
-    public float getAngular_factor() {
+    public Float getAngular_factor() {
         return (Float)variables.get("angular_factor");
     }
 
@@ -289,7 +289,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param angular_factor
      */
-    public void setAngular_factor(float angular_factor) {
+    public void setAngular_factor(Float angular_factor) {
         variables.put("angular_factor", angular_factor);
     }
 
@@ -297,7 +297,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getLength_factor() {
+    public Float getLength_factor() {
         return (Float)variables.get("length_factor");
     }
 
@@ -305,7 +305,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param length_factor
      */
-    public void setLength_factor(float length_factor) {
+    public void setLength_factor(Float length_factor) {
         variables.put("length_factor", length_factor);
     }
 
@@ -313,23 +313,23 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public boolean isAngular_damping() {
-        return (Boolean)variables.get("angular_damping");
+    public Boolean getAngularDamping() {
+        return (Boolean)variables.get("angularDamping");
     }
 
     /**
      * 
      * @param angular_damping
      */
-    public void setAngular_damping(boolean angular_damping) {
-        variables.put("angular_damping", angular_damping);
+    public void setAngularDamping(Boolean angularDamping) {
+        variables.put("angularDamping", angularDamping);
     }
 
     /**
      *
      * @return
      */
-    public boolean isLength_damping() {
+    public Boolean getLength_damping() {
         return (Boolean)variables.get("length_damping");
     }
 
@@ -337,7 +337,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param length_damping
      */
-    public void setLength_damping(boolean length_damping) {
+    public void setLength_damping(Boolean length_damping) {
         variables.put("length_damping", length_damping);
     }
 
@@ -345,7 +345,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public boolean isDebug() {
+    public Boolean getDebug() {
         return (Boolean)variables.get("Debug");
     }
 
@@ -353,7 +353,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param Debug 
      */
-    public void setDebug(boolean Debug) {
+    public void setDebug(Boolean Debug) {
         variables.put("Debug", Debug);
     }
     
@@ -377,7 +377,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getMaxRange() {
+    public Float getMaxRange() {
        return (Float)variables.get("MaxRange");
     }
 
@@ -385,7 +385,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param SonarMaxRange
      */
-    public void setMaxRange(float SonarMaxRange) {
+    public void setMaxRange(Float SonarMaxRange) {
         variables.put("MaxRange", SonarMaxRange);
     }
 
@@ -393,7 +393,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getMinRange() {
+    public Float getMinRange() {
         return (Float)variables.get("MinRange");
     }
 
@@ -401,7 +401,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param SonarMinRange
      */
-    public void setMinRange(float SonarMinRange) {
+    public void setMinRange(Float SonarMinRange) {
         variables.put("MinRange", SonarMinRange);
     }
 
@@ -425,7 +425,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public boolean isScanning() {
+    public Boolean getScanning() {
         return (Boolean)variables.get("Scanning");
     }
 
@@ -433,7 +433,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param Scanning 
      */
-    public void setScanning(boolean Scanning) {
+    public void setScanning(Boolean Scanning) {
         variables.put("Scanning", Scanning);
     }
     
@@ -441,7 +441,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public boolean isScanInstant() {
+    public Boolean getScanInstant() {
         return (Boolean)variables.get("ScanInstant");
     }
 
@@ -449,7 +449,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param ScanInstant 
      */
-    public void setScanInstant(boolean ScanInstant) {
+    public void setScanInstant(Boolean ScanInstant) {
         variables.put("ScanInstant", ScanInstant);
     }
 
@@ -457,7 +457,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getScanning_resolution() {
+    public Float getScanning_resolution() {
         return (Float)variables.get("scanning_resolution");
     }
 
@@ -465,7 +465,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param scanning_resolution
      */
-    public void setScanning_resolution(float scanning_resolution) {
+    public void setScanning_resolution(Float scanning_resolution) {
         variables.put("scanning_resolution", scanning_resolution);
     }
 
@@ -473,7 +473,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getScanSection() {
+    public Float getScanSection() {
         return (Float)variables.get("SonarScanSection");
     }
 
@@ -481,7 +481,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param SonarScanSection
      */
-    public void setScanSection(float SonarScanSection) {
+    public void setScanSection(Float SonarScanSection) {
         variables.put("SonarScanSection", SonarScanSection);
     }
     
@@ -489,39 +489,39 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public float getScanningAngleMax() {
-       return (Float)variables.get("scanning_angle_max");
+    public Float getScanningAngleMax() {
+       return (Float)variables.get("scanningAngleMax");
     }
 
     /**
      *
      * @param scanning_angle_max 
      */
-    public void setScanningAngleMax(float scanning_angle_max) {
-        variables.put("scanning_angle_max", scanning_angle_max);
+    public void setScanningAngleMax(Float scanningAngleMax) {
+        variables.put("scanningAngleMax", scanningAngleMax);
     }
     
         /**
      *
      * @return
      */
-    public float getScanningAngleMin() {
-       return (Float)variables.get("scanning_angle_min");
+    public Float getScanningAngleMin() {
+       return (Float)variables.get("scanningAngleMin");
     }
 
     /**
      *
      * @param scanning_angle_min 
      */
-    public void setScanningAngleMin(float scanning_angle_min) {
-        variables.put("scanning_angle_min", scanning_angle_min);
+    public void setScanningAngleMin(Float scanningAngleMin) {
+        variables.put("scanningAngleMin", scanningAngleMin);
     }
 
     /**
      *
      * @return
      */
-    public int getBeam_ray_height_resolution() {
+    public Integer getBeam_ray_height_resolution() {
         return (Integer)variables.get("beam_ray_height_resolution");
     }
 
@@ -529,7 +529,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param beam_ray_height_resolution
      */
-    public void setBeam_ray_height_resolution(int beam_ray_height_resolution) {
+    public void setBeam_ray_height_resolution(Integer beam_ray_height_resolution) {
         variables.put("beam_ray_height_resolution", beam_ray_height_resolution);
     }
 
@@ -537,7 +537,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public int getBeam_ray_width_resolution() {
+    public Integer getBeam_ray_width_resolution() {
         return (Integer)variables.get("beam_ray_width_resolution");
     }
 
@@ -545,7 +545,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param beam_ray_width_resolution
      */
-    public void setBeam_ray_width_resolution(int beam_ray_width_resolution) {
+    public void setBeam_ray_width_resolution(Integer beam_ray_width_resolution) {
         variables.put("beam_ray_width_resolution", beam_ray_width_resolution);
     }
 
@@ -553,7 +553,7 @@ public class RayBasedSensor extends Sensor{
      * 
      * @return
      */
-    public float getBeam_height() {
+    public Float getBeam_height() {
         return (Float)variables.get("beam_height");
     }
 
@@ -561,7 +561,7 @@ public class RayBasedSensor extends Sensor{
      * 
      * @param beam_height
      */
-    public void setBeam_height(float beam_height) {
+    public void setBeam_height(Float beam_height) {
         variables.put("beam_height", beam_height);
     }
 
@@ -569,7 +569,7 @@ public class RayBasedSensor extends Sensor{
      * 
      * @return
      */
-    public float getBeam_width() {
+    public Float getBeam_width() {
         return (Float)variables.get("beam_width");
     }
 
@@ -577,7 +577,7 @@ public class RayBasedSensor extends Sensor{
      * 
      * @param beam_width
      */
-    public void setBeam_width(float beam_width) {
+    public void setBeam_width(Float beam_width) {
         variables.put("beam_width", beam_width);
     }
 
@@ -585,7 +585,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @return
      */
-    public int getScanning_gain() {
+    public Integer getScanningGain() {
         return (Integer)variables.get("ScanningGain");
     }
 
@@ -593,7 +593,7 @@ public class RayBasedSensor extends Sensor{
      *
      * @param ScanningGain 
      */
-    public void setScanning_gain(int ScanningGain) {
+    public void setScanningGain(Integer ScanningGain) {
         variables.put("ScanningGain", ScanningGain);
     }
     
@@ -602,15 +602,15 @@ public class RayBasedSensor extends Sensor{
      * @return
      */
     public ColorRGBA getDebugColor() {
-        return (ColorRGBA)variables.get("debug_color");
+        return (ColorRGBA)variables.get("debugColor");
     }
 
     /**
      * 
      * @param debug_color
      */
-    public void setDebugColor(ColorRGBA debug_color) {
-        variables.put("debug_color", debug_color);
+    public void setDebugColor(ColorRGBA debugColor) {
+        variables.put("debugColor", debugColor);
     }
 
     /**
@@ -780,7 +780,7 @@ public class RayBasedSensor extends Sensor{
     private float[] getOneRayInstantData(){
         int size = (int)Math.ceil((Math.abs(getScanningAngleMax())+Math.abs(getScanningAngleMin()))/getScanning_resolution());
         float[] rayData = new float[size];
-        if(isDebug()){
+        if(getDebug()){
             debug_node.detachAllChildren();
         }
         for (int i = 0; i < rayData.length; i++) {
@@ -795,7 +795,7 @@ public class RayBasedSensor extends Sensor{
      */
     private float[] getOneRayDataFloat(){
         Vector3f ray_start = this.SonarStart.getWorldTranslation();
-        /*if(isDebug()){
+        /*if(getDebug()){
             debug_node.detachAllChildren();
         }*/
         Quaternion beam_iteration_quaternion = new Quaternion();
@@ -814,7 +814,7 @@ public class RayBasedSensor extends Sensor{
 
         addScanGainToArray(arr_ret,sonar_data);
 
-        if(isDebug()){
+        if(getDebug()){
             Vector3f ray_start2 = angle_node_start.getWorldTranslation();
             Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
             Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
@@ -844,7 +844,7 @@ public class RayBasedSensor extends Sensor{
      */
     private byte[] getOneRayData(){
         Vector3f ray_start = this.SonarStart.getWorldTranslation();
-        if(isDebug()){
+        if(getDebug()){
             debug_node.detachAllChildren();
         }
         Quaternion beam_iteration_quaternion = new Quaternion();
@@ -859,7 +859,7 @@ public class RayBasedSensor extends Sensor{
 
         addScanGainToArray(arr_ret,sonar_data);
 
-        if(isDebug()){
+        if(getDebug()){
             Vector3f ray_start2 = angle_node_start.getWorldTranslation();
             Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
             Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
@@ -900,7 +900,7 @@ public class RayBasedSensor extends Sensor{
     }
 
     private void scan_next(){
-        if(isScanning()){//rotate the sonar to the next position
+        if(getScanning()){//rotate the sonar to the next position
             last_head_position = getCurrentHeadPosition();
             float angle = (float)Math.PI*2f;
             if((Float)getScanningAngleMax() != null){
@@ -918,11 +918,11 @@ public class RayBasedSensor extends Sensor{
         if(sonar_data[0] != -1f || sonar_data[1] != -1f){
             int sonar_array_distance =(int)(((ReturnDataLength)/getMaxRange())*sonar_data[0]);
             if( (arr_ret[sonar_array_distance] < 127) && sonar_data[0]!=0.0f ){//is there enough space to add?
-                int sonar_array_distance_intensity = getScanning_gain();
-                if(isAngular_damping()){
-                    sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * getScanning_gain() * getAngular_factor());//angle damping
+                int sonar_array_distance_intensity = getScanningGain();
+                if(getAngularDamping()){
+                    sonar_array_distance_intensity = (int)((((Math.PI/2)-sonar_data[1])/(Math.PI/2)) * getScanningGain() * getAngular_factor());//angle damping
                 }
-                if(isLength_damping()){
+                if(getLength_damping()){
                     sonar_array_distance_intensity = (int) (sonar_array_distance_intensity * (sonar_data[0] / getMaxRange()) * getLength_factor()); //length damping
                 }
                 if(arr_ret[sonar_array_distance] <= (byte)(127-sonar_array_distance_intensity)){//genug platz für full gain
@@ -969,7 +969,7 @@ public class RayBasedSensor extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(isDebug()){
+                if(getDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
@@ -1033,7 +1033,7 @@ public class RayBasedSensor extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(isDebug()){
+                if(getDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
@@ -1058,7 +1058,7 @@ public class RayBasedSensor extends Sensor{
 
                 addScanGainToArray(arr_ret,sonar_data);
 
-                if(isDebug()){
+                if(getDebug()){
                     Vector3f ray_start2 = angle_node_start.getWorldTranslation();
                     Vector3f ray_direction2 = (angle_node_end.getWorldTranslation()).subtract(angle_node_start.getWorldTranslation());
                     Geometry mark5 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction2.mult(getMaxRange())));
@@ -1086,7 +1086,7 @@ public class RayBasedSensor extends Sensor{
 
         addScanGainToArray(arr_ret,sonar_data);
 
-        if(isDebug()){
+        if(getDebug()){
             Vector3f ray_direction3 = (SonarEnd.getWorldTranslation()).subtract(ray_start);
             Geometry mark7 = new Geometry("Sonar_Arrow_Debug", new Arrow(ray_direction3.mult(getMaxRange())));
             Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

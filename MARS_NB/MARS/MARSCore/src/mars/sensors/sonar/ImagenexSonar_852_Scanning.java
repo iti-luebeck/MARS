@@ -147,8 +147,8 @@ public class ImagenexSonar_852_Scanning extends Sonar{
         this.mars.getTreeTopComp().initRayBasedData(sonData,lastHeadPosition,this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
         fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte)getScanning_gain());
-        fl.setRange((byte)getMaxRange());
+        fl.setStartGain((byte)getScanningGain().shortValue());
+        fl.setRange((byte)getMaxRange().shortValue());
         
         if( publisher != null ){
             publisher.publish(fl);

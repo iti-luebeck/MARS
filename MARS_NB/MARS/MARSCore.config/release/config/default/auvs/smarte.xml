@@ -407,10 +407,10 @@
                     </entry>
                 </noise>
                 <variables>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="angular_damping">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="angularDamping">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="SonarConeType">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="ConeType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">3</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="beam_width">
@@ -428,13 +428,13 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="beam_ray_width_resolution">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">4</value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="scanning_angle_min">
+					<entry xsi:type="myHashMapEntryTypeObject" key="scanningAngleMin">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">-3.1415926535897932384626433832795</value>
                     </entry>
-					<entry xsi:type="myHashMapEntryTypeObject" key="scanning_angle_max">
+					<entry xsi:type="myHashMapEntryTypeObject" key="scanningAngleMax">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">3.1415926535897932384626433832795</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="debug_color">
+                    <entry xsi:type="myHashMapEntryTypeColorRGBA" key="debugColor">
                         <value>
                             <a>0.3</a>
                             <b>0.0</b>
