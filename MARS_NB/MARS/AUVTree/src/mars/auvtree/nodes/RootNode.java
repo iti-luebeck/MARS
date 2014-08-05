@@ -5,7 +5,7 @@
  */
 package mars.auvtree.nodes;
 
-import java.util.Set;
+import java.util.HashMap;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 
@@ -16,7 +16,7 @@ import org.openide.nodes.Children;
  */
 public class RootNode extends AbstractNode {
 
-    public RootNode(Set s) {
+    public RootNode(HashMap s) {
         super(Children.create(new AUVNodeFactory(s), true));
     }
 

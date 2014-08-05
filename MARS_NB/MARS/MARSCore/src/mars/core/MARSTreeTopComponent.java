@@ -80,7 +80,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "MARSTreeTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "properties", openAtStartup = true)
+@TopComponent.Registration(mode = "properties", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSTreeTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(

@@ -23,6 +23,7 @@ import org.openide.modules.InstalledFileLocator;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class AUVTransferHandler extends TransferHandler{
 
     @Override

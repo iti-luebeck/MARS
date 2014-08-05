@@ -8,6 +8,7 @@ package mars.auvtree.nodes;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,10 +38,10 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
     /**
      * Set of auv names.
      */
-    private Set auvNames;
+    private HashMap<String,AUV> auvs;
     
-    public AUVNodeFactory(Set auvNames) {
-        this.auvNames = auvNames;
+    public AUVNodeFactory(HashMap<String,AUV> auvs) {
+        this.auvs = auvs;
     }
     
     /**
@@ -51,7 +52,7 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
      */
     @Override
     protected boolean createKeys(List toPopulate) {
-        SortedSet<String> sortedset = new TreeSet<String>(auvNames);
+        SortedSet<String> sortedset = new TreeSet<String>(auvs.keySet());
         for (Iterator<String> it = sortedset.iterator(); it.hasNext();) {
             String auvName = it.next();
             toPopulate.add(auvName);
@@ -67,7 +68,7 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
      */
     @Override
     protected Node createNodeForKey(String key) {
-        AUVNode auvNode = new AUVNode(key);
+        AUVNode auvNode = new AUVNode(auvs.get(key),key);
         auvNode.addNodeListener(this);
         return auvNode;
     }
@@ -86,15 +87,14 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
 
     @Override
     public void nodeDestroyed(NodeEvent ne) {
-        AUVNode lookup = ne.getNode().getLookup().lookup(AUVNode.class);
-        String name = lookup.getDisplayName();
-        auvNames.remove(name);
+        AUV lookup = ne.getNode().getLookup().lookup(AUV.class);
+        String name = lookup.getName();
+        auvs.remove(name);
         refresh(true);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        
     }
 
 }
