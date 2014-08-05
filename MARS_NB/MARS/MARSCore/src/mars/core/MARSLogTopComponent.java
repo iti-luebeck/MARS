@@ -26,7 +26,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "MARSLogTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "bottomSlidingSide", openAtStartup = true)
+@TopComponent.Registration(mode = "bottomSlidingSide", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSLogTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(

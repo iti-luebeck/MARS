@@ -50,7 +50,7 @@ import org.openide.windows.WindowManager;
         iconBase = "org/mars/auvtree/yellow_submarine.png", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
-@TopComponent.Registration(mode = "explorer", openAtStartup = true)
+@TopComponent.Registration(mode = "explorer", openAtStartup = true, position = 1)
 @ActionID(category = "Window", id = "mars.module.auvEditor.AUVTreeTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(

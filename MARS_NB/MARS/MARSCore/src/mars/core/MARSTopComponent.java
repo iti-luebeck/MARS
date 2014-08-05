@@ -114,8 +114,8 @@ import org.openide.windows.WindowManager;
         preferredID = "MARSTopComponent")
 @Messages({
     "CTL_MARSAction=MARS",
-    "CTL_MARSTopComponent=MARS Window",
-    "HINT_MARSTopComponent=This is a MARS window"
+    "CTL_MARSTopComponent=MARS View",
+    "HINT_MARSTopComponent=This is the main MARS window"
 })
 public final class MARSTopComponent extends TopComponent {
 
@@ -2009,10 +2009,10 @@ public final class MARSTopComponent extends TopComponent {
                                         mtc3.setMARS(mars);
                                         mars.setMARSMapComp(mtc3);
                                         
-                                        TopComponent tc4 = WindowManager.getDefault().findTopComponent("MARSLogTopComponent");
+                                        /*TopComponent tc4 = WindowManager.getDefault().findTopComponent("MARSLogTopComponent");
                                         MARSLogTopComponent mtc4 = (MARSLogTopComponent) tc4;
                                         mtc4.setMARS(mars);
-                                        mars.setMARSLogComp(mtc4);
+                                        mars.setMARSLogComp(mtc4);*/
                                         
                                          //find all toolbars that need mars and set it
                                         Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");

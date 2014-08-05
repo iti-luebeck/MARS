@@ -24,7 +24,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "MARSMapTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "explorer", openAtStartup = true)
+@TopComponent.Registration(mode = "explorer", openAtStartup = true, position = 2)
 @ActionID(category = "Window", id = "mars.core.MARSMapTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -32,7 +32,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "MARSMapTopComponent")
 @Messages({
     "CTL_MARSMapAction=MARSMap",
-    "CTL_MARSMapTopComponent=MARSMap Window",
+    "CTL_MARSMapTopComponent=Map",
     "HINT_MARSMapTopComponent=This is a MARSMap window"
 })
 public final class MARSMapTopComponent extends TopComponent {

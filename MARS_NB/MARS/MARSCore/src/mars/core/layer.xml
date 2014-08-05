@@ -36,26 +36,32 @@
         </folder>
     </folder>
     <folder name="Toolbars">
-       <file name="MyToolbar.xml" url="MyToolbar.xml">
+        <file name="Clipboard_hidden"/>
+        <file name="Memory_hidden"/>
+        <file name="MyToolbar.xml" url="MyToolbar.xml">
             <attr name="position" intvalue="100"/>
        </file>
         <file name="Standard.xml" url="Standard.xml"/>
+        <file name="UndoRedo_hidden"/>
     </folder>
     <folder name="Windows2">
         <folder name="Components">
+            <file name="LookupTopComponent.settings_hidden"/>
+            <file name="MARSChartTopComponent.settings_hidden"/>
+            <file name="MARSCompassTopComponent.settings_hidden"/>
+            <file name="MARSLogTopComponent.settings_hidden"/>
             <file name="MARSMapTopComponent.settings" url="MARSMapTopComponentSettings.xml"/>
+            <file name="MARSUnderwaterModemTopComponent.settings_hidden"/>
+            <file name="MARSVideoCameraTopComponent.settings_hidden"/>
         </folder>
         <folder name="Modes">
-            <file name="anonymousMode_1.wsmode" url="anonymousMode_1Wsmode.xml"/>
-            <file name="bottomSlidingSide.wsmode" url="bottomSlidingSideWsmode.xml"/>
-            <file name="editor.wsmode" url="editorWsmode.xml"/>
-            <file name="explorer.wsmode" url="explorerWsmode.xml"/>
-            <file name="leftSlidingSide.wsmode" url="leftSlidingSideWsmode.xml"/>
-            <file name="output.wsmode" url="outputWsmode.xml"/>
+            <folder name="anonymousMode_1"/>
+            <folder name="properties">
+                <file name="properties.wstcref" url="propertiesWstcref.xml"/>
+            </folder>
+			<file name="anonymousMode_1.wsmode" url="anonymousMode_1Wsmode.xml"/>
             <file name="properties.wsmode" url="propertiesWsmode.xml"/>
-            <file name="rightSlidingSide.wsmode" url="rightSlidingSideWsmode.xml"/>
-            <file name="topSlidingSide.wsmode" url="topSlidingSideWsmode.xml"/>
         </folder>
-        <file name="WindowManager.wswmgr" url="WindowManager.wswmgr"/>
+		<file name="WindowManager.wswmgr" url="WindowManager.wswmgr"/>
     </folder>
 </filesystem>
