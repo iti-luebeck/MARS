@@ -34,6 +34,7 @@ import mars.auv.BasicAUV;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import org.openide.modules.InstalledFileLocator;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
@@ -233,6 +234,28 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+        /**
+     * 
+     * @param auvs
+     * @param file
+     * @return
+     */
+    public static String clearSimObjects(HashMap<String,SimObject> simobs, File file){
+        File[] listFiles = file.listFiles();
+        for (File oldFile : listFiles) {
+            String name = oldFile.getName().substring(0, oldFile.getName().lastIndexOf("."));
+            boolean containsKey = simobs.containsKey(name);
+            if(!containsKey){
+                try {
+                    Files.deleteIfExists(oldFile.toPath());
+                } catch (IOException ex) {
+                     return "Can't delete File: " + oldFile.getAbsolutePath();
+                }
+            }
+        }
+        return null;
+    }
+    
     /**
      * 
      * @return
@@ -409,6 +432,28 @@ public class XML_JAXB_ConfigReaderWriter {
                 String failure =  saveAUV(auv, file); 
                 if(failure != null){
                     return failure;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * 
+     * @param auvs
+     * @param file
+     * @return
+     */
+    public static String clearAUVs(HashMap<String,AUV> auvs, File file){
+        File[] listFiles = file.listFiles();
+        for (File oldFile : listFiles) {
+            String name = oldFile.getName().substring(0, oldFile.getName().lastIndexOf("."));
+            boolean containsKey = auvs.containsKey(name);
+            if(!containsKey){
+                try {
+                    Files.deleteIfExists(oldFile.toPath());
+                } catch (IOException ex) {
+                     return "Can't delete File: " + oldFile.getAbsolutePath();
                 }
             }
         }
@@ -595,13 +640,23 @@ public class XML_JAXB_ConfigReaderWriter {
         if(failure != null){
             return failure;
         }
-                
+             
+        //clear the old simobs
+        failure = clearSimObjects(simObjectManager.getSimObjects(), simobFile);
+        if(failure != null){
+            return failure;
+        }
         failure = saveSimObjects(simObjectManager.getSimObjects(), simobFile);
         if(failure != null){
             return failure;
         }
         
-        //clear the folder first
+        //clear the old auvs
+        failure = clearAUVs(auvManager.getAUVs(),auvFile);
+        if(failure != null){
+            return failure;
+        }
+        //save the auvs
         failure = saveAUVs(auvManager.getAUVs(),auvFile);
         if(failure != null){
             return failure;
