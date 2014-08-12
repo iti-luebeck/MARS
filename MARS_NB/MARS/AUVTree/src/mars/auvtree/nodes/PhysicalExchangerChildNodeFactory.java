@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import mars.PhysicalExchanger;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
@@ -73,8 +74,8 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
 
     @Override
     public void nodeDestroyed(NodeEvent ne) {
-        PhysicalExchangerNode lookup = (PhysicalExchangerNode)ne.getNode();
-        String name = lookup.getDisplayName();
+        PhysicalExchanger lookup = ne.getNode().getLookup().lookup(PhysicalExchanger.class);
+        String name = lookup.getName();
         params.remove(name);
         refresh(true);
     }

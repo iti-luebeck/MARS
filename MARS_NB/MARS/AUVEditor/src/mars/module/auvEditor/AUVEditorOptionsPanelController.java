@@ -14,7 +14,7 @@ import org.openide.util.Lookup;
  */
 @OptionsPanelController.TopLevelRegistration(
         categoryName = "#OptionsCategory_Name_AUVEditor",
-        iconBase = "mars/module/auvEditor/Face-monkey.png",
+        iconBase = "mars/module/auvEditor/auveditor_symbol_32.png",
         keywords = "#OptionsCategory_Keywords_AUVEditor",
         keywordsCategory = "AUVEditor")
 @org.openide.util.NbBundle.Messages({"OptionsCategory_Name_AUVEditor=AUVEditor", "OptionsCategory_Keywords_AUVEditor=A Keyword"})

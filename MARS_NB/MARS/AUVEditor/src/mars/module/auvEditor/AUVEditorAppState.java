@@ -51,6 +51,7 @@ import org.openide.modules.InstalledFileLocator;
  *
  * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
  * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ * @author Thomas Tosik
  */
 public class AUVEditorAppState extends AbstractAppState implements AppStateExtension {
 
@@ -395,27 +396,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      */
     @SuppressWarnings("element-type-mismatch")
     public void setCoordinateAxesControl(PhysicalExchanger pE) {
-        String pEName = null;
-        if (auv.getActuators().containsValue(pE)) {
-            Iterator<Entry<String, Actuator>> i = auv.getActuators().entrySet().iterator();
-            for (Entry<String, Actuator> e; i.hasNext();) {
-                e = i.next();
-                if (e.getValue().equals(pE)) {
-                    pEName = e.getKey();
-                    break;
-                }
-            }
-        }
-        if (auv.getSensors().containsValue(pE) && pEName == null) {
-            Iterator<Entry<String, Sensor>> i = auv.getSensors().entrySet().iterator();
-            for (Entry<String, Sensor> e; i.hasNext();) {
-                e = i.next();
-                if (e.equals(pE)) {
-                    pEName = e.getKey();
-                    break;
-                }
-            }
-        }
+        String pEName = pE.getName();
         if (pEName != null) {
             final Node pEN = (Node) auvNode.getChild(pEName);
             // deselect the current object

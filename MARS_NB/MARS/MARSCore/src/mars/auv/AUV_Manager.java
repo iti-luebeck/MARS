@@ -527,7 +527,7 @@ public class AUV_Manager implements UpdateState{
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
         final AUV fin_auv = auv;
         removeAUVFromScene(fin_auv);
-         auvs.remove(fin_auv.getName());
+        auvs.remove(fin_auv.getName());
     }
 
     /**

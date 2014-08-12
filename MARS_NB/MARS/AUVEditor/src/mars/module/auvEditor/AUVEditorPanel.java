@@ -6,6 +6,7 @@ import java.util.prefs.Preferences;
  *
  * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
  * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ * @author Thomas Tosik
  */
 final class AUVEditorPanel extends javax.swing.JPanel {
 
@@ -42,16 +43,18 @@ final class AUVEditorPanel extends javax.swing.JPanel {
             }
         });
 
-        jCheckBox2.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(AUVEditorPanel.class, "AUVEditorPanel.jCheckBox2.text")); // NOI18N
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
 
         jCheckBox3.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(AUVEditorPanel.class, "AUVEditorPanel.jCheckBox3.text")); // NOI18N
 
-        jCheckBox4.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(AUVEditorPanel.class, "AUVEditorPanel.jCheckBox4.text")); // NOI18N
 
-        jCheckBox5.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox5, org.openide.util.NbBundle.getMessage(AUVEditorPanel.class, "AUVEditorPanel.jCheckBox5.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AUVEditorPanel.class, "AUVEditorPanel.jLabel1.text")); // NOI18N
@@ -84,10 +87,10 @@ final class AUVEditorPanel extends javax.swing.JPanel {
             }
         });
         jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 jTextField1InputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jTextField1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -175,8 +178,8 @@ final class AUVEditorPanel extends javax.swing.JPanel {
             int parseInt = Integer.parseInt(jTextField1.getText());
             jSlider1.setValue(parseInt);
         } catch (Exception e) {
-            jTextField1.setText("5");
-            jSlider1.setValue(5);
+            jTextField1.setText("1");
+            jSlider1.setValue(1);
         }
     }//GEN-LAST:event_jTextField1PropertyChange
 
@@ -187,16 +190,20 @@ final class AUVEditorPanel extends javax.swing.JPanel {
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
     }//GEN-LAST:event_jTextField1KeyTyped
 
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
     void load() {
         // TODO read settings and initialize GUI
         // Example:        
         jCheckBox1.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showGrid", true));
-        jCheckBox2.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showXGrid", true));
+        jCheckBox2.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showXGrid", false));
         jCheckBox3.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showYGrid", true));
-        jCheckBox4.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showZGrid", true));
-        jCheckBox5.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("enableAUVWireframe", true));
-        jSlider1.setValue(Preferences.userNodeForPackage(AUVEditorPanel.class).getInt("scaleAxesAndOrb", 5));
-        jTextField1.setText(Preferences.userNodeForPackage(AUVEditorPanel.class).get("scaleAxesAndOrb", "5"));
+        jCheckBox4.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("showZGrid", false));
+        jCheckBox5.setSelected(Preferences.userNodeForPackage(AUVEditorPanel.class).getBoolean("enableAUVWireframe", false));
+        jSlider1.setValue(Preferences.userNodeForPackage(AUVEditorPanel.class).getInt("scaleAxesAndOrb", 1));
+        jTextField1.setText(Preferences.userNodeForPackage(AUVEditorPanel.class).get("scaleAxesAndOrb", "1"));
         // or for org.openide.util with API spec. version >= 7.4:
         // someCheckBox.setSelected(NbPreferences.forModule(AUVEditorPanel.class).getBoolean("someFlag", false));
         // or:
