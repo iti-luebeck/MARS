@@ -30,22 +30,26 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Line;
+import java.awt.Event;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Collection;
+import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.prefs.Preferences;
+import javax.swing.event.EventListenerList;
 import mars.AdvancedFlyByCamera;
 import mars.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.auv.BasicAUV;
 import mars.sensors.Sensor;
 import mars.states.AppStateExtension;
+import mars.states.AppStateListener;
 import org.openide.modules.InstalledFileLocator;
 
 /**
@@ -124,6 +128,11 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * is released.
      */
     private boolean save = false;
+    
+    /*
+    * 
+    */
+    private EventListenerList listeners = new EventListenerList();
 
     /**
      * Sets the AppStateManager and Application. Additionally initializes the
@@ -176,12 +185,31 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             rootNode.addLight(amb);
             rootNode.updateGeometricState();
 
-            if (auv != null) {
+            //tell other components that we are initialized
+            notifyAdvertisement(new Event(this, 1, null));
+            
+            /*if (auv != null) {
                 addAUVSpatial();
                 cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_Y);
-            }
+            }*/
         }
         super.initialize(stateManager, app);
+    }
+    
+    public void loadAUV(BasicAUV auv){
+        if(isInitialized()){
+            deleteAllAUVs();
+            setAUV(auv);
+            addAUVSpatial();
+            cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_Y);
+        }
+    }
+    
+    private void deleteAllAUVs(){
+        if(auvNode!=null){
+            auvNode.detachAllChildren();
+            rootNode.detachChild(auvNode);
+        }
     }
 
     private void addAUVSpatial() {
@@ -285,6 +313,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         advFlyCamState.setDragToRotate(true);
         advFlyCamState.setEnabled(true);
         getCamera().setLocation(new Vector3f(3f, 1f, 0f));
+        cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
         advFlyCamState.registerWithInput(inputManager);
     }
 
@@ -645,4 +674,22 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             coordinateAxesNode.setLocalScale(newScale);
         }
     }
+    
+    public void addAdListener( AppStateListener listener )
+    {
+      listeners.add( AppStateListener.class, listener );
+    }
+
+
+    public void removeAdListener( AppStateListener listener )
+    {
+      listeners.remove( AppStateListener.class, listener );
+    }
+
+    protected synchronized void notifyAdvertisement( Event event )
+    {
+      for ( AppStateListener l : listeners.getListeners( AppStateListener.class ) )
+        l.advertisement( event );
+    }
+
 }

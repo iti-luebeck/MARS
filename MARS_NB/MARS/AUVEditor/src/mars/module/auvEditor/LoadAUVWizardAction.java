@@ -78,6 +78,8 @@ public final class LoadAUVWizardAction implements ActionListener {
                 if (auv_manager == null) {// try to get mars, else its the listener
                     auv_manager = cl.lookup(AUV_Manager.class);
                     auvEditorTopComponent.setAUV((BasicAUV) auv_manager.getAUV(jComboBox1.getSelectedItem().toString()));
+                }else{
+                    auvEditorTopComponent.setAUV((BasicAUV) auv_manager.getAUV(jComboBox1.getSelectedItem().toString()));
                 }
 
                 auvEditorTopComponent.requestActive();
@@ -100,6 +102,9 @@ public final class LoadAUVWizardAction implements ActionListener {
                 //result.addLookupListener(this);
                 if (auv_manager == null) {// try to get mars, else its the listener
                     auv_manager = cl.lookup(AUV_Manager.class);
+                    auv_manager.registerAUV(basicAUV);
+                    auvEditorTopComponent.setAUV(basicAUV);
+                }else{
                     auv_manager.registerAUV(basicAUV);
                     auvEditorTopComponent.setAUV(basicAUV);
                 }

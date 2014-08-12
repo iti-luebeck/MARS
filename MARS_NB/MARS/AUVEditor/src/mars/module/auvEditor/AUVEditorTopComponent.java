@@ -5,6 +5,7 @@ import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -12,6 +13,7 @@ import mars.MARS_Main;
 import mars.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
+import mars.states.AppStateListener;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.util.Lookup;
@@ -26,6 +28,7 @@ import org.openide.windows.TopComponent;
  *
  * @author Christian Friedrich <friedri1 at informatik.uni-luebeck.de>
  * @author Alexander Bigerl <bigerl at informatik.uni-luebeck.de>
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.module.auvEditor//AUVEditor//EN",
@@ -185,7 +188,28 @@ public final class AUVEditorTopComponent extends TopComponent implements LookupL
         }
     }
 
-    public void setAUV(BasicAUV auv) {
-        appState.setAUV(auv);
+    public void setAUV(final BasicAUV auv) {
+        if(!appState.isInitialized()){//we have to wait till the state is ready
+            appState.addAdListener(new AppStateListener() {
+                @Override
+                public void advertisement(Event e) {
+                    mars.enqueue(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        appState.loadAUV(auv);
+                        return null;
+                    }
+                    });
+                }
+            });
+        }else{//direct action
+            mars.enqueue(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        appState.loadAUV(auv);
+                        return null;
+                    }
+                    });
+        }
     }
 }
