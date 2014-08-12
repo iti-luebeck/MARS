@@ -122,7 +122,7 @@ public class Positionmeter extends Sensor implements ChartValue{
      * 
      * @return
      */
-    public Vector3f getPosition(){
+    public Vector3f getWorldPosition(){
         if(getNoiseType() == NoiseType.NO_NOISE){
             return getPositionRaw();
         }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
@@ -179,9 +179,9 @@ public class Positionmeter extends Sensor implements ChartValue{
         fl.setHeader(header);
         
         geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
-        point.setX(getPosition().x);
-        point.setY(getPosition().z);
-        point.setZ(getPosition().y);
+        point.setX(getWorldPosition().x);
+        point.setY(getWorldPosition().z);
+        point.setZ(getWorldPosition().y);
         fl.setPoint(point);  
         
         if( publisher != null ){

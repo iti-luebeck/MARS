@@ -215,9 +215,9 @@ public class Posemeter extends Sensor implements ChartValue{
         fl.setHeader(header);
         
         geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
-        point.setX(pos.getPosition().x);
-        point.setY(pos.getPosition().z);//dont forget to switch y and z!!!!
-        point.setZ(pos.getPosition().y);
+        point.setX(pos.getWorldPosition().x);
+        point.setY(pos.getWorldPosition().z);//dont forget to switch y and z!!!!
+        point.setZ(pos.getWorldPosition().y);
         
         geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
         Quaternion ter_orientation = new Quaternion();

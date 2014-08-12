@@ -15,8 +15,10 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -169,6 +171,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
             rootNode.addLight(sun);
+            AmbientLight amb = new AmbientLight();
+            amb.setColor(new ColorRGBA(0.25f, 0.25f, 0.25f, 0.25f));
+            rootNode.addLight(amb);
             rootNode.updateGeometricState();
 
             if (auv != null) {
@@ -279,6 +284,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(getCamera());
         advFlyCamState.setDragToRotate(true);
         advFlyCamState.setEnabled(true);
+        getCamera().setLocation(new Vector3f(3f, 1f, 0f));
         advFlyCamState.registerWithInput(inputManager);
     }
 

@@ -273,7 +273,7 @@ public class GPSReceiver extends Sensor{
         double distanceLat = geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
         double distanceLon = geoCalc.calculateGeodeticCurve(reference, userPos2, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
         
-        Vector3f diffPosition = pos.getPosition().subtract(getReferencePointWorld());
+        Vector3f diffPosition = pos.getWorldPosition().subtract(getReferencePointWorld());
         double metLat = (1d/distanceLat)*(Math.abs(pointA.getLatitude()-userPos.getLatitude()));
         double latitude = diffPosition.z * metLat;
         
