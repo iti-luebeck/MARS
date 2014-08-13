@@ -190,8 +190,16 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            boolean auvEnabled = auv.getAuv_param().isEnabled();
+            final boolean auvEnabled = auv.getAuv_param().isEnabled();
             auv.getAuv_param().setEnabled(!auvEnabled);
+            Future simStateFuture = mars.enqueue(new Callable() {
+                public Void call() throws Exception {
+                    if(mars.getStateManager().getState(SimState.class) != null){
+                        auvManager.enableAUV(auv, !auvEnabled);
+                    }
+                    return null;
+                }
+            });
             propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             //JOptionPane.showMessageDialog(null, "Done!");
         }
