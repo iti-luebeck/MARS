@@ -74,7 +74,9 @@ public class Helper {
      * @param rayStart
      * @param rayDirection
      * @return
+     * @deprecated Is buged when far away from origin. Use getIntersectionWithPlaneCorrect instead.
      */
+    @Deprecated
     public static Vector3f getIntersectionWithPlane(Vector3f planeStart, Vector3f planeNormal, Vector3f rayStart, Vector3f rayDirection){
         float t = ((planeStart.subtract(rayStart)).dot(planeNormal)/((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).dot(planeNormal));
         return rayStart.add(((rayStart.add(rayDirection).mult(100f)).subtract(rayStart)).mult(t));

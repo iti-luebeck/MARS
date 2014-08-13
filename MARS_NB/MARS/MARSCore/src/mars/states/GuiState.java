@@ -555,7 +555,7 @@ public class GuiState extends AbstractAppState{
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
         guiControlState.setIntersection(intersection);
         if(guiControlState.getGhostObject() != null){
             guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection,null));
@@ -567,7 +567,7 @@ public class GuiState extends AbstractAppState{
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
         guiControlState.setIntersection(intersection);
         if(guiControlState.getGhostObject() != null){
             guiControlState.getGhostObject().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection,null));
@@ -583,7 +583,7 @@ public class GuiState extends AbstractAppState{
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
+        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
         Vector3f diff = intersection.subtract(auv.getAUVNode().getWorldTranslation());
         diff.y = 0f;
         diff.normalizeLocal();
@@ -618,8 +618,7 @@ public class GuiState extends AbstractAppState{
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlane(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
-        //System.out.println("Intersection: " + intersection);
+        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(),Vector3f.UNIT_Y,click3d, dir);
         Vector3f diff = intersection.subtract(simob.getSpatial().getWorldTranslation());
         diff.y = 0f;
         diff.normalizeLocal();
@@ -630,14 +629,13 @@ public class GuiState extends AbstractAppState{
             angle = diff.angleBetween(Vector3f.UNIT_X)*(-1);
         }
         
-        //System.out.println("angle: " + angle);
+        
         if(guiControlState.getGhostObject() != null){
             Quaternion quat = new Quaternion();
             Quaternion gquat = new Quaternion();
             
             Quaternion wQuat = simob.getSpatial().getWorldRotation();
             float[] ff = wQuat.toAngles(null);
-            //System.out.println("ff: " + ff[1]);
             float newAng = ff[1] - angle;
             
             quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
@@ -668,7 +666,6 @@ public class GuiState extends AbstractAppState{
           for (int i = 0; i < results.size(); i++) {
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
-              System.out.println("i choose you hover !, " + target.getParent().getUserData("auv_name") );
               if((String)target.getParent().getUserData("auv_name") != null){
                   BasicAUV auv = (BasicAUV)auvManager.getAUV((String)target.getParent().getUserData("auv_name"));
                   if(auv != null){
@@ -685,10 +682,8 @@ public class GuiState extends AbstractAppState{
           auvManager.deselectAllAUVs();
           this.mars.setHoverMenuForAUV(false);
         }else{//nothing to pickRightClick
-            //System.out.println("Nothing to pick auv!");
             auvManager.deselectAllAUVs();
             this.mars.setHoverMenuForAUV(false);
-            //guiControlState.setFree(true);
         }
 
         results.clear();
@@ -698,7 +693,6 @@ public class GuiState extends AbstractAppState{
             for (int i = 0; i < results.size(); i++) {
               Geometry target = results.getCollision(i).getGeometry();
               // Here comes the action:
-              //System.out.println("i choose you hover !, " + target.getUserData("simob_name") );
                 if( ((String)target.getUserData("simob_name") != null) ){
                     Integer pickType = (Integer)target.getUserData(PickHint.PickName);
                     if( (pickType == null) || (pickType == PickHint.Pick) ){//only pick spatials who are pickable
