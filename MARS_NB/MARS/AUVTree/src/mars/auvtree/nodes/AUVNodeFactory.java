@@ -19,6 +19,7 @@ import java.util.concurrent.Future;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.auv.NodeRefreshEvent;
 import mars.core.CentralLookup;
 import mars.states.SimState;
 import org.openide.nodes.ChildFactory;
@@ -27,21 +28,29 @@ import org.openide.nodes.NodeEvent;
 import org.openide.nodes.NodeListener;
 import org.openide.nodes.NodeMemberEvent;
 import org.openide.nodes.NodeReorderEvent;
+import org.openide.util.Lookup;
+import org.openide.util.Lookup.Result;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
 /**
  * Factory for creation of auv nodes.
  * 
  * @author Christian
+ * @author Thomas Tosik
  */
-public class AUVNodeFactory extends ChildFactory<String> implements NodeListener{
+public class AUVNodeFactory extends ChildFactory<String> implements NodeListener,LookupListener{
 
     /**
      * Set of auv names.
      */
     private HashMap<String,AUV> auvs;
+    private final Lookup.Result<NodeRefreshEvent> lookupResult;
     
-    public AUVNodeFactory(HashMap<String,AUV> auvs) {
+    public AUVNodeFactory(HashMap<String,AUV> auvs, AUV_Manager auv_manager) {
         this.auvs = auvs;
+        lookupResult = auv_manager.getLookup().lookupResult(NodeRefreshEvent.class);
+        lookupResult.addLookupListener(this);
     }
     
     /**
@@ -70,11 +79,19 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
     protected Node createNodeForKey(String key) {
         AUVNode auvNode = new AUVNode(auvs.get(key),key);
         auvNode.addNodeListener(this);
+        System.out.println("childrenAdded: " + key);
         return auvNode;
+    }
+    
+    @Override
+    public void resultChanged(LookupEvent lookupEvent) {
+        refresh(true);
+        System.out.println("refresh");
     }
 
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
+        System.out.println("childrenAdded");
     }
 
     @Override
@@ -95,6 +112,7 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("prop change: " + evt);
     }
 
 }

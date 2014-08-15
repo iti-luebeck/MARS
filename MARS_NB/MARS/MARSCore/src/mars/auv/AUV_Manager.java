@@ -20,18 +20,21 @@ import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 import mars.Collider;
-import mars.PhysicalEnvironment;
-import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.gui.tree.UpdateState;
 import mars.recorder.RecordManager;
-import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
 import mars.states.MapState;
+import mars.states.SimState;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -39,7 +42,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @ServiceProvider(service=AUV_Manager.class)
-public class AUV_Manager implements UpdateState{
+public class AUV_Manager implements UpdateState,Lookup.Provider{
 
     //auv HashMap to store and load auv's
     private HashMap<String,AUV> auvs = new HashMap<String,AUV> ();
@@ -56,6 +59,10 @@ public class AUV_Manager implements UpdateState{
     private RecordManager recManager;
     private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
+    
+    //lookup stuff
+    private InstanceContent content = new InstanceContent();
+    private Lookup lookup = new AbstractLookup(content);
 
     /**
      *
@@ -86,6 +93,13 @@ public class AUV_Manager implements UpdateState{
      *
      */
     public AUV_Manager() {
+    }
+    
+    
+    @Override
+    public Lookup getLookup()
+    {
+        return lookup;
     }
 
     /**
@@ -469,6 +483,7 @@ public class AUV_Manager implements UpdateState{
                 auvs.put(fin_auv.getName(), fin_auv);
                 preloadAUV(fin_auv);
                 progr.finish();
+                content.add(new NodeRefreshEvent());
                 return null;
             }
         });
