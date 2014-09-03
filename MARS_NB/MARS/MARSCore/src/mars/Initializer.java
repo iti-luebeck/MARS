@@ -896,14 +896,6 @@ public class Initializer {
 
                        skyControl = new SkyControl(assetManager, mars.getCamera(), cloudFlattening, starMotion,
                                bottomDome);
-                       /*
-                        * Put SkyControl in charge of the lights, the
-                        * shadow renderer, and the viewport background. (optional)
-                        */
-                       skyControl.addViewPort(viewPort);
-                       skyControl.setAmbientLight(ambLight);
-                       skyControl.setMainLight(sun);
-                       skyControl.setShadowRenderer(dlsr);
                        
                        skyControl.getSunAndStars().setHour(mars_settings.getSkyDomeHour());
                        skyControl.getSunAndStars().setObserverLatitude(mars_settings.getSkyDomeObserverLatitude());
@@ -913,13 +905,27 @@ public class Initializer {
                        skyControl.setCloudiness(mars_settings.getSkyDomeCloudiness());
                        skyControl.setCloudModulation(mars_settings.isSkyDomeCloudModulation());
                        skyControl.setLunarDiameter(mars_settings.getSkyDomeLunarDiameter());
+                       skyControl.getUpdater().addViewPort(viewPort);
+                       skyControl.getUpdater().addShadowRenderer(dlsr);
+                       skyControl.getUpdater().addShadowFilter(dlsf);
+                       skyControl.getUpdater().setAmbientLight(ambLight);
+                       //skyControl.getUpdater().setAmbientMultiplier(2f);
+                       skyControl.getUpdater().setMainLight(sun);
+                       skyControl.getUpdater().setMainMultiplier(5f);
+                       skyControl.getUpdater().setShadowFiltersEnabled(true);
+                               
+                       //add bloom filter for a better sun
+                       BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+                       bloom.setBlurScale(2.5f);
+                       bloom.setExposurePower(1f);
+                       fpp.addFilter(bloom);
+                       skyControl.getUpdater().addBloomFilter(bloom);
                        
                        /*
                         * Add SkyControl to the scene and enable it.
                         */
                        final Node rootNodeMars = mars.getRootNode();
                        rootNodeMars.addControl(skyControl);
-                       //sceneReflectionNode.addControl(skyControl);
                        skyControl.setEnabled(true);
                        
                        timeOfDay = new TimeOfDay(mars_settings.getSkyDomeHour());
@@ -1441,6 +1447,7 @@ public class Initializer {
 
         //terrain_node = new Node("terrain");
         terrain_physics_control = new RigidBodyControl(terrainShape, 0);
+        //terrain_physics_control = new RigidBodyControl(0);
 
         /*Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
@@ -1450,13 +1457,13 @@ public class Initializer {
         
         
         terrain_physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
         terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
-        terrain_physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
+        terrain_physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        terrain_physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
         //terrain_physics_control.setFriction(0f);
         //terrain_physics_control.setRestitution(1f);
         //terrain_node.attachChild(terrain);
+        terrain_physics_control.setEnabled(true);
         terrain.addControl(terrain_physics_control);
         
         //set shadwos for terrain
@@ -1466,8 +1473,8 @@ public class Initializer {
         //SonarDetectableNode.attachChild(terrain_node);
         sceneReflectionNode.attachChild(terrain_node);
         RayDetectable.attachChild(terrain_node);
-        //bulletAppState.getPhysicsSpace().add(terrain);
-        bulletAppState.getPhysicsSpace().add(terrain_physics_control);
+        bulletAppState.getPhysicsSpace().add(terrain);
+        //bulletAppState.getPhysicsSpace().add(terrain_physics_control);
     }
 
     /**
@@ -1936,8 +1943,13 @@ public class Initializer {
      *
      * @param hour
      */
-    public void resetTimeOfDay(float hour){
-        timeOfDay = new TimeOfDay(hour);
+    public void resetTimeOfDay(final float hour){
+        Future fut = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                       timeOfDay = new TimeOfDay(hour);
+                       return null;
+                    }
+                });
     }
 
 }

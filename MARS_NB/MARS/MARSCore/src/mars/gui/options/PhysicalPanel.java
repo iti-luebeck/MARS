@@ -5,6 +5,7 @@
 package mars.gui.options;
 
 import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.core.CentralLookup;
 import mars.states.SimState;
 import org.openide.explorer.propertysheet.PropertySheet;
@@ -44,8 +45,8 @@ final class PhysicalPanel extends javax.swing.JPanel {
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
         CentralLookup cl = CentralLookup.getDefault();
         SimState state = cl.lookup(SimState.class);
-        MARS_Settings settings = state.getMARSSettings();
-        AbstractNode abstractNode = new SettingsNode(settings, "environment");
+        PhysicalEnvironment penv = state.getAuvManager().getPhysical_environment();
+        AbstractNode abstractNode = new EnvNode(penv, "environment");
         Node[] nodes = new Node[1];
         nodes[0] = abstractNode;
         ps.setNodes(nodes);

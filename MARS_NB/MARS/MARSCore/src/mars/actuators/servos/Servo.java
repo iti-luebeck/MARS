@@ -199,7 +199,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @return
      */
-    public float getOperatingAngle() {
+    public Float getOperatingAngle() {
         return (Float)variables.get("OperatingAngle");
     }
 
@@ -207,7 +207,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @param OperatingAngle
      */
-    public void setOperatingAngle(float OperatingAngle) {
+    public void setOperatingAngle(Float OperatingAngle) {
         variables.put("OperatingAngle", OperatingAngle);
     }
 
@@ -215,7 +215,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @return
      */
-    public float getResolution() {
+    public Float getResolution() {
         return (Float)variables.get("Resolution");
     }
 
@@ -223,7 +223,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @param Resolution
      */
-    public void setResolution(float Resolution) {
+    public void setResolution(Float Resolution) {
         variables.put("Resolution", Resolution);
     }
     
@@ -231,7 +231,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @return
      */
-    public int getServoNeutralPosition() {
+    public Integer getServoNeutralPosition() {
         return (Integer)variables.get("ServoNeutralPosition");
     }
 
@@ -239,7 +239,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @param ServoNeutralPosition
      */
-    public void setServoNeutralPosition(float ServoNeutralPosition) {
+    public void setServoNeutralPosition(Integer ServoNeutralPosition) {
         variables.put("ServoNeutralPosition", ServoNeutralPosition);
     }
 
@@ -247,7 +247,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @return
      */
-    public float getSpeedPerDegree() {
+    public Float getSpeedPerDegree() {
         return (Float)variables.get("SpeedPerDegree");
     }
 
@@ -255,7 +255,7 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
      * 
      * @param SpeedPerDegree
      */
-    public void setSpeedPerDegree(float SpeedPerDegree) {
+    public void setSpeedPerDegree(Float SpeedPerDegree) {
         variables.put("SpeedPerDegree", SpeedPerDegree);
     }
     

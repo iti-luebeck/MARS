@@ -98,23 +98,23 @@ public class UnderwaterModem extends CommunicationDevice{
      * @return
      */
     @Override
-    public float getPropagationDistance() {
-        return (Float)variables.get("propagation_distance");
+    public Float getPropagationDistance() {
+        return (Float)variables.get("propagationDistance");
     }
 
     /**
      * 
      * @param propagation_distance
      */
-    public void setPropagationDistance(float propagation_distance) {
-        variables.put("propagation_distance", propagation_distance);
+    public void setPropagationDistance(Float propagationDistance) {
+        variables.put("propagationDistance", propagationDistance);
     }
     
     /**
      * 
      * @return
      */
-    public boolean  isDebug() {
+    public boolean getDebug() {
         return (Boolean)variables.get("debug");
     }
 
@@ -131,15 +131,15 @@ public class UnderwaterModem extends CommunicationDevice{
      * @return
      */
     public ColorRGBA getDebugColor() {
-        return (ColorRGBA)variables.get("debug_color");
+        return (ColorRGBA)variables.get("debugColor");
     }
 
     /**
      * 
      * @param debug_color
      */
-    public void setDebugColor(ColorRGBA debug_color) {
-        variables.put("debug_color", debug_color);
+    public void setDebugColor(ColorRGBA debugColor) {
+        variables.put("debugColor", debugColor);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class UnderwaterModem extends CommunicationDevice{
         DebugDistance.setLocalTranslation(Vector3f.ZERO);
         DebugDistance.updateGeometricState();
         PhysicalExchanger_Node.attachChild(DebugDistance);
-        setDebugVisible(isDebug());
+        setDebugVisible(getDebug());
         
         PhysicalExchanger_Node.attachChild(comNet);
         
@@ -216,7 +216,7 @@ public class UnderwaterModem extends CommunicationDevice{
     
     private void updateState(String target, String hashmapname){
         if(target.equals("debug") && hashmapname.equals("")){
-            setDebugVisible(isDebug());
+            setDebugVisible(getDebug());
         }else if(target.equals("debug_color") && hashmapname.equals("")){
             debugDistanceMat.setColor("Color", getDebugColor());
         }else if(target.equals("propagation_distance") && hashmapname.equals("")){

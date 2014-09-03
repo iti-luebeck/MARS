@@ -205,8 +205,8 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
         this.fireIconChange();
-        if ("Position".equals(evt.getPropertyName()) || "Rotation".equals(evt.getPropertyName())) {
+        //if ("Position".equals(evt.getPropertyName()) || "Rotation".equals(evt.getPropertyName())) {
             setSheet(getSheet());
-        }
+        //}
     }
 }

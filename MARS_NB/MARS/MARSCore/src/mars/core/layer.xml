@@ -17,6 +17,9 @@
                 <attr name="selectionType" stringvalue="ANY"/>
             </file>-->
         </folder>
+        <folder name="Help">
+            <file name="org-netbeans-core-actions-AboutAction.shadow_hidden"/>
+        </folder>
     </folder>
     <folder name="OptionsDialog">
         <file name="General.instance_hidden"/>

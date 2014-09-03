@@ -544,9 +544,9 @@ public class MyProjectedGrid extends Mesh {
         BufferUtils.populateFromBuffer(bottomRight, normBuf, focalSpot + sizeX + 1);
 
         // Use linear interpolation to find the height.
-        topLeft.interpolateLocal(topRight, intOnX);
-        bottomLeft.interpolateLocal(bottomRight, intOnX);
-        topLeft.interpolateLocal(bottomLeft, intOnZ);
+        topLeft = topLeft.interpolate(topRight, intOnX);
+        bottomLeft = bottomLeft.interpolate(bottomRight, intOnX);
+        topLeft = topLeft.interpolate(bottomLeft, intOnZ);
         return topLeft.normalizeLocal();
     }
 

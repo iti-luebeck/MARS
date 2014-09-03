@@ -76,7 +76,7 @@ public class HanseBagPlayer extends Teleporter{
      * 
      * @return
      */
-    public int getPressureRelative() {
+    public Integer getPressureRelative() {
         return (Integer)variables.get("PressureRelative");
     }
 
@@ -84,7 +84,7 @@ public class HanseBagPlayer extends Teleporter{
      * 
      * @param PressureRelative 
      */
-    public void setPressureRelative(int PressureRelative) {
+    public void setPressureRelative(Integer PressureRelative) {
         variables.put("PressureRelative",PressureRelative);
     }
     

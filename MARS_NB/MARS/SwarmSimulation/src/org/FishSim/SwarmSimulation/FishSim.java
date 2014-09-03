@@ -21,6 +21,7 @@ import mars.states.SimState;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 @ServiceProvider(service=AbstractAppState.class)
 public class FishSim extends AbstractAppState implements AppStateExtension {
@@ -210,8 +211,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         removeSwarms();
         removeFoodSources();
         
-        rootNode.updateLogicalState(tpf);
-        rootNode.updateGeometricState();
+        //rootNode.updateLogicalState(tpf);
+        //rootNode.updateGeometricState();
     }
     
     /**

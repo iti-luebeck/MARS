@@ -164,7 +164,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                     Sphere auv_geom_sphere = new Sphere(16, 16, 0.025f);
                     Geometry auv_geom = new Geometry(auv.getName() + "-geom", auv_geom_sphere);
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    auv_geom_mat.setColor("Color", auv.getAuv_param().getMap_Color());
+                    auv_geom_mat.setColor("Color", auv.getAuv_param().getModelMapColor());
 
                     //don't forget transparency for depth
                     auv_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -201,7 +201,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         uw_geom.setLocalTranslation(0f,0f, -0.5f);
                         uw_geom.updateGeometricState();
                         auvNode.attachChild(uw_geom);
-                        if(uw.isDebug()){
+                        if(uw.getDebug()){
                             uw_geom.setCullHint(CullHint.Never);
                         }else{
                             uw_geom.setCullHint(CullHint.Always);
@@ -234,7 +234,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         son_geom.setLocalRotation(quat);
                         son_geom.updateGeometricState();
                         auvNode.attachChild(son_geom);
-                        if(son.isDebug()){
+                        if(son.getDebug()){
                             son_geom.setCullHint(CullHint.Never);
                         }else{
                             son_geom.setCullHint(CullHint.Always);
@@ -383,7 +383,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         while (it.hasNext()) {
                             UnderwaterModem uw = (UnderwaterModem)it.next();
                             Geometry uwgeom = (Geometry)node.getChild(auv.getName()+ "-" + uw.getName() + "-geom");
-                            if(uw.isDebug()){
+                            if(uw.getDebug()){
                                 uwgeom.setCullHint(CullHint.Never);
                                 Cylinder cyl = (Cylinder)uwgeom.getMesh();
                                 cyl.updateGeometry(16,16,uw.getPropagationDistance()*(2f/(terx_px*tile_length)),uw.getPropagationDistance()*(2f/(terx_px*tile_length)),0.1f,true,false);
@@ -398,7 +398,7 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                         while (it.hasNext()) {
                             Sonar son = (Sonar)it.next();
                             Geometry songeom = (Geometry)node.getChild(auv.getName()+ "-" + son.getName() + "-geom");
-                            if(son.isDebug()){
+                            if(son.getDebug()){
                                 songeom.setCullHint(CullHint.Never);
                                 Quaternion quat = new Quaternion();
                                 quat.fromAngles(0f, 0f, -son.getCurrentHeadPosition());
@@ -432,10 +432,10 @@ public class MapState extends AbstractAppState implements AppStateExtension{
                             
                             node.setLocalTranslation(auv_dist.x*(2f/(terx_px*tile_length)), (-1)*auv_dist.z*(2f/(tery_px*tile_length)), 0f);
                             float alpha = 0f;
-                            if(auv.getAuv_param().getAlpha_Depth_Scale() > 0f){
-                                alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getAlpha_Depth_Scale()))*(1f/auv.getAuv_param().getAlpha_Depth_Scale());
+                            if(auv.getAuv_param().getModelAlphaDepthScale() > 0f){
+                                alpha = Math.max(0f,Math.min(Math.abs(auv.getPhysicsControl().getPhysicsLocation().y),auv.getAuv_param().getModelAlphaDepthScale()))*(1f/auv.getAuv_param().getModelAlphaDepthScale());
                             }
-                            ColorRGBA auv_geom_color = auv.getAuv_param().getMap_Color();
+                            ColorRGBA auv_geom_color = auv.getAuv_param().getModelMapColor();
                             //Geometry geom = (Geometry)node.getChild(auv.getName()+"-geom");
                             geom.getMaterial().setColor("Color",  new ColorRGBA(auv_geom_color.getRed(), auv_geom_color.getGreen(), auv_geom_color.getBlue(), 1f-alpha));
                             

@@ -19,6 +19,24 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>mars.core.fatcow</code-name-base>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>mars.core.fugue</code-name-base>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>mars.core.sekkyumu</code-name-base>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>mars.libs.AbsoluteLayout</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -36,14 +54,6 @@
                 </dependency>
                 <dependency>
                     <code-name-base>mars.libs.JMonkeyOculusRift</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
-                    <code-name-base>mars.libs.RealSlimShader</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
@@ -212,6 +222,15 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.modules.javahelp</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>2.30.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.modules.options.api</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -344,9 +363,9 @@
                 <package>mars.gui</package>
                 <package>mars.gui.PropertyEditors</package>
                 <package>mars.gui.dnd</package>
+                <package>mars.gui.options</package>
                 <package>mars.gui.plot</package>
                 <package>mars.gui.sonarview</package>
-                <package>mars.gui.table</package>
                 <package>mars.gui.tree</package>
                 <package>mars.hardware</package>
                 <package>mars.recorder</package>

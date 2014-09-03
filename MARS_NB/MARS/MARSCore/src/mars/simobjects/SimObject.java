@@ -219,9 +219,9 @@ public class SimObject{
         physics_control = new RigidBodyControl(collisionShape, 0f);
         physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
         physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
-        physics_control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
+        physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
         
          //debug
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -341,16 +341,16 @@ public class SimObject{
      *
      * @return
      */
-    public String getDND_Icon() {
-        return (String)simob_variables.get("dnd_icon");
+    public String getDndIcon() {
+        return (String)simob_variables.get("dndIcon");
     }
 
     /**
      *
      * @param dnd_icon 
      */
-    public void setDND_Icon(String dnd_icon) {
-        simob_variables.put("dnd_icon", dnd_icon);
+    public void setDndIcon(String dndIcon) {
+        simob_variables.put("dndIcon", dndIcon);
     }
     
     /**
@@ -374,15 +374,15 @@ public class SimObject{
      * @return
      */
     public Vector3f getCollisionPosition() {
-        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("collision_position");
+        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("position");
     }
 
     /**
      *
      * @param collision_position 
      */
-    public void setCollisionPosition(Vector3f collision_position) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("collision_position", collision_position);
+    public void setCollisionPosition(Vector3f position) {
+        ((HashMap<String,Object>)simob_variables.get("Collision")).put("position", position);
     }
 
     /**
@@ -442,15 +442,23 @@ public class SimObject{
      * @return
      */
     public boolean isRayDetectable() {
-        return (Boolean)simob_variables.get("ray_detectable");
+        return (Boolean)simob_variables.get("rayDetectable");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getRayDetectable() {
+        return (Boolean)simob_variables.get("rayDetectable");
     }
 
     /**
      *
      * @param ray_detectable 
      */
-    public void setRayDetectable(boolean ray_detectable) {
-        simob_variables.put("ray_detectable", ray_detectable);
+    public void setRayDetectable(boolean rayDetectable) {
+        simob_variables.put("rayDetectable", rayDetectable);
     }
 
     /**

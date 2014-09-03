@@ -39,7 +39,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso( {Actuator.class,Sensor.class} )
-public abstract class PhysicalExchanger extends Noise implements ROS,PropertyChangeListenerSupport{
+public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,PropertyChangeListenerSupport{
 
     @SuppressWarnings("FieldMayBeFinal")
     private List listeners = Collections.synchronizedList(new LinkedList());
@@ -204,6 +204,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      *
      * @param name
      */
+    @Override
     public void setName(String name){
         String old = getName();
         //PhysicalExchangerName = name;
@@ -216,6 +217,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      *
      * @return
      */
+    @Override
     public String getName(){
         return (String)variables.get("name");
     }
@@ -263,6 +265,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @return
      */
+    @Override
     public Boolean getEnabled() {
         return (Boolean)variables.get("enabled");
     }
@@ -271,6 +274,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param enabled
      */
+    @Override
     public void setEnabled(Boolean enabled) {
         boolean old = getEnabled();
         variables.put("enabled", enabled);
@@ -350,7 +354,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param ros_publish_rate
      */
-    public void setRos_publish_rate(int ros_publish_rate) {
+    public void setRos_publish_rate(Integer ros_publish_rate) {
         int old = getRos_publish_rate();
         variables.put("ros_publish_rate",ros_publish_rate);
         fire("ros_publish_rate", old, ros_publish_rate);
@@ -372,7 +376,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param tf_ros_publish_rate 
      */
-    public void setTFRos_publish_rate(int tf_ros_publish_rate) {
+    public void setTFRos_publish_rate(Integer tf_ros_publish_rate) {
         int old = getTFRos_publish_rate();
         variables.put("tf_ros_publish_rate",tf_ros_publish_rate);
         fire("tf_ros_publish_rate", old, tf_ros_publish_rate);
@@ -414,7 +418,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param ros_queue_listener_size 
      */
-    public void setRos_queue_listener_size(int ros_queue_listener_size) {
+    public void setRos_queue_listener_size(Integer ros_queue_listener_size) {
         int old = getRos_queue_listener_size();
         //this.ros_frame_id = ros_frame_id;
         variables.put("ros_queue_listener_size",ros_queue_listener_size);
@@ -485,7 +489,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * @return
      */
     public String getdnd_icon(){
-        return (String)variables.get("dnd_icon");
+        return (String)variables.get("dndIcon");
     }
     
     /**
@@ -504,8 +508,8 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      */
     public void setdnd_icon(String dnd_icon){
         String old = getdnd_icon();
-        variables.put("dnd_icon",dnd_icon);
-        fire("dnd_icon", old, dnd_icon);
+        variables.put("dndIcon",dnd_icon);
+        fire("dndIcon", old, dnd_icon);
     }
 
     /**
@@ -574,7 +578,7 @@ public abstract class PhysicalExchanger extends Noise implements ROS,PropertyCha
      * 
      * @param currentConsumption
      */
-    public void setCurrentConsumptio(float currentConsumption){
+    public void setCurrentConsumption(Float currentConsumption){
         Float old = getCurrentConsumption();
         variables.put("currentConsumption",currentConsumption);
         fire("currentConsumption", old, currentConsumption);

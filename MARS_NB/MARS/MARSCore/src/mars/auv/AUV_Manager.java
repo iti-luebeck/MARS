@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -618,7 +619,7 @@ public class AUV_Manager implements UpdateState{
      */
     private void addAUVToNode(AUV auv, Node node){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
-        if(auv.getAuv_param().isRay_Detectable()){
+        if(auv.getAuv_param().isRayDetectable()){
             RayDetectable.attachChild(auv.getSelectionNode());
         }
         node.attachChild(auv.getSelectionNode());

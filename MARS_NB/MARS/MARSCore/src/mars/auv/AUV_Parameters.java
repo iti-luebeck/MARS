@@ -89,6 +89,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         for (int i = 0; i < pcls.length; i++) {
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
+        updateVariable(propertyName);
     }
     
     /**
@@ -108,21 +109,21 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      */
     public void createDefault(){
         initAfterJAXB();
-        setAlpha_Depth_Scale(3.0f);
+        setModelAlphaDepthScale(3.0f);
         setAngular_factor(1.0f);
         setName("basicAUV");
         setOptimizeBatched(true);
-        setBuoyancy_distance(0.0f);
-        setBuoyancy_resolution(0.03125f);
-        setBuoyancy_scale(0.9f);
-        setBuoyancy_updaterate(1);
-        setBuoyancy_Dimensions(Vector3f.UNIT_XYZ);
-        setBuoyancy_Position(Vector3f.ZERO);
+        setBuoyancyDistance(0.0f);
+        setBuoyancyResolution(0.03125f);
+        setBuoyancyFactor(0.9f);
+        setBuoyancyUpdaterate(1);
+        setBuoyancyDimensions(Vector3f.UNIT_XYZ);
+        setBuoyancyPosition(Vector3f.ZERO);
         setBuoyancyScale(Vector3f.UNIT_XYZ);
-        setBuoyancy_Type(0);
+        setBuoyancyType(0);
         setCentroid_center_distance(Vector3f.ZERO);
         setCollisionPosition(Vector3f.ZERO);
-        setDND_Icon("");
+        setDndIcon("");
         setDamping_angular(0.1f);
         setDamping_linear(0.2f);
         setDebugBounding(false);
@@ -131,7 +132,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setDebugCollision(false);
         setDebugDrag(false);
         setDebugPhysicalExchanger(false);
-        setDebugVisualizers(false);
+        setDebugVisualizer(false);
         setDebugWireframe(false);
         setDebugBuoycancyVolume(false);
         setCollisionDimensions(Vector3f.UNIT_XYZ);
@@ -147,7 +148,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setOptimizeLodReduction1(0.3f);
         setOptimizeLodReduction2(0.6f);
         setOptimizeLodTrisPerPixel(0.5f);
-        setMap_Color(ColorRGBA.Red);
+        setModelMapColor(ColorRGBA.Red);
         setMass(1.0f);
         setWaypointsMaxWaypoints(25);
         setModelFilepath("");
@@ -157,10 +158,10 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
         setOffCamera_width(320);
         setPhysicalvalues_updaterate(0.0f);
         setPosition(Vector3f.ZERO);
-        setRay_Detectable(false);
+        setRayDetectable(false);
         setRotation(Vector3f.ZERO);
         setRotationQuaternion(Quaternion.IDENTITY);
-        setSelection_color(ColorRGBA.Red);
+        setModelSelectionColor(ColorRGBA.Red);
         setCollisionType(1);
         setWaypointsLineWidth(5.0f);
         setWaypointsColor(ColorRGBA.White);
@@ -174,6 +175,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * 
      * @param path
      */
+    @Deprecated
     public void updateState(TreePath path){
         System.out.println("TREEPATH: " + path);
         if(path.getPathComponent(2).equals(this)){//make sure we want to change auv params
@@ -190,6 +192,72 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @param target
      * @param hashmapname
      */
+    public void updateVariable(String target){
+        RigidBodyControl physics_control = auv.getPhysicsControl();
+        if(target.equals("position")){
+            if(physics_control != null ){
+                physics_control.setPhysicsLocation(getPosition());
+            }
+        }/*else if(target.equals("collision") && hashmapname.equals("Debug")){
+            auv.setCollisionVisible(isDebugCollision());
+        }else if(target.equals("rotation") && hashmapname.equals("")){
+            if(physics_control != null ){
+                Matrix3f m_rot = new Matrix3f();
+                Quaternion q_rot = new Quaternion();
+                q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
+                m_rot.set(q_rot);
+                physics_control.setPhysicsRotation(m_rot);
+            }
+        }else if(target.equals("scale") && hashmapname.equals("Model")){
+            auv.getAUVSpatial().setLocalScale(getModelScale());
+        }else if(target.equals("collisionbox")){*/
+            /*if(physics_control != null ){
+                CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
+                BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getCollisionDimensions());
+                compoundCollisionShape1.addChildShape(boxCollisionShape, getCentroid_center_distance());
+                RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass());
+                if(isDebugCollision()){
+                    Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
+                    debug_mat.setColor("Color", ColorRGBA.Red);
+                    physics_control.attachDebugShape(debug_mat);
+                }
+                new_physics_control.setCollisionGroup(1);
+                new_physics_control.setCollideWithGroups(1);
+                new_physics_control.setDamping(getDamping_linear(), getDamping_angular());
+                auv.setPhysicsControl(new_physics_control);
+            }*/
+        /*}else if(target.equals("physical_exchanger") && hashmapname.equals("Debug")){
+            auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
+        }else if(target.equals("centers") && hashmapname.equals("Debug")){
+            auv.setCentersVisible(isDebugCenters());
+        }else if(target.equals("visualizer") && hashmapname.equals("Debug")){
+            auv.setVisualizerVisible(isDebugVisualizers());
+        }else if(target.equals("bounding") && hashmapname.equals("Debug")){
+            auv.setBoundingBoxVisible(isDebugBounding());
+        }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
+            auv.setWaypointsEnabled(isWaypointsEnabled());
+        }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
+            auv.setWayPointsVisible(isWaypointsVisiblity());
+        }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
+            
+        }else if(target.equals("mass_auv") && hashmapname.equals("")){
+            if(physics_control != null ){
+                physics_control.setMass(getMass());
+            }
+        }else if(target.equals("enabled") && hashmapname.equals("")){
+            if(!isEnabled()){
+                //check if it exist before removing
+
+            }
+        }     */  
+    }
+    
+    /**
+     * 
+     * @param target
+     * @param hashmapname
+     */
+    @Deprecated
     public void updateState(String target, String hashmapname){
         RigidBodyControl physics_control = auv.getPhysicsControl();
         if(target.equals("collision") && hashmapname.equals("Debug")){
@@ -302,16 +370,16 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public String getDND_Icon() {
-        return (String)params.get("dnd_icon");
+    public String getDndIcon() {
+        return (String)params.get("dndIcon");
     }
 
     /**
      *
      * @param dnd_icon 
      */
-    public void setDND_Icon(String dnd_icon) {
-        params.put("dnd_icon", dnd_icon);
+    public void setDndIcon(String dndIcon) {
+        params.put("dndIcon", dndIcon);
     }
 
     /**
@@ -507,16 +575,24 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Boolean isRay_Detectable() {
-        return (Boolean)params.get("ray_detectable");
+    public Boolean isRayDetectable() {
+        return (Boolean)params.get("rayDetectable");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getRayDetectable() {
+        return (Boolean)params.get("rayDetectable");
     }
 
     /**
      *
      * @param ray_detectable 
      */
-    public void setRay_Detectable(Boolean ray_detectable) {
-        params.put("ray_detectable", ray_detectable);
+    public void setRayDetectable(Boolean rayDetectable) {
+        params.put("rayDetectable", rayDetectable);
     }
 
         /**
@@ -651,96 +727,96 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Integer getBuoyancy_updaterate() {
-        return (Integer)buoyancy.get("buoyancy_updaterate");
+    public Integer getBuoyancyUpdaterate() {
+        return (Integer)buoyancy.get("updaterate");
     }
 
     /**
      *
      * @param buoyancy_updaterate
      */
-    public void setBuoyancy_updaterate(Integer buoyancy_updaterate) {
-        buoyancy.put("buoyancy_updaterate", buoyancy_updaterate);
+    public void setBuoyancyUpdaterate(Integer updaterate) {
+        buoyancy.put("updaterate", updaterate);
     }
 
     /**
      *
      * @return
      */
-    public Float getBuoyancy_distance() {
-        return (Float)buoyancy.get("buoyancy_distance");
+    public Float getBuoyancyDistance() {
+        return (Float)buoyancy.get("distance");
     }
 
     /**
      *
      * @param buoyancy_distance
      */
-    public void setBuoyancy_distance(Float buoyancy_distance) {
-        buoyancy.put("buoyancy_distance", buoyancy_distance);
+    public void setBuoyancyDistance(Float distance) {
+        buoyancy.put("distance", distance);
     }
 
     /**
      *
      * @return
      */
-    public Float getBuoyancy_scale() {
-        return (Float)buoyancy.get("buoyancy_scale");
+    public Float getBuoyancyFactor() {
+        return (Float)buoyancy.get("factor");
     }
 
     /**
      *
      * @param buoyancy_scale
      */
-    public void setBuoyancy_scale(Float buoyancy_scale) {
-        buoyancy.put("buoyancy_scale", buoyancy_scale);
+    public void setBuoyancyFactor(Float factor) {
+        buoyancy.put("factor", factor);
     }
     
         /**
      *
      * @return
      */
-    public Float getBuoyancy_resolution() {
-        return (Float)buoyancy.get("buoyancy_resolution");
+    public Float getBuoyancyResolution() {
+        return (Float)buoyancy.get("resolution");
     }
 
     /**
      *
      * @param buoyancy_resolution 
      */
-    public void setBuoyancy_resolution(Float buoyancy_resolution) {
-        buoyancy.put("buoyancy_resolution", buoyancy_resolution);
+    public void setBuoyancyResolution(Float resolution) {
+        buoyancy.put("resolution", resolution);
     }
     
         /**
      *
      * @return
      */
-    public Vector3f getBuoyancy_Dimensions() {
-        return (Vector3f)buoyancy.get("buoyancy_dimensions");
+    public Vector3f getBuoyancyDimensions() {
+        return (Vector3f)buoyancy.get("dimensions");
     }
 
     /**
      *
      * @param buoyancy_dimensions 
      */
-    public void setBuoyancy_Dimensions(Vector3f buoyancy_dimensions) {
-        buoyancy.put("buoyancy_dimensions", buoyancy_dimensions);
+    public void setBuoyancyDimensions(Vector3f dimensions) {
+        buoyancy.put("dimensions", dimensions);
     }
     
     /**
      *
      * @return
      */
-    public Vector3f getBuoyancy_Position() {
-        return (Vector3f)buoyancy.get("buoyancy_position");
+    public Vector3f getBuoyancyPosition() {
+        return (Vector3f)buoyancy.get("position");
     }
 
     /**
      *
      * @param buoyancy_position 
      */
-    public void setBuoyancy_Position(Vector3f buoyancy_position) {
-        buoyancy.put("buoyancy_position", buoyancy_position);
+    public void setBuoyancyPosition(Vector3f position) {
+        buoyancy.put("position", position);
     }
     
     /**
@@ -748,31 +824,31 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @return
      */
     public Vector3f getBuoyancyScale() {
-        return (Vector3f)buoyancy.get("buoyancyScale");
+        return (Vector3f)buoyancy.get("scale");
     }
 
     /**
      *
      * @param buoyancyScale 
      */
-    public void setBuoyancyScale(Vector3f buoyancyScale) {
-        buoyancy.put("buoyancyScale", buoyancyScale);
+    public void setBuoyancyScale(Vector3f scale) {
+        buoyancy.put("scale", scale);
     }
 
     /**
      *
      * @return
      */
-    public Integer getBuoyancy_Type() {
-        return (Integer)buoyancy.get("buoyancy_type");
+    public Integer getBuoyancyType() {
+        return (Integer)buoyancy.get("type");
     }
 
     /**
      *
      * @param buoyancy_type 
      */
-    public void setBuoyancy_Type(Integer buoyancy_type) {
-        buoyancy.put("buoyancy_type", buoyancy_type);
+    public void setBuoyancyType(Integer type) {
+        buoyancy.put("type", type);
     }
 
     /**
@@ -811,48 +887,48 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public ColorRGBA getSelection_color() {
-         return (ColorRGBA)model.get("selection_color");
+    public ColorRGBA getModelSelectionColor() {
+         return (ColorRGBA)model.get("selectionColor");
     }
 
     /**
      *
      * @param color
      */
-    public void setSelection_color(ColorRGBA color) {
-        model.put("selection_color", color);
+    public void setModelSelectionColor(ColorRGBA selectionColor) {
+        model.put("selectionColor", selectionColor);
     }
     
         /**
      *
      * @return
      */
-    public ColorRGBA getMap_Color() {
-         return (ColorRGBA)model.get("map_color");
+    public ColorRGBA getModelMapColor() {
+         return (ColorRGBA)model.get("mapColor");
     }
 
     /**
      *
      * @param color
      */
-    public void setMap_Color(ColorRGBA color) {
-        model.put("map_color", color);
+    public void setModelMapColor(ColorRGBA mapColor) {
+        model.put("mapColor", mapColor);
     }
     
     /**
      *
      * @return
      */
-    public Float getAlpha_Depth_Scale() {
-        return (Float)model.get("alpha_depth_scale");
+    public Float getModelAlphaDepthScale() {
+        return (Float)model.get("alphaDepthScale");
     }
 
     /**
      *
      * @param alpha_depth_scale 
      */
-    public void setAlpha_Depth_Scale(Float alpha_depth_scale) {
-        model.put("alpha_depth_scale", alpha_depth_scale);
+    public void setModelAlphaDepthScale(Float alphaDepthScale) {
+        model.put("alphaDepthScale", alphaDepthScale);
     }
 
     /**
@@ -996,7 +1072,10 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @param position
      */
     public void setPosition(Vector3f position) {
+        Vector3f old = getPosition();
+        //PhysicalExchangerName = name;
         params.put("position", position);
+        fire("position", old, position);
     }
 
     /**
@@ -1057,15 +1136,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @return
      */
     public Vector3f getCollisionPosition() {
-        return (Vector3f)collision.get("collision_position");
+        return (Vector3f)collision.get("position");
     }
 
     /**
      *
      * @param collision_position 
      */
-    public void setCollisionPosition(Vector3f collision_position) {
-        collision.put("collision_position", collision_position);
+    public void setCollisionPosition(Vector3f position) {
+        collision.put("position", position);
     }
 
     /**
@@ -1089,15 +1168,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @return
      */
     public Float getMass() {
-        return (Float)params.get("mass_auv");
+        return (Float)params.get("mass");
     }
 
     /**
      *
      * @param mass_auv
      */
-    public void setMass(Float mass_auv) {
-        params.put("mass_auv", mass_auv);
+    public void setMass(Float mass) {
+        params.put("mass", mass);
     }
 
     /**
@@ -1312,7 +1391,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @return
      */
-    public Boolean getDebugVisualizers() {
+    public Boolean getDebugVisualizer() {
          return (Boolean)debug.get("visualizer");
     }
 
@@ -1320,7 +1399,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      *
      * @param visualizer 
      */
-    public void setDebugVisualizers(Boolean visualizer) {
+    public void setDebugVisualizer(Boolean visualizer) {
         debug.put("visualizer", visualizer);
     }
 

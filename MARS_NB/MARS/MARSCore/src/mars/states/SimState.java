@@ -197,10 +197,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     public void cleanup() {
         super.cleanup();
         
-        //deattach the state root node from the main 
-        mars.getRootNode().detachChild(getRootNode());
-        getRootNode().detachAllChildren();
-        
         //cleanup the initer (viewport, filters)
         initer.cleanup();
         
@@ -212,6 +208,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         //clean the cameras
         chaseCam.setEnabled(false);
         chaseCam = null;
+        
+        //deattach the state root node from the main 
+        mars.getRootNode().detachChild(getRootNode());
+        getRootNode().detachAllChildren();
     }
 
     /**
@@ -460,7 +460,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             Lookup lkp = Lookup.getDefault();
             AbstractAppState state = lkp.lookup(AbstractAppState.class);
             if(state != null){
-                //stateManager.attach(state);
+                stateManager.attach(state);
             }
         }
         progr.progress( "Init Super" );
@@ -891,14 +891,16 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         
         if(initer != null && initer.getSkyControl() != null){
             if(getMARSSettings().getSkyDomeSpeed() != 0f){
-                initer.getTimeOfDay().update(tpf);
-                initer.getTimeOfDay().setRate(getMARSSettings().getSkyDomeSpeed() * getMARSSettings().getSkyDomeDirection());
-                initer.getSkyControl().getSunAndStars().setHour(initer.getTimeOfDay().getHour());
+                if(initer.getTimeOfDay().isInitialized()){
+                    initer.getTimeOfDay().update(tpf);
+                    initer.getTimeOfDay().setRate(getMARSSettings().getSkyDomeSpeed() * getMARSSettings().getSkyDomeDirection());
+                    initer.getSkyControl().getSunAndStars().setHour(initer.getTimeOfDay().getHour());
+                }
             }
         }
         
-        rootNode.updateLogicalState(tpf);
-        rootNode.updateGeometricState();
+        //rootNode.updateLogicalState(tpf);
+        //rootNode.updateGeometricState();
     }
     
     /**

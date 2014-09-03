@@ -22,6 +22,7 @@ import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
 import javax.swing.JOptionPane;
+import mars.AUVObject;
 import mars.ChartValue;
 import mars.MARS_Main;
 import mars.Manipulating;
@@ -78,6 +79,7 @@ import org.openide.nodes.Children;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
+import org.openide.util.HelpCtx;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.Lookups;
 
@@ -218,6 +220,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }*/
 
         setDisplayName(nodeName);
+        setShortDescription(obj.getClass().toString());
     }
 
     /**
@@ -228,8 +231,8 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getIcon(int type) {
-        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe == null || pe.getEnabled()) {
+        AUVObject auvObject = getLookup().lookup(AUVObject.class);
+        if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
@@ -245,8 +248,8 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Image getOpenedIcon(int type) {
-        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        if (pe == null || pe.getEnabled()) {
+        AUVObject auvObject = getLookup().lookup(AUVObject.class);
+        if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
         }else{
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
@@ -381,6 +384,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                     }
 
                     prop.setName(name);
+                    prop.setShortDescription("test lirum ipsum");
                     set.put(prop);
                 } catch (NoSuchMethodException ex) {
                     ErrorManager.getDefault();
@@ -473,7 +477,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             return new Action[]{new ViewCameraAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof RayBasedSensor){
             return new Action[]{new SonarPlanarAction(), new SonarPolarAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else if(obj instanceof UnderwaterModem){
+        }else if(obj instanceof CommunicationDevice){
             return new Action[]{new ViewCommunicationAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }else if(obj instanceof ChartValue){
             return new Action[]{new DataChartAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
@@ -481,7 +485,12 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             return new Action[]{new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
         }
    }
-    
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx(obj.getClass().getCanonicalName());
+    }
+
     /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
@@ -489,23 +498,23 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
-            if(obj instanceof PhysicalExchanger){
-                PhysicalExchanger objpe = (PhysicalExchanger) obj;
-                if (objpe.getEnabled()) {
+            if(obj instanceof AUVObject){
+                AUVObject auvObject = (AUVObject) obj;
+                if (auvObject.getEnabled()) {
                     putValue(NAME, "Disable");
                 } else {
                     putValue(NAME, "Enable");
                 }
-            }  
+            }
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-            boolean peEnabled = pe.isEnabled();
-            pe.setEnabled(false);
+            AUVObject auvObject = getLookup().lookup(AUVObject.class);
+            boolean peEnabled = auvObject.getEnabled();
+            auvObject.setEnabled(!peEnabled);
             propertyChange(new PropertyChangeEvent(this, "enabled", !peEnabled, peEnabled));
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }

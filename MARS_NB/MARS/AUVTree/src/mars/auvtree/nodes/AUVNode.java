@@ -27,12 +27,16 @@ import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
 import mars.states.SimState;
 import mars.auvtree.TreeUtil;
+import mars.core.MARSChartTopComponent;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.actions.Presenter;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.ExTransferable;
+import org.openide.util.datatransfer.TransferListener;
+import org.openide.util.lookup.Lookups;
 
 /**
  * This class is the representation for the auv's in the tree.
@@ -46,16 +50,16 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      * Name of the icon on the harddrive.
      */
     private final String iconName;
-
-    /**
-     * AUV object from mars.
-     */
-    private final BasicAUV auv;
     
     /**
      * 
      */
     private final MARS_Main mars;
+    
+    /**
+     * 
+     */
+    private final AUV auv;
     
     /**
      * 
@@ -67,8 +71,8 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     private String name;
 
-    public AUVNode(String name) {
-        super(Children.create(new ParamChildNodeFactory(name), true));
+    public AUVNode(Object obj,String name) {
+        super(Children.create(new ParamChildNodeFactory(name), true),Lookups.singleton(obj));
         this.name = name;
 
         // use lookup to get auv out of mars
@@ -76,15 +80,15 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         auvManager = cl.lookup(AUV_Manager.class);
         mars = cl.lookup(MARS_Main.class);
 
-        auv = (BasicAUV) auvManager.getAUV(name);
-
-        if(auv.getAuv_param().getIcon() == null){//default
+        auv = getLookup().lookup(AUV.class);
+        if(auv != null && auv.getAuv_param().getIcon() == null){//default
             iconName = "yellow_submarine.png";
         }else{
             iconName = auv.getAuv_param().getIcon();
         }
 
         setDisplayName(name);
+        setShortDescription(auv.getClass().toString());
     }
 
     /**
@@ -130,24 +134,44 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Transferable drag() throws IOException {
-        return new Transferable() {
+        Transferable transferable = new Transferable(){
+                                        @Override
+                                        public DataFlavor[] getTransferDataFlavors() {
+                                            DataFlavor[] dt = new DataFlavor[1];
+                                            dt[0] = new TransferHandlerObjectDataFlavor();
+                                            return dt;
+                                        }
+
+                                        @Override
+                                        public boolean isDataFlavorSupported(DataFlavor flavor) {
+                                            return true;
+                                        }
+
+                                        @Override
+                                        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                                            return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
+                                        }
+                                    };
+        ExTransferable create = ExTransferable.create(transferable);
+        TransferListener tfl = new TransferListener() {
+
             @Override
-            public DataFlavor[] getTransferDataFlavors() {
-                DataFlavor[] dt = new DataFlavor[1];
-                dt[0] = new TransferHandlerObjectDataFlavor();
-                return dt;
+            public void accepted(int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
-            public boolean isDataFlavorSupported(DataFlavor flavor) {
-                return true;
+            public void rejected() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
-            public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
+            public void ownershipLost() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
+        create.addTransferListener(tfl);
+        return create;
     }
 
     /**
@@ -169,7 +193,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             boolean auvEnabled = auv.getAuv_param().isEnabled();
             auv.getAuv_param().setEnabled(!auvEnabled);
             propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -196,7 +220,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
                 return null;
             }
             });
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -216,14 +240,11 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
               Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
+                auv.reset();
                 return null;
             }
             });
-            JOptionPane.showMessageDialog(null, "Done!");
+            //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
@@ -236,20 +257,25 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     private class DebugAction extends AbstractAction implements Presenter.Popup {
         
         public DebugAction() {
-            putValue(NAME, "test");
+            putValue(NAME, "Buoyancy");
         }
         
         @Override
         public JMenuItem getPopupPresenter() {
             JMenu result = new JMenu("Add Debug Data to Chart");  //remember JMenu is a subclass of JMenuItem
             result.add (new JMenuItem(this));
-            result.add (new JMenuItem(this));
             return result;
         }
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            MARSChartTopComponent chart = new MARSChartTopComponent(auv);
+
+            chart.setName("Chart of: " + auv.getName());
+            chart.open();
+            chart.requestActive(); 
+
+            chart.repaint();
         }
     }        
 

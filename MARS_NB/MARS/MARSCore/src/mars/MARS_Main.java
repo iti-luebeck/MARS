@@ -428,7 +428,9 @@ public class MARS_Main extends SimpleApplication{
     private void endStart(){
         Future startStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
-                stateManager.getState(StartState.class).setEnabled(false);
+                if(stateManager.getState(StartState.class)!=null){
+                    stateManager.getState(StartState.class).setEnabled(false);
+                }
                 return null;
             }
         });

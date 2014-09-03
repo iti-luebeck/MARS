@@ -80,7 +80,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "MARSTreeTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "properties", openAtStartup = true)
+@TopComponent.Registration(mode = "properties", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSTreeTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -741,7 +741,7 @@ public final class MARSTreeTopComponent extends TopComponent {
                                     //addDataToChart.setVisible(false);
                                     RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
                                     lastSelectedRayBasedSensor = rays;
-                                    if(rays.isScanning()){
+                                    if(rays.getScanning()){
                                         viewSonarPolar.setEnabled(true);
                                         viewSonarPlanar.setEnabled(true);
                                     }else{
@@ -1839,7 +1839,7 @@ public final class MARSTreeTopComponent extends TopComponent {
                 newParam.setAuv(auv);
                 newParam.setName(auv.getName());
                 if(saveIdentity.isSelected()){//extra identity save
-                    newParam.setDND_Icon(auv.getAuv_param().getDND_Icon());
+                    newParam.setDndIcon(auv.getAuv_param().getDndIcon());
                     newParam.setIcon(auv.getAuv_param().getIcon());
                 }
                 mod.valueForPathChanged(newPath, newParam);

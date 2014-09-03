@@ -138,7 +138,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * 
      * @return
      */
-    public float getCanonForce() {
+    public Float getCanonForce() {
         return (Float)variables.get("CanonForce");
     }
 
@@ -146,7 +146,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * 
      * @param CanonForce
      */
-    public void setCanonForce(float CanonForce) {
+    public void setCanonForce(Float CanonForce) {
         variables.put("CanonForce", CanonForce);
     }
 
@@ -154,7 +154,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * 
      * @return
      */
-    public float getRecoilForce() {
+    public Float getRecoilForce() {
         return (Float)variables.get("RecoilForce");
     }
 
@@ -162,7 +162,7 @@ public class Canon extends Actuator implements Moveable,Keys{
      * 
      * @param RecoilForce
      */
-    public void setRecoilForce(float RecoilForce) {
+    public void setRecoilForce(Float RecoilForce) {
         variables.put("RecoilForce", RecoilForce);
     }
 

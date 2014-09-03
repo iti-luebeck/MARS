@@ -34,8 +34,8 @@ public class SimObTransferHandler extends TransferHandler{
             if( selPath != null ){// to be save of "bad" clicking
                 if (selPath.getLastPathComponent() instanceof SimObject) { 
                     SimObject simob = (SimObject)selPath.getLastPathComponent();
-                    if(!simob.getDND_Icon().equals("")){
-                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+simob.getDND_Icon(), "mars.core", false);
+                    if(!simob.getDndIcon().equals("")){
+                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+simob.getDndIcon(), "mars.core", false);
                         img = ImageIO.read(file);
                     }else{// no dnd image
                         File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+"simob_undefined_dnd.png", "mars.core", false);

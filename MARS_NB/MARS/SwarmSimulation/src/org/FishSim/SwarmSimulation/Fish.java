@@ -17,6 +17,7 @@ import mars.control.MyLodControl;
 /**
  *
  * @author Mandy Feldvoß
+ * @author Thomas Tosik
  */
 
 public class Fish extends Node{
@@ -47,7 +48,6 @@ public class Fish extends Node{
      */
     public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm, String path, boolean animation){
         this.sim = sim;
-        control = new FishControl(this);
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
         if(animation){
             modelControl = model.getChild("Cube").getControl(AnimControl.class);
@@ -55,12 +55,12 @@ public class Fish extends Node{
             channel_swim.setAnim("ArmatureAction.001");
             channel_swim.setLoopMode(LoopMode.Loop);
         }
-        optimize(model);
+        //optimize(model);
         attachChild(model);
         scale(scale.x, scale.y, scale.z);
         setLocalTranslation(localTrans);
-        this.swarm = swarm;     
-        sim.getRootNode().attachChild(this);
+        this.swarm = swarm;
+        control = new FishControl(this);
     }
     
     /**
@@ -109,7 +109,7 @@ public class Fish extends Node{
      * @param tpf Time per frame
      */
     public void swim(float tpf){
-        //control.swim(tpf);
+        control.swim(tpf);
     }
     
     /**

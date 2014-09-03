@@ -227,10 +227,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
             initer.hideProjectedWavesWater(isProjectedWavesWaterEnabled());
         }else if(hashmapname.equals("ProjectedWavesWater")){
             initer.updateProjectedWavesWater();
-        }/*else if(target.equals("position") && hashmapname.equals("Terrain")){
-            initer.getTerrainNode().setLocalTranslation(getTerrainPosition());
-        }*/
-        else if(hashmapname.equals("Terrain")){
+        }else if(hashmapname.equals("Terrain")){
             //initer.updateTerrain();
         }else if(hashmapname.equals("Grass")){
             initer.updateGrass();
@@ -248,8 +245,6 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
             initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
             initer.resetTimeOfDay(getSkyDomeHour());
         }
-        
-        
     }
     
     /**

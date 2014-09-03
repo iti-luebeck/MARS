@@ -121,7 +121,7 @@ public abstract class CommunicationDevice extends Sensor{
      *
      * @return
      */
-    public abstract float getPropagationDistance();
+    public abstract Float getPropagationDistance();
     
     /**
      *

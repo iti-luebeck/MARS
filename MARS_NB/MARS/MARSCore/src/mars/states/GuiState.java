@@ -658,7 +658,7 @@ public class GuiState extends AbstractAppState{
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
 
         // Aim the ray from the clicked spot forwards.
-        Ray ray = new Ray(click3d, dir);
+        Ray ray = new Ray(click3d, dir.normalizeLocal());
         // Collect intersections between ray and all nodes in results list.
         AUVsNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
@@ -833,7 +833,7 @@ public class GuiState extends AbstractAppState{
                 case 4: selected_auv.getAuv_param().setDebugDrag(selected);selected_auv.setDragVisible(selected);break;
                 case 5: selected_auv.getAuv_param().setDebugWireframe(selected);selected_auv.setWireframeVisible(selected);break;
                 case 6: selected_auv.getAuv_param().setDebugBounding(selected);selected_auv.setBoundingBoxVisible(selected);break;
-                case 7: selected_auv.getAuv_param().setDebugVisualizers(selected);selected_auv.setVisualizerVisible(selected);break;
+                case 7: selected_auv.getAuv_param().setDebugVisualizer(selected);selected_auv.setVisualizerVisible(selected);break;
                 case 8: selected_auv.getAuv_param().setDebugBuoycancyVolume(selected);selected_auv.setBuoyancyVolumeVisible(selected);break;
                 default:;
             }                
