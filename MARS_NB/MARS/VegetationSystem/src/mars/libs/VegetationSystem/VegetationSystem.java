@@ -221,8 +221,23 @@ public class VegetationSystem extends Node{
      * @param radius radius in which the camera is considered near
      * @return the genuine grass object
      */
-    public Geometry createGenuineGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius){
+    /**
+     * Creates a genuine grass object
+     * @param texturePath path of the texture
+     * @param alphaDT the alpha discard threshold
+     * @param sway sway animation performed by the grass by force of wind
+     * @param response deforming the grass when near
+     * @param fade in and out fading of the object when displayed at maximium range
+     * @param wind vector which defines the wind
+     * @param swayFreq frequancy at which the grass will sway
+     * @param radius radius in which the camera is considered near
+     * @param rHeight height in which the camera affects the grass
+     * @param scale scaling of the grass object
+     * @return the genuine grass object
+     */
+    public Geometry createGenuineGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius, float rHeight, Vector3f scale){
         Geometry grassModel = new Geometry("Grass", new GrassTuft());
+        grassModel.scale(scale.x, scale.y, scale.z);
         Material grassMaterial = new Material(am, "Common/MatDefs/Grass/Grass.j3md");
         Texture grass = am.loadTexture(texturePath);
         
@@ -231,6 +246,8 @@ public class VegetationSystem extends Node{
         grassMaterial.setBoolean("Swaying", sway);
         grassMaterial.setBoolean("Response", response);
         grassMaterial.setFloat("RespRadius", radius);
+        grassMaterial.setFloat("RespHeight", rHeight);
+        grassMaterial.setFloat("ModelHeight", 2*scale.y);
         grassMaterial.setBoolean("Fade", fade);
         grassMaterial.setVector2("Wind", wind);
         grassMaterial.setFloat("SwayFrequency", swayFreq);
@@ -252,10 +269,13 @@ public class VegetationSystem extends Node{
      * @param wind vector which defines the wind
      * @param swayFreq frequancy at which the grass will sway
      * @param radius radius in which the camera is considered near
+     * @param rHeight height in which the camera affects the grass
+     * @param scale scaling of the grass object
      * @return the genuine grass object
      */
-    public Geometry createImposterGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius){
+    public Geometry createImposterGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius, float rHeight, Vector3f scale){
         Geometry grassModel = new Geometry("Grass", new GrassQuad());
+        grassModel.scale(scale.x, scale.y, scale.z);
         Material grassMaterial = new Material(am, "Common/MatDefs/Grass/Grass.j3md");
         Texture grass = am.loadTexture(texturePath);
         
@@ -264,6 +284,7 @@ public class VegetationSystem extends Node{
         grassMaterial.setBoolean("Swaying", sway);
         grassMaterial.setBoolean("Response", response);
         grassMaterial.setFloat("RespRadius", radius);
+        grassMaterial.setFloat("ModelHeight", 2*scale.y);
         grassMaterial.setBoolean("Fade", fade);
         grassMaterial.setVector2("Wind", wind);
         grassMaterial.setFloat("SwayFrequency", swayFreq);

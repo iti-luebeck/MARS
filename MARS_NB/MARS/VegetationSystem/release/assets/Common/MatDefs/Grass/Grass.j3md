@@ -2,7 +2,6 @@ MaterialDef Grass {
 
     MaterialParameters {
 
-        //Forester
         //Is the grass swaying or not?
         Boolean Swaying
 
@@ -14,6 +13,15 @@ MaterialDef Grass {
 
         //Does the grass response to camera position?
         Boolean Response
+
+        //If true, in which radius?
+        Float RespRadius
+        
+        //If true, at which maximum distance
+        Float RespHeight
+
+        //Height of the model
+        Float ModelHeight
         
         //Does the grass fade?
         Boolean Fade

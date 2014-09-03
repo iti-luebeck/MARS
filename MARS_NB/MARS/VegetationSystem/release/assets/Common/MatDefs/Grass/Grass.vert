@@ -12,6 +12,12 @@ uniform vec3 g_CameraPosition;
     uniform vec2 m_Wind;
 #endif
 
+#ifdef RESPONSE
+    uniform float m_RespRadius;
+    uniform float m_RespHeight;
+    uniform float m_ModelHeight;
+#endif
+
 #ifdef FADE
     uniform float m_FadeDistMin;
     uniform float m_FadeDistMax;
@@ -164,17 +170,16 @@ void main(){
    #endif
 
    #ifdef SWAYING
-        modelSpacePos.xz += m_Wind*inTexCoord.y*abs(sin(g_Time + modelSpacePos.x/10 + m_SwayFrequency));
+        modelSpacePos.xz += m_Wind*inTexCoord.y*abs(sin(g_Time + mod(modelSpacePos.x, m_Wind.x) + mod(modelSpacePos.z, m_Wind.y) + m_SwayFrequency));
    #endif
 
    #ifdef RESPONSE
         vec3 transR = ((g_WorldMatrix * modelSpacePos).xyz)-g_CameraPosition.xyz;
-        if(length(transR) < 30){
-            vec3 trans = normalize(transR);
-            trans = vec3(trans.x, -inTexCoord.y*(abs(trans.x)+abs(trans.z))/5,trans.z);
-            trans = normalize(trans);
-            modelSpacePos.xyz += trans*5*30/length(transR)*inTexCoord.y;//*inTexCoord.y;
-            //modelSpacePos.y += -inTexCoord.y;
+        transR.y = -transR.y;
+        if(length(transR.xz) < m_RespRadius && transR.y < m_RespHeight){
+            vec3 trans = normalize(vec3(transR.x, 0, transR.z))*m_ModelHeight;
+            trans.y = -m_ModelHeight;
+            modelSpacePos.xyz += trans*(1-pow(length(transR.y)/m_RespHeight,4))*(1-pow(length(transR.xz)/m_RespRadius,2))*inTexCoord.y;
 
         }
    #endif

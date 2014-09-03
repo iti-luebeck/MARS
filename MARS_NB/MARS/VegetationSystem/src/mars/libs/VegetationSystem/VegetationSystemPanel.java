@@ -6,7 +6,9 @@
 package mars.libs.VegetationSystem;
 
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 
 final class VegetationSystemPanel extends javax.swing.JPanel {
@@ -631,9 +633,12 @@ final class VegetationSystemPanel extends javax.swing.JPanel {
             sca3 = Float.parseFloat(scaleS[2]);
         }
         
+        Spatial gGrass = vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText()), 2*Float.parseFloat(thrustRad.getText()), new Vector3f(sca1, sca2, sca3));
+        Spatial iGrass = vSList.get(selected).createImposterGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText()), 2*Float.parseFloat(thrustRad.getText()), new Vector3f(sca1, sca2, sca3));
+        
         if(channel == 0){
-            vSList.get(selected).setGenuineRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
-            vSList.get(selected).setImposterRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
+            vSList.get(selected).setGenuineRed(gGrass);
+            vSList.get(selected).setImposterRed(iGrass);
             if(shadows.isSelected()){
                 rShadow = RenderQueue.ShadowMode.CastAndReceive;
             }else{
@@ -643,8 +648,8 @@ final class VegetationSystemPanel extends javax.swing.JPanel {
             randPR = (float)(randPlant.getValue()/100);
             randSR = (float)(randSize.getValue()/100);
         }else if(channel == 1){
-            vSList.get(selected).setGenuineRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
-            vSList.get(selected).setImposterRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
+            vSList.get(selected).setGenuineGreen(gGrass);
+            vSList.get(selected).setImposterGreen(iGrass);
             if(shadows.isSelected()){
                 gShadow = RenderQueue.ShadowMode.CastAndReceive;
             }else{
@@ -654,8 +659,8 @@ final class VegetationSystemPanel extends javax.swing.JPanel {
             randPG = (float)(randPlant.getValue()/100);
             randSG = (float)(randSize.getValue()/100);
         }else{
-            vSList.get(selected).setGenuineRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
-            vSList.get(selected).setImposterRed(vSList.get(selected).createGenuineGrass(texture.getText(), Float.parseFloat(aDT.getText()), windRes.isSelected(), thrustRes.isSelected(), fade.isSelected(), wind, Float.parseFloat(swayFreq.getText()), Float.parseFloat(thrustRad.getText())).scale(sca1, sca2, sca3));
+            vSList.get(selected).setGenuineBlue(gGrass);
+            vSList.get(selected).setImposterBlue(iGrass);
             if(shadows.isSelected()){
                 bShadow = RenderQueue.ShadowMode.CastAndReceive;
             }else{
