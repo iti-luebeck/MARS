@@ -1,0 +1,28 @@
+MaterialDef WaterParticles {
+    MaterialParameters {
+        Int NumSamples
+        Int Octaves
+        Int OctaveOffset
+        Float Persistence
+        Float MaxIntensity
+        Float Falloff
+        Float TimeScale
+        Vector3 CoordinateScale
+        Vector3 CameraPosition
+        Color ParticleColor
+        Matrix4 WorldViewProjectionInverse
+        Texture2D Texture
+        Texture2D ParticleTexture
+    }
+    
+    Technique {
+        VertexShader GLSL120: Common/MatDefs/Post/Post.vert
+        FragmentShader GLSL120: Shaders/WaterParticles/WaterParticles.frag
+
+        WorldParameters {
+            Time
+            Resolution
+            WorldViewProjectionMatrix
+        }
+    }
+}
