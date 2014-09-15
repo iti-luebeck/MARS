@@ -76,6 +76,7 @@ import org.openide.actions.RenameAction;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
@@ -452,6 +453,9 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         this.fireIconChange();
         if ("Position".equals(evt.getPropertyName()) || "Rotation".equals(evt.getPropertyName())) {
             setSheet(getSheet());
+        }else if("enabled".equals(evt.getPropertyName())){
+            AUVNode parentNode = (AUVNode)getParentNode().getParentNode();
+            parentNode.updateName();
         }
     }
     

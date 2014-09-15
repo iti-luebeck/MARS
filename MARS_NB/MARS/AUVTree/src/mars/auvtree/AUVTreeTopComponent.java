@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.swing.ActionMap;
 import javax.swing.TransferHandler;
+import javax.swing.text.DefaultEditorKit;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import org.openide.awt.ActionID;
@@ -82,6 +83,8 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         
         //enable global delete
         actionMap.put("delete", ExplorerUtils.actionDelete(mgr, true));
+        actionMap.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(mgr));
+        actionMap.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(mgr));
         
         // associate lookup with explorer manager
         associateLookup(ExplorerUtils.createLookup(mgr, actionMap));
@@ -89,21 +92,7 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         bTV.setRootVisible(false);
         bTV.setDropTarget(false);
         bTV.setDragSource(true);
-        /*bTV.getViewport().getView().addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                System.out.println("press");
-                WindowManager.getDefault().getMainWindow().getGraphics().drawImage(TreeUtil.getImage("hanse_dnd.png"), e.getX(), e.getY(), bTV);
-                System.out.println(mgr.getSelectedNodes());
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-            }
-            }        
-        );*/
         add(bTV, BorderLayout.CENTER);
-        //WindowManager.getDefault().getMainWindow().setDropTarget(null);
     }
 
     /**
@@ -116,9 +105,8 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         result = cl.lookup(template);
         if (auv_manager == null) {// try to get mars, else its the listener
             auv_manager = cl.lookup(AUV_Manager.class);
-            //Set<String> auvNames = auv_manager.getAUVs().keySet();
             HashMap<String,AUV> auvs = auv_manager.getAUVs();
-            mgr.setRootContext(new RootNode(auvs));
+            mgr.setRootContext(new RootNode(auvs,auv_manager));
         }
         if(mars == null){
             mars = cl.lookup(MARS_Main.class);

@@ -58,7 +58,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      */
     public AUV_Parameters copy(){
         Cloner cloner = new Cloner();
-        cloner.dontCloneInstanceOf(AUV.class); 
+        cloner.dontCloneInstanceOf(AUV.class,List.class);
         AUV_Parameters auvParamCopy = cloner.deepClone(this);
         return auvParamCopy;
     }
@@ -1448,7 +1448,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport{
      * @param enabled 
      */
     public void setEnabled(Boolean enabled) {
+        Boolean old = getEnabled();
         params.put("enabled", enabled);
+        fire("enabled", old, enabled);
     }
 
     /**

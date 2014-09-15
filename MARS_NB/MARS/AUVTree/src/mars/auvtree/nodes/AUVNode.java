@@ -28,6 +28,7 @@ import mars.gui.dnd.TransferHandlerObjectType;
 import mars.states.SimState;
 import mars.auvtree.TreeUtil;
 import mars.core.MARSChartTopComponent;
+import org.openide.actions.CopyAction;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
@@ -86,7 +87,10 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         }else{
             iconName = auv.getAuv_param().getIcon();
         }
-
+        
+        //set a listener to params. useful for updating view when changes happen in auvparasm like enable or dnd
+        auv.getAuv_param().addPropertyChangeListener(this);
+                
         setDisplayName(name);
         setShortDescription(auv.getClass().toString());
     }
@@ -100,12 +104,17 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(DeleteAction.class),SystemAction.get(RenameAction.class),new DebugAction()};
+        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(CopyAction.class),SystemAction.get(DeleteAction.class),SystemAction.get(RenameAction.class),new DebugAction()};
     }
 
     @Override
     public boolean canDestroy() {
          return true;
+    }
+
+    @Override
+    public boolean canCopy() {
+        return true;
     }
 
     @Override
@@ -123,7 +132,6 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
         this.fireIconChange();
-       // this.fireNodeDestroyed();
     }
 
     /**
@@ -246,7 +254,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-              Future simStateFuture = mars.enqueue(new Callable() {
+            Future simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 auv.reset();
                 return null;
@@ -301,6 +309,20 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     }
 
     @Override
+    public Transferable clipboardCopy() throws IOException {
+        return super.clipboardCopy();
+        /*Transferable deflt = super.clipboardCopy();
+        ExTransferable added = ExTransferable.create(deflt);
+        added.put(new ExTransferable.Single(CustomerFlavor.CUSTOMER_FLAVOR) {
+            @Override
+            protected Customer getData() {
+                return getLookup().lookup(Customer.class);
+            }
+        });
+        return added;*/
+    }
+
+    @Override
     public void setName(final String s) {
         final String oldName = this.name;
         this.name = s;
@@ -316,6 +338,13 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
                 });
         fireDisplayNameChange(oldName, s);
         fireNameChange(oldName, s);
+    }
+    
+    
+    public void updateName(){
+        fireIconChange();
+        fireOpenedIconChange();
+        fireDisplayNameChange(null, getDisplayName());
     }
     
     /**
