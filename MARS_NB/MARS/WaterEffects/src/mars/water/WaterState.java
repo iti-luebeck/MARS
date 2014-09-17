@@ -28,7 +28,6 @@ import com.jme3.water.WaterFilter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import mars.MARS_Main;
 import mars.core.CentralLookup;
 import mars.states.AppStateExtension;
 import mars.states.SimState;
@@ -105,13 +104,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
      */
     private final List<Spatial> tracking;
     /**
-     * Emitter for sediment clouds.
-     */
-    private ParticleEmitter emitter;
-    /**
      * Scene to be reflected.
      */
     private Node reflection;
+    private SedimentEmitter emitter;
     
     /**
      * Creates a new WaterState.
@@ -130,11 +126,11 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.app = (SimpleApplication) app;
+        this.app          = (SimpleApplication) app;
         this.assetManager = app.getAssetManager();
         this.inputManager = app.getInputManager();
         this.viewPort     = app.getViewPort();
-        this.cam = app.getCamera();
+        this.cam          = app.getCamera();
         
         // Projected Grid
         grid = new ProjectedGrid(this.app.getTimer(), cam, 100, 70, 0.02f, heightGenerator);
@@ -149,30 +145,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         particle.setTexture("Texture", assetManager.loadTexture("Textures/mud.png"));
         particle.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
         
-        emitter = new ParticleEmitter("Mud", ParticleMesh.Type.Triangle, 10000);
-        emitter.setLocalTranslation(-20, -13, 0);
-        emitter.setMaterial(particle);
-        emitter.setImagesX(2);
-        emitter.setImagesY(2);
-        emitter.setSelectRandomImage(true);
-        emitter.setStartSize(.05f);
-        emitter.setEndSize(.05f);
-        emitter.setStartColor(new ColorRGBA(.4f, .34f, .23f, 1f));
-        emitter.setEndColor(new ColorRGBA(.4f, .34f, .23f, 1f));
-        emitter.setParticlesPerSec(800);
-        emitter.setLowLife(0.5f);
-        emitter.setHighLife(2f);
-        emitter.setRandomAngle(true);
-        emitter.setShape(new EmitterSphereShape(Vector3f.ZERO, .2f));
-        emitter.setGravity(new Vector3f(0, -1.5f, 0));
+        emitter = new SedimentEmitter();
+        emitter.setParticleMaterial(particle);
         
-        RadialParticleInfluencer influencer = new RadialParticleInfluencer();
-        influencer.setHorizontal(true);
-        influencer.setRadialVelocity(3);
-        
-        emitter.setParticleInfluencer(influencer);
-        
-        rootNode.attachChild(emitter);
+        rootNode.attachChild(emitter.getRootNode());
         
         CentralLookup cl = CentralLookup.getDefault();
         SimState sim = cl.lookup(SimState.class);
@@ -193,7 +169,6 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         water.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
         water.setRefractionStrength(.3f);
         water.setTrailLength(200);
-        water.setWaterTransparency(.5f);
         
         filterProcessor.addFilter(water);
         
@@ -202,7 +177,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         
         waterJME.setWaveScale(0.003f);
         waterJME.setMaxAmplitude(1f);
-        waterJME.setFoamExistence(new Vector3f(1f, 4, 0.5f));
+        waterJME.setFoamExistence(new Vector3f(1f, 2.5f, 0.5f));
         waterJME.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
         waterJME.setRefractionStrength(.3f);
         waterJME.setEnabled(false);
@@ -282,7 +257,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         }
         
         grid.update(cam.getViewMatrix().clone());
-        particles.setEnabled(water.isUnderWater());
+        if (water.isEnabled()) particles.setUnderwater(water.isUnderWater());
     }
     
     @Override
@@ -338,20 +313,16 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         return water;
     }
     
+    public WaterFilter getJMEWaterFilter() {
+        return waterJME;
+    }
+    
     /**
      * Gets the {@link WaterParticleFilter} being used.
      * @return water particle filter
      */
     public WaterParticleFilter getParticleFilter() {
         return particles;
-    }
-    
-    /**
-     * Gets the emitter being used.
-     * @return sediment emitter
-     */
-    public ParticleEmitter getEmitter() {
-        return emitter;
     }
     
     /**
@@ -368,6 +339,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
 
     public void setLightDir(Vector3f lightDir) {
         this.lightDir = lightDir;
+    }
+    
+    public SedimentEmitter getSedimentEmitter() {
+        return emitter;
     }
 
     @Override

@@ -23,6 +23,7 @@ void main() {
     // Grab scene fragment color
     vec4 sceneColor = texture2D(m_Texture, texCoord);
     
+    #ifdef UNDERWATER
     // calculate fragment coordinates on near plane (z = 0)
     vec4 coordinates = m_WorldViewProjectionInverse * vec4(gl_FragCoord.xy/g_Resolution * 2.0 - 1.0, 0.0, 1.0);
 
@@ -52,4 +53,7 @@ void main() {
 
     // calculate final color by mixing scene color with noise color
     gl_FragColor = mix(sceneColor, noiseColor, min(noise, m_MaxIntensity));
+    #else
+    gl_FragColor = sceneColor;
+    #endif
 }

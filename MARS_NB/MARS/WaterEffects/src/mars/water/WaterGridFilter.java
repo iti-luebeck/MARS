@@ -297,6 +297,7 @@ public class WaterGridFilter extends Filter {
      * List of vehicles being tracked for foam trails.
      */
     private List<Vehicle> tracking;
+    private boolean useFoamTrails;
     /**
      * Debugging value sent to shader.
      */
@@ -322,6 +323,7 @@ public class WaterGridFilter extends Filter {
         
         tracking = new ArrayList<Vehicle>();
         trailLength = 140;
+        useFoamTrails = true;
         
         this.reflectionScene = reflectionScene;
         this.lightDirection = lightDirection;
@@ -483,85 +485,87 @@ public class WaterGridFilter extends Filter {
         // track objects and generate foam meshes
         Material foamMat = new Material(assetManager, "MatDefs/Foam/Foam.j3md");
         foamMat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-        
+
         // clear the foam view
         foamScene.detachAllChildren();
-        
-        // process all tracked spatials
-        for (Vehicle vehicle : tracking) {
-            Spatial object = vehicle.getSpatial();
-            Vector3f position = object.getWorldTranslation();
-            List<Vector3f> trail = vehicle.getTrail();
-            
-            // add the current position to the list
-            trail.add(0, position.clone());
-            
-            // if the trail is too long, remove an element from the end
-            if (trail.size() > trailLength) {
-                trail.remove(trail.size() - 1);
-            }
-            
-            int size = trail.size();
-            
-            // create a mesh if there is more than one tracking point
-            if (size > 1) {
-                // create a mesh for the foam trail
-                Mesh foamMesh = new Mesh();
-                Geometry foamGeometry = new Geometry("foam", foamMesh);
-                foamGeometry.setMaterial(foamMat);
 
-                // set up vertices, texture coordinates and indices
-                Vector3f[] vertices = new Vector3f[size * 2];
-                Vector2f[] texCoord = new Vector2f[size * 2];
-                int[] indices = new int[size * 6 - 6];
-                
-                int index = 0;
-                
-                for (int i = 1; i < size; i++) {
-                    // get point and previous point
-                    Vector3f point = trail.get(i);
-                    Vector3f previous = trail.get(i - 1);
-                    
-                    // calculate direction vector and orthogonal side vector
-                    Vector3f direction = point.subtract(previous).normalize();
-                    Vector3f side = Vector3f.UNIT_Y.cross(direction).normalize().mult(vehicle.getWidth() + .02f * i);
-                    
-                    // add two vertices per tracking point
-                    vertices[2 * i - 2] = point.add(side);
-                    vertices[2 * i - 1] = point.add(side.negate());
-                    
-                    // set vertex height according to grid
-                    vertices[2 * i - 2].y = heightGenerator.getHeight(vertices[2 * i - 2].x, vertices[2 * i - 2].z, timer.getTimeInSeconds());
-                    vertices[2 * i - 1].y = heightGenerator.getHeight(vertices[2 * i - 1].x, vertices[2 * i - 1].z, timer.getTimeInSeconds());
-                    
-                    // set texture coordinates
-                    texCoord[2 * i - 1] = new Vector2f(1f / (size - 1) * i, 0);
-                    texCoord[2 * i] = new Vector2f(1f / (size - 1) * i, 1);
-                    
-                    // first triangle
-                    indices[index++] = 2 * i - 2;
-                    indices[index++] = 2 * i;
-                    indices[index++] = 2 * i - 1;
-                    
-                    // second triangle
-                    indices[index++] = 2 * i - 1;
-                    indices[index++] = 2 * i;
-                    indices[index++] = 2 * i + 1;
+        if (useFoamTrails) {
+            // process all tracked spatials
+            for (Vehicle vehicle : tracking) {
+                Spatial object = vehicle.getSpatial();
+                Vector3f position = object.getWorldTranslation();
+                List<Vector3f> trail = vehicle.getTrail();
+
+                // add the current position to the list
+                trail.add(0, position.clone());
+
+                // if the trail is too long, remove an element from the end
+                if (trail.size() > trailLength) {
+                    trail.remove(trail.size() - 1);
                 }
-                
-                // set mesh buffers
-                foamMesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
-                foamMesh.setBuffer(Type.Index, 3, BufferUtils.createIntBuffer(indices));
-                foamMesh.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
-                
-                // update and attach to scene
-                foamMesh.updateBound();
-                foamGeometry.updateModelBound();
-                
-                foamScene.attachChild(foamGeometry);
+
+                int size = trail.size();
+
+                // create a mesh if there is more than one tracking point
+                if (size > 1) {
+                    // create a mesh for the foam trail
+                    Mesh foamMesh = new Mesh();
+                    Geometry foamGeometry = new Geometry("foam", foamMesh);
+                    foamGeometry.setMaterial(foamMat);
+
+                    // set up vertices, texture coordinates and indices
+                    Vector3f[] vertices = new Vector3f[size * 2];
+                    Vector2f[] texCoord = new Vector2f[size * 2];
+                    int[] indices = new int[size * 6 - 6];
+
+                    int index = 0;
+
+                    for (int i = 1; i < size; i++) {
+                        // get point and previous point
+                        Vector3f point = trail.get(i);
+                        Vector3f previous = trail.get(i - 1);
+
+                        // calculate direction vector and orthogonal side vector
+                        Vector3f direction = point.subtract(previous).normalize();
+                        Vector3f side = Vector3f.UNIT_Y.cross(direction).normalize().mult(vehicle.getWidth() + .02f * i);
+
+                        // add two vertices per tracking point
+                        vertices[2 * i - 2] = point.add(side);
+                        vertices[2 * i - 1] = point.add(side.negate());
+
+                        // set vertex height according to grid
+                        vertices[2 * i - 2].y = heightGenerator.getHeight(vertices[2 * i - 2].x, vertices[2 * i - 2].z, timer.getTimeInSeconds());
+                        vertices[2 * i - 1].y = heightGenerator.getHeight(vertices[2 * i - 1].x, vertices[2 * i - 1].z, timer.getTimeInSeconds());
+
+                        // set texture coordinates
+                        texCoord[2 * i - 1] = new Vector2f(1f / (size - 1) * i, 0);
+                        texCoord[2 * i] = new Vector2f(1f / (size - 1) * i, 1);
+
+                        // first triangle
+                        indices[index++] = 2 * i - 2;
+                        indices[index++] = 2 * i;
+                        indices[index++] = 2 * i - 1;
+
+                        // second triangle
+                        indices[index++] = 2 * i - 1;
+                        indices[index++] = 2 * i;
+                        indices[index++] = 2 * i + 1;
+                    }
+
+                    // set mesh buffers
+                    foamMesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
+                    foamMesh.setBuffer(Type.Index, 3, BufferUtils.createIntBuffer(indices));
+                    foamMesh.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
+
+                    // update and attach to scene
+                    foamMesh.updateBound();
+                    foamGeometry.updateModelBound();
+
+                    foamScene.attachChild(foamGeometry);
+                }
             }
         }
-        
+
         // update scene and foam cam
         foamScene.updateGeometricState();
         foamCam.copyFrom(sceneCam);
@@ -626,6 +630,10 @@ public class WaterGridFilter extends Filter {
      */
     public void setTrailLength(int length) {
         trailLength = length;
+    }
+    
+    public void setUseFoamTrails(boolean useFoamTrails) {
+        this.useFoamTrails = useFoamTrails;
     }
     
     /**

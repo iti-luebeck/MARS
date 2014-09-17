@@ -55,6 +55,7 @@ public class WaterParticleFilter extends Filter {
      * Texture for the particle effect.
      */
     private Texture2D particleTexture = null;
+    private boolean underwater;
     
     /**
      * Creates a new WaterParticleFilter with default values.
@@ -261,5 +262,13 @@ public class WaterParticleFilter extends Filter {
         if (material == null) return;
         
         material.setFloat("Persistence", persistence);
+    }
+    
+    public void setUnderwater(boolean underwater) {
+        this.underwater = underwater;
+        
+        if (material == null) return;
+        
+        material.setBoolean("Underwater", underwater);
     }
 }

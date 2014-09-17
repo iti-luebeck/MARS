@@ -13,6 +13,7 @@ MaterialDef WaterParticles {
         Matrix4 WorldViewProjectionInverse
         Texture2D Texture
         Texture2D ParticleTexture
+        Boolean Underwater
     }
     
     Technique {
@@ -23,6 +24,10 @@ MaterialDef WaterParticles {
             Time
             Resolution
             WorldViewProjectionMatrix
+        }
+        
+        Defines {
+            UNDERWATER: Underwater
         }
     }
 }
