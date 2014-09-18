@@ -33,17 +33,19 @@ void main() {
 
     // calculate noise over multiple octaves
     float noise = 0;
+    float frequency = pow(2, m_OctaveOffset);
+    float amplitude = pow(m_Persistence, m_OctaveOffset);
 
     for (int i = 0; i < m_Octaves; i++) {
-        float iteration = i + m_OctaveOffset;
-        float frequency = pow(2.0, iteration);
-        float amplitude = pow(m_Persistence, iteration);
-
         // calculate noise value using coordinates and time
         noise += snoise(vec4(coordinates.xyz * frequency, g_Time * m_TimeScale)) * amplitude;
-        // ensure noise is within [0, 1]
-        noise = clamp(noise, 0, 1);
+        
+        frequency *= 2;
+        amplitude *= m_Persistence;
     }
+
+    // ensure noise is within [0, 1]
+    noise = clamp(noise, 0, 1);
 
     // increase the falloff to get points rather than areas
     noise = clamp(pow(noise, m_Falloff), 0, 1);
