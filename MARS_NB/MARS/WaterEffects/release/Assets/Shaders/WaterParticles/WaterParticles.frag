@@ -33,8 +33,9 @@ void main() {
 
     // calculate noise over multiple octaves
     float noise = 0;
-    float frequency = pow(2, m_OctaveOffset);
-    float amplitude = pow(m_Persistence, m_OctaveOffset);
+    float offset = m_OctaveOffset;
+    float frequency = pow(2, offset);
+    float amplitude = pow(m_Persistence, offset);
 
     for (int i = 0; i < m_Octaves; i++) {
         // calculate noise value using coordinates and time
