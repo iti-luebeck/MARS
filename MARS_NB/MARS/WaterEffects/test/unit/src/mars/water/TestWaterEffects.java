@@ -117,7 +117,7 @@ public class TestWaterEffects extends SimpleApplication {
         
         // 'boats'
         Box boatShape = new Box(5, 1, 5);
-        Geometry boat1 = new Geometry("Boat", boatShape);
+        final Geometry boat1 = new Geometry("Boat", boatShape);
         boat1.setLocalTranslation(0, 0, 10);
         boat1.setMaterial(mat_stl);
         sceneNode.attachChild(boat1);
@@ -136,7 +136,7 @@ public class TestWaterEffects extends SimpleApplication {
         boatControl1.setSpeed(.5f);
         boatControl1.play();
         
-        Geometry boat2 = new Geometry("Boat", boatShape);
+        final Geometry boat2 = new Geometry("Boat", boatShape);
         boat2.setLocalTranslation(0, 0, 10);
         boat2.setMaterial(mat_stl);
         sceneNode.attachChild(boat2);
@@ -155,7 +155,7 @@ public class TestWaterEffects extends SimpleApplication {
         boatControl2.setSpeed(.4f);
         boatControl2.play();
         
-        Geometry boat3 = new Geometry("Boat", boatShape);
+        final Geometry boat3 = new Geometry("Boat", boatShape);
         boat3.setLocalTranslation(0, 0, 10);
         boat3.setMaterial(mat_stl);
         sceneNode.attachChild(boat3);
@@ -174,7 +174,7 @@ public class TestWaterEffects extends SimpleApplication {
         boatControl3.setSpeed(.3f);
         boatControl3.play();
         
-        Geometry boat4 = new Geometry("Boat", boatShape);
+        final Geometry boat4 = new Geometry("Boat", boatShape);
         boat4.setLocalTranslation(0, 0, 10);
         boat4.setMaterial(mat_stl);
         sceneNode.attachChild(boat4);
@@ -192,7 +192,7 @@ public class TestWaterEffects extends SimpleApplication {
         boatControl4.setSpeed(.3f);
         boatControl4.play();
         
-        Geometry boat5 = new Geometry("Boat", boatShape);
+        final Geometry boat5 = new Geometry("Boat", boatShape);
         boat5.setLocalTranslation(0, 0, 10);
         boat5.setMaterial(mat_stl);
         sceneNode.attachChild(boat5);
@@ -235,7 +235,7 @@ public class TestWaterEffects extends SimpleApplication {
                 return null;
             }
         });
-        stateManager.attach(FPSJME);
+        //stateManager.attach(FPSJME);
         
         FPSState FPSNew = new FPSState(70, 60, "NewWater.txt", "WaterGridFilter only");
         FPSNew.addSetup(new Callable() {
@@ -250,7 +250,7 @@ public class TestWaterEffects extends SimpleApplication {
                 return null;
             }
         });
-        stateManager.attach(FPSNew);
+        //stateManager.attach(FPSNew);
         
         FPSState FPSNewFoam = new FPSState(135, 60, "NewWaterWithFoam.txt", "WaterGridFilter with Foam Trails");
         FPSNewFoam.addSetup(new Callable() {
@@ -265,7 +265,7 @@ public class TestWaterEffects extends SimpleApplication {
                 return null;
             }
         });
-        stateManager.attach(FPSNewFoam);
+        //stateManager.attach(FPSNewFoam);
         
         FPSState FPSParticles = new FPSState(200, 60, "Particles.txt", "WaterParticleFilter only");
         FPSParticles.addSetup(new Callable() {
@@ -280,9 +280,9 @@ public class TestWaterEffects extends SimpleApplication {
                 return null;
             }
         });
-        stateManager.attach(FPSParticles);
+        //stateManager.attach(FPSParticles);
         
-        FPSState FPSSediment = new FPSState(265, 60, "Sediment.txt", "Sediment Emitter");
+        FPSState FPSSediment = new FPSState(5, 60, "Sediment.txt", "Sediment Emitter");
         FPSSediment.addSetup(new Callable() {
             @Override
             public Object call() {
@@ -291,11 +291,11 @@ public class TestWaterEffects extends SimpleApplication {
                 waterState.getParticleFilter().setEnabled(false);
                 
                 waterState.getSedimentEmitter().setEnabled(true);
-                waterState.getSedimentEmitter().addEmitter(new Vector3f(0, -10, -60));
-                waterState.getSedimentEmitter().addEmitter(new Vector3f(0, -10, -30));
-                waterState.getSedimentEmitter().addEmitter(new Vector3f(0, -10, 0));
-                waterState.getSedimentEmitter().addEmitter(new Vector3f(0, -10, 30));
-                waterState.getSedimentEmitter().addEmitter(new Vector3f(0, -10, 60));
+                waterState.getSedimentEmitter().addEmitter(boat1);
+                waterState.getSedimentEmitter().addEmitter(boat2);
+                waterState.getSedimentEmitter().addEmitter(boat3);
+                waterState.getSedimentEmitter().addEmitter(boat4);
+                waterState.getSedimentEmitter().addEmitter(boat5);
                 
                 return null;
             }

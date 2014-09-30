@@ -7,6 +7,7 @@ package mars.water.options;
 
 import mars.water.WaterState;
 import mars.water.WaterHeightGenerator;
+import org.openide.util.NbPreferences;
 
 final class GridPanel extends javax.swing.JPanel {
 
@@ -20,15 +21,6 @@ final class GridPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         gen = state.getHeightGenerator();
-        smallX.setText(String.valueOf(gen.getScalexsmall()));
-        smallY.setText(String.valueOf(gen.getScaleysmall()));
-        bigX.setText(String.valueOf(gen.getScalexbig()));
-        bigY.setText(String.valueOf(gen.getScaleybig()));
-        smallHeight.setText(String.valueOf(gen.getHeightsmall()));
-        bigHeight.setText(String.valueOf(gen.getHeightbig()));
-        smallSpeed.setText(String.valueOf(gen.getSpeedsmall()));
-        bigSpeed.setText(String.valueOf(gen.getSpeedbig()));
-        octaves.setText(String.valueOf(gen.getOctaves()));
     }
 
     /**
@@ -241,23 +233,37 @@ final class GridPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_octavesActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(GridPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(GridPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        gen.setScalexsmall(NbPreferences.forModule(GridPanel.class).getFloat("XSmall", .04f));
+        gen.setScaleysmall(NbPreferences.forModule(GridPanel.class).getFloat("YSmall", .02f));
+        gen.setScalexbig(NbPreferences.forModule(GridPanel.class).getFloat("XBig", .03f));
+        gen.setScaleybig(NbPreferences.forModule(GridPanel.class).getFloat("YBig", .1f));
+        gen.setHeightsmall(NbPreferences.forModule(GridPanel.class).getFloat("HeightSmall", .25f));
+        gen.setHeightbig(NbPreferences.forModule(GridPanel.class).getFloat("HeightBig", .01f));
+        gen.setSpeedsmall(NbPreferences.forModule(GridPanel.class).getFloat("SpeedSmall", 1));
+        gen.setSpeedbig(NbPreferences.forModule(GridPanel.class).getFloat("SpeedBig", .5f));
+        gen.setOctaves(NbPreferences.forModule(GridPanel.class).getInt("Octaves", 0));
+        
+        smallX.setText(String.valueOf(gen.getScalexsmall()));
+        smallY.setText(String.valueOf(gen.getScaleysmall()));
+        bigX.setText(String.valueOf(gen.getScalexbig()));
+        bigY.setText(String.valueOf(gen.getScaleybig()));
+        smallHeight.setText(String.valueOf(gen.getHeightsmall()));
+        bigHeight.setText(String.valueOf(gen.getHeightbig()));
+        smallSpeed.setText(String.valueOf(gen.getSpeedsmall()));
+        bigSpeed.setText(String.valueOf(gen.getSpeedbig()));
+        octaves.setText(String.valueOf(gen.getOctaves()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(GridPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(GridPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(GridPanel.class).putFloat("XSmall", gen.getScalexsmall());
+        NbPreferences.forModule(GridPanel.class).putFloat("YSmall", gen.getScaleysmall());
+        NbPreferences.forModule(GridPanel.class).putFloat("XBig", gen.getScalexbig());
+        NbPreferences.forModule(GridPanel.class).putFloat("YBig", gen.getScaleybig());
+        NbPreferences.forModule(GridPanel.class).putFloat("HeightSmall", gen.getHeightsmall());
+        NbPreferences.forModule(GridPanel.class).putFloat("HeightBig", gen.getHeightbig());
+        NbPreferences.forModule(GridPanel.class).putFloat("SpeedSmall", gen.getSpeedsmall());
+        NbPreferences.forModule(GridPanel.class).putFloat("SpeedBig", gen.getSpeedbig());
+        NbPreferences.forModule(GridPanel.class).putInt("Octaves", gen.getOctaves());
     }
 
     boolean valid() {

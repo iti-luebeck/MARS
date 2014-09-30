@@ -5,14 +5,22 @@
  */
 package mars.water.options;
 
-final class SedimentPanel extends javax.swing.JPanel {
+import com.jme3.math.ColorRGBA;
+import mars.water.SedimentEmitter;
+import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
+final class SedimentPanel extends javax.swing.JPanel {
     private final SedimentOptionsPanelController controller;
+    private WaterState state;
+    private SedimentEmitter emitter;
 
     SedimentPanel(SedimentOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
-        // TODO listen to changes in form fields and call controller.changed()
+        while (WaterState.getInstance() == null);
+        state = WaterState.getInstance();
+        emitter = state.getSedimentEmitter();
     }
 
     /**
@@ -29,33 +37,112 @@ final class SedimentPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         size = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField4 = new javax.swing.JFormattedTextField();
-        jFormattedTextField5 = new javax.swing.JFormattedTextField();
-        jFormattedTextField6 = new javax.swing.JFormattedTextField();
-        jFormattedTextField7 = new javax.swing.JFormattedTextField();
+        colorR = new javax.swing.JFormattedTextField();
+        colorG = new javax.swing.JFormattedTextField();
+        colorB = new javax.swing.JFormattedTextField();
+        colorA = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
+        velocityAtt = new javax.swing.JFormattedTextField();
+        jLabel5 = new javax.swing.JLabel();
+        upAtt = new javax.swing.JFormattedTextField();
+        jLabel6 = new javax.swing.JLabel();
+        number = new javax.swing.JFormattedTextField();
+        jLabel7 = new javax.swing.JLabel();
+        numberAtt = new javax.swing.JFormattedTextField();
+        jLabel8 = new javax.swing.JLabel();
 
         velocity.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.velocity.text")); // NOI18N
+        velocity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                velocityActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel1.text")); // NOI18N
 
         up.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.up.text")); // NOI18N
+        up.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel2.text")); // NOI18N
 
         size.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.size.text")); // NOI18N
+        size.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sizeActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel3.text")); // NOI18N
 
-        jFormattedTextField4.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jFormattedTextField4.text")); // NOI18N
+        colorR.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.colorR.text")); // NOI18N
+        colorR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorRActionPerformed(evt);
+            }
+        });
 
-        jFormattedTextField5.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jFormattedTextField5.text")); // NOI18N
+        colorG.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.colorG.text")); // NOI18N
+        colorG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorGActionPerformed(evt);
+            }
+        });
 
-        jFormattedTextField6.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jFormattedTextField6.text")); // NOI18N
+        colorB.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.colorB.text")); // NOI18N
+        colorB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorBActionPerformed(evt);
+            }
+        });
 
-        jFormattedTextField7.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jFormattedTextField7.text")); // NOI18N
+        colorA.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.colorA.text")); // NOI18N
+        colorA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorAActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel4.text")); // NOI18N
+
+        velocityAtt.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.velocityAtt.text")); // NOI18N
+        velocityAtt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                velocityAttActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel5.text")); // NOI18N
+
+        upAtt.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.upAtt.text")); // NOI18N
+        upAtt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upAttActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel6.text")); // NOI18N
+
+        number.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.number.text")); // NOI18N
+        number.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numberActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel7.text")); // NOI18N
+
+        numberAtt.setText(org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.numberAtt.text")); // NOI18N
+        numberAtt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numberAttActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(SedimentPanel.class, "SedimentPanel.jLabel8.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -67,20 +154,28 @@ final class SedimentPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(velocity, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(up, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(colorR, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(velocityAtt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(upAtt, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(number, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numberAtt, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(colorG, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(colorB, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(colorA, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(238, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,41 +186,132 @@ final class SedimentPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(velocityAtt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(up, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(upAtt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numberAtt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void colorGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorGActionPerformed
+        ColorRGBA color = emitter.getColor();
+        color.g = Float.parseFloat(colorG.getText());
+        emitter.setColor(color);
+    }//GEN-LAST:event_colorGActionPerformed
+
+    private void numberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberActionPerformed
+        emitter.setNumber(Integer.parseInt(number.getText()));
+    }//GEN-LAST:event_numberActionPerformed
+
+    private void numberAttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberAttActionPerformed
+        emitter.setNumberAttenuation(Float.parseFloat(numberAtt.getText()));
+    }//GEN-LAST:event_numberAttActionPerformed
+
+    private void velocityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_velocityActionPerformed
+        emitter.setVelocity(Float.parseFloat(velocity.getText()));
+    }//GEN-LAST:event_velocityActionPerformed
+
+    private void velocityAttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_velocityAttActionPerformed
+        emitter.setVelocityAttenuation(Float.parseFloat(velocityAtt.getText()));
+    }//GEN-LAST:event_velocityAttActionPerformed
+
+    private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
+        emitter.setGravity(Float.parseFloat(up.getText()));
+    }//GEN-LAST:event_upActionPerformed
+
+    private void upAttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upAttActionPerformed
+        emitter.setGravityAttenuation(Float.parseFloat(upAtt.getText()));
+    }//GEN-LAST:event_upAttActionPerformed
+
+    private void sizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sizeActionPerformed
+        emitter.setSize(Float.parseFloat(size.getText()));
+    }//GEN-LAST:event_sizeActionPerformed
+
+    private void colorRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorRActionPerformed
+        ColorRGBA color = emitter.getColor();
+        color.r = Float.parseFloat(colorR.getText());
+        emitter.setColor(color);
+    }//GEN-LAST:event_colorRActionPerformed
+
+    private void colorBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorBActionPerformed
+        ColorRGBA color = emitter.getColor();
+        color.b = Float.parseFloat(colorB.getText());
+        emitter.setColor(color);
+    }//GEN-LAST:event_colorBActionPerformed
+
+    private void colorAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorAActionPerformed
+        ColorRGBA color = emitter.getColor();
+        color.a = Float.parseFloat(colorA.getText());
+        emitter.setColor(color);
+    }//GEN-LAST:event_colorAActionPerformed
+
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(SedimentPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(SedimentPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        emitter.setVelocity(NbPreferences.forModule(SedimentPanel.class).getFloat("Velocity", 4));
+        emitter.setVelocityAttenuation(NbPreferences.forModule(SedimentPanel.class).getFloat("VelocityAttenuation", 100));
+        emitter.setGravity(NbPreferences.forModule(SedimentPanel.class).getFloat("Gravity", 2));
+        emitter.setGravityAttenuation(NbPreferences.forModule(SedimentPanel.class).getFloat("GravityAttenuation", 1000));
+        emitter.setNumber(NbPreferences.forModule(SedimentPanel.class).getInt("Number", 1000));
+        emitter.setNumberAttenuation(NbPreferences.forModule(SedimentPanel.class).getFloat("NumberAttenuation", 1));
+        emitter.setSize(NbPreferences.forModule(SedimentPanel.class).getFloat("Size", .05f));
+        ColorRGBA color = new ColorRGBA();
+        color.r = NbPreferences.forModule(SedimentPanel.class).getFloat("ColorR", .4f);
+        color.g = NbPreferences.forModule(SedimentPanel.class).getFloat("ColorG", .34f);
+        color.b = NbPreferences.forModule(SedimentPanel.class).getFloat("ColorB", .23f);
+        color.a = NbPreferences.forModule(SedimentPanel.class).getFloat("ColorA", 1);
+        emitter.setColor(color);
+        
+        velocity.setText(String.valueOf(emitter.getVelocity()));
+        velocityAtt.setText(String.valueOf(emitter.getVelocityAttenuation()));
+        up.setText(String.valueOf(emitter.getGravity()));
+        upAtt.setText(String.valueOf(emitter.getGravityAttenuation()));
+        number.setText(String.valueOf(emitter.getNumber()));
+        numberAtt.setText(String.valueOf(emitter.getNumberAttenuation()));
+        size.setText(String.valueOf(emitter.getSize()));
+        colorR.setText(String.valueOf(color.r));
+        colorG.setText(String.valueOf(color.g));
+        colorB.setText(String.valueOf(color.b));
+        colorA.setText(String.valueOf(color.a));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(SedimentPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(SedimentPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("Velocity", emitter.getVelocity());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("VelocityAttenuation", emitter.getVelocityAttenuation());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("Gravity", emitter.getGravity());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("GravityAttenuation", emitter.getGravityAttenuation());
+        NbPreferences.forModule(SedimentPanel.class).putInt("Number", emitter.getNumber());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("NumberAttenuation", emitter.getNumberAttenuation());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("Size", emitter.getSize());
+        NbPreferences.forModule(SedimentPanel.class).putFloat("ColorR", emitter.getColor().r);
+        NbPreferences.forModule(SedimentPanel.class).putFloat("ColorG", emitter.getColor().g);
+        NbPreferences.forModule(SedimentPanel.class).putFloat("ColorB", emitter.getColor().b);
+        NbPreferences.forModule(SedimentPanel.class).putFloat("ColorA", emitter.getColor().a);
+        
     }
 
     boolean valid() {
@@ -134,16 +320,24 @@ final class SedimentPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFormattedTextField jFormattedTextField4;
-    private javax.swing.JFormattedTextField jFormattedTextField5;
-    private javax.swing.JFormattedTextField jFormattedTextField6;
-    private javax.swing.JFormattedTextField jFormattedTextField7;
+    private javax.swing.JFormattedTextField colorA;
+    private javax.swing.JFormattedTextField colorB;
+    private javax.swing.JFormattedTextField colorG;
+    private javax.swing.JFormattedTextField colorR;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JFormattedTextField number;
+    private javax.swing.JFormattedTextField numberAtt;
     private javax.swing.JFormattedTextField size;
     private javax.swing.JFormattedTextField up;
+    private javax.swing.JFormattedTextField upAtt;
     private javax.swing.JFormattedTextField velocity;
+    private javax.swing.JFormattedTextField velocityAtt;
     // End of variables declaration//GEN-END:variables
 }

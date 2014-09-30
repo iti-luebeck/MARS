@@ -8,6 +8,7 @@ package mars.water.options;
 import com.jme3.math.Vector3f;
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class FoamPanel extends javax.swing.JPanel {
 
@@ -21,14 +22,6 @@ final class FoamPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        enabled.setSelected(filter.isUseFoam());
-        intensity.setText(String.valueOf(filter.getFoamIntensity()));
-        hardness.setText(String.valueOf(filter.getFoamHardness()));
-        Vector3f existence = filter.getFoamExistence();
-        fade.setText(String.valueOf(existence.x));
-        invisible.setText(String.valueOf(existence.y));
-        cap.setText(String.valueOf(existence.z));
-        trail.setText(String.valueOf(filter.getTrailLength()));
     }
 
     /**
@@ -220,23 +213,33 @@ final class FoamPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_trailActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(FoamPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(FoamPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setUseFoam(NbPreferences.forModule(FoamPanel.class).getBoolean("UseFoam", true));
+        filter.setFoamIntensity(NbPreferences.forModule(FoamPanel.class).getFloat("FoamIntensity", .5f));
+        filter.setFoamHardness(NbPreferences.forModule(FoamPanel.class).getFloat("FoamHardness", 1));
+        Vector3f existence = new Vector3f();
+        existence.x = NbPreferences.forModule(FoamPanel.class).getFloat("FoamFadeDepth", 1);
+        existence.y = NbPreferences.forModule(FoamPanel.class).getFloat("FoamInvisbleDepth", 2.5f);
+        existence.z = NbPreferences.forModule(FoamPanel.class).getFloat("FoamCapHeight", .5f);
+        filter.setFoamExistence(existence);
+        filter.setTrailLength(NbPreferences.forModule(FoamPanel.class).getInt("FoamTrailLength", 200));
+        
+        enabled.setSelected(filter.isUseFoam());
+        intensity.setText(String.valueOf(filter.getFoamIntensity()));
+        hardness.setText(String.valueOf(filter.getFoamHardness()));
+        fade.setText(String.valueOf(existence.x));
+        invisible.setText(String.valueOf(existence.y));
+        cap.setText(String.valueOf(existence.z));
+        trail.setText(String.valueOf(filter.getTrailLength()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(FoamPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(FoamPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(FoamPanel.class).putBoolean("UseFoam", filter.isUseFoam());
+        NbPreferences.forModule(FoamPanel.class).putFloat("FoamIntensity", filter.getFoamIntensity());
+        NbPreferences.forModule(FoamPanel.class).putFloat("FoamHardness", filter.getFoamHardness());
+        NbPreferences.forModule(FoamPanel.class).putFloat("FoamFadeDepth", filter.getFoamExistence().x);
+        NbPreferences.forModule(FoamPanel.class).putFloat("FoamInvisbleDepth", filter.getFoamExistence().y);
+        NbPreferences.forModule(FoamPanel.class).putFloat("FoamCapHeight", filter.getFoamExistence().z);
+        NbPreferences.forModule(FoamPanel.class).putInt("FoamTrailLength", filter.getTrailLength());
     }
 
     boolean valid() {

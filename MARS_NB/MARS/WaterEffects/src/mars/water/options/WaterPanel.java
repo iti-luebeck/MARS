@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class WaterPanel extends javax.swing.JPanel {
     private final WaterOptionsPanelController controller;
@@ -21,32 +22,6 @@ final class WaterPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        opacity.setText(String.valueOf(filter.getWaterTransparency()));
-        fogDistance.setText(String.valueOf(filter.getUnderWaterFogDistance()));
-        normalScale.setText(String.valueOf(filter.getNormalScale()));
-        Vector3f lightDirection = filter.getLightDirection();
-        lightDirectionX.setText(String.valueOf(lightDirection.x));
-        lightDirectionY.setText(String.valueOf(lightDirection.y));
-        lightDirectionZ.setText(String.valueOf(lightDirection.z));
-        ColorRGBA lightColor = filter.getLightColor();
-        lightColorR.setText(String.valueOf(lightColor.r));
-        lightColorG.setText(String.valueOf(lightColor.g));
-        lightColorB.setText(String.valueOf(lightColor.b));
-        lightColorA.setText(String.valueOf(lightColor.a));
-        ColorRGBA waterColor = filter.getWaterColor();
-        waterColorR.setText(String.valueOf(waterColor.r));
-        waterColorG.setText(String.valueOf(waterColor.g));
-        waterColorB.setText(String.valueOf(waterColor.b));
-        waterColorA.setText(String.valueOf(waterColor.a));
-        ColorRGBA deepColor = filter.getDeepWaterColor();
-        deepColorR.setText(String.valueOf(deepColor.r));
-        deepColorG.setText(String.valueOf(deepColor.g));
-        deepColorB.setText(String.valueOf(deepColor.b));
-        deepColorA.setText(String.valueOf(deepColor.a));
-        Vector3f extinction = filter.getColorExtinction();
-        extinctionR.setText(String.valueOf(extinction.x));
-        extinctionG.setText(String.valueOf(extinction.y));
-        extinctionB.setText(String.valueOf(extinction.z));
     }
 
     /**
@@ -497,23 +472,83 @@ final class WaterPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_opacityActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(WaterPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(WaterPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setWaterTransparency(NbPreferences.forModule(WaterPanel.class).getFloat("WaterOpacity", .1f));
+        filter.setUnderWaterFogDistance(NbPreferences.forModule(WaterPanel.class).getFloat("FogDistance", 300));
+        filter.setNormalScale(NbPreferences.forModule(WaterPanel.class).getFloat("NormalScale", 3));
+        Vector3f lightDirection = new Vector3f();
+        lightDirection.x = NbPreferences.forModule(WaterPanel.class).getFloat("LightDirectionX", 1);
+        lightDirection.y = NbPreferences.forModule(WaterPanel.class).getFloat("LightDirectionY", 1);
+        lightDirection.z = NbPreferences.forModule(WaterPanel.class).getFloat("LightDirectionZ", 1);
+        filter.setLightDirection(lightDirection);
+        ColorRGBA lightColor = new ColorRGBA();
+        lightColor.r = NbPreferences.forModule(WaterPanel.class).getFloat("LightColorR", 1);
+        lightColor.g = NbPreferences.forModule(WaterPanel.class).getFloat("LightColorG", 1);
+        lightColor.b = NbPreferences.forModule(WaterPanel.class).getFloat("LightColorB", 1);
+        lightColor.a = NbPreferences.forModule(WaterPanel.class).getFloat("LightColorA", 1);
+        filter.setLightColor(lightColor);
+        ColorRGBA waterColor = new ColorRGBA();
+        waterColor.r = NbPreferences.forModule(WaterPanel.class).getFloat("WaterColorR", .0078f);
+        waterColor.g = NbPreferences.forModule(WaterPanel.class).getFloat("WaterColorG", .3176f);
+        waterColor.b = NbPreferences.forModule(WaterPanel.class).getFloat("WaterColorB", .5f);
+        waterColor.a = NbPreferences.forModule(WaterPanel.class).getFloat("WaterColorA", 1);
+        filter.setWaterColor(waterColor);
+        ColorRGBA deepColor = new ColorRGBA();
+        deepColor.r = NbPreferences.forModule(WaterPanel.class).getFloat("DeepWaterColorR", .0039f);
+        deepColor.g = NbPreferences.forModule(WaterPanel.class).getFloat("DeepWaterColorG", .00196f);
+        deepColor.b = NbPreferences.forModule(WaterPanel.class).getFloat("DeepWaterColorB", .145f);
+        deepColor.a = NbPreferences.forModule(WaterPanel.class).getFloat("DeepWaterColorA", 1);
+        filter.setDeepWaterColor(deepColor);
+        Vector3f extinction = new Vector3f();
+        extinction.x = NbPreferences.forModule(WaterPanel.class).getFloat("ColorExtinctionR", 5);
+        extinction.y = NbPreferences.forModule(WaterPanel.class).getFloat("ColorExtinctionG", 20);
+        extinction.z = NbPreferences.forModule(WaterPanel.class).getFloat("ColorExtinctionB", 30);
+        filter.setColorExtinction(extinction);
+        
+        opacity.setText(String.valueOf(filter.getWaterTransparency()));
+        fogDistance.setText(String.valueOf(filter.getUnderWaterFogDistance()));
+        normalScale.setText(String.valueOf(filter.getNormalScale()));
+        lightDirectionX.setText(String.valueOf(lightDirection.x));
+        lightDirectionY.setText(String.valueOf(lightDirection.y));
+        lightDirectionZ.setText(String.valueOf(lightDirection.z));
+        lightColorR.setText(String.valueOf(lightColor.r));
+        lightColorG.setText(String.valueOf(lightColor.g));
+        lightColorB.setText(String.valueOf(lightColor.b));
+        lightColorA.setText(String.valueOf(lightColor.a));
+        waterColorR.setText(String.valueOf(waterColor.r));
+        waterColorG.setText(String.valueOf(waterColor.g));
+        waterColorB.setText(String.valueOf(waterColor.b));
+        waterColorA.setText(String.valueOf(waterColor.a));
+        deepColorR.setText(String.valueOf(deepColor.r));
+        deepColorG.setText(String.valueOf(deepColor.g));
+        deepColorB.setText(String.valueOf(deepColor.b));
+        deepColorA.setText(String.valueOf(deepColor.a));
+        extinctionR.setText(String.valueOf(extinction.x));
+        extinctionG.setText(String.valueOf(extinction.y));
+        extinctionB.setText(String.valueOf(extinction.z));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(WaterPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(WaterPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(WaterPanel.class).putFloat("WaterOpacity", filter.getWaterTransparency());
+        NbPreferences.forModule(WaterPanel.class).putFloat("FogDistance", filter.getUnderWaterFogDistance());
+        NbPreferences.forModule(WaterPanel.class).putFloat("NormalScale", filter.getNormalScale());
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightDirectionX", filter.getLightDirection().x);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightDirectionY", filter.getLightDirection().y);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightDirectionZ", filter.getLightDirection().z);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightColorR", filter.getLightColor().r);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightColorG", filter.getLightColor().g);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightColorB", filter.getLightColor().b);
+        NbPreferences.forModule(WaterPanel.class).putFloat("LightColorA", filter.getLightColor().a);
+        NbPreferences.forModule(WaterPanel.class).putFloat("WaterColorR", filter.getWaterColor().r);
+        NbPreferences.forModule(WaterPanel.class).putFloat("WaterColorG", filter.getWaterColor().g);
+        NbPreferences.forModule(WaterPanel.class).putFloat("WaterColorB", filter.getWaterColor().b);
+        NbPreferences.forModule(WaterPanel.class).putFloat("WaterColorA", filter.getWaterColor().a);
+        NbPreferences.forModule(WaterPanel.class).putFloat("DeepWaterColorR", filter.getDeepWaterColor().r);
+        NbPreferences.forModule(WaterPanel.class).putFloat("DeepWaterColorG", filter.getDeepWaterColor().g);
+        NbPreferences.forModule(WaterPanel.class).putFloat("DeepWaterColorB", filter.getDeepWaterColor().b);
+        NbPreferences.forModule(WaterPanel.class).putFloat("DeepWaterColorA", filter.getDeepWaterColor().a);
+        NbPreferences.forModule(WaterPanel.class).putFloat("ColorExtinctionR", filter.getColorExtinction().x);
+        NbPreferences.forModule(WaterPanel.class).putFloat("ColorExtinctionG", filter.getColorExtinction().y);
+        NbPreferences.forModule(WaterPanel.class).putFloat("ColorExtinctionB", filter.getColorExtinction().z);
     }
 
     boolean valid() {

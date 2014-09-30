@@ -8,6 +8,7 @@ package mars.water.options;
 import com.jme3.math.Vector2f;
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class WavesPanel extends javax.swing.JPanel {
 
@@ -21,15 +22,6 @@ final class WavesPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        hq.setSelected(filter.isUseHQShoreline());
-        ripples.setSelected(filter.isUseRipples());
-        scale.setText(String.valueOf(filter.getWaveScale()));
-        speed.setText(String.valueOf(filter.getSpeed()));
-        amplitude.setText(String.valueOf(filter.getMaxAmplitude()));
-        hardness.setText(String.valueOf(filter.getShoreHardness()));
-        Vector2f wind = filter.getWindDirection();
-        windX.setText(String.valueOf(wind.x));
-        windY.setText(String.valueOf(wind.y));
     }
 
     /**
@@ -216,23 +208,36 @@ final class WavesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_hardnessActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(WavesPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(WavesPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setUseHQShoreline(NbPreferences.forModule(WavesPanel.class).getBoolean("HQShoreline", true));
+        filter.setUseRipples(NbPreferences.forModule(WavesPanel.class).getBoolean("UseRipples", true));
+        filter.setWaveScale(NbPreferences.forModule(WavesPanel.class).getFloat("WaveScale", .003f));
+        filter.setSpeed(NbPreferences.forModule(WavesPanel.class).getFloat("Speed", 1));
+        filter.setMaxAmplitude(NbPreferences.forModule(WavesPanel.class).getFloat("MaxAmplitude", 1));
+        filter.setShoreHardness(NbPreferences.forModule(WavesPanel.class).getFloat("ShoreHardness", .1f));
+        Vector2f wind = new Vector2f();
+        wind.x = NbPreferences.forModule(WavesPanel.class).getFloat("WindDirectionX", 1);
+        wind.y = NbPreferences.forModule(WavesPanel.class).getFloat("WindDirectionY", 1);
+        filter.setWindDirection(wind);
+        
+        hq.setSelected(filter.isUseHQShoreline());
+        ripples.setSelected(filter.isUseRipples());
+        scale.setText(String.valueOf(filter.getWaveScale()));
+        speed.setText(String.valueOf(filter.getSpeed()));
+        amplitude.setText(String.valueOf(filter.getMaxAmplitude()));
+        hardness.setText(String.valueOf(filter.getShoreHardness()));
+        windX.setText(String.valueOf(filter.getWindDirection().x));
+        windY.setText(String.valueOf(filter.getWindDirection().y));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(WavesPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(WavesPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(WavesPanel.class).putBoolean("HQShoreline", filter.isUseHQShoreline());
+        NbPreferences.forModule(WavesPanel.class).putBoolean("UseRipples", filter.isUseRipples());
+        NbPreferences.forModule(WavesPanel.class).putFloat("WaveScale", filter.getWaveScale());
+        NbPreferences.forModule(WavesPanel.class).putFloat("Speed", filter.getSpeed());
+        NbPreferences.forModule(WavesPanel.class).putFloat("MaxAmplitude", filter.getMaxAmplitude());
+        NbPreferences.forModule(WavesPanel.class).putFloat("ShoreHardness", filter.getShoreHardness());
+        NbPreferences.forModule(WavesPanel.class).putFloat("WindDirectionX", filter.getWindDirection().x);
+        NbPreferences.forModule(WavesPanel.class).putFloat("WindDirectionY", filter.getWindDirection().y);
     }
 
     boolean valid() {

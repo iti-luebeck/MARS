@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import mars.water.WaterParticleFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class ParticlesPanel extends javax.swing.JPanel {
 
@@ -22,21 +23,6 @@ final class ParticlesPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getParticleFilter();
-        octaves.setText(String.valueOf(filter.getOctaves()));
-        offset.setText(String.valueOf(filter.getOctaveOffset()));
-        persistence.setText(String.valueOf(filter.getPersistence()));
-        time.setText(String.valueOf(filter.getTimeScale()));
-        Vector3f scale = filter.getCoordinateScale();
-        coordX.setText(String.valueOf(scale.x));
-        coordY.setText(String.valueOf(scale.y));
-        coordZ.setText(String.valueOf(scale.z));
-        ColorRGBA color = filter.getParticleColor();
-        colorR.setText(String.valueOf(color.r));
-        colorG.setText(String.valueOf(color.g));
-        colorB.setText(String.valueOf(color.b));
-        colorA.setText(String.valueOf(color.a));
-        intensity.setText(String.valueOf(filter.getMaximumIntensity()));
-        falloff.setText(String.valueOf(filter.getFalloff()));
     }
 
     /**
@@ -334,23 +320,41 @@ final class ParticlesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_falloffActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(ParticlesPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(ParticlesPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setOctaves(NbPreferences.forModule(ParticlesPanel.class).getInt("Octaves", 3));
+        filter.setOctaveOffset(NbPreferences.forModule(ParticlesPanel.class).getInt("OctaveOffset", 4));
+        filter.setPersistence(NbPreferences.forModule(ParticlesPanel.class).getFloat("Persistence", 1));
+        filter.setTimeScale(NbPreferences.forModule(ParticlesPanel.class).getFloat("TimeScale", .1f));
+        Vector3f scale = new Vector3f();
+        scale.x = NbPreferences.forModule(ParticlesPanel.class).getFloat("CoordinateScaleX", .2f);
+        scale.y = NbPreferences.forModule(ParticlesPanel.class).getFloat("CoordinateScaleY", .2f);
+        scale.z = NbPreferences.forModule(ParticlesPanel.class).getFloat("CoordinateScaleZ", .2f);
+        filter.setCoordinateScale(scale);
+        ColorRGBA color = new ColorRGBA();
+        color.r = NbPreferences.forModule(ParticlesPanel.class).getFloat("ParticleColorR", .3f);
+        color.g = NbPreferences.forModule(ParticlesPanel.class).getFloat("ParticleColorR", .3f);
+        color.b = NbPreferences.forModule(ParticlesPanel.class).getFloat("ParticleColorR", .18f);
+        color.a = NbPreferences.forModule(ParticlesPanel.class).getFloat("ParticleColorR", 1);
+        filter.setParticleColor(color);
+        filter.setMaximumIntensity(NbPreferences.forModule(ParticlesPanel.class).getFloat("MaxIntensity", 1));
+        filter.setFalloff(NbPreferences.forModule(ParticlesPanel.class).getFloat("Falloff", 4));
+        
+        octaves.setText(String.valueOf(filter.getOctaves()));
+        offset.setText(String.valueOf(filter.getOctaveOffset()));
+        persistence.setText(String.valueOf(filter.getPersistence()));
+        time.setText(String.valueOf(filter.getTimeScale()));
+        coordX.setText(String.valueOf(scale.x));
+        coordY.setText(String.valueOf(scale.y));
+        coordZ.setText(String.valueOf(scale.z));
+        colorR.setText(String.valueOf(color.r));
+        colorG.setText(String.valueOf(color.g));
+        colorB.setText(String.valueOf(color.b));
+        colorA.setText(String.valueOf(color.a));
+        intensity.setText(String.valueOf(filter.getMaximumIntensity()));
+        falloff.setText(String.valueOf(filter.getFalloff()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(ParticlesPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(ParticlesPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        
     }
 
     boolean valid() {

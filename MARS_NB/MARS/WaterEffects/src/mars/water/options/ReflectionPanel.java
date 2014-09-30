@@ -7,6 +7,7 @@ package mars.water.options;
 
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class ReflectionPanel extends javax.swing.JPanel {
 
@@ -20,11 +21,6 @@ final class ReflectionPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        mapSize.setText(String.valueOf(filter.getReflectionMapSize()));
-        displacement.setText(String.valueOf(filter.getReflectionDisplace()));
-        specular.setSelected(filter.isUseSpecular());
-        shiny.setText(String.valueOf(filter.getShininess()));
-        sunScale.setText(String.valueOf(filter.getSunScale()));
     }
 
     /**
@@ -160,23 +156,25 @@ final class ReflectionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_mapSizeActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(ReflectionPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(ReflectionPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setReflectionMapSize(NbPreferences.forModule(ReflectionPanel.class).getInt("ReflectionMapSize", 512));
+        filter.setReflectionDisplace(NbPreferences.forModule(ReflectionPanel.class).getFloat("ReflectionDisplacement", 30));
+        filter.setUseSpecular(NbPreferences.forModule(ReflectionPanel.class).getBoolean("UseSpecular", true));
+        filter.setShininess(NbPreferences.forModule(ReflectionPanel.class).getFloat("Shininess", .7f));
+        filter.setSunScale(NbPreferences.forModule(ReflectionPanel.class).getFloat("SunScale", 3));
+        
+        mapSize.setText(String.valueOf(filter.getReflectionMapSize()));
+        displacement.setText(String.valueOf(filter.getReflectionDisplace()));
+        specular.setSelected(filter.isUseSpecular());
+        shiny.setText(String.valueOf(filter.getShininess()));
+        sunScale.setText(String.valueOf(filter.getSunScale()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(ReflectionPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(ReflectionPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(ReflectionPanel.class).putInt("ReflectionMapSize", filter.getReflectionMapSize());
+        NbPreferences.forModule(ReflectionPanel.class).putFloat("ReflectionDisplacement", filter.getReflectionDisplace());
+        NbPreferences.forModule(ReflectionPanel.class).putBoolean("UseSpecular", filter.isUseSpecular());
+        NbPreferences.forModule(ReflectionPanel.class).putFloat("Shininess", filter.getShininess());
+        NbPreferences.forModule(ReflectionPanel.class).putFloat("SunScale", filter.getSunScale());
     }
 
     boolean valid() {

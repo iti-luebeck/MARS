@@ -7,6 +7,7 @@ package mars.water.options;
 
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class RefractionPanel extends javax.swing.JPanel {
 
@@ -20,9 +21,6 @@ final class RefractionPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        enabled.setSelected(filter.isUseRefraction());
-        strength.setText(String.valueOf(filter.getRefractionStrength()));
-        constant.setText(String.valueOf(filter.getRefractionConstant()));
     }
 
     /**
@@ -112,23 +110,19 @@ final class RefractionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_constantActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(RefractionPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(RefractionPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setUseRefraction(NbPreferences.forModule(RefractionPanel.class).getBoolean("UseRefraction", true));
+        filter.setRefractionStrength(NbPreferences.forModule(RefractionPanel.class).getFloat("RefractionStrength", .1f));
+        filter.setRefractionConstant(NbPreferences.forModule(RefractionPanel.class).getFloat("RefractionConstant", .5f));
+        
+        enabled.setSelected(filter.isUseRefraction());
+        strength.setText(String.valueOf(filter.getRefractionStrength()));
+        constant.setText(String.valueOf(filter.getRefractionConstant()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(RefractionPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(RefractionPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(RefractionPanel.class).putBoolean("UseRefraction", filter.isUseRefraction());
+        NbPreferences.forModule(RefractionPanel.class).putFloat("RefractionStrength", filter.getRefractionStrength());
+        NbPreferences.forModule(RefractionPanel.class).putFloat("RefractionConstant", filter.getRefractionConstant());
     }
 
     boolean valid() {

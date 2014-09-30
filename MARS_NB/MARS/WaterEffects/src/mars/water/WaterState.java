@@ -5,10 +5,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh;
-import com.jme3.effect.influencers.RadialParticleInfluencer;
-import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -256,8 +252,9 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
             iterator.remove();
         }
         
-        grid.update(cam.getViewMatrix().clone());
         if (water.isEnabled()) particles.setUnderwater(water.isUnderWater());
+        grid.update(cam.getViewMatrix().clone());
+        emitter.update(app.getRootNode());
     }
     
     @Override

@@ -2,6 +2,7 @@ package mars.water;
 
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingVolume;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Vehicle {
      * List containing tracking points.
      */
     private List<Vector3f> trail;
+    private ParticleEmitter emitter;
     
     /**
      * Creates a new vehicle.
@@ -65,5 +67,13 @@ public class Vehicle {
      */
     public float getWidth() {
         return width;
+    }
+    
+    public ParticleEmitter getEmitter() {
+        return emitter;
+    }
+    
+    public void setEmitter(ParticleEmitter emitter) {
+        this.emitter = emitter;
     }
 }

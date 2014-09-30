@@ -7,6 +7,7 @@ package mars.water.options;
 
 import mars.water.WaterGridFilter;
 import mars.water.WaterState;
+import org.openide.util.NbPreferences;
 
 final class CausticsPanel extends javax.swing.JPanel {
 
@@ -20,8 +21,6 @@ final class CausticsPanel extends javax.swing.JPanel {
         while (WaterState.getInstance() == null);
         state = WaterState.getInstance();
         filter = state.getWaterFilter();
-        enabled.setSelected(filter.isUseCaustics());
-        intensity.setText(String.valueOf(filter.getCausticsIntensity()));
     }
 
     /**
@@ -94,23 +93,16 @@ final class CausticsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_intensityActionPerformed
 
     void load() {
-        // TODO read settings and initialize GUI
-        // Example:        
-        // someCheckBox.setSelected(Preferences.userNodeForPackage(CausticsPanel.class).getBoolean("someFlag", false));
-        // or for org.openide.util with API spec. version >= 7.4:
-        // someCheckBox.setSelected(NbPreferences.forModule(CausticsPanel.class).getBoolean("someFlag", false));
-        // or:
-        // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        filter.setUseCaustics(NbPreferences.forModule(CausticsPanel.class).getBoolean("UseCaustics", true));
+        filter.setCausticsIntensity(NbPreferences.forModule(CausticsPanel.class).getFloat("CausticsIntensity", .5f));
+        
+        enabled.setSelected(filter.isUseCaustics());
+        intensity.setText(String.valueOf(filter.getCausticsIntensity()));
     }
 
     void store() {
-        // TODO store modified settings
-        // Example:
-        // Preferences.userNodeForPackage(CausticsPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or for org.openide.util with API spec. version >= 7.4:
-        // NbPreferences.forModule(CausticsPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
-        // or:
-        // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        NbPreferences.forModule(CausticsPanel.class).putBoolean("UseCaustics", filter.isUseCaustics());
+        NbPreferences.forModule(CausticsPanel.class).putFloat("CausticsIntensity", filter.getCausticsIntensity());
     }
 
     boolean valid() {
