@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.auv;
+package mars.uwCommManager;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.CommunicationType;
 import mars.PhysicalEnvironment;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
 import mars.states.SimState;

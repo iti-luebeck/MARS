@@ -14,7 +14,7 @@ import mars.CommunicationDeviceEvent;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
-import mars.auv.CommunicationManager;
+import mars.uwCommManager.CommunicationManager;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;
 

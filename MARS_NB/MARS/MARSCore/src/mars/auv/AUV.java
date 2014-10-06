@@ -5,6 +5,7 @@
 
 package mars.auv;
 
+import mars.uwCommManager.CommunicationManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.auv;
+package mars.uwCommManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

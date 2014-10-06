@@ -18,7 +18,7 @@ import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.MARS_Main;
 import mars.actuators.Thruster;
-import mars.auv.CommunicationManager;
+import mars.uwCommManager.CommunicationManager;
 import mars.sensors.Accelerometer;
 import mars.sensors.Compass;
 import mars.sensors.Gyroscope;

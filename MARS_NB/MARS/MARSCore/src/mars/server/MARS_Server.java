@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV_Manager;
 import mars.MARS_Main;
-import mars.auv.CommunicationManager;
+import mars.uwCommManager.CommunicationManager;
 
 /**
  * This is the server thread class. It waits for new requests from the clients(i.e. Hanse) and than processes it.

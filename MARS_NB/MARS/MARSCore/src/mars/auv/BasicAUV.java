@@ -4,6 +4,7 @@
  */
 package mars.auv;
 
+import mars.uwCommManager.CommunicationManager;
 import com.jme3.renderer.queue.RenderQueue;
 import javax.swing.tree.TreePath;
 import mars.CollisionType;

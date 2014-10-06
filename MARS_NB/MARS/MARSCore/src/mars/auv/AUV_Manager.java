@@ -5,6 +5,7 @@
 
 package mars.auv;
 
+import mars.uwCommManager.CommunicationManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
 import java.io.IOException;
@@ -498,6 +499,7 @@ public class AUV_Manager implements UpdateState,Lookup.Provider{
         Iterator iter = arrlist.iterator();
         while(iter.hasNext() ) {
             AUV auv = (AUV)iter.next();
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV:..."+ auv.getName(), "");
             registerAUV(auv);
         }
     }
