@@ -1,0 +1,22 @@
+MaterialDef WaterLevel {
+    MaterialParameters {
+    }
+
+    Technique {
+        VertexShader   GLSL120 : Shaders/Water/Empty.vert
+        FragmentShader GLSL120 : Shaders/Water/Empty.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+    }
+
+    Technique HeightPass {
+        VertexShader   GLSL120 : Shaders/Water/WaterLevel.vert
+        FragmentShader GLSL120 : Shaders/Water/WaterLevel.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+    }
+}

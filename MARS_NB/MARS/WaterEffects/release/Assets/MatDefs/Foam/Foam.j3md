@@ -1,0 +1,10 @@
+MaterialDef Foam {
+    Technique {
+        VertexShader GLSL120: Shaders/Foam/Foam.vert
+        FragmentShader GLSL120: Shaders/Foam/Foam.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }   
+    }
+}
