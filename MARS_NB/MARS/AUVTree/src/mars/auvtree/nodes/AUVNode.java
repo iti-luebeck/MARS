@@ -75,6 +75,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public AUVNode(Object obj,String name) {
         super(Children.create(new ParamChildNodeFactory(name), true),Lookups.singleton(obj));
         this.name = name;
+        Lookups.singleton(obj);
 
         // use lookup to get auv out of mars
         CentralLookup cl = CentralLookup.getDefault();
@@ -310,16 +311,16 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
     @Override
     public Transferable clipboardCopy() throws IOException {
-        return super.clipboardCopy();
-        /*Transferable deflt = super.clipboardCopy();
+        Transferable deflt = super.clipboardCopy();
         ExTransferable added = ExTransferable.create(deflt);
         added.put(new ExTransferable.Single(CustomerFlavor.CUSTOMER_FLAVOR) {
             @Override
-            protected Customer getData() {
-                return getLookup().lookup(Customer.class);
+            protected AUV getData() {
+                
+                return getLookup().lookup(AUV.class);
             }
         });
-        return added;*/
+        return added;
     }
 
     @Override

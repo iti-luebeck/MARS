@@ -5,8 +5,6 @@
 
 package mars.actuators;
 
-import mars.actuators.weapons.Canon;
-import mars.actuators.servos.Servo;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -18,11 +16,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Initializer;
-import mars.PhysicalExchanger;
-import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.PhysicalExchanger;
+import mars.actuators.cable.Cable;
+import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.actuators.weapons.Canon;
 import mars.ros.ROS_Publisher;
 import mars.ros.ROS_Subscriber;
 import mars.states.SimState;
@@ -34,7 +35,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class,PointVisualizer.class,BallastTank.class,Lamp.class,Teleporter.class,Animator.class} )
+@XmlSeeAlso( {Thruster.class,Servo.class,Canon.class,VectorVisualizer.class,PointVisualizer.class,BallastTank.class,Lamp.class,Teleporter.class,Animator.class,Cable.class} )
 public abstract class Actuator extends PhysicalExchanger implements ROS_Subscriber,ROS_Publisher{
     /*
      * 

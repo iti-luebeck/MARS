@@ -350,6 +350,7 @@
                 <package>mars.Helper</package>
                 <package>mars.accumulators</package>
                 <package>mars.actuators</package>
+                <package>mars.actuators.cable</package>
                 <package>mars.actuators.servos</package>
                 <package>mars.actuators.visualizer</package>
                 <package>mars.actuators.weapons</package>

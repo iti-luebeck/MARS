@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.Action;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.NodeRefreshEvent;
 import org.openide.actions.PasteAction;
@@ -49,8 +50,6 @@ public class RootNode extends AbstractNode implements NodeListener,LookupListene
     
     @Override
     public void resultChanged(LookupEvent lookupEvent) {
-        
-        System.out.println("aaaaaaaaaa");
     }
 
     @Override
@@ -85,15 +84,15 @@ public class RootNode extends AbstractNode implements NodeListener,LookupListene
         };
     }
     
-    /*@Override
+    @Override
     protected void createPasteTypes(Transferable t, List<PasteType> s) {
-        super.createPasteTypes(t, s);
+        //super.createPasteTypes(t, s);
         PasteType p = getDropType(t, 0, 0);
         if (p != null) {
             s.add(p);
         }
-    }*/
-    /*
+    }
+    
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(CustomerFlavor.CUSTOMER_FLAVOR)) {
@@ -101,7 +100,8 @@ public class RootNode extends AbstractNode implements NodeListener,LookupListene
                 @Override
                 public Transferable paste() throws IOException {
                     try {
-                        model.add((Customer) t.getTransferData(CustomerFlavor.CUSTOMER_FLAVOR));
+                        //model.add((AUV) t.getTransferData(CustomerFlavor.CUSTOMER_FLAVOR));
+                        AUV auv = (AUV) t.getTransferData(CustomerFlavor.CUSTOMER_FLAVOR);
                         final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
                         if (node != null) {
                             node.destroy();
@@ -115,5 +115,5 @@ public class RootNode extends AbstractNode implements NodeListener,LookupListene
         } else {
             return null;
         }
-    }*/
+    }
 }

@@ -7,6 +7,7 @@
 package mars.auvtree.nodes;
 
 import java.awt.datatransfer.DataFlavor;
+import mars.auv.AUV;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.awt.datatransfer.DataFlavor;
 public class CustomerFlavor extends DataFlavor{
     public static final DataFlavor CUSTOMER_FLAVOR = new CustomerFlavor();
     
-    /*public CustomerFlavor() {
-        super(Customer.class, "Customer");
-    }*/
+    public CustomerFlavor() {
+        super(AUV.class, "AUV");
+    }
 }

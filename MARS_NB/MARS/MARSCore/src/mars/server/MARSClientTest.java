@@ -6,6 +6,7 @@ package mars.server;
 
 import java.util.EventListener;
 import javax.swing.Icon;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import org.openide.util.lookup.ServiceProvider;
 
