@@ -20,31 +20,32 @@ import mars.control.MyLightControl;
 
 /**
  * This is a simple lamp to illuminate underwater scenes.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Lamp extends Actuator{
+public class Lamp extends Actuator {
 
     //motor
     private Geometry LampStart;
     private Geometry LampEnd;
-    
+
     private SpotLight spotLight;
-    
+
     private Node Rotation_Node = new Node();
-    
+
     /**
-     * 
+     *
      */
-    public Lamp(){
+    public Lamp() {
         super();
     }
-    
+
     /**
      *
      * @param lamp
      */
-    public Lamp(Lamp lamp){
+    public Lamp(Lamp lamp) {
         super(lamp);
     }
 
@@ -58,7 +59,7 @@ public class Lamp extends Actuator{
         actuator.initAfterJAXB();
         return actuator;
     }
-    
+
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
@@ -87,12 +88,12 @@ public class Lamp extends Actuator{
         mark4.setMaterial(mark_mat4);
         mark4.updateGeometricState();
         Rotation_Node.attachChild(mark4);
-        
+
         //add the acutal light
         spotLight = new SpotLight();
         spotLight.setColor(getColor());
         spotLight.setPosition(getPosition());
-        spotLight.setDirection(Rotation_Node.localToWorld(Vector3f.UNIT_X,null));
+        spotLight.setDirection(Rotation_Node.localToWorld(Vector3f.UNIT_X, null));
         spotLight.setSpotRange(getRange());
         spotLight.setSpotInnerAngle(getInnerAngle());
         spotLight.setSpotOuterAngle(getOuterAngle());
@@ -100,15 +101,14 @@ public class Lamp extends Actuator{
         MyLightControl lightControl = new MyLightControl(spotLight);
         lightControl.setLampEnd(LampEnd);
         LampStart.addControl(lightControl); // this spatial controls the position of this light.
-        
+
         //add volumetric light
         /*VolumeLightFilter vsf = new VolumeLightFilter(spotLight, 128, rootNode);
-        vsf.setInensity(1.0f);
-        getIniter().addFilter(vsf);*/
-
+         vsf.setInensity(1.0f);
+         getIniter().addFilter(vsf);*/
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        quat.fromAngles(getRotation().getX(), getRotation().getY(), getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         auv_node.attachChild(PhysicalExchanger_Node);
@@ -125,69 +125,69 @@ public class Lamp extends Actuator{
     @Override
     public void update(float tpf) {
     }
-    
+
     /**
      *
      * @return
      */
     public ColorRGBA getColor() {
-        return (ColorRGBA)variables.get("Color");
+        return (ColorRGBA) variables.get("Color");
     }
 
     /**
      *
-     * @param Color 
+     * @param Color
      */
-    public void setColor(ColorRGBA Color){
+    public void setColor(ColorRGBA Color) {
         variables.put("Color", Color);
     }
-    
+
     /**
      *
      * @return
      */
     public Float getRange() {
-        return (Float)variables.get("Range");
+        return (Float) variables.get("Range");
     }
 
     /**
      *
-     * @param Range 
+     * @param Range
      */
-    public void setRange(Float Range){
+    public void setRange(Float Range) {
         variables.put("Range", Range);
     }
-    
+
     /**
      *
      * @return
      */
     public Float getInnerAngle() {
-        return (Float)variables.get("InnerAngle");
+        return (Float) variables.get("InnerAngle");
     }
 
     /**
      *
-     * @param InnerAngle 
+     * @param InnerAngle
      */
-    public void setInnerAngle(Float InnerAngle){
+    public void setInnerAngle(Float InnerAngle) {
         variables.put("InnerAngle", InnerAngle);
     }
-    
+
     /**
      *
      * @return
      */
     public Float getOuterAngle() {
-        return (Float)variables.get("OuterAngle");
+        return (Float) variables.get("OuterAngle");
     }
 
     /**
      *
-     * @param OuterAngle 
+     * @param OuterAngle
      */
-    public void setOuterAngle(Float OuterAngle){
+    public void setOuterAngle(Float OuterAngle) {
         variables.put("OuterAngle", OuterAngle);
     }
-    
+
 }

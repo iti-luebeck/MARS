@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars;
 
 /**
+ * Determines which collison model is used.
  *
  * @author Thomas Tosik
  */
 public class CollisionType {
 
     /**
-     * 
+     *
      */
     public static final int BOXCOLLISIONSHAPE = 0;
     /**

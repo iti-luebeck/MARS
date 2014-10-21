@@ -13,13 +13,14 @@ import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
 
 /**
- * This class is basically a teleporter but since the hanse bag files for the 
+ * This class is basically a teleporter but since the hanse bag files for the
  * estimated pose dont have the depth we have to make a special teleporter for
  * subscribing to the pressure sensor.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class HanseBagPlayer extends Teleporter{
-    
+public class HanseBagPlayer extends Teleporter {
+
     private Vector3f pos2d = Vector3f.ZERO;
     private float depth = 0f;
     private com.jme3.math.Quaternion quat = com.jme3.math.Quaternion.IDENTITY;
@@ -71,25 +72,25 @@ public class HanseBagPlayer extends Teleporter{
     public void setQuat(com.jme3.math.Quaternion quat) {
         this.quat = quat;
     }
-    
-   /**
-     * 
+
+    /**
+     *
      * @return
      */
     public Integer getPressureRelative() {
-        return (Integer)variables.get("PressureRelative");
+        return (Integer) variables.get("PressureRelative");
     }
 
     /**
-     * 
-     * @param PressureRelative 
+     *
+     * @param PressureRelative
      */
     public void setPressureRelative(Integer PressureRelative) {
-        variables.put("PressureRelative",PressureRelative);
+        variables.put("PressureRelative", PressureRelative);
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
@@ -98,38 +99,38 @@ public class HanseBagPlayer extends Teleporter{
         final HanseBagPlayer self = this;
         Subscriber<geometry_msgs.PoseStamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.PoseStamped._TYPE);
         subscriber.addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
-                @Override
-                public void onNewMessage(geometry_msgs.PoseStamped message) {
+            @Override
+            public void onNewMessage(geometry_msgs.PoseStamped message) {
                     //System.out.println("I (" + getName()+ ") heard: \"" + message.getPose().getPosition() + "\"");
-                    
-                    Point pos = (Point)message.getPose().getPosition();
-                    Vector3f v_pos = new Vector3f((float)pos.getX(), (float)pos.getZ(), (float)pos.getY());
-                    
-                    //getting from ROS Co-S to MARS Co-S
-                    Quaternion ori = (Quaternion)message.getPose().getOrientation();
-                    com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float)ori.getX(), (float)ori.getZ(), (float)ori.getY(), -(float)ori.getW());
-                    com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
-                    qrot.fromAngles(0f, FastMath.HALF_PI, 0f);
-                    quat.multLocal(qrot);
 
-                    v_pos.y = getDepth();
-                    
-                    setQuat(quat);
-                    setPos2d(v_pos);
-                    self.teleport(v_pos,quat);
-                }
-        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-        
+                Point pos = (Point) message.getPose().getPosition();
+                Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
+
+                //getting from ROS Co-S to MARS Co-S
+                Quaternion ori = (Quaternion) message.getPose().getOrientation();
+                com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
+                com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
+                qrot.fromAngles(0f, FastMath.HALF_PI, 0f);
+                quat.multLocal(qrot);
+
+                v_pos.y = getDepth();
+
+                setQuat(quat);
+                setPos2d(v_pos);
+                self.teleport(v_pos, quat);
+            }
+        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+
         Subscriber<hanse_msgs.pressure> subscriberDepth = ros_node.newSubscriber(auv_name + "/" + "pressure/depth", hanse_msgs.pressure._TYPE);
         subscriberDepth.addMessageListener(new MessageListener<hanse_msgs.pressure>() {
-                @Override
-                public void onNewMessage(hanse_msgs.pressure message) {
-                    float dep = 0f;
-                    int pos = (int)message.getData();
-                    
-                    dep = (getPressureRelative()-pos)/(float)(pe.getFluid_density() * pe.getGravitational_acceleration()) * 100f;
-                    setDepth(dep);
-                }
-        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+            @Override
+            public void onNewMessage(hanse_msgs.pressure message) {
+                float dep = 0f;
+                int pos = (int) message.getData();
+
+                dep = (getPressureRelative() - pos) / (float) (pe.getFluid_density() * pe.getGravitational_acceleration()) * 100f;
+                setDepth(dep);
+            }
+        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 }

@@ -11,16 +11,18 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
 /**
- * This is basically the FlyByCamera only that we cant rotate 360°. Its restricted so we can "over"rotate.
+ * This is basically the FlyByCamera only that we cant rotate 360°. Its
+ * restricted so we can not "over"rotate.
+ *
  * @author Thomas Tosik
  */
-public class AdvancedFlyByCamera extends FlyByCamera{
-    
+public class AdvancedFlyByCamera extends FlyByCamera {
+
     /**
-     * 
+     *
      * @param cam
      */
-    public AdvancedFlyByCamera(Camera cam){
+    public AdvancedFlyByCamera(Camera cam) {
         super(cam);
     }
 
@@ -32,18 +34,18 @@ public class AdvancedFlyByCamera extends FlyByCamera{
         this.cam = cam;
         initialUpVec = cam.getUp().clone();
     }
-    
+
     /**
-     * 
+     *
      * @param value
      * @param axis
      */
     @Override
-    protected void rotateCamera(float value, Vector3f axis){        
-        if (dragToRotate){
-            if (canRotate){
+    protected void rotateCamera(float value, Vector3f axis) {
+        if (dragToRotate) {
+            if (canRotate) {
 //                value = -value;
-            }else{
+            } else {
                 return;
             }
         }
@@ -58,15 +60,15 @@ public class AdvancedFlyByCamera extends FlyByCamera{
         mat.mult(left, left);
         mat.mult(dir, dir);
 
-            Quaternion q = new Quaternion();
-            if(Math.abs(up.y) >= (0.1f)){//dont over turn
-                q.fromAxes(left, up, dir);
-                q.normalizeLocal();
+        Quaternion q = new Quaternion();
+        if (Math.abs(up.y) >= (0.1f)) {//dont over turn
+            q.fromAxes(left, up, dir);
+            q.normalizeLocal();
 
-                cam.setAxes(q);
-            }
+            cam.setAxes(q);
+        }
     }
-    
+
     /**
      *
      * @param name
@@ -75,17 +77,18 @@ public class AdvancedFlyByCamera extends FlyByCamera{
      */
     @Override
     public void onAction(String name, boolean value, float tpf) {
-        if (!enabled)
+        if (!enabled) {
             return;
+        }
 
-        if (name.equals("FLYCAM_RotateDrag") && dragToRotate){
+        if (name.equals("FLYCAM_RotateDrag") && dragToRotate) {
             canRotate = value;
             //inputManager.setCursorVisible(!value);
         } else if (name.equals("FLYCAM_InvertY")) {
             // Toggle on the up.
-            if( !value ) {  
+            if (!value) {
                 this.invertY = !this.invertY;
             }
-        }        
+        }
     }
 }

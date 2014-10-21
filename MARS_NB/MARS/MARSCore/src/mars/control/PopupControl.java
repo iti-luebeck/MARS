@@ -17,16 +17,16 @@ import mars.auv.AUV;
 import mars.states.NiftyState;
 
 /**
+ * Used to show the nifty popup of AUVs with the name.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class PopupControl extends AbstractControl{
+public class PopupControl extends AbstractControl {
 
     private Camera cam;
     private AppStateManager stateManager;
     private AUV auv;
-    private MARS_Settings mars_settings;
-    
+
     /**
      *
      */
@@ -40,7 +40,7 @@ public class PopupControl extends AbstractControl{
      */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
-        
+
     }
 
     /**
@@ -49,19 +49,17 @@ public class PopupControl extends AbstractControl{
      */
     @Override
     protected void controlUpdate(float f) {
-        if((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getGuiPopUpAUVNameDistance() && auv.getMARS_Settings().getGuiPopUpAUVName()){
-            if(stateManager.getState(NiftyState.class) != null){
-                NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
-                //System.out.println("cam " + auv.getName() + ": " + cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation()));
+        if ((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getGuiPopUpAUVNameDistance() && auv.getMARS_Settings().getGuiPopUpAUVName()) {
+            if (stateManager.getState(NiftyState.class) != null) {
+                NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
                 Vector3f worldTranslation = cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation());
-                niftyState.setPopUpNameForAUV(auv, (int)worldTranslation.x, cam.getHeight()-(int)worldTranslation.y);
-                //niftyState.setPopupMenu(true);
-                niftyState.setPopupMenu(auv,true);
+                niftyState.setPopUpNameForAUV(auv, (int) worldTranslation.x, cam.getHeight() - (int) worldTranslation.y);
+                niftyState.setPopupMenu(auv, true);
             }
-        }else{
-            if(stateManager.getState(NiftyState.class) != null){
-                NiftyState niftyState = (NiftyState)stateManager.getState(NiftyState.class);
-                niftyState.setPopupMenu(auv,false);
+        } else {
+            if (stateManager.getState(NiftyState.class) != null) {
+                NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                niftyState.setPopupMenu(auv, false);
             }
         }
     }
@@ -73,7 +71,7 @@ public class PopupControl extends AbstractControl{
      */
     @Override
     public Control cloneForSpatial(Spatial spatial) {
-        return super.cloneForSpatial(spatial); //To change body of generated methods, choose Tools | Templates.
+        return super.cloneForSpatial(spatial);
     }
 
     /**
@@ -98,13 +96,5 @@ public class PopupControl extends AbstractControl{
      */
     public void setAuv(AUV auv) {
         this.auv = auv;
-    }
-
-    /**
-     *
-     * @param mars_settings
-     */
-    public void setMars_settings(MARS_Settings mars_settings) {
-        this.mars_settings = mars_settings;
     }
 }

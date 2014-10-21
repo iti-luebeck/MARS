@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.ChartValue;
 import org.ros.node.topic.Publisher;
-import mars.NoiseType;
+import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.states.SimState;

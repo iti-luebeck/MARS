@@ -89,7 +89,7 @@ import mars.auv.example.Monsun2;
 import mars.auv.example.SMARTE;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.LimitedRigidBodyControl;
+import mars.control.LimitedRigidBodyControl;
 import mars.auv.example.Buoy;
 import mars.auv.example.Manta;
 import mars.auv.example.ROMP;

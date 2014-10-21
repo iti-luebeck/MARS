@@ -6,14 +6,17 @@ package mars;
 
 /**
  * This is interface must be implemented if you want to add values to a chart.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public interface ChartValue {
+
     /**
      *
      * @return
      */
     public Object getChartValue();
+
     /**
      *
      * @return

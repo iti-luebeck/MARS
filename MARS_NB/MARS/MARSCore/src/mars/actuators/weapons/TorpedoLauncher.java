@@ -5,7 +5,7 @@
 package mars.actuators.weapons;
 
 /**
- *
+ * 
  * @author Thomas Tosik
  */
 public class TorpedoLauncher {

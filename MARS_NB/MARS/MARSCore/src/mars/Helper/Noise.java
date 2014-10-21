@@ -2,8 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package mars;
+package mars.Helper;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -14,17 +13,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.xml.HashMapAdapter;
 
 /**
- * In this class should be several static methods for noises. Nothing done yet.
+ * In this class should be several static methods for noises like gaussian
+ * distribution.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class Noise {
+
     /**
-     * 
+     *
      */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    @XmlElement(name="noise")
-    protected HashMap<String,Object> noises;
+    @XmlElement(name = "noise")
+    protected HashMap<String, Object> noises;
     /**
      *
      */
@@ -35,28 +37,28 @@ public class Noise {
      * @return
      */
     public Integer getNoiseType() {
-        return (Integer)noises.get("NoiseType");
+        return (Integer) noises.get("NoiseType");
     }
 
     /**
      *
-     * @param NoiseType 
+     * @param NoiseType
      */
     public void setNoiseType(Integer NoiseType) {
         noises.put("NoiseType", NoiseType);
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Float getNoiseValue() {
-        return (Float)noises.get("NoiseValue");
+        return (Float) noises.get("NoiseValue");
     }
 
     /**
      *
-     * @param NoiseValue 
+     * @param NoiseValue
      */
     public void setNoiseValue(Float NoiseValue) {
         noises.put("NoiseValue", NoiseValue);
@@ -67,10 +69,12 @@ public class Noise {
      * @param UnifromDeviation
      * @return
      */
-    protected float getUnifromDistributionNoise(float UnifromDeviation){
-        int rand = random.nextInt((int)UnifromDeviation + 1);
-        if( random.nextBoolean() == true )//change +/- with 50%P
-            rand = (-1)*rand;
+    protected float getUnifromDistributionNoise(float UnifromDeviation) {
+        int rand = random.nextInt((int) UnifromDeviation + 1);
+        if (random.nextBoolean() == true)//change +/- with 50%P
+        {
+            rand = (-1) * rand;
+        }
         return rand;
     }
 
@@ -79,16 +83,16 @@ public class Noise {
      * @param StandardDeviation
      * @return
      */
-    protected float getGaussianDistributionNoise(float StandardDeviation){
-        float rand = (float)((random.nextGaussian()*(StandardDeviation)));
+    protected float getGaussianDistributionNoise(float StandardDeviation) {
+        float rand = (float) ((random.nextGaussian() * (StandardDeviation)));
         return rand;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public HashMap<String,Object> getAllNoiseVariables(){
+    public HashMap<String, Object> getAllNoiseVariables() {
         return noises;
     }
 }

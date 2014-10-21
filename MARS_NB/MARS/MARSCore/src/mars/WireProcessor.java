@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars;
 
 import com.jme3.asset.AssetManager;
@@ -16,6 +15,7 @@ import com.jme3.texture.FrameBuffer;
 
 /**
  * We want to see some WireFrames.
+ *
  * @author Thomas Tosik
  */
 public class WireProcessor implements SceneProcessor {
@@ -24,7 +24,7 @@ public class WireProcessor implements SceneProcessor {
     Material wireMaterial;
 
     /**
-     * 
+     *
      * @param manager
      * @param color
      */
@@ -38,6 +38,7 @@ public class WireProcessor implements SceneProcessor {
      * @param rm
      * @param vp
      */
+    @Override
     public void initialize(RenderManager rm, ViewPort vp) {
         renderManager = rm;
     }
@@ -48,6 +49,7 @@ public class WireProcessor implements SceneProcessor {
      * @param w
      * @param h
      */
+    @Override
     public void reshape(ViewPort vp, int w, int h) {
     }
 
@@ -55,6 +57,7 @@ public class WireProcessor implements SceneProcessor {
      *
      * @return
      */
+    @Override
     public boolean isInitialized() {
         return renderManager != null;
     }
@@ -63,6 +66,7 @@ public class WireProcessor implements SceneProcessor {
      *
      * @param tpf
      */
+    @Override
     public void preFrame(float tpf) {
     }
 
@@ -70,6 +74,7 @@ public class WireProcessor implements SceneProcessor {
      *
      * @param rq
      */
+    @Override
     public void postQueue(RenderQueue rq) {
         renderManager.setForcedMaterial(wireMaterial);
     }
@@ -78,6 +83,7 @@ public class WireProcessor implements SceneProcessor {
      *
      * @param out
      */
+    @Override
     public void postFrame(FrameBuffer out) {
         renderManager.setForcedMaterial(null);
     }
@@ -85,6 +91,7 @@ public class WireProcessor implements SceneProcessor {
     /**
      *
      */
+    @Override
     public void cleanup() {
         renderManager.setForcedMaterial(null);
     }

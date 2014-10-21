@@ -10,15 +10,18 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.LodControl;
 
 /**
+ * Since the original LodControl has a bug with mutliple views and cameras...
  * 
+ * @author Thomas Tosik
  */
 public class MyLodControl extends LodControl {
+
     private Camera controlCam;
 
     /**
      * Creates a new <code>LodControl</code>.
      */
-    public MyLodControl(){
+    public MyLodControl() {
     }
 
     /**
@@ -43,9 +46,9 @@ public class MyLodControl extends LodControl {
      * @param vp
      */
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp){
+    protected void controlRender(RenderManager rm, ViewPort vp) {
         Camera cam = vp.getCamera();
-        if(controlCam.equals(cam)){
+        if (controlCam.equals(cam)) {
             super.controlRender(rm, vp);
         }
     }

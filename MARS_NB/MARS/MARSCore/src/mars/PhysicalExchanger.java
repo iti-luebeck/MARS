@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars;
 
+import mars.Helper.Noise;
 import mars.states.SimState;
 import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -33,13 +33,14 @@ import mars.sensors.Sensor;
 import mars.xml.HashMapAdapter;
 
 /**
- * This is the basic interface for all sensors/actuators
+ * This is the basic interface for all sensors/actuators.
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Actuator.class,Sensor.class} )
-public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,PropertyChangeListenerSupport{
+@XmlSeeAlso({Actuator.class, Sensor.class})
+public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS, PropertyChangeListenerSupport {
 
     @SuppressWarnings("FieldMayBeFinal")
     private List listeners = Collections.synchronizedList(new LinkedList());
@@ -52,7 +53,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         listeners.add(pcl);
     }
-    
+
     /**
      *
      * @param pcl
@@ -69,20 +70,20 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
     }
-    
+
     /**
      *
-     * @param auv_node 
+     * @param auv_node
      */
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         this.auv_node = auv_node;
     }
-    
+
     /**
-     * 
+     *
      */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    protected HashMap<String,Object> variables;
+    protected HashMap<String, Object> variables;
 
     /**
      *
@@ -105,47 +106,47 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
      */
     protected RigidBodyControl physics_control;
     /**
-     * 
+     *
      */
     protected PhysicalEnvironment pe;
     /*
      * 
      */
     /**
-     * 
+     *
      */
-    protected  boolean enabled = true;
+    protected boolean enabled = true;
     /*
      * 
      */
     /**
-     * 
+     *
      */
     protected int ros_publish_rate = 1000;
     /**
-     * 
+     *
      */
     protected String ros_frame_id = "/map";
     /*
      * 
      */
     /**
-     * 
+     *
      */
     protected String ros_msg_type = "";
     /*
      * 
-     */    
+     */
     /**
-     * 
+     *
      */
     protected MARSNodeMain mars_node = null;
-    
+
     /**
-     * 
+     *
      */
     protected int rosSequenceNumber = 0;
-    
+
     /*
      * 
      */
@@ -154,26 +155,26 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
      */
     public TF_ROS_Publisher tf_pub = null;
     /**
-     * 
+     *
      */
-    protected  SimState simState = null;
+    protected SimState simState = null;
     /**
-     * 
+     *
      */
     protected boolean rosinit = false;
-    
+
     private long oldtime = 0;
-    
+
     /**
-     * 
+     *
      * @param simState
      */
     public void setSimState(SimState simState) {
         this.simState = simState;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public RigidBodyControl getPhysicsControl() {
@@ -192,10 +193,10 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
      *
      * @param visible
      */
-    public void setNodeVisibility(boolean visible){
-        if(visible){
+    public void setNodeVisibility(boolean visible) {
+        if (visible) {
             PhysicalExchanger_Node.setCullHint(CullHint.Never);
-        }else{
+        } else {
             PhysicalExchanger_Node.setCullHint(CullHint.Always);
         }
     }
@@ -205,7 +206,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
      * @param name
      */
     @Override
-    public void setName(String name){
+    public void setName(String name) {
         String old = getName();
         //PhysicalExchangerName = name;
         variables.put("name", name);
@@ -218,60 +219,60 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
      * @return
      */
     @Override
-    public String getName(){
-        return (String)variables.get("name");
+    public String getName() {
+        return (String) variables.get("name");
     }
 
     /**
-     * 
+     *
      */
     public abstract void reset();
-    
+
     /**
      *
      * @return
      */
     public abstract PhysicalExchanger copy();
-    
+
     /**
      *
      * @param pe
      */
-    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe) {
         HashMap<String, Object> variablesOriginal = pe.getAllVariables();
         Cloner cloner = new Cloner();
         variables = cloner.deepClone(variablesOriginal);
-        
+
         HashMap<String, Object> noisevariablesOriginal = pe.getAllNoiseVariables();
         noises = cloner.deepClone(noisevariablesOriginal);
     }
-    
+
     /**
      *
      */
-    public void cleanup(){
+    public void cleanup() {
         auv_node.detachChild(PhysicalExchanger_Node);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public Boolean isEnabled() {
-        return (Boolean)variables.get("enabled");
     }
 
     /**
-     * 
+     *
+     * @return
+     */
+    public Boolean isEnabled() {
+        return (Boolean) variables.get("enabled");
+    }
+
+    /**
+     *
      * @return
      */
     @Override
     public Boolean getEnabled() {
-        return (Boolean)variables.get("enabled");
+        return (Boolean) variables.get("enabled");
     }
-    
+
     /**
-     * 
+     *
      * @param enabled
      */
     @Override
@@ -280,21 +281,20 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
         variables.put("enabled", enabled);
         fire("enabled", old, enabled);
     }
-    
+
     /**
-     * 
+     *
      */
     /*public void setEnabled(boolean enabled) {
-        variables.put("enabled", enabled);
-    }*/
-
+     variables.put("enabled", enabled);
+     }*/
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public String getROS_MSG_Type() {
@@ -302,14 +302,14 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
     }
 
     /**
-     * 
+     *
      */
     public void initROS() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
@@ -319,118 +319,118 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
     }
 
     /**
-     * 
+     *
      * @param ros_msg_type
      */
     public void setROS_MSG_Type(String ros_msg_type) {
         this.ros_msg_type = ros_msg_type;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public MARSNodeMain getMARS_Node() {
         return mars_node;
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      */
     public void setROS_Node(MARSNodeMain ros_node) {
         this.mars_node = ros_node;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public Integer getRos_publish_rate() {
-        return (Integer)variables.get("ros_publish_rate");
+        return (Integer) variables.get("ros_publish_rate");
     }
 
     /**
-     * 
+     *
      * @param ros_publish_rate
      */
     public void setRos_publish_rate(Integer ros_publish_rate) {
         int old = getRos_publish_rate();
-        variables.put("ros_publish_rate",ros_publish_rate);
+        variables.put("ros_publish_rate", ros_publish_rate);
         fire("ros_publish_rate", old, ros_publish_rate);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public Integer getTFRos_publish_rate() {
-        if((Integer)variables.get("tf_ros_publish_rate") == null){
+        if ((Integer) variables.get("tf_ros_publish_rate") == null) {
             return 1000;
-        }else{
-            return (Integer)variables.get("tf_ros_publish_rate");
+        } else {
+            return (Integer) variables.get("tf_ros_publish_rate");
         }
     }
 
     /**
-     * 
-     * @param tf_ros_publish_rate 
+     *
+     * @param tf_ros_publish_rate
      */
     public void setTFRos_publish_rate(Integer tf_ros_publish_rate) {
         int old = getTFRos_publish_rate();
-        variables.put("tf_ros_publish_rate",tf_ros_publish_rate);
+        variables.put("tf_ros_publish_rate", tf_ros_publish_rate);
         fire("tf_ros_publish_rate", old, tf_ros_publish_rate);
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public String getRos_frame_id() {       
-        return (String)variables.get("ros_frame_id");
+    public String getRos_frame_id() {
+        return (String) variables.get("ros_frame_id");
     }
 
     /**
-     * 
+     *
      * @param ros_frame_id
      */
     public void setRos_frame_id(String ros_frame_id) {
         String old = getRos_frame_id();
         //this.ros_frame_id = ros_frame_id;
-        variables.put("ros_frame_id",ros_frame_id);
+        variables.put("ros_frame_id", ros_frame_id);
         fire("ros_frame_id", old, ros_frame_id);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Integer getRos_queue_listener_size() {   
-        Integer ros_queue_listener_size = (Integer)variables.get("ros_queue_listener_size");
-        if(ros_queue_listener_size != null){
+    public Integer getRos_queue_listener_size() {
+        Integer ros_queue_listener_size = (Integer) variables.get("ros_queue_listener_size");
+        if (ros_queue_listener_size != null) {
             return ros_queue_listener_size;
-        }else{
+        } else {
             return 1;
         }
     }
 
     /**
-     * 
-     * @param ros_queue_listener_size 
+     *
+     * @param ros_queue_listener_size
      */
     public void setRos_queue_listener_size(Integer ros_queue_listener_size) {
         int old = getRos_queue_listener_size();
         //this.ros_frame_id = ros_frame_id;
-        variables.put("ros_queue_listener_size",ros_queue_listener_size);
+        variables.put("ros_queue_listener_size", ros_queue_listener_size);
         fire("ros_queue_listener_size", old, ros_queue_listener_size);
     }
-    
+
     /**
      *
      * @param tpf
      */
     public abstract void update(float tpf);
-    
+
     /**
      *
      * @return
@@ -441,146 +441,148 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
 
     /**
      *
-     * @param pe 
+     * @param pe
      */
     public void setPhysical_environment(PhysicalEnvironment pe) {
         this.pe = pe;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public HashMap<String,Object> getAllVariables(){
+    public HashMap<String, Object> getAllVariables() {
         return variables;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public HashMap<String,String> getAllActions(){
+    public HashMap<String, String> getAllActions() {
         return null;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initAfterJAXB(){
+    public void initAfterJAXB() {
         tf_pub = new TF_ROS_Publisher(this);
-       /* variables.put("noise_type", getNoiseType());
-        variables.put("noise_value", getNoiseValue());
-        variables.put("name",getName());
-        variables.put("enabled", isEnabled());
-        variables.put("ros_publish_rate", getRos_publish_rate());
-        variables.put("ros_frame_id", getRos_frame_id());*/
-    };
+        /* variables.put("noise_type", getNoiseType());
+         variables.put("noise_value", getNoiseValue());
+         variables.put("name",getName());
+         variables.put("enabled", isEnabled());
+         variables.put("ros_publish_rate", getRos_publish_rate());
+         variables.put("ros_frame_id", getRos_frame_id());*/
+    }
+
+    ;
     
     /**
      * 
      * @return
      */
-    public String getIcon(){
-        return (String)variables.get("icon");
+    public String getIcon() {
+        return (String) variables.get("icon");
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public String getdnd_icon(){
-        return (String)variables.get("dndIcon");
+    public String getdnd_icon() {
+        return (String) variables.get("dndIcon");
     }
-    
+
     /**
-     * 
+     *
      * @param icon
      */
-    public void setIcon(String icon){
+    public void setIcon(String icon) {
         String old = getIcon();
-        variables.put("icon",icon);
+        variables.put("icon", icon);
         fire("icon", old, icon);
     }
-    
+
     /**
-     * 
+     *
      * @param dnd_icon
      */
-    public void setdnd_icon(String dnd_icon){
+    public void setdnd_icon(String dnd_icon) {
         String old = getdnd_icon();
-        variables.put("dndIcon",dnd_icon);
+        variables.put("dndIcon", dnd_icon);
         fire("dndIcon", old, dnd_icon);
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public String getAccumulator(){
-        return (String)variables.get("accumulator");
+    public String getAccumulator() {
+        return (String) variables.get("accumulator");
     }
-    
+
     /**
-     * 
+     *
      * @param accumulator
      */
-    public void setAccumulator(String accumulator){
+    public void setAccumulator(String accumulator) {
         String old = getAccumulator();
-        variables.put("accumulator",accumulator);
+        variables.put("accumulator", accumulator);
         fire("accumulator", old, accumulator);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Vector3f getPosition(){
-        return (Vector3f)variables.get("Position");
+    public Vector3f getPosition() {
+        return (Vector3f) variables.get("Position");
     }
-    
+
     /**
-     * 
+     *
      * @param Position
      */
-    public void setPosition(Vector3f Position){
+    public void setPosition(Vector3f Position) {
         Vector3f old = getPosition();
-        variables.put("Position",Position);
+        variables.put("Position", Position);
         fire("Position", old, Position);
     }
-    
-        /**
-     * 
+
+    /**
+     *
      * @return
      */
-    public Vector3f getRotation(){
-        return (Vector3f)variables.get("Rotation");
+    public Vector3f getRotation() {
+        return (Vector3f) variables.get("Rotation");
     }
-    
+
     /**
-     * 
+     *
      * @param Rotation
      */
-    public void setRotation(Vector3f Rotation){
+    public void setRotation(Vector3f Rotation) {
         Vector3f old = getRotation();
-        variables.put("Rotation",Rotation);
+        variables.put("Rotation", Rotation);
         fire("Rotation", old, Rotation);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Float getCurrentConsumption(){
-        return (Float)variables.get("currentConsumption");
+    public Float getCurrentConsumption() {
+        return (Float) variables.get("currentConsumption");
     }
-    
+
     /**
-     * 
+     *
      * @param currentConsumption
      */
-    public void setCurrentConsumption(Float currentConsumption){
+    public void setCurrentConsumption(Float currentConsumption) {
         Float old = getCurrentConsumption();
-        variables.put("currentConsumption",currentConsumption);
+        variables.put("currentConsumption", currentConsumption);
         fire("currentConsumption", old, currentConsumption);
     }
 
@@ -600,7 +602,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
     public AUV getAuv() {
         return auv;
     }
-    
+
     /**
      *
      * @return
@@ -624,29 +626,27 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject,ROS,P
     public Node getPhysicalExchanger_Node() {
         return PhysicalExchanger_Node;
     }
-    
-    
-    
+
     /**
-     * 
+     *
      * @param path
      */
     public abstract void updateState(TreePath path);
-    
+
     /**
-     * 
+     *
      */
     public void publishData() {
     }
 
     /**
-     * 
+     *
      */
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();
-        if( ((curtime-oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
-            
-        }else{
+        if (((curtime - oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
+
+        } else {
             oldtime = curtime;
             publishData();
         }

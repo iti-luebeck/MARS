@@ -2,14 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package mars;
+package mars.Helper;
 
 /**
+ * Used in the Noise class to determine which noise should be used.
  *
  * @author Thomas Tosik
  */
 public class NoiseType {
+
     /**
      *
      */

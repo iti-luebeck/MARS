@@ -10,30 +10,32 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.input.FlyByCamera;
 
 /**
+ * The correspnding AppState to the AdvancedFlyCam.
  *
  * @author Thomas Tosik
  */
-public class AdvancedFlyCamAppState extends AbstractAppState{
-  
+public class AdvancedFlyCamAppState extends AbstractAppState {
+
     private Application app;
     private FlyByCamera flyCam;
 
     /**
-     * 
+     *
      */
     public AdvancedFlyCamAppState() {
-    }    
+    }
 
     /**
-     *  This is called by SimpleApplication during initialize().
-     * @param cam 
+     * This is called by SimpleApplication during initialize().
+     *
+     * @param cam
      */
-    public void setCamera( FlyByCamera cam ) {
+    public void setCamera(FlyByCamera cam) {
         this.flyCam = cam;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public FlyByCamera getCamera() {
@@ -48,19 +50,19 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
+
         this.app = app;
 
         if (app.getInputManager() != null) {
-        
+
             if (flyCam == null) {
                 flyCam = new FlyByCamera(app.getCamera());
             }
-            
-            flyCam.registerWithInput(app.getInputManager());            
-        }               
+
+            flyCam.registerWithInput(app.getInputManager());
+        }
     }
-            
+
     /**
      *
      * @param enabled
@@ -68,10 +70,10 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        
+
         flyCam.setEnabled(enabled);
     }
-    
+
     /**
      *
      */
@@ -79,6 +81,6 @@ public class AdvancedFlyCamAppState extends AbstractAppState{
     public void cleanup() {
         super.cleanup();
 
-        flyCam.unregisterInput();        
+        flyCam.unregisterInput();
     }
 }
