@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors.sonar;
 
 import java.nio.ByteOrder;
@@ -17,34 +16,36 @@ import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
- * This is the Imaginex Sonar class. It's the sonar used in the AUV HANSE.
- * Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
+ * This is the Imaginex Sonar class. It is the sonar used in the AUV HANSE. Since
+ * the Imaginex sonars need some header information to be sent we put them in
+ * front of the basic sonar data.
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class ImagenexSonar_852_Scanning extends Sonar{
+public class ImagenexSonar_852_Scanning extends Sonar {
 
     private int SonarReturnDataHeaderLength = 12;//265
 
     ///ROS stuff
     /**
-     * 
+     *
      */
     protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
     /**
-     * 
+     *
      */
     protected hanse_msgs.ScanningSonar fl;
     /**
-     * 
+     *
      */
-    protected std_msgs.Header header; 
-    
+    protected std_msgs.Header header;
+
     /**
-     * 
+     *
      */
-    public ImagenexSonar_852_Scanning(){
+    public ImagenexSonar_852_Scanning() {
         super();
     }
 
@@ -61,11 +62,11 @@ public class ImagenexSonar_852_Scanning extends Sonar{
      * @return
      */
     public int getSonarReturnDataTotalLength() {
-        return super.getReturnDataLength()+SonarReturnDataHeaderLength+1;//+1 is the termination byte
+        return super.getReturnDataLength() + SonarReturnDataHeaderLength + 1;//+1 is the termination byte
     }
 
     @Override
-    protected byte[] encapsulateWithHeaderTail(byte[] sondat){
+    protected byte[] encapsulateWithHeaderTail(byte[] sondat) {
         byte[] header = new byte[SonarReturnDataHeaderLength];
         byte[] end = new byte[1];
 
@@ -94,45 +95,45 @@ public class ImagenexSonar_852_Scanning extends Sonar{
     }
 
     @Override
-    public byte[] getData(){
+    public byte[] getData() {
         return encapsulateWithHeaderTail(super.getData());
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public byte[] getRawData(){
+    public byte[] getRawData() {
         return super.getData();
     }
 
     @Override
-    protected float calculateAverageNoiseFunction(float x){
-        return 14.22898616f*((float)Math.pow(1.03339750f, (float)Math.abs(x)) );
+    protected float calculateAverageNoiseFunction(float x) {
+        return 14.22898616f * ((float) Math.pow(1.03339750f, (float) Math.abs(x)));
     }
 
     @Override
-    protected float calculateStandardDeviationNoiseFunction(float x){
-        return 7.50837174f*((float)Math.pow(1.02266704f, (float)Math.abs(x)) );
+    protected float calculateStandardDeviationNoiseFunction(float x) {
+        return 7.50837174f * ((float) Math.pow(1.02266704f, (float) Math.abs(x)));
     }
-    
-        /**
-     * 
+
+    /**
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),hanse_msgs.ScanningSonar._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.ScanningSonar._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
-    
+
     /**
-     * 
+     *
      */
     @Override
     public void publish() {
@@ -141,16 +142,16 @@ public class ImagenexSonar_852_Scanning extends Sonar{
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        
+
         byte[] sonData = getRawData();
         float lastHeadPosition = getLastHeadPosition();
-        this.mars.getTreeTopComp().initRayBasedData(sonData,lastHeadPosition,this);
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN,sonData));
+        this.mars.getTreeTopComp().initRayBasedData(sonData, lastHeadPosition, this);
+        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
         fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte)getScanningGain().shortValue());
-        fl.setRange((byte)getMaxRange().shortValue());
-        
-        if( publisher != null ){
+        fl.setStartGain((byte) getScanningGain().shortValue());
+        fl.setRange((byte) getMaxRange().shortValue());
+
+        if (publisher != null) {
             publisher.publish(fl);
         }
     }

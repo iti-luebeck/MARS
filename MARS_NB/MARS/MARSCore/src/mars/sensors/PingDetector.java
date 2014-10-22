@@ -2,12 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -18,8 +16,6 @@ import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.ChartValue;
 import mars.Helper.Helper;
 import mars.PhysicalExchanger;
@@ -28,16 +24,16 @@ import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
-import mars.xml.Vector3fAdapter;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
+ * Detects a SimObject that functions also as a ping source.
  *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class PingDetector extends Sensor implements ChartValue{
+public class PingDetector extends Sensor implements ChartValue {
 
     private Geometry PingStart;
     private Geometry PingDirection;
@@ -45,32 +41,32 @@ public class PingDetector extends Sensor implements ChartValue{
     private SimObjectManager simob_manager;
 
     private float detection_range = 50.0f;
-    
+
     private Publisher<std_msgs.Float32> publisher = null;
     private std_msgs.Float32 fl;
-    private std_msgs.Header header; 
+    private std_msgs.Header header;
 
     /**
-     * 
+     *
      */
-    public PingDetector(){
+    public PingDetector() {
         super();
     }
-        
+
     /**
      *
-     * @param simstate 
+     * @param simstate
      */
-    public PingDetector(SimState simstate){
+    public PingDetector(SimState simstate) {
         super(simstate);
         this.simob_manager = simstate.getSimob_manager();
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public PingDetector(PingDetector sensor){
+    public PingDetector(PingDetector sensor) {
         super(sensor);
     }
 
@@ -85,12 +81,12 @@ public class PingDetector extends Sensor implements ChartValue{
         return sensor;
     }
 
-    public void update(float tpf){
+    public void update(float tpf) {
 
     }
 
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.015f);
         PingStart = new Geometry("CompassStart", sphere7);
@@ -118,10 +114,10 @@ public class PingDetector extends Sensor implements ChartValue{
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
         PhysicalExchanger_Node.attachChild(mark4);
-        
+
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        quat.fromAngles(getRotation().getX(), getRotation().getY(), getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
 
         auv_node.attachChild(PhysicalExchanger_Node);
@@ -132,7 +128,7 @@ public class PingDetector extends Sensor implements ChartValue{
      * @return
      */
     public Float getDetection_range() {
-        return (Float)variables.get("detection_range");
+        return (Float) variables.get("detection_range");
     }
 
     /**
@@ -147,15 +143,15 @@ public class PingDetector extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getNearestPingerDistance(){
-        HashMap<String,SimObject> simobs = simob_manager.getSimObjects();
+    public float getNearestPingerDistance() {
+        HashMap<String, SimObject> simobs = simob_manager.getSimObjects();
         float ret = getDetection_range();
-        for ( String elem : simobs.keySet() ){
-            SimObject simob = (SimObject)simobs.get(elem);
-            if(simob.isPinger()){
+        for (String elem : simobs.keySet()) {
+            SimObject simob = (SimObject) simobs.get(elem);
+            if (simob.isPinger()) {
                 float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
-                if( distance <= getDetection_range() && distance < ret ){
-                   ret = distance;
+                if (distance <= getDetection_range() && distance < ret) {
+                    ret = distance;
                 }
             }
         }
@@ -167,13 +163,13 @@ public class PingDetector extends Sensor implements ChartValue{
      * @param pinger
      * @return
      */
-    public float getPingerDistance(String pinger){
+    public float getPingerDistance(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if(simob != null && simob.isPinger()){
+        if (simob != null && simob.isPinger()) {
             float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
-            if(distance <= getDetection_range()){
+            if (distance <= getDetection_range()) {
                 return distance;
-            }else{
+            } else {
                 return getDetection_range();
             }
         }
@@ -184,7 +180,7 @@ public class PingDetector extends Sensor implements ChartValue{
      *
      * @return
      */
-    public Vector3f getNearestPingerAngle(){
+    public Vector3f getNearestPingerAngle() {
         return Vector3f.ZERO;
     }
 
@@ -193,8 +189,8 @@ public class PingDetector extends Sensor implements ChartValue{
      * @param pinger_vector
      * @return The yaw angle in degree
      */
-    private float getYawDegree(Vector3f pinger_vector){
-        return (float)(getYawRadiant(pinger_vector)*(180/Math.PI));
+    private float getYawDegree(Vector3f pinger_vector) {
+        return (float) (getYawRadiant(pinger_vector) * (180 / Math.PI));
     }
 
     /**
@@ -202,7 +198,7 @@ public class PingDetector extends Sensor implements ChartValue{
      * @param pinger_vector
      * @return The yaw angle in radiant
      */
-    private float getYawRadiant(Vector3f pinger_vector){
+    private float getYawRadiant(Vector3f pinger_vector) {
         Vector3f vec_roll = PingDirection.getWorldTranslation().subtract(PingStart.getWorldTranslation());
 
         //rotate the pinger_detector and the pinger to the unitZ
@@ -211,35 +207,23 @@ public class PingDetector extends Sensor implements ChartValue{
         Matrix3f rot = Helper.getRotationMatrix(angle, crossed.normalize());
         Vector3f rotated = rot.mult(vec_roll);
         Vector3f pingrotated = rot.mult(pinger_vector);
-        //System.out.println(Vector3f.UNIT_Z + "/" + vec_roll + ";" + rotated);
-        //System.out.println("pinge: " + pinger_vector + ";" + pingrotated);
-
-       /* Vector3f ray_start = PingStart.getWorldTranslation();
-        Vector3f ray_direction = pingrotated;
-        Geometry mark4 = new Geometry("PingDetector_Arrow", new Arrow(ray_direction.mult(getDetection_range())));
-        Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat4.setColor("Color", ColorRGBA.DarkGray);
-        mark4.setMaterial(mark_mat4);
-        mark4.setLocalTranslation(ray_start);
-        mark4.updateGeometricState();
-        rootNode.attachChild(mark4);*/
 
         vec_roll = rotated;
-        pinger_vector = new Vector3f(pingrotated.getX(),0,pingrotated.getZ());
-        if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
+        pinger_vector = new Vector3f(pingrotated.getX(), 0, pingrotated.getZ());
+        if (vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f) {
             return 0f;
         }
         Vector3f plus = (pinger_vector.cross(vec_roll)).normalize();
-        if( plus.getY() < 0 ){//negativ, vec_roll on the right side of the magnetic north
+        if (plus.getY() < 0) {//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pinger_vector.normalize());
-        }else if( plus.getY() == 0){
-            if( (pinger_vector.add(vec_roll)).length() <= (vec_roll.length()+pinger_vector.length()) ){//vectors point in same direction
+        } else if (plus.getY() == 0) {
+            if ((pinger_vector.add(vec_roll)).length() <= (vec_roll.length() + pinger_vector.length())) {//vectors point in same direction
                 return 0f;
-            }else{//vectors are opposite
-                return (float)Math.PI;
+            } else {//vectors are opposite
+                return (float) Math.PI;
             }
-        }else{//left side
-            return (float)(Math.PI + ( Math.PI - (vec_roll.normalize()).angleBetween(pinger_vector.normalize()) ) );
+        } else {//left side
+            return (float) (Math.PI + (Math.PI - (vec_roll.normalize()).angleBetween(pinger_vector.normalize())));
         }
     }
 
@@ -248,37 +232,24 @@ public class PingDetector extends Sensor implements ChartValue{
      * @param pinger
      * @return angle in radiant
      */
-    public float getPingerAngleRadiant(String pinger){
+    public float getPingerAngleRadiant(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if(simob != null && simob.isPinger()){
+        if (simob != null && simob.isPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
-
-            /* debugstuff
-            Vector3f ray_start = PingStart.getWorldTranslation();
-            Vector3f ray_direction = pinger_vector;
-            Geometry mark4 = new Geometry("PingDetector_Arrow", new Arrow(ray_direction.mult(getDetection_range())));
-            Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mark_mat4.setColor("Color", ColorRGBA.DarkGray);
-            mark4.setMaterial(mark_mat4);
-            mark4.setLocalTranslation(ray_start);
-            mark4.updateGeometricState();
-            rootNode.attachChild(mark4);*/
-
             float yaw = getYawRadiant(pinger_vector);
-            //System.out.println("Yaw!!!! " + yaw);
             return yaw;
         }
         return 0f;
     }
 
-        /**
+    /**
      *
      * @param pinger
      * @return angle in degree
      */
-    public float getPingerAngleDegree(String pinger){
+    public float getPingerAngleDegree(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if(simob != null && simob.isPinger()){
+        if (simob != null && simob.isPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
             float yaw = getYawDegree(pinger_vector);
             return yaw;
@@ -288,21 +259,22 @@ public class PingDetector extends Sensor implements ChartValue{
 
     /**
      * Nothing implemeted yet
+     *
      * @return
      */
-    public String getNearestPingerName(){
+    public String getNearestPingerName() {
         return "";
     }
 
     /**
      *
      */
-    public void reset(){
+    public void reset() {
 
     }
 
     /**
-     * 
+     *
      * @param simob_manager
      */
     public void setSimObjectManager(SimObjectManager simob_manager) {
@@ -310,42 +282,42 @@ public class PingDetector extends Sensor implements ChartValue{
     }
 
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),std_msgs.Float32._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void publish() {
         header.setSeq(rosSequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        
+
         fl.setData((getPingerAngleRadiant("pingpong")));
-        
-        if( publisher != null ){
+
+        if (publisher != null) {
             publisher.publish(fl);
         }
     }
-    
+
     @Override
     public void publishData() {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPingerAngleRadiant("pingpong"), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
-    
+
     /**
      *
      * @return

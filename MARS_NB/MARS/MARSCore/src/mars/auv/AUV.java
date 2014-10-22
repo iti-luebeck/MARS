@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -34,51 +33,55 @@ import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
 
 /**
- * An basic interface for auv's like "Hanse".
+ * An basic interface for AUVs like "Hanse".
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {BasicAUV.class} )
-public interface AUV extends RosNodeListener,UpdateState, ChartValue{
+@XmlSeeAlso({BasicAUV.class})
+public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
      * @param tpf
      */
     public void updateForces(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateSensors(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateActuators(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateAccumulators(float tpf);
-    
+
     /**
      *
      * @param tpf
      */
     public void updateWaypoints(float tpf);
+
     /**
-     * 
+     *
      */
     public void publishSensorsOfAUV();
+
     /**
-     * 
+     *
      */
     public void publishActuatorsOfAUV();
+
     /**
      *
      */
@@ -86,20 +89,24 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      */
     public void reset();
+
     /**
      *
      * @return
      */
     public String getName();
+
     /**
      *
      * @param auv_name
      */
     public void setName(String auv_name);
+
     /**
      *
      * @return
@@ -108,31 +115,37 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
      */
     public MyCustomGhostControl getGhostControl();
+
     /**
      *
      * @param physics_control
      */
     public void setPhysicsControl(RigidBodyControl physics_control);
-     /**
+
+    /**
      *
      * @return
      */
     public Node getAUVNode();
+
     /**
-     * 
+     *
      * @return
      */
     public Node getSelectionNode();
+
     /**
      *
      * @return
      */
     public Geometry getMassCenterGeom();
+
     /**
      *
      */
@@ -140,76 +153,90 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      */
     public void createDefault();
+
     /**
-     * 
+     *
      */
     public void initROS();
+
     /**
      *
      * @return
      */
     @Override
     public String toString();
+
     /**
      *
      * @return
      */
-    public HashMap<String,Actuator> getActuators();
+    public HashMap<String, Actuator> getActuators();
+
     /**
      *
      * @return
      */
-    public HashMap<String,Sensor> getSensors();
+    public HashMap<String, Sensor> getSensors();
+
     /**
      *
      * @return
      */
-    public HashMap<String,Accumulator> getAccumulators();
+    public HashMap<String, Accumulator> getAccumulators();
+
     /**
      *
-     * @param key 
+     * @param key
      * @return
      */
     public Accumulator getAccumulator(String key);
+
     /**
      *
      * @return
      */
     public AUV_Parameters getAuv_param();
+
     /**
      *
-     * @param auvParam 
+     * @param auvParam
      */
     public void setAuv_param(AUV_Parameters auvParam);
+
     /**
      *
      * @param classNameString
      * @return
      */
     public ArrayList getSensorsOfClass(String classNameString);
+
     /**
      *
      * @param classNameString
      * @return
      */
     public boolean hasSensorsOfClass(String classNameString);
+
     /**
      *
-     * @param simstate 
+     * @param simstate
      */
     public void setState(SimState simstate);
     /*
      *
      */
+
     /**
      *
      * @return
      */
     public PhysicalEnvironment getPhysical_environment();
+
     /**
      *
      * @param physical_environment
@@ -218,14 +245,16 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
-     * 
+     *
      * @return
      */
     public MARS_Settings getMARS_Settings();
     /*
      * 
      */
+
     /**
      *
      * @param simauv_settings
@@ -234,6 +263,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
@@ -242,6 +272,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      * 
      */
+
     /**
      *
      * @return
@@ -250,11 +281,12 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      */
     public void cleanupOffscreenView();
-    
+
     /**
      *
      */
@@ -262,10 +294,12 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
-     * 
+     *
      */
     public void addDragOffscreenView();
+
     /**
      *
      * @return
@@ -274,6 +308,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
@@ -282,132 +317,152 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @param visible
      */
-    public void debugView( boolean visible );
+    public void debugView(boolean visible);
     /*
      * 
      */
+
     /**
-     * 
+     *
      * @return
      */
     public CommunicationManager getCommunicationManager();
     /*
-    * 
-    */
-    /**
      * 
+     */
+
+    /**
+     *
      * @param com_manager
      */
     public void setCommunicationManager(CommunicationManager com_manager);
+
     /**
-     * 
+     *
      * @param mars_node
      */
     public void setROS_Node(MARSNodeMain mars_node);
-    
+
     /**
-     * 
+     *
      * @param selected
      */
     public void setSelected(boolean selected);
+
     /**
-     * 
+     *
      * @return
      */
     public boolean isSelected();
+
     /**
-     * 
+     *
      * @return
      */
     public Spatial getGhostAUV();
+
     /**
-     * 
+     *
      * @param hide
      */
     public void hideGhostAUV(boolean hide);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setCentersVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setPhysicalExchangerVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setVisualizerVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setCollisionVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBuoycancyVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBuoyancyVolumeVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setWireframeVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setDragVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setWayPointsVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBoundingBoxVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param enabled
      */
     public void setWaypointsEnabled(boolean enabled);
+
     /**
-     * 
+     *
      * @return
      */
     public WayPoints getWaypoints();
+
     /**
-     * 
+     *
      * @param path
      */
     @Override
     public void updateState(TreePath path);
-    
-    /**
-     *
-     * @param listener
-     */
-    public void addAdListener( AUVListener listener );
 
     /**
      *
      * @param listener
      */
-    public void removeAdListener( AUVListener listener );
-    
+    public void addAdListener(AUVListener listener);
+
+    /**
+     *
+     * @param listener
+     */
+    public void removeAdListener(AUVListener listener);
+
     /**
      *
      */
@@ -417,8 +472,8 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      *
      * @param event
      */
-    public void notifyAdvertisement( ChartEvent event );
-    
+    public void notifyAdvertisement(ChartEvent event);
+
     /**
      *
      * @param name
@@ -437,19 +492,19 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * @param arrlist
      */
     public void registerPhysicalExchangers(ArrayList arrlist);
-    
+
     /**
      *
      * @param pex
      */
     public void deregisterPhysicalExchanger(PhysicalExchanger pex);
-    
+
     /**
      *
-     * @param name 
+     * @param name
      */
     public void deregisterPhysicalExchanger(String name);
-    
+
     /**
      *
      * @param oldName

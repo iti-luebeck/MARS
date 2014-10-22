@@ -20,49 +20,50 @@ import org.ros.node.topic.Publisher;
 
 /**
  * Gives the exact position in world coordinates.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Positionmeter extends Sensor implements ChartValue{
-    
-    private Vector3f old_position = new Vector3f(0f,0f,0f);
-    private Vector3f new_position = new Vector3f(0f,0f,0f);
-    
+public class Positionmeter extends Sensor implements ChartValue {
+
+    private Vector3f old_position = new Vector3f(0f, 0f, 0f);
+    private Vector3f new_position = new Vector3f(0f, 0f, 0f);
+
     ///ROS stuff
     private Publisher<geometry_msgs.PointStamped> publisher = null;
     private geometry_msgs.PointStamped fl;
-    private std_msgs.Header header; 
-    
-    /**
-     * 
-     */
-    public Positionmeter(){
-        super();
-    }
-        
+    private std_msgs.Header header;
+
     /**
      *
-     * @param simstate 
+     */
+    public Positionmeter() {
+        super();
+    }
+
+    /**
+     *
+     * @param simstate
      * @param pe
      */
-    public Positionmeter(SimState simstate,PhysicalEnvironment pe){
+    public Positionmeter(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
         this.pe = pe;
     }
 
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public Positionmeter(SimState simstate){
+    public Positionmeter(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public Positionmeter(Positionmeter sensor){
+    public Positionmeter(Positionmeter sensor) {
         super(sensor);
     }
 
@@ -81,7 +82,7 @@ public class Positionmeter extends Sensor implements ChartValue{
      *
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
     }
 
@@ -89,7 +90,7 @@ public class Positionmeter extends Sensor implements ChartValue{
      *
      * @param tpf
      */
-    public void update(float tpf){
+    public void update(float tpf) {
         new_position = physics_control.getPhysicsLocation();//get the new position
         old_position = new_position.clone();
     }
@@ -98,7 +99,7 @@ public class Positionmeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getPositionX(){
+    public float getPositionX() {
         return new_position.x;
     }
 
@@ -106,34 +107,34 @@ public class Positionmeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getPositionY(){
+    public float getPositionY() {
         return new_position.y;
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public float getPositionZ(){
+    public float getPositionZ() {
         return new_position.z;
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public Vector3f getWorldPosition(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public Vector3f getWorldPosition() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getPositionRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getPositionRaw().x+((float)((1f/100f)*noise)),getPositionRaw().y+((float)((1f/100f)*noise)),getPositionRaw().z+((float)((1f/100f)*noise)));
+            Vector3f noised = new Vector3f(getPositionRaw().x + ((float) ((1f / 100f) * noise)), getPositionRaw().y + ((float) ((1f / 100f) * noise)), getPositionRaw().z + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getPositionRaw().x+((float)((1f/100f)*noise)),getPositionRaw().y+((float)((1f/100f)*noise)),getPositionRaw().z+((float)((1f/100f)*noise)));
+            Vector3f noised = new Vector3f(getPositionRaw().x + ((float) ((1f / 100f) * noise)), getPositionRaw().y + ((float) ((1f / 100f) * noise)), getPositionRaw().z + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else{
+        } else {
             return getPositionRaw();
         }
     }
@@ -142,34 +143,34 @@ public class Positionmeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    private Vector3f getPositionRaw(){
+    private Vector3f getPositionRaw() {
         return physics_control.getPhysicsLocation();
     }
 
     /**
      *
      */
-    public void reset(){
-        old_position = new Vector3f(0f,0f,0f);
-        new_position = new Vector3f(0f,0f,0f);
+    public void reset() {
+        old_position = new Vector3f(0f, 0f, 0f);
+        new_position = new Vector3f(0f, 0f, 0f);
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) { 
+    public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),geometry_msgs.PointStamped._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PointStamped._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PointStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void publish() {
@@ -177,25 +178,25 @@ public class Positionmeter extends Sensor implements ChartValue{
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        
+
         geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
         point.setX(getWorldPosition().x);
         point.setY(getWorldPosition().z);
         point.setZ(getWorldPosition().y);
-        fl.setPoint(point);  
-        
-        if( publisher != null ){
+        fl.setPoint(point);
+
+        if (publisher != null) {
             publisher.publish(fl);
         }
     }
-    
+
     @Override
     public void publishData() {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPosition(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
-    
+
     /**
      *
      * @return

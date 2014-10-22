@@ -19,12 +19,13 @@ import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;
 
 /**
+ * The base class for all communicating sensors like underwater modems.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {UnderwaterModem.class,WiFi.class} )
-public abstract class CommunicationDevice extends Sensor{
+@XmlSeeAlso({UnderwaterModem.class, WiFi.class})
+public abstract class CommunicationDevice extends Sensor {
 
     /**
      *
@@ -34,7 +35,7 @@ public abstract class CommunicationDevice extends Sensor{
      *
      */
     protected EventListenerList listeners = new EventListenerList();
-    
+
     /**
      *
      */
@@ -66,10 +67,9 @@ public abstract class CommunicationDevice extends Sensor{
     public CommunicationDevice(MARS_Main mars, PhysicalEnvironment pe) {
         super(mars, pe);
     }
-    
-        
+
     /**
-     * 
+     *
      * @return
      */
     public CommunicationManager getCommunicationManager() {
@@ -77,7 +77,7 @@ public abstract class CommunicationDevice extends Sensor{
     }
 
     /**
-     * 
+     *
      * @param com_manager
      */
     public void setCommunicationManager(CommunicationManager com_manager) {
@@ -104,7 +104,7 @@ public abstract class CommunicationDevice extends Sensor{
      */
     @Override
     public PhysicalExchanger copy() {
-       return null;
+        return null;
     }
 
     @Override
@@ -116,41 +116,39 @@ public abstract class CommunicationDevice extends Sensor{
      * @return
      */
     public abstract Vector3f getWorldPosition();
-    
+
     /**
      *
      * @return
      */
     public abstract Float getPropagationDistance();
-    
+
     /**
      *
      * @param msg
      */
     public abstract void publish(String msg);
-    
+
     /**
      *
      * @param listener
      */
-    public void addAdListener( PhysicalExchangerListener listener )
-    {
-      listeners.add( PhysicalExchangerListener.class, listener );
+    public void addAdListener(PhysicalExchangerListener listener) {
+        listeners.add(PhysicalExchangerListener.class, listener);
     }
 
     /**
      *
      * @param listener
      */
-    public void removeAdListener( PhysicalExchangerListener listener )
-    {
-      listeners.remove( PhysicalExchangerListener.class, listener );
+    public void removeAdListener(PhysicalExchangerListener listener) {
+        listeners.remove(PhysicalExchangerListener.class, listener);
     }
-    
+
     /**
      *
      */
-    public void removeAllListener(){
+    public void removeAllListener() {
         //listeners.
     }
 
@@ -158,9 +156,9 @@ public abstract class CommunicationDevice extends Sensor{
      *
      * @param event
      */
-    protected synchronized void notifyAdvertisement( CommunicationDeviceEvent event )
-    {
-      for ( PhysicalExchangerListener l : listeners.getListeners( PhysicalExchangerListener.class ) )
-        l.onNewData( event );
+    protected synchronized void notifyAdvertisement(CommunicationDeviceEvent event) {
+        for (PhysicalExchangerListener l : listeners.getListeners(PhysicalExchangerListener.class)) {
+            l.onNewData(event);
+        }
     }
 }

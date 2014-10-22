@@ -5,9 +5,10 @@
 package mars.sensors;
 
 /**
+ * Not functional so far.
  *
  * @author Thomas Tosik
  */
 public class GalileoReceiver {
-    
+
 }

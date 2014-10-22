@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auv.example;
 
 import com.jme3.math.Vector3f;
@@ -11,34 +10,36 @@ import mars.states.SimState;
 import mars.auv.BasicAUV;
 
 /**
- * The Hanse class for the Hanse AUV. Because i developed mainly for Hanse it is the same as the BasicAUV class.
+ * The Hanse class for the Hanse AUV.
+ * http://www.iti.uni-luebeck.de/en/research/mobile-robotics/hanse.html
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class Hanse extends BasicAUV{
+public class Hanse extends BasicAUV {
 
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public Hanse(SimState simstate){
+    public Hanse(SimState simstate) {
         super(simstate);
     }
 
     /**
      *
      */
-    public Hanse(){
+    public Hanse() {
         super();
     }
 
     @Override
-    protected Vector3f updateMyForces(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyForces() {
+        return new Vector3f(0f, 0f, 0f);
     }
-    
+
     @Override
-    protected Vector3f updateMyTorque(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyTorque() {
+        return new Vector3f(0f, 0f, 0f);
     }
 }

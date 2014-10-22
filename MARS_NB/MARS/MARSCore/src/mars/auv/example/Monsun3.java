@@ -10,34 +10,36 @@ import mars.states.SimState;
 import mars.auv.BasicAUV;
 
 /**
+ * The main class for the new yellow MONSUN AUV.
+ * http://www.iti.uni-luebeck.de/en/research/mobile-robotics/monsun.html
  *
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class Monsun3 extends BasicAUV{
-    
+public class Monsun3 extends BasicAUV {
+
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public Monsun3(SimState simstate){
+    public Monsun3(SimState simstate) {
         super(simstate);
     }
 
     /**
      *
      */
-    public Monsun3(){
+    public Monsun3() {
         super();
     }
 
     @Override
-    protected Vector3f updateMyForces(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyForces() {
+        return new Vector3f(0f, 0f, 0f);
     }
-    
+
     @Override
-    protected Vector3f updateMyTorque(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyTorque() {
+        return new Vector3f(0f, 0f, 0f);
     }
 }

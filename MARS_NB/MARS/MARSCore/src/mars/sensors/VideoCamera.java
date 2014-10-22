@@ -42,7 +42,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {BlackfinCamera.class} )
+//@XmlSeeAlso( {BlackfinCamera.class} )
 public class VideoCamera extends Sensor implements Moveable{
 
     private Geometry CameraStart;

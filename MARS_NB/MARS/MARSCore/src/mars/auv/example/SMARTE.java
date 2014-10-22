@@ -10,34 +10,36 @@ import mars.states.SimState;
 import mars.auv.BasicAUV;
 
 /**
+ * The main class for the SMART-E AUV.
+ * http://www.iti.uni-luebeck.de/en/research/mobile-robotics/smart-e.html
  *
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class SMARTE extends BasicAUV{
-    
+public class SMARTE extends BasicAUV {
+
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public SMARTE(SimState simstate){
+    public SMARTE(SimState simstate) {
         super(simstate);
     }
 
     /**
      *
      */
-    public SMARTE(){
+    public SMARTE() {
         super();
     }
 
     @Override
-    protected Vector3f updateMyForces(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyForces() {
+        return new Vector3f(0f, 0f, 0f);
     }
-    
+
     @Override
-    protected Vector3f updateMyTorque(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyTorque() {
+        return new Vector3f(0f, 0f, 0f);
     }
 }

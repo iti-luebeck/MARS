@@ -151,7 +151,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private int buoyancy_updaterate = 5;
     private int drag_updaterate = 5;
     private int flow_updaterate = 1;
-    
+
     //offview
     private FrameBuffer drag_offBuffer;
     private ViewPort drag_offView;
@@ -163,13 +163,13 @@ public class BasicAUV implements AUV, SceneProcessor {
     private final ByteBuffer cpuBuf = BufferUtils.createByteBuffer(offCamera_width * offCamera_height * 4);
     private final byte[] cpuArray = new byte[offCamera_width * offCamera_height * 4];
     ViewPort debug_drag_view;
-    
+
     //area
     private float frustumSize = 0.6f;//0.6f
     private float pixel_heigth = 0.0f;
     private float pixel_width = 0.0f;
     private float pixel_area = 0.0f;
-    
+
     //physics
     private PhysicalEnvironment physical_environment;
     private float completeVolume = 0.0f;//m³
@@ -177,12 +177,12 @@ public class BasicAUV implements AUV, SceneProcessor {
     private float actual_vol_air = 0.0f;//m³
     private float drag_area = 0.0f;//m² pojected
     private float drag_area_temp = 0.0f;//m² pojected
-    
+
     //forces
     private float buoyancy_force = 0.0f;
     private Vector3f drag_force_vec = new Vector3f(0f, 0f, 0f);
     private Node rootNode;
-    
+
     //PhysicalExchanger HashMaps to store and load sensors and actuators
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Sensors")
@@ -201,7 +201,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
     private Spatial ghost_auv_spatial;
-    
+
     //LOD
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
 
@@ -332,7 +332,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
         auv_node.setName(auv_param.getName() + "_physicnode");
-        if(WayPoints != null){
+        if (WayPoints != null) {
             WayPoints.setAuv_param(auv_param);
         }
     }
@@ -477,7 +477,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
         Future fut = mars.enqueue(new Callable() {
-             public Void call() throws Exception {
+            public Void call() throws Exception {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
                 accumulators.remove(pex.getName());
@@ -490,36 +490,36 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void deregisterPhysicalExchanger(String name) {
         Sensor sens = sensors.get(name);
-        if(sens != null){
+        if (sens != null) {
             deregisterPhysicalExchanger(sens);
         }
         Actuator act = actuators.get(name);
-        if(act != null){
+        if (act != null) {
             deregisterPhysicalExchanger(act);
         }
     }
-    
+
     /**
      *
      * @param oldName
      * @param newName
      */
     @Override
-    public void updatePhysicalExchangerName(String oldName, String newName){
+    public void updatePhysicalExchangerName(String oldName, String newName) {
         Sensor sens = sensors.get(oldName);
-        if(sens != null){
+        if (sens != null) {
             sens.setName(newName);
             sensors.remove(oldName);
             sensors.put(newName, sens);
         }
         Actuator act = actuators.get(oldName);
-        if(act != null){
+        if (act != null) {
             act.setName(newName);
             actuators.remove(oldName);
             actuators.put(newName, act);
         }
         Accumulator acc = accumulators.get(oldName);
-        if(acc != null){
+        if (acc != null) {
             acc.setName(newName);
             accumulators.remove(oldName);
             accumulators.put(newName, acc);
@@ -628,7 +628,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             Sensor sens = (Sensor) sensors.get(elem);
             try {
                 boolean ret = (Class.forName(classNameString).isInstance(sens));
-                if(ret){
+                if (ret) {
                     return true;
                 }
             } catch (ClassNotFoundException ex) {
@@ -660,15 +660,14 @@ public class BasicAUV implements AUV, SceneProcessor {
         //calculate the completeVolume one time exact as possible, ignore water height
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
         //used primarly for auftriebspunkt
-        if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
+        if (getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE) {
             float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
             completeVolume = vol[0];
-        }else{
+        } else {
             float[] calculateVolumeExcact = calculateVolumeExcact(auv_spatial, true);
             completeVolume = calculateVolumeExcact[0];
         }
-        
-        
+
         //calculate first buoyancy force
         //System.out.println("VOLUME: " + completeVolume + "VOLUME AIR: " + calculateVolumeExcact[1]);
         actual_vol = completeVolume;
@@ -850,7 +849,6 @@ public class BasicAUV implements AUV, SceneProcessor {
          complete_force = complete_force.add(drag_force_vec);
          }*/
         //physics_control.applyCentralForce(drag_force_vec);
-
         //since the impulse vector should be in world space (http://www.bulletphysics.org/Bullet/phpBB3/viewtopic.php?p=&f=9&t=2693) we have to convert it
         //Vector3f world_drag_force_vec = physics_control.getPhysicsLocation().add(drag_force_vec);
         Vector3f world_drag_force_vec = new Vector3f();
@@ -869,31 +867,31 @@ public class BasicAUV implements AUV, SceneProcessor {
         float angular_velocity = physics_control.getAngularVelocity().length();
         //System.out.println("angular_drag_torque_vec: " + angular_velocity + " " + physics_control.getAngularVelocity());
         //notifySafeAdvertisement(new ChartEvent(this, angular_velocity, 0));
-        
+
         /*if(Helper.infinityCheck(physics_control.getAngularVelocity())){
-            System.out.println("UNF!!!!!!!!!!");
-            physics_control.setAngularVelocity(Vector3f.ZERO);
-        }*/
-        if(angular_velocity <= 5f){
+         System.out.println("UNF!!!!!!!!!!");
+         physics_control.setAngularVelocity(Vector3f.ZERO);
+         }*/
+        if (angular_velocity <= 5f) {
             float drag_torque = (float) (auv_param.getDrag_coefficient_angular() * drag_area * 0.25f * physical_environment.getFluid_density() * Math.pow(angular_velocity, 2));
             //float drag_torque = (float) (auv_param.getDrag_coefficient_angular() * drag_area * 0.25f * physical_environment.getFluid_density() * Math.pow(angular_velocity,1.5f));
             Vector3f drag_direction = physics_control.getAngularVelocity().negate().normalize();
-            Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque / ((float)mars_settings.getPhysicsFramerate()));
+            Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque / ((float) mars_settings.getPhysicsFramerate()));
             //System.out.println("angular_drag_torque_vec: " + angular_drag_torque_vec.length() + " " + angular_velocity);
             /*if(angular_drag_torque_vec.negate().length() >= angular_velocity){
-                angular_drag_torque_vec.normalizeLocal().multLocal(angular_velocity);
-            }*/
+             angular_drag_torque_vec.normalizeLocal().multLocal(angular_velocity);
+             }*/
             physics_control.applyTorqueImpulse(angular_drag_torque_vec);
             //physicalvalues.updateDragTorque(drag_torque);
             //physicalvalues.updateVector(cur_ang);
-        }else{
+        } else {
             /*float drag_torque = (float) (auv_param.getDrag_coefficient_angular() * drag_area * 0.25f * physical_environment.getFluid_density() * angular_velocity);
-            Vector3f drag_direction = physics_control.getAngularVelocity().negate().normalize();
-            Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque / ((float)mars_settings.getPhysicsFramerate()));
+             Vector3f drag_direction = physics_control.getAngularVelocity().negate().normalize();
+             Vector3f angular_drag_torque_vec = drag_direction.mult(drag_torque / ((float)mars_settings.getPhysicsFramerate()));
 
-            physics_control.applyTorqueImpulse(angular_drag_torque_vec);
-            physicalvalues.updateDragTorque(drag_torque);
-            physicalvalues.updateVector(cur_ang);*/
+             physics_control.applyTorqueImpulse(angular_drag_torque_vec);
+             physicalvalues.updateDragTorque(drag_torque);
+             physicalvalues.updateVector(cur_ang);*/
             physics_control.setAngularVelocity(Vector3f.ZERO);
         }
     }
@@ -904,18 +902,17 @@ public class BasicAUV implements AUV, SceneProcessor {
         float epsilon = 0.5f;
         buoyancy_updaterate = auv_param.getBuoyancyUpdaterate();
         if (buoyancy_updaterate == 1) {//take all buoyancy_updaterate times new values
-  
+
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
-            if(getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE){
-                float[] vol = (float[])calculateVolumeAutoRound(auv_spatial,0.03125f,false);
+            if (getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE) {
+                float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.03125f, false);
                 actual_vol = vol[0] * auv_param.getBuoyancyFactor();
                 actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
-            }else{
+            } else {
                 float[] vol = (float[]) calculateVolumeExcact(auv_spatial, false);
                 actual_vol = vol[0] * auv_param.getBuoyancyFactor();
                 actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
             }
-            
 
             //buoyancy_force = physical_environment.getFluid_density() * physical_environment.getGravitational_acceleration() * completeVolume;
             buoyancy_force = (physical_environment.getFluid_density() * actual_vol + physical_environment.getAir_density() * actual_vol_air) * physical_environment.getGravitational_acceleration();
@@ -938,19 +935,18 @@ public class BasicAUV implements AUV, SceneProcessor {
             }
         } else {
             buoyancy_force = (physical_environment.getFluid_density() * actual_vol + physical_environment.getAir_density() * actual_vol_air) * physical_environment.getGravitational_acceleration();
-            if(buoyancy_updaterate > 0){
+            if (buoyancy_updaterate > 0) {
                 buoyancy_updaterate--;
             }
         }
 
         //buoyancy_force = buoyancy_force_water + buoyancy_force_air;
-
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
-        Vector3f buoyancy_force_vec = new Vector3f(0.0f, buoyancy_force / ((float)mars_settings.getPhysicsFramerate()), 0.0f);
+        Vector3f buoyancy_force_vec = new Vector3f(0.0f, buoyancy_force / ((float) mars_settings.getPhysicsFramerate()), 0.0f);
         //notifySafeAdvertisement(new ChartEvent(this, OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()), 0));
         notifySafeAdvertisement(new ChartEvent(this, actual_vol, 0));
         //notifySafeAdvertisement(new ChartEvent(this,VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()).length(), 0));
-        
+
         //physics_control.applyCentralForce(buoyancy_force_vec);
         //physics_control.applyForce(buoyancy_force_vec, VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()));
         if (!Helper.infinityCheck(buoyancy_force_vec)) {
@@ -1006,10 +1002,9 @@ public class BasicAUV implements AUV, SceneProcessor {
                 //check on bounds....has to be done here if flowmap!=heightmap
                 int flowX = initer.getFlowX()[(auv_pos_x) + (initer.getTerrain_image_width() * auv_pos_y)];
                 int flowY = initer.getFlowY()[(auv_pos_x) + (initer.getTerrain_image_width() * auv_pos_y)];
-                //System.out.println("physicsLocation: " + physicsLocation + " " + "auv_pos_x: " + auv_pos_x + " " + "auv_pos_y: " + auv_pos_y + " " + "flowX: " + flowX + "flowY: " + flowY);
 
-                float scaledFlowX = (flowX / 32768f) / ((float)mars_settings.getPhysicsFramerate());
-                float scaledFlowY = (flowY / 32768f) / ((float)mars_settings.getPhysicsFramerate());
+                float scaledFlowX = (flowX / 32768f) / ((float) mars_settings.getPhysicsFramerate());
+                float scaledFlowY = (flowY / 32768f) / ((float) mars_settings.getPhysicsFramerate());
                 Vector3f flowForce = new Vector3f(scaledFlowX, 0f, scaledFlowY);
                 flowForce.multLocal(mars_settings.getFlowForceScale());
                 initer.setFlowVector(new Vector3f((flowX / 32768f), 0f, (flowY / 32768f)));
@@ -1044,18 +1039,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         resetAllAccumulators();
         clearForces();
         WayPoints.reset();
-        physics_control.setPhysicsLocation(auv_param.getPosition());    
-        /*physics_control.setPhysicsRotation(Quaternion.IDENTITY);
-        physics_control.setEnabled(false);
-        auv_node.setLocalRotation(Quaternion.IDENTITY);
-        auv_node.setLocalTranslation(Vector3f.ZERO);
-        getSelectionNode().removeFromParent();
-        auv_node.forceRefresh(true, true, false);
-        auv_node.updateGeometricState();
-        auv_node.updateModelBound();
-        simstate.getAUVsNode().attachChild(getSelectionNode());
-
-        physics_control.setEnabled(true);*/
+        physics_control.setPhysicsLocation(auv_param.getPosition());
         rotateAUV();
         for (final Geometry geometry : listGeoms) {
             geometry.setLodLevel(0);
@@ -1082,7 +1066,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         if (auv_node.getParent().getParent().getParent().getParent().getName() != null && auv_node.getParent().getParent().getParent().getParent().getName().equals("SimState Root Node")) {//check if PhysicsNode added to rootNode
             //since bullet deactivate nodes that dont move enough we must activate it
             /*if(!physics_control.isActive()){
-                physics_control.activate();
+             physics_control.activate();
              }*/
             //calculate actuator(motors) forces
             updateActuatorForces();
@@ -1100,17 +1084,15 @@ public class BasicAUV implements AUV, SceneProcessor {
             updateAngularDragForces();
 
             //add the water_current
-            if(getMARS_Settings().isFlowEnabled()){
+            if (getMARS_Settings().isFlowEnabled()) {
                 updateWaterCurrentForce();
             }
-            
+
             //set all velocity to zero for debug purposes
             //physics_control.setLinearVelocity(Vector3f.ZERO);
             //physics_control.setAngularVelocity(Vector3f.ZERO);
             //physics_control.setPhysicsLocation(Vector3f.ZERO);
-            
             //System.out.println("FORCES: " + physics_control.getLinearVelocity() + " " + physics_control.getAngularVelocity());
-
         } else {//if not inform
             Logger.getLogger(BasicAUV.class.getName()).log(Level.WARNING, "AUV PhysicsNode is not added to the rootNode!", "");
         }
@@ -1324,26 +1306,18 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     private void loadModel() {
         auv_spatial = assetManager.loadModel(auv_param.getModelFilepath());
-        
+
         optimizeSpatial(auv_spatial);
-        
+
         //assetManager.unregisterLoader(OBJLoader.class);
         //assetManager.registerLoader(MyOBJLoader.class,"obj");
         //auv_spatial = (Spatial)assetManager.loadAsset(new ModelKey(auv_param.getModelFilepath()));
-
-
         /*assetManager.registerLoader(MyMTLLoader.class);
          int index = auv_param.getModelFilepath().lastIndexOf(".");
          String matPath = auv_param.getModelFilepath().substring(0, index).concat(".mtl");
          Material auv_mat = (Material)assetManager.loadAsset(matPath);*/
-
         auv_spatial.setLocalScale(auv_param.getModelScale());
         auv_spatial.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y, auv_param.getCentroid_center_distance().z);
-
-        //here should be somehow the fix for the gui rotation problem
-        /*Quaternion rot = new Quaternion();
-         rot.fromAngles(0f, -1.34f, 0f);
-         auv_spatial.setLocalRotation(rot);*/
 
         auv_spatial.updateModelBound();
         auv_spatial.updateGeometricState();
@@ -1352,12 +1326,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
-
-        //own load controler, still lacks a lot of features to be used productive
-        // offical lod control from jme3 is used now
-        /*SpatialLodControl slc = new SpatialLodControl(mars.getCamera(),auv_spatial);
-         auv_spatial.addControl(slc);*/
-        
         //a control for showing a popup when too far away from the auv
         PopupControl ppcontrol = new PopupControl();
         ppcontrol.setCam(mars.getCamera());
@@ -1365,21 +1333,15 @@ public class BasicAUV implements AUV, SceneProcessor {
         ppcontrol.setStateManager(mars.getStateManager());
         ppcontrol.setAuv(this);
         auv_spatial.addControl(ppcontrol);
-        
-        
 
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();
-        //bbVolume = bb.getVolume();
-        //BoundingBox bb = new BoundingBox();
-        //bb.computeFromPoints(auv_spatial.);
         wbx.fromBoundingBox(bb);
         boundingBox = new Geometry("TheMesh", wbx);
         Material mat_box = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat_box.setColor("Color", ColorRGBA.Blue);
         boundingBox.setMaterial(mat_box);
         boundingBox.setLocalTranslation(bb.getCenter());
-        //boundingBox.setLocalTranslation(auv_param.getCentroid_center_distance().x, auv_param.getCentroid_center_distance().y,auv_param.getCentroid_center_distance().z);
         boundingBox.updateModelBound();
         boundingBox.updateGeometricState();
         setBoundingBoxVisible(auv_param.isDebugBounding());
@@ -1392,16 +1354,16 @@ public class BasicAUV implements AUV, SceneProcessor {
         Material BuoyancyGeomMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         BuoyancyGeomMat.setColor("Color", ColorRGBA.Cyan);
         /*BuoyancyGeom.setMaterial(BuoyancyGeomMat);
-        BuoyancyGeom.setLocalTranslation(bb.getCenter());
-        BuoyancyGeom.updateModelBound();
-        BuoyancyGeom.updateGeometricState();
-        Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
-        setSpatialVisible(BuoyancyGeom, false);
-        auv_node.attachChild(BuoyancyGeom);*/
-        
+         BuoyancyGeom.setLocalTranslation(bb.getCenter());
+         BuoyancyGeom.updateModelBound();
+         BuoyancyGeom.updateGeometricState();
+         Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
+         setSpatialVisible(BuoyancyGeom, false);
+         auv_node.attachChild(BuoyancyGeom);*/
+
         //add a buoyancy geom, needed for exact completeVolume calculation later
         if (auv_param.getBuoyancyType() == BuoyancyType.BOXCOLLISIONSHAPE) {
-            Box buoyancyBox = new Box(auv_param.getBuoyancyDimensions().x,auv_param.getBuoyancyDimensions().y,auv_param.getBuoyancyDimensions().z);
+            Box buoyancyBox = new Box(auv_param.getBuoyancyDimensions().x, auv_param.getBuoyancyDimensions().y, auv_param.getBuoyancyDimensions().z);
             BuoyancyGeom = new Geometry("BuoyancyGeom", buoyancyBox);
             BuoyancyGeom.setMaterial(BuoyancyGeomMat);
             BuoyancyGeom.setLocalTranslation(auv_param.getBuoyancyPosition());
@@ -1412,7 +1374,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         } else if (auv_param.getBuoyancyType() == BuoyancyType.SPHERECOLLISIONSHAPE) {
             //collisionShape = new SphereCollisionShape(auv_param.getCollisionDimensions().x);
         } else if (auv_param.getBuoyancyType() == BuoyancyType.CONECOLLISIONSHAPE) {
-           //collisionShape = new ConeCollisionShape(auv_param.getCollisionDimensions().x, auv_param.getCollisionDimensions().y);
+            //collisionShape = new ConeCollisionShape(auv_param.getCollisionDimensions().x, auv_param.getCollisionDimensions().y);
         } else if (auv_param.getBuoyancyType() == BuoyancyType.CYLINDERCOLLISIONSHAPE) {
             //collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions(), 0);
         } else if (auv_param.getBuoyancyType() == BuoyancyType.MESHACCURATE) {
@@ -1426,21 +1388,21 @@ public class BasicAUV implements AUV, SceneProcessor {
             BuoyancyGeom.updateGeometricState();
             Helper.setNodePickUserData(BuoyancyGeom, PickHint.NoPick);
             auv_node.attachChild(BuoyancyGeom);
-        }else if (auv_param.getBuoyancyType() == BuoyancyType.NOSHAPE) {
+        } else if (auv_param.getBuoyancyType() == BuoyancyType.NOSHAPE) {
             //collisionShape = CollisionShapeFactory.createDynamicMeshShape(auv_spatial);
         } else {
             //collisionShape = new BoxCollisionShape(auv_param.getCollisionDimensions());
         }
-        
-        if(BuoyancyGeom!= null){//for init
+
+        if (BuoyancyGeom != null) {//for init
             setBuoyancyVolumeVisible(getAuv_param().isDebugBuoycancyVolume());
         }
 
         setWireframeVisible(auv_param.isDebugWireframe());
         auv_node.attachChild(auv_spatial);
     }
-    
-        /*
+
+    /*
      *
      */
     /**
@@ -1449,7 +1411,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     public Spatial loadModelCopy() {
         Spatial auv_spatial_copy = assetManager.loadModel(auv_param.getModelFilepath());
-        
+
         optimizeSpatial(auv_spatial_copy);
 
         auv_spatial_copy.setLocalScale(auv_param.getModelScale());
@@ -1463,14 +1425,14 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         return auv_spatial_copy;
     }
-    
-    private void optimizeSpatial(Spatial auv_spatial){
-        if(auv_spatial instanceof Node){
-            Node auv = (Node)auv_spatial;
-            if(auv_param.isOptimizeBatched()){
+
+    private void optimizeSpatial(Spatial auv_spatial) {
+        if (auv_spatial instanceof Node) {
+            Node auv = (Node) auv_spatial;
+            if (auv_param.isOptimizeBatched()) {
                 jme3tools.optimize.GeometryBatchFactory.optimize(auv);
             }
-            if(auv_param.isOptimizeLod()){
+            if (auv_param.isOptimizeLod()) {
                 for (Spatial spatial : auv.getChildren()) {
                     if (spatial instanceof Geometry) {
                         listGeoms.add((Geometry) spatial);
@@ -1478,7 +1440,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
 
                 for (final Geometry geometry : listGeoms) {
-                    LodGenerator lodGenerator = new LodGenerator(geometry);          
+                    LodGenerator lodGenerator = new LodGenerator(geometry);
                     lodGenerator.bakeLods(LodGenerator.TriangleReductionMethod.PROPORTIONAL, auv_param.getOptimizeLodReduction1(), auv_param.getOptimizeLodReduction2());
                     geometry.setLodLevel(0);
                     MyLodControl control = new MyLodControl();
@@ -1505,11 +1467,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         //add ghost collision to the "ghost" object so we can get collision results
         /*BoundingBox ghostBound = (BoundingBox) ghost_auv_spatial.getWorldBound();
-        ghostControl = new MyCustomGhostControl(new BoxCollisionShape(ghostBound.getExtent(null)));
-        ghostControl.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
-        ghostControl.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
+         ghostControl = new MyCustomGhostControl(new BoxCollisionShape(ghostBound.getExtent(null)));
+         ghostControl.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+         ghostControl.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
 
-        ghost_auv_spatial.addControl(ghostControl);*/
+         ghost_auv_spatial.addControl(ghostControl);*/
 
         /*Spatial debugShape2 = ghostControl.createDebugShape(assetManager);
          auv_node.attachChild(debugShape2);*/
@@ -1569,14 +1531,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         physics_control.setAngularFactor(auv_param.getAngular_factor());
         physics_control.setSleepingThresholds(0f, 0f);// so the physics node doesn't get deactivated
         physics_control.setEnabled(true);
-        //physics_control.setApplyPhysicsLocal(true);
-        //physics_control.setFriction(0f);
-        //physics_control.setRestitution(0.3f);
 
         //debug
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
-
 
         if (getAuv_param().isDebugCollision()) {
             Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Setting DebugHint for: " + getName(), "");
@@ -1630,7 +1588,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         pixel_heigth = ((2 * frustumSize) / offCamera_height);//multiplied by 2 because the frustrumsize counts from the middle
         pixel_width = ((2 * (aspect * frustumSize)) / offCamera_width);
         pixel_area = pixel_heigth * pixel_width;
-        //System.out.println("pa: " + pixel_area + " ph: " + pixel_heigth + " pw: " + pixel_width);
 
         //setup framebuffer to use renderbuffer
         // this is faster for gpu -> cpu copies
@@ -1677,21 +1634,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private float updateImageContents() {
         if (renderer != null) {
             cpuBuf.clear();
-
-            /*Future fut = mars.enqueue(new Callable() {
-             public Void call() throws Exception {
-             renderer.readFrameBuffer(drag_offBuffer, cpuBuf);
-             return null;
-             }
-             });*/
             renderer.readFrameBuffer(drag_offBuffer, cpuBuf);
-            /*try {
-             fut.get();
-             } catch (InterruptedException ex) {
-             Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
-             } catch (ExecutionException ex) {
-             Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
-             }*/
 
             // copy native memory to java memory
             cpuBuf.clear();
@@ -1704,13 +1647,11 @@ public class BasicAUV implements AUV, SceneProcessor {
                 byte g = cpuArray[i + 1];
                 byte r = cpuArray[i + 2];
                 byte a = cpuArray[i + 3];
-                //System.out.println(b + " " + g + " " + r);
                 if (g == -1 && b == 0 && r == 0) {
                     whites++;
                 }
             }
             whites = (offCamera_width * offCamera_height) - whites;
-            //System.out.println(getAuv_param().getName() + " WHITES: " + whites);
             return whites * pixel_area;
         }
         return 0.0f;
@@ -1734,8 +1675,6 @@ public class BasicAUV implements AUV, SceneProcessor {
             //onCamera.setLocation( centerBB.add(Vector3f.UNIT_X) );
             onCamera.lookAt(centerBB, Vector3f.UNIT_Y);
         }
-
-        //System.out.println("physics_control.getLinearVelocity(): " + physics_control.getLinearVelocity());
 
         if (physics_control.getLinearVelocity().length() != 0f) {//when we have no velocity then we have no water resistance than we dont need an update
             return drag_area_temp;//updateImageContents();
@@ -1789,8 +1728,6 @@ public class BasicAUV implements AUV, SceneProcessor {
          rootNode.attachChild(mark4);
          */
         //System.out.println("=========================");
-
-
         //water height for checking what is air and water completeVolume
         /*float waterheight = 0;
          if(mars_settings.isProjectedWavesWaterEnabled()){
@@ -1852,7 +1789,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 if (!skip_inf) {
                     second = results.getCollision(i).getContactPoint();
                     if (!Helper.infinityCheck(second)) {
-
 
                         if (second.y > waterheight/*physical_environment.getWater_height()*/ && !ignore_water_height) {
                             //we need to calculate the completeVolume + center above water height
@@ -1922,30 +1858,29 @@ public class BasicAUV implements AUV, SceneProcessor {
         Vector3f worldToLocalUnit = Vector3f.UNIT_Y;//(BuoyancyGeom.worldToLocal(Vector3f.UNIT_Y, null));
         //System.out.println("worldToLocalUnit: " + worldToLocalUnit + " length: " + worldToLocalUnit.length());
         float waterheight = waterheightWorld;//worldToLocal.y;
-        
+
         /*Arrow arrow = new Arrow(BuoyancyGeom.localToWorld(worldToLocalUnit, null));
-        //arrow.set
-        final Geometry line3 = new Geometry("tedt", arrow);
-        Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat11.setColor("Color", ColorRGBA.Cyan);
-        line3.setMaterial(mark_mat11);
-        line3.setLocalTranslation(BuoyancyGeom.localToWorld(new Vector3f(0f, waterheight, 0f), null));
-        line3.updateGeometricState();
-        Future simStateFutureView3 = mars.enqueue(new Callable() {
-           public Void call() throws Exception {
-              rootNode.attachChild(line3);
-              return null;
-           }
-        });*/
-        
+         //arrow.set
+         final Geometry line3 = new Geometry("tedt", arrow);
+         Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+         mark_mat11.setColor("Color", ColorRGBA.Cyan);
+         line3.setMaterial(mark_mat11);
+         line3.setLocalTranslation(BuoyancyGeom.localToWorld(new Vector3f(0f, waterheight, 0f), null));
+         line3.updateGeometricState();
+         Future simStateFutureView3 = mars.enqueue(new Callable() {
+         public Void call() throws Exception {
+         rootNode.attachChild(line3);
+         return null;
+         }
+         });*/
         ArrayList<Vector3f> polyline = new ArrayList<Vector3f>();
 
         for (int i = 0; i < mesh.getTriangleCount(); i++) {
             Triangle t = new Triangle();
             mesh.getTriangle(i, t);
-            Vector3f a = BuoyancyGeom.localToWorld(t.get1(),null);
-            Vector3f b = BuoyancyGeom.localToWorld(t.get2(),null);
-            Vector3f c = BuoyancyGeom.localToWorld(t.get3(),null);
+            Vector3f a = BuoyancyGeom.localToWorld(t.get1(), null);
+            Vector3f b = BuoyancyGeom.localToWorld(t.get2(), null);
+            Vector3f c = BuoyancyGeom.localToWorld(t.get3(), null);
             if (ignore_water_height || a.y < waterheight && b.y < waterheight && c.y < waterheight) {//if all vertex of the triangle are underwater we are safe, count them towards normal completeVolume
                 float volume_t = Helper.calculatePolyederVolume(a, b, c);
                 volume = volume + volume_t;
@@ -1976,38 +1911,38 @@ public class BasicAUV implements AUV, SceneProcessor {
                     polyline.add(intersectionWithPlaneC);
                 } else if ((a.y >= waterheight && b.y >= waterheight && c.y < waterheight)) {
                     /*final Geometry line = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(c, null), BuoyancyGeom.localToWorld(a, null)));
-                    Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    mark_mat9.setColor("Color", ColorRGBA.Cyan);
-                    line.setMaterial(mark_mat9);
-                    Future simStateFutureView = mars.enqueue(new Callable() {
-                       public Void call() throws Exception {
-                          rootNode.attachChild(line);
-                          return null;
-                       }
-                    }); 
-                    final Geometry line2 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(c, null), BuoyancyGeom.localToWorld(b, null)));
-                    Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    mark_mat10.setColor("Color", ColorRGBA.Cyan);
-                    line2.setMaterial(mark_mat10);
-                    Future simStateFutureView2 = mars.enqueue(new Callable() {
-                       public Void call() throws Exception {
-                          rootNode.attachChild(line2);
-                          return null;
-                       }
-                    });
-                    final Geometry line3 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(worldToLocal, null), BuoyancyGeom.localToWorld(worldToLocalUnit, null)));
-                    Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    mark_mat11.setColor("Color", ColorRGBA.Cyan);
-                    line3.setMaterial(mark_mat11);
-                    Future simStateFutureView3 = mars.enqueue(new Callable() {
-                       public Void call() throws Exception {
-                          rootNode.attachChild(line3);
-                          return null;
-                       }
-                    });*/
-                    
-                    Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f,waterheight,0f), worldToLocalUnit, c, b.subtract(c));
-                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f,waterheight,0f), worldToLocalUnit, c, a.subtract(c));
+                     Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                     mark_mat9.setColor("Color", ColorRGBA.Cyan);
+                     line.setMaterial(mark_mat9);
+                     Future simStateFutureView = mars.enqueue(new Callable() {
+                     public Void call() throws Exception {
+                     rootNode.attachChild(line);
+                     return null;
+                     }
+                     }); 
+                     final Geometry line2 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(c, null), BuoyancyGeom.localToWorld(b, null)));
+                     Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                     mark_mat10.setColor("Color", ColorRGBA.Cyan);
+                     line2.setMaterial(mark_mat10);
+                     Future simStateFutureView2 = mars.enqueue(new Callable() {
+                     public Void call() throws Exception {
+                     rootNode.attachChild(line2);
+                     return null;
+                     }
+                     });
+                     final Geometry line3 = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(worldToLocal, null), BuoyancyGeom.localToWorld(worldToLocalUnit, null)));
+                     Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                     mark_mat11.setColor("Color", ColorRGBA.Cyan);
+                     line3.setMaterial(mark_mat11);
+                     Future simStateFutureView3 = mars.enqueue(new Callable() {
+                     public Void call() throws Exception {
+                     rootNode.attachChild(line3);
+                     return null;
+                     }
+                     });*/
+
+                    Vector3f intersectionWithPlaneB = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, c, b.subtract(c));
+                    Vector3f intersectionWithPlaneA = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, waterheight, 0f), worldToLocalUnit, c, a.subtract(c));
                     /*Triangle tN = new Triangle();
                      tN.set1(a);
                      tN.set2(intersectionWithPlaneB);
@@ -2073,7 +2008,6 @@ public class BasicAUV implements AUV, SceneProcessor {
          Vector3f nor = FastMath.computeNormal(polyline.get(0),polyline.get(1), polyline.get(3));//minimum number of vertixes from a slice of a 3d box is 6, due to the code above
         
          float area3D_Polygon = Helper.area3D_Polygon(polyline, nor);*/
-
         //we calculated the completeVolume of the cut but we forgot the cutting plane
         //since we stored all cutting points (always a pair) we can "triangulize" the cutting plane
         //by taking a point in the middle of the konvex hull as a origin from which we can triangulize
@@ -2082,7 +2016,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             Vector3f v2 = polyline.get(5);//<-- buggy!!!
             Vector3f origin = v1.add((v2.subtract(v1)).mult(0.5f));
             float sign = 1.0f;//Math.signum(origin.dot(worldToLocalUnit));//its always up direction because its a clean cut in the x,z plane
-            
+
             for (int i = 0; i < polyline.size(); i = i + 2) {
                 Vector3f vec1 = polyline.get(i);
                 Vector3f vec2 = polyline.get(i + 1);
@@ -2096,19 +2030,19 @@ public class BasicAUV implements AUV, SceneProcessor {
         /*for (int i = 0; i < polyline.size(); i=i+2) {
             
             
-            Vector3f vec1 = polyline.get(i);
-            Vector3f vec2 = polyline.get(i+1);
+         Vector3f vec1 = polyline.get(i);
+         Vector3f vec2 = polyline.get(i+1);
 
-            final Geometry line = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(vec1, null), BuoyancyGeom.localToWorld(vec2, null)));
-            Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mark_mat9.setColor("Color", ColorRGBA.Red);
-            line.setMaterial(mark_mat9);
-            Future simStateFutureView = mars.enqueue(new Callable() {
-               public Void call() throws Exception {
-                  rootNode.attachChild(line);
-                  return null;
-               }
-            });
+         final Geometry line = new Geometry("tedt", new Line(BuoyancyGeom.localToWorld(vec1, null), BuoyancyGeom.localToWorld(vec2, null)));
+         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+         mark_mat9.setColor("Color", ColorRGBA.Red);
+         line.setMaterial(mark_mat9);
+         Future simStateFutureView = mars.enqueue(new Callable() {
+         public Void call() throws Exception {
+         rootNode.attachChild(line);
+         return null;
+         }
+         });
          }*/
 
         /*Future simStateFutureView = mars.enqueue(new Callable() {
@@ -2123,10 +2057,9 @@ public class BasicAUV implements AUV, SceneProcessor {
          return null;
          }
          });*/
-
         arr_ret[0] = volume;
         //System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
-        if(volume > completeVolume+0.1f){
+        if (volume > completeVolume + 0.1f) {
             System.out.println("too much volume!!!!!!!");
         }
         arr_ret[1] = completeVolume - volume;
@@ -2151,7 +2084,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         //System.out.println("boundingBox.getWorldTranslation(): " + boundingBox.getWorldTranslation());
         //System.out.println("auv_node.getWorldTranslation(): " + auv_node.getWorldTranslation());
         Vector3f ray_start = new Vector3f(boundingBox.getWorldTranslation().x, boundingBox.getWorldTranslation().y, boundingBox.getWorldTranslation().z);
-
 
         float radius = extBB.length();
 
@@ -2256,8 +2188,6 @@ public class BasicAUV implements AUV, SceneProcessor {
          return null;
          }
          });*/
-
-
         Vector3f volume_center_local = new Vector3f(0f, 0f, 0f);
         try {
             auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
@@ -2284,7 +2214,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
             });
         }
-
 
         //return calc_volume;
         arr_ret[0] = calc_volume;
@@ -2313,7 +2242,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishSensorsOfAUV() {
         for (String elem : sensors.keySet()) {
             Sensor element = (Sensor) sensors.get(elem);
-            if(element.isEnabled()){
+            if (element.isEnabled()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }
@@ -2327,7 +2256,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishActuatorsOfAUV() {
         for (String elem : actuators.keySet()) {
             Actuator element = (Actuator) actuators.get(elem);
-            if(element.isEnabled()){
+            if (element.isEnabled()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }
@@ -2475,9 +2404,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 selectionNode.addLight(ambient_light);
             }
             if (mars_settings.getGuiGlowSelection()) {
-                /*Material mat_white = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-                 mat_white.setColor("GlowColor", ColorRGBA.Blue); 
-                 auv_spatial.setMaterial(mat_white);*/
                 setGlowColor(ghost_auv_spatial, mars_settings.getGuiSelectionColor());
             }
         } else if (selected == false) {
@@ -2600,7 +2526,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void setBoundingBoxVisible(boolean visible) {
         setSpatialVisible(boundingBox, visible);
     }
-    
+
     /**
      *
      * @param visible

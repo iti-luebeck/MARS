@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.actuators.weapons;
+package mars.actuators.SpecialManipulators;
 
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;

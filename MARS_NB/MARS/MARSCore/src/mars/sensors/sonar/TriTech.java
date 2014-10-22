@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors.sonar;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,23 +11,23 @@ import mars.Helper.Helper;
 import mars.hardware.Imaginex;
 
 /**
- * This is the Imaginex Sonar class. It's the sonar used in the AUV HANSE.
- * Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
+ * This is the Tritech Sonar class. It is the sonar used in the AUV SMART-E.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class TriTech extends Sonar{
+public class TriTech extends Sonar {
 
     private int SonarReturnDataHeaderLength = 12;//265
 
     /**
-     * 
+     *
      */
-    public TriTech(){
+    public TriTech() {
         super();
     }
- 
+
     /**
      *
      * @return
@@ -42,11 +41,11 @@ public class TriTech extends Sonar{
      * @return
      */
     public int getSonarReturnDataTotalLength() {
-        return super.getReturnDataLength()+SonarReturnDataHeaderLength+1;//+1 is the termination byte
+        return super.getReturnDataLength() + SonarReturnDataHeaderLength + 1;//+1 is the termination byte
     }
 
     @Override
-    protected byte[] encapsulateWithHeaderTail(byte[] sondat){
+    protected byte[] encapsulateWithHeaderTail(byte[] sondat) {
         byte[] header = new byte[SonarReturnDataHeaderLength];
         byte[] end = new byte[1];
 
@@ -75,27 +74,26 @@ public class TriTech extends Sonar{
     }
 
     @Override
-    public byte[] getData(){
+    public byte[] getData() {
         return encapsulateWithHeaderTail(super.getData());
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public byte[] getRawData(){
+    public byte[] getRawData() {
         return super.getData();
     }
 
     @Override
-    protected float calculateAverageNoiseFunction(float x){
-        return 14.22898616f*((float)Math.pow(1.03339750f, (float)Math.abs(x)) );
+    protected float calculateAverageNoiseFunction(float x) {
+        return 14.22898616f * ((float) Math.pow(1.03339750f, (float) Math.abs(x)));
     }
 
     @Override
-    protected float calculateStandardDeviationNoiseFunction(float x){
-        return 7.50837174f*((float)Math.pow(1.02266704f, (float)Math.abs(x)) );
+    protected float calculateStandardDeviationNoiseFunction(float x) {
+        return 7.50837174f * ((float) Math.pow(1.02266704f, (float) Math.abs(x)));
     }
 }
-

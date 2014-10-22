@@ -10,34 +10,36 @@ import mars.states.SimState;
 import mars.auv.BasicAUV;
 
 /**
+ * This is a base class for all ASVs. Used for the SURFER ASV.
+ * http://www.iti.uni-luebeck.de/en/research/mobile-robotics/surfer.html
  *
  * @author Thomas Tosik
  */
 @XmlRootElement
-public class ASV extends BasicAUV{
-    
+public class ASV extends BasicAUV {
+
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public ASV(SimState simstate){
+    public ASV(SimState simstate) {
         super(simstate);
     }
 
     /**
      *
      */
-    public ASV(){
+    public ASV() {
         super();
     }
 
     @Override
-    protected Vector3f updateMyForces(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyForces() {
+        return new Vector3f(0f, 0f, 0f);
     }
-    
+
     @Override
-    protected Vector3f updateMyTorque(){
-        return new Vector3f(0f,0f,0f);
+    protected Vector3f updateMyTorque() {
+        return new Vector3f(0f, 0f, 0f);
     }
 }

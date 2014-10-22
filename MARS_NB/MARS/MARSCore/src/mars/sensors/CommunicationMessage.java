@@ -5,14 +5,17 @@
 package mars.sensors;
 
 /**
- * This class stores the actual message to be send through the under water modem network and the sender.
+ * This class stores the actual message to be send through the under water modem
+ * network and the sender.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class CommunicationMessage {
+
     String auvName = "";
-    String msg = ""; 
+    String msg = "";
     int communicationType = 0;
-    
+
     /**
      *
      * @param auvName

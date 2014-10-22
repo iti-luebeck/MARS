@@ -22,7 +22,7 @@ import mars.actuators.cable.Cable;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
-import mars.actuators.weapons.Canon;
+import mars.actuators.SpecialManipulators.Canon;
 import mars.ros.ROS_Publisher;
 import mars.ros.ROS_Subscriber;
 import mars.states.SimState;

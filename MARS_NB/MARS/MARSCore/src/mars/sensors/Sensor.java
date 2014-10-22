@@ -2,10 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors;
 
-import mars.sensors.sonar.Sonar;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.rits.cloning.Cloner;
@@ -19,23 +17,24 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
 import mars.MARS_Main;
 import mars.ros.ROS_Publisher;
-import mars.ros.TF_ROS_Publisher;
 import mars.states.SimState;
 
 /**
- * This is a basic sensors interface. Extend from here to make you
- * own sensors like an pressure sensor or light sensors.
+ * This is a basic sensors interface. Extend from here to make your own sensors
+ * like an pressure sensor or light sensors.
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Accelerometer.class,Compass.class,Gyroscope.class,InfraRedSensor.class,PingDetector.class,PressureSensor.class,SalinitySensor.class,TemperatureSensor.class,Velocimeter.class,VideoCamera.class,IMU.class,Positionmeter.class,Orientationmeter.class,Posemeter.class,TerrainSender.class,GPSReceiver.class,AmpereMeter.class,VoltageMeter.class,FlowMeter.class,PollutionMeter.class,Transformer.class,RayBasedSensor.class,CommunicationDevice.class} )
-public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
+@XmlSeeAlso({Accelerometer.class, Compass.class, Gyroscope.class, InfraRedSensor.class, PingDetector.class, PressureSensor.class, SalinitySensor.class, TemperatureSensor.class, Velocimeter.class, VideoCamera.class, IMU.class, Positionmeter.class, Orientationmeter.class, Posemeter.class, TerrainSender.class, GPSReceiver.class, AmpereMeter.class, VoltageMeter.class, FlowMeter.class, PollutionMeter.class, Transformer.class, RayBasedSensor.class, CommunicationDevice.class})
+public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher {
     /*
      * 
      */
+
     /**
-     * 
+     *
      */
     protected SimState simState;
     /**
@@ -54,27 +53,27 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * 
      */
     /**
-     * 
+     *
      */
     protected long time = 0;
     /**
-     * 
+     *
      */
     protected long tf_time = 0;
-            
+
     /**
-     * 
+     *
      */
-    protected Sensor(){
+    protected Sensor() {
     }
-    
+
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    protected Sensor(SimState simstate){
+    protected Sensor(SimState simstate) {
         setSimState(simstate);
-        variables = new HashMap<String,Object> ();
+        variables = new HashMap<String, Object>();
     }
 
     /**
@@ -82,29 +81,29 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
      * @param mars
      * @param pe
      */
-    protected Sensor(MARS_Main mars, PhysicalEnvironment pe){
+    protected Sensor(MARS_Main mars, PhysicalEnvironment pe) {
         this.mars = mars;
         this.pe = pe;
         this.assetManager = mars.getAssetManager();
         this.rootNode = mars.getRootNode();
-        variables = new HashMap<String,Object> ();
+        variables = new HashMap<String, Object>();
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public Sensor(Sensor sensor){
+    public Sensor(Sensor sensor) {
         HashMap<String, Object> variablesOriginal = sensor.getAllVariables();
         Cloner cloner = new Cloner();
         variables = cloner.deepClone(variablesOriginal);
-        
+
         HashMap<String, Object> noisevariablesOriginal = sensor.getAllNoiseVariables();
         noises = cloner.deepClone(noisevariablesOriginal);
     }
-    
+
     /**
-     * 
+     *
      * @param simState
      */
     @Override
@@ -117,21 +116,21 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
 
     /**
      *
-     * @param pe 
+     * @param pe
      */
     @Override
-    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe) {
         super.copyValuesFromPhysicalExchanger(pe);
     }
-    
+
     /**
-     * 
+     *
      * @param path
      */
     @Override
     public void updateState(TreePath path) {
     }
-    
+
     /**
      *
      */
@@ -139,31 +138,31 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher{
     public void cleanup() {
         super.cleanup();
     }
-    
+
     /**
-     * 
+     *
      */
     public void publish() {
-        if(tf_pub != null){
+        if (tf_pub != null) {
             tf_pub.publishTF();
         }
     }
 
     /**
-     * 
+     *
      */
     public void publishUpdate() {
-        if(tf_pub != null){
+        if (tf_pub != null) {
             tf_pub.publishTFUpdate();
         }
         long curtime = System.currentTimeMillis();
-        if( ((curtime-time) < getRos_publish_rate()) || (getRos_publish_rate() == 0) ){
-            
-        }else{
+        if (((curtime - time) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
+
+        } else {
             time = curtime;
-            if(mars_node != null && mars_node.isExisting() && rosinit){
+            if (mars_node != null && mars_node.isExisting() && rosinit) {
                 //if(mars_node.isRunning()){
-                    publish();
+                publish();
                 //}
             }
         }

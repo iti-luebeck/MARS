@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors;
 
 import com.jme3.material.Material;
@@ -20,12 +19,13 @@ import mars.states.SimState;
 
 /**
  * This is a basic compass class.
+ *
  * @author Thomas Tosik
- * @deprecated 
+ * @deprecated
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @Deprecated
-public class Compass extends Sensor{
+public class Compass extends Sensor {
 
     private Geometry CompassStart;
     private Geometry CompassYawAxis;
@@ -42,16 +42,16 @@ public class Compass extends Sensor{
     private Vector3f magnetic_z = Vector3f.UNIT_Y;
 
     /**
-     * 
+     *
      */
     public Compass() {
         super();
     }
-        
-     /**
+
+    /**
      *
-     * @param simstate 
-      * @param pe
+     * @param simstate
+     * @param pe
      */
     public Compass(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
@@ -59,18 +59,18 @@ public class Compass extends Sensor{
     }
 
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
     public Compass(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public Compass(Compass sensor){
+    public Compass(Compass sensor) {
         super(sensor);
     }
 
@@ -85,12 +85,12 @@ public class Compass extends Sensor{
         return sensor;
     }
 
-    public void update(float tpf){
+    public void update(float tpf) {
 
     }
 
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.015f);
         CompassStart = new Geometry("CompassStart", sphere7);
@@ -136,41 +136,41 @@ public class Compass extends Sensor{
      *
      * @return
      */
-    public float getYawRadiant(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public float getYawRadiant() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getYawRadiantRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getYawRadiantRaw()+((float)((1f/100f)*noise));
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            return getYawRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getYawRadiantRaw() + ((float)((1f/100f)*noise));
-        }else{
+            return getYawRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else {
             return getYawRadiantRaw();
         }
     }
 
     /**
-     * 
+     *
      * @return The yaw angle in radiant
      */
-    private float getYawRadiantRaw(){
+    private float getYawRadiantRaw() {
         Vector3f vec_roll = CompassRollAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
-        vec_roll = new Vector3f(vec_roll.getX(),0,vec_roll.getZ());
-        if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
+        vec_roll = new Vector3f(vec_roll.getX(), 0, vec_roll.getZ());
+        if (vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f) {
             return 0f;
         }
         Vector3f plus = (pe.getMagnetic_north().cross(vec_roll)).normalize();
-        if( plus.getY() < 0 ){//negativ, vec_roll on the right side of the magnetic north
+        if (plus.getY() < 0) {//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pe.getMagnetic_north().normalize());
-        }else if( plus.getY() == 0){
-            if( (pe.getMagnetic_north().add(vec_roll)).length() <= (vec_roll.length()+pe.getMagnetic_north().length()) ){//vectors point in same direction
+        } else if (plus.getY() == 0) {
+            if ((pe.getMagnetic_north().add(vec_roll)).length() <= (vec_roll.length() + pe.getMagnetic_north().length())) {//vectors point in same direction
                 return 0f;
-            }else{//vectors are opposite
-                return (float)Math.PI;
+            } else {//vectors are opposite
+                return (float) Math.PI;
             }
-        }else{//left side
-            return (float)(Math.PI + ( Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_north().normalize()) ) );
+        } else {//left side
+            return (float) (Math.PI + (Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_north().normalize())));
         }
     }
 
@@ -178,55 +178,55 @@ public class Compass extends Sensor{
      *
      * @return The yaw angle in degree
      */
-    public float getYawDegree(){
-        return (float)(getYawRadiant()*(180/Math.PI));
+    public float getYawDegree() {
+        return (float) (getYawRadiant() * (180 / Math.PI));
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public float getPitchRadiant(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public float getPitchRadiant() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getPitchRadiantRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getPitchRadiantRaw()+((float)((1f/100f)*noise));
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            return getPitchRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getPitchRadiantRaw() + ((float)((1f/100f)*noise));
-        }else{
+            return getPitchRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else {
             return getPitchRadiantRaw();
         }
     }
 
-     /**
+    /**
      *
      * @return The yaw angle in radiant
      */
-    private float getPitchRadiantRaw(){
+    private float getPitchRadiantRaw() {
         Vector3f vec_roll = CompassRollAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
         //System.out.println("vec_roll: " + vec_roll);
         //System.out.println("pe.getMagnetic_east(): " + pe.getMagnetic_east());
-        vec_roll = new Vector3f(0,vec_roll.getY(),vec_roll.getZ());
+        vec_roll = new Vector3f(0, vec_roll.getY(), vec_roll.getZ());
         vec_roll.normalizeLocal();
         //System.out.println("vec_roll_scal: " + vec_roll);
-        if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
+        if (vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f) {
             return 0f;
         }
         //return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
         Vector3f plus = (pe.getMagnetic_east().cross(vec_roll)).normalize();
         //System.out.println("plus: " + plus);
-        if( plus.getX() < 0 ){//negativ, vec_roll on the right side of the magnetic north
+        if (plus.getX() < 0) {//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize());
-        }else if( plus.getX() == 0){
-            if( (pe.getMagnetic_east().add(vec_roll)).length() <= (vec_roll.length()+pe.getMagnetic_east().length()) ){//vectors point in same direction
+        } else if (plus.getX() == 0) {
+            if ((pe.getMagnetic_east().add(vec_roll)).length() <= (vec_roll.length() + pe.getMagnetic_east().length())) {//vectors point in same direction
                 return 0f;
-            }else{//vectors are opposite
-                return (float)Math.PI;
+            } else {//vectors are opposite
+                return (float) Math.PI;
             }
-        }else{//left side
-            return (float)(Math.PI + ( Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize()) ) );
+        } else {//left side
+            return (float) (Math.PI + (Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_east().normalize())));
         }
     }
 
@@ -234,49 +234,49 @@ public class Compass extends Sensor{
      *
      * @return The yaw angle in degree
      */
-    public float getPitchDegree(){
-        return (float)(getPitchRadiant()*(180/Math.PI));
+    public float getPitchDegree() {
+        return (float) (getPitchRadiant() * (180 / Math.PI));
     }
 
     /**
      *
      * @return
      */
-    public float getRollRadiant(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public float getRollRadiant() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getRollRadiantRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getRollRadiantRaw()+((float)((1f/100f)*noise));
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+            return getRollRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getRollRadiantRaw() + ((float)((1f/100f)*noise));
-        }else{
+            return getRollRadiantRaw() + ((float) ((1f / 100f) * noise));
+        } else {
             return getRollRadiantRaw();
         }
     }
 
-     /**
+    /**
      *
      * @return The yaw angle in radiant
      */
-    private float getRollRadiantRaw(){
+    private float getRollRadiantRaw() {
         Vector3f vec_roll = CompassYawAxis.getWorldTranslation().subtract(CompassStart.getWorldTranslation());
-        vec_roll = new Vector3f(vec_roll.getX(),vec_roll.getY(),0);
-        if( vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f){
+        vec_roll = new Vector3f(vec_roll.getX(), vec_roll.getY(), 0);
+        if (vec_roll.getX() == 0f && vec_roll.getY() == 0f && vec_roll.getZ() == 0f) {
             return 0f;
         }
         Vector3f plus = (pe.getMagnetic_z().cross(vec_roll)).normalize();
-        if( plus.getZ() < 0 ){//negativ, vec_roll on the right side of the magnetic north
+        if (plus.getZ() < 0) {//negativ, vec_roll on the right side of the magnetic north
             return (vec_roll.normalize()).angleBetween(pe.getMagnetic_z().normalize());
-        }else if( plus.getZ() == 0){
-            if( (pe.getMagnetic_z().add(vec_roll)).length() <= (vec_roll.length()+pe.getMagnetic_z().length()) ){//vectors point in same direction
+        } else if (plus.getZ() == 0) {
+            if ((pe.getMagnetic_z().add(vec_roll)).length() <= (vec_roll.length() + pe.getMagnetic_z().length())) {//vectors point in same direction
                 return 0f;
-            }else{//vectors are opposite
-                return (float)Math.PI;
+            } else {//vectors are opposite
+                return (float) Math.PI;
             }
-        }else{//left side
-            return (float)(Math.PI + ( Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_z().normalize()) ) );
+        } else {//left side
+            return (float) (Math.PI + (Math.PI - (vec_roll.normalize()).angleBetween(pe.getMagnetic_z().normalize())));
         }
     }
 
@@ -284,8 +284,8 @@ public class Compass extends Sensor{
      *
      * @return The yaw angle in degree
      */
-    public float getRollDegree(){
-        return (float)(getRollRadiant()*(180/Math.PI));
+    public float getRollDegree() {
+        return (float) (getRollRadiant() * (180 / Math.PI));
     }
 
     /**
@@ -293,7 +293,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassPitchAxisVector() {
-        return (Vector3f)variables.get("CompassPitchAxisVector");
+        return (Vector3f) variables.get("CompassPitchAxisVector");
     }
 
     /**
@@ -309,7 +309,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassRollAxisVector() {
-        return (Vector3f)variables.get("CompassRollAxisVector");
+        return (Vector3f) variables.get("CompassRollAxisVector");
     }
 
     /**
@@ -317,7 +317,7 @@ public class Compass extends Sensor{
      * @param CompassRollAxisVector
      */
     public void setCompassRollAxisVector(Vector3f CompassRollAxisVector) {
-         variables.put("CompassRollAxisVector", CompassRollAxisVector);
+        variables.put("CompassRollAxisVector", CompassRollAxisVector);
     }
 
     /**
@@ -325,12 +325,12 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassStartVector() {
-        return (Vector3f)variables.get("Position");
+        return (Vector3f) variables.get("Position");
     }
 
     /**
      *
-     * @param Position 
+     * @param Position
      */
     public void setCompassStartVector(Vector3f Position) {
         variables.put("Position", Position);
@@ -341,7 +341,7 @@ public class Compass extends Sensor{
      * @return
      */
     public Vector3f getCompassYawAxisVector() {
-        return (Vector3f)variables.get("CompassYawAxisVector");
+        return (Vector3f) variables.get("CompassYawAxisVector");
     }
 
     /**
@@ -353,7 +353,7 @@ public class Compass extends Sensor{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Vector3f getMagnetic_north() {
@@ -403,7 +403,7 @@ public class Compass extends Sensor{
     /**
      *
      */
-    public void reset(){
+    public void reset() {
 
     }
 }

@@ -9,20 +9,21 @@ import java.util.logging.Logger;
 
 /**
  * This is only a simple Runnable for the CommunicationManager (Modem)
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class CommunicationManagerRunnable implements Runnable{
+public class CommunicationManagerRunnable implements Runnable {
 
     private static final long sleeptime = 1;
     private boolean running = true;
     CommunicationManager comManager;
-    
+
     /**
      *
      */
     public CommunicationManagerRunnable() {
     }
-    
+
     /**
      *
      * @param comManager
@@ -41,16 +42,16 @@ public class CommunicationManagerRunnable implements Runnable{
 
     @Override
     public void run() {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "CommunicationManager running...", ""); 
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "CommunicationManager running...", "");
         try {
             while (running) {
-                if(comManager!=null){
+                if (comManager != null) {
                     comManager.update(0f);
                 }
                 Thread.sleep(sleeptime);
             }
         } catch (Exception e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "CommunicationManager failed!", e); 
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "CommunicationManager failed!", e);
         }
-    } 
+    }
 }

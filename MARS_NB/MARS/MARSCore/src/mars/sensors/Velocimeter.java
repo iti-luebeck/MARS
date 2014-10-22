@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors;
 
 import com.jme3.math.Vector3f;
@@ -18,36 +17,37 @@ import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 
 /**
- *  This a basis Velocimeter class. It gives you the linear velocity.
+ * This a basis Velocimeter class. It gives you the linear velocity.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Velocimeter extends Sensor implements ChartValue{
+public class Velocimeter extends Sensor implements ChartValue {
 
-   ///ROS stuff
+    ///ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
     private std_msgs.Float32 fl;
-    
-    /**
-     * 
-     */
-    public Velocimeter(){
-        super();
-    }
-    
+
     /**
      *
-     * @param simstate 
      */
-    public Velocimeter(SimState simstate){
+    public Velocimeter() {
+        super();
+    }
+
+    /**
+     *
+     * @param simstate
+     */
+    public Velocimeter(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public Velocimeter(Velocimeter sensor){
+    public Velocimeter(Velocimeter sensor) {
         super(sensor);
     }
 
@@ -62,7 +62,7 @@ public class Velocimeter extends Sensor implements ChartValue{
         return sensor;
     }
 
-    public void update(float tpf){
+    public void update(float tpf) {
 
     }
 
@@ -70,26 +70,26 @@ public class Velocimeter extends Sensor implements ChartValue{
      *
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public Vector3f getLinearVelocity(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public Vector3f getLinearVelocity() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getLinearVelocityRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getLinearVelocityRaw().x+((float)((1f/100f)*noise)),getLinearVelocityRaw().y+((float)((1f/100f)*noise)),getLinearVelocityRaw().z+((float)((1f/100f)*noise)));
+            Vector3f noised = new Vector3f(getLinearVelocityRaw().x + ((float) ((1f / 100f) * noise)), getLinearVelocityRaw().y + ((float) ((1f / 100f) * noise)), getLinearVelocityRaw().z + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getLinearVelocityRaw().x+((float)((1f/100f)*noise)),getLinearVelocityRaw().y+((float)((1f/100f)*noise)),getLinearVelocityRaw().z+((float)((1f/100f)*noise)));
+            Vector3f noised = new Vector3f(getLinearVelocityRaw().x + ((float) ((1f / 100f) * noise)), getLinearVelocityRaw().y + ((float) ((1f / 100f) * noise)), getLinearVelocityRaw().z + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else{
+        } else {
             return getLinearVelocityRaw();
         }
     }
@@ -98,7 +98,7 @@ public class Velocimeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    private Vector3f getLinearVelocityRaw(){
+    private Vector3f getLinearVelocityRaw() {
         return physics_control.getLinearVelocity();
     }
 
@@ -106,7 +106,7 @@ public class Velocimeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getLinearVelocityXAxis(){
+    public float getLinearVelocityXAxis() {
         return physics_control.getLinearVelocity().x;
     }
 
@@ -114,7 +114,7 @@ public class Velocimeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getLinearVelocityYAxis(){
+    public float getLinearVelocityYAxis() {
         return physics_control.getLinearVelocity().y;
     }
 
@@ -122,48 +122,48 @@ public class Velocimeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    public float getLinearVelocityZAxis(){
+    public float getLinearVelocityZAxis() {
         return physics_control.getLinearVelocity().z;
     }
 
     /**
      *
      */
-    public void reset(){
+    public void reset() {
 
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),std_msgs.Float32._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
         this.rosinit = true;
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void publish() {
         fl.setData(getLinearVelocity().length());
-        if( publisher != null ){
+        if (publisher != null) {
             publisher.publish(fl);
         }
     }
-    
+
     @Override
     public void publishData() {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getLinearVelocity().length(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
-    
+
     /**
      *
      * @return

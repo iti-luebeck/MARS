@@ -2,14 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors.sonar;
 
 /**
+ * Determines the type of cone that is used by ray based sensors like the sonar.
  *
  * @author Thomas Tosik
  */
 public class ConeType {
+
     /**
      *
      */
