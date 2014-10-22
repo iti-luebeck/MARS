@@ -5,7 +5,6 @@
 
 package mars.auv;
 
-import mars.uwCommManager.CommunicationManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
 import java.io.IOException;
@@ -56,7 +55,6 @@ public class AUV_Manager implements UpdateState,Lookup.Provider{
     private BulletAppState bulletAppState;
     private Node rootNode;
     private SimState simstate;
-    private CommunicationManager com_manager;
     private RecordManager recManager;
     private HashMap<String,MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
@@ -209,21 +207,6 @@ public class AUV_Manager implements UpdateState,Lookup.Provider{
         this.physical_environment = physical_environment;
     }
     
-    /**
-     * 
-     * @return
-     */
-    public CommunicationManager getCommunicationManager() {
-        return com_manager;
-    }
-
-    /**
-     * 
-     * @param com_manager
-     */
-    public void setCommunicationManager(CommunicationManager com_manager) {
-        this.com_manager = com_manager;
-    }
 
     /**
      *
@@ -584,7 +567,6 @@ public class AUV_Manager implements UpdateState,Lookup.Provider{
             auv.setState(simstate);
             auv.setMARS_Settings(simauv_settings);
             auv.setPhysical_environment(physical_environment);
-            auv.setCommunicationManager(com_manager);
             auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
             initAUV(auv);
         if(auv.getAuv_param().isEnabled()){    

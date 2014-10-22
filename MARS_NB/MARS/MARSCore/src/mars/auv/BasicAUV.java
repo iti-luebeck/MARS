@@ -4,7 +4,6 @@
  */
 package mars.auv;
 
-import mars.uwCommManager.CommunicationManager;
 import com.jme3.renderer.queue.RenderQueue;
 import javax.swing.tree.TreePath;
 import mars.CollisionType;
@@ -196,7 +195,6 @@ public class BasicAUV implements AUV, SceneProcessor {
     private HashMap<String, Accumulator> accumulators = new HashMap<String, Accumulator>();
 
     private EventListenerList listeners = new EventListenerList();
-    private CommunicationManager com_manager;
     private MARSNodeMain mars_node;
     //selection stuff aka highlightening
     private boolean selected = false;
@@ -371,24 +369,6 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setMARS_Settings(MARS_Settings simauv_settings) {
         this.mars_settings = simauv_settings;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public CommunicationManager getCommunicationManager() {
-        return com_manager;
-    }
-
-    /**
-     *
-     * @param com_manager
-     */
-    @Override
-    public void setCommunicationManager(CommunicationManager com_manager) {
-        this.com_manager = com_manager;
     }
 
     /**
@@ -697,9 +677,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
                 if (element instanceof VideoCamera) {
                     ((VideoCamera) element).setIniter(initer);//is needed for filters
-                }
-                if (element instanceof CommunicationDevice) {
-                    ((CommunicationDevice) element).setCommunicationManager(com_manager);//is needed for filters
                 }
                 if (element instanceof InfraRedSensor) {
                     ((InfraRedSensor) element).setCollider(simstate.getCollider());//is needed for filters

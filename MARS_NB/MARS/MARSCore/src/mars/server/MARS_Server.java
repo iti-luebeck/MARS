@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV_Manager;
 import mars.MARS_Main;
-import mars.uwCommManager.CommunicationManager;
 
 /**
  * This is the server thread class. It waits for new requests from the clients(i.e. Hanse) and than processes it.
@@ -29,7 +28,6 @@ public class MARS_Server implements Runnable {
 
     private MARS_Main mars;
     private AUV_Manager auv_manager;
-    private CommunicationManager com_manager;
     
     private ArrayList<Connection> connections = new ArrayList<Connection>();
 
@@ -39,7 +37,7 @@ public class MARS_Server implements Runnable {
      * @param auv_manager
      * @param com_manager  
      */
-    public MARS_Server(MARS_Main simauv, AUV_Manager auv_manager, CommunicationManager com_manager) {
+    public MARS_Server(MARS_Main simauv, AUV_Manager auv_manager) {
         //set the logging
         try {
             // Create an appending file handler
@@ -52,7 +50,6 @@ public class MARS_Server implements Runnable {
 
         this.mars = simauv;
         this.auv_manager = auv_manager;
-        this.com_manager = com_manager;
     }
 
     /**
@@ -127,7 +124,7 @@ public class MARS_Server implements Runnable {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Waiting for Connection...", "");
                 Socket sockConnected = socket.accept();
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Connected with " + sockConnected, "");
-                Connection con = new Connection(sockConnected,mars,auv_manager,com_manager);
+                Connection con = new Connection(sockConnected,mars,auv_manager);
                 con.start();
                 connections.add(con);
             }

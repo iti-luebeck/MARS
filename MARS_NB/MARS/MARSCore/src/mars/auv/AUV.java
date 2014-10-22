@@ -5,7 +5,6 @@
 
 package mars.auv;
 
-import mars.uwCommManager.CommunicationManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -288,22 +287,6 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * @param visible
      */
     public void debugView( boolean visible );
-    /*
-     * 
-     */
-    /**
-     * 
-     * @return
-     */
-    public CommunicationManager getCommunicationManager();
-    /*
-    * 
-    */
-    /**
-     * 
-     * @param com_manager
-     */
-    public void setCommunicationManager(CommunicationManager com_manager);
     /**
      * 
      * @param mars_node

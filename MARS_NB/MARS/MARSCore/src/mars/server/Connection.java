@@ -18,7 +18,6 @@ import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.MARS_Main;
 import mars.actuators.Thruster;
-import mars.uwCommManager.CommunicationManager;
 import mars.sensors.Accelerometer;
 import mars.sensors.Compass;
 import mars.sensors.Gyroscope;
@@ -40,7 +39,6 @@ public class Connection extends Thread {
     private MARS_Main mars;
     private BasicAUV auv;
     private AUV_Manager auv_manager;
-    private CommunicationManager com_manager;
 
     private int OutputStreamSize = 1228100;
 
@@ -72,7 +70,7 @@ public class Connection extends Thread {
      * @param auv_manager
      * @param com_manager  
      */
-    public Connection(Socket sockConnected,MARS_Main mars, AUV_Manager auv_manager, CommunicationManager com_manager) {
+    public Connection(Socket sockConnected,MARS_Main mars, AUV_Manager auv_manager) {
         //set the logging
         /*
         try {
@@ -86,7 +84,6 @@ public class Connection extends Thread {
         */
         this.mars = mars;
         this.auv_manager = auv_manager;
-        this.com_manager = com_manager;
         this.sockConnected = sockConnected;
     }
 
@@ -279,7 +276,6 @@ public class Connection extends Thread {
             String comm_name = input[1];
             String comm_msg = input[2];
             //com_manager.putMsg(comm_msg);
-            com_manager.putMsg(auv.getName(), comm_msg,CommunicationType.UNDERWATERSOUND);
             //UnderwaterModem comm = (UnderwaterModem)auv.getSensor(comm_name);
             /*if(comm != null){
                 String ret = " " + comm.getMessage();

@@ -67,7 +67,6 @@ import mars.PickHint;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
-import mars.uwCommManager.CommunicationManager;
 import mars.auv.example.Hanse;
 import mars.auv.example.Monsun2;
 import mars.simobjects.SimObject;
@@ -101,7 +100,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
     private AUV_Manager auvManager;
     private RecordManager recordManager;
     private SimObjectManager simobManager;
-    private CommunicationManager comManager;
     private BulletAppState bulletAppState;
     private MARS_Main mars;
     
@@ -325,17 +323,15 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             //recordManager.loadRecordings();
             auvManager = new AUV_Manager(this);
             simobManager = new SimObjectManager(this);
-            comManager = new CommunicationManager(auvManager, this, rootNode, physical_environment);
         
             progr.progress( "Creating Initializer" );
-            initer = new Initializer(mars,this,auvManager,comManager,physical_environment);
+            initer = new Initializer(mars,this,auvManager,physical_environment);
             initer.init();
             
             //set camera to look to (0,0,0)
             setupCamPos();
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
             
-            comManager.setServer(initer.getRAW_Server());
 
             if(mars_settings.getROSEnabled()){
                 if(initer.checkROSServer()){//Waiting for ROS Server to be ready
@@ -347,7 +343,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             initMap();//for mars_settings
             
             progr.progress( "Populate AUVManager" );
-            populateAUV_Manager(auvs,physical_environment,mars_settings,comManager,recordManager,initer);
+            populateAUV_Manager(auvs,physical_environment,mars_settings,recordManager,initer);
             
             Future fut = mars.enqueue(new Callable() {
              public Void call() throws Exception {
@@ -751,11 +747,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
      /*
      *
      */
-    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, CommunicationManager com_manager, RecordManager recordManager, Initializer initer){
+    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, RecordManager recordManager, Initializer initer){
         auvManager.setBulletAppState(bulletAppState);
         auvManager.setPhysical_environment(pe);
         auvManager.setSimauv_settings(mars_settings);
-        auvManager.setCommunicationManager(com_manager);
         auvManager.setRecManager(recordManager);
         if(mars_settings.getROSEnabled()){
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
@@ -1060,9 +1055,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
         }
 
         //only update physics when simulation is started and auv_manager/comManager are both ready and instantied.
-        if(auvManager != null && initial_ready && comManager != null){
+        if(auvManager != null && initial_ready){
             auvManager.updateAllAUVs(tpf);
-            comManager.update(tpf);
         }            
     }
 

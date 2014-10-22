@@ -14,7 +14,6 @@ import mars.CommunicationDeviceEvent;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
-import mars.uwCommManager.CommunicationManager;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;
 
@@ -26,10 +25,6 @@ import mars.states.SimState;
 @XmlSeeAlso( {UnderwaterModem.class,WiFi.class} )
 public abstract class CommunicationDevice extends Sensor{
 
-    /**
-     *
-     */
-    protected CommunicationManager com_manager;
     /**
      *
      */
@@ -67,22 +62,6 @@ public abstract class CommunicationDevice extends Sensor{
         super(mars, pe);
     }
     
-        
-    /**
-     * 
-     * @return
-     */
-    public CommunicationManager getCommunicationManager() {
-        return com_manager;
-    }
-
-    /**
-     * 
-     * @param com_manager
-     */
-    public void setCommunicationManager(CommunicationManager com_manager) {
-        this.com_manager = com_manager;
-    }
 
     @Override
     public void initAfterJAXB() {

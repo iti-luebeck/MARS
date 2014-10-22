@@ -294,7 +294,6 @@ public class UnderwaterModem extends CommunicationDevice{
                 public void onNewMessage(std_msgs.String message) {
                     System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
                     notifyAdvertisement(new CommunicationDeviceEvent(fin_this,message.getData(),System.currentTimeMillis(),CommunicationDeviceEventType.IN));
-                    com_manager.putMsg(fin_auv_name,message.getData(),CommunicationType.UNDERWATERSOUND);
                 }
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
         this.rosinit = true;
