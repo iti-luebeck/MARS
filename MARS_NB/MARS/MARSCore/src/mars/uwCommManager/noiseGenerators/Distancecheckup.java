@@ -14,19 +14,38 @@ import mars.sensors.UnderwaterModem;
 import mars.sensors.WiFi;
 
 /**
- *
- * @author Jasper Schwinghammer
+ * Just a basic filter for the distance. We only need to test for AUV's that are in range of the modem
+ * 
+ * @version 0.1
+ * @author Jasper Schwinghammer, Thomas Tosik
  */
 public class Distancecheckup{
     
     AUV_Manager auvManager = null;
-    
-    public Distancecheckup(AUV_Manager auvManager) {
+
+    public Distancecheckup() {
+ 
+    }
+    /**
+     * Init all nontrivial stuff
+     * @param auvManager the AUV_Manager
+     * @return if all initialization worked 
+     */
+    public boolean init(final AUV_Manager auvManager) {
+        if (auvManager == null) return false;
         this.auvManager = auvManager;
+        return true;
     }
 
-
-    public MsgandPossibleTargetHelper noisify(CommunicationMessage msg) {
+    /**
+     * 
+     * Checks for a CommuncationMessage if any AUV's are in range to recieve the message.
+     * 
+     * @since 0.1
+     * @param msg the CommunicationsMessage containing the sender reference
+     * @return the message and alle AUV's that are possibly in range of the message
+     */
+    public MsgandPossibleTargetHelper checkDistanceForMessage(final CommunicationMessage msg) {
         AUV sender = (AUV)auvManager.getAUV(msg.getAuvName());
         
         
@@ -50,7 +69,7 @@ public class Distancecheckup{
         HashMap<String,AUV> targets = new HashMap<String,AUV>();
         for ( String elem : auvs.keySet() ){
             AUV auv = (AUV)auvs.get(elem);
-            
+            //Code copy-pasted from the old method by Thomas Tosik
             if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName()) && !auv.getName().equals(msg.getAuvName())){
                 ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
                 Iterator it = uwmo.iterator();

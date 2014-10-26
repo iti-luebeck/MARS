@@ -10,24 +10,45 @@ import mars.auv.AUV;
 import mars.sensors.CommunicationMessage;
 
 /**
- *
- * @author jaspe_000
+ * 
+ * A helper class used to return the message as well as all suitable targets.
+ * @version 0.1
+ * @author Jasper Schwinghammer
  */
 public class MsgandPossibleTargetHelper {
-    
+    /**
+     * The message
+     */
     private CommunicationMessage msg;
+    /**
+     * all possible targets
+     */
     private HashMap<String,AUV> targets;
     
-    
+    /**
+     * Initialization of the two private Objects
+     * @param msg
+     * @param targets 
+     */
     public MsgandPossibleTargetHelper(CommunicationMessage msg, HashMap<String,AUV> targets) {
         this.msg = msg;
         this.targets = targets;
     }
-    
+    /**
+     * 
+     * Get the message object
+     * @since 0.1
+     * @return the message
+     */
     public CommunicationMessage getMsg() {
         return msg;
     }
     
+    /**
+     * Get the HashMap containing all targetable AUV's
+     * @since 0.1
+     * @return 
+     */
     public HashMap<String,AUV> getTargets() {
         return targets;
     }
