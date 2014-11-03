@@ -83,6 +83,7 @@ import mars.core.MARSTreeTopComponent;
 import mars.filter.FishEyeFilter;
 import mars.recorder.RecordControl;
 import mars.recorder.RecordManager;
+import mars.uwCommManager.CommunicationState;
 import mars.xml.ConfigManager;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -458,6 +459,13 @@ public class SimState extends AbstractAppState implements PhysicsTickListener,Ap
             if(state != null){
                 stateManager.attach(state);
             }
+            AbstractAppState comState = new CommunicationState();
+            comState.initialize(stateManager, app);
+            if(comState != null) {
+                stateManager.attach(comState);
+            }
+            
+            
         }
         progr.progress( "Init Super" );
         super.initialize(stateManager, app);

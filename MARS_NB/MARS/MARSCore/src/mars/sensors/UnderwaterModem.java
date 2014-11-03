@@ -28,7 +28,9 @@ import mars.states.SimState;
 import mars.CommunicationDeviceEvent;
 import mars.CommunicationDeviceEventType;
 import mars.CommunicationType;
+import mars.core.CentralLookup;
 import mars.ros.MARSNodeMain;
+import mars.uwCommManager.CommunicationState;
 import org.ros.node.topic.Subscriber;
 
 /**
@@ -144,7 +146,11 @@ public class UnderwaterModem extends CommunicationDevice{
 
     @Override
     public void update(float tpf){
-
+        
+        /// TEST CODE Jasper Schwinghammer 03.11.2014
+        System.out.println("I send a Message now: " + this.getAuv().getName());
+        CommunicationState comState = CentralLookup.getDefault().lookup(CommunicationState.class);
+        if (comState != null)comState.putMsg(new CommunicationMessage(this.getAuv().getName(), "Hello here is " + getAuv().getName() + " who can hear me? ", CommunicationType.UNDERWATERSOUND));
     }
 
     @Override
@@ -313,12 +319,15 @@ public class UnderwaterModem extends CommunicationDevice{
      */
     @Override
     public void publish(String msg){
+        /*
         fl.setData(msg);
         if( publisher != null ){
             System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
             notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
+        */
+        System.out.println("Hey I, " + getAuv().getName() + ", got a Message: " + msg);
     }
     
     /**

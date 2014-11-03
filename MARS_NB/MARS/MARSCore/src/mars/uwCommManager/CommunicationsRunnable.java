@@ -97,7 +97,7 @@ public class CommunicationsRunnable implements Runnable {
                 
                 // handle sleeptimes
                 float timeForThisLoop = timer.getTimePerFrame();
-                int sleepTime = 1000/Math.round(timeForThisLoop*1000)*getMsgCnt();
+                int sleepTime = 1000/(Math.round(timeForThisLoop*1000)+1)*(getMsgCnt()+1);
                 if (sleepTime >50) sleepTime = 50;
                 Thread.sleep(sleepTime);
 

@@ -11,11 +11,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.CommunicationDeviceEvent;
+import mars.CommunicationType;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchanger;
+import mars.core.CentralLookup;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;
+import mars.uwCommManager.CommunicationState;
 
 /**
  *
