@@ -18,6 +18,7 @@ import mars.xml.Vector3fAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"time", "position", "rotation"})
+@Deprecated
 public class Record implements Comparable<Record>{
     
     /**

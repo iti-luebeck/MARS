@@ -18,6 +18,7 @@ import mars.core.MARSLogTopComponent;
  * This control set the auv spatial to a recored position/rotation at a specific time.
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class RecordControl extends AbstractControl{
     
     private RecordManager recordManager;

@@ -13,6 +13,7 @@ import mars.xml.XML_JAXB_ConfigReaderWriter;
  * This class handels multiple recordings.
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class RecordManager {
 
     private boolean enabled = false;

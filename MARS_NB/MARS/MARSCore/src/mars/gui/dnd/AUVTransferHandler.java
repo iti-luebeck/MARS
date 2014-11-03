@@ -22,9 +22,10 @@ import org.openide.modules.InstalledFileLocator;
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @deprecated Is now in the AUVTree
  */
 @Deprecated
-public class AUVTransferHandler extends TransferHandler{
+public class AUVTransferHandler extends TransferHandler {
 
     @Override
     public int getSourceActions(JComponent c) {
@@ -34,29 +35,29 @@ public class AUVTransferHandler extends TransferHandler{
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
         if (action == MOVE) {// "delete" it
-            
-        }else if( action == COPY){
-        
+
+        } else if (action == COPY) {
+
         }
     }
 
-    private BufferedImage createDNDImage(JComponent c){
+    private BufferedImage createDNDImage(JComponent c) {
         // we want a custom dnd image to be painted
         BufferedImage img = null;
         try {
-            JTree auvTree = (JTree)c;
-            TreePath selPath = auvTree.getSelectionPath();   
-            if( selPath != null ){// to be save of "bad" clicking
-                if (selPath.getLastPathComponent() instanceof AUV) { 
-                    AUV auv = (AUV)selPath.getLastPathComponent();
-                    if(!auv.getAuv_param().getDndIcon().equals("")){
+            JTree auvTree = (JTree) c;
+            TreePath selPath = auvTree.getSelectionPath();
+            if (selPath != null) {// to be save of "bad" clicking
+                if (selPath.getLastPathComponent() instanceof AUV) {
+                    AUV auv = (AUV) selPath.getLastPathComponent();
+                    if (!auv.getAuv_param().getDndIcon().equals("")) {
                         File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + auv.getAuv_param().getDndIcon(), "mars.core", false);
                         img = ImageIO.read(file);
-                    }else{// no dnd image
+                    } else {// no dnd image
                         File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
                         img = ImageIO.read(file);
                     }
-                }else{//default auv image?
+                } else {//default auv image?
                     File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
                     img = ImageIO.read(file);
                 }
@@ -65,19 +66,19 @@ public class AUVTransferHandler extends TransferHandler{
         }
         return img;
     }
-    
+
     @Override
     protected Transferable createTransferable(final JComponent c) {
         final AUVTransferHandler auvT = this;
-        final JTree auvTree = (JTree)c;
-        
+        final JTree auvTree = (JTree) c;
+
         // we want a custom dnd image to be painted
         BufferedImage img = createDNDImage(c);
         this.setDragImage(img);
         this.setDragImageOffset(new Point(0, 0));
-        
+
         TreePath selectionPath = auvTree.getSelectionPath();
-        if(selectionPath.getLastPathComponent() instanceof AUV){//only dnd if auvs, not a lower node
+        if (selectionPath.getLastPathComponent() instanceof AUV) {//only dnd if auvs, not a lower node
             return new Transferable() {
                 public DataFlavor[] getTransferDataFlavors() {
                     DataFlavor[] dt = new DataFlavor[1];
@@ -90,15 +91,15 @@ public class AUVTransferHandler extends TransferHandler{
                 }
 
                 public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                    TreePath selPath = auvTree.getSelectionPath();   
-                    if (selPath.getLastPathComponent() instanceof AUV) { 
-                        AUV auv = (AUV)selPath.getLastPathComponent();                 
+                    TreePath selPath = auvTree.getSelectionPath();
+                    if (selPath.getLastPathComponent() instanceof AUV) {
+                        AUV auv = (AUV) selPath.getLastPathComponent();
                         return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
                     }
                     return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
                 }
             };
-        }else{
+        } else {
             return null;
         }
     }

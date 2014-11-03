@@ -6,22 +6,16 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
-import javax.swing.JOptionPane;
 import mars.AUVObject;
 import mars.ChartValue;
 import mars.MARS_Main;
@@ -35,10 +29,7 @@ import mars.actuators.Teleporter;
 import mars.actuators.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
-import mars.auv.AUV;
-import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
-import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import mars.core.MARSChartTopComponent;
 import mars.core.MARSCompassTopComponent;
@@ -66,17 +57,14 @@ import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
 import mars.sensors.WiFi;
 import mars.sensors.sonar.Sonar;
-import mars.states.SimState;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
 import mars.auvtree.TreeUtil;
 import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import org.openide.ErrorManager;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
-import org.openide.modules.InstalledFileLocator;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
@@ -97,27 +85,27 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      * Object which is representated by the node
      */
     private Object obj;
-    
+
     /**
      * Hashmap with paramaeters of object.
      */
     private HashMap params;
-    
+
     /**
      * Hashmap with noise paramaeters of object.
      */
     private HashMap noise;
-    
+
     /**
-     * 
+     *
      */
     private ArrayList slavesNames;
-            
+
     /**
      * Name of the image file on the harddisk.
      */
     private String icon = "question-white.png";
-    
+
     /**
      * Displayname of the node.
      */
@@ -142,84 +130,83 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         } else if (obj instanceof Actuator) {
             params = ((Actuator) (obj)).getAllVariables();
             noise = ((Actuator) (obj)).getAllNoiseVariables();
-            if(obj instanceof Manipulating){
+            if (obj instanceof Manipulating) {
                 slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Actuator) (obj)).getIcon();
         } else if (obj instanceof Sensor) {
             params = ((Sensor) (obj)).getAllVariables();
             noise = ((Sensor) (obj)).getAllNoiseVariables();
-            if(obj instanceof AmpereMeter){
-                
+            if (obj instanceof AmpereMeter) {
+
             }
-            if(obj instanceof Manipulating){
+            if (obj instanceof Manipulating) {
                 slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Sensor) (obj)).getIcon();
-        } else if(obj instanceof AUV_Parameters){
-           params = ((AUV_Parameters) (obj)).getAllVariables();
+        } else if (obj instanceof AUV_Parameters) {
+            params = ((AUV_Parameters) (obj)).getAllVariables();
         }
-        
+
         //no icon set, use default one
-        if(icon == null){
-            if(obj instanceof Sonar){
+        if (icon == null) {
+            if (obj instanceof Sonar) {
                 icon = "radar.png";
-            }else if(obj instanceof Compass){
+            } else if (obj instanceof Compass) {
                 icon = "compass.png";
-            }else if(obj instanceof VideoCamera){
+            } else if (obj instanceof VideoCamera) {
                 icon = "cctv_camera.png";
-            }else if(obj instanceof PingDetector){
+            } else if (obj instanceof PingDetector) {
                 icon = "microphone.png";
-            }else if(obj instanceof IMU){
+            } else if (obj instanceof IMU) {
                 icon = "compass.png";
-            }else if(obj instanceof TemperatureSensor){
+            } else if (obj instanceof TemperatureSensor) {
                 icon = "thermometer.png";
-            }else if(obj instanceof Gyroscope){
+            } else if (obj instanceof Gyroscope) {
                 icon = "transform_rotate.png";
-            }else if(obj instanceof PressureSensor){
+            } else if (obj instanceof PressureSensor) {
                 icon = "transform_perspective.png";
-            }else if(obj instanceof TerrainSender){
+            } else if (obj instanceof TerrainSender) {
                 icon = "soil_layers.png";
-            }else if(obj instanceof Thruster){
+            } else if (obj instanceof Thruster) {
                 icon = "thruster_seabotix.png";
-            }else if(obj instanceof VectorVisualizer){
+            } else if (obj instanceof VectorVisualizer) {
                 icon = "arrow_up.png";
-            }else if(obj instanceof Servo){
+            } else if (obj instanceof Servo) {
                 icon = "AX-12.png";
-            }else if(obj instanceof UnderwaterModem){
+            } else if (obj instanceof UnderwaterModem) {
                 icon = "speaker-volume.png";
-            }else if(obj instanceof WiFi){
+            } else if (obj instanceof WiFi) {
                 icon = "radio_2.png";
-            }else if(obj instanceof Lamp){
+            } else if (obj instanceof Lamp) {
                 icon = "flashlight-shine.png";
-            }else if(obj instanceof GPSReceiver){
+            } else if (obj instanceof GPSReceiver) {
                 icon = "satellite.png";
-            }else if(obj instanceof Lamp){
+            } else if (obj instanceof Lamp) {
                 icon = "flashlight-shine.png";
-            }else if(obj instanceof VoltageMeter){
+            } else if (obj instanceof VoltageMeter) {
                 icon = "battery_charge.png";
-            }else if(obj instanceof AmpereMeter){
+            } else if (obj instanceof AmpereMeter) {
                 icon = "battery_charge.png";
-            }else if(obj instanceof FlowMeter){
+            } else if (obj instanceof FlowMeter) {
                 icon = "breeze_small.png";
-            }else if(obj instanceof Teleporter){
+            } else if (obj instanceof Teleporter) {
                 icon = "transform_move.png";
-            }else if(obj instanceof PollutionMeter){
+            } else if (obj instanceof PollutionMeter) {
                 icon = "oil-barrel.png";
-            }else{//last resort
+            } else {//last resort
                 icon = "question-white.png";
             }
         }
-        
+
         // create subchilds
         // don't show them currently, because one has to use the property window
         //when you want to activate it you need addtional code:
         //https://blogs.oracle.com/geertjan/entry/no_expansion_key_when_no
         //http://netbeans.dzone.com/nb-dynamic-icons-for-explorer-trees
         /*if (params != null && !params.isEmpty()) {
-            setChildren(Children.create(new ParamChildNodeFactory(params), true));
-        }*/
-
+         setChildren(Children.create(new ParamChildNodeFactory(params), true));
+         }*/
         setDisplayName(nodeName);
         setShortDescription(obj.getClass().toString());
     }
@@ -235,7 +222,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         AUVObject auvObject = getLookup().lookup(AUVObject.class);
         if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
-        }else{
+        } else {
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
         }
     }
@@ -252,7 +239,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         AUVObject auvObject = getLookup().lookup(AUVObject.class);
         if (auvObject == null || auvObject.getEnabled()) {
             return TreeUtil.getImage(icon);
-        }else{
+        } else {
             return GrayFilter.createDisabledImage(TreeUtil.getImage(icon));
         }
     }
@@ -267,10 +254,10 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     public String getDisplayName() {
         return nodeName;
     }
-    
+
     @Override
     public boolean canDestroy() {
-         return true;
+        return true;
     }
 
     @Override
@@ -299,57 +286,57 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         obj = getLookup().lookup(PhysicalExchanger.class);
-        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+        if (obj == null) {//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(Accumulator.class);
         }
-        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+        if (obj == null) {//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(Manipulating.class);
         }
-        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+        if (obj == null) {//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(AUV_Parameters.class);
         }
-        if(obj == null){//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
+        if (obj == null) {//i know, its hacky at the moment. should use multiple lookup. or an common interface for all interesting objects
             obj = getLookup().lookup(HashMap.class);
         }
-        
+
         if (params != null) {
-            createPropertiesSet(obj,params,"Properties",false,sheet);
+            createPropertiesSet(obj, params, "Properties", false, sheet);
         }
         if (noise != null) {
-            createPropertiesSet(obj,noise,"Noise",true,sheet);
+            createPropertiesSet(obj, noise, "Noise", true, sheet);
         }
         if (slavesNames != null) {
-            sheet.put(createPropertiesSet(obj,slavesNames,"Slaves",true));
+            sheet.put(createPropertiesSet(obj, slavesNames, "Slaves", true));
         }
         // add listener to react of changes from external editors (AUVEditor)
-        if(params != null){
+        if (params != null) {
             ((PropertyChangeListenerSupport) (obj)).addPropertyChangeListener(this);
         }
         return sheet;
     }
-    
-    private void createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert, Sheet sheet){
+
+    private void createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert, Sheet sheet) {
         Sheet.Set set;
-        if(expert){
+        if (expert) {
             set = Sheet.createExpertSet();
-        }else{
+        } else {
             set = Sheet.createPropertiesSet();
         }
-        
+
         set.setDisplayName(displayName);
         set.setName(displayName);
         sheet.put(set);
         Property prop;
         String name;
-        
+
         SortedSet<String> sortedset = new TreeSet<String>(params.keySet());
         for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
             String key = it2.next();
             Object value = params.get(key);
 
-            if(value instanceof HashMap){//make a new set 
+            if (value instanceof HashMap) {//make a new set 
                 Sheet.Set setHM = Sheet.createExpertSet();
-                HashMap hasher = (HashMap)value;
+                HashMap hasher = (HashMap) value;
                 SortedSet<String> sortedset2 = new TreeSet<String>(hasher.keySet());
                 for (Iterator<String> it3 = sortedset2.iterator(); it3.hasNext();) {
                     String key2 = it3.next();
@@ -373,7 +360,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 setHM.setDisplayName(key);
                 setHM.setName(key);
                 sheet.put(setHM);
-            }else{//ueber set (properties)
+            } else {//ueber set (properties)
                 name = key.substring(0, 1).toUpperCase() + key.substring(1);
                 try {
                     prop = new PropertySupport.Reflection(obj, value.getClass(), name);
@@ -394,18 +381,18 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }
     }
 
-    private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert){
+    private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert) {
         Sheet.Set set;
-        if(expert){
+        if (expert) {
             set = Sheet.createExpertSet();
-        }else{
+        } else {
             set = Sheet.createPropertiesSet();
         }
-        
+
         Property prop;
         String name;
         for (Iterator it = params.iterator(); it.hasNext();) {
-            String slaveName = (String)it.next();
+            String slaveName = (String) it.next();
             try {
                 prop = new PropertySupport.Reflection(obj, String.class, "SlavesNames");
                 prop.setName(slaveName);
@@ -416,31 +403,31 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }
         /*Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
         
-        for (; i.hasNext();) {
-            Map.Entry<String, Object> mE = i.next();
+         for (; i.hasNext();) {
+         Map.Entry<String, Object> mE = i.next();
 
-            if (!mE.getKey().isEmpty()) {
-                name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
-                try {
-                    prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), "getSlavesNames");
-                    // set custom property editor for position and rotation params
-                    if (mE.getValue() instanceof Vector3f) {
-                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
-                    } else if (mE.getValue() instanceof ColorRGBA) {
-                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
-                    }
+         if (!mE.getKey().isEmpty()) {
+         name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+         try {
+         prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), "getSlavesNames");
+         // set custom property editor for position and rotation params
+         if (mE.getValue() instanceof Vector3f) {
+         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+         } else if (mE.getValue() instanceof ColorRGBA) {
+         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+         }
 
-                    prop.setName(name);
-                    set.put(prop);
-                } catch (NoSuchMethodException ex) {
-                    ErrorManager.getDefault();
-                }
-            }
-        }*/
+         prop.setName(name);
+         set.put(prop);
+         } catch (NoSuchMethodException ex) {
+         ErrorManager.getDefault();
+         }
+         }
+         }*/
         set.setDisplayName(displayName);
         return set;
     }
-        
+
     /**
      * This listerner is called on property changes. It updates the Property
      * Sheet to display adjusted values.
@@ -453,19 +440,19 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         this.fireIconChange();
         if ("Position".equals(evt.getPropertyName()) || "Rotation".equals(evt.getPropertyName())) {
             setSheet(getSheet());
-        }else if("enabled".equals(evt.getPropertyName())){
-            AUVNode parentNode = (AUVNode)getParentNode().getParentNode();
+        } else if ("enabled".equals(evt.getPropertyName())) {
+            AUVNode parentNode = (AUVNode) getParentNode().getParentNode();
             parentNode.updateName();
         }
     }
-    
+
     @Override
     public void destroy() throws IOException {
         PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
         pe.getAuv().deregisterPhysicalExchanger(pe);
         fireNodeDestroyed();
     }
-    
+
     /**
      * This one is overridden to define left click actions.
      *
@@ -475,20 +462,20 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Action[] getActions(boolean popup) {
-        if(obj instanceof Compass){
-            return new Action[]{new DataChartAction(), new ViewCompassAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else if(obj instanceof VideoCamera){
-            return new Action[]{new ViewCameraAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else if(obj instanceof RayBasedSensor){
-            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else if(obj instanceof CommunicationDevice){
-            return new Action[]{new ViewCommunicationAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else if(obj instanceof ChartValue){
-            return new Action[]{new DataChartAction(),new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
-        }else{
-            return new Action[]{new EnableAction(),SystemAction.get(RenameAction.class),SystemAction.get(DeleteAction.class)};
+        if (obj instanceof Compass) {
+            return new Action[]{new DataChartAction(), new ViewCompassAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+        } else if (obj instanceof VideoCamera) {
+            return new Action[]{new ViewCameraAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+        } else if (obj instanceof RayBasedSensor) {
+            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+        } else if (obj instanceof CommunicationDevice) {
+            return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+        } else if (obj instanceof ChartValue) {
+            return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+        } else {
+            return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
         }
-   }
+    }
 
     @Override
     public HelpCtx getHelpCtx() {
@@ -502,7 +489,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
-            if(obj instanceof AUVObject){
+            if (obj instanceof AUVObject) {
                 AUVObject auvObject = (AUVObject) obj;
                 if (auvObject.getEnabled()) {
                     putValue(NAME, "Disable");
@@ -522,8 +509,8 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }
 
     }
-    
-   /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -539,25 +526,24 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
 
             //sonarFrame.setSize(2*252+300, 2*252);
-
             final PolarView imgP = new PolarView();
             win.addRayBasedView(imgP);
 
             win.setName("Polar View");
             win.open();
-            win.requestActive(); 
+            win.requestActive();
 
             win.repaint();
             RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
-            if(lookup != null){
+            if (lookup != null) {
                 //rayBasedSensorList.put(lookup.getName(), imgP);
                 win.setName("Polar View of: " + lookup.getName());
             }
         }
 
     }
-    
-       /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -570,65 +556,64 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            
+
             RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
 
             //sonarFrame.setSize(400+300, 252);
-
             final PlanarView imgP = new PlanarView();
             win.addRayBasedView(imgP);
 
             win.setName("Planar View");
             win.open();
-            win.requestActive(); 
+            win.requestActive();
 
             win.repaint();
-            
+
             RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
-            if(lookup != null){
+            if (lookup != null) {
                 //rayBasedSensorList.put(lookup.getName(), imgP);
                 win.setName("Planar View of: " + lookup.getName());
             }
 
             /*
              //add Jpane for otherSTuff
-            JPanel optionsOther = new JPanel();
-            optionsOther.setMaximumSize(new Dimension(300, 100));
-            GridLayout gl2 = new GridLayout(1,1);
-            optionsOther.setLayout(gl2);
-            optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
-            options.add(optionsOther);
+             JPanel optionsOther = new JPanel();
+             optionsOther.setMaximumSize(new Dimension(300, 100));
+             GridLayout gl2 = new GridLayout(1,1);
+             optionsOther.setLayout(gl2);
+             optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
+             options.add(optionsOther);
 
 
-            JLabel jlDataPoints = new JLabel("Data Points:");
-            optionsOther.add(jlDataPoints);
-            final JTextField jbDataPoints = new JTextField("400");
-            jbDataPoints.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
-            jbDataPoints.setMaximumSize(new Dimension(100, 30));
+             JLabel jlDataPoints = new JLabel("Data Points:");
+             optionsOther.add(jlDataPoints);
+             final JTextField jbDataPoints = new JTextField("400");
+             jbDataPoints.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
+             jbDataPoints.setMaximumSize(new Dimension(100, 30));
 
-            KeyListener kl = new KeyListener() {
+             KeyListener kl = new KeyListener() {
 
-                public void keyTyped(KeyEvent e) {
-                }
+             public void keyTyped(KeyEvent e) {
+             }
 
-                public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                        imgP.setDataPoints(500);
-                    }
-                }
+             public void keyPressed(KeyEvent e) {
+             if(e.getKeyCode() == KeyEvent.VK_ENTER){
+             imgP.setDataPoints(500);
+             }
+             }
 
-                public void keyReleased(KeyEvent e) {
-                }
+             public void keyReleased(KeyEvent e) {
+             }
 
-            };
-            jbDataPoints.addKeyListener(kl);
-            optionsOther.add(jbDataPoints);
-            */
+             };
+             jbDataPoints.addKeyListener(kl);
+             optionsOther.add(jbDataPoints);
+             */
         }
 
     }
-    
-           /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -642,20 +627,20 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             ChartValue lookup = getLookup().lookup(ChartValue.class);
-            if(lookup != null){
+            if (lookup != null) {
                 MARSChartTopComponent chart = new MARSChartTopComponent(lookup);
 
                 chart.setName("Chart of: " + "...");
                 chart.open();
-                chart.requestActive(); 
+                chart.requestActive();
 
                 chart.repaint();
             }
         }
 
     }
-    
-               /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -671,20 +656,20 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             VideoCamera lookup = getLookup().lookup(VideoCamera.class);
             CentralLookup cl = CentralLookup.getDefault();
             MARS_Main mars = cl.lookup(MARS_Main.class);
-            if(lookup != null){
-                MARSVideoCameraTopComponent video = new MARSVideoCameraTopComponent(lookup,mars);
+            if (lookup != null) {
+                MARSVideoCameraTopComponent video = new MARSVideoCameraTopComponent(lookup, mars);
 
                 video.setName("Video of: " + lookup.getName());
                 video.open();
-                video.requestActive(); 
+                video.requestActive();
 
                 video.repaint();
             }
         }
 
     }
-    
-                   /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -698,20 +683,20 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             Compass lookup = getLookup().lookup(Compass.class);
-            if(lookup != null){
+            if (lookup != null) {
                 MARSCompassTopComponent comp = new MARSCompassTopComponent(lookup);
 
                 comp.setName("Video of: " + lookup.getName());
                 comp.open();
-                comp.requestActive(); 
+                comp.requestActive();
 
                 comp.repaint();
             }
         }
 
     }
-    
-                       /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -725,7 +710,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             CommunicationDevice lookup = getLookup().lookup(CommunicationDevice.class);
-            if(lookup != null){
+            if (lookup != null) {
                 MARSUnderwaterModemTopComponent uw = new MARSUnderwaterModemTopComponent(lookup);
                 uw.setName("Data of: " + lookup.getAuv().getName() + "/" + lookup.getName());
                 uw.open();

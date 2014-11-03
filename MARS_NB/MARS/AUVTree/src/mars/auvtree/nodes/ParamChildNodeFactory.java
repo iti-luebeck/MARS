@@ -6,11 +6,7 @@
 package mars.auvtree.nodes;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;

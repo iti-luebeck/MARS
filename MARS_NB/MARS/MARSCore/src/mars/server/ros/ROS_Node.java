@@ -15,7 +15,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
-//import org.ros.node.DefaultNodeFactory;
 import org.ros.node.NodeConfiguration;
 import mars.MARS_Main;
 import mars.MARS_Settings;
@@ -26,13 +25,14 @@ import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeMainExecutor;
 
 /**
- *
+ * The main publishing node from ROSJava for all AUVs.
+ * 
  * @author Thomas Tosik
  */
-public class ROS_Node implements Runnable{
+public class ROS_Node implements Runnable {
 
     private static final long sleeptime = 2;
-    
+
     private String master_ip = "127.0.0.1"; //localhost
     private String local_ip = "127.0.0.1";
     private int master_port = 11311;// port
@@ -42,22 +42,20 @@ public class ROS_Node implements Runnable{
     private MARS_Main mars;
     private AUV_Manager auv_manager;
     private MARS_Settings marsSettings;
-    
+
     //rosjava stuff
     private NodeMainExecutor nodeMainExecutor;
     private boolean running = true;
     private boolean initready = false;
-    private HashMap<String,MARSNodeMain> nodes = new HashMap<String, MARSNodeMain>();
+    private HashMap<String, MARSNodeMain> nodes = new HashMap<String, MARSNodeMain>();
     private MARSNodeMain systemNode;
     private SystemTFNode systemTFNode = new SystemTFNode();
-    
-    
-    
+
     /**
-     * 
+     *
      * @param mars
      * @param auv_manager
-     * @param marsSettings  
+     * @param marsSettings
      */
     public ROS_Node(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging
@@ -68,15 +66,16 @@ public class ROS_Node implements Runnable{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
 
         this.mars = mars;
         this.auv_manager = auv_manager;
         this.marsSettings = marsSettings;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public String getMaster_ip() {
@@ -84,7 +83,7 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @param master_ip
      */
     public void setMaster_ip(String master_ip) {
@@ -93,7 +92,7 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @param local_ip
      */
     public void setLocal_ip(String local_ip) {
@@ -101,7 +100,7 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getLocal_ip() {
@@ -109,7 +108,7 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getMaster_uri() {
@@ -121,7 +120,7 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getMaster_port() {
@@ -129,59 +128,59 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @param master_port
      */
     public void setMaster_port(int master_port) {
         this.master_port = master_port;
         setMaster_uri("http://" + master_ip + ":" + master_port + "/");
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public HashMap<String,MARSNodeMain> getMarsNodes() {
+    public HashMap<String, MARSNodeMain> getMarsNodes() {
         return nodes;
     }
-    
+
     /**
-     * 
-     * @param auv 
+     *
+     * @param auv
      * @return
      */
     public MARSNodeMain getMarsNodeForAUV(String auv) {
         return nodes.get(auv);
     }
-    
+
     /**
-     * 
+     *
      */
     public void shutdown() {
         nodeMainExecutor.shutdown();
         running = false;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public boolean checkNodes(){
-        for ( String elem : nodes.keySet() ){
-            MARSNodeMain node = (MARSNodeMain)nodes.get(elem);
+    public boolean checkNodes() {
+        for (String elem : nodes.keySet()) {
+            MARSNodeMain node = (MARSNodeMain) nodes.get(elem);
             checkNode(node);
         }
         return true;
     }
-    
-    private void checkNode(MARSNodeMain node){
+
+    private void checkNode(MARSNodeMain node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Waiting for ROS Server Node:" + "" + " to be created...", "");
-        while(node == null){
+        while (node == null) {
 
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Node created.", "");
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Waiting for ROS Server Node to exist...", "");
-        while(!node.isExisting()){
+        while (!node.isExisting()) {
 
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Node exists.", "");
@@ -189,13 +188,13 @@ public class ROS_Node implements Runnable{
 
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Nodes running.", "");
     }
-    
+
     /**
-     * 
+     *
      */
-    public void init(){
+    public void init() {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Starting ROS Server...", "");
-        
+
         InetAddress ownIP = null;
         try {
             ownIP = InetAddress.getLocalHost();
@@ -203,32 +202,32 @@ public class ROS_Node implements Runnable{
         } catch (UnknownHostException ex) {
             Logger.getLogger(ROS_Node.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         System.out.println("ROS Master IP: " + getMaster_uri());
         java.net.URI muri = java.net.URI.create(getMaster_uri());
-        
+
         String own_ip_string = "127.0.0.1";
-        if(getLocal_ip().equals("auto")){
+        if (getLocal_ip().equals("auto")) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUTO IP Detection activated. Using: " + ownIP.getHostAddress(), "");
             own_ip_string = ownIP.getHostAddress();
-        }else{
+        } else {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Local IP Settings activated. Using: " + getLocal_ip(), "");
             own_ip_string = getLocal_ip();
         }
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
-        createSystemNode(own_ip_string,muri);
+        createSystemNode(own_ip_string, muri);
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            createNode(auv,own_ip_string,muri);
+        for (String elem : auvs.keySet()) {
+            AUV auv = (AUV) auvs.get(elem);
+            createNode(auv, own_ip_string, muri);
         }
     }
-    
+
     /*
      * Used for ros->jme tf (doesn't fit into auvs, doenst make sense)
      */
-    private void createSystemNode(String own_ip_string, java.net.URI muri){
+    private void createSystemNode(String own_ip_string, java.net.URI muri) {
         NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
         nodeConf.setNodeName("MARS_System");
         //Preconditions.checkState(systemNode == null);
@@ -238,12 +237,11 @@ public class ROS_Node implements Runnable{
         systemNode.addRosNodeListener(systemTFNode);
         nodeMainExecutor.execute(systemNode, nodeConf);
     }
-    
-    private void createNode(AUV auv, String own_ip_string, java.net.URI muri){
+
+    private void createNode(AUV auv, String own_ip_string, java.net.URI muri) {
         NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
         nodeConf.setNodeName("MARS" + "/" + auv.getName());
         MARSNodeMain marsnode;
-        //Preconditions.checkState(systemNode == null);
         Preconditions.checkNotNull(nodeConf);
         marsnode = new MARSNodeMain(nodeConf);
         marsnode.addRosNodeListener(auv);
@@ -260,27 +258,27 @@ public class ROS_Node implements Runnable{
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public synchronized boolean isInitReady(){
+    public synchronized boolean isInitReady() {
         return initready;
     }
-    
+
     @Override
     public void run() {
         //init();
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server running...", "");
-        
+
         try {
             while (running) {
 
                 Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
-                        if(marsSettings.getROSPublish()){
+                        if (marsSettings.getROSPublish()) {
                             auv_manager.publishSensorsOfAUVs();
                             auv_manager.publishActuatorsOfAUVs();
-                            if(systemNode != null){
+                            if (systemNode != null) {
                                 systemTFNode.publishSystemTF();
                             }
                         }
@@ -292,5 +290,5 @@ public class ROS_Node implements Runnable{
         } catch (Exception e) {
         }
     }
-    
+
 }

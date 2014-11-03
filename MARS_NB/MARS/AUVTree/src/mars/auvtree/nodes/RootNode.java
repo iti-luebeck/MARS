@@ -28,62 +28,60 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
-import org.openide.util.Utilities;
 import org.openide.util.datatransfer.PasteType;
-import org.openide.util.lookup.Lookups;
 
 /**
  * This node is just the root node of the tree. It is hided in the tree.
- * 
+ *
  * @author Christian
  * @author Thomsa Tosik
  */
-public class RootNode extends AbstractNode implements NodeListener,LookupListener{
+public class RootNode extends AbstractNode implements NodeListener, LookupListener {
 
     private final Lookup.Result<NodeRefreshEvent> lookupResult;
-    
-    public RootNode(HashMap s,AUV_Manager auv_manager) {
-        super(Children.create(new AUVNodeFactory(s,auv_manager), true));
+
+    public RootNode(HashMap s, AUV_Manager auv_manager) {
+        super(Children.create(new AUVNodeFactory(s, auv_manager), true));
         lookupResult = auv_manager.getLookup().lookupResult(NodeRefreshEvent.class);
         lookupResult.addLookupListener(this);
     }
-    
+
     @Override
     public void resultChanged(LookupEvent lookupEvent) {
     }
 
     @Override
     public void nodeDestroyed(NodeEvent ne) {
-        
+
     }
 
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
-        
+
     }
 
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
-        
+
     }
 
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
-        
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        
+
     }
- 
+
     @Override
     public Action[] getActions(boolean context) {
-        return new Action[] {
+        return new Action[]{
             PasteAction.get(PasteAction.class)
         };
     }
-    
+
     @Override
     protected void createPasteTypes(Transferable t, List<PasteType> s) {
         //super.createPasteTypes(t, s);
@@ -92,7 +90,7 @@ public class RootNode extends AbstractNode implements NodeListener,LookupListene
             s.add(p);
         }
     }
-    
+
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(CustomerFlavor.CUSTOMER_FLAVOR)) {

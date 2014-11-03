@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auvtree.nodes;
 
 import java.util.List;
@@ -11,17 +10,18 @@ import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 
 /**
- *
+ * Just the factory for the RootNode.
+ * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class RootNodeFactory extends ChildFactory<String>{
+public class RootNodeFactory extends ChildFactory<String> {
 
     public RootNodeFactory() {
     }
 
     @Override
     protected boolean createKeys(List<String> list) {
-        
+
         return true;
     }
 

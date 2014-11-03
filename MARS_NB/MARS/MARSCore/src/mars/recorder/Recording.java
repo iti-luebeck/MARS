@@ -18,6 +18,7 @@ import mars.xml.HashMapAdapter;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlRootElement(name="Recording")
+@Deprecated
 public class Recording {
     
     @XmlJavaTypeAdapter(HashMapAdapter.class)

@@ -22,33 +22,35 @@ import org.openide.modules.InstalledFileLocator;
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @deprecated Is now in the AUVTree
  */
-public class SimObTransferHandler extends TransferHandler{
+@Deprecated
+public class SimObTransferHandler extends TransferHandler {
 
     @Override
     public int getSourceActions(JComponent c) {
         BufferedImage img = null;
         try {
-            JTree simobTree = (JTree)c;
-            TreePath selPath = simobTree.getSelectionPath();   
-            if( selPath != null ){// to be save of "bad" clicking
-                if (selPath.getLastPathComponent() instanceof SimObject) { 
-                    SimObject simob = (SimObject)selPath.getLastPathComponent();
-                    if(!simob.getDndIcon().equals("")){
-                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+simob.getDndIcon(), "mars.core", false);
+            JTree simobTree = (JTree) c;
+            TreePath selPath = simobTree.getSelectionPath();
+            if (selPath != null) {// to be save of "bad" clicking
+                if (selPath.getLastPathComponent() instanceof SimObject) {
+                    SimObject simob = (SimObject) selPath.getLastPathComponent();
+                    if (!simob.getDndIcon().equals("")) {
+                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/" + simob.getDndIcon(), "mars.core", false);
                         img = ImageIO.read(file);
-                    }else{// no dnd image
-                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+"simob_undefined_dnd.png", "mars.core", false);
+                    } else {// no dnd image
+                        File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
                         img = ImageIO.read(file);
                     }
-                }else{//default auv image?
-                    File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/"+"simob_undefined_dnd.png", "mars.core", false);
+                } else {//default auv image?
+                    File file = InstalledFileLocator.getDefault().locate(".//Assets/Icons/" + "simob_undefined_dnd.png", "mars.core", false);
                     img = ImageIO.read(file);
                 }
             }
         } catch (IOException e) {
         }
-        
+
         this.setDragImage(img);
         this.setDragImageOffset(new Point(0, 0));
         return COPY_OR_MOVE;
@@ -57,7 +59,7 @@ public class SimObTransferHandler extends TransferHandler{
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
         if (action == MOVE) {// "delete" it
-            
+
         }
     }
 
@@ -77,10 +79,10 @@ public class SimObTransferHandler extends TransferHandler{
             }
 
             public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                JTree simobTree = (JTree)c;
-                TreePath selPath = simobTree.getSelectionPath();   
-                if (selPath.getLastPathComponent() instanceof SimObject) { 
-                    SimObject simob = (SimObject)selPath.getLastPathComponent();                 
+                JTree simobTree = (JTree) c;
+                TreePath selPath = simobTree.getSelectionPath();
+                if (selPath.getLastPathComponent() instanceof SimObject) {
+                    SimObject simob = (SimObject) selPath.getLastPathComponent();
                     return new TransferHandlerObject(TransferHandlerObjectType.SIMOBJECT, simob.getName());
                 }
                 return new TransferHandlerObject(TransferHandlerObjectType.NONE, "");
