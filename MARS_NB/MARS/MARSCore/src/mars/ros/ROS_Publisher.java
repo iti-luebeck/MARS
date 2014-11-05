@@ -7,16 +7,18 @@ package mars.ros;
 /**
  *
  * @author Thomas Tosik
- * @deprecated 
+ * @deprecated Should be replaced be the new MARSClient interface
  */
 @Deprecated
-public interface ROS_Publisher{   
+public interface ROS_Publisher {
+
     /**
-     * 
+     *
      */
     public void publishUpdate();
+
     /**
-     * 
+     *
      */
     public void publish();
 }

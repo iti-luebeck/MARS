@@ -7,7 +7,6 @@ package mars.core;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import org.openide.DialogDisplayer;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
@@ -19,7 +18,7 @@ import org.openide.windows.WindowManager;
 
 /**
  *
- * @author Tosik
+ * @author Thomas Tosik
  */
 @ActionID(
         category = "File",
@@ -37,10 +36,10 @@ public final class LoadConfigAction implements ActionListener {
         File basePath = InstalledFileLocator.getDefault().locate("config", "mars.core", false);
         //addFileFilter(new XMLFileFilter())
         File f = new FileChooserBuilder("libraries-dir").setTitle("Load Configuration").setDefaultWorkingDirectory(basePath).setDirectoriesOnly(true).setApproveText("Load").showOpenDialog();
-        if(f != null){
+        if (f != null) {
             TopComponent tc = WindowManager.getDefault().findTopComponent("MARSTopComponent");
             MARSTopComponent mtc = (MARSTopComponent) tc;
-            if(mtc != null){
+            if (mtc != null) {
                 mtc.loadSimState(f);
             }
         }

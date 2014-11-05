@@ -14,8 +14,9 @@ import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
+ * And action so that the user can switch back to the free camera view (WASD).
  *
- * @author Tosik
+ * @author Thomas Tosik
  */
 @ActionID(
         category = "View",
@@ -31,7 +32,7 @@ public final class FreeCameraAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         TopComponent tc = WindowManager.getDefault().findTopComponent("MARSTopComponent");
         MARSTopComponent mtc = (MARSTopComponent) tc;
-        if(mtc != null){
+        if (mtc != null) {
             mtc.activateFlyByCam();
         }
     }

@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.text.Document;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 /**
@@ -22,6 +21,7 @@ import javax.swing.tree.TreePath;
  * Meant to be used as a cell editor within a JTable or JTree
  * @author Thomas Tosik
  */
+@Deprecated
 public class TextFieldEditor extends JTextField implements CellEditor {
     Object value;
     TreePath treepath;

@@ -10,15 +10,15 @@ import mars.gui.plot.PhysicalExchangerListener;
 import java.util.Calendar;
 import javax.swing.text.DefaultCaret;
 import mars.sensors.CommunicationDevice;
-import mars.sensors.UnderwaterModem;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays a textual view of what is happening in an underwater modem.
+ * 
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSUnderwaterModem//EN",

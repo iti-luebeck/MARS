@@ -8,7 +8,8 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 /**
- *
+ * A filter for xml files. 
+ * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class XMLFileFilter extends FileFilter{

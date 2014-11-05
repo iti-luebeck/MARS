@@ -17,16 +17,18 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 
 /**
+ * A special node that is used for ROS stuff.
  *
  * @author Thomas Tosik
  */
 public class MARSNodeMain extends AbstractNodeMain {
+
     private ConnectedNode connectedNode;
     private EventListenerList listeners = new EventListenerList();
     NodeConfiguration nodeConf = null;
 
     /**
-     * 
+     *
      * @param nodeConf
      */
     public MARSNodeMain(NodeConfiguration nodeConf) {
@@ -35,7 +37,7 @@ public class MARSNodeMain extends AbstractNodeMain {
     }
 
     /**
-     * 
+     *
      * @param arg0
      */
     public void onStart(Node arg0) {
@@ -43,112 +45,110 @@ public class MARSNodeMain extends AbstractNodeMain {
     }
 
     /**
-     * 
+     *
      * @param connectedNode
      */
     @Override
     public void onStart(final ConnectedNode connectedNode) {
         Preconditions.checkState(this.connectedNode == null);
         this.connectedNode = connectedNode;
-        notifyFire( new RosNodeEvent(this) );
+        notifyFire(new RosNodeEvent(this));
     }
 
     /**
-     * 
+     *
      * @param node
      */
     @Override
     public void onShutdown(Node node) {
-        if(node != null){
+        if (node != null) {
             node.shutdown();
         }
     }
-    
+
     /**
-     * 
+     *
      * @param listener
      */
-    public void addRosNodeListener( RosNodeListener listener )
-    {
-        listeners.add( RosNodeListener.class, listener );
+    public void addRosNodeListener(RosNodeListener listener) {
+        listeners.add(RosNodeListener.class, listener);
     }
 
     /**
-     * 
+     *
      * @param listener
      */
-    public void removeRosNodeListener( RosNodeListener listener )
-    {
-        listeners.remove( RosNodeListener.class, listener );
+    public void removeRosNodeListener(RosNodeListener listener) {
+        listeners.remove(RosNodeListener.class, listener);
     }
 
     /**
-     * 
+     *
      * @param event
      */
-    protected synchronized void notifyFire( RosNodeEvent event )
-    {
-        for ( RosNodeListener l : listeners.getListeners( RosNodeListener.class ) )
-            l.fireEvent( event );
+    protected synchronized void notifyFire(RosNodeEvent event) {
+        for (RosNodeListener l : listeners.getListeners(RosNodeListener.class)) {
+            l.fireEvent(event);
+        }
     }
-    
+
     /**
-     * 
+     *
      * @param topic
      * @param msg_type
      * @return
      */
-    public Publisher newPublisher(String topic, String msg_type){
-        return connectedNode.newPublisher(topic, msg_type); 
+    public Publisher newPublisher(String topic, String msg_type) {
+        return connectedNode.newPublisher(topic, msg_type);
     }
-    
+
     /**
-     * 
+     *
      * @param topic
      * @param msg_type
      * @param msg_listener
-     * @deprecated 
+     * @deprecated
      */
     @Deprecated
-    public void newSubscriber(String topic, String msg_type, MessageListener msg_listener){
+    public void newSubscriber(String topic, String msg_type, MessageListener msg_listener) {
         //connectedNode.newSubscriber(topic, msg_type, msg_listener);
     }
-    
+
     /**
-     * 
+     *
      * @param topic
      * @param msg_type
      * @return
      */
-    public Subscriber newSubscriber(String topic, String msg_type){
+    public Subscriber newSubscriber(String topic, String msg_type) {
         return connectedNode.newSubscriber(topic, msg_type);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public MessageFactory getMessageFactory(){
+    public MessageFactory getMessageFactory() {
         return connectedNode.getTopicMessageFactory();
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
     public GraphName getDefaultNodeName() {
         return nodeConf.getNodeName();
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public boolean isExisting(){
-        if(connectedNode != null){
+    public boolean isExisting() {
+        if (connectedNode != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

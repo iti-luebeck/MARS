@@ -15,7 +15,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays the minimap.
+ * 
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSMap//EN",
