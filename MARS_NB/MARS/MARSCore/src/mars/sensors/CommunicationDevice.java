@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.CommunicationDeviceEvent;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.CommunicationManager;
 import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;

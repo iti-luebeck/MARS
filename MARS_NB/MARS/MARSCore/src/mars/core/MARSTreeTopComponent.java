@@ -34,7 +34,7 @@ import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;

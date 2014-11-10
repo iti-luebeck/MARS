@@ -6,7 +6,7 @@ package mars.ros;
 
 import java.util.ArrayList;
 import java.util.List;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 

@@ -271,7 +271,6 @@ public class Initializer {
         setupCrossHairs();
         setupServer();
         setupAdvServer();
-        setupPublisher();
         //setupGlow();
         //setupFishEye();
         //setupLensFlare();
@@ -284,7 +283,7 @@ public class Initializer {
     }
 
     /**
-     *
+     * 
      */
     public void cleanup() {
         if (fppS != null) {
@@ -334,11 +333,8 @@ public class Initializer {
         hideCrossHairs(mars_settings.isCrossHairsEnabled());
     }
 
-    /*
-     * setting up the raw_server for communication with the auvs
-     */
     /**
-     *
+     * setting up the raw_server for communication with the auv
      */
     public void setupServer() {
         if (mars_settings.getRAWEnabled()) {
@@ -363,7 +359,7 @@ public class Initializer {
     }
 
     /**
-     *
+     * Setup the generic publisher. Used to publish all sensor data.
      */
     public void setupAdvServer() {
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
@@ -389,13 +385,6 @@ public class Initializer {
                 Exceptions.printStackTrace(ex);
             }
         }
-    }
-
-    /**
-     *
-     */
-    public void setupPublisher() {
-
     }
 
     /**
@@ -733,18 +722,6 @@ public class Initializer {
      */
     public void setupPlaneWater() {
         // A translucent/transparent texture, similar to a window frame.
-        /*Box boxshape = new Box(new Vector3f(0f,0f,0f), 1000f,0.01f,1000f);
-         water_plane = new Geometry("water_plane", boxshape);
-         water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
-         Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
-         mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterFilepath()));
-         mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-         water_plane.setMaterial(mat_tt);
-         water_plane.setQueueBucket(Bucket.Transparent);
-         rootNode.attachChild(water_plane);*/
-        //hidePlaneWater(mars_settings.isPlaneWaterEnabled());
-
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 if (water_plane != null) {
@@ -754,7 +731,6 @@ public class Initializer {
                 water_plane = new Geometry("water_plane", boxshape);
                 water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                //assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
                 mat_tt.setTexture("ColorMap", assetManager.loadTexture(mars_settings.getPlanewaterFilepath()));
                 mat_tt.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
                 water_plane.setMaterial(mat_tt);
@@ -957,24 +933,8 @@ public class Initializer {
         z_axis.updateGeometricState();
         axisNode.attachChild(z_axis);
 
-        /*//Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.6f)));
-         Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(0.615f)));
-         Material length_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         length_axis_mat.setColor("Color", ColorRGBA.Red);
-         length_axis.setMaterial(length_axis_mat);
-         //length_axis.setLocalTranslation(new Vector3f(0f,-2f,0f));
-         length_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
-         length_axis.updateGeometricState();
-         axisNode.attachChild(length_axis);*/
         rootNode.attachChild(axisNode);
-        /*Geometry length_axis = new Geometry("length_axis", new Arrow(Vector3f.UNIT_Z.mult(2.87f)));
-         Material length_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-         length_axis_mat.setColor("Color", ColorRGBA.Red);
-         length_axis.setMaterial(length_axis_mat);
-         length_axis.setLocalTranslation(new Vector3f(0f,0f,-0.32f));
-         //length_axis.setLocalTranslation(new Vector3f(0f,0f,-0.615f));
-         length_axis.updateGeometricState();
-         rootNode.attachChild(length_axis);*/
+
         hideAxis(mars_settings.isAxisEnabled());
     }
 
@@ -1493,8 +1453,6 @@ public class Initializer {
     }
 
     private void setupFlow() {
-        //assetManager.registerLocator("Assets/Textures/Flow", FileLocator.class);
-
         Texture heightMapImage = assetManager.loadTexture(
                 mars_settings.getFlowMapX());
         heightMapImage.getImage().setFormat(Format.Luminance16);//fix for format problems
@@ -1898,7 +1856,6 @@ public class Initializer {
                 int auv_pos_y = (int) (((float) getPollution_image_width() / ((float) getPollution_image_width() * flow_scale.z)) * relSensorPos.z);
 
                 int pollution = (int) getPollutionmap().getTrueHeightAtPoint(auv_pos_x, auv_pos_y);
-                //System.out.println(auv_pos_x + "/" + auv_pos_y + " pollution: " + pollution);
 
                 return pollution;
             } else {//out of pollutionmap bound. no pollution
@@ -1916,7 +1873,8 @@ public class Initializer {
     }
 
     /**
-     *
+     * SkyDome stuff.
+     * 
      * @return
      */
     public SkyControl getSkyControl() {
@@ -1924,7 +1882,8 @@ public class Initializer {
     }
 
     /**
-     *
+     * SkyDome stuff.
+     * 
      * @return
      */
     public TimeOfDay getTimeOfDay() {
@@ -1932,7 +1891,8 @@ public class Initializer {
     }
 
     /**
-     *
+     * SkyDome stuff.
+     * 
      * @param hour
      */
     public void resetTimeOfDay(final float hour) {

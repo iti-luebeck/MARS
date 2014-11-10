@@ -14,7 +14,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.texture.FrameBuffer;
 
 /**
- * We want to see some WireFrames.
+ * We want to see some WireFrames with a changeable color.
  *
  * @author Thomas Tosik
  */

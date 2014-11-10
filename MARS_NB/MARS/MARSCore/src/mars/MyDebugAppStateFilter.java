@@ -30,26 +30,25 @@ public class MyDebugAppStateFilter implements DebugAppStateFilter {
     public MyDebugAppStateFilter(MARS_Settings mars_settings, AUV_Manager auvManager) {
         this.mars_settings = mars_settings;
         this.auvManager = auvManager;
-        //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Setting up DebugAppStateFilter", "");
     }
 
     /**
+     * Checks if a debug object should be displayed. For example wireframe,
+     * bounding box, collison box.
      *
-     * @param o
-     * @return
+     * @param obj
+     * @return True if debug object should be displayed. Otherwise false.
      */
     @Override
-    public boolean displayObject(Object o) {
-        //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Try to display DebugObject: " + o, "");
+    public boolean displayObject(Object obj) {
         if (mars_settings.getPhysicsDebug()) {
             return true;
         } else {
-            if (o instanceof MyCustomGhostControl) {//we dont want to see them..ever
+            if (obj instanceof MyCustomGhostControl) {//we dont want to see them..ever
                 return false;
             } else {
-                if (o instanceof RigidBodyControl) {
-                    //Logger.getLogger(MyDebugAppStateFilter.class.getName()).log(Level.INFO, "Displaying DebugObject: " + o, "");
-                    RigidBodyControl control = (RigidBodyControl) o;
+                if (obj instanceof RigidBodyControl) {
+                    RigidBodyControl control = (RigidBodyControl) obj;
                     Object userObject = control.getUserObject();
                     if (userObject != null && userObject instanceof Spatial) {
                         Spatial spatial = (Spatial) userObject;

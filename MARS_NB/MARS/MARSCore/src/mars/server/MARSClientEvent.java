@@ -5,7 +5,7 @@
 package mars.server;
 
 import java.util.EventObject;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 
 /**

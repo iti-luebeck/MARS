@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 

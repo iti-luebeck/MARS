@@ -2,11 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.PhysicalExchange;
 
-import mars.Helper.Noise;
-import mars.states.SimState;
-import mars.ros.ROS;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -25,11 +22,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.Helper.Noise;
+import mars.PhysicalEnvironment;
+import mars.PropertyChangeListenerSupport;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.ros.MARSNodeMain;
+import mars.ros.ROS;
 import mars.ros.TF_ROS_Publisher;
 import mars.sensors.Sensor;
+import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -208,7 +210,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     @Override
     public void setName(String name) {
         String old = getName();
-        //PhysicalExchangerName = name;
         variables.put("name", name);
         PhysicalExchanger_Node.setName(name);
         fire("name", old, name);
@@ -216,7 +217,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
     /**
      *
-     * @return
+     * @return The unique name of the sensor/actuator.
      */
     @Override
     public String getName() {
@@ -224,13 +225,13 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     *
+     * Reset the sensors/actuator to the default settings.
      */
     public abstract void reset();
 
     /**
      *
-     * @return
+     * @return A no-depth clone copy.
      */
     public abstract PhysicalExchanger copy();
 
@@ -248,7 +249,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     *
+     * Deattach from all nodes, filters.....
      */
     public void cleanup() {
         auv_node.detachChild(PhysicalExchanger_Node);
@@ -285,9 +286,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     /**
      *
      */
-    /*public void setEnabled(boolean enabled) {
-     variables.put("enabled", enabled);
-     }*/
     @Override
     public String toString() {
         return getName();
@@ -297,6 +295,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @return
      */
+    @Override
     public String getROS_MSG_Type() {
         return ros_msg_type;
     }
@@ -304,6 +303,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     /**
      *
      */
+    @Override
     public void initROS() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -313,6 +313,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      * @param ros_node
      * @param auv_name
      */
+    @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         setROS_Node(ros_node);
         tf_pub.initROS(ros_node, auv_name);
@@ -322,6 +323,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @param ros_msg_type
      */
+    @Override
     public void setROS_MSG_Type(String ros_msg_type) {
         this.ros_msg_type = ros_msg_type;
     }
@@ -330,6 +332,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @return
      */
+    @Override
     public MARSNodeMain getMARS_Node() {
         return mars_node;
     }
@@ -338,6 +341,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @param ros_node
      */
+    @Override
     public void setROS_Node(MARSNodeMain ros_node) {
         this.mars_node = ros_node;
     }
@@ -426,6 +430,8 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
+     * The update method that will be called by the auvManager, hence by the
+     * main mars update loop. Should be node safe
      *
      * @param tpf
      */
@@ -631,16 +637,17 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @param path
      */
+    @Deprecated
     public abstract void updateState(TreePath path);
 
     /**
-     *
+     * Make a periodic action on call. Called by publishDataUpdate.
      */
     public void publishData() {
     }
 
     /**
-     *
+     * The update loop for publishing of data from a sensor.
      */
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();

@@ -10,7 +10,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.input.FlyByCamera;
 
 /**
- * The correspnding AppState to the AdvancedFlyCam.
+ * The correspnding AppState to the AdvancedFlyCam. Nothing special inside here.
  *
  * @author Thomas Tosik
  */

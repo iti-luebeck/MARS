@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Collider;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.PickHint;
 import mars.sensors.sonar.Sonar;
 import mars.sensors.sonar.ConeType;

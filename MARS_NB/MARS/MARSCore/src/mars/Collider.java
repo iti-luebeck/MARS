@@ -10,9 +10,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
 
 /**
- * This class can be used when you need to have nodes collidable, and check for
+ * This class can be used when you need collidable nodes, and check for
  * them, but cant add them to a second node. Sice The ScenGraph doesn't allow
- * multiple parents
+ * multiple parents. Copy from JME Nodes(?).
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */

@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.PhysicalExchange;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 
 /**
  * Use this interface if you want to move sensors/actuators with servos for
- * example
+ * example.
  *
  * @author Thomas Tosik
  */

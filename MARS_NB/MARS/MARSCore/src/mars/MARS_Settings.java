@@ -65,7 +65,6 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     private HashMap<String, Object> Misc;
     private HashMap<String, Object> Camera;
     private HashMap<String, Object> Record;
-    //private HashMap<String,Object> FPS;
 
     @XmlTransient
     private Initializer initer;
@@ -99,17 +98,12 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     private String terrainfilepath_hm = "image7.jpg";
     private String terrainfilepath_cm = "image8.jpg";
 
-    //@XmlElement(name = "terrain_position")
-    //@XmlAttribute
     private Vector3f terrain_position = new Vector3f(-60.0f, -15.0f, -30.0f);
     private ColorRGBA light_color = ColorRGBA.White;
     private Vector3f light_direction = new Vector3f(0f, -1f, 0f);
-    //@XmlTransient
-    //@XmlElement(name = "PhysicalEnvironment")
     private PhysicalEnvironment physical_environment;
     private int framerate = 60;
     private int FrameLimit = 60;
-    //private boolean FPS = true;
     private boolean debug = false;
     private float tileLength = 0.4f;
     private float tileHeigth = 12f;
@@ -122,7 +116,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     }
 
     /**
-     *
+     * Called by JAXB after JAXB loaded the basic stuff.
      */
     public void initAfterJAXB() {
         Physics = (HashMap<String, Object>) settings.get("Physics");
@@ -203,7 +197,8 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     }
 
     /**
-     *
+     * Called to update world stuff when parameters changed.
+     * 
      * @param target
      * @param hashmapname
      */
@@ -250,6 +245,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
      *
      * @param path
      */
+    @Override
     public void updateState(TreePath path) {
         if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
             if (path.getParentPath().getLastPathComponent().toString().equals("Settings")) {

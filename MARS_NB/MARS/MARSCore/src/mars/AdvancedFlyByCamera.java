@@ -36,6 +36,7 @@ public class AdvancedFlyByCamera extends FlyByCamera {
     }
 
     /**
+     * This method checks the rotation. Also the overturn check happens here.
      *
      * @param value
      * @param axis

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.cable.Cable;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.PointVisualizer;

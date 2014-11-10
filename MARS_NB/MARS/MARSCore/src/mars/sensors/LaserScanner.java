@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 
 /**
  * Tha base class for all lase scanners. Similiar to the sonar.

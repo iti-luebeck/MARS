@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.PhysicalExchange;
 
 import com.jme3.math.Matrix3f;
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ public interface Manipulating {
     /**
      *
      * @param name
-     * @return
+     * @return The actuator/sensor that is attached as an moveable object.
      */
     public Moveable getSlave(String name);
 
     /**
      *
-     * @return
+     * @return A list of all attached sensors/actuators that will be moved.
      */
     public ArrayList getSlavesNames();
 

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;

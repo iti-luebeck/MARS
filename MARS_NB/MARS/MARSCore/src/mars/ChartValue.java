@@ -13,7 +13,7 @@ public interface ChartValue {
 
     /**
      *
-     * @return
+     * @return The value that should be put into the chart.
      */
     public Object getChartValue();
 

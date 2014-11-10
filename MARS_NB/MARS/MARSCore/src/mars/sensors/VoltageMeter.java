@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;

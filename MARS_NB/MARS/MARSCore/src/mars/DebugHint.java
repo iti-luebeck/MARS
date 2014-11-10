@@ -6,6 +6,9 @@ package mars;
 
 /**
  *
+ * Used in DebugAppStateFilter. Determines if debug stuff of physics for
+ * nodes/objects is shown.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class DebugHint {

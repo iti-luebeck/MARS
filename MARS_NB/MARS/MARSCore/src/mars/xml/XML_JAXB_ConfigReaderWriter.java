@@ -26,7 +26,7 @@ import mars.Helper.Helper;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.recorder.Recording;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;

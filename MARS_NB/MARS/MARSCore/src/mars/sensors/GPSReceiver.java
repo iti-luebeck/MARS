@@ -7,7 +7,6 @@ package mars.sensors;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -16,7 +15,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.geodesy.Ellipsoid;
 import mars.geodesy.GeodeticCalculator;
 import mars.geodesy.GlobalPosition;
@@ -24,7 +23,6 @@ import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
-import sensor_msgs.NavSatFix;
 
 /**
  * A GPS sensor. Translates MARS world coordinates to GPS. Needs a reference

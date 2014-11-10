@@ -5,8 +5,8 @@
 package mars;
 
 /**
- * This class is used to determine if an Object is pickable or not. Is used with
- * setUserData.
+ * This class is used to determine if an object is pickable or not. Is used with
+ * setUserData. Important for GUI/Ray stuff.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */

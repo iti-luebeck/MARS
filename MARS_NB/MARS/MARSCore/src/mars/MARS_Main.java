@@ -78,18 +78,15 @@ public class MARS_Main extends SimpleApplication {
     AdvancedFlyByCamera advFlyCam;
 
     //nifty(gui) stuff
-    private NiftyJmeDisplay niftyDisplay;
-    private Nifty nifty;
-    private Element progressBarElement;
-    private TextRenderer textRenderer;
     private boolean load = false;
     private Future simStateFuture = null;
     private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(2);
 
+    //the speed settings for the speed-up-simulation button
     private float[] speeds = new float[8];
     private int speedsCount = 3;//default speed
 
-    //progress bar (nb)
+    //progress bar (nbp)
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("MARS_Main");
 
     /**
@@ -97,7 +94,6 @@ public class MARS_Main extends SimpleApplication {
      */
     public MARS_Main() {
         super();
-        //Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
         speeds[0] = 0.25f;
         speeds[1] = 0.5f;
         speeds[2] = 0.75f;
@@ -191,8 +187,8 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /*
-    * Used to map the folders correctly with NetBeans Platform
-    */
+     * Used to map the folders correctly with NetBeans Platform
+     */
     private void initAssetPaths() {
         File file = InstalledFileLocator.getDefault().locate("Assets/Images", "mars.core", false);
         String absolutePath = file.getAbsolutePath();
@@ -350,21 +346,11 @@ public class MARS_Main extends SimpleApplication {
                 return true;
             }
         });
-        /*try {
-         //wait till ros killed
-         Object obj = simStateFuture.get(1000, TimeUnit.MILLISECONDS);
-         } catch (InterruptedException ex) {
-         Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (ExecutionException ex) {
-         Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (TimeoutException ex) {
-         Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
         super.stop();
     }
 
     /**
-     *
+     * Create and add a SimState to MARS.
      */
     public void startSimState() {
         endStart();
@@ -378,6 +364,10 @@ public class MARS_Main extends SimpleApplication {
         });
     }
 
+    /*
+     * Disable the StartState
+     */
+    @Deprecated
     private void endStart() {
         Future startStateFuture = this.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -393,6 +383,7 @@ public class MARS_Main extends SimpleApplication {
      *
      * @param TreeTopComp
      */
+    @Deprecated
     public void setTreeTopComp(MARSTreeTopComponent TreeTopComp) {
         this.TreeTopComp = TreeTopComp;
     }
@@ -401,6 +392,7 @@ public class MARS_Main extends SimpleApplication {
      *
      * @return
      */
+    @Deprecated
     public MARSTreeTopComponent getTreeTopComp() {
         return TreeTopComp;
     }
@@ -478,29 +470,7 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void initNifty() {
-        assetManager.registerLocator("Assets/Interface", FileLocator.class);
-        assetManager.registerLocator("Assets/Icons", FileLocator.class);
-        niftyDisplay = new NiftyJmeDisplay(assetManager,
-                inputManager,
-                audioRenderer,
-                guiViewPort);
-        nifty = niftyDisplay.getNifty();
-
-        nifty.fromXml("nifty_energy_popup.xml", "start");
-
-        //set logging to less spam
-        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
-        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
-
-        guiViewPort.addProcessor(niftyDisplay);
-    }
-
-    /**
+     * Set the hover menus of AUVs to a position.
      *
      * @param auv
      * @param x
@@ -519,6 +489,7 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
+     * Set the visibility of the hover menues.
      *
      * @param visible
      */
@@ -535,7 +506,8 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
-     *
+     * Make the speed-up symbol appear if simulation is speeded up.
+     * 
      * @param visible
      */
     public void setSpeedMenu(final boolean visible) {
@@ -548,57 +520,6 @@ public class MARS_Main extends SimpleApplication {
                 return null;
             }
         });
-    }
-
-    /**
-     *
-     * @param getFocus
-     */
-    public void onFocus(boolean getFocus) {
-    }
-
-    /**
-     *
-     * @param progress
-     * @param loadingText
-     */
-    public void setProgress(final float progress, final String loadingText) {
-        //since this method is called from another thread, we enqueue the changes to the progressbar to the update loop thread
-        enqueue(new Callable() {
-
-            public Object call() throws Exception {
-                final int MIN_WIDTH = 32;
-                int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
-                progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
-                progressBarElement.getParent().layoutElements();
-
-                textRenderer.setText(loadingText);
-                return null;
-            }
-        });
-
-    }
-
-    /**
-     *
-     * @param progress
-     * @param loadingText
-     */
-    public void setProgressWithoutEnq(final float progress, String loadingText) {
-        final int MIN_WIDTH = 32;
-        int pixelWidth = (int) (MIN_WIDTH + (progressBarElement.getParent().getWidth() - MIN_WIDTH) * progress);
-        progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
-        progressBarElement.getParent().layoutElements();
-
-        textRenderer.setText(loadingText);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Nifty getNifty() {
-        return nifty;
     }
 
     /**
@@ -755,7 +676,8 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
-     *
+     * Disable the statistics state properly so it is not shown anymore.
+     * 
      * @param darken
      */
     public void setStatsStateDark(boolean darken) {
@@ -799,13 +721,5 @@ public class MARS_Main extends SimpleApplication {
      */
     public void setConfigName(String configName) {
         configManager.setConfigName(configName);
-    }
-
-    /**
-     *
-     * @param progr
-     */
-    public void setProgressHandle(ProgressHandle progr) {
-        //this.progr = progr;
     }
 }

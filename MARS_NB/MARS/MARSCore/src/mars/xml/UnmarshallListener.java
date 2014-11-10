@@ -7,7 +7,7 @@ package mars.xml;
 import javax.xml.bind.Unmarshaller.Listener;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.recorder.Recording;
 import mars.accumulators.Accumulator;
 import mars.auv.AUV_Parameters;
