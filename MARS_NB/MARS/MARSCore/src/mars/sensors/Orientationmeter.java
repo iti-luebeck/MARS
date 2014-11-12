@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;

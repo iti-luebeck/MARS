@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.misc;
 
 import java.util.EventObject;
 import mars.sensors.CommunicationDevice;

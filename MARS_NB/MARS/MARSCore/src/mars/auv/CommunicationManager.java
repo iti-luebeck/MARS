@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import mars.CommunicationType;
+import mars.misc.CommunicationType;
 import mars.PhysicalEnvironment;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.PhysicalExchange.AUVObject;
-import mars.PropertyChangeListenerSupport;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
 /**

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
-import mars.PickHint;
+import mars.misc.PickHint;
 
 /**
  * A special type of SimObject the simulates and oil burst (pipeline) through

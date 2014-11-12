@@ -13,7 +13,7 @@ import info.monitorenter.gui.chart.controls.LayoutFactory;
 import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import java.awt.Color;
 import java.util.ArrayList;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.auv.AUV;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;

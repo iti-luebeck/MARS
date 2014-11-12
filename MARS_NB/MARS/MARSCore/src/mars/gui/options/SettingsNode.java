@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import mars.MARS_Settings;
-import mars.PropertyChangeListenerSupport;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
 import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import org.openide.ErrorManager;

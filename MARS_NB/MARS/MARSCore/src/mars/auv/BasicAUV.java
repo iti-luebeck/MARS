@@ -6,7 +6,7 @@ package mars.auv;
 
 import com.jme3.renderer.queue.RenderQueue;
 import javax.swing.tree.TreePath;
-import mars.CollisionType;
+import mars.object.CollisionType;
 import mars.actuators.Thruster;
 import mars.actuators.Actuator;
 import mars.sensors.Sensor;
@@ -65,8 +65,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import jme3tools.optimize.LodGenerator;
-import mars.BuoyancyType;
-import mars.DebugHint;
+import mars.object.BuoyancyType;
+import mars.misc.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.Keys;
@@ -77,7 +77,7 @@ import mars.MARS_Main;
 import mars.PhysicalExchange.Manipulating;
 import mars.PhysicalExchange.Moveable;
 import mars.control.MyCustomGhostControl;
-import mars.PickHint;
+import mars.misc.PickHint;
 import mars.accumulators.Accumulator;
 import mars.actuators.BallastTank;
 import mars.actuators.visualizer.PointVisualizer;
@@ -272,7 +272,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     }
 
     /**
-     *
+     * Called by JAXB after object creation.
      */
     public void initAfterJAXB() {
         try {
@@ -2393,7 +2393,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     }
 
     /**
-     *
+     * GUI stuff.
      * @param selected
      */
     @Override

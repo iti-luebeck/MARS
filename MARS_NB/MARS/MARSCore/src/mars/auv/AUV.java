@@ -17,20 +17,21 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.ChartValue;
-import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
-import mars.control.MyCustomGhostControl;
+import mars.PhysicalEnvironment;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
-import mars.states.SimState;
 import mars.actuators.Actuator;
+import mars.control.MyCustomGhostControl;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.PhysicalExchange.PhysicalExchanger;
 import mars.gui.tree.UpdateState;
+import mars.misc.ChartValue;
+import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
+import mars.states.SimState;
 
 /**
  * An basic interface for AUVs like "Hanse".
@@ -40,7 +41,7 @@ import mars.sensors.Sensor;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, UpdateState, ChartValue {
+public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObject {
 
     /**
      *
@@ -73,22 +74,19 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
     public void updateWaypoints(float tpf);
 
     /**
-     *
+     * Try to send all data from the sensors into the "network".
      */
     public void publishSensorsOfAUV();
 
     /**
-     *
+     * Try to send all data from the actuators into the "network"
      */
     public void publishActuatorsOfAUV();
 
     /**
-     *
+     * Set all the forces to zero.
      */
     public void clearForces();
-    /*
-     *
-     */
 
     /**
      *
@@ -97,12 +95,13 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
-     * @return
+     * @return Unique name of the AUV.
      */
     public String getName();
 
     /**
-     *
+     * Unique name of the AUV.
+     * 
      * @param auv_name
      */
     public void setName(String auv_name);
@@ -130,7 +129,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
-     * @return
+     * @return Main AUV node used for the scenegraph (rootNode).
      */
     public Node getAUVNode();
 
@@ -142,17 +141,14 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
-     * @return
+     * @return The Geometry representing the mass center of the auv.
      */
     public Geometry getMassCenterGeom();
 
     /**
-     *
+     * Initialize method called after AUV creation or if enabled.
      */
     public void init();
-    /*
-     *
-     */
 
     /**
      *
@@ -161,7 +157,9 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
+     * @deprecated
      */
+    @Deprecated
     public void initROS();
 
     /**
@@ -173,32 +171,32 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
-     * @return
+     * @return All actuators registered to this AUV.
      */
     public HashMap<String, Actuator> getActuators();
 
     /**
      *
-     * @return
+     * @return All sensors registered to this AUV.
      */
     public HashMap<String, Sensor> getSensors();
 
     /**
      *
-     * @return
+     * @return All accumulators registered to this AUV.
      */
     public HashMap<String, Accumulator> getAccumulators();
 
     /**
      *
      * @param key
-     * @return
+     * @return A specific accumulator by its unique name.
      */
     public Accumulator getAccumulator(String key);
 
     /**
      *
-     * @return
+     * @return The AUVParameters object.
      */
     public AUV_Parameters getAuv_param();
 
@@ -211,14 +209,14 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
     /**
      *
      * @param classNameString
-     * @return
+     * @return All sensors by a specific class.
      */
     public ArrayList getSensorsOfClass(String classNameString);
 
     /**
      *
      * @param classNameString
-     * @return
+     * @return True if AUV has a specific sensor type.
      */
     public boolean hasSensorsOfClass(String classNameString);
 
@@ -275,7 +273,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
 
     /**
      *
-     * @return
+     * @return The main 3D model of the AUV.
      */
     public Spatial getAUVSpatial();
     /*
@@ -283,7 +281,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
      */
 
     /**
-     *
+     * Clears all offscreen renderes. Cameras, area drag.
      */
     public void cleanupOffscreenView();
 
@@ -291,9 +289,6 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
      *
      */
     public void cleanupAUV();
-    /*
-     *
-     */
 
     /**
      *
@@ -346,6 +341,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue {
      *
      * @param mars_node
      */
+    @Deprecated
     public void setROS_Node(MARSNodeMain mars_node);
 
     /**

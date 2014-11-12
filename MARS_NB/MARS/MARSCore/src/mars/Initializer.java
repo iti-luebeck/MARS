@@ -4,6 +4,8 @@
  */
 package mars;
 
+import mars.misc.WireProcessor;
+import mars.misc.Collider;
 import java.nio.ShortBuffer;
 import mars.states.SimState;
 import com.jme3.asset.AssetManager;

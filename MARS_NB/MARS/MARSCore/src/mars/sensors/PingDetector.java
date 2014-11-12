@@ -16,7 +16,7 @@ import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;

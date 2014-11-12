@@ -10,7 +10,7 @@ import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.CommunicationDeviceEvent;
+import mars.misc.CommunicationDeviceEvent;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;

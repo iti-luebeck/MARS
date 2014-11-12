@@ -5,7 +5,7 @@
 package mars.gui.plot;
 
 import java.util.EventListener;
-import mars.CommunicationDeviceEvent;
+import mars.misc.CommunicationDeviceEvent;
 
 /**
  * Same as AUVListener but for PhysicalExchangers.

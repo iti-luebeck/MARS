@@ -37,7 +37,7 @@ import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.PickHint;
+import mars.misc.PickHint;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;

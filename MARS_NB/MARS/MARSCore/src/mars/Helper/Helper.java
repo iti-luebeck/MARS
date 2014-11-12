@@ -14,7 +14,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import mars.PickHint;
+import mars.misc.PickHint;
 
 /**
  * This class has various basic static methods that are used everywhere.

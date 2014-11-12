@@ -21,7 +21,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import mars.CollisionType;
+import mars.object.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
@@ -38,8 +38,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.PickHint;
+import mars.misc.PickHint;
 import mars.gui.tree.HashMapWrapper;
+import mars.object.MARSObject;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -51,7 +52,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement(name = "SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({OilBurst.class})
-public class SimObject {
+public class SimObject implements MARSObject{
 
     /**
      *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.misc;
 
 /*
  * Copyright (c) 2009-2010 jMonkeyEngine

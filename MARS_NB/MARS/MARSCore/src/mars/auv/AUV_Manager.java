@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
@@ -18,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
-import mars.Collider;
+import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
@@ -108,7 +107,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
 
     /**
      *
-     * @return
+     * @return True if no AUVs are registered.
      */
     public boolean isEmpty() {
         return auvs.isEmpty();
@@ -125,7 +124,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
 
     /**
      *
-     * @return
+     * @return All AUVs registered.
      */
     public HashMap<String, AUV> getAUVs() {
         return auvs;
@@ -145,7 +144,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
 
     /**
      *
-     * @return
+     * @return All AUV classes.
      */
     public ArrayList<Class<? extends AUV>> getAUVClasses() {
         ArrayList<Class<? extends AUV>> ret = new ArrayList<Class<? extends AUV>>();
@@ -162,7 +161,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     /**
      *
      * @param classNameString
-     * @return
+     * @return All AUVs of a specific class.
      */
     public ArrayList getAUVsOfClass(String classNameString) {
         ArrayList ret = new ArrayList();
@@ -182,7 +181,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     /**
      *
      * @param classNameString
-     * @return
+     * @return True if an AUV exists with a specific class.
      */
     public boolean hasAUVsOfClass(String classNameString) {
         for (String elem : auvs.keySet()) {
@@ -299,6 +298,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     /**
+     * Updates all AUVs.
      *
      * @param tpf
      */
@@ -579,6 +579,9 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         }
     }
 
+    /*
+     * Make some loading so we don't have to wait longer in MARS. Used for deactivation.
+     */
     private void preloadAUV(AUV auv) {
         //if(auv.getAuv_param().isEnabled()){
         auv.setState(simstate);
@@ -616,12 +619,18 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         }
     }
 
+    /*
+    * Adds the AUV node to the scengraph(rootNode).
+    */
     private void addAUVToScene(AUV auv) {
         auv.addDragOffscreenView();
         addAUVToNode(auv, AUVsNode);
         addAUVToBulletAppState(auv, bulletAppState);
     }
 
+    /*
+    * Removes the AUV node from the scengraph(rootNode).
+    */
     private void removeAUVFromScene(AUV auv) {
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
         if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
@@ -650,6 +659,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      *
      * @param node
      */
+    @Deprecated
     private void addAUVsToNode(Node node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
         for (String elem : auvs.keySet()) {
@@ -689,7 +699,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     /**
-     *
+     * Add the AUV to the mini-map state.
      * @param auv
      */
     public void addAUVtoMap(AUV auv) {
@@ -710,6 +720,9 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         }
     }
 
+    /*
+    * Call the init method of all AUVs.
+    */
     private void initAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
         auv.init();
@@ -722,7 +735,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     /**
-     *
+     * GUI stuff.
      */
     public void deselectAllAUVs() {
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
@@ -733,7 +746,8 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     /**
-     *
+     * GUI stuff.
+     * 
      * @param auv
      */
     public void deselectAUV(AUV auv) {
@@ -753,7 +767,8 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     /**
-     *
+     * GUI stuff.
+     * 
      * @return
      */
     public AUV getSelectedAUV() {

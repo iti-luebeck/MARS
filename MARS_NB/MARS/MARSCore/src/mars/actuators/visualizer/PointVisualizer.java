@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;

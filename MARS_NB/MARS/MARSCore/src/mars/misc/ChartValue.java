@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.misc;
 
 /**
  * This is interface must be implemented if you want to add values to a chart.

@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Noise;
 import mars.PhysicalEnvironment;
-import mars.PropertyChangeListenerSupport;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.ros.MARSNodeMain;

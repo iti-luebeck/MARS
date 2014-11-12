@@ -4,6 +4,8 @@
  */
 package mars;
 
+import mars.misc.MyOBJLoader;
+import mars.states.AdvancedFlyByCamera;
 import com.jme3.app.FlyCamAppState;
 import java.util.logging.Level;
 import java.util.logging.Logger;

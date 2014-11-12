@@ -18,7 +18,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.tree.TreePath;
-import mars.Collider;
+import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.gui.tree.UpdateState;

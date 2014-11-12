@@ -93,7 +93,7 @@ public class WayPoints extends Node {
     }
 
     /**
-     *
+     * Updates the gradient effect of all connected waypoints.
      */
     public void updateGradient() {
         Future fut = simauv.enqueue(new Callable() {
@@ -120,7 +120,7 @@ public class WayPoints extends Node {
     }
 
     /**
-     *
+     * Updates the color of all connected waypoints.
      */
     public void updateColor() {
         Future fut = simauv.enqueue(new Callable() {
@@ -162,7 +162,7 @@ public class WayPoints extends Node {
 
     /**
      *
-     * @return
+     * @return A list of all waypoints.
      */
     public ArrayList getWaypoints() {
         return waypoints;
@@ -171,7 +171,7 @@ public class WayPoints extends Node {
     /**
      *
      * @param index
-     * @return
+     * @return A specific waypoint at point index.
      */
     public Vector3f getWaypoint(int index) {
         return (Vector3f) waypoints.get(index);
@@ -190,7 +190,7 @@ public class WayPoints extends Node {
     }
 
     /**
-     *
+     * Clears all waypoints.
      */
     public void reset() {
         waypoints.clear();

@@ -12,7 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;

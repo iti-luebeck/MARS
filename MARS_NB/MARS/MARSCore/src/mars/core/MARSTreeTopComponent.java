@@ -28,7 +28,7 @@ import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.Helper.ClassComparator;
 import mars.KeyConfig;
 import mars.MARS_Main;

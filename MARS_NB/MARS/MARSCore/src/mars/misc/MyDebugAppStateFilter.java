@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.misc;
 
 import mars.control.MyCustomGhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState.DebugAppStateFilter;
 import com.jme3.scene.Spatial;
+import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
 
 /**

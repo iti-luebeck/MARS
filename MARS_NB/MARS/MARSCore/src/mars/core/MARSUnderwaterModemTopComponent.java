@@ -4,8 +4,8 @@
  */
 package mars.core;
 
-import mars.CommunicationDeviceEvent;
-import mars.CommunicationDeviceEventType;
+import mars.misc.CommunicationDeviceEvent;
+import mars.misc.CommunicationDeviceEventType;
 import mars.gui.plot.PhysicalExchangerListener;
 import java.util.Calendar;
 import javax.swing.text.DefaultCaret;

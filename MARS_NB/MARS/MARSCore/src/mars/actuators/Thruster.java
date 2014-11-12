@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.PhysicalExchange.Moveable;

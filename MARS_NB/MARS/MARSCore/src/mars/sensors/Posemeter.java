@@ -12,7 +12,7 @@ import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;

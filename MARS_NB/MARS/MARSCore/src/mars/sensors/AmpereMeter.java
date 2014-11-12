@@ -10,7 +10,7 @@ import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;

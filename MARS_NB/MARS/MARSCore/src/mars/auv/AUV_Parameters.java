@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.PropertyChangeListenerSupport;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -104,7 +104,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
-     *
+     * Creates an default filled AUVParameters.
      */
     public void createDefault() {
         initAfterJAXB();
@@ -327,7 +327,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @return
+     * @return The main HashMap with all variables.
      */
     public HashMap<String, Object> getAllVariables() {
         return params;
@@ -749,7 +749,6 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param distance
-     * @param buoyancy_distance
      */
     public void setBuoyancyDistance(Float distance) {
         buoyancy.put("distance", distance);
@@ -766,7 +765,6 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param factor
-     * @param buoyancy_scale
      */
     public void setBuoyancyFactor(Float factor) {
         buoyancy.put("factor", factor);
@@ -833,7 +831,6 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param scale
-     * @param buoyancyScale
      */
     public void setBuoyancyScale(Vector3f scale) {
         buoyancy.put("scale", scale);
@@ -1460,7 +1457,8 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
-     *
+     * Get a value of a specific HashMap.
+     * 
      * @param value
      * @param hashmapname
      * @return
@@ -1475,7 +1473,8 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
-     *
+     * Set a value of specific HashMap.
+     * 
      * @param value
      * @param object
      * @param hashmapname

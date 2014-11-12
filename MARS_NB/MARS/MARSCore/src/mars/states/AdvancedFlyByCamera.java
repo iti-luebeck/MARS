@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars;
+package mars.states;
 
 import com.jme3.input.FlyByCamera;
 import com.jme3.math.Matrix3f;
