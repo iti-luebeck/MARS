@@ -81,7 +81,6 @@ public class Dynamixel_AX12PLUS extends Servo{
         subscriber.addMessageListener(new MessageListener<std_msgs.Float64>() {
                 @Override
                 public void onNewMessage(std_msgs.Float64 message) {
-                    System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((double)message.getData());
                 }
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());

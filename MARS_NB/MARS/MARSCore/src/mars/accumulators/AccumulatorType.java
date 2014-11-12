@@ -6,7 +6,8 @@
 package mars.accumulators;
 
 /**
- *
+ * Defines the accumulator type that is used in the energy consumption.
+ * 
  * @author Thomas Tosik
  */
 public class AccumulatorType {

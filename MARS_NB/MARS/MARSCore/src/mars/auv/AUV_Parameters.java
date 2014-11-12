@@ -189,7 +189,6 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param target
-     * @param hashmapname
      */
     public void updateVariable(String target) {
         RigidBodyControl physics_control = auv.getPhysicsControl();
@@ -376,7 +375,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param dnd_icon
+     * @param dndIcon
      */
     public void setDndIcon(String dndIcon) {
         params.put("dndIcon", dndIcon);
@@ -589,7 +588,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param ray_detectable
+     * @param rayDetectable
      */
     public void setRayDetectable(Boolean rayDetectable) {
         params.put("rayDetectable", rayDetectable);
@@ -733,7 +732,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param buoyancy_updaterate
+     * @param updaterate
      */
     public void setBuoyancyUpdaterate(Integer updaterate) {
         buoyancy.put("updaterate", updaterate);
@@ -749,6 +748,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param distance
      * @param buoyancy_distance
      */
     public void setBuoyancyDistance(Float distance) {
@@ -765,6 +765,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param factor
      * @param buoyancy_scale
      */
     public void setBuoyancyFactor(Float factor) {
@@ -781,6 +782,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param resolution
      * @param buoyancy_resolution
      */
     public void setBuoyancyResolution(Float resolution) {
@@ -797,6 +799,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param dimensions
      * @param buoyancy_dimensions
      */
     public void setBuoyancyDimensions(Vector3f dimensions) {
@@ -813,7 +816,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param buoyancy_position
+     * @param position
      */
     public void setBuoyancyPosition(Vector3f position) {
         buoyancy.put("position", position);
@@ -829,6 +832,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param scale
      * @param buoyancyScale
      */
     public void setBuoyancyScale(Vector3f scale) {
@@ -845,7 +849,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param buoyancy_type
+     * @param type
      */
     public void setBuoyancyType(Integer type) {
         buoyancy.put("type", type);
@@ -893,6 +897,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param selectionColor
      * @param color
      */
     public void setModelSelectionColor(ColorRGBA selectionColor) {
@@ -909,7 +914,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param color
+     * @param mapColor
      */
     public void setModelMapColor(ColorRGBA mapColor) {
         model.put("mapColor", mapColor);
@@ -925,7 +930,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param alpha_depth_scale
+     * @param alphaDepthScale
      */
     public void setModelAlphaDepthScale(Float alphaDepthScale) {
         model.put("alphaDepthScale", alphaDepthScale);
@@ -1141,7 +1146,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param collision_position
+     * @param position
      */
     public void setCollisionPosition(Vector3f position) {
         collision.put("position", position);
@@ -1173,6 +1178,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
+     * @param mass
      * @param mass_auv
      */
     public void setMass(Float mass) {

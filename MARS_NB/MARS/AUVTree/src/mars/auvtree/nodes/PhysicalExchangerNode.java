@@ -20,7 +20,7 @@ import mars.PhysicalExchange.AUVObject;
 import mars.ChartValue;
 import mars.MARS_Main;
 import mars.PhysicalExchange.Manipulating;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.PropertyChangeListenerSupport;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;

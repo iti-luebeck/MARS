@@ -44,7 +44,7 @@ import java.util.concurrent.Callable;
 import java.util.prefs.Preferences;
 import javax.swing.event.EventListenerList;
 import mars.AdvancedFlyByCamera;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.auv.BasicAUV;
 import mars.sensors.Sensor;

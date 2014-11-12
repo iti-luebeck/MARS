@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeEvent;

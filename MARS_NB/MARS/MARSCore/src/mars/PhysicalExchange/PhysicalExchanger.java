@@ -204,7 +204,8 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     *
+     * Set the unique name.
+     * 
      * @param name
      */
     @Override

@@ -6,7 +6,7 @@ package mars.testmod.newsensor;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.sensors.PressureSensor;
 import mars.states.SimState;
 import org.openide.util.lookup.ServiceProvider;

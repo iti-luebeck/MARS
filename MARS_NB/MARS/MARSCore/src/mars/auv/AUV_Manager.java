@@ -97,6 +97,10 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public AUV_Manager() {
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Lookup getLookup() {
         return lookup;

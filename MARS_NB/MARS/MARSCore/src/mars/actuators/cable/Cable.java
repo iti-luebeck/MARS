@@ -36,10 +36,17 @@ import mars.actuators.Actuator;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Cable extends Actuator{
     
+    /**
+     *
+     */
     public Cable(){
         super();
     }
     
+    /**
+     *
+     * @param cable
+     */
     public Cable(Cable cable){
         super(cable);
     }
@@ -77,50 +84,98 @@ public class Cable extends Actuator{
     public void update(float tpf) {
     }
     
+    /**
+     *
+     * @return
+     */
     public Float getLength(){
         return (Float)variables.get("Length");
     }
     
+    /**
+     *
+     * @param length
+     */
     public void setLength(float length){
         variables.put("Length", length);
     }
     
+    /**
+     *
+     * @return
+     */
     public Float getDetailedLength(){
         return (Float)variables.get("DetailedLength");
     }
     
+    /**
+     *
+     * @param Detailedlength
+     */
     public void setDetailedLength(float Detailedlength){
         variables.put("Length", Detailedlength);
     }
     
+    /**
+     *
+     * @return
+     */
     public Integer getSections(){
         return (Integer) variables.get("Sections");
     }
     
+    /**
+     *
+     * @param sections
+     */
     public void setSections(int sections){
         variables.put("Sections", sections);
     }
     
+    /**
+     *
+     * @return
+     */
     public Vector3f getPosStaticAnchor(){
         return (Vector3f) variables.get("PosStaticAnchor");
     }
     
+    /**
+     *
+     * @param posStaticAnchor
+     */
     public void setPosStaticAnchor(Vector3f posStaticAnchor){
         variables.put("PosStaticAnchor", posStaticAnchor);
     }
     
+    /**
+     *
+     * @return
+     */
     public Float getDiameter(){
         return (Float) variables.get("Diameter");
     }
     
+    /**
+     *
+     * @param diameter
+     */
     public void setDiameter(float diameter){
         variables.put("Diameter", diameter);
     }
     
+    /**
+     *
+     * @return
+     */
     public Float getMass(){
         return (Float) variables.get("Mass");
     }
     
+    /**
+     *
+     * @param mass
+     */
     public void setMass(float mass){
         variables.put("Mass", mass);
     }

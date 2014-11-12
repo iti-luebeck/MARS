@@ -21,32 +21,64 @@ public class CableControl implements Control{
     Vector3f prevPosition = new Vector3f(0, 0, 0);
     Vector3f currPosition = new Vector3f(0, 0, 0);
 
+    /**
+     *
+     * @param cableNode
+     */
     public CableControl(CableNode cableNode) {
         this.cableNode = cableNode;
     }    
 
+    /**
+     *
+     * @param sptl
+     * @return
+     */
     @Override
     public Control cloneForSpatial(Spatial sptl) {
         return null;
     }
 
+    /**
+     *
+     * @param sptl
+     */
     @Override
     public void setSpatial(Spatial sptl) {
     }
 
+    /**
+     *
+     * @param f
+     */
     @Override
     public void update(float f) {
         cableNode.updateGeometry();
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     public void render(RenderManager rm, ViewPort vp) {
     }
 
+    /**
+     *
+     * @param je
+     * @throws IOException
+     */
     @Override
     public void write(JmeExporter je) throws IOException {
     }
 
+    /**
+     *
+     * @param ji
+     * @throws IOException
+     */
     @Override
     public void read(JmeImporter ji) throws IOException {
     }

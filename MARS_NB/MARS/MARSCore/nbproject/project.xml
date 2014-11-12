@@ -348,12 +348,13 @@
             <public-packages>
                 <package>mars</package>
                 <package>mars.Helper</package>
+                <package>mars.PhysicalExchange</package>
                 <package>mars.accumulators</package>
                 <package>mars.actuators</package>
+                <package>mars.actuators.SpecialManipulators</package>
                 <package>mars.actuators.cable</package>
                 <package>mars.actuators.servos</package>
                 <package>mars.actuators.visualizer</package>
-                <package>mars.actuators.weapons</package>
                 <package>mars.annotations</package>
                 <package>mars.auv</package>
                 <package>mars.auv.example</package>

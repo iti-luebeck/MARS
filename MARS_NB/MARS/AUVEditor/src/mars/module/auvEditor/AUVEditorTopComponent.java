@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import mars.states.AppStateListener;

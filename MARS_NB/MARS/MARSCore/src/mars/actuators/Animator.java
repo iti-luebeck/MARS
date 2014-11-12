@@ -126,7 +126,6 @@ public class Animator extends Actuator {
         subscriber.addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
             @Override
             public void onNewMessage(geometry_msgs.PoseStamped message) {
-                System.out.println("I (" + getName() + ") heard: \"" + message.getPose().getPosition() + "\"");
 
                 Point pos = (Point) message.getPose().getPosition();
                 Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());

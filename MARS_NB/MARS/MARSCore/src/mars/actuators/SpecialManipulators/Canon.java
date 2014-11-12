@@ -217,12 +217,13 @@ public class Canon extends Actuator implements Moveable, Keys {
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
+    @Override
     public void update() {
 
     }
 
     /**
-     *
+     * Create a round geometry and apply a force to it.
      */
     public void shoot() {
         System.out.println("Shoot");
@@ -233,7 +234,6 @@ public class Canon extends Actuator implements Moveable, Keys {
         bulletg.setMaterial(mat2);
         bulletg.setShadowMode(ShadowMode.CastAndReceive);
         bulletg.setLocalTranslation(CanonEnd.getWorldTranslation());
-        //RigidBodyControl bulletNode = new BombControl(assetManager, bulletCollisionShape, 1);
         RigidBodyControl bulletNode = new RigidBodyControl(bulletCollisionShape, 1);
         bulletNode.applyImpulse(left.mult(this.CanonForce), Vector3f.ZERO);
         bulletg.addControl(bulletNode);
@@ -250,19 +250,18 @@ public class Canon extends Actuator implements Moveable, Keys {
 
     }
 
+    @Override
     public void reset() {
 
     }
 
     /**
-     *
+     * Rotate the canon.
+     * 
      * @param alpha
      */
     @Override
     public void updateRotation(float alpha) {
-        /*System.out.println("I(" + getName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
-         System.out.println("My local rotation axis is:" + local_rotation_axis );
-         System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
         Quaternion quat = new Quaternion();
         quat.fromAngleAxis(alpha, local_rotation_axis);
         Rotation_Node.setLocalRotation(quat);
@@ -281,11 +280,6 @@ public class Canon extends Actuator implements Moveable, Keys {
         Rotation_Node.worldToLocal(WorldServoEnd, LocalServoEnd);
         Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
         local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
-
-        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis);
-        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis, null));
-        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation());
-        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation());
     }
 
     /**
