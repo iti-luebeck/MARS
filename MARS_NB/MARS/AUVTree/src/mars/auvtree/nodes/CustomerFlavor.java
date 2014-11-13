@@ -14,8 +14,14 @@ import mars.auv.AUV;
  */
 public class CustomerFlavor extends DataFlavor {
 
+    /**
+     *
+     */
     public static final DataFlavor CUSTOMER_FLAVOR = new CustomerFlavor();
 
+    /**
+     *
+     */
     public CustomerFlavor() {
         super(AUV.class, "AUV");
     }

@@ -15,7 +15,15 @@ import java.beans.PropertyChangeListener;
  */
 public interface InterfaceProperty {
 
+    /**
+     *
+     * @param pcl
+     */
     public void addPropertyChangeListener(PropertyChangeListener pcl);
 
+    /**
+     *
+     * @param pcl
+     */
     public void removePropertyChangeListener(PropertyChangeListener pcl);
 }

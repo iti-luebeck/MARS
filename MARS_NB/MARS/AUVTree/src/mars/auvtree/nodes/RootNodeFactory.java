@@ -16,15 +16,28 @@ import org.openide.nodes.Node;
  */
 public class RootNodeFactory extends ChildFactory<String> {
 
+    /**
+     *
+     */
     public RootNodeFactory() {
     }
 
+    /**
+     *
+     * @param list
+     * @return
+     */
     @Override
     protected boolean createKeys(List<String> list) {
 
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         return super.createNodeForKey(key); //To change body of generated methods, choose Tools | Templates.

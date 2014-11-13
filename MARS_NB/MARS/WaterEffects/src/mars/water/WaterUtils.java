@@ -15,6 +15,12 @@ import com.jme3.util.TempVars;
  */
 public class WaterUtils {
     
+    /**
+     *
+     * @param reflectionCam
+     * @param plane
+     * @param sceneCam
+     */
     public static void updateReflectionCam(Camera reflectionCam, Plane plane, Camera sceneCam){
         
         TempVars vars = TempVars.get();

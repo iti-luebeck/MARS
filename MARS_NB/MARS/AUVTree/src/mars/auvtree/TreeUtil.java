@@ -24,6 +24,7 @@ public class TreeUtil {
      * Loads the image for the node. Uses the icon name from the attachments to
      * find the image on disk.
      *
+     * @param iconName
      * @return Image object which was loaded.
      */
     public static Image getImage(String iconName) {

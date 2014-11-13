@@ -23,7 +23,9 @@ import java.util.ArrayList;
  *
  * @author t0neg0d
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @deprecated Doesnt work as intended.
  */
+@Deprecated
 public class LensFlareFilter extends Filter {
 
     RenderManager rm;
@@ -170,7 +172,7 @@ public class LensFlareFilter extends Filter {
      * threshold || g < threshold || b < threshold is discarded. @param
      * threshold
      *
-     * Default is 0.9f
+     * Default is 0.9f @param threshold
      */
     public void setLightMapThreshold(float threshold) {
         if (threshold > 0.5f) {

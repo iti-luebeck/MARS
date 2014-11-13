@@ -114,11 +114,20 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         tracking = new ArrayList<Spatial>();
     }
     
+    /**
+     *
+     * @param reflection
+     */
     public WaterState(Node reflection) {
         this();
         this.reflection = reflection;
     }
     
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -244,6 +253,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         setInstance(this);
     }
     
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) {
         Iterator<Spatial> iterator = tracking.iterator();
@@ -257,6 +270,9 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         emitter.update(app.getRootNode());
     }
     
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -264,6 +280,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         rootNode.removeFromParent();
     }
     
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -310,6 +330,10 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         return water;
     }
     
+    /**
+     *
+     * @return
+     */
     public WaterFilter getJMEWaterFilter() {
         return waterJME;
     }
@@ -330,14 +354,26 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         tracking.add(object);
     }
 
+    /**
+     *
+     * @return
+     */
     public Vector3f getLightDir() {
         return lightDir;
     }
 
+    /**
+     *
+     * @param lightDir
+     */
     public void setLightDir(Vector3f lightDir) {
         this.lightDir = lightDir;
     }
     
+    /**
+     *
+     * @return
+     */
     public SedimentEmitter getSedimentEmitter() {
         return emitter;
     }

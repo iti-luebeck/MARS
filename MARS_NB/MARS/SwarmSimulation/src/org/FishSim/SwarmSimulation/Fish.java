@@ -21,16 +21,44 @@ import mars.control.MyLodControl;
  */
 
 public class Fish extends Node{
+
+    /**
+     *
+     */
     protected Swarm swarm;
     private final FishControl control;
     private final Node model;
     private AnimControl modelControl;
+
+    /**
+     *
+     */
     protected AnimChannel channel_swim;
+
+    /**
+     *
+     */
     protected FishSim sim;
+
+    /**
+     *
+     */
     protected Vector3f lastMove = new Vector3f().zero();
+
+    /**
+     *
+     */
     protected Quaternion rotation = new Quaternion();   
     private final List<Geometry> listGeoms = new ArrayList<Geometry>();
+
+    /**
+     *
+     */
     protected float moveSpeed = 0;
+
+    /**
+     *
+     */
     protected float rotationSpeed = 0;
     private final float initHunger = 100;
     private float hungerAmount = initHunger;

@@ -40,31 +40,56 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
 
     private final Lookup.Result<NodeRefreshEvent> lookupResult;
 
+    /**
+     *
+     * @param s
+     * @param auv_manager
+     */
     public RootNode(HashMap s, AUV_Manager auv_manager) {
         super(Children.create(new AUVNodeFactory(s, auv_manager), true));
         lookupResult = auv_manager.getLookup().lookupResult(NodeRefreshEvent.class);
         lookupResult.addLookupListener(this);
     }
 
+    /**
+     *
+     * @param lookupEvent
+     */
     @Override
     public void resultChanged(LookupEvent lookupEvent) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
 
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
 
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
 
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
 
@@ -75,6 +100,11 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
 
     }
 
+    /**
+     *
+     * @param context
+     * @return
+     */
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
@@ -82,6 +112,11 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
         };
     }
 
+    /**
+     *
+     * @param t
+     * @param s
+     */
     @Override
     protected void createPasteTypes(Transferable t, List<PasteType> s) {
         //super.createPasteTypes(t, s);
@@ -91,6 +126,13 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
         }
     }
 
+    /**
+     *
+     * @param t
+     * @param arg1
+     * @param arg2
+     * @return
+     */
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(CustomerFlavor.CUSTOMER_FLAVOR)) {

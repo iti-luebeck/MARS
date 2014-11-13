@@ -71,6 +71,14 @@ public class WaterParticleFilter extends Filter {
         particleColor = new ColorRGBA(.3f, .3f, .18f, 1);
     }
     
+    /**
+     *
+     * @param manager
+     * @param renderManager
+     * @param vp
+     * @param w
+     * @param h
+     */
     @Override
     protected void initFilter(AssetManager manager, RenderManager renderManager, ViewPort vp, int w, int h) {
         if (particleTexture == null) {
@@ -91,11 +99,19 @@ public class WaterParticleFilter extends Filter {
         viewPort = vp;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Material getMaterial() {
         return material;
     }
     
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void preFrame(float tpf) {
         Camera cam = viewPort.getCamera();
@@ -264,6 +280,10 @@ public class WaterParticleFilter extends Filter {
         material.setFloat("Persistence", persistence);
     }
     
+    /**
+     *
+     * @param underwater
+     */
     public void setUnderwater(boolean underwater) {
         this.underwater = underwater;
         

@@ -72,6 +72,11 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     private String name;
 
+    /**
+     *
+     * @param obj
+     * @param name
+     */
     public AUVNode(Object obj, String name) {
         super(Children.create(new ParamChildNodeFactory(name), true), Lookups.singleton(obj));
         this.name = name;
@@ -108,16 +113,28 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         return new Action[]{new ChaseAction(), new ResetAction(), new EnableAction(), SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class), new DebugAction()};
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canDestroy() {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canCopy() {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canRename() {
         return true;
@@ -295,6 +312,10 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         }
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Override
     public void destroy() throws IOException {
         Future simStateFuture = mars.enqueue(new Callable() {
@@ -308,6 +329,11 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         fireNodeDestroyed();
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     @Override
     public Transferable clipboardCopy() throws IOException {
         Transferable deflt = super.clipboardCopy();
@@ -340,6 +366,9 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         fireNameChange(oldName, s);
     }
 
+    /**
+     *
+     */
     public void updateName() {
         fireIconChange();
         fireOpenedIconChange();

@@ -77,6 +77,7 @@ public class GeodeticMeasurement extends GeodeticCurve
 
    /**
     * Get the GeodeticMeasurement as a string.
+     * @return 
     */
    @Override
    public String toString()

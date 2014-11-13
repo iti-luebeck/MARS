@@ -14,34 +14,110 @@ import java.util.Random;
  */
 
 public class Swarm implements IFoodSource{
+
+    /**
+     *
+     */
     protected List<Fish> swarm;
+
+    /**
+     *
+     */
     protected FishSim sim;
+
+    /**
+     *
+     */
     protected FoodSourceMap ownMap = null;
+
+    /**
+     *
+     */
     protected ArrayList<FoodSourceMap> foreignMaps = new ArrayList<FoodSourceMap>();
+
+    /**
+     *
+     */
     protected Vector3f scale;
+
+    /**
+     *
+     */
     protected float near;
+
+    /**
+     *
+     */
     protected Random random = new Random();
+
+    /**
+     *
+     */
     protected Vector3f center;
+
+    /**
+     *
+     */
     protected float colRadius;
+
+    /**
+     *
+     */
     protected float viewRadius;
+
+    /**
+     *
+     */
     protected SwarmColControl colCont;
+
+    /**
+     *
+     */
     protected SwarmViewControl viewCont;
     private Vector3f colLocation = null;
     private Vector3f viewLocation = null;
     private Vector3f splitLocation = null;
     private int solidCollisionType = 0;
+
+    /**
+     *
+     */
     protected int type;
+
+    /**
+     *
+     */
     protected float moveSpeed = 1f;
+
+    /**
+     *
+     */
     protected float rotationSpeed = 1;
     private float avoidTime = 0f;
     private float targetTime = 0f;
+
+    /**
+     *
+     */
     protected float splitTime = 0f;
     private float searchTime = 0f;
+
+    /**
+     *
+     */
     protected float escapeInc = 0;
     private Vector3f lastCenter = Vector3f.ZERO;
     private boolean collided = false;
     private boolean viewCollided = false;
+
+    /**
+     *
+     */
     protected boolean split = false;
+
+    /**
+     *
+     */
     protected boolean merge = false;
     private Swarm mergeWith;
     private Vector3f searchVec = new Vector3f(0,0,0);

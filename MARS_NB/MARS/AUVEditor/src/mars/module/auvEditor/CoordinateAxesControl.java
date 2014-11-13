@@ -53,6 +53,9 @@ public class CoordinateAxesControl extends AbstractControl {
     private Node currentlySelectedOrb;
     private Vector3f rotationVector;
 
+    /**
+     *
+     */
     public CoordinateAxesControl() {
         super();
     }
@@ -86,6 +89,10 @@ public class CoordinateAxesControl extends AbstractControl {
         inputManager.addListener(actionListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
     }
 
+    /**
+     *
+     * @param enabled
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -333,10 +340,19 @@ public class CoordinateAxesControl extends AbstractControl {
         }
     };
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     protected void controlUpdate(float tpf) {
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
     }

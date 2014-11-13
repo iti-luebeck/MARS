@@ -370,6 +370,8 @@
                 <package>mars.gui.sonarview</package>
                 <package>mars.gui.tree</package>
                 <package>mars.hardware</package>
+                <package>mars.misc</package>
+                <package>mars.object</package>
                 <package>mars.recorder</package>
                 <package>mars.ros</package>
                 <package>mars.sensors</package>

@@ -37,6 +37,9 @@ public class SedimentEmitter {
     private float size = .05f;
     private ColorRGBA color = new ColorRGBA(.4f, .34f, .23f, 1f);
     
+    /**
+     *
+     */
     public SedimentEmitter() {
         super();
         
@@ -44,6 +47,10 @@ public class SedimentEmitter {
         root = new Node("Sediment Emitters");
     }
     
+    /**
+     *
+     * @param spatial
+     */
     public void addEmitter(Spatial spatial) {
         ParticleEmitter emitter = new ParticleEmitter("Mud", ParticleMesh.Type.Triangle, 10000);
         emitter.setLocalTranslation(spatial.getLocalTranslation());
@@ -75,19 +82,35 @@ public class SedimentEmitter {
         root.attachChild(emitter);
     }
     
+    /**
+     *
+     * @param material
+     */
     public void setParticleMaterial(Material material) {
         this.material = material;
     }
     
+    /**
+     *
+     * @return
+     */
     public Node getRootNode() {
         return root;
     }
     
+    /**
+     *
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         if (enabled) root.setCullHint(Spatial.CullHint.Dynamic);
         else root.setCullHint(Spatial.CullHint.Always);
     }
     
+    /**
+     *
+     * @param scene
+     */
     public void update(Node scene) {
         for(Vehicle vehicle : vehicles) {
             ParticleEmitter emitter = vehicle.getEmitter();
@@ -114,66 +137,130 @@ public class SedimentEmitter {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public int getNumber() {
         return number;
     }
     
+    /**
+     *
+     * @param number
+     */
     public void setNumber(int number) {
         this.number = number;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getNumberAttenuation() {
         return numberAtt;
     }
     
+    /**
+     *
+     * @param numberAtt
+     */
     public void setNumberAttenuation(float numberAtt) {
         this.numberAtt = numberAtt;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getGravity() {
         return up;
     }
     
+    /**
+     *
+     * @param up
+     */
     public void setGravity(float up) {
         this.up = up;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getGravityAttenuation() {
         return upAtt;
     }
     
+    /**
+     *
+     * @param upAtt
+     */
     public void setGravityAttenuation(float upAtt) {
         this.upAtt = upAtt;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getVelocity() {
         return velocity;
     }
     
+    /**
+     *
+     * @param velocity
+     */
     public void setVelocity(float velocity) {
         this.velocity = velocity;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getVelocityAttenuation() {
         return velocityAtt;
     }
     
+    /**
+     *
+     * @param velocityAtt
+     */
     public void setVelocityAttenuation(float velocityAtt) {
         this.velocityAtt = velocityAtt;
     }
     
+    /**
+     *
+     * @return
+     */
     public float getSize() {
         return size;
     }
     
+    /**
+     *
+     * @param size
+     */
     public void setSize(float size) {
         this.size = size;
     }
     
+    /**
+     *
+     * @return
+     */
     public ColorRGBA getColor() {
         return color;
     }
     
+    /**
+     *
+     * @param color
+     */
     public void setColor(ColorRGBA color) {
         this.color = color;
     }

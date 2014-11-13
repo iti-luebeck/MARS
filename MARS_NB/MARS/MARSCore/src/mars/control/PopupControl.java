@@ -12,7 +12,6 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
-import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.states.NiftyState;
 

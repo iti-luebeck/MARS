@@ -21,9 +21,25 @@ import org.openide.nodes.Node;
 public class ParamChildNodeFactory extends ChildFactory<String> {
 
     private HashMap params;
+
+    /**
+     *
+     */
     public static final int ACCUMULATORS = 0;
+
+    /**
+     *
+     */
     public static final int ACTUATORS = 1;
+
+    /**
+     *
+     */
     public static final int SENSORS = 2;
+
+    /**
+     *
+     */
     public static final int PARAMETER = 3;
     private BasicAUV auv;
 
@@ -38,6 +54,11 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
         auv = (BasicAUV) auv_manager.getAUV(name);
     }
 
+    /**
+     *
+     * @param toPopulate
+     * @return
+     */
     @Override
     protected boolean createKeys(List toPopulate) {
         toPopulate.add("" + PARAMETER);
@@ -47,6 +68,11 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         Node n = null;

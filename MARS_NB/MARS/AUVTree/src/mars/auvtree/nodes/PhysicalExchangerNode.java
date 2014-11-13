@@ -17,7 +17,6 @@ import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
 import mars.PhysicalExchange.AUVObject;
-import mars.misc.ChartValue;
 import mars.MARS_Main;
 import mars.PhysicalExchange.Manipulating;
 import mars.PhysicalExchange.PhysicalExchanger;
@@ -255,11 +254,19 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         return nodeName;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canDestroy() {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canRename() {
         return true;
@@ -446,6 +453,10 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         }
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Override
     public void destroy() throws IOException {
         PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
@@ -470,13 +481,17 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
         } else if (obj instanceof CommunicationDevice) {
             return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
-        } else if (obj instanceof ChartValue) {
+        } else if (obj instanceof mars.misc.ChartValue) {
             return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
         } else {
             return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public HelpCtx getHelpCtx() {
         return new HelpCtx(obj.getClass().getCanonicalName());
@@ -626,7 +641,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            ChartValue lookup = getLookup().lookup(ChartValue.class);
+            mars.misc.ChartValue lookup = getLookup().lookup(mars.misc.ChartValue.class);
             if (lookup != null) {
                 MARSChartTopComponent chart = new MARSChartTopComponent(lookup);
 

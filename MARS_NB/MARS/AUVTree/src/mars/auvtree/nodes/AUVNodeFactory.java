@@ -38,6 +38,11 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
     private HashMap<String, AUV> auvs;
     private final Lookup.Result<NodeRefreshEvent> lookupResult;
 
+    /**
+     *
+     * @param auvs
+     * @param auv_manager
+     */
     public AUVNodeFactory(HashMap<String, AUV> auvs, AUV_Manager auv_manager) {
         this.auvs = auvs;
         lookupResult = auv_manager.getLookup().lookupResult(NodeRefreshEvent.class);
@@ -74,25 +79,45 @@ public class AUVNodeFactory extends ChildFactory<String> implements NodeListener
         return auvNode;
     }
 
+    /**
+     *
+     * @param lookupEvent
+     */
     @Override
     public void resultChanged(LookupEvent lookupEvent) {
         refresh(true);
         System.out.println("refresh");
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
         System.out.println("childrenAdded");
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
         AUV lookup = ne.getNode().getLookup().lookup(AUV.class);

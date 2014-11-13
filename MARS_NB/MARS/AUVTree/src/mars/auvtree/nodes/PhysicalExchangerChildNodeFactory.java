@@ -37,6 +37,11 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         this.params = params;
     }
 
+    /**
+     *
+     * @param toPopulate
+     * @return
+     */
     @Override
     protected boolean createKeys(List toPopulate) {
         //sorted output
@@ -48,6 +53,11 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         // create new node for every key
@@ -56,18 +66,34 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         return n;
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
         PhysicalExchanger lookup = ne.getNode().getLookup().lookup(PhysicalExchanger.class);
