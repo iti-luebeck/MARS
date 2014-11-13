@@ -13,6 +13,10 @@ import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
 
+/**
+ *
+ * @author Tosik
+ */
 @ActionID(
         category = "Help",
         id = "mars.core.AboutDialogAction")

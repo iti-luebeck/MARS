@@ -105,7 +105,7 @@ public class WiFi extends CommunicationDevice {
 
     /**
      *
-     * @param propagation_distance
+     * @param propagationDistance
      */
     public void setPropagationDistance(Float propagationDistance) {
         variables.put("propagationDistance", propagationDistance);

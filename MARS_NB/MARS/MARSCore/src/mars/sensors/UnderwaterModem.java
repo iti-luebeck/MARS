@@ -105,7 +105,7 @@ public class UnderwaterModem extends CommunicationDevice {
 
     /**
      *
-     * @param propagation_distance
+     * @param propagationDistance
      */
     public void setPropagationDistance(Float propagationDistance) {
         variables.put("propagationDistance", propagationDistance);
@@ -137,6 +137,7 @@ public class UnderwaterModem extends CommunicationDevice {
 
     /**
      *
+     * @param debugColor
      * @param debug_color
      */
     public void setDebugColor(ColorRGBA debugColor) {

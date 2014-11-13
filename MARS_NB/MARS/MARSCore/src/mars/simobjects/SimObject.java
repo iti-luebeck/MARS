@@ -349,7 +349,7 @@ public class SimObject implements MARSObject{
 
     /**
      *
-     * @param dnd_icon
+     * @param dndIcon
      */
     public void setDndIcon(String dndIcon) {
         simob_variables.put("dndIcon", dndIcon);
@@ -381,7 +381,7 @@ public class SimObject implements MARSObject{
 
     /**
      *
-     * @param collision_position
+     * @param position
      */
     public void setCollisionPosition(Vector3f position) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("position", position);
@@ -456,7 +456,7 @@ public class SimObject implements MARSObject{
 
     /**
      *
-     * @param ray_detectable
+     * @param rayDetectable
      */
     public void setRayDetectable(boolean rayDetectable) {
         simob_variables.put("rayDetectable", rayDetectable);

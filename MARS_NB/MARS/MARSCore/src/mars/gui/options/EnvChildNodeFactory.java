@@ -26,12 +26,17 @@ public class EnvChildNodeFactory extends ChildFactory<String> implements NodeLis
     /**
      * Constructor for every child node under accumulator, actuator and sensor
      *
-     * @param params
+     * @param env
      */
     public EnvChildNodeFactory(PhysicalEnvironment env) {
         this.env = env;
     }
 
+    /**
+     *
+     * @param toPopulate
+     * @return
+     */
     @Override
     protected boolean createKeys(List toPopulate) {
         //sorted output
@@ -44,6 +49,11 @@ public class EnvChildNodeFactory extends ChildFactory<String> implements NodeLis
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         // create new node for every key
@@ -52,18 +62,34 @@ public class EnvChildNodeFactory extends ChildFactory<String> implements NodeLis
         return n;
     }
     
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
         SettingsNode lookup = (SettingsNode)ne.getNode();

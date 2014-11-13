@@ -14,5 +14,9 @@ import java.util.EventListener;
  */
 public interface AppStateListener extends EventListener {
 
+    /**
+     *
+     * @param e
+     */
     public void advertisement(Event e);
 }

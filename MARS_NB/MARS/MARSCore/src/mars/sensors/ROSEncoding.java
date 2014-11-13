@@ -14,6 +14,7 @@ public enum ROSEncoding {
     /**
      *
      */
+    RGB,
     RGB8 {
                 @Override
                 public String toString() {
