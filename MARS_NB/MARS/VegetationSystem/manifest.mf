@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.VegetationSystem
+OpenIDE-Module-Localizing-Bundle: mars/VegetationSystem/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.libs.VegetationSystem;
+package mars.VegetationSystem;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,7 +14,7 @@ import org.openide.util.Lookup;
 
 @OptionsPanelController.TopLevelRegistration(
         categoryName = "#OptionsCategory_Name_VegetationSystem",
-        iconBase = "mars/libs/VegetationSystem/grass_icon.png",
+        iconBase = "mars/VegetationSystem/grass_icon.png",
         keywords = "#OptionsCategory_Keywords_VegetationSystem",
         keywordsCategory = "VegetationSystem"
 )

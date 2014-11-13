@@ -1,4 +1,4 @@
-package mars.libs.VegetationSystem;
+package mars.VegetationSystem;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
