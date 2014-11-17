@@ -5,6 +5,8 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.CommunicationType;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -17,7 +19,7 @@ import mars.sensors.WiFi;
  * Just a basic filter for the distance. We only need to test for AUV's that are in range of the modem
  * 
  * @version 0.1
- * @author Jasper Schwinghammer, Thomas Tosik
+ * @author Jasper Schwinghammer
  */
 public class Distancecheckup{
     
@@ -27,6 +29,7 @@ public class Distancecheckup{
  
     }
     /**
+     * @since 0.1
      * Init all nontrivial stuff
      * @param auvManager the AUV_Manager
      * @return if all initialization worked 
@@ -77,6 +80,8 @@ public class Distancecheckup{
                     CommunicationDevice mod = (CommunicationDevice)it.next();
                     Vector3f modPos = mod.getWorldPosition();
                     Vector3f distance = modPos.subtract(senderUWPos);
+                    
+                    System.out.println("Sender position: " + senderUWPos.toString() + "\n reciever position: " + modPos.toString() + " \n distance: " + distance.toString());
                     if(msg.getCommunicationType() == CommunicationType.UNDERWATERSOUND && mod instanceof UnderwaterModem){//check the communications ways (underwater, overwater)
                         if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also underwater

@@ -10,6 +10,8 @@ import com.jme3.system.Timer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +43,7 @@ public class CommunicationsRunnable implements Runnable {
     
     private ConcurrentLinkedQueue<CommunicationMessage> assingedMessages = null;
     
-    private boolean distanceCheckupFirst = false;
+    private boolean distanceCheckupFirst = true;
     private Distancecheckup distCheck = null;
     
     
@@ -73,7 +75,6 @@ public class CommunicationsRunnable implements Runnable {
     @Override
     public void run() {
         try{
-            
             while(running) {
                 timer.getTimePerFrame();
                 //DO WE HAVE NEW MESSAGES?
@@ -148,7 +149,7 @@ public class CommunicationsRunnable implements Runnable {
     }
     
     /**
-     * SHOULD NOT BE USED 
+     * SHOULD NOT BE USED use getMsgCount() instead.
      * ConcurrentLinkedQueue.size() is used here. Bad runtime and inaccurate in multible thread env.
      * @deprecated 
      * @return the count of currently assinged messages
@@ -198,6 +199,5 @@ public class CommunicationsRunnable implements Runnable {
     private synchronized int getMsgCnt() {
         return msgCount;
     }
-    
     
 }

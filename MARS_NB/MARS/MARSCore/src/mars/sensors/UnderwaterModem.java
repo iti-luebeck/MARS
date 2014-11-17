@@ -148,9 +148,12 @@ public class UnderwaterModem extends CommunicationDevice{
     public void update(float tpf){
         
         /// TEST CODE Jasper Schwinghammer 03.11.2014
-        System.out.println("I send a Message now: " + this.getAuv().getName());
         CommunicationState comState = CentralLookup.getDefault().lookup(CommunicationState.class);
-        if (comState != null)comState.putMsg(new CommunicationMessage(this.getAuv().getName(), "Hello here is " + getAuv().getName() + " who can hear me? ", CommunicationType.UNDERWATERSOUND));
+        if (comState != null){
+            String msg = "Hello here is " + getAuv().getName() + " who can hear me? ";
+            notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.IN));
+            comState.putMsg(new CommunicationMessage(this.getAuv().getName(), msg, CommunicationType.UNDERWATERSOUND));
+        }
     }
 
     @Override
@@ -327,7 +330,7 @@ public class UnderwaterModem extends CommunicationDevice{
             publisher.publish(fl);
         }
         */
-        System.out.println("Hey I, " + getAuv().getName() + ", got a Message: " + msg);
+        notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
     }
     
     /**
