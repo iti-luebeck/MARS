@@ -5,8 +5,6 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mars.CommunicationType;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
