@@ -27,5 +27,5 @@ public abstract class ANoiseGenerator {
      * @param msg
      * @return 
      */
-    public abstract CommunicationMessage noisify(CommunicationMessage msg);
+    public abstract byte[] noisify(byte[] msg);
 }
