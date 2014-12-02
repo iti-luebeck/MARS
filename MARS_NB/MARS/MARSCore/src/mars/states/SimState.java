@@ -300,7 +300,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             initMap();//for mars_settings
 
             progr.progress("Populate AUVManager");
-            populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, recordManager, initer);
+            populateAUV_Manager(auvs, physical_environment, mars_settings, recordManager, initer);
 
             Future fut = mars.enqueue(new Callable() {
                 public Void call() throws Exception {

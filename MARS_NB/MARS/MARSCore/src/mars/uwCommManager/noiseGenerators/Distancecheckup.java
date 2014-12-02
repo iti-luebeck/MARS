@@ -5,7 +5,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import mars.CommunicationType;
+import mars.misc.CommunicationType;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
