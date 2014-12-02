@@ -9,13 +9,9 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import mars.PhysicalExchanger;
-import mars.auv.AUV_Manager;
-import mars.auv.BasicAUV;
-import mars.core.CentralLookup;
+import mars.PhysicalExchange.PhysicalExchanger;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeEvent;
@@ -28,7 +24,7 @@ import org.openide.nodes.NodeReorderEvent;
  * @author Christian Friedrich
  * @author Thomas Tosik
  */
-public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> implements NodeListener{
+public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> implements NodeListener {
 
     private HashMap params;
 
@@ -41,10 +37,15 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         this.params = params;
     }
 
+    /**
+     *
+     * @param toPopulate
+     * @return
+     */
     @Override
     protected boolean createKeys(List toPopulate) {
         //sorted output
-        SortedSet<String> sortedset= new TreeSet<String>(params.keySet());
+        SortedSet<String> sortedset = new TreeSet<String>(params.keySet());
         for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
             String string = it2.next();
             toPopulate.add(string);
@@ -52,6 +53,11 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         // create new node for every key
@@ -59,19 +65,35 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
         n.addNodeListener(this);
         return n;
     }
-    
+
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
         PhysicalExchanger lookup = ne.getNode().getLookup().lookup(PhysicalExchanger.class);
@@ -82,6 +104,6 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        
+
     }
 }

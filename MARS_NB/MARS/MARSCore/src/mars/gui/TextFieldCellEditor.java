@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.gui;
 
 import java.awt.Component;
@@ -18,8 +17,10 @@ import javax.swing.tree.TreePath;
 
 /**
  * Is used to check if a cell in the JTree is editable or not.
+ *
  * @author Thomas Tosik
  */
+@Deprecated
 public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellEditor {
 
     TextFieldTreeCellRenderer renderer = new TextFieldTreeCellRenderer();
@@ -30,7 +31,7 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
     JTree tree;
 
     /**
-     * 
+     *
      * @param tree
      */
     public TextFieldCellEditor(JTree tree) {
@@ -48,7 +49,7 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
         boolean returnValue = false;
         if (event instanceof MouseEvent) {
             MouseEvent mouseEvent = (MouseEvent) event;
-            TreePath path = tree.getPathForLocation(mouseEvent.getX(),mouseEvent.getY());
+            TreePath path = tree.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
             if (path != null) {
                 Object node = path.getLastPathComponent();
                 //System.out.println("editable!!!! " + path + " comp: " + node);
@@ -59,15 +60,15 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
                     //System.out.println("leaf");
                     returnValue = treeNode.isLeaf();
                     //returnValue = true;
-                }else if ((node != null) && (node instanceof Float)) {
+                } else if ((node != null) && (node instanceof Float)) {
                     return true;
-                }else if ((node != null) && (node instanceof Double)) {
+                } else if ((node != null) && (node instanceof Double)) {
                     return true;
-                }else if ((node != null) && (node instanceof Integer)) {
+                } else if ((node != null) && (node instanceof Integer)) {
                     return true;
-                }else if ((node != null) && (node instanceof Boolean)) {
+                } else if ((node != null) && (node instanceof Boolean)) {
                     return true;
-                }else if ((node != null) && (node instanceof String)) {
+                } else if ((node != null) && (node instanceof String)) {
                     return true;
                 }
             }
@@ -76,7 +77,7 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
     }
 
     public Component getTreeCellEditorComponent(JTree tree, Object value,
-        boolean selected, boolean expanded, boolean leaf, int row) {
+            boolean selected, boolean expanded, boolean leaf, int row) {
         if (leaf) {
             currentEditor = leafEditor;
             leafEditor.setTreepath(tree.getSelectionPath());

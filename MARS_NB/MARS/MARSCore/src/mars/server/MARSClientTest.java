@@ -10,12 +10,13 @@ import mars.auv.AUV_Manager;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * An example implemenation. Very bare bone.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-@ServiceProvider(service=MARSClient.class)
-public class MARSClientTest implements MARSClient{
-    
+@ServiceProvider(service = MARSClient.class)
+public class MARSClientTest implements MARSClient {
+
     AUV_Manager auvManager;
 
     /**

@@ -11,6 +11,10 @@ import org.openide.explorer.propertysheet.PropertySheet;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
 
+/**
+ *
+ * @author Tosik
+ */
 public final class GraphicsPanel extends javax.swing.JPanel {
 
     private final GraphicsOptionsPanelController controller;

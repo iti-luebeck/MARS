@@ -1,0 +1,86 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mars.states;
+
+import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.input.FlyByCamera;
+
+/**
+ * The correspnding AppState to the AdvancedFlyCam. Nothing special inside here.
+ *
+ * @author Thomas Tosik
+ */
+public class AdvancedFlyCamAppState extends AbstractAppState {
+
+    private Application app;
+    private FlyByCamera flyCam;
+
+    /**
+     *
+     */
+    public AdvancedFlyCamAppState() {
+    }
+
+    /**
+     * This is called by SimpleApplication during initialize().
+     *
+     * @param cam
+     */
+    public void setCamera(FlyByCamera cam) {
+        this.flyCam = cam;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public FlyByCamera getCamera() {
+        return flyCam;
+    }
+
+    /**
+     *
+     * @param stateManager
+     * @param app
+     */
+    @Override
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app);
+
+        this.app = app;
+
+        if (app.getInputManager() != null) {
+
+            if (flyCam == null) {
+                flyCam = new FlyByCamera(app.getCamera());
+            }
+
+            flyCam.registerWithInput(app.getInputManager());
+        }
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        flyCam.setEnabled(enabled);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void cleanup() {
+        super.cleanup();
+
+        flyCam.unregisterInput();
+    }
+}

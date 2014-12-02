@@ -5,13 +5,13 @@
 package mars.core;
 
 import java.awt.Color;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import mars.gui.sonarview.RayBasedSensorView;
 import org.openide.windows.TopComponent;
 
 /**
- *
+ * A TopComponent that is used to display data from sonars.
+ * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class RayBasedSensorTopComponent extends TopComponent {

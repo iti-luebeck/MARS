@@ -31,74 +31,76 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
-import mars.Manipulating;
-import mars.Moveable;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.Manipulating;
+import mars.PhysicalExchange.Moveable;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
 import mars.xml.HashMapAdapter;
 
 /**
- * This is the default servo class. It uses the Dynamixel AX-12 servos as it basis.
- * You have to set the starting position of the servo and the rotation axis(servo direction).
- * Than dont forget to link a "moveable" physical exchanger(sensor/other actor) to the servo.
+ * This is the default servo class. It uses the Dynamixel AX-12 servos as it
+ * basis. You have to set the starting position of the servo and the rotation
+ * axis(servo direction). Than dont forget to link a "moveable" physical
+ * exchanger(sensor/other actor) to the servo.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {Dynamixel_AX12PLUS.class,Modelcraft_ES07.class} )
-public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
-    
+@XmlSeeAlso({Dynamixel_AX12PLUS.class, Modelcraft_ES07.class})
+public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
+
     //servo
     private Geometry ServoStart;
     private Geometry ServoEnd;
     private double desired_angle = 0d;
-    
-    @XmlElement(name="Slaves")
+
+    @XmlElement(name = "Slaves")
     private List<String> slaves_names = new ArrayList<String>();
     private List<Moveable> slaves = new ArrayList<Moveable>();
-    
+
     /**
-     * 
+     *
      */
-    protected  float OperatingAngle = 5.235987f;
-    
+    protected float OperatingAngle = 5.235987f;
+
     /**
-     * 
+     *
      */
     protected int ServoNeutralPosition = 0;
-    
+
     /**
-     * 
+     *
      */
     protected float Resolution = 0.005061f;
-    
+
     /**
-     * 
+     *
      */
     protected float SpeedPerDegree = 0.003266f;
-    
+
     private int current_angle_iteration = 0;
-    
+
     private int desired_angle_iteration = 0;
-    
+
     private int max_angle_iteration = 518;
-    
+
     private float SpeedPerIteration = 0.0009473f;
-    
+
     private float time = 0;
-    
+
     //JAXB KEYS
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    @XmlElement(name="Actions")
-    private HashMap<String,String> action_mapping = new HashMap<String, String>();
-    
+    @XmlElement(name = "Actions")
+    private HashMap<String, String> action_mapping = new HashMap<String, String>();
+
     /**
-     * 
+     *
      */
-    public Servo(){
+    public Servo() {
         super();
         try {
             // Create an appending file handler
@@ -107,15 +109,17 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
+
     /**
      *
-     * @param simstate 
+     * @param simstate
      * @param MassCenterGeom
      */
-    public Servo(SimState simstate,Geometry MassCenterGeom) {
-        super(simstate,MassCenterGeom);
+    public Servo(SimState simstate, Geometry MassCenterGeom) {
+        super(simstate, MassCenterGeom);
         try {
             // Create an appending file handler
             boolean append = true;
@@ -123,12 +127,13 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
 
     /**
      *
-     * @param simstate 
+     * @param simstate
      */
     public Servo(SimState simstate) {
         super(simstate);
@@ -139,14 +144,15 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
-    
+
     /**
      *
      * @param servo
      */
-    public Servo(Servo servo){
+    public Servo(Servo servo) {
         super(servo);
         HashMap<String, String> actionsOriginal = servo.getAllActions();
         Cloner cloner = new Cloner();
@@ -163,26 +169,26 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         actuator.initAfterJAXB();
         return actuator;
     }
-    
-   /**
+
+    /**
      *
-     * @param pe 
+     * @param pe
      */
     @Override
-    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe){
+    public void copyValuesFromPhysicalExchanger(PhysicalExchanger pe) {
         super.copyValuesFromPhysicalExchanger(pe);
-        if(pe instanceof Servo){
-            HashMap<String, String> actionOriginal = ((Servo)pe).getAllActions();
+        if (pe instanceof Servo) {
+            HashMap<String, String> actionOriginal = ((Servo) pe).getAllActions();
             Cloner cloner = new Cloner();
             action_mapping = cloner.deepClone(actionOriginal);
-            
-            ArrayList<String> slavesOriginal = ((Servo)pe).getSlavesNames();
+
+            ArrayList<String> slavesOriginal = ((Servo) pe).getSlavesNames();
             slaves_names = cloner.deepClone(slavesOriginal);
         }
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void initAfterJAXB() {
@@ -190,21 +196,21 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         computeAngleIterations();
     }
 
-    private void computeAngleIterations(){
-        max_angle_iteration = (int)(Math.round(((getOperatingAngle()/2)/getResolution())));
-        SpeedPerIteration = (getResolution())*((getSpeedPerDegree())/((float)(Math.PI*2)/360f));
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public Float getOperatingAngle() {
-        return (Float)variables.get("OperatingAngle");
+    private void computeAngleIterations() {
+        max_angle_iteration = (int) (Math.round(((getOperatingAngle() / 2) / getResolution())));
+        SpeedPerIteration = (getResolution()) * ((getSpeedPerDegree()) / ((float) (Math.PI * 2) / 360f));
     }
 
     /**
-     * 
+     *
+     * @return
+     */
+    public Float getOperatingAngle() {
+        return (Float) variables.get("OperatingAngle");
+    }
+
+    /**
+     *
      * @param OperatingAngle
      */
     public void setOperatingAngle(Float OperatingAngle) {
@@ -212,31 +218,31 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Float getResolution() {
-        return (Float)variables.get("Resolution");
+        return (Float) variables.get("Resolution");
     }
 
     /**
-     * 
+     *
      * @param Resolution
      */
     public void setResolution(Float Resolution) {
         variables.put("Resolution", Resolution);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public Integer getServoNeutralPosition() {
-        return (Integer)variables.get("ServoNeutralPosition");
+        return (Integer) variables.get("ServoNeutralPosition");
     }
 
     /**
-     * 
+     *
      * @param ServoNeutralPosition
      */
     public void setServoNeutralPosition(Integer ServoNeutralPosition) {
@@ -244,27 +250,27 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Float getSpeedPerDegree() {
-        return (Float)variables.get("SpeedPerDegree");
+        return (Float) variables.get("SpeedPerDegree");
     }
 
     /**
-     * 
+     *
      * @param SpeedPerDegree
      */
     public void setSpeedPerDegree(Float SpeedPerDegree) {
         variables.put("SpeedPerDegree", SpeedPerDegree);
     }
-    
-     /**
-     * DON'T CALL THIS METHOD!
-     * In this method all the initialiasing for the servo will be done and it will be attached to the physicsNode.
+
+    /**
+     * DON'T CALL THIS METHOD! In this method all the initialiasing for the
+     * servo will be done and it will be attached to the physicsNode.
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, 0.025f);
         ServoStart = new Geometry("ServoStart", sphere7);
@@ -292,276 +298,275 @@ public class Servo extends Actuator implements Manipulating,Keys,ChartValue{
         mark4.setLocalTranslation(ray_start);
         mark4.updateGeometricState();
         PhysicalExchanger_Node.attachChild(mark4);
-        
+
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        quat.fromAngles(getRotation().getX(), getRotation().getY(), getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
     @Override
-    public void update(){
+    public void update() {
     }
-    
+
     @Override
-    public void update(float tpf){
+    public void update(float tpf) {
         updateAnglePosition(tpf);
     }
-    
+
     @Override
-    public void reset(){
+    public void reset() {
         this.setDesiredAnglePosition(0);
     }
-    
-    private void updateAnglePosition(float tpf){
+
+    private void updateAnglePosition(float tpf) {
         //System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
-        if( desired_angle_iteration != current_angle_iteration){//when we are not on the desired position we have work to do
+        if (desired_angle_iteration != current_angle_iteration) {//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
             //System.out.println("possible_iterations: " + possible_iterations);
-            if(possible_iterations > 0){//when we dont have enough time to rotate we wait till the next frame
-                
+            if (possible_iterations > 0) {//when we dont have enough time to rotate we wait till the next frame
+
                 int do_it_iterations = 0;
-                if(Math.abs(desired_angle_iteration-current_angle_iteration) >= possible_iterations){// we have enough space/time to fully make possible_iterations
+                if (Math.abs(desired_angle_iteration - current_angle_iteration) >= possible_iterations) {// we have enough space/time to fully make possible_iterations
                     do_it_iterations = possible_iterations;
-                }else{//we have to make less than possible since we are close to our goal(desired_angle_iteration)
-                    do_it_iterations = Math.abs(desired_angle_iteration-current_angle_iteration);
+                } else {//we have to make less than possible since we are close to our goal(desired_angle_iteration)
+                    do_it_iterations = Math.abs(desired_angle_iteration - current_angle_iteration);
                 }
-                
+
                 //dont forget to negate for direction
-                if(desired_angle_iteration < current_angle_iteration){
+                if (desired_angle_iteration < current_angle_iteration) {
                     do_it_iterations = do_it_iterations * (-1);
                 }
                 ///do_it_iterations = possible_iterations;
-                
+
                 //System.out.println("do_it_iterations: " + do_it_iterations);
-                
                 Iterator iter = slaves.iterator();
-                while(iter.hasNext() ) {
-                    final Moveable moves = (Moveable)iter.next();
+                while (iter.hasNext()) {
+                    final Moveable moves = (Moveable) iter.next();
                     final int fin_do_it_iterations = do_it_iterations;
                     Future fut = this.simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {
-                            moves.updateRotation(getResolution()*(fin_do_it_iterations+current_angle_iteration+getServoNeutralPosition()));
+                            moves.updateRotation(getResolution() * (fin_do_it_iterations + current_angle_iteration + getServoNeutralPosition()));
                             return null;
                         }
                     });
                 }
                 //since we will rotate we have to update our current angle
                 current_angle_iteration += do_it_iterations;
-                
+
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public Matrix3f getWorldRotationAxisPoints(){
+    public Matrix3f getWorldRotationAxisPoints() {
         return new Matrix3f().setColumn(0, ServoEnd.getWorldTranslation()).setColumn(1, ServoStart.getWorldTranslation());
     }
-    
-    private int howMuchIterations(float tpf){
+
+    private int howMuchIterations(float tpf) {
         time += tpf;
-        if( time > SpeedPerIteration){//we have enough time to do a least one iteration
+        if (time > SpeedPerIteration) {//we have enough time to do a least one iteration
             //how much iterations can we do exactly in time?
-            int possible_iterations = (int)Math.floor(time/SpeedPerIteration);
+            int possible_iterations = (int) Math.floor(time / SpeedPerIteration);
             time = 0;
             return possible_iterations;
-        }else{//not enough time, we have to wait till the next frame
+        } else {//not enough time, we have to wait till the next frame
             return 0;
         }
     }
-    
+
     /**
-     * 
+     *
      * @param desired_angle_iteration
      */
-    public void setDesiredAnglePosition(int desired_angle_iteration){
+    public void setDesiredAnglePosition(int desired_angle_iteration) {
         System.out.println("desired_angle_iteration: " + desired_angle_iteration);
-        if(desired_angle_iteration > max_angle_iteration){
+        if (desired_angle_iteration > max_angle_iteration) {
             this.desired_angle_iteration = max_angle_iteration;
-        }else if(desired_angle_iteration < -max_angle_iteration){
+        } else if (desired_angle_iteration < -max_angle_iteration) {
             this.desired_angle_iteration = -max_angle_iteration;
-        }else{
+        } else {
             this.desired_angle_iteration = desired_angle_iteration;
         }
     }
-    
+
     /**
-     * 
+     *
      * @param desired_angle
      */
-    public void setDesiredAnglePosition(double desired_angle){
+    public void setDesiredAnglePosition(double desired_angle) {
         this.desired_angle = desired_angle;
-        if(desired_angle >= Math.PI/2f){
-            desired_angle = Math.PI/2f;
-        }else if(desired_angle <= -Math.PI/2f){
-            desired_angle = -Math.PI/2f;
+        if (desired_angle >= Math.PI / 2f) {
+            desired_angle = Math.PI / 2f;
+        } else if (desired_angle <= -Math.PI / 2f) {
+            desired_angle = -Math.PI / 2f;
         }
-        float desired_angle_f = (float)desired_angle;
-        int desired_angle_iterations = Math.round( 1024f*((desired_angle_f+((float)Math.PI/2f))/(float)Math.PI) );
-        
+        float desired_angle_f = (float) desired_angle;
+        int desired_angle_iterations = Math.round(1024f * ((desired_angle_f + ((float) Math.PI / 2f)) / (float) Math.PI));
+
         System.out.println("desired_angle_iterations: " + desired_angle_iterations);
-        if(desired_angle_iterations >= 512){
-            setDesiredAnglePosition(Math.round(desired_angle_iterations-512));
-        }else{
-            setDesiredAnglePosition(Math.round(-(512-desired_angle_iterations)));
+        if (desired_angle_iterations >= 512) {
+            setDesiredAnglePosition(Math.round(desired_angle_iterations - 512));
+        } else {
+            setDesiredAnglePosition(Math.round(-(512 - desired_angle_iterations)));
         }
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public int getDesiredAnglePosition(){
+    public int getDesiredAnglePosition() {
         return this.desired_angle_iteration;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public int getCurentAnglePosition(){
+    public int getCurentAnglePosition() {
         return this.current_angle_iteration;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public HashMap<String,String> getAllActions(){
+    public HashMap<String, String> getAllActions() {
         return action_mapping;
     }
-    
+
     /**
-     * 
-     * @param name 
+     *
+     * @param name
      * @return
      */
     @Override
     public Moveable getSlave(String name) {
         Iterator iter = slaves.iterator();
-        while(iter.hasNext() ) {
-            Moveable moves = (Moveable)iter.next();
-            if(moves.getSlaveName().equals(name)){
+        while (iter.hasNext()) {
+            Moveable moves = (Moveable) iter.next();
+            if (moves.getSlaveName().equals(name)) {
                 return moves;
             }
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public ArrayList getSlavesNames(){
-        return (ArrayList)slaves_names;
+    public ArrayList getSlavesNames() {
+        return (ArrayList) slaves_names;
     }
 
     /**
-     * 
+     *
      * @param slave
      */
     @Override
     public void addSlave(Moveable slave) {
-        if(slave != null){
+        if (slave != null) {
             slaves.add(slave);
-            if(!slaves_names.contains(slave.getSlaveName())){
+            if (!slaves_names.contains(slave.getSlaveName())) {
                 slaves_names.add(slave.getSlaveName());
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param slaves
      */
     @Override
-    public void addSlaves(ArrayList slaves){
+    public void addSlaves(ArrayList slaves) {
         Iterator iter = slaves.iterator();
-        while(iter.hasNext() ) {
-            Moveable moves = (Moveable)iter.next();
-            addSlave(moves);    
+        while (iter.hasNext()) {
+            Moveable moves = (Moveable) iter.next();
+            addSlave(moves);
         }
     }
-        
+
     /**
-     * 
+     *
      * @param inputManager
      * @param keyconfig
      */
     @Override
-    public void addKeys(InputManager inputManager, KeyConfig keyconfig){
-        for ( String elem : action_mapping.keySet() ){
-            String action = (String)action_mapping.get(elem);
+    public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
+        for (String elem : action_mapping.keySet()) {
+            String action = (String) action_mapping.get(elem);
             final String mapping = elem;
             final Servo self = this;
-            if(action.equals("setDesiredAnglePosition3")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(300);
-                            }
+            if (action.equals("setDesiredAnglePosition3")) {
+                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                ActionListener actionListener = new ActionListener() {
+                    public void onAction(String name, boolean keyPressed, float tpf) {
+                        if (name.equals(mapping) && !keyPressed) {
+                            self.setDesiredAnglePosition(300);
                         }
-                    };
-                    inputManager.addListener(actionListener, elem);
-            }else if(action.equals("setDesiredAnglePosition2")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(-300);
-                            }
+                    }
+                };
+                inputManager.addListener(actionListener, elem);
+            } else if (action.equals("setDesiredAnglePosition2")) {
+                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                ActionListener actionListener = new ActionListener() {
+                    public void onAction(String name, boolean keyPressed, float tpf) {
+                        if (name.equals(mapping) && !keyPressed) {
+                            self.setDesiredAnglePosition(-300);
                         }
-                    };
-                    inputManager.addListener(actionListener, elem);
-            }else if(action.equals("setDesiredAnglePosition")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition(1.5d);
-                            }
+                    }
+                };
+                inputManager.addListener(actionListener, elem);
+            } else if (action.equals("setDesiredAnglePosition")) {
+                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                ActionListener actionListener = new ActionListener() {
+                    public void onAction(String name, boolean keyPressed, float tpf) {
+                        if (name.equals(mapping) && !keyPressed) {
+                            self.setDesiredAnglePosition(1.5d);
                         }
-                    };
-                    inputManager.addListener(actionListener, elem);
-            }else if(action.equals("increment")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition((self.getDesiredAnglePosition())+10);
-                            }
+                    }
+                };
+                inputManager.addListener(actionListener, elem);
+            } else if (action.equals("increment")) {
+                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                ActionListener actionListener = new ActionListener() {
+                    public void onAction(String name, boolean keyPressed, float tpf) {
+                        if (name.equals(mapping) && !keyPressed) {
+                            self.setDesiredAnglePosition((self.getDesiredAnglePosition()) + 10);
                         }
-                    };
-                    inputManager.addListener(actionListener, elem);
-            }else if(action.equals("decrement")){
-                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping))); 
-                    ActionListener actionListener = new ActionListener() {
-                        public void onAction(String name, boolean keyPressed, float tpf) {
-                            if(name.equals(mapping) && !keyPressed) {
-                                self.setDesiredAnglePosition((self.getDesiredAnglePosition())-10);
-                            }
+                    }
+                };
+                inputManager.addListener(actionListener, elem);
+            } else if (action.equals("decrement")) {
+                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                ActionListener actionListener = new ActionListener() {
+                    public void onAction(String name, boolean keyPressed, float tpf) {
+                        if (name.equals(mapping) && !keyPressed) {
+                            self.setDesiredAnglePosition((self.getDesiredAnglePosition()) - 10);
                         }
-                    };
-                    inputManager.addListener(actionListener, elem);
+                    }
+                };
+                inputManager.addListener(actionListener, elem);
             }
         }
     }
-    
+
     /**
      *
      * @return
      */
     @Override
     public Object getChartValue() {
-        return (float)desired_angle;
+        return (float) desired_angle;
     }
 
     /**

@@ -51,19 +51,19 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      * Name of the icon on the harddrive.
      */
     private final String iconName;
-    
+
     /**
-     * 
+     *
      */
     private final MARS_Main mars;
-    
+
     /**
-     * 
+     *
      */
     private final AUV auv;
-    
+
     /**
-     * 
+     *
      */
     private final AUV_Manager auvManager;
 
@@ -72,9 +72,15 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     private String name;
 
-    public AUVNode(Object obj,String name) {
-        super(Children.create(new ParamChildNodeFactory(name), true),Lookups.singleton(obj));
+    /**
+     *
+     * @param obj
+     * @param name
+     */
+    public AUVNode(Object obj, String name) {
+        super(Children.create(new ParamChildNodeFactory(name), true), Lookups.singleton(obj));
         this.name = name;
+        Lookups.singleton(obj);
 
         // use lookup to get auv out of mars
         CentralLookup cl = CentralLookup.getDefault();
@@ -82,15 +88,15 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         mars = cl.lookup(MARS_Main.class);
 
         auv = getLookup().lookup(AUV.class);
-        if(auv != null && auv.getAuv_param().getIcon() == null){//default
+        if (auv != null && auv.getAuv_param().getIcon() == null) {//default
             iconName = "yellow_submarine.png";
-        }else{
+        } else {
             iconName = auv.getAuv_param().getIcon();
         }
-        
+
         //set a listener to params. useful for updating view when changes happen in auvparasm like enable or dnd
         auv.getAuv_param().addPropertyChangeListener(this);
-                
+
         setDisplayName(name);
         setShortDescription(auv.getClass().toString());
     }
@@ -104,24 +110,36 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(),new ResetAction(),new EnableAction(),SystemAction.get(CopyAction.class),SystemAction.get(DeleteAction.class),SystemAction.get(RenameAction.class),new DebugAction()};
+        return new Action[]{new ChaseAction(), new ResetAction(), new EnableAction(), SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class), new DebugAction()};
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canDestroy() {
-         return true;
+        return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canCopy() {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canRename() {
         return true;
     }
- 
+
     /**
      * This method is called on every property change. It updates display of the
      * name.
@@ -142,24 +160,24 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Transferable drag() throws IOException {
-        Transferable transferable = new Transferable(){
-                                        @Override
-                                        public DataFlavor[] getTransferDataFlavors() {
-                                            DataFlavor[] dt = new DataFlavor[1];
-                                            dt[0] = new TransferHandlerObjectDataFlavor();
-                                            return dt;
-                                        }
+        Transferable transferable = new Transferable() {
+            @Override
+            public DataFlavor[] getTransferDataFlavors() {
+                DataFlavor[] dt = new DataFlavor[1];
+                dt[0] = new TransferHandlerObjectDataFlavor();
+                return dt;
+            }
 
-                                        @Override
-                                        public boolean isDataFlavorSupported(DataFlavor flavor) {
-                                            return true;
-                                        }
+            @Override
+            public boolean isDataFlavorSupported(DataFlavor flavor) {
+                return true;
+            }
 
-                                        @Override
-                                        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                                            return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
-                                        }
-                                    };
+            @Override
+            public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                return new TransferHandlerObject(TransferHandlerObjectType.AUV, auv.getName());
+            }
+        };
         ExTransferable create = ExTransferable.create(transferable);
         TransferListener tfl = new TransferListener() {
 
@@ -202,7 +220,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
             auv.getAuv_param().setEnabled(!auvEnabled);
             Future simStateFuture = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
-                    if(mars.getStateManager().getState(SimState.class) != null){
+                    if (mars.getStateManager().getState(SimState.class) != null) {
                         auvManager.enableAUV(auv, !auvEnabled);
                     }
                     return null;
@@ -213,8 +231,8 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         }
 
     }
-    
-        /**
+
+    /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
@@ -228,19 +246,19 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
+                public Void call() throws Exception {
+                    if (mars.getStateManager().getState(SimState.class) != null) {
+                        SimState simState = (SimState) mars.getStateManager().getState(SimState.class);
+                        simState.chaseAUV(auv);
+                    }
+                    return null;
                 }
-                return null;
-            }
             });
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
-    
+
     /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
@@ -255,71 +273,79 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                auv.reset();
-                return null;
-            }
+                public Void call() throws Exception {
+                    auv.reset();
+                    return null;
+                }
             });
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 
     }
-    
-    
+
     /**
      * Inner class for the actions on right click. Provides action to enable and
      * disable an auv.
      */
     private class DebugAction extends AbstractAction implements Presenter.Popup {
-        
+
         public DebugAction() {
             putValue(NAME, "Buoyancy");
         }
-        
+
         @Override
         public JMenuItem getPopupPresenter() {
             JMenu result = new JMenu("Add Debug Data to Chart");  //remember JMenu is a subclass of JMenuItem
-            result.add (new JMenuItem(this));
+            result.add(new JMenuItem(this));
             return result;
         }
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
             MARSChartTopComponent chart = new MARSChartTopComponent(auv);
 
             chart.setName("Chart of: " + auv.getName());
             chart.open();
-            chart.requestActive(); 
+            chart.requestActive();
 
             chart.repaint();
         }
-    }        
+    }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Override
     public void destroy() throws IOException {
         Future simStateFuture = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                            if(mars.getStateManager().getState(SimState.class) != null){
-                                auvManager.deregisterAUVNoFuture(auv);
-                            }
-                        return null;
-                    }
-                });
+            public Void call() throws Exception {
+                if (mars.getStateManager().getState(SimState.class) != null) {
+                    auvManager.deregisterAUVNoFuture(auv);
+                }
+                return null;
+            }
+        });
         fireNodeDestroyed();
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     @Override
     public Transferable clipboardCopy() throws IOException {
-        return super.clipboardCopy();
-        /*Transferable deflt = super.clipboardCopy();
+        Transferable deflt = super.clipboardCopy();
         ExTransferable added = ExTransferable.create(deflt);
         added.put(new ExTransferable.Single(CustomerFlavor.CUSTOMER_FLAVOR) {
             @Override
-            protected Customer getData() {
-                return getLookup().lookup(Customer.class);
+            protected AUV getData() {
+
+                return getLookup().lookup(AUV.class);
             }
         });
-        return added;*/
+        return added;
     }
 
     @Override
@@ -327,26 +353,28 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         final String oldName = this.name;
         this.name = s;
         Future simStateFuture = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                            if(mars.getStateManager().getState(SimState.class) != null){
+            public Void call() throws Exception {
+                if (mars.getStateManager().getState(SimState.class) != null) {
                                 //AUV auv = auvManager.getAUV(oldName);
-                                //auv.setName(s);
-                                auvManager.updateAUVName(oldName,s);
-                            }
-                        return null;
-                    }
-                });
+                    //auv.setName(s);
+                    auvManager.updateAUVName(oldName, s);
+                }
+                return null;
+            }
+        });
         fireDisplayNameChange(oldName, s);
         fireNameChange(oldName, s);
     }
-    
-    
-    public void updateName(){
+
+    /**
+     *
+     */
+    public void updateName() {
         fireIconChange();
         fireOpenedIconChange();
         fireDisplayNameChange(null, getDisplayName());
     }
-    
+
     /**
      * Returns the display name
      *
@@ -382,7 +410,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public Image getIcon(int type) {
         if (auv.getAuv_param().isEnabled()) {
             return TreeUtil.getImage(iconName);
-        }else{
+        } else {
             return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
         }
     }
@@ -398,7 +426,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public Image getOpenedIcon(int type) {
         if (auv.getAuv_param().isEnabled()) {
             return TreeUtil.getImage(iconName);
-        }else{
+        } else {
             return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
         }
     }

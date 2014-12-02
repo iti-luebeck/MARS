@@ -15,24 +15,27 @@ import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
 
 /**
+ * The main class responsible for publish/sending data of the sensors/actuators
+ * from auvs.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class PhysicalExchangerPublisher implements Runnable{
+public class PhysicalExchangerPublisher implements Runnable {
+
     private static final long sleeptime = 2;
 
     private MARS_Main mars;
     private AUV_Manager auv_manager;
     private MARS_Settings marsSettings;
-    
+
     //rosjava stuff
     private boolean running = true;
 
     /**
-     * 
+     *
      * @param mars
      * @param auv_manager
-     * @param marsSettings  
+     * @param marsSettings
      */
     public PhysicalExchangerPublisher(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging
@@ -43,15 +46,16 @@ public class PhysicalExchangerPublisher implements Runnable{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
 
         this.mars = mars;
         this.auv_manager = auv_manager;
         this.marsSettings = marsSettings;
     }
-    
+
     /**
-     * 
+     *
      */
     public void shutdown() {
         running = false;
@@ -65,8 +69,8 @@ public class PhysicalExchangerPublisher implements Runnable{
                 Future fut = mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         //if(marsSettings.isROS_Server_publish()){
-                            auv_manager.publishSensorsOfAUVs();
-                            auv_manager.publishActuatorsOfAUVs();
+                        auv_manager.publishSensorsOfAUVs();
+                        auv_manager.publishActuatorsOfAUVs();
                         //}
                         return null;
                     }

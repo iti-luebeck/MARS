@@ -48,29 +48,28 @@ import com.jme3.util.TempVars;
 import java.io.IOException;
 
 /**
- * This Control maintains a reference to a Camera,
- * which will be synched with the position (worldTranslation)
- * of the current spatial.
- * 
+ * This Control maintains a reference to a Camera, which will be synched with
+ * the position (worldTranslation) of the current spatial.
+ *
  * Copyied from rep and activated the translation/rotation. - Thomas Tosik
- * 
+ *
  * @author tim
  */
 public class MyLightControl extends AbstractControl {
 
     /**
-     * 
+     *
      */
     public static enum ControlDirection {
 
         /**
-         * Means, that the Light's transform is "copied"
-         * to the Transform of the Spatial.
+         * Means, that the Light's transform is "copied" to the Transform of the
+         * Spatial.
          */
         LightToSpatial,
         /**
-         * Means, that the Spatial's transform is "copied"
-         * to the Transform of the light.
+         * Means, that the Spatial's transform is "copied" to the Transform of
+         * the light.
          */
         SpatialToLight;
     }
@@ -93,7 +92,7 @@ public class MyLightControl extends AbstractControl {
 
     /**
      * @param light The light to be synced.
-     * @param controlDir  
+     * @param controlDir
      */
     public MyLightControl(Light light, ControlDirection controlDir) {
         this.light = light;
@@ -101,7 +100,7 @@ public class MyLightControl extends AbstractControl {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Light getLight() {
@@ -109,7 +108,7 @@ public class MyLightControl extends AbstractControl {
     }
 
     /**
-     * 
+     *
      * @param light
      */
     public void setLight(Light light) {
@@ -117,7 +116,7 @@ public class MyLightControl extends AbstractControl {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ControlDirection getControlDir() {
@@ -125,18 +124,18 @@ public class MyLightControl extends AbstractControl {
     }
 
     /**
-     * 
+     *
      * @param controlDir
      */
     public void setControlDir(ControlDirection controlDir) {
         this.controlDir = controlDir;
     }
-    
+
     /**
-     * 
+     *
      * @param LampEnd
      */
-    public void setLampEnd(Geometry LampEnd){
+    public void setLampEnd(Geometry LampEnd) {
         this.LampEnd = LampEnd;
     }
 
@@ -170,9 +169,9 @@ public class MyLightControl extends AbstractControl {
         }
         vars.release();
         //TODO add code for Spot light here when it's done
-        if( light instanceof SpotLight){
-            ((SpotLight)light).setPosition(spatial.getWorldTranslation());                
-            ((SpotLight)light).setDirection(LampEnd.getWorldTranslation().subtract(spatial.getWorldTranslation()));
+        if (light instanceof SpotLight) {
+            ((SpotLight) light).setPosition(spatial.getWorldTranslation());
+            ((SpotLight) light).setDirection(LampEnd.getWorldTranslation().subtract(spatial.getWorldTranslation()));
         }
 
     }
@@ -195,7 +194,6 @@ public class MyLightControl extends AbstractControl {
         }
         vars.release();
         //TODO add code for Spot light here when it's done
-
 
     }
 
@@ -224,7 +222,7 @@ public class MyLightControl extends AbstractControl {
     private static final String CONTROL_DIR_NAME = "controlDir";
 
     /**
-     * 
+     *
      * @param im
      * @throws IOException
      */
@@ -236,7 +234,7 @@ public class MyLightControl extends AbstractControl {
     }
 
     /**
-     * 
+     *
      * @param ex
      * @throws IOException
      */

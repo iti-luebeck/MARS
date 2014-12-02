@@ -18,13 +18,15 @@ import mars.auv.AUV;
 import mars.simobjects.SimObject;
 
 /**
- * This class is used for storing in which state the gui controls are currently. 
+ * This class is used for storing in which state the gui controls are currently.
  * For example: When you are pressing left_ctrl you get into a new state where
- * you can move the auv. But you have to deactivate ther commands that could be 
+ * you can move the auv. But you have to deactivate ther commands that could be
  * harming like the contextmenue on right mouse button.
+ *
  * @author Thomas Tosik
  */
 public class GuiControlState {
+
     private boolean move_auv = false;
     private boolean select_auv = false;
     private boolean rotate_auv = false;
@@ -47,19 +49,19 @@ public class GuiControlState {
     private Node GUINode = new Node("GUI_Node");
     private Vector3f rotateArrowVectorStart = Vector3f.ZERO;
     private Vector3f rotateArrowVectorEnd = Vector3f.UNIT_X;
-    
+
     /**
-     * 
+     *
      * @param assetManager
      */
     public GuiControlState(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void init(){
+    public void init() {
         arrow = new Arrow(getRotateArrowVectorEnd());
         Vector3f ray_start = getRotateArrowVectorStart();
         rotateArrow = new Geometry("RotateArrow", arrow);
@@ -71,31 +73,31 @@ public class GuiControlState {
         setRotateArrowVisible(false);
         GUINode.attachChild(rotateArrow);
     }
-    
+
     /**
-     * 
+     *
      */
-    public void updateRotateArrow(){
+    public void updateRotateArrow() {
         rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
         arrow.setArrowExtent(getRotateArrowVectorEnd().subtract(getRotateArrowVectorStart()));
         rotateArrow.updateGeometricState();
     }
-    
+
     /**
-     * 
+     *
      * @param visible
      */
-    public void setRotateArrowVisible(boolean visible){
+    public void setRotateArrowVisible(boolean visible) {
         System.out.println("setRotateArrowVisible: " + visible);
-        if(visible){
+        if (visible) {
             rotateArrow.setCullHint(CullHint.Never);
-        }else{
+        } else {
             rotateArrow.setCullHint(CullHint.Always);
         }
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Vector3f getRotateArrowVectorEnd() {
@@ -103,7 +105,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param rotateArrowVectorEnd
      */
     public void setRotateArrowVectorEnd(Vector3f rotateArrowVectorEnd) {
@@ -111,7 +113,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Vector3f getRotateArrowVectorStart() {
@@ -119,7 +121,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param rotateArrowVectorStart
      */
     public void setRotateArrowVectorStart(Vector3f rotateArrowVectorStart) {
@@ -127,7 +129,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Node getGUINode() {
@@ -135,7 +137,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public AUV getLatestSelectedAUV() {
@@ -143,15 +145,15 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param latestSelectedAUV
      */
     public void setLatestSelectedAUV(AUV latestSelectedAUV) {
         this.latestSelectedAUV = latestSelectedAUV;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public SimObject getLatestSelectedSimOb() {
@@ -159,7 +161,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param latestSelectedSimOb
      */
     public void setLatestSelectedSimOb(SimObject latestSelectedSimOb) {
@@ -167,7 +169,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isMove_auv() {
@@ -175,15 +177,15 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param move_auv
      */
     public void setMove_auv(boolean move_auv) {
         this.move_auv = move_auv;
-        if(move_auv == true){
-            setFree(false);  
+        if (move_auv == true) {
+            setFree(false);
             setRotate_auv(false);
-        }else{
+        } else {
             setFree(true);
         }
     }
@@ -205,7 +207,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isRotate_auv() {
@@ -213,21 +215,21 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param rotate_auv
      */
     public void setRotate_auv(boolean rotate_auv) {
         this.rotate_auv = rotate_auv;
-        if(rotate_auv == true){
-            setFree(false);   
+        if (rotate_auv == true) {
+            setFree(false);
             setMove_auv(false);
-        }else{
+        } else {
             setFree(true);
         }
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public boolean isMove_simob() {
@@ -235,21 +237,21 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param move_simob
      */
     public void setMove_simob(boolean move_simob) {
         this.move_simob = move_simob;
-        if(move_simob == true){
-            setFree(false);  
+        if (move_simob == true) {
+            setFree(false);
             setRotate_simob(false);
-        }else{
+        } else {
             setFree(true);
         }
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isRotate_simob() {
@@ -257,21 +259,21 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param rotate_simob
      */
     public void setRotate_simob(boolean rotate_simob) {
         this.rotate_simob = rotate_simob;
-        if(rotate_simob == true){
-            setFree(false);   
+        if (rotate_simob == true) {
+            setFree(false);
             setMove_simob(false);
-        }else{
+        } else {
             setFree(true);
         }
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isAuv_context() {
@@ -279,7 +281,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param auv_context
      */
     public void setAuv_context(boolean auv_context) {
@@ -287,7 +289,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isFree() {
@@ -295,7 +297,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param free
      */
     public void setFree(boolean free) {
@@ -303,7 +305,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Vector3f getIntersection() {
@@ -311,7 +313,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param intersection
      */
     public void setIntersection(Vector3f intersection) {
@@ -319,7 +321,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Spatial getGhostObject() {
@@ -327,7 +329,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param ghost_object
      */
     public void setGhostObject(Spatial ghost_object) {
@@ -335,7 +337,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Quaternion getRotation() {
@@ -343,7 +345,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param rotation
      */
     public void setRotation(Quaternion rotation) {
@@ -351,7 +353,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getDepth_factor() {
@@ -359,7 +361,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param depth_factor
      */
     public void setDepth_factor(float depth_factor) {
@@ -367,7 +369,7 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getDepth_iteration() {
@@ -375,56 +377,56 @@ public class GuiControlState {
     }
 
     /**
-     * 
+     *
      * @param depth_iteration
      */
     public void setDepth_iteration(int depth_iteration) {
         this.depth_iteration = depth_iteration;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void incrementDepthIteration(){
+    public void incrementDepthIteration() {
         depth_iteration = depth_iteration + 1;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void decrementDepthIteration(){
+    public void decrementDepthIteration() {
         depth_iteration = depth_iteration - 1;
     }
-    
+
     /**
-     * 
+     *
      * @param contact_point
      */
-    public void setAuvContactPoint(Vector3f contact_point){
+    public void setAuvContactPoint(Vector3f contact_point) {
         this.contact_point = contact_point;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Vector3f getAuvContactPoint(){
+    public Vector3f getAuvContactPoint() {
         return contact_point;
     }
-    
+
     /**
-     * 
+     *
      * @param contact_direction
      */
-    public void setAuvContactDirection(Vector3f contact_direction){
+    public void setAuvContactDirection(Vector3f contact_direction) {
         this.contact_direction = contact_direction;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Vector3f getAuvContactDirection(){
+    public Vector3f getAuvContactDirection() {
         return contact_direction;
     }
 }

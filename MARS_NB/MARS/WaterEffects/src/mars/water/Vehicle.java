@@ -69,10 +69,18 @@ public class Vehicle {
         return width;
     }
     
+    /**
+     *
+     * @return
+     */
     public ParticleEmitter getEmitter() {
         return emitter;
     }
     
+    /**
+     *
+     * @param emitter
+     */
     public void setEmitter(ParticleEmitter emitter) {
         this.emitter = emitter;
     }

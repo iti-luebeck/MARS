@@ -3,19 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auvtree.nodes;
 
 import java.awt.datatransfer.DataFlavor;
+import mars.auv.AUV;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class CustomerFlavor extends DataFlavor{
+public class CustomerFlavor extends DataFlavor {
+
+    /**
+     *
+     */
     public static final DataFlavor CUSTOMER_FLAVOR = new CustomerFlavor();
-    
-    /*public CustomerFlavor() {
-        super(Customer.class, "Customer");
-    }*/
+
+    /**
+     *
+     */
+    public CustomerFlavor() {
+        super(AUV.class, "AUV");
+    }
 }

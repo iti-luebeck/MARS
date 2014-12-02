@@ -10,12 +10,11 @@ import java.util.EventListener;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public interface RosNodeListener extends EventListener
-{
+public interface RosNodeListener extends EventListener {
+
     /**
-     * 
+     *
      * @param e
      */
-    public void fireEvent( RosNodeEvent e );
-}    
-
+    public void fireEvent(RosNodeEvent e);
+}

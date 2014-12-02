@@ -63,21 +63,44 @@ public class ReflectionProcessor implements SceneProcessor {
         this.reflectionClipPlane = reflectionClipPlane;
     }
 
+    /**
+     *
+     * @param rm
+     * @param vp
+     */
     public void initialize(RenderManager rm, ViewPort vp) {
         this.rm = rm;
         this.vp = vp;
     }
 
+    /**
+     *
+     * @param vp
+     * @param w
+     * @param h
+     */
     public void reshape(ViewPort vp, int w, int h) {
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized() {
         return rm != null;
     }
 
+    /**
+     *
+     * @param tpf
+     */
     public void preFrame(float tpf) {
     }
 
+    /**
+     *
+     * @param rq
+     */
     public void postQueue(RenderQueue rq) {
         //we need special treatement for the sky because it must not be clipped
         rm.getRenderer().setFrameBuffer(reflectionBuffer);
@@ -94,9 +117,16 @@ public class ReflectionProcessor implements SceneProcessor {
 
     }
 
+    /**
+     *
+     * @param out
+     */
     public void postFrame(FrameBuffer out) {
     }
 
+    /**
+     *
+     */
     public void cleanup() {
     }
 

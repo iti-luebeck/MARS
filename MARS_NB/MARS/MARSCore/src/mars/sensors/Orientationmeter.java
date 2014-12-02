@@ -9,10 +9,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
-import mars.NoiseType;
+import mars.misc.ChartValue;
+import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -21,49 +21,50 @@ import org.ros.node.topic.Publisher;
 
 /**
  * Gives the exact orientation of the auv.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Orientationmeter extends Sensor implements ChartValue{
-    
+public class Orientationmeter extends Sensor implements ChartValue {
+
     Quaternion new_orientation = new Quaternion();
     Quaternion old_orientation = new Quaternion();
-        
+
     ///ROS stuff
     private Publisher<geometry_msgs.PoseStamped> publisher = null;
     private geometry_msgs.PoseStamped fl;
-    private std_msgs.Header header; 
-    
-    /**
-     * 
-     */
-    public Orientationmeter(){
-        super();
-    }
-        
+    private std_msgs.Header header;
+
     /**
      *
-     * @param simstate 
+     */
+    public Orientationmeter() {
+        super();
+    }
+
+    /**
+     *
+     * @param simstate
      * @param pe
      */
-    public Orientationmeter(SimState simstate,PhysicalEnvironment pe){
+    public Orientationmeter(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
         this.pe = pe;
     }
 
     /**
-     * 
-     * @param simstate 
+     *
+     * @param simstate
      */
-    public Orientationmeter(SimState simstate){
+    public Orientationmeter(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public Orientationmeter(Orientationmeter sensor){
+    public Orientationmeter(Orientationmeter sensor) {
         super(sensor);
     }
 
@@ -82,7 +83,7 @@ public class Orientationmeter extends Sensor implements ChartValue{
      *
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
     }
 
@@ -90,14 +91,14 @@ public class Orientationmeter extends Sensor implements ChartValue{
      *
      * @param tpf
      */
-    public void update(float tpf){
+    public void update(float tpf) {
         new_orientation = physics_control.getPhysicsRotation();//get the new velocity
         old_orientation = new_orientation.clone();
     }
-    
+
     /**
      *
-     * @param addedOrientation 
+     * @param addedOrientation
      */
     public void setAddedOrientation(Vector3f addedOrientation) {
         variables.put("addedOrientation", addedOrientation);
@@ -108,25 +109,25 @@ public class Orientationmeter extends Sensor implements ChartValue{
      * @return
      */
     public Vector3f getAddedOrientation() {
-        return (Vector3f)variables.get("addedOrientation");
+        return (Vector3f) variables.get("addedOrientation");
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public Quaternion getOrientation(){
-        if(getNoiseType() == NoiseType.NO_NOISE){
+    public Quaternion getOrientation() {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getOrientationRaw();
-        }else if(getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION){
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Quaternion noised = new Quaternion(getOrientationRaw().getX()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getW()+((float)((1f/100f)*noise)));
+            Quaternion noised = new Quaternion(getOrientationRaw().getX() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getW() + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else if(getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION){
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Quaternion noised = new Quaternion(getOrientationRaw().getX()+((float)((1f/100f)*noise)),getOrientationRaw().getY()+((float)((1f/100f)*noise)),getOrientationRaw().getZ()+((float)((1f/100f)*noise)),getOrientationRaw().getW()+((float)((1f/100f)*noise)));
+            Quaternion noised = new Quaternion(getOrientationRaw().getX() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getZ() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getW() + ((float) ((1f / 100f) * noise)));
             return noised;
-        }else{
+        } else {
             return getOrientationRaw();
         }
     }
@@ -135,34 +136,34 @@ public class Orientationmeter extends Sensor implements ChartValue{
      *
      * @return
      */
-    private Quaternion getOrientationRaw(){
+    private Quaternion getOrientationRaw() {
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getAddedOrientation().getX(),getAddedOrientation().getY(),getAddedOrientation().getZ());
+        quat.fromAngles(getAddedOrientation().getX(), getAddedOrientation().getY(), getAddedOrientation().getZ());
         return physics_control.getPhysicsRotation().mult(quat);
     }
 
     /**
      *
      */
-    public void reset(){
+    public void reset() {
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),geometry_msgs.PoseStamped._TYPE);  
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
 
     /**
-     * 
+     *
      */
     @Override
     public void publish() {
@@ -170,29 +171,29 @@ public class Orientationmeter extends Sensor implements ChartValue{
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        
+
         geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
         quat.setX(getOrientation().getX());
         quat.setY(getOrientation().getY());
         quat.setZ(getOrientation().getZ());
         quat.setW(getOrientation().getW());
-        
+
         geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
         pose.setOrientation(quat);
         fl.setPose(pose);
-        
-        if( publisher != null ){
+
+        if (publisher != null) {
             publisher.publish(fl);
         }
-    }    
-    
+    }
+
     @Override
     public void publishData() {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getOrientation(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
-        
+
     /**
      *
      * @return
@@ -200,7 +201,7 @@ public class Orientationmeter extends Sensor implements ChartValue{
     @Override
     public Object getChartValue() {
         float[] bla = getOrientation().toAngles(null);
-        return new Vector3f(bla[0],bla[1],bla[2]);
+        return new Vector3f(bla[0], bla[1], bla[2]);
     }
 
     /**

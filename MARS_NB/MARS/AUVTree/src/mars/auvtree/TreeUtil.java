@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auvtree;
 
 import java.awt.Image;
@@ -16,15 +15,16 @@ import org.openide.util.Exceptions;
 
 /**
  * Helper Class for loading icons.
- * 
+ *
  * @author Christian
  */
 public class TreeUtil {
-    
+
     /**
      * Loads the image for the node. Uses the icon name from the attachments to
      * find the image on disk.
      *
+     * @param iconName
      * @return Image object which was loaded.
      */
     public static Image getImage(String iconName) {

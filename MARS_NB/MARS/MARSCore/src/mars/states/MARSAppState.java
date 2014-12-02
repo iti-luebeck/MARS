@@ -11,17 +11,18 @@ import com.jme3.scene.Node;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class MARSAppState extends AbstractAppState{
-     /**
+public class MARSAppState extends AbstractAppState {
+
+    /**
      *
      */
     protected Node rootNode = new Node("Root Node");
-     
-     /**
-     * 
+
+    /**
+     *
      * @return
      */
-    public Node getRootNode(){
+    public Node getRootNode() {
         return rootNode;
     }
 }

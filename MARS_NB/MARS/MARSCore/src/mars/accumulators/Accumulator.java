@@ -16,17 +16,18 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.AUVObject;
-import mars.PropertyChangeListenerSupport;
+import mars.PhysicalExchange.AUVObject;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
 /**
+ * This class reperesents an accumulator. Sensors and actuators can drain energy from it.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class Accumulator implements AUVObject,PropertyChangeListenerSupport{
+public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
     private List listeners = Collections.synchronizedList(new LinkedList());
 
@@ -111,18 +112,18 @@ public class Accumulator implements AUVObject,PropertyChangeListenerSupport{
     public void updateState(TreePath path) {
 
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
     public Boolean getEnabled() {
-        return (Boolean)variables.get("enabled");
+        return (Boolean) variables.get("enabled");
     }
-    
+
     /**
-     * 
+     *
      * @param enabled
      */
     @Override
@@ -224,8 +225,8 @@ public class Accumulator implements AUVObject,PropertyChangeListenerSupport{
     }
 
     /**
-     * 
-     * @param ActualCurrent 
+     *
+     * @param ActualCurrent
      */
     public void setActualCurrent(Double ActualCurrent) {
         variables.put("ActualCurrent", ActualCurrent);

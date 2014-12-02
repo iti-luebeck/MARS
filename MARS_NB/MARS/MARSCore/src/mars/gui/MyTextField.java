@@ -9,6 +9,8 @@ import javax.swing.JTextField;
 import javax.swing.text.Document;
 
 /**
+ * A special text field which filters inputs.
+ * 
  * @author Thomas Tosik
  */
 public class MyTextField extends JTextField{

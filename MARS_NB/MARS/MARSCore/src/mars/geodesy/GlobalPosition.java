@@ -122,6 +122,7 @@ public class GlobalPosition extends GlobalCoordinates
 
    /**
     * Get position as a string.
+     * @return 
     */
    @Override
    public String toString()

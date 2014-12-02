@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -25,10 +24,11 @@ import java.util.logging.Logger;
 import mars.MARS_Main;
 
 /**
+ * This class manages the visible waypoints of an AUV.
  *
  * @author Thomas Tosik
  */
-public class WayPoints extends Node{
+public class WayPoints extends Node {
 
     private ArrayList waypoints = new ArrayList();
     private ArrayList waypoints_geom = new ArrayList();
@@ -50,11 +50,11 @@ public class WayPoints extends Node{
 
     /**
      *
-     * @param name 
+     * @param name
      * @param simauv
-     * @param auv_param 
+     * @param auv_param
      */
-    public WayPoints(String name, MARS_Main simauv,AUV_Parameters auv_param) {
+    public WayPoints(String name, MARS_Main simauv, AUV_Parameters auv_param) {
         super(name);
         this.simauv = simauv;
         this.assetManager = simauv.getAssetManager();
@@ -67,44 +67,45 @@ public class WayPoints extends Node{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
 
     /**
      *
      * @param waypoint
      */
-    public void addWaypoint(Vector3f waypoint){
-        if(waypoints.size() >= 1){//add a line if we have minimum two points
-            if(auv_param.getWaypointsMaxWaypoints() == 0){//unlimited waypoints
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
-            }else if(waypoints.size() >= auv_param.getWaypointsMaxWaypoints()) {//limited waypoints
+    public void addWaypoint(Vector3f waypoint) {
+        if (waypoints.size() >= 1) {//add a line if we have minimum two points
+            if (auv_param.getWaypointsMaxWaypoints() == 0) {//unlimited waypoints
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
+            } else if (waypoints.size() >= auv_param.getWaypointsMaxWaypoints()) {//limited waypoints
                 waypoints.remove(0);
                 waypoints_geom.remove(0);
                 destroyLine();
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
-            }else{
-                createLine("waypoint"+waypoints.size()+1,auv_param.getWaypointsColor(),(Vector3f)waypoints.get(waypoints.size()-1),waypoint);
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
+            } else {
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
             }
         }
         waypoints.add(waypoint);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Added Waypoint at: " + waypoint.toString(), "");
     }
-    
+
     /**
-     * 
+     * Updates the gradient effect of all connected waypoints.
      */
-    public void updateGradient(){
+    public void updateGradient() {
         Future fut = simauv.enqueue(new Callable() {
             public Void call() throws Exception {
-                float ways = (float)waypoints_geom.size();
+                float ways = (float) waypoints_geom.size();
                 int counter = 1;
                 Iterator iter = waypoints_geom.iterator();
-                while(iter.hasNext() ) {
-                    Geometry waypoint_geom = (Geometry)iter.next();
+                while (iter.hasNext()) {
+                    Geometry waypoint_geom = (Geometry) iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                     ColorRGBA way_color = new ColorRGBA(auv_param.getWaypointsColor());
-                    way_color.a = ((float)counter)/ways;
+                    way_color.a = ((float) counter) / ways;
                     counter++;
                     auv_geom_mat.setColor("Color", way_color);
 
@@ -117,16 +118,16 @@ public class WayPoints extends Node{
             }
         });
     }
-    
+
     /**
-     * 
+     * Updates the color of all connected waypoints.
      */
-    public void updateColor(){
+    public void updateColor() {
         Future fut = simauv.enqueue(new Callable() {
             public Void call() throws Exception {
                 Iterator iter = waypoints_geom.iterator();
-                while(iter.hasNext() ) {
-                    Geometry waypoint_geom = (Geometry)iter.next();
+                while (iter.hasNext()) {
+                    Geometry waypoint_geom = (Geometry) iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                     auv_geom_mat.setColor("Color", auv_param.getWaypointsColor());
                     waypoint_geom.setMaterial(auv_geom_mat);
@@ -140,7 +141,7 @@ public class WayPoints extends Node{
      *
      * @param tpf
      */
-    public void incTime(float tpf){
+    public void incTime(float tpf) {
         time = time + tpf;
     }
 
@@ -161,7 +162,7 @@ public class WayPoints extends Node{
 
     /**
      *
-     * @return
+     * @return A list of all waypoints.
      */
     public ArrayList getWaypoints() {
         return waypoints;
@@ -170,36 +171,36 @@ public class WayPoints extends Node{
     /**
      *
      * @param index
-     * @return
+     * @return A specific waypoint at point index.
      */
     public Vector3f getWaypoint(int index) {
-        return (Vector3f)waypoints.get(index);
+        return (Vector3f) waypoints.get(index);
     }
 
     /**
      *
      * @param visible
      */
-    public void setWaypointVisibility(boolean visible){
-        if(visible){
+    public void setWaypointVisibility(boolean visible) {
+        if (visible) {
             this.setCullHint(CullHint.Never);
-        }else{
+        } else {
             this.setCullHint(CullHint.Always);
         }
     }
-    
+
     /**
-     * 
+     * Clears all waypoints.
      */
-    public void reset(){
+    public void reset() {
         waypoints.clear();
         waypoints_geom.clear();
         destroyLines();
     }
 
-    private void createLine(String name, ColorRGBA color, Vector3f start, Vector3f end){
+    private void createLine(String name, ColorRGBA color, Vector3f start, Vector3f end) {
         Line line = new Line(start, end);
-        if(auv_param.getWaypointsLineWidth() != null){
+        if (auv_param.getWaypointsLineWidth() != null) {
             line.setLineWidth(auv_param.getWaypointsLineWidth());
         }
         final Geometry geom = new Geometry(name, line);
@@ -209,28 +210,28 @@ public class WayPoints extends Node{
         geom.updateGeometricState();
         waypoints_geom.add(geom);
         Future fut = simauv.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        self.attachChild(geom);
-                        return null;
-                    }
+            public Void call() throws Exception {
+                self.attachChild(geom);
+                return null;
+            }
         });
     }
 
-    private void destroyLine(){
+    private void destroyLine() {
         Future fut = simauv.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        self.detachChildAt(0);
-                        return null;
-                    }
+            public Void call() throws Exception {
+                self.detachChildAt(0);
+                return null;
+            }
         });
     }
-    
-    private void destroyLines(){
+
+    private void destroyLines() {
         Future fut = simauv.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        self.detachAllChildren();
-                        return null;
-                    }
+            public Void call() throws Exception {
+                self.detachAllChildren();
+                return null;
+            }
         });
     }
 

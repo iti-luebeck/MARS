@@ -43,8 +43,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.prefs.Preferences;
 import javax.swing.event.EventListenerList;
-import mars.AdvancedFlyByCamera;
-import mars.PhysicalExchanger;
+import mars.states.AdvancedFlyByCamera;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.auv.BasicAUV;
 import mars.sensors.Sensor;
@@ -196,6 +196,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         super.initialize(stateManager, app);
     }
     
+    /**
+     *
+     * @param auv
+     */
     public void loadAUV(BasicAUV auv){
         if(isInitialized()){
             deleteAllAUVs();
@@ -360,6 +364,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         return super.isInitialized();
     }
 
+    /**
+     *
+     */
     @Override
     public void postRender() {
         if (!super.isEnabled()) {
@@ -368,6 +375,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         super.postRender();
     }
 
+    /**
+     *
+     * @param rm
+     */
     @Override
     public void render(RenderManager rm) {
         if (!super.isEnabled()) {
@@ -376,6 +387,9 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         super.render(rm);
     }
 
+    /**
+     *
+     */
     @Override
     public void cleanup() {
         super.cleanup();
@@ -555,11 +569,19 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         }
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
     }
 
+    /**
+     *
+     * @param stateManager
+     */
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
@@ -675,17 +697,28 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         }
     }
     
+    /**
+     *
+     * @param listener
+     */
     public void addAdListener( AppStateListener listener )
     {
       listeners.add( AppStateListener.class, listener );
     }
 
-
+    /**
+     *
+     * @param listener
+     */
     public void removeAdListener( AppStateListener listener )
     {
       listeners.remove( AppStateListener.class, listener );
     }
 
+    /**
+     *
+     * @param event
+     */
     protected synchronized void notifyAdvertisement( Event event )
     {
       for ( AppStateListener l : listeners.getListeners( AppStateListener.class ) )

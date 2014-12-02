@@ -16,8 +16,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ChartValue;
-import mars.PhysicalExchanger;
+import mars.misc.ChartValue;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
@@ -25,47 +25,49 @@ import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
 
 /**
+ * A simple visualization of a point in the 3d world. Can be used for debugging
+ * purposes since it can be moved.
  *
- * @author Tosik
+ * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class PointVisualizer extends Actuator implements ChartValue{
+public class PointVisualizer extends Actuator implements ChartValue {
 
     //motor
     private Geometry VectorVisualizerStart;
     private Vector3f vector = Vector3f.ZERO;
-    
+
     private Node Rotation_Node = new Node();
-    
-    /**
-     * 
-     */
-    public PointVisualizer(){
-        super();
-    }
-    
+
     /**
      *
-     * @param simstate 
-     * @param MassCenterGeom
      */
-    public PointVisualizer(SimState simstate,Geometry MassCenterGeom) {
-        super(simstate,MassCenterGeom);
+    public PointVisualizer() {
+        super();
     }
 
     /**
      *
-     * @param simstate 
+     * @param simstate
+     * @param MassCenterGeom
+     */
+    public PointVisualizer(SimState simstate, Geometry MassCenterGeom) {
+        super(simstate, MassCenterGeom);
+    }
+
+    /**
+     *
+     * @param simstate
      */
     public PointVisualizer(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param pointVisualizer
      */
-    public PointVisualizer(PointVisualizer pointVisualizer){
+    public PointVisualizer(PointVisualizer pointVisualizer) {
         super(pointVisualizer);
     }
 
@@ -81,31 +83,31 @@ public class PointVisualizer extends Actuator implements ChartValue{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ColorRGBA getColor() {
-        return (ColorRGBA)variables.get("Color");
+        return (ColorRGBA) variables.get("Color");
     }
 
     /**
-     * 
+     *
      * @param Color
      */
     public void setColor(ColorRGBA Color) {
         variables.put("Color", Color);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public Float getRadius() {
-        return (Float)variables.get("Radius");
+        return (Float) variables.get("Radius");
     }
 
     /**
-     * 
+     *
      * @param Radius
      */
     public void setRadius(Float Radius) {
@@ -113,11 +115,11 @@ public class PointVisualizer extends Actuator implements ChartValue{
     }
 
     /**
-     * DON'T CALL THIS METHOD!
-     * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
+     * DON'T CALL THIS METHOD! In this method all the initialiasing for the
+     * motor will be done and it will be attached to the physicsNode.
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
         Sphere sphere7 = new Sphere(16, 16, getRadius());
         VectorVisualizerStart = new Geometry("PointVisualizerStart", sphere7);
@@ -129,36 +131,35 @@ public class PointVisualizer extends Actuator implements ChartValue{
 
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        quat.fromAngles(getRotation().getX(), getRotation().getY(), getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
         PhysicalExchanger_Node.attachChild(Rotation_Node);
         rootNode.attachChild(PhysicalExchanger_Node);
     }
 
-    public void update(){
+    public void update() {
 
     }
 
-   /**
+    /**
      *
      * @param tpf
      */
     @Override
-    public void update(float tpf){
-        
+    public void update(float tpf) {
+
     }
 
-    public void reset(){
-        
+    public void reset() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param vector
      */
-    public void updateVector(final Vector3f vector){
+    public void updateVector(final Vector3f vector) {
         this.vector = vector;
-        System.out.println("I (" + getName()+ ") heard: \"" + vector + "\"");
         Future fut = this.simauv.enqueue(new Callable() {
             public Void call() throws Exception {
                 VectorVisualizerStart.setLocalTranslation(vector);
@@ -167,9 +168,9 @@ public class PointVisualizer extends Actuator implements ChartValue{
             }
         });
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
@@ -179,15 +180,14 @@ public class PointVisualizer extends Actuator implements ChartValue{
         final PointVisualizer self = this;
         Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.Vector3Stamped._TYPE);
         subscriber.addMessageListener(new MessageListener<geometry_msgs.Vector3Stamped>() {
-                @Override
-                public void onNewMessage(geometry_msgs.Vector3Stamped message) {
-                    System.out.println("I (" + getName()+ ") heard: \"" + message.getVector() + "\"");
-                    Vector3 vec = (Vector3)message.getVector();
-                    self.updateVector(new Vector3f((float)vec.getX(), (float)vec.getZ(), (float)vec.getY()));
-                }
-        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+            @Override
+            public void onNewMessage(geometry_msgs.Vector3Stamped message) {
+                Vector3 vec = (Vector3) message.getVector();
+                self.updateVector(new Vector3f((float) vec.getX(), (float) vec.getZ(), (float) vec.getY()));
+            }
+        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
-    
+
     /**
      *
      * @return

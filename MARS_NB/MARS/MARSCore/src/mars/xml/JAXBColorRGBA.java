@@ -10,47 +10,49 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * A special HashMap entry so JAXB can work easier with JME ColorRGBA.
  *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JAXBColorRGBA {
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float a;
-    
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float b;
-    
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float g;
-    
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float r;
-    
+
     /**
-     * 
+     *
      */
-    public JAXBColorRGBA(){
-        
+    public JAXBColorRGBA() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param color
      */
-    public JAXBColorRGBA(ColorRGBA color){
+    public JAXBColorRGBA(ColorRGBA color) {
         a = color.a;
         b = color.b;
         g = color.g;
@@ -58,7 +60,7 @@ public class JAXBColorRGBA {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getA() {
@@ -66,7 +68,7 @@ public class JAXBColorRGBA {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getB() {
@@ -74,15 +76,15 @@ public class JAXBColorRGBA {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getG() {
         return g;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public float getR() {

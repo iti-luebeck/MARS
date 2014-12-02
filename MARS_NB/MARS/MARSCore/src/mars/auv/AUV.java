@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -18,88 +17,95 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.ChartValue;
-import mars.PhysicalEnvironment;
 import mars.MARS_Settings;
-import mars.control.MyCustomGhostControl;
+import mars.PhysicalEnvironment;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
-import mars.states.SimState;
 import mars.actuators.Actuator;
+import mars.control.MyCustomGhostControl;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.PhysicalExchanger;
 import mars.gui.tree.UpdateState;
+import mars.misc.ChartValue;
+import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
+import mars.states.SimState;
 
 /**
- * An basic interface for auv's like "Hanse".
+ * An basic interface for AUVs like "Hanse".
+ *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {BasicAUV.class} )
-public interface AUV extends RosNodeListener,UpdateState, ChartValue{
+@XmlSeeAlso({BasicAUV.class})
+public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObject {
 
     /**
      *
      * @param tpf
      */
     public void updateForces(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateSensors(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateActuators(float tpf);
-    
+
     /**
-     * 
+     *
      * @param tpf
      */
     public void updateAccumulators(float tpf);
-    
+
     /**
      *
      * @param tpf
      */
     public void updateWaypoints(float tpf);
+
     /**
-     * 
+     * Try to send all data from the sensors into the "network".
      */
     public void publishSensorsOfAUV();
+
     /**
-     * 
+     * Try to send all data from the actuators into the "network"
      */
     public void publishActuatorsOfAUV();
+
     /**
-     *
+     * Set all the forces to zero.
      */
     public void clearForces();
-    /*
-     *
-     */
+
     /**
      *
      */
     public void reset();
+
     /**
      *
-     * @return
+     * @return Unique name of the AUV.
      */
     public String getName();
+
     /**
-     *
+     * Unique name of the AUV.
+     * 
      * @param auv_name
      */
     public void setName(String auv_name);
+
     /**
      *
      * @return
@@ -108,108 +114,127 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
      */
     public MyCustomGhostControl getGhostControl();
+
     /**
      *
      * @param physics_control
      */
     public void setPhysicsControl(RigidBodyControl physics_control);
-     /**
+
+    /**
      *
-     * @return
+     * @return Main AUV node used for the scenegraph (rootNode).
      */
     public Node getAUVNode();
+
     /**
-     * 
+     *
      * @return
      */
     public Node getSelectionNode();
+
     /**
      *
-     * @return
+     * @return The Geometry representing the mass center of the auv.
      */
     public Geometry getMassCenterGeom();
+
     /**
-     *
+     * Initialize method called after AUV creation or if enabled.
      */
     public void init();
-    /*
-     *
-     */
+
     /**
      *
      */
     public void createDefault();
+
     /**
-     * 
+     *
+     * @deprecated
      */
+    @Deprecated
     public void initROS();
+
     /**
      *
      * @return
      */
     @Override
     public String toString();
+
     /**
      *
-     * @return
+     * @return All actuators registered to this AUV.
      */
-    public HashMap<String,Actuator> getActuators();
+    public HashMap<String, Actuator> getActuators();
+
     /**
      *
-     * @return
+     * @return All sensors registered to this AUV.
      */
-    public HashMap<String,Sensor> getSensors();
+    public HashMap<String, Sensor> getSensors();
+
     /**
      *
-     * @return
+     * @return All accumulators registered to this AUV.
      */
-    public HashMap<String,Accumulator> getAccumulators();
+    public HashMap<String, Accumulator> getAccumulators();
+
     /**
      *
-     * @param key 
-     * @return
+     * @param key
+     * @return A specific accumulator by its unique name.
      */
     public Accumulator getAccumulator(String key);
+
     /**
      *
-     * @return
+     * @return The AUVParameters object.
      */
     public AUV_Parameters getAuv_param();
+
     /**
      *
-     * @param auvParam 
+     * @param auvParam
      */
     public void setAuv_param(AUV_Parameters auvParam);
+
     /**
      *
      * @param classNameString
-     * @return
+     * @return All sensors by a specific class.
      */
     public ArrayList getSensorsOfClass(String classNameString);
+
     /**
      *
      * @param classNameString
-     * @return
+     * @return True if AUV has a specific sensor type.
      */
     public boolean hasSensorsOfClass(String classNameString);
+
     /**
      *
-     * @param simstate 
+     * @param simstate
      */
     public void setState(SimState simstate);
     /*
      *
      */
+
     /**
      *
      * @return
      */
     public PhysicalEnvironment getPhysical_environment();
+
     /**
      *
      * @param physical_environment
@@ -218,14 +243,16 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
-     * 
+     *
      * @return
      */
     public MARS_Settings getMARS_Settings();
     /*
      * 
      */
+
     /**
      *
      * @param simauv_settings
@@ -234,6 +261,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
@@ -242,30 +270,31 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      * 
      */
+
     /**
      *
-     * @return
+     * @return The main 3D model of the AUV.
      */
     public Spatial getAUVSpatial();
     /*
      *
      */
+
     /**
-     *
+     * Clears all offscreen renderes. Cameras, area drag.
      */
     public void cleanupOffscreenView();
-    
+
     /**
      *
      */
     public void cleanupAUV();
-    /*
+
+    /**
      *
      */
-    /**
-     * 
-     */
     public void addDragOffscreenView();
+
     /**
      *
      * @return
@@ -274,6 +303,7 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @return
@@ -282,116 +312,134 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
     /*
      *
      */
+
     /**
      *
      * @param visible
      */
     public void debugView( boolean visible );
     /**
-     * 
+     *
      * @param mars_node
      */
+    @Deprecated
     public void setROS_Node(MARSNodeMain mars_node);
-    
+
     /**
-     * 
+     *
      * @param selected
      */
     public void setSelected(boolean selected);
+
     /**
-     * 
+     *
      * @return
      */
     public boolean isSelected();
+
     /**
-     * 
+     *
      * @return
      */
     public Spatial getGhostAUV();
+
     /**
-     * 
+     *
      * @param hide
      */
     public void hideGhostAUV(boolean hide);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setCentersVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setPhysicalExchangerVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setVisualizerVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setCollisionVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBuoycancyVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBuoyancyVolumeVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setWireframeVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setDragVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setWayPointsVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param visible
      */
     public void setBoundingBoxVisible(boolean visible);
+
     /**
-     * 
+     *
      * @param enabled
      */
     public void setWaypointsEnabled(boolean enabled);
+
     /**
-     * 
+     *
      * @return
      */
     public WayPoints getWaypoints();
+
     /**
-     * 
+     *
      * @param path
      */
     @Override
     public void updateState(TreePath path);
-    
-    /**
-     *
-     * @param listener
-     */
-    public void addAdListener( AUVListener listener );
 
     /**
      *
      * @param listener
      */
-    public void removeAdListener( AUVListener listener );
-    
+    public void addAdListener(AUVListener listener);
+
+    /**
+     *
+     * @param listener
+     */
+    public void removeAdListener(AUVListener listener);
+
     /**
      *
      */
@@ -401,8 +449,8 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      *
      * @param event
      */
-    public void notifyAdvertisement( ChartEvent event );
-    
+    public void notifyAdvertisement(ChartEvent event);
+
     /**
      *
      * @param name
@@ -421,19 +469,19 @@ public interface AUV extends RosNodeListener,UpdateState, ChartValue{
      * @param arrlist
      */
     public void registerPhysicalExchangers(ArrayList arrlist);
-    
+
     /**
      *
      * @param pex
      */
     public void deregisterPhysicalExchanger(PhysicalExchanger pex);
-    
+
     /**
      *
-     * @param name 
+     * @param name
      */
     public void deregisterPhysicalExchanger(String name);
-    
+
     /**
      *
      * @param oldName

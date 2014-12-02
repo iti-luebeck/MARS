@@ -84,6 +84,7 @@
             </module-dependencies>
             <public-packages>
                 <package>mars.water</package>
+                <package>mars.water.options</package>
             </public-packages>
         </data>
     </configuration>

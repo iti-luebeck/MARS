@@ -10,48 +10,50 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * A special HashMap entry so JAXB can work easier with JME Vector3f.
  *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JAXBVector3f {
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float x;
-    
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float y;
-    
+
     /**
-     * 
+     *
      */
     @XmlElement
     public float z;
-    
+
     /**
-     * 
+     *
      */
-    public JAXBVector3f(){
-        
+    public JAXBVector3f() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param vec
      */
-    public JAXBVector3f(Vector3f vec){
+    public JAXBVector3f(Vector3f vec) {
         x = vec.x;
         y = vec.y;
         z = vec.z;
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getX() {
@@ -59,7 +61,7 @@ public class JAXBVector3f {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getY() {
@@ -67,7 +69,7 @@ public class JAXBVector3f {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getZ() {

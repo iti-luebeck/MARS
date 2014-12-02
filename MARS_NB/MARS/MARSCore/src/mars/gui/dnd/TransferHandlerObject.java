@@ -10,13 +10,13 @@ import java.io.Serializable;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class TransferHandlerObject implements Serializable{
+public class TransferHandlerObject implements Serializable {
 
     private int type = 0;
     private String name = "";
-    
+
     /**
-     * 
+     *
      * @param type
      * @param name
      */
@@ -26,7 +26,7 @@ public class TransferHandlerObject implements Serializable{
     }
 
     /**
-     * 
+     *
      * @param name
      */
     public void setName(String name) {
@@ -34,7 +34,7 @@ public class TransferHandlerObject implements Serializable{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getName() {
@@ -42,7 +42,7 @@ public class TransferHandlerObject implements Serializable{
     }
 
     /**
-     * 
+     *
      * @param type
      */
     public void setType(int type) {
@@ -50,7 +50,7 @@ public class TransferHandlerObject implements Serializable{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getType() {

@@ -16,6 +16,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  *
  * @author Thomas Tosik
  */
+@Deprecated
 public class TextFieldTreeCellRenderer extends DefaultTreeCellRenderer{
 
     private TextFieldEditor leafRenderer = new TextFieldEditor();

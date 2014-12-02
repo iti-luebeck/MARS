@@ -200,6 +200,10 @@ public class Model3DFactory {
         return lineGeo;
     }
 
+    /**
+     *
+     * @return
+     */
     public Node getWireFrameCrossNode() {
         Node wireFrameCross = new Node("Wireframe Cross");
         wireFrameCross.attachChild(getWireFrameGeometry("x Plain", 0.5f, 'x'));
@@ -278,6 +282,7 @@ public class Model3DFactory {
      * returns a Spatial loaded from Path. The name is set to "Attachment"
      *
      * @param path path relativ to "./assets"
+     * @param position
      * @return instance of Spatial<br/>
      * null: not found or not able to load the file
      */

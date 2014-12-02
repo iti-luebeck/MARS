@@ -5,21 +5,26 @@
 package mars.xml;
 
 /**
+ * A special HashMapEntry so we can store easily the unit used by a physical
+ * thing. For example temperatur = C°.
  *
  * @author Thomas Tosik
  */
 public class HashMapEntry {
-    private String unit = ""; 
-    
+
+    private String unit = "";
+
     private Object value;
-    
+
     /**
-     * 
+     *
      */
-    public HashMapEntry() {unit="";}
-    
+    public HashMapEntry() {
+        unit = "";
+    }
+
     /**
-     * 
+     *
      * @param unit
      * @param value
      */
@@ -27,21 +32,21 @@ public class HashMapEntry {
         this.unit = unit;
         this.value = value;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public String getUnit() {
-        if(unit != null){
+        if (unit != null) {
             return unit;
-        }else{
+        } else {
             return "";
         }
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Object getValue() {
@@ -49,7 +54,7 @@ public class HashMapEntry {
     }
 
     /**
-     * 
+     *
      * @param unit
      */
     public void setUnit(String unit) {
@@ -57,7 +62,7 @@ public class HashMapEntry {
     }
 
     /**
-     * 
+     *
      * @param value
      */
     public void setValue(Object value) {

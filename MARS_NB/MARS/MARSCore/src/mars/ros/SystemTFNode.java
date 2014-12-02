@@ -13,19 +13,20 @@ import org.ros.node.topic.Publisher;
 
 /**
  * This Node sends the ros->jme3 tf.
+ *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class SystemTFNode implements RosNodeListener{
-    
+public class SystemTFNode implements RosNodeListener {
+
     //ros system tf
     private Publisher<tf.tfMessage> publisher = null;
     private tf.tfMessage fl;
     private geometry_msgs.TransformStamped tfs;
-    private std_msgs.Header header; 
+    private std_msgs.Header header;
     private int rosSequenceNumber = 0;
     private boolean init = false;
     private MARSNodeMain systemNode;
-    
+
     /**
      *
      */
@@ -47,22 +48,22 @@ public class SystemTFNode implements RosNodeListener{
     public MARSNodeMain getSystemNode() {
         return systemNode;
     }
-     
+
     /**
-     * 
+     *
      * @param e
      */
-    public void fireEvent( RosNodeEvent e ){
-        if(true){
-            initSystemTF((MARSNodeMain)e.getSource());
+    public void fireEvent(RosNodeEvent e) {
+        if (true) {
+            initSystemTF((MARSNodeMain) e.getSource());
         }
     }
-    
+
     /**
      *
      */
-    public void publishSystemTF(){
-        if(init){
+    public void publishSystemTF() {
+        if (init) {
             //root
             header.setSeq(rosSequenceNumber++);
             header.setFrameId("ros");
@@ -79,14 +80,14 @@ public class SystemTFNode implements RosNodeListener{
 
             geometry_msgs.Quaternion quat2 = getSystemNode().getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
             Quaternion quat_jme = new Quaternion();
-            quat_jme.fromAngles(0f,FastMath.HALF_PI,FastMath.HALF_PI);
+            quat_jme.fromAngles(0f, FastMath.HALF_PI, FastMath.HALF_PI);
             quat2.setX(quat_jme.getX());
             quat2.setY(quat_jme.getY());
             quat2.setZ(quat_jme.getZ());
             quat2.setW(quat_jme.getW());
             transform2.setRotation(quat2);
 
-            tfs.setTransform(transform2);  
+            tfs.setTransform(transform2);
 
             tfs.setChildFrameId("jme3");
 
@@ -95,14 +96,14 @@ public class SystemTFNode implements RosNodeListener{
 
             fl.setTransforms(tfl);
 
-            if( publisher != null ){
+            if (publisher != null) {
                 publisher.publish(fl);
             }
         }
     }
-    
-    private void initSystemTF(MARSNodeMain ros_node) { 
-        publisher = ros_node.newPublisher("/tf",tf.tfMessage._TYPE);  
+
+    private void initSystemTF(MARSNodeMain ros_node) {
+        publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
         fl = ros_node.getMessageFactory().newFromType(tf.tfMessage._TYPE);
         tfs = ros_node.getMessageFactory().newFromType(geometry_msgs.TransformStamped._TYPE);
         header = ros_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);

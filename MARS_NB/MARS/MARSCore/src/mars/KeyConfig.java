@@ -17,88 +17,90 @@ import javax.xml.bind.annotation.XmlElement;
 import mars.gui.tree.UpdateState;
 
 /**
- * This class stores the mapping between the keyboard input and an action that you want to perform with a class that extends the KEYS interface.
+ * This class stores the mapping between the keyboard input and an action that
+ * you want to perform with a class that extends the KEYS interface.
+ *
  * @author Thomas Tosik
- * @deprecated 
+ * @deprecated
  */
-@XmlRootElement(name="KeyConfig")
+@XmlRootElement(name = "KeyConfig")
 @XmlAccessorType(XmlAccessType.NONE)
 @Deprecated
-public class KeyConfig implements UpdateState{
+public class KeyConfig implements UpdateState {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    private HashMap<String,String> keys;
-    
+    private HashMap<String, String> keys;
+
     @XmlElement
     private String auv_key_focus = "";
-        
+
     /**
-     * 
+     *
      */
     public KeyConfig() {
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public HashMap<String,String> getKeys(){
+    public HashMap<String, String> getKeys() {
         return keys;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initAfterJAXB(){
-        
+    public void initAfterJAXB() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param target
      * @param hashmapname
      */
-    public void updateState(String target, String hashmapname){
-        if(target.equals("enabled") && hashmapname.equals("Axis")){
-            
+    public void updateState(String target, String hashmapname) {
+        if (target.equals("enabled") && hashmapname.equals("Axis")) {
+
         }
     }
-    
+
     /**
-     * 
+     *
      * @param path
      */
-    public void updateState(TreePath path){
-        if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
-            if( path.getParentPath().getLastPathComponent().toString().equals("Settings")){
-                updateState(path.getLastPathComponent().toString(),"");
-            }else{
-                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
+    public void updateState(TreePath path) {
+        if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
+            if (path.getParentPath().getLastPathComponent().toString().equals("Settings")) {
+                updateState(path.getLastPathComponent().toString(), "");
+            } else {
+                updateState(path.getLastPathComponent().toString(), path.getParentPath().getLastPathComponent().toString());
             }
         }
     }
-    
+
     /**
-     * 
+     *
      */
-    public void createKeys(){
+    public void createKeys() {
         KeyNames keynames = new KeyNames();
-        keys = new HashMap<String,String>();
+        keys = new HashMap<String, String>();
         for (int i = 0; i < 223; i++) {
             keys.put("#" + i + " " + keynames.getName(i), "");
         }
     }
-    
-    private int getKeyNumber(String keyname){
+
+    private int getKeyNumber(String keyname) {
         return Integer.valueOf(keyname.substring(1, keyname.indexOf(" ")));
     }
-    
+
     /**
-     * 
+     *
      * @param mapping
      * @return
      */
-    public int getKeyNumberForMapping(String mapping){
+    public int getKeyNumberForMapping(String mapping) {
         for (Entry<String, String> entry : keys.entrySet()) {
             if (mapping.equals(entry.getValue())) {
                 return getKeyNumber(entry.getKey());
@@ -108,7 +110,7 @@ public class KeyConfig implements UpdateState{
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getAuv_key_focus() {
@@ -116,7 +118,7 @@ public class KeyConfig implements UpdateState{
     }
 
     /**
-     * 
+     *
      * @param auv_key_focus
      */
     public void setAuv_key_focus(String auv_key_focus) {

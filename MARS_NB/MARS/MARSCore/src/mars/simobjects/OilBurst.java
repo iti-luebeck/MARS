@@ -18,15 +18,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
-import mars.PickHint;
+import mars.misc.PickHint;
 
 /**
+ * A special type of SimObject the simulates and oil burst (pipeline) through
+ * particles.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-@XmlRootElement(name="OilBurst")
+@XmlRootElement(name = "OilBurst")
 @XmlAccessorType(XmlAccessType.NONE)
-public class OilBurst extends SimObject{
+public class OilBurst extends SimObject {
 
     /**
      *
@@ -41,7 +43,7 @@ public class OilBurst extends SimObject{
     public OilBurst(SimObject simob) {
         super(simob);
     }
-    
+
     /**
      *
      * @return
@@ -52,14 +54,14 @@ public class OilBurst extends SimObject{
         oilBurst.initAfterJAXB();
         return oilBurst;
     }
-    
+
     /**
      *
      */
     @Override
-    public void init(){
+    public void init() {
         initParticles();
-        Helper.setNodePickUserData(debugNode,PickHint.NoPick);
+        Helper.setNodePickUserData(debugNode, PickHint.NoPick);
         simObNode.attachChild(renderNode);
         simObNode.attachChild(debugNode);
         simObNode.setLocalScale(getScale());
@@ -70,15 +72,14 @@ public class OilBurst extends SimObject{
         simObNode.updateModelBound();
         simObNode.updateGeometricState();
     }
-    
-    private void initParticles(){
-        //assetManager.registerLocator("Assets/Textures/Water", FileLocator.class);
+
+    private void initParticles() {
         ParticleEmitter fire = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 300);
-        Material mat_red = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");
+        Material mat_red = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat_red.setTexture("Texture", assetManager.loadTexture("Effects/Smoke/Smoke.png"));
         mat_red.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         fire.setMaterial(mat_red);
-        fire.setImagesX(15); 
+        fire.setImagesX(15);
         fire.setImagesY(1); // 2x2 texture animation
         fire.setEndColor(new ColorRGBA(0f, 0f, 0f, 0.0f));
         fire.setStartColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 1.0f));
@@ -90,111 +91,61 @@ public class OilBurst extends SimObject{
         fire.setLowLife(4f);
         fire.setHighLife(5f);
         fire.setParticlesPerSec(25.0f);
-        //fire.setShape(new EmitterPointShape(Vector3f.ZERO));
-        //fire.setGravity(0f, -0.05f, 0f);
-        //fire.setFacingVelocity(true);
         fire.setRandomAngle(false);
         fire.setRotateSpeed(0.0f);
         renderNode.attachChild(fire);
-        
+
         Material material = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         material.setTexture("Texture", assetManager.loadTexture("Effects/flame-alpha.png"));
         material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        //material.getAdditionalRenderState().setDepthWrite(true);
-        //material.getAdditionalRenderState().setDepthTest(true);
         material.getAdditionalRenderState().setAlphaTest(true);
-        //material.getAdditionalRenderState().setAlphaFallOff(1.0f);
-        material.setFloat("Softness", 3f); // 
-        
-        /*ParticleEmitter smoke = new ParticleEmitter("Smoke", ParticleMesh.Type.Triangle, 100);
-        smoke.setMaterial(material);
-        smoke.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
-        //smoke.setShape(new EmitterBoxShape(new Vector3f(0f,0f,0f),new Vector3f(10f,1.4f,10f)));
-        smoke.setImagesX(1);
-        smoke.setImagesY(1); // 2x2 texture animation
-        smoke.setStartColor(new ColorRGBA(0.0f, 0.0f, 0.0f,1f)); // dark gray
-        smoke.setEndColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 0.3f)); // gray      
-        smoke.setStartSize(0.1f);
-        smoke.setEndSize(2.5f);
-        smoke.setGravity(0f, -0.0001f, 0f);
-        smoke.setLowLife(100f);
-        smoke.setHighLife(100f);    
-        smoke.setEnabled(false);
-        //smoke.setLocalTranslation(0, 0.1f, 0); 
-        smoke.emitAllParticles();
-        smoke.setQueueBucket(RenderQueue.Bucket.Translucent);
-        renderNode.attachChild(smoke);*/
-        
-        /*ParticleEmitter smoke = new ParticleEmitter("Smoke", ParticleMesh.Type.Triangle, 30);
-        smoke.setMaterial(material);
-        smoke.setShape(new EmitterSphereShape(Vector3f.ZERO, 5));
-        smoke.setImagesX(1);
-        smoke.setImagesY(1); // 2x2 texture animation
-        smoke.setStartColor(new ColorRGBA(0.1f, 0.1f, 0.1f,1f)); // dark gray
-        smoke.setEndColor(new ColorRGBA(0.5f, 0.5f, 0.5f, 0.3f)); // gray      
-        smoke.setStartSize(3f);
-        smoke.setEndSize(5f);
-        smoke.setGravity(0, -0.001f, 0);
-        smoke.setLowLife(100f);
-        smoke.setHighLife(100f);
-        smoke.setLocalTranslation(0, 0.1f, 0);        
-        smoke.emitAllParticles();*/
-        
+        material.setFloat("Softness", 3f);
         ParticleEmitter smoke = new ParticleEmitter("Smoke", ParticleMesh.Type.Triangle, 800);
         smoke.setMaterial(material);
-        //smoke.setShape(new EmitterSphereShape(Vector3f.ZERO, 0.5f));
-        smoke.setShape(new EmitterBoxShape(new Vector3f(-80f,-0.5f,-80f),new Vector3f(80f,0.1f,80f)));
-        //smoke.setShape(new EmitterPointShape(Vector3f.ZERO));
+        smoke.setShape(new EmitterBoxShape(new Vector3f(-80f, -0.5f, -80f), new Vector3f(80f, 0.1f, 80f)));
         smoke.setImagesX(2);
         smoke.setImagesY(2); // 2x2 texture animation
-        smoke.setStartColor(new ColorRGBA(0.0f, 0.0f, 0.0f,0.5f)); // dark gray//0.125f
+        smoke.setStartColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 0.5f)); // dark gray//0.125f
         smoke.setEndColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 0.0f)); // gray      
         smoke.setStartSize(0.7f);//0.2f
         smoke.setEndSize(1.5f);
         smoke.setGravity(0f, 0.05f, 0f);
         smoke.setLowLife(6f);
-        smoke.setHighLife(8f);    
-        
+        smoke.setHighLife(8f);
+
         smoke.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 0.2f, 0.0f));
         smoke.getParticleInfluencer().setVelocityVariation(0.05f);
-        //smoke.setInWorldSpace(true);
         smoke.setRandomAngle(true);
         smoke.setRotateSpeed(0.0f);
-        smoke.setLocalTranslation(0, -0.6f, 0);   
-        //smoke.emitAllParticles();
+        smoke.setLocalTranslation(0, -0.6f, 0);
         smoke.setQueueBucket(RenderQueue.Bucket.Transparent);
-        
-        /*smoke.setGravity(0f, 0.0f, 0f);
-        smoke.getParticleInfluencer().setVelocityVariation(0.0f);
-        smoke.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 0.0f, 0.0f));*/
-        
-        //smoke.emitAllParticles();
+
         smoke.setEnabled(true);
-        
+
         renderNode.attachChild(smoke);
     }
-    
-   /**
-     * 
+
+    /**
+     *
      * @param target
      * @param hashmapname
      */
     @Override
-    public void updateState(String target, String hashmapname){
-        if(target.equals("position") && hashmapname.equals("")){
-            if(simObNode != null ){
+    public void updateState(String target, String hashmapname) {
+        if (target.equals("position") && hashmapname.equals("")) {
+            if (simObNode != null) {
                 simObNode.setLocalTranslation(getPosition());
             }
-        }else if(target.equals("rotation") && hashmapname.equals("")){
-            if(simObNode != null ){
+        } else if (target.equals("rotation") && hashmapname.equals("")) {
+            if (simObNode != null) {
                 Matrix3f m_rot = new Matrix3f();
                 Quaternion q_rot = new Quaternion();
                 q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
                 m_rot.set(q_rot);
                 simObNode.setLocalRotation(m_rot);
             }
-        }else if(target.equals("scale") && hashmapname.equals("")){
+        } else if (target.equals("scale") && hashmapname.equals("")) {
             simObNode.setLocalScale(getScale());
-        }    
+        }
     }
 }

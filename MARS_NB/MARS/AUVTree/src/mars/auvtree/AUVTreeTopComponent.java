@@ -84,13 +84,14 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         //enable global delete
         actionMap.put("delete", ExplorerUtils.actionDelete(mgr, true));
         actionMap.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(mgr));
+        //actionMap.put("paste", ExplorerUtils.actionPaste(mgr));
         actionMap.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(mgr));
         
         // associate lookup with explorer manager
         associateLookup(ExplorerUtils.createLookup(mgr, actionMap));
         setLayout(new BorderLayout());
         bTV.setRootVisible(false);
-        bTV.setDropTarget(false);
+        bTV.setDropTarget(true);
         bTV.setDragSource(true);
         add(bTV, BorderLayout.CENTER);
     }

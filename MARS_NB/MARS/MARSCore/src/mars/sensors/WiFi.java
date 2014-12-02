@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors;
 
 import com.jme3.material.Material;
@@ -21,22 +20,24 @@ import java.util.concurrent.Future;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
-import mars.CommunicationDeviceEvent;
-import mars.CommunicationDeviceEventType;
-import mars.CommunicationType;
+import mars.misc.CommunicationDeviceEvent;
+import mars.misc.CommunicationDeviceEventType;
+import mars.misc.CommunicationType;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 
 /**
- * A underwater modem class for communication between the auv's. Nothing implemented yet.
+ * Basically an underwater modem class but only for the surface.
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class WiFi extends CommunicationDevice{
+public class WiFi extends CommunicationDevice {
+
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
     private Geometry DebugDistance;
@@ -49,27 +50,27 @@ public class WiFi extends CommunicationDevice{
     private Publisher<std_msgs.Int8> publisherSig = null;
     private std_msgs.String fl;
     private std_msgs.Int8 flSig;
-    
+
     /**
-     * 
+     *
      */
-    public WiFi(){
+    public WiFi() {
         super();
     }
-    
-     /**
+
+    /**
      *
-     * @param simstate 
+     * @param simstate
      */
-    public WiFi(SimState simstate){
+    public WiFi(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param sensor
      */
-    public WiFi(WiFi sensor){
+    public WiFi(WiFi sensor) {
         super(sensor);
     }
 
@@ -85,57 +86,57 @@ public class WiFi extends CommunicationDevice{
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
     public Vector3f getWorldPosition() {
-       return UnderwaterModemStart.getWorldTranslation();
+        return UnderwaterModemStart.getWorldTranslation();
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     @Override
     public Float getPropagationDistance() {
-        return (Float)variables.get("propagationDistance");
+        return (Float) variables.get("propagationDistance");
     }
 
     /**
-     * 
-     * @param propagation_distance
+     *
+     * @param propagationDistance
      */
     public void setPropagationDistance(Float propagationDistance) {
         variables.put("propagationDistance", propagationDistance);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public boolean getDebug() {
-        return (Boolean)variables.get("debug");
+        return (Boolean) variables.get("debug");
     }
 
     /**
-     * 
+     *
      * @param debug
      */
     public void setDebug(boolean debug) {
         variables.put("debug", debug);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public ColorRGBA getDebugColor() {
-        return (ColorRGBA)variables.get("debugColor");
+        return (ColorRGBA) variables.get("debugColor");
     }
 
     /**
-     * 
+     *
      * @param debug_color
      */
     public void setDebugColor(ColorRGBA debugColor) {
@@ -143,12 +144,12 @@ public class WiFi extends CommunicationDevice{
     }
 
     @Override
-    public void update(float tpf){
+    public void update(float tpf) {
 
     }
 
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         Sphere sphere7 = new Sphere(16, 16, 0.05f);
         UnderwaterModemStart = new Geometry("UnderwaterModemStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -165,7 +166,7 @@ public class WiFi extends CommunicationDevice{
         UnderwaterModemEnd.setLocalTranslation(Vector3f.UNIT_X);
         UnderwaterModemEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemEnd);
-        
+
         //create debug stuff
         debugDistanceSphere = new Sphere(16, 16, getPropagationDistance());
         DebugDistance = new Geometry("DebugDistance", debugDistanceSphere);
@@ -179,113 +180,114 @@ public class WiFi extends CommunicationDevice{
         DebugDistance.updateGeometricState();
         PhysicalExchanger_Node.attachChild(DebugDistance);
         setDebugVisible(getDebug());
-        
+
         PhysicalExchanger_Node.attachChild(comNet);
-        
+
         PhysicalExchanger_Node.setLocalTranslation(getPosition());
         Quaternion quat = new Quaternion();
-        quat.fromAngles(getRotation().getX(),getRotation().getY(),getRotation().getZ());
+        quat.fromAngles(getRotation().getX(), getRotation().getY(), getRotation().getZ());
         PhysicalExchanger_Node.setLocalRotation(quat);
         this.auv_node = auv_node;
         this.auv_node.attachChild(PhysicalExchanger_Node);
     }
-    
-    private void setDebugVisible(boolean visible){
+
+    private void setDebugVisible(boolean visible) {
         /*if(!visible){
-            DebugDistance.setCullHint(CullHint.Always);
-        }else{
-            DebugDistance.setCullHint(CullHint.Never);
-        }*/
+         DebugDistance.setCullHint(CullHint.Always);
+         }else{
+         DebugDistance.setCullHint(CullHint.Never);
+         }*/
         //forgot future?
-        if(!visible){
+        if (!visible) {
             DebugDistance.removeFromParent();
-        }else{
+        } else {
             PhysicalExchanger_Node.attachChild(DebugDistance);
         }
     }
 
     /**
-     * 
+     *
      * @param path
      */
     @Override
     public void updateState(TreePath path) {
-       super.updateState(path);
-       updateState(path.getLastPathComponent().toString(),"");
+        super.updateState(path);
+        updateState(path.getLastPathComponent().toString(), "");
     }
-    
-    private void updateState(String target, String hashmapname){
-        if(target.equals("debug") && hashmapname.equals("")){
+
+    private void updateState(String target, String hashmapname) {
+        if (target.equals("debug") && hashmapname.equals("")) {
             setDebugVisible(getDebug());
-        }else if(target.equals("debug_color") && hashmapname.equals("")){
+        } else if (target.equals("debug_color") && hashmapname.equals("")) {
             debugDistanceMat.setColor("Color", getDebugColor());
-        }else if(target.equals("propagation_distance") && hashmapname.equals("")){
+        } else if (target.equals("propagation_distance") && hashmapname.equals("")) {
             debugDistanceSphere.updateGeometry(16, 16, getPropagationDistance());
         }
     }
 
     /**
-     * 
+     *
      */
-    public void reset(){
+    public void reset() {
 
     }
-    
+
     /**
      * some eye candy, you can see the communication net
+     *
      * @param uws
      */
-    public void updateComNet(HashMap<String,WiFi> uws){
+    public void updateComNet(HashMap<String, WiFi> uws) {
         Future fut2 = simState.getMARS().enqueue(new Callable() {
-                        public Void call() throws Exception {
-                            comNet.detachAllChildren();
-                            return null;
-                        }
-                    });
+            public Void call() throws Exception {
+                comNet.detachAllChildren();
+                return null;
+            }
+        });
         final Vector3f modPos = this.getWorldPosition();
-        for ( String elem : uws.keySet() ){
-            final WiFi uw = (WiFi)uws.get(elem);  
-            if(uw != this){//ignore myself
+        for (String elem : uws.keySet()) {
+            final WiFi uw = (WiFi) uws.get(elem);
+            if (uw != this) {//ignore myself
                 Vector3f distance = modPos.subtract(uw.getWorldPosition());
                 final float proDist = this.getPropagationDistance();
                 final float dis = Math.abs(distance.length());
-                if( dis <= proDist ){//ignore uws far away
+                if (dis <= proDist) {//ignore uws far away
                     final Vector3f newVec = new Vector3f();
                     comNet.worldToLocal(uw.getWorldPosition(), newVec);
                     Future fut = simState.getMARS().enqueue(new Callable() {
                         public Void call() throws Exception {
-                            Geometry x_axis = new Geometry("x_axis!", new Line(Vector3f.ZERO,newVec.mult(0.5f)));
+                            Geometry x_axis = new Geometry("x_axis!", new Line(Vector3f.ZERO, newVec.mult(0.5f)));
                             Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                             ColorRGBA color = getDebugColor();
-                            color.a = 1f-(dis/proDist);
+                            color.a = 1f - (dis / proDist);
                             x_axis_mat.setColor("Color", color);
                             x_axis_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
                             x_axis.setQueueBucket(Bucket.Transparent);
                             x_axis.setMaterial(x_axis_mat);
-                            x_axis.setLocalTranslation(new Vector3f(0f,0f,0f));
+                            x_axis.setLocalTranslation(new Vector3f(0f, 0f, 0f));
                             x_axis.updateGeometricState();
                             comNet.attachChild(x_axis);
                             return null;
                         }
                     });
-                }  
+                }
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out",std_msgs.String._TYPE);  
-        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal",std_msgs.Int8._TYPE); 
+        publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE);
+        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal", std_msgs.Int8._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
         flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
-        
+
         final String fin_auv_name = auv_name;
         final WiFi fin_this = this;
         Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE);
@@ -298,34 +300,34 @@ public class WiFi extends CommunicationDevice{
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
         this.rosinit = true;
     }
-    
+
     /**
-     * 
+     *
      */
     @Override
-    public void publish(){
-        
+    public void publish() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param msg
      */
     @Override
-    public void publish(String msg){
+    public void publish(String msg) {
         fl.setData(msg);
-        if( publisher != null ){
+        if (publisher != null) {
             //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
+            notifyAdvertisement(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public String getMessage(){
+    public String getMessage() {
         return "This is a Message";
     }
 }

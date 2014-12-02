@@ -4,24 +4,13 @@
  */
 package mars.core;
 
-import com.jme3.math.Vector3f;
-import info.monitorenter.gui.chart.ITrace2D;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
-import mars.ChartValue;
 import mars.sensors.Compass;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.CompassPlot;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.general.DefaultValueDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -29,7 +18,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays a compass.
+ * 
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSCompass//EN",

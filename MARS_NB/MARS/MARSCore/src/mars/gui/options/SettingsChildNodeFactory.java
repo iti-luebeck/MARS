@@ -32,6 +32,11 @@ public class SettingsChildNodeFactory extends ChildFactory<String> implements No
         this.settings = settings;
     }
 
+    /**
+     *
+     * @param toPopulate
+     * @return
+     */
     @Override
     protected boolean createKeys(List toPopulate) {
         //sorted output
@@ -44,6 +49,11 @@ public class SettingsChildNodeFactory extends ChildFactory<String> implements No
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     protected Node createNodeForKey(String key) {
         // create new node for every key
@@ -52,18 +62,34 @@ public class SettingsChildNodeFactory extends ChildFactory<String> implements No
         return n;
     }
     
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nme
+     */
     @Override
     public void childrenRemoved(NodeMemberEvent nme) {
     }
 
+    /**
+     *
+     * @param nre
+     */
     @Override
     public void childrenReordered(NodeReorderEvent nre) {
     }
 
+    /**
+     *
+     * @param ne
+     */
     @Override
     public void nodeDestroyed(NodeEvent ne) {
         SettingsNode lookup = (SettingsNode)ne.getNode();

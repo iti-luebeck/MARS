@@ -25,11 +25,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.Helper.Helper;
 import mars.Initializer;
-import mars.Moveable;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.Moveable;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -42,7 +41,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {BlackfinCamera.class} )
+//@XmlSeeAlso( {BlackfinCamera.class} )
 public class VideoCamera extends Sensor implements Moveable{
 
     private Geometry CameraStart;

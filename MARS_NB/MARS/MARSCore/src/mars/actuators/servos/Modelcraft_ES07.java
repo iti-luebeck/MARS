@@ -81,7 +81,6 @@ public class Modelcraft_ES07 extends Servo{
         subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
                 @Override
                 public void onNewMessage(smart_e_msgs.servoCam message) {
-                    System.out.println("I (" + getName()+ ") heard: \"" + message.getData() + "\"");
                     self.setDesiredAnglePosition((int)message.getData());
                 }
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());

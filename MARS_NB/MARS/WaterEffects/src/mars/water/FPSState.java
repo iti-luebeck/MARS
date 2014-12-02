@@ -26,6 +26,13 @@ public class FPSState extends AbstractAppState {
     private String title;
     private Callable setup = null;
     
+    /**
+     *
+     * @param initTime
+     * @param duration
+     * @param fileName
+     * @param title
+     */
     public FPSState(float initTime, float duration, String fileName, String title) {
         this.initTime = initTime;
         this.duration = duration;
@@ -36,14 +43,26 @@ public class FPSState extends AbstractAppState {
         remainDur = duration;
     }
     
+    /**
+     *
+     * @param info
+     */
     public void addInfo(String info) { // Erlaubt das Hinzufügen weiterer Strings in die Ausgabedatei
         this.info += info + "\n";
     }
     
+    /**
+     *
+     * @param setup
+     */
     public void addSetup(Callable setup) {
         this.setup = setup;
     }
     
+    /**
+     *
+     * @param tpf
+     */
     @Override
     public void update(float tpf) { // Aus der update-Methode der SimpleApplication(oder vergleichbar) mit der time-per-frame aufrufen
         if (remainIT > 0f){
@@ -87,6 +106,10 @@ public class FPSState extends AbstractAppState {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public String getText(){
         String ans = "************************************************************************************\n";
         ans += "====================================================================================\n";

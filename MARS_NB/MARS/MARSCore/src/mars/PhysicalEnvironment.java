@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars;
 
+import mars.misc.PropertyChangeListenerSupport;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import java.beans.PropertyChangeEvent;
@@ -24,20 +24,22 @@ import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
 
 /**
- * This class contains all physical parameters that are important for the auv like fluid density.
+ * This class contains all physical parameters of the outside world that are
+ * important for the auv like fluid density.
+ *
  * @author Thomas Tosik
  */
-@XmlRootElement(name="PhysicalEnvironment")
+@XmlRootElement(name = "PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSupport{
+public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerSupport {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    private HashMap<String,Object> environment;
+    private HashMap<String, Object> environment;
     private BulletAppState bulletAppState;
-    
+
     @XmlTransient
     private List listeners = Collections.synchronizedList(new LinkedList());
-    
+
     //physics
     private float fluid_density = 998.2071f;//kg/m³
     private float air_density = 1.2041f;//kg/m³
@@ -51,31 +53,32 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
     private Vector3f magnetic_north = Vector3f.UNIT_X;
     private Vector3f magnetic_east = Vector3f.UNIT_Z;
     private Vector3f magnetic_z = Vector3f.UNIT_Y;
-    private Vector3f water_current = new Vector3f(0f,0f,0f);
+    private Vector3f water_current = new Vector3f(0f, 0f, 0f);
     private float water_height = 0.0f;//m
-    
+
     /**
-     * 
+     *
      */
-    public PhysicalEnvironment(){
-        
+    public PhysicalEnvironment() {
+
     }
-    
-     /**
+
+    /**
      * You have to initialize first when you read the data in trough jaxb.
-     * @deprecated 
+     *
+     * @deprecated
      */
     @Deprecated
-    public void init(){
+    public void init() {
     }
-    
+
     /**
-     * 
+     * Called by JAXB after JAXB loaded the basic stuff.
      */
-    public void initAfterJAXB(){
-        
+    public void initAfterJAXB() {
+
     }
-    
+
     /**
      *
      * @param pcl
@@ -101,40 +104,41 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
     }
-    
+
     /**
-     * 
+     * Called to update world stuff when parameters changed.
      * @param path
      */
-    public void updateState(TreePath path){
-        if(path.getPathComponent(0).equals(this)){//make sure we want to change auv params
-            updateState(path.getLastPathComponent().toString(),"");
+    @Override
+    public void updateState(TreePath path) {
+        if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
+            updateState(path.getLastPathComponent().toString(), "");
         }
     }
-    
+
     /**
-     * 
+     * Called to update world stuff when parameters changed.
      * @param target
      * @param hashmapname
      */
-    public void updateState(String target, String hashmapname){
-        if(target.equals("collision") && hashmapname.equals("Debug")){
+    public void updateState(String target, String hashmapname) {
+        if (target.equals("collision") && hashmapname.equals("Debug")) {
 
-        }else if(target.equals("gravitational_acceleration_vector") && hashmapname.equals("")){
-            bulletAppState.getPhysicsSpace().setGravity(getGravitational_acceleration_vector());   
+        } else if (target.equals("gravitational_acceleration_vector") && hashmapname.equals("")) {
+            bulletAppState.getPhysicsSpace().setGravity(getGravitational_acceleration_vector());
         }
     }
-   
+
     /**
      *
      * @return
      */
-    public HashMap<String,Object> getAllEnvironment(){
+    public HashMap<String, Object> getAllEnvironment() {
         return environment;
     }
-    
+
     /**
-     * 
+     *
      * @param bulletAppState
      */
     public void setBulletAppState(BulletAppState bulletAppState) {
@@ -146,7 +150,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getWater_height() {
-        return (Float)((HashMapEntry)environment.get("water_height")).getValue();
+        return (Float) ((HashMapEntry) environment.get("water_height")).getValue();
     }
 
     /**
@@ -162,7 +166,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getAir_density() {
-        return (Float)((HashMapEntry)environment.get("air_density")).getValue();
+        return (Float) ((HashMapEntry) environment.get("air_density")).getValue();
     }
 
     /**
@@ -178,7 +182,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getAir_temp() {
-        return (Float)((HashMapEntry)environment.get("air_temp")).getValue();
+        return (Float) ((HashMapEntry) environment.get("air_temp")).getValue();
     }
 
     /**
@@ -194,7 +198,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getFluid_density() {
-        return (Float)((HashMapEntry)environment.get("fluid_density")).getValue();
+        return (Float) ((HashMapEntry) environment.get("fluid_density")).getValue();
     }
 
     /**
@@ -210,7 +214,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getFluid_salinity() {
-        return (Float)((HashMapEntry)environment.get("fluid_salinity")).getValue();
+        return (Float) ((HashMapEntry) environment.get("fluid_salinity")).getValue();
     }
 
     /**
@@ -226,7 +230,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getFluid_temp() {
-        return (Float)((HashMapEntry)environment.get("fluid_temp")).getValue();
+        return (Float) ((HashMapEntry) environment.get("fluid_temp")).getValue();
     }
 
     /**
@@ -242,7 +246,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getFluid_viscosity() {
-        return (Float)((HashMapEntry)environment.get("fluid_viscosity")).getValue();
+        return (Float) ((HashMapEntry) environment.get("fluid_viscosity")).getValue();
     }
 
     /**
@@ -258,7 +262,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Vector3f getGravitational_acceleration_vector() {
-        return (Vector3f)((HashMapEntry)environment.get("gravitational_acceleration_vector")).getValue();
+        return (Vector3f) ((HashMapEntry) environment.get("gravitational_acceleration_vector")).getValue();
     }
 
     /**
@@ -275,7 +279,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      */
     public Float getGravitational_acceleration() {
         //return (float)((Vector3f)environment.get("gravitational_acceleration_vector")).length();
-        return (Float)((Vector3f)((HashMapEntry)environment.get("gravitational_acceleration_vector")).getValue()).length();
+        return (Float) ((Vector3f) ((HashMapEntry) environment.get("gravitational_acceleration_vector")).getValue()).length();
     }
 
     /**
@@ -292,7 +296,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Vector3f getMagnetic_north() {
-        return (Vector3f)((HashMapEntry)environment.get("magnetic_north")).getValue();
+        return (Vector3f) ((HashMapEntry) environment.get("magnetic_north")).getValue();
     }
 
     /**
@@ -308,7 +312,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Vector3f getMagnetic_east() {
-        return (Vector3f)((HashMapEntry)environment.get("magnetic_east")).getValue();
+        return (Vector3f) ((HashMapEntry) environment.get("magnetic_east")).getValue();
     }
 
     /**
@@ -324,7 +328,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Vector3f getMagnetic_z() {
-        return (Vector3f)((HashMapEntry)environment.get("magnetic_z")).getValue();
+        return (Vector3f) ((HashMapEntry) environment.get("magnetic_z")).getValue();
     }
 
     /**
@@ -340,7 +344,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Float getPressure_water_height() {
-        return (Float)((HashMapEntry)environment.get("pressure_water_height")).getValue();
+        return (Float) ((HashMapEntry) environment.get("pressure_water_height")).getValue();
     }
 
     /**
@@ -356,7 +360,7 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @return
      */
     public Vector3f getWater_current() {
-        return (Vector3f)((HashMapEntry)environment.get("water_current")).getValue();
+        return (Vector3f) ((HashMapEntry) environment.get("water_current")).getValue();
     }
 
     /**
@@ -366,19 +370,19 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
     public void setWater_current(Vector3f water_current) {
         environment.put("water_current", new HashMapEntry("kgm/s²", water_current));
     }
-    
+
     /**
      *
      * @param value
      * @param hashmapname
      * @return
      */
-    public Object getValue(String value,String hashmapname) {
-        if(hashmapname.equals("") || hashmapname == null){
-            return (Object)environment.get(value);
-        }else{
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)environment.get(hashmapname);
-            return (Object)hashmap.get(value);
+    public Object getValue(String value, String hashmapname) {
+        if (hashmapname.equals("") || hashmapname == null) {
+            return (Object) environment.get(value);
+        } else {
+            HashMap<String, Object> hashmap = (HashMap<String, Object>) environment.get(hashmapname);
+            return (Object) hashmap.get(value);
         }
     }
 
@@ -389,16 +393,16 @@ public class PhysicalEnvironment implements UpdateState,PropertyChangeListenerSu
      * @param hashmapname
      */
     public void setValue(String value, Object object, String hashmapname) {
-        if(hashmapname.equals("") || hashmapname == null){
+        if (hashmapname.equals("") || hashmapname == null) {
             environment.put(value, object);
-        }else{
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)environment.get(hashmapname);
+        } else {
+            HashMap<String, Object> hashmap = (HashMap<String, Object>) environment.get(hashmapname);
             hashmap.put(value, object);
         }
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Environment";
     }
 }

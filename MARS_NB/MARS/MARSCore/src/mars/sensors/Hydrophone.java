@@ -5,9 +5,10 @@
 package mars.sensors;
 
 /**
+ * Not functional yet.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class Hydrophone {
-    
+
 }

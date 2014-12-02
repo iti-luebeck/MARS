@@ -52,7 +52,14 @@ public class WaterHeightGenerator implements HeightGenerator {
 	private float speedbig = 0.5f;
 	private int octaves = 0;
 
-	public float getHeight( float x, float z, float time ) {
+    /**
+     *
+     * @param x
+     * @param z
+     * @param time
+     * @return
+     */
+    public float getHeight( float x, float z, float time ) {
 		float zval = z * scaleybig * 4f + time * speedbig * 4f;
 		float height = FastMath.sin( zval );
 		height *= heightbig;
@@ -71,75 +78,147 @@ public class WaterHeightGenerator implements HeightGenerator {
 		return height; // + waterHeight
 	}
 
-	public float getScalexsmall() {
+    /**
+     *
+     * @return
+     */
+    public float getScalexsmall() {
 		return scalexsmall;
 	}
 
-	public void setScalexsmall( float scalexsmall ) {
+    /**
+     *
+     * @param scalexsmall
+     */
+    public void setScalexsmall( float scalexsmall ) {
 		this.scalexsmall = scalexsmall;
 	}
 
-	public float getScaleysmall() {
+    /**
+     *
+     * @return
+     */
+    public float getScaleysmall() {
 		return scaleysmall;
 	}
 
-	public void setScaleysmall( float scaleysmall ) {
+    /**
+     *
+     * @param scaleysmall
+     */
+    public void setScaleysmall( float scaleysmall ) {
 		this.scaleysmall = scaleysmall;
 	}
 
-	public float getScalexbig() {
+    /**
+     *
+     * @return
+     */
+    public float getScalexbig() {
 		return scalexbig;
 	}
 
-	public void setScalexbig( float scalexbig ) {
+    /**
+     *
+     * @param scalexbig
+     */
+    public void setScalexbig( float scalexbig ) {
 		this.scalexbig = scalexbig;
 	}
 
-	public float getScaleybig() {
+    /**
+     *
+     * @return
+     */
+    public float getScaleybig() {
 		return scaleybig;
 	}
 
-	public void setScaleybig( float scaleybig ) {
+    /**
+     *
+     * @param scaleybig
+     */
+    public void setScaleybig( float scaleybig ) {
 		this.scaleybig = scaleybig;
 	}
 
-	public float getHeightsmall() {
+    /**
+     *
+     * @return
+     */
+    public float getHeightsmall() {
 		return heightsmall;
 	}
 
-	public void setHeightsmall( float heightsmall ) {
+    /**
+     *
+     * @param heightsmall
+     */
+    public void setHeightsmall( float heightsmall ) {
 		this.heightsmall = heightsmall;
 	}
 
-	public float getHeightbig() {
+    /**
+     *
+     * @return
+     */
+    public float getHeightbig() {
 		return heightbig;
 	}
 
-	public void setHeightbig( float heightbig ) {
+    /**
+     *
+     * @param heightbig
+     */
+    public void setHeightbig( float heightbig ) {
 		this.heightbig = heightbig;
 	}
 
-	public float getSpeedsmall() {
+    /**
+     *
+     * @return
+     */
+    public float getSpeedsmall() {
 		return speedsmall;
 	}
 
-	public void setSpeedsmall( float speedsmall ) {
+    /**
+     *
+     * @param speedsmall
+     */
+    public void setSpeedsmall( float speedsmall ) {
 		this.speedsmall = speedsmall;
 	}
 
-	public float getSpeedbig() {
+    /**
+     *
+     * @return
+     */
+    public float getSpeedbig() {
 		return speedbig;
 	}
 
-	public void setSpeedbig( float speedbig ) {
+    /**
+     *
+     * @param speedbig
+     */
+    public void setSpeedbig( float speedbig ) {
 		this.speedbig = speedbig;
 	}
 
-	public int getOctaves() {
+    /**
+     *
+     * @return
+     */
+    public int getOctaves() {
 		return octaves;
 	}
 
-	public void setOctaves( int octaves ) {
+    /**
+     *
+     * @param octaves
+     */
+    public void setOctaves( int octaves ) {
 		this.octaves = octaves;
 	}
 }

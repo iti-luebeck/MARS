@@ -36,5 +36,13 @@ package mars.water;
  * @author Matthias Schellhase portage to jme3
  */
 public interface HeightGenerator {
+
+    /**
+     *
+     * @param x
+     * @param z
+     * @param time
+     * @return
+     */
     public float getHeight( float x, float z, float time );
 }

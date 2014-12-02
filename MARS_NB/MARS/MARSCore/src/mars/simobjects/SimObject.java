@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.simobjects;
 
 import com.jme3.asset.AssetManager;
@@ -22,7 +21,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import mars.CollisionType;
+import mars.object.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
@@ -39,27 +38,30 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.PickHint;
+import mars.misc.PickHint;
 import mars.gui.tree.HashMapWrapper;
+import mars.object.MARSObject;
 import mars.xml.HashMapAdapter;
 
 /**
- * A basic simauv object that shall be loaded. For example an pipe or another custom made model.
+ * A basic simauv object that shall be loaded. For example a pipeline or another
+ * custom made model.
+ *
  * @author Thomas Tosik
  */
-@XmlRootElement(name="SimObject")
+@XmlRootElement(name = "SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {OilBurst.class} )
-public class SimObject{
+@XmlSeeAlso({OilBurst.class})
+public class SimObject implements MARSObject{
 
     /**
      *
      */
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    @XmlElement(name="")
-    protected HashMap<String,Object> simob_variables;
-    private HashMap<String,Object> collision;
-    
+    @XmlElement(name = "")
+    protected HashMap<String, Object> simob_variables;
+    private HashMap<String, Object> collision;
+
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
@@ -87,24 +89,24 @@ public class SimObject{
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
     private Spatial debugShape;
-    
+
     /**
-     * 
+     *
      */
-    public SimObject(){
-        
+    public SimObject() {
+
     }
-    
+
     /**
      *
      * @param simob
      */
-    public SimObject(SimObject simob){
+    public SimObject(SimObject simob) {
         HashMap<String, Object> variablesOriginal = simob.getAllVariables();
         Cloner cloner = new Cloner();
         simob_variables = cloner.deepClone(variablesOriginal);
     }
-    
+
     /**
      *
      * @return
@@ -114,68 +116,68 @@ public class SimObject{
         simob.initAfterJAXB();
         return simob;
     }
-    
+
     /**
-     * 
+     *
      * @param path
      */
-    public void updateState(TreePath path){
-        if(path.getPathComponent(1).equals(this)){//make sure we want to change auv params 
+    public void updateState(TreePath path) {
+        if (path.getPathComponent(1).equals(this)) {//make sure we want to change auv params 
             //System.out.println("update tts " + path);
             Object obj = path.getParentPath().getLastPathComponent();
-            if(path.getParentPath().getLastPathComponent() instanceof HashMapWrapper){
-                updateState(path.getLastPathComponent().toString(),path.getParentPath().getLastPathComponent().toString());
-            }else{
-                updateState(path.getLastPathComponent().toString(),"");
+            if (path.getParentPath().getLastPathComponent() instanceof HashMapWrapper) {
+                updateState(path.getLastPathComponent().toString(), path.getParentPath().getLastPathComponent().toString());
+            } else {
+                updateState(path.getLastPathComponent().toString(), "");
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param target
      * @param hashmapname
      */
-    public void updateState(String target, String hashmapname){
-        if(target.equals("position") && hashmapname.equals("")){
-            if(physics_control != null ){
+    public void updateState(String target, String hashmapname) {
+        if (target.equals("position") && hashmapname.equals("")) {
+            if (physics_control != null) {
                 physics_control.setPhysicsLocation(getPosition());
             }
-        }else if(target.equals("rotation") && hashmapname.equals("")){
-            if(physics_control != null ){
+        } else if (target.equals("rotation") && hashmapname.equals("")) {
+            if (physics_control != null) {
                 Matrix3f m_rot = new Matrix3f();
                 Quaternion q_rot = new Quaternion();
                 q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
                 m_rot.set(q_rot);
                 physics_control.setPhysicsRotation(m_rot);
             }
-        }else if(target.equals("scale") && hashmapname.equals("")){
+        } else if (target.equals("scale") && hashmapname.equals("")) {
             getSpatial().setLocalScale(getScale());
-        }else if(target.equals("debug_collision") && hashmapname.equals("Collision")){
+        } else if (target.equals("debug_collision") && hashmapname.equals("Collision")) {
             setCollisionVisible(isDebugCollision());
-        }else if(target.equals("color") && hashmapname.equals("")){
-            
+        } else if (target.equals("color") && hashmapname.equals("")) {
+
             spatialMaterial.setColor("Color", getColor());
-        }else if(target.equals("light") && hashmapname.equals("")){
-            if(!isLight()){
+        } else if (target.equals("light") && hashmapname.equals("")) {
+            if (!isLight()) {
                 spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 spatialMaterial.setColor("Color", getColor());
                 spatial.setMaterial(spatialMaterial);
-            }else{
-                
+            } else {
+
             }
-        }     
+        }
     }
 
     /**
      *
      * @return
      */
-    public HashMap<String,Object> getAllVariables(){
+    public HashMap<String, Object> getAllVariables() {
         return simob_variables;
     }
 
-    private void loadModel(){
+    private void loadModel() {
         //assetManager.registerLocator("./Assets/Models/", FileLocator.class);
         spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         spatial = assetManager.loadModel(getFilepath());
@@ -184,7 +186,7 @@ public class SimObject{
         spatial.setUserData("simob_name", getName());
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
-        if(!isLight()){
+        if (!isLight()) {
             spatialMaterial.setColor("Color", getColor());
             spatial.setMaterial(spatialMaterial);
         }
@@ -197,21 +199,21 @@ public class SimObject{
         renderNode.attachChild(spatial);
     }
 
-        /*
+    /*
      * When we have the spatial for the auv we create the physics node out of it. Needed for all the physics and collisions.
      */
-    private void createPhysicsNode(){
+    private void createPhysicsNode() {
         CollisionShape collisionShape;
-        if(getType() == CollisionType.BOXCOLLISIONSHAPE){
+        if (getType() == CollisionType.BOXCOLLISIONSHAPE) {
             collisionShape = new BoxCollisionShape(getDimensions());
-        }else if(getType() == CollisionType.SPHERECOLLISIONSHAPE){
+        } else if (getType() == CollisionType.SPHERECOLLISIONSHAPE) {
             collisionShape = new SphereCollisionShape(getDimensions().x);
-        }else if(getType() == CollisionType.CONECOLLISIONSHAPE){
-            collisionShape = new ConeCollisionShape(getDimensions().x,getDimensions().y);
-        }else if(getType() == CollisionType.CYLINDERCOLLISIONSHAPE){
+        } else if (getType() == CollisionType.CONECOLLISIONSHAPE) {
+            collisionShape = new ConeCollisionShape(getDimensions().x, getDimensions().y);
+        } else if (getType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
             //collisionShape = new CylinderCollisionShape(auv_param.getDimensions().x,auv_param.getDimensions().y);
             collisionShape = new BoxCollisionShape(getDimensions());
-        }else if(getType() == CollisionType.MESHACCURATE){
+        } else if (getType() == CollisionType.MESHACCURATE) {
             collisionShape = CollisionShapeFactory.createMeshShape(spatial);
         } else {
             collisionShape = new BoxCollisionShape(getDimensions());
@@ -222,43 +224,43 @@ public class SimObject{
         physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
         physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
         physics_control.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_04);
-        
-         //debug
+
+        //debug
         Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         debug_mat.setColor("Color", ColorRGBA.Red);
         /*debugShape = physics_control.createDebugShape(assetManager);
-        debugNode.attachChild(debugShape);
-        if(isDebugCollision()){
-            debugShape.setCullHint(CullHint.Inherit);
-        }else{
-            debugShape.setCullHint(CullHint.Always);
-        }*/
-        
+         debugNode.attachChild(debugShape);
+         if(isDebugCollision()){
+         debugShape.setCullHint(CullHint.Inherit);
+         }else{
+         debugShape.setCullHint(CullHint.Always);
+         }*/
+
         spatial.addControl(physics_control);
         spatial.updateGeometricState();
-    }
-    
-    /**
-     * 
-     */
-    public void initAfterJAXB(){
-        collision = (HashMap<String,Object>)simob_variables.get("Collision");
     }
 
     /**
      *
      */
-    public void init(){
+    public void initAfterJAXB() {
+        collision = (HashMap<String, Object>) simob_variables.get("Collision");
+    }
+
+    /**
+     *
+     */
+    public void init() {
         loadModel();
         createPhysicsNode();
         createGhostSpatial();
-        Helper.setNodePickUserData(debugNode,PickHint.NoPick);
+        Helper.setNodePickUserData(debugNode, PickHint.NoPick);
         simObNode.attachChild(renderNode);
         simObNode.attachChild(debugNode);
         spatial.updateGeometricState();
         simObNode.updateGeometricState();
     }
-    
+
     /**
      *
      * @return
@@ -269,34 +271,34 @@ public class SimObject{
 
     /**
      *
-     * @param mars_settings 
+     * @param mars_settings
      */
     public void setMARSSettings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }
-    
+
     /**
-     * 
+     *
      * @param selected
      */
-    public void setSelected(boolean selected){
-        if(selected && this.selected==false){
+    public void setSelected(boolean selected) {
+        if (selected && this.selected == false) {
             ambient_light.setColor(mars_settings.getGuiSelectionColor());
-            simObNode.addLight(ambient_light); 
-        }else if(selected == false){
+            simObNode.addLight(ambient_light);
+        } else if (selected == false) {
             simObNode.removeLight(ambient_light);
         }
         this.selected = selected;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public boolean isSelected(){
+    public boolean isSelected() {
         return selected;
     }
-    
+
     /**
      *
      * @return
@@ -304,7 +306,7 @@ public class SimObject{
     public Node getSimObNode() {
         return simObNode;
     }
-    
+
     /**
      *
      * @return
@@ -321,68 +323,68 @@ public class SimObject{
         return physics_control;
     }
 
-        /**
+    /**
      *
      * @return
      */
     public String getIcon() {
-        return (String)simob_variables.get("icon");
+        return (String) simob_variables.get("icon");
     }
 
     /**
      *
-     * @param icon 
+     * @param icon
      */
     public void setIcon(String icon) {
         simob_variables.put("icon", icon);
     }
-    
-        /**
+
+    /**
      *
      * @return
      */
     public String getDndIcon() {
-        return (String)simob_variables.get("dndIcon");
+        return (String) simob_variables.get("dndIcon");
     }
 
     /**
      *
-     * @param dnd_icon 
+     * @param dndIcon
      */
     public void setDndIcon(String dndIcon) {
         simob_variables.put("dndIcon", dndIcon);
     }
-    
+
     /**
      *
      * @return
      */
     public Vector3f getDimensions() {
-        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("dimensions");
+        return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("dimensions");
     }
 
     /**
      *
-     * @param dimensions 
+     * @param dimensions
      */
     public void setDimensions(Vector3f dimensions) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("dimensions", dimensions);
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("dimensions", dimensions);
     }
-        
+
     /**
      *
      * @return
      */
     public Vector3f getCollisionPosition() {
-        return (Vector3f)((HashMap<String,Object>)simob_variables.get("Collision")).get("position");
+        return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("position");
     }
 
     /**
      *
-     * @param collision_position 
+     * @param position
      */
     public void setCollisionPosition(Vector3f position) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("position", position);
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("position", position);
     }
 
     /**
@@ -390,7 +392,7 @@ public class SimObject{
      * @return
      */
     public int getType() {
-        return (Integer)((HashMap<String,Object>)simob_variables.get("Collision")).get("type");
+        return (Integer) ((HashMap<String, Object>) simob_variables.get("Collision")).get("type");
     }
 
     /**
@@ -398,7 +400,7 @@ public class SimObject{
      * @param type
      */
     public void setType(int type) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("type", type);
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("type", type);
     }
 
     /**
@@ -406,7 +408,7 @@ public class SimObject{
      * @return
      */
     public boolean isCollidable() {
-        return (Boolean)((HashMap<String,Object>)simob_variables.get("Collision")).get("collidable");
+        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("collidable");
     }
 
     /**
@@ -414,48 +416,47 @@ public class SimObject{
      * @param collidable
      */
     public void setCollidable(boolean collidable) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("collidable", collidable);
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("collidable", collidable);
     }
 
     /**
      *
-     * @return
-     * @deprecated 
+     * @return @deprecated
      */
     @Deprecated
     public boolean isSonar_detectable() {
-        return (Boolean)simob_variables.get("sonar_detectable");
+        return (Boolean) simob_variables.get("sonar_detectable");
     }
 
     /**
      *
      * @param sonar_detectable
-     * @deprecated 
+     * @deprecated
      */
     @Deprecated
     public void setSonar_detectable(boolean sonar_detectable) {
         simob_variables.put("sonar_detectable", sonar_detectable);
     }
-    
+
     /**
      *
      * @return
      */
     public boolean isRayDetectable() {
-        return (Boolean)simob_variables.get("rayDetectable");
+        return (Boolean) simob_variables.get("rayDetectable");
     }
-    
+
     /**
      *
      * @return
      */
     public Boolean getRayDetectable() {
-        return (Boolean)simob_variables.get("rayDetectable");
+        return (Boolean) simob_variables.get("rayDetectable");
     }
 
     /**
      *
-     * @param ray_detectable 
+     * @param rayDetectable
      */
     public void setRayDetectable(boolean rayDetectable) {
         simob_variables.put("rayDetectable", rayDetectable);
@@ -466,7 +467,7 @@ public class SimObject{
      * @return
      */
     public boolean isPinger() {
-        return (Boolean)simob_variables.get("pinger");
+        return (Boolean) simob_variables.get("pinger");
     }
 
     /**
@@ -482,7 +483,7 @@ public class SimObject{
      * @return
      */
     public boolean isLight() {
-        return (Boolean)simob_variables.get("light");
+        return (Boolean) simob_variables.get("light");
     }
 
     /**
@@ -506,7 +507,7 @@ public class SimObject{
      * @return
      */
     public ColorRGBA getColor() {
-        return (ColorRGBA)simob_variables.get("color");
+        return (ColorRGBA) simob_variables.get("color");
     }
 
     /**
@@ -530,7 +531,7 @@ public class SimObject{
      * @return
      */
     public boolean isEnabled() {
-        return (Boolean)simob_variables.get("enabled");
+        return (Boolean) simob_variables.get("enabled");
     }
 
     /**
@@ -546,7 +547,7 @@ public class SimObject{
      * @return
      */
     public String getFilepath() {
-        return (String)simob_variables.get("filepath");
+        return (String) simob_variables.get("filepath");
     }
 
     /**
@@ -562,7 +563,7 @@ public class SimObject{
      * @return
      */
     public String getName() {
-        return (String)simob_variables.get("name");
+        return (String) simob_variables.get("name");
     }
 
     /**
@@ -578,7 +579,7 @@ public class SimObject{
      * @return
      */
     public Vector3f getPosition() {
-        return (Vector3f)simob_variables.get("position");
+        return (Vector3f) simob_variables.get("position");
     }
 
     /**
@@ -594,7 +595,7 @@ public class SimObject{
      * @return
      */
     public Vector3f getRotation() {
-        return (Vector3f)simob_variables.get("rotation");
+        return (Vector3f) simob_variables.get("rotation");
     }
 
     /**
@@ -604,18 +605,18 @@ public class SimObject{
     public void setRotation(Vector3f rotation) {
         simob_variables.put("rotation", rotation);
     }
-    
-     /**
+
+    /**
      *
      * @return
      */
     public Vector3f getScale() {
-        return (Vector3f)simob_variables.get("scale");
+        return (Vector3f) simob_variables.get("scale");
     }
 
     /**
      *
-     * @param scale 
+     * @param scale
      */
     public void setScale(Vector3f scale) {
         simob_variables.put("scale", scale);
@@ -626,7 +627,7 @@ public class SimObject{
      * @return
      */
     public boolean isDebugCollision() {
-         return (Boolean)((HashMap<String,Object>)simob_variables.get("Collision")).get("debug_collision");
+        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug_collision");
     }
 
     /**
@@ -634,7 +635,7 @@ public class SimObject{
      * @param debug_collision
      */
     public void setDebugCollision(boolean debug_collision) {
-        ((HashMap<String,Object>)simob_variables.get("Collision")).put("debug_collision", debug_collision);
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug_collision", debug_collision);
     }
 
     /**
@@ -643,12 +644,12 @@ public class SimObject{
      * @param hashmapname
      * @return
      */
-    public Object getValue(String value,String hashmapname) {
-        if(hashmapname.equals("") || hashmapname == null){
-            return (Object)simob_variables.get(value);
-        }else{
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)simob_variables.get(hashmapname);
-            return (Object)hashmap.get(value);
+    public Object getValue(String value, String hashmapname) {
+        if (hashmapname.equals("") || hashmapname == null) {
+            return (Object) simob_variables.get(value);
+        } else {
+            HashMap<String, Object> hashmap = (HashMap<String, Object>) simob_variables.get(hashmapname);
+            return (Object) hashmap.get(value);
         }
     }
 
@@ -659,10 +660,10 @@ public class SimObject{
      * @param hashmapname
      */
     public void setValue(String value, Object object, String hashmapname) {
-        if(hashmapname.equals("") || hashmapname == null){
+        if (hashmapname.equals("") || hashmapname == null) {
             simob_variables.put(value, object);
-        }else{
-            HashMap<String,Object> hashmap = (HashMap<String,Object>)simob_variables.get(hashmapname);
+        } else {
+            HashMap<String, Object> hashmap = (HashMap<String, Object>) simob_variables.get(hashmapname);
             hashmap.put(value, object);
         }
     }
@@ -698,8 +699,8 @@ public class SimObject{
     public void setSimauv(MARS_Main simauv) {
         this.simauv = simauv;
     }
-    
-    private void createGhostSpatial(){
+
+    private void createGhostSpatial() {
         //assetManager.registerLocator("Assets/Models", FileLocator.class);
         ghost_simob_spatial = assetManager.loadModel(getFilepath());
         ghost_simob_spatial.setLocalScale(getScale());
@@ -712,63 +713,63 @@ public class SimObject{
         ghost_simob_spatial.setCullHint(CullHint.Always);
         debugNode.attachChild(ghost_simob_spatial);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
-    public Spatial getGhostSpatial(){
+    public Spatial getGhostSpatial() {
         return ghost_simob_spatial;
     }
-    
+
     /**
-     * 
+     *
      * @param hide
      */
-    public void hideGhostSpatial(boolean hide){
-        if(hide){
-             ghost_simob_spatial.setCullHint(CullHint.Always);
-        }else{
-             ghost_simob_spatial.setCullHint(CullHint.Never);
+    public void hideGhostSpatial(boolean hide) {
+        if (hide) {
+            ghost_simob_spatial.setCullHint(CullHint.Always);
+        } else {
+            ghost_simob_spatial.setCullHint(CullHint.Never);
         }
     }
-    
+
     /**
-     * 
+     *
      * @param visible
      */
-    public void setCollisionVisible(boolean visible){
-        if(visible){
+    public void setCollisionVisible(boolean visible) {
+        if (visible) {
             debugShape.setCullHint(CullHint.Inherit);
-        }else{
+        } else {
             debugShape.setCullHint(CullHint.Always);
         }
     }
-    
+
     /**
-     * 
+     *
      * @param visible
      */
-    public void setWireframeVisible(boolean visible){
-        if(visible){
-            Node nodes = (Node)spatial;
+    public void setWireframeVisible(boolean visible) {
+        if (visible) {
+            Node nodes = (Node) spatial;
             List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial2 = it.next();
                 System.out.println(spatial2.getName());
-                if(spatial2 instanceof Geometry){
-                    Geometry geom = (Geometry)spatial2;
+                if (spatial2 instanceof Geometry) {
+                    Geometry geom = (Geometry) spatial2;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(true);
                 }
             }
-        }else{
-            Node nodes = (Node)spatial;
+        } else {
+            Node nodes = (Node) spatial;
             List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial2 = it.next();
                 System.out.println(spatial2.getName());
-                if(spatial2 instanceof Geometry){
-                    Geometry geom = (Geometry)spatial2;
+                if (spatial2 instanceof Geometry) {
+                    Geometry geom = (Geometry) spatial2;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(false);
                 }
             }
@@ -776,7 +777,7 @@ public class SimObject{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

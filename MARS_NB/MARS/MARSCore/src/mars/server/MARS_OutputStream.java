@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.server;
 
 import java.io.BufferedOutputStream;
@@ -11,9 +10,11 @@ import java.io.OutputStream;
 
 /**
  * An own OutputStream. Either with some filtering or cutting off the BOM.
+ *
  * @author Thomas Tosik
  */
-public class MARS_OutputStream extends BufferedOutputStream{
+@Deprecated
+public class MARS_OutputStream extends BufferedOutputStream {
 
     /**
      *
@@ -24,20 +25,20 @@ public class MARS_OutputStream extends BufferedOutputStream{
     }
 
     /**
-     * 
+     *
      * @param out
      * @param size
      */
     public MARS_OutputStream(OutputStream out, int size) {
-        super(out,size);
+        super(out, size);
     }
 
     private void writeQT(int b) throws IOException {
         // newline isnt allowed when sending a byte array with image data
         /*if (b == '\n')
-            super.write(11);
-        else
-            super.write(b);*/
+         super.write(11);
+         else
+         super.write(b);*/
         super.write(b);
     }
 

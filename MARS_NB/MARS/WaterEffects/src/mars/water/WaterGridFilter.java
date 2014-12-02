@@ -307,7 +307,15 @@ public class WaterGridFilter extends Filter {
      * Shape of the area the effect is restricted to.
      */
     public enum AreaShape {
+
+        /**
+         *
+         */
         Circular,
+
+        /**
+         *
+         */
         Square
     }
     
@@ -331,6 +339,14 @@ public class WaterGridFilter extends Filter {
         this.heightGenerator = heightGenerator;
     }
     
+    /**
+     *
+     * @param manager
+     * @param renderManager
+     * @param vp
+     * @param w
+     * @param h
+     */
     @Override
     protected void initFilter(AssetManager manager, RenderManager renderManager, ViewPort vp, int w, int h) {
         this.renderManager = renderManager;
@@ -432,11 +448,19 @@ public class WaterGridFilter extends Filter {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected boolean isRequiresDepthTexture() {
         return true;
     }
 
+    /**
+     *
+     * @param tpf
+     */
     @Override
     protected void preFrame(float tpf) {
         Camera sceneCam = viewPort.getCamera();
@@ -571,6 +595,10 @@ public class WaterGridFilter extends Filter {
         foamCam.copyFrom(sceneCam);
     }
     
+    /**
+     *
+     * @param queue
+     */
     @Override
     protected void postQueue(RenderQueue queue) {
         // render water surface height to texture and send to shader
@@ -589,11 +617,19 @@ public class WaterGridFilter extends Filter {
         renderManager.getRenderer().setFrameBuffer(viewPort.getOutputFrameBuffer());
     }
     
+    /**
+     *
+     * @param depthTexture
+     */
     @Override
     protected void setDepthTexture(Texture depthTexture){
         getMaterial().setTexture("DepthTexture", depthTexture);
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     protected Material getMaterial() {
         return material;
@@ -632,6 +668,10 @@ public class WaterGridFilter extends Filter {
         trailLength = length;
     }
     
+    /**
+     *
+     * @param useFoamTrails
+     */
     public void setUseFoamTrails(boolean useFoamTrails) {
         this.useFoamTrails = useFoamTrails;
     }
@@ -1151,6 +1191,10 @@ public class WaterGridFilter extends Filter {
         return useHQShoreline;
     }
 
+    /**
+     *
+     * @param useHQShoreline
+     */
     public void setUseHQShoreline(boolean useHQShoreline) {
         this.useHQShoreline = useHQShoreline;
         

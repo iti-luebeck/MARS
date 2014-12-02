@@ -9,12 +9,13 @@ import com.jme3.input.InputManager;
 /**
  *
  * @author Tosik
- * @deprecated 
+ * @deprecated
  */
 @Deprecated
-public interface  Keys {
+public interface Keys {
+
     /**
-     * 
+     *
      * @param inputManager
      * @param keyconfig
      */

@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.io.File;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Lamp;
 import mars.actuators.Teleporter;

@@ -18,7 +18,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays the camera view of an AUV.
+ * 
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSVideoCamera//EN",

@@ -5,7 +5,6 @@
 package mars.core;
 
 import com.jme3.math.ColorRGBA;
-import com.rits.cloning.Cloner;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.InputEvent;
@@ -29,13 +28,13 @@ import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.Helper.ClassComparator;
 import mars.KeyConfig;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
@@ -56,7 +55,6 @@ import mars.gui.sonarview.RayBasedSensorView;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.Compass;
 import mars.sensors.RayBasedSensor;
-import mars.sensors.UnderwaterModem;
 import mars.sensors.VideoCamera;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -70,7 +68,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays the tree.
+ * 
+ * @author Thomas Tosik
  * @deprecated see the new AUVTree Module
  */
 @ConvertAsProperties(

@@ -75,20 +75,12 @@ public class ColorPropertyEditor extends PropertyEditorSupport {
         float green = ((ColorRGBA) (getValue())).getGreen();
         float blue = ((ColorRGBA) (getValue())).getBlue();
         float alpha = ((ColorRGBA) (getValue())).getAlpha();
-        
-        /*Rectangle r = gfx.getClipBounds();
-        gfx.setColor(new Color(red, green, blue));
-        //gfx.fillRoundRect(1, 1, 270, 16, 10, 10);
-        //gfx.drawRoundRect(1, 1, 270, 16, 10, 10);
-        gfx.fillRect(1, 1, 270, 16);
-        gfx.drawRect(1, 1, 270, 16);
-        gfx.setColor(Color.black);
-        gfx.drawString(getAsText(), box.x + 0, box.y + 13);*/
+
         Color oldColor = gfx.getColor();
         gfx.setColor(Color.black);
-        gfx.drawRect(box.x, box.y, 14, box.height-3);
+        gfx.drawRect(box.x, box.y, 14, box.height - 3);
         gfx.setColor(new Color(red, green, blue));
-        gfx.fillRect(box.x+1, box.y+1, 13, box.height-4);
+        gfx.fillRect(box.x + 1, box.y + 1, 13, box.height - 4);
         gfx.setColor(Color.black);
         gfx.drawString(getAsText(), box.x + 20, box.y + 13);
         gfx.setColor(oldColor);

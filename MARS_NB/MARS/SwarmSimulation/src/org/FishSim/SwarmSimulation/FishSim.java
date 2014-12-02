@@ -27,8 +27,20 @@ import mars.states.SimState;
 public class FishSim extends AbstractAppState implements AppStateExtension {
     //MARS variables
     private static FishSim instance = null;
+
+    /**
+     *
+     */
     protected SwarmPanel sPanel;
+
+    /**
+     *
+     */
     protected FoodSourcePanel fSPanel;
+
+    /**
+     *
+     */
     protected FoodSourceMapPanel fSMPanel;
     private final Node rootNode = new Node("FishSimState Root Node");
     private MARS_Main mars;

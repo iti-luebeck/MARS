@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mars.sensors.sonar;
 
 import com.jme3.collision.CollisionResults;
@@ -13,22 +12,23 @@ import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.sensors.RayBasedSensor;
 
 /**
- * This is the main sonar class.
- * It supports rotating and non-rotating sonars. But you can also use it as a basis for other sonars(Tritech,Imaginex,...).
+ * This is the main sonar class. It supports rotating and non-rotating sonars.
+ * But you can also use it as a basis for other sonars(Tritech,Imaginex,...).
+ *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso( {ImagenexSonar_852_Echo.class,ImagenexSonar_852_Scanning.class,TriTech.class} )
-public class Sonar extends RayBasedSensor{
- 
+@XmlSeeAlso({ImagenexSonar_852_Echo.class, ImagenexSonar_852_Scanning.class, TriTech.class})
+public class Sonar extends RayBasedSensor {
+
     /**
-     * 
+     *
      */
-    public Sonar(){
+    public Sonar() {
         super();
         try {
             // Create an appending file handler
@@ -37,14 +37,15 @@ public class Sonar extends RayBasedSensor{
             // Add to the desired logger
             Logger logger = Logger.getLogger(this.getClass().getName());
             logger.addHandler(handler);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
 
     /**
      *
      * @param sonar
      */
-    public Sonar(Sonar sonar){
+    public Sonar(Sonar sonar) {
         super(sonar);
     }
 
@@ -60,17 +61,18 @@ public class Sonar extends RayBasedSensor{
     }
 
     /**
-     * This method is used to encapsulate the raw sonar data with header and 
-     * tail information. You have to overwrite it and implement you header 
-     * and tail if you want to use it.
+     * This method is used to encapsulate the raw sonar data with header and
+     * tail information. You have to overwrite it and implement you header and
+     * tail if you want to use it.
+     *
      * @param sondat
      * @return
      */
     @Override
-    protected byte[] encapsulateWithHeaderTail(byte[] sondat){
+    protected byte[] encapsulateWithHeaderTail(byte[] sondat) {
         return sondat;
     }
-    
+
     /**
      *
      * @param results
@@ -80,31 +82,22 @@ public class Sonar extends RayBasedSensor{
      * @return
      */
     @Override
-    protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction){
-        if(distance >= getMaxRange()){//too far away
-            //System.out.println("too far away");
+    protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction) {
+        if (distance >= getMaxRange()) {//too far away
             return null;
-        }else if(results.getCollision(i).getContactPoint().y >= pe.getWater_height()){//forget hits over water
+        } else if (results.getCollision(i).getContactPoint().y >= pe.getWater_height()) {//forget hits over water
             return null;
-        }else if ((distance > getMinRange())) {
-            //first = results2.getCollision(i).getContactPoint();
+        } else if ((distance > getMinRange())) {
             Vector3f cnormal = results.getCollision(i).getContactNormal();
             Vector3f direction_negated = direction.negate();
             float angle = cnormal.angleBetween(direction_negated);
-            if(angle > Math.PI/2){//sometimes the normal vector isnt right and than we have to much angle
-                angle = (float)Math.PI/2;
+            if (angle > Math.PI / 2) {//sometimes the normal vector isnt right and than we have to much angle
+                angle = (float) Math.PI / 2;
             }
-
-            /*System.out.println("angle: " + angle);
-            System.out.println("cnor: " + cnormal);
-            System.out.println("direc: " + direction_negated);*/
-            //System.out.println(first);
-            //ret = (first.subtract(ray_start)).length();
             float[] arr_ret = new float[1];
             arr_ret[0] = angle;
-            //System.out.println(distance);
             return arr_ret;
-        }else{
+        } else {
             return null;
         }
     }
@@ -115,8 +108,8 @@ public class Sonar extends RayBasedSensor{
      * @return
      */
     @Override
-    protected float calculateAverageNoiseFunction(float x){
-        return ((float)Math.pow(1.1f, (float)Math.abs(x)) );
+    protected float calculateAverageNoiseFunction(float x) {
+        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
     }
 
     /**
@@ -125,7 +118,7 @@ public class Sonar extends RayBasedSensor{
      * @return
      */
     @Override
-    protected float calculateStandardDeviationNoiseFunction(float x){
-        return ((float)Math.pow(1.1f, (float)Math.abs(x)) );
+    protected float calculateStandardDeviationNoiseFunction(float x) {
+        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
     }
 }

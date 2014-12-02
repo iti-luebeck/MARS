@@ -11,12 +11,9 @@ import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.controls.LayoutFactory;
 import info.monitorenter.gui.chart.traces.Trace2DLtd;
-import info.monitorenter.gui.chart.traces.painters.TracePainterFill;
-import info.monitorenter.gui.chart.traces.painters.TracePainterVerticalBar;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
-import mars.ChartValue;
+import mars.misc.ChartValue;
 import mars.auv.AUV;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -25,7 +22,9 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * Top component which displays charts/lots of data from auvs/sensors.
+ * 
+ * @author Thomas Tosik
  */
 @ConvertAsProperties(
         dtd = "-//mars.core//MARSChart//EN",

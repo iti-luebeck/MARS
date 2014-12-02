@@ -6,7 +6,7 @@ package mars.testmod.newactuator;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import com.jme3.scene.Geometry;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.actuators.Thruster;
 import mars.states.SimState;

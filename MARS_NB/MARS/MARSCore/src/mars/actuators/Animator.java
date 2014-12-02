@@ -14,48 +14,50 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.PhysicalExchanger;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
 import mars.states.SimState;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
 
 /**
+ * This class is similiar to the teleporter but with an interpolation between
+ * movement points.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Animator extends Actuator{
-    
-    /**
-     * 
-     */
-    public Animator(){
-        super();
-    }
-    
+public class Animator extends Actuator {
+
     /**
      *
-     * @param simstate 
-     * @param MassCenterGeom
      */
-    public Animator(SimState simstate,Geometry MassCenterGeom) {
-        super(simstate,MassCenterGeom);
+    public Animator() {
+        super();
     }
 
     /**
      *
-     * @param simstate 
+     * @param simstate
+     * @param MassCenterGeom
+     */
+    public Animator(SimState simstate, Geometry MassCenterGeom) {
+        super(simstate, MassCenterGeom);
+    }
+
+    /**
+     *
+     * @param simstate
      */
     public Animator(SimState simstate) {
         super(simstate);
     }
-    
+
     /**
      *
      * @param teleporter
      */
-    public Animator(Animator teleporter){
+    public Animator(Animator teleporter) {
         super(teleporter);
     }
 
@@ -71,46 +73,48 @@ public class Animator extends Actuator{
     }
 
     /**
-     * DON'T CALL THIS METHOD!
-     * In this method all the initialiasing for the motor will be done and it will be attached to the physicsNode.
+     * DON'T CALL THIS METHOD! In this method all the initialiasing for the
+     * motor will be done and it will be attached to the physicsNode.
      */
     @Override
-    public void init(Node auv_node){
+    public void init(Node auv_node) {
         super.init(auv_node);
     }
 
-    public void update(){
+    @Override
+    public void update() {
     }
 
-   /**
+    /**
      *
      * @param tpf
      */
     @Override
-    public void update(float tpf){
+    public void update(float tpf) {
     }
 
-    public void reset(){
-        
+    @Override
+    public void reset() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param vector
-     * @param quat  
+     * @param quat
      */
-    public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat){
+    public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat) {
         Future simStateFuture = this.simauv.enqueue(new Callable() {
             public Void call() throws Exception {
                 getPhysicsControl().setPhysicsLocation(vector);
                 getPhysicsControl().setPhysicsRotation(quat);
                 return null;
             }
-        }); 
+        });
     }
-    
+
     /**
-     * 
+     *
      * @param ros_node
      * @param auv_name
      */
@@ -120,23 +124,21 @@ public class Animator extends Actuator{
         final Animator self = this;
         Subscriber<geometry_msgs.PoseStamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.PoseStamped._TYPE);
         subscriber.addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
-                @Override
-                public void onNewMessage(geometry_msgs.PoseStamped message) {
-                    System.out.println("I (" + getName()+ ") heard: \"" + message.getPose().getPosition() + "\"");
-                    
-                    Point pos = (Point)message.getPose().getPosition();
-                    Vector3f v_pos = new Vector3f((float)pos.getX(), (float)pos.getZ(), (float)pos.getY());
-                    
-                    //getting from ROS Co-S to MARS Co-S
-                    Quaternion ori = (Quaternion)message.getPose().getOrientation();
-                    com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float)ori.getX(), (float)ori.getZ(), (float)ori.getY(), -(float)ori.getW());
-                    com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
-                    qrot.fromAngles(0f, FastMath.HALF_PI, 0);
-                    quat.multLocal(qrot);
+            @Override
+            public void onNewMessage(geometry_msgs.PoseStamped message) {
 
-                    self.teleport(v_pos,quat);
-                }
-        },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+                Point pos = (Point) message.getPose().getPosition();
+                Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
+
+                //getting from ROS Co-S to MARS Co-S
+                Quaternion ori = (Quaternion) message.getPose().getOrientation();
+                com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
+                com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
+                qrot.fromAngles(0f, FastMath.HALF_PI, 0);
+                quat.multLocal(qrot);
+
+                self.teleport(v_pos, quat);
+            }
+        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 }
-
