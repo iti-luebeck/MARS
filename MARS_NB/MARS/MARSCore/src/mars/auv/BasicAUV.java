@@ -2555,9 +2555,14 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void setWireframeVisible(boolean visible) {
-        if (visible) {
+        List<Spatial> children = new ArrayList<Spatial>(); 
+        if(auv_spatial instanceof Node){
             Node nodes = (Node) auv_spatial;
-            List<Spatial> children = nodes.getChildren();
+            children.addAll(nodes.getChildren());
+        }else{//its a spatial or geometry
+            children.add(auv_spatial);
+        }
+        if (visible) {
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
                 System.out.println(spatial.getName());
@@ -2567,8 +2572,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
             }
         } else {
-            Node nodes = (Node) auv_spatial;
-            List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
                 System.out.println(spatial.getName());
