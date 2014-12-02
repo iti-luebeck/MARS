@@ -5,6 +5,9 @@
  */
 package mars.uwCommManager.options;
 
+import static mars.uwCommManager.options.CommOptionsConstants.*;
+import java.util.prefs.Preferences;
+
 final class CommunicationConfigurationPanel extends javax.swing.JPanel {
 
     private final CommunicationConfigurationOptionsPanelController controller;
@@ -106,6 +109,8 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // someCheckBox.setSelected(NbPreferences.forModule(CommunicationConfigurationPanel.class).getBoolean("someFlag", false));
         // or:
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        jCheckBox1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, true));
+        jSlider1.setValue(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getInt(OPTIONS_THREADCOUNT_SLIDER, 3));
     }
 
     void store() {
@@ -116,6 +121,8 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // NbPreferences.forModule(CommunicationConfigurationPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
         // or:
         // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, jCheckBox1.isSelected());
+        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putInt(OPTIONS_THREADCOUNT_SLIDER, jSlider1.getValue());
     }
 
     boolean valid() {

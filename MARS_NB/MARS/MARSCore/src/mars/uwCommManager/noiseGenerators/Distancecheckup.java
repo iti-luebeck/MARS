@@ -5,9 +5,9 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import mars.misc.CommunicationType;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.misc.CommunicationType;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
 import mars.sensors.UnderwaterModem;
@@ -79,7 +79,7 @@ public class Distancecheckup{
                     Vector3f modPos = mod.getWorldPosition();
                     Vector3f distance = modPos.subtract(senderUWPos);
                     
-                    System.out.println("Sender position: " + senderUWPos.toString() + "\n reciever position: " + modPos.toString() + " \n distance: " + distance.toString());
+                    //System.out.println("Sender position: " + senderUWPos.toString() + "\n reciever position: " + modPos.toString() + " \n distance: " + distance.toString());
                     if(msg.getCommunicationType() == CommunicationType.UNDERWATERSOUND && mod instanceof UnderwaterModem){//check the communications ways (underwater, overwater)
                         if( Math.abs(distance.length()) <= senderUW.getPropagationDistance() ){//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also underwater

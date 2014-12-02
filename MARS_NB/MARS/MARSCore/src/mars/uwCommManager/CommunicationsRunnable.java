@@ -166,13 +166,13 @@ public class CommunicationsRunnable implements Runnable {
     /**
      * Activate the distancecheckfirstup
      */
-    private void activateDistanceCheckup() {
+    public void activateDistanceCheckup() {
         this.distanceCheckupFirst = true;
     }
     /**
      * Deactivate the distance checking firstup
      */
-    private void deactivateDistanceCheckup() {
+    public void deactivateDistanceCheckup() {
         this.distanceCheckupFirst = false;
     }
     

@@ -12,12 +12,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
+import mars.uwCommManager.options.CommOptionsConstants;
+import static mars.uwCommManager.options.CommOptionsConstants.*;
 
 /**
  * Entrypoint of the communications module.
@@ -41,7 +48,7 @@ public class CommunicationState extends AbstractAppState {
     private List<Thread> threads = null;
     private List<CommunicationsRunnable> runnables = null;
     
-    public static final int THREAD_COUNT = 3;
+    private static int threadCount;
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -49,19 +56,53 @@ public class CommunicationState extends AbstractAppState {
         if(app instanceof MARS_Main){
             app = (MARS_Main)app;
         }
-        threads = new LinkedList<Thread>();
         runnables = new LinkedList<CommunicationsRunnable>();
         
-        for(int i = 0; i<THREAD_COUNT; i++) {
+        if(!loadAndInitPreferenceListeners()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Failed to load communications config");
+        }
+        
+        for(int i = 0; i<threadCount; i++) {
             CommunicationsRunnable comRunnable = new CommunicationsRunnable(this);
             if(comRunnable.init()); {
-                Thread comThread = new Thread (comRunnable);
-                threads.add(comThread);
+                Thread comThread = new Thread(comRunnable);
                 runnables.add(comRunnable);
                 comThread.start();
         }
         }
         CentralLookup.getDefault().add(this);
+    }
+    
+    private boolean loadAndInitPreferenceListeners() {
+        Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
+        if(pref == null) return false;
+        threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 3);
+        
+        
+        
+        pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+            public void preferenceChange(PreferenceChangeEvent e) {
+                //Distance Checkup Event
+                if(e.getKey().equals(OPTIONS_DISTANCE_CHECKUP_CHECKBOX)) {
+                    
+                    for(CommunicationsRunnable runnable : runnables) {
+                        if(e.getNewValue().equals("true")) runnable.activateDistanceCheckup();
+                        else runnable.deactivateDistanceCheckup();
+                    }//END iteration runnables
+                }//Distance Checkup Event closed
+                
+                //Thread Slider Event
+                if(e.getKey().equals(OPTIONS_THREADCOUNT_SLIDER)) {
+                    threadCount = Integer.parseInt(e.getNewValue());
+                    int counter = 0;
+                    for(CommunicationsRunnable runnable : runnables) {
+                        counter++;
+                        if(counter>threadCount) runnable.stop();
+                    }//End iteration runnables
+                }//Thread Slider Event closed
+            }
+        });
+        return true;
     }
     
     @Override
@@ -105,7 +146,7 @@ public class CommunicationState extends AbstractAppState {
              */
             runnables.get(counter).assignMessage(msg);
             counter++;
-            if(counter == THREAD_COUNT) counter = 0;
+            if(counter == threadCount) counter = 0;
         }
     }
     
@@ -132,6 +173,10 @@ public class CommunicationState extends AbstractAppState {
         if(enabled){
         } else {
         }
+    }
+    
+    public static int getThreadCount() {
+        return threadCount;
     }
     
 

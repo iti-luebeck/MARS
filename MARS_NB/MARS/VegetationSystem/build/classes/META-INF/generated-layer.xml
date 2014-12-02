@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
+                            "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="OptionsDialog">
+        <file name="mars-VegetationSystem-VegetationSystemOptionsPanelController.instance">
+            <!--mars.VegetationSystem.VegetationSystemOptionsPanelController-->
+            <attr
+                methodvalue="org.netbeans.spi.options.OptionsCategory.createCategory" name="instanceCreate"/>
+            <attr name="controller" newvalue="mars.VegetationSystem.VegetationSystemOptionsPanelController"/>
+            <attr
+                bundlevalue="mars.VegetationSystem.Bundle#OptionsCategory_Name_VegetationSystem" name="categoryName"/>
+            <attr name="iconBase" stringvalue="mars/VegetationSystem/grass_icon.png"/>
+            <attr
+                bundlevalue="mars.VegetationSystem.Bundle#OptionsCategory_Keywords_VegetationSystem" name="keywords"/>
+            <attr name="keywordsCategory" stringvalue="VegetationSystem"/>
+        </file>
+    </folder>
+</filesystem>
