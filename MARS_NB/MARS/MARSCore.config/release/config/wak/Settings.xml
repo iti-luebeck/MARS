@@ -15,6 +15,9 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="maxsubsteps">
                     <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">32</value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="poke">
+                    <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">5.0</value>
+                </entry>
             </value>
         </entry>
         <entry xsi:type="myHashMapEntryTypeHashMap" key="Misc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
