@@ -130,14 +130,14 @@ public class Helper {
             spatial.setUserData(PickHint.PickName, pickHint);
         }
     }
-
+    
     /**
      *
      * @param spatial
      * @param name
      * @param hint
      */
-    public static void setNodeUserData(Spatial spatial, String name, int hint) {
+    public static void setNodeUserData(Spatial spatial, String name, Object hint) {
         if (spatial instanceof Node) {
             Node node = (Node) spatial;
             node.setUserData(name, hint);

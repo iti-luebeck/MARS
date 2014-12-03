@@ -408,6 +408,22 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     public void setPhysicsSpeed(Float speed) {
         Physics.put("speed", speed);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getPhysicsPoke() {
+        return ((Float) Physics.get("poke") != null) ? (Float) Physics.get("poke") : 5.0f;
+    }
+
+    /**
+     *
+     * @param poke
+     */
+    public void setPhysicsPoke(Float poke) {
+        Physics.put("poke", poke);
+    }
 
     /**
      *

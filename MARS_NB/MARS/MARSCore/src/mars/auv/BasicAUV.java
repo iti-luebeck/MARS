@@ -1322,7 +1322,8 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_spatial.updateModelBound();
         auv_spatial.updateGeometricState();
         auv_spatial.setName(auv_param.getModelName());
-        auv_spatial.setUserData("auv_name", getName());
+        Helper.setNodeUserData(auv_spatial, "auv_name", getName());
+        //auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
