@@ -113,7 +113,7 @@ public class SeaBotixThruster extends Thruster {
         subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
             @Override
             public void onNewMessage(hanse_msgs.sollSpeed message) {
-                System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
+                //System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
                 self.set_thruster_speed((int) message.getData());
             }
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());

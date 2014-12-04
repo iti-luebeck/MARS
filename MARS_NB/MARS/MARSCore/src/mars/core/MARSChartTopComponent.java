@@ -240,7 +240,6 @@ public final class MARSChartTopComponent extends TopComponent {
             @Override public void onNewData( ChartEvent e ) {
                 if(e.getObject() instanceof Float){
                     for (ITrace2D trace : traces) {
-                        //System.out.println("vol2: " + (Float)e.getObject());
                         trace.addPoint(((double) System.currentTimeMillis() - m_starttime), (Float)e.getObject());
                     }
                 }else if(e.getObject() instanceof Vector3f){

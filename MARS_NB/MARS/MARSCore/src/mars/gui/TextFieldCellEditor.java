@@ -52,12 +52,10 @@ public class TextFieldCellEditor extends AbstractCellEditor implements TreeCellE
             TreePath path = tree.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
             if (path != null) {
                 Object node = path.getLastPathComponent();
-                //System.out.println("editable!!!! " + path + " comp: " + node);
                 if ((node != null) && (node instanceof DefaultMutableTreeNode)) {
                     DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
                     //Object userObject = treeNode.getUserObject();
                     //returnValue = ((treeNode.isLeaf()) && (userObject instanceof CheckBoxNode));
-                    //System.out.println("leaf");
                     returnValue = treeNode.isLeaf();
                     //returnValue = true;
                 } else if ((node != null) && (node instanceof Float)) {

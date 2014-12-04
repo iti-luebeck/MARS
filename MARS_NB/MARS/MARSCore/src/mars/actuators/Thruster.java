@@ -298,10 +298,10 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
         local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
 
-        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis);
-        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis, null));
-        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation());
-        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation());
+        //System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis);
+        //System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis, null));
+        //System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation());
+        //System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation());
     }
 
     /**

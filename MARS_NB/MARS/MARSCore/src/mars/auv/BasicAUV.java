@@ -2566,7 +2566,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         if (visible) {
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
-                System.out.println(spatial.getName());
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(true);
@@ -2575,7 +2574,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         } else {
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
-                System.out.println(spatial.getName());
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(false);

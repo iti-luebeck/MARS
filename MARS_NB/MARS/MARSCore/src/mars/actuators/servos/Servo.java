@@ -321,10 +321,8 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     }
 
     private void updateAnglePosition(float tpf) {
-        //System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
         if (desired_angle_iteration != current_angle_iteration) {//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
-            //System.out.println("possible_iterations: " + possible_iterations);
             if (possible_iterations > 0) {//when we dont have enough time to rotate we wait till the next frame
 
                 int do_it_iterations = 0;
@@ -340,7 +338,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
                 }
                 ///do_it_iterations = possible_iterations;
 
-                //System.out.println("do_it_iterations: " + do_it_iterations);
                 Iterator iter = slaves.iterator();
                 while (iter.hasNext()) {
                     final Moveable moves = (Moveable) iter.next();
@@ -385,7 +382,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      * @param desired_angle_iteration
      */
     public void setDesiredAnglePosition(int desired_angle_iteration) {
-        System.out.println("desired_angle_iteration: " + desired_angle_iteration);
         if (desired_angle_iteration > max_angle_iteration) {
             this.desired_angle_iteration = max_angle_iteration;
         } else if (desired_angle_iteration < -max_angle_iteration) {
@@ -409,7 +405,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
         float desired_angle_f = (float) desired_angle;
         int desired_angle_iterations = Math.round(1024f * ((desired_angle_f + ((float) Math.PI / 2f)) / (float) Math.PI));
 
-        System.out.println("desired_angle_iterations: " + desired_angle_iterations);
         if (desired_angle_iterations >= 512) {
             setDesiredAnglePosition(Math.round(desired_angle_iterations - 512));
         } else {

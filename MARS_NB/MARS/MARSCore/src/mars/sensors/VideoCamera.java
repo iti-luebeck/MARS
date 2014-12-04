@@ -502,9 +502,6 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public void updateRotation(float alpha){
-        /*System.out.println("I(" + getName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
-        System.out.println("My local rotation axis is:" + local_rotation_axis );
-        System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
         Quaternion quat = new Quaternion();
         quat.fromAngleAxis(alpha, local_rotation_axis);
         Rotation_Node.setLocalRotation(quat);
@@ -523,11 +520,6 @@ public class VideoCamera extends Sensor implements Moveable{
         Rotation_Node.worldToLocal(WorldServoEnd, LocalServoEnd);
         Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
         local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
-        
-        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis );
-        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );
-        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation() );
-        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation() );
     }
     
     /**

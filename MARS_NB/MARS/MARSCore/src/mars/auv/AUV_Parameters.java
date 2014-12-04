@@ -176,7 +176,6 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      */
     @Deprecated
     public void updateState(TreePath path) {
-        System.out.println("TREEPATH: " + path);
         if (path.getPathComponent(2).equals(this)) {//make sure we want to change auv params
             if (path.getParentPath().getLastPathComponent().toString().equals("AUVParameters")) {
                 updateState(path.getLastPathComponent().toString(), "");

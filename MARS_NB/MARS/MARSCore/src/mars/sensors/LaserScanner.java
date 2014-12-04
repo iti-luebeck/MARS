@@ -69,7 +69,6 @@ public class LaserScanner extends RayBasedSensor {
     @Override
     protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction) {
         if (distance >= getMaxRange()) {//too far away
-            //System.out.println("too far away");
             return null;
         } else if (results.getCollision(i).getContactPoint().y <= pe.getWater_height()) {//forget hits under water
             return null;

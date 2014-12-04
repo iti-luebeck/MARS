@@ -937,7 +937,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     public void restartSimulation() {
         simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
-                System.out.println("RESET!!!");
+                System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();
                 return null;
             }

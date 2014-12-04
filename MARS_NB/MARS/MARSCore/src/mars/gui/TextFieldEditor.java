@@ -98,7 +98,6 @@ public class TextFieldEditor extends JTextField implements CellEditor {
      * @param treepath
      */
     public void setTreepath(TreePath treepath) {
-        //System.out.println("TFE: " + treepath);
         this.treepath = treepath;
     }
 

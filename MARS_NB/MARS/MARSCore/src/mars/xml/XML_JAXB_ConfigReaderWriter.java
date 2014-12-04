@@ -92,7 +92,7 @@ public class XML_JAXB_ConfigReaderWriter {
             File[] files = dir.listFiles(filter);
             for (int i = 0; i < files.length; i++) {
                 //Get filename of file or directory
-                System.out.println(files[i].getName());
+                //System.out.println(files[i].getName());
                 arrlist.add(loadSimObject(files[i]));
             }
             return arrlist;
@@ -270,7 +270,7 @@ public class XML_JAXB_ConfigReaderWriter {
             File[] files = dir.listFiles(filter);
             for (int i = 0; i < files.length; i++) {
                 //Get filename of file or directory
-                System.out.println(files[i].getName());
+                //System.out.println(files[i].getName());
                 arrlist.add(loadAUV(files[i]));
             }
             return arrlist;

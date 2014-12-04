@@ -226,7 +226,6 @@ public class Canon extends Actuator implements Moveable, Keys {
      * Create a round geometry and apply a force to it.
      */
     public void shoot() {
-        System.out.println("Shoot");
         Vector3f left = (CanonEnd.getWorldTranslation().subtract(CanonStart.getWorldTranslation())).normalize();
         physics_control.applyImpulse(left.mult(-RecoilForce), this.getMassCenterGeom().getWorldTranslation().subtract(CanonStart.getWorldTranslation()));
 
