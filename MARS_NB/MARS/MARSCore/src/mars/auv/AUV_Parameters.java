@@ -1339,7 +1339,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @return
      */
     public Boolean isDebugPhysicalExchanger() {
-        return (Boolean) debug.get("physical_exchanger");
+        return (Boolean) debug.get("physicalExchanger");
     }
 
     /**
@@ -1347,15 +1347,15 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @return
      */
     public Boolean getDebugPhysicalExchanger() {
-        return (Boolean) debug.get("physical_exchanger");
+        return (Boolean) debug.get("physicalExchanger");
     }
 
     /**
      *
      * @param physical_exchanger
      */
-    public void setDebugPhysicalExchanger(Boolean physical_exchanger) {
-        debug.put("physical_exchanger", physical_exchanger);
+    public void setDebugPhysicalExchanger(Boolean physicalExchanger) {
+        debug.put("physicalExchanger", physicalExchanger);
     }
 
     /**
