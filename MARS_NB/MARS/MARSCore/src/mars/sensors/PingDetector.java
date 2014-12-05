@@ -88,7 +88,7 @@ public class PingDetector extends Sensor implements ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.015f);
+        Sphere sphere7 = new Sphere(8, 8, 0.015f);
         PingStart = new Geometry("CompassStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.DarkGray);
@@ -96,7 +96,7 @@ public class PingDetector extends Sensor implements ChartValue {
         PingStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(PingStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.015f);
+        Sphere sphere9 = new Sphere(8, 8, 0.015f);
         PingDirection = new Geometry("CompassYawAxis", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.DarkGray);

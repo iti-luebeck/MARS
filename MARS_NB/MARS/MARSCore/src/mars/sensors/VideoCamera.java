@@ -197,7 +197,7 @@ public class VideoCamera extends Sensor implements Moveable{
     @Override
     public void init(Node auv_node){
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         CameraStart = new Geometry("CameraStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Green);
@@ -218,7 +218,7 @@ public class VideoCamera extends Sensor implements Moveable{
         DomeGeom.updateGeometricState();
         Rotation_Node.attachChild(DomeGeom);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         CameraEnd = new Geometry("CameraEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
@@ -227,7 +227,7 @@ public class VideoCamera extends Sensor implements Moveable{
         CameraEnd.updateGeometricState();
         Rotation_Node.attachChild(CameraEnd);
 
-        Sphere sphere10 = new Sphere(16, 16, 0.025f);
+        Sphere sphere10 = new Sphere(8, 8, 0.025f);
         CameraTop = new Geometry("CameraTop", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.DarkGray);

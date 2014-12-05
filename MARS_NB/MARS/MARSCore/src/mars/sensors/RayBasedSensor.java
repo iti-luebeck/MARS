@@ -170,7 +170,7 @@ public class RayBasedSensor extends Sensor {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         SonarStart = new Geometry("SonarStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
@@ -178,7 +178,7 @@ public class RayBasedSensor extends Sensor {
         SonarStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         SonarEnd = new Geometry("SonarEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
@@ -187,7 +187,7 @@ public class RayBasedSensor extends Sensor {
         SonarEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarEnd);
 
-        Sphere sphere10 = new Sphere(16, 16, 0.025f);
+        Sphere sphere10 = new Sphere(8, 8, 0.025f);
         SonarUp = new Geometry("SonarUp", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Blue);

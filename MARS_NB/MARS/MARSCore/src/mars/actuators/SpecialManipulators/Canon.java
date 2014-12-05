@@ -185,7 +185,7 @@ public class Canon extends Actuator implements Moveable, Keys {
         Texture tex2 = assetManager.loadTexture(key2);
         mat2.setTexture("ColorMap", tex2);
 
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         CanonStart = new Geometry("CanonLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
@@ -193,7 +193,7 @@ public class Canon extends Actuator implements Moveable, Keys {
         CanonStart.updateGeometricState();
         Rotation_Node.attachChild(CanonStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         CanonEnd = new Geometry("CanonLeftEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);

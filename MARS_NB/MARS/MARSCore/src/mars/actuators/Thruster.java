@@ -143,7 +143,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         MotorStart = new Geometry("MotorLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
@@ -151,7 +151,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         MotorStart.updateGeometricState();
         Rotation_Node.attachChild(MotorStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         MotorEnd = new Geometry("MotorLeftEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);

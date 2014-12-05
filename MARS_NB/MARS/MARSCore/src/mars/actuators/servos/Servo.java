@@ -246,7 +246,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         ServoStart = new Geometry("ServoStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
@@ -254,7 +254,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
         ServoStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         ServoEnd = new Geometry("ServoEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.White);

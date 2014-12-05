@@ -151,7 +151,7 @@ public class UnderwaterModem extends CommunicationDevice {
 
     @Override
     public void init(Node auv_node) {
-        Sphere sphere7 = new Sphere(16, 16, 0.05f);
+        Sphere sphere7 = new Sphere(8, 8, 0.05f);
         UnderwaterModemStart = new Geometry("UnderwaterModemStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
@@ -159,7 +159,7 @@ public class UnderwaterModem extends CommunicationDevice {
         UnderwaterModemStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(UnderwaterModemStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.05f);
+        Sphere sphere9 = new Sphere(8, 8, 0.05f);
         UnderwaterModemEnd = new Geometry("UnderwaterModemEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);

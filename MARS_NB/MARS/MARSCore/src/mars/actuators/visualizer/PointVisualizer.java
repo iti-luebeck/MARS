@@ -121,7 +121,7 @@ public class PointVisualizer extends Actuator implements ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, getRadius());
+        Sphere sphere7 = new Sphere(8, 8, getRadius());
         VectorVisualizerStart = new Geometry("PointVisualizerStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", getColor());
