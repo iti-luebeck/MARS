@@ -108,15 +108,6 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor() {
         super();
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -125,16 +116,6 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
 
         this.RayDetectable = simstate.getCollider();
         this.pe = pe;
@@ -146,16 +127,7 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor(SimState simstate) {
         super(simstate);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
+
         this.RayDetectable = simstate.getCollider();
         rootNode.attachChild(debug_node);
     }

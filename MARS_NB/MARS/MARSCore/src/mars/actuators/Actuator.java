@@ -60,9 +60,6 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
      *
      */
     protected Node rootNode;
-    /*
-     *
-     */
     /**
      *
      */
@@ -84,7 +81,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
      *
      */
     protected Actuator() {
-
+        super();
     }
 
     /**
@@ -165,15 +162,8 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
 
     /**
      *
-     * @param simauv_settings
      */
-    public void setSimauv_settings(MARS_Settings simauv_settings) {
-        this.simauv_settings = simauv_settings;
-    }
-
-    /**
-     *
-     */
+    @Override
     public abstract void reset();
 
     /**

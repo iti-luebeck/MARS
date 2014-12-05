@@ -51,7 +51,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     private Node AUVsNode;
     private MARS_Main mars;
     private PhysicalEnvironment physical_environment;
-    private MARS_Settings simauv_settings;
+    private MARS_Settings mars_settings;
     private BulletAppState bulletAppState;
     private Node rootNode;
     private SimState simstate;
@@ -71,12 +71,21 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public AUV_Manager(SimState simstate) {
         //set the logging
         try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+
+            if(simstate.getMARSSettings().getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!simstate.getMARSSettings().getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
         } catch (IOException e) {
         }
 
@@ -172,7 +181,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
                     ret.add(auv);
                 }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
         return ret;
@@ -189,7 +198,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
             try {
                 return (Class.forName(classNameString).isInstance(auv));
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -239,16 +248,16 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      *
      * @return
      */
-    public MARS_Settings getSimauv_settings() {
-        return simauv_settings;
+    public MARS_Settings getMARS_settings() {
+        return mars_settings;
     }
 
     /**
      *
-     * @param simauv_settings
+     * @param mars_settings
      */
-    public void setSimauv_settings(MARS_Settings simauv_settings) {
-        this.simauv_settings = simauv_settings;
+    public void setMARS_settings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
     }
 
     /**
@@ -585,7 +594,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     private void preloadAUV(AUV auv) {
         //if(auv.getAuv_param().isEnabled()){
         auv.setState(simstate);
-        auv.setMARS_Settings(simauv_settings);
+        auv.setMARS_Settings(mars_settings);
         auv.setPhysical_environment(physical_environment);
         auv.setCommunicationManager(com_manager);
         auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
@@ -712,6 +721,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     /**
      *
      */
+    @Deprecated
     private void initAUVs() {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV's...", "");
         for (String elem : auvs.keySet()) {
@@ -728,6 +738,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         auv.init();
     }
 
+    @Deprecated
     private void initAUV(String auv_name) {
         AUV auv = (AUV) getAUV(auv_name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");

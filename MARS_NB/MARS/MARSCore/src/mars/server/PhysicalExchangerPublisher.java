@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV_Manager;
+import mars.states.SimState;
 
 /**
  * The main class responsible for publish/sending data of the sensors/actuators
@@ -40,12 +41,23 @@ public class PhysicalExchangerPublisher implements Runnable {
     public PhysicalExchangerPublisher(MARS_Main mars, AUV_Manager auv_manager, MARS_Settings marsSettings) {
         //set the logging
         try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
+
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(marsSettings.getLoggingLevel()));
+
+            if(marsSettings.getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(marsSettings.getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+
+            if(!marsSettings.getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
+
         } catch (IOException e) {
         }
 

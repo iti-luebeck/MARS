@@ -220,6 +220,13 @@ public class Initializer {
         this.mars_settings.setInit(this);
         sun = new DirectionalLight();
         fpp = new FilterPostProcessor(assetManager);
+        
+        //setup logging
+        if(!mars_settings.getLoggingEnabled()){
+            Logger.getLogger(Initializer.class.getName()).setLevel(Level.OFF);
+        }else{
+            Logger.getLogger(Initializer.class.getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
+        }
     }
 
     /**

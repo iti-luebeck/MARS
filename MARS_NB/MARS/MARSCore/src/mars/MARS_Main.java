@@ -21,16 +21,11 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.math.ColorRGBA;
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.plugins.OBJLoader;
 import com.jme3.system.AppSettings;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.tools.SizeValue;
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -104,6 +99,7 @@ public class MARS_Main extends SimpleApplication {
         speeds[5] = 2.0f;
         speeds[6] = 3.0f;
         speeds[7] = 4.0f;
+        //Logger.getLogger("").setLevel(Level.OFF);
     }
 
     /**

@@ -149,7 +149,12 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      * Initialize method called after AUV creation or if enabled.
      */
     public void init();
-
+    
+    /**
+    *
+    */
+    public void setupLogger();
+            
     /**
      *
      */
