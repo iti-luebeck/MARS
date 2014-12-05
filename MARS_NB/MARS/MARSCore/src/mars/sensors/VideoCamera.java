@@ -10,13 +10,15 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Dome;
+import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
@@ -26,22 +28,23 @@ import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
+import mars.Helper.Pyramid;
 import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
- * This is a common camera class for auv's.
+ * This is a common camera class for AUVs.
+ * 
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-//@XmlSeeAlso( {BlackfinCamera.class} )
 public class VideoCamera extends Sensor implements Moveable{
 
     private Geometry CameraStart;
@@ -201,6 +204,19 @@ public class VideoCamera extends Sensor implements Moveable{
         CameraStart.setMaterial(mark_mat7);
         CameraStart.updateGeometricState();
         Rotation_Node.attachChild(CameraStart);
+        
+        Pyramid pyramid = new Pyramid(0.25f,0.5f);
+        Geometry DomeGeom = new Geometry("CameraStart", pyramid);
+        Material DomeGeom_Mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        DomeGeom_Mat.setColor("Color", ColorRGBA.Green);
+        DomeGeom_Mat.getAdditionalRenderState().setWireframe(true);
+        DomeGeom.setMaterial(DomeGeom_Mat);
+        Quaternion quatDome = new Quaternion();
+        quatDome.fromAngles(0f, 0f, 1.57f);
+        DomeGeom.setLocalRotation(quatDome);
+        DomeGeom.setLocalTranslation(new Vector3f(0.25f, 0f, 0f));
+        DomeGeom.updateGeometricState();
+        Rotation_Node.attachChild(DomeGeom);
 
         Sphere sphere9 = new Sphere(16, 16, 0.025f);
         CameraEnd = new Geometry("CameraEnd", sphere9);
