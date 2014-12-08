@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.actuators;
+package mars.actuators.thruster;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -17,11 +17,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
 import com.rits.cloning.Cloner;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -35,6 +33,7 @@ import mars.Keys;
 import mars.PhysicalExchange.Moveable;
 import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.actuators.Actuator;
 import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.actuators;
+package mars.actuators.thruster;
 
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,20 +13,20 @@ import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 
 /**
- * This class represents the Geomar Thrusters. A measured force fitting curve is
- * used.
+ * This class represents the SeaBotix Thrusters. A measured force fitting curve
+ * is used.
  *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class GeomarThruster extends Thruster {
+public class SeaBotixThruster extends Thruster {
 
     /**
      *
      */
-    public GeomarThruster() {
+    public SeaBotixThruster() {
         super();
-        motor_increment = 0.6f;
+        motor_increment = 5f;
     }
 
     /**
@@ -34,25 +34,25 @@ public class GeomarThruster extends Thruster {
      * @param simstate
      * @param MassCenterGeom
      */
-    public GeomarThruster(SimState simstate, Geometry MassCenterGeom) {
+    public SeaBotixThruster(SimState simstate, Geometry MassCenterGeom) {
         super(simstate, MassCenterGeom);
-        motor_increment = 0.6f;
+        motor_increment = 5f;
     }
 
     /**
      *
      * @param simstate
      */
-    public GeomarThruster(SimState simstate) {
+    public SeaBotixThruster(SimState simstate) {
         super(simstate);
-        motor_increment = 0.6f;
+        motor_increment = 5f;
     }
 
     /**
      *
      * @param thruster
      */
-    public GeomarThruster(GeomarThruster thruster) {
+    public SeaBotixThruster(SeaBotixThruster thruster) {
         super(thruster);
         motor_increment = 5f;
     }
@@ -62,22 +62,26 @@ public class GeomarThruster extends Thruster {
      * @return
      */
     @Override
-    public GeomarThruster copy() {
-        GeomarThruster actuator = new GeomarThruster(this);
+    public SeaBotixThruster copy() {
+        SeaBotixThruster actuator = new SeaBotixThruster(this);
         actuator.initAfterJAXB();
         return actuator;
     }
 
     /**
      * This is the function that represents the SeaBotix measured thruster
-     * force.
+     * force. It is limited to +/- 127.
      *
      * @param speed
      * @return
      */
     @Override
     protected float calculateThrusterForce(int speed) {
-        return (Math.signum(speed)) * (4.4950211572f * (float) Math.pow(1.0234763348f, (float) Math.abs(speed)));
+        //return (Math.signum(speed))*(0.16f * (float)Math.pow(1.04f, (float)Math.abs(speed)) );
+        // we want to limit the maximum settable value to +/- 127
+        int limited_speed = (Math.abs(speed) <= 127) ? Math.abs(speed) : 127;
+        limited_speed = ((int) Math.signum(speed)) * limited_speed;
+        return (Math.signum(limited_speed)) * (0.00046655f * (float) Math.pow((float) Math.abs(limited_speed), 2.02039525f));
     }
 
     /**
@@ -89,7 +93,11 @@ public class GeomarThruster extends Thruster {
      */
     @Override
     protected float calculateThrusterCurrent(int speed) {
-        return 0.4100154271f * (float) Math.pow(1.0338512063f, (float) Math.abs(speed));
+        if (Math.abs(speed) > 22) {
+            return 0.01f * Math.abs(speed) - 0.22f;
+        } else {
+            return 0f;
+        }
     }
 
     /**
@@ -98,13 +106,14 @@ public class GeomarThruster extends Thruster {
      * @param auv_name
      */
     @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
+    public void initROS(MARSNodeMain ros_node, final String auv_name) {
         super.initROS(ros_node, auv_name);
-        final GeomarThruster self = this;
+        final SeaBotixThruster self = this;
         Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
         subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
             @Override
             public void onNewMessage(hanse_msgs.sollSpeed message) {
+                //System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
                 self.set_thruster_speed((int) message.getData());
             }
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());

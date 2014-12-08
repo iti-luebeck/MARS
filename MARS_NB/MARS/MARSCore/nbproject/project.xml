@@ -354,6 +354,7 @@
                 <package>mars.actuators.SpecialManipulators</package>
                 <package>mars.actuators.cable</package>
                 <package>mars.actuators.servos</package>
+                <package>mars.actuators.thruster</package>
                 <package>mars.actuators.visualizer</package>
                 <package>mars.annotations</package>
                 <package>mars.auv</package>

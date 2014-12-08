@@ -7,7 +7,7 @@ package mars.auv;
 import com.jme3.renderer.queue.RenderQueue;
 import javax.swing.tree.TreePath;
 import mars.object.CollisionType;
-import mars.actuators.Thruster;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.Actuator;
 import mars.sensors.Sensor;
 import com.jme3.asset.AssetManager;

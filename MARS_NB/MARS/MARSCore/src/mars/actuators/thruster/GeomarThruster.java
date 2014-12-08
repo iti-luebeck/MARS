@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.actuators;
+package mars.actuators.thruster;
 
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,17 +13,18 @@ import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 
 /**
- * Plain thrusters used by the MONSUN project.
+ * This class represents the Geomar Thrusters. A measured force fitting curve is
+ * used.
  *
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class BrushlessThruster extends Thruster {
+public class GeomarThruster extends Thruster {
 
     /**
      *
      */
-    public BrushlessThruster() {
+    public GeomarThruster() {
         super();
         motor_increment = 0.6f;
     }
@@ -33,7 +34,7 @@ public class BrushlessThruster extends Thruster {
      * @param simstate
      * @param MassCenterGeom
      */
-    public BrushlessThruster(SimState simstate, Geometry MassCenterGeom) {
+    public GeomarThruster(SimState simstate, Geometry MassCenterGeom) {
         super(simstate, MassCenterGeom);
         motor_increment = 0.6f;
     }
@@ -42,7 +43,7 @@ public class BrushlessThruster extends Thruster {
      *
      * @param simstate
      */
-    public BrushlessThruster(SimState simstate) {
+    public GeomarThruster(SimState simstate) {
         super(simstate);
         motor_increment = 0.6f;
     }
@@ -51,7 +52,7 @@ public class BrushlessThruster extends Thruster {
      *
      * @param thruster
      */
-    public BrushlessThruster(BrushlessThruster thruster) {
+    public GeomarThruster(GeomarThruster thruster) {
         super(thruster);
         motor_increment = 5f;
     }
@@ -61,8 +62,8 @@ public class BrushlessThruster extends Thruster {
      * @return
      */
     @Override
-    public BrushlessThruster copy() {
-        BrushlessThruster actuator = new BrushlessThruster(this);
+    public GeomarThruster copy() {
+        GeomarThruster actuator = new GeomarThruster(this);
         actuator.initAfterJAXB();
         return actuator;
     }
@@ -76,7 +77,7 @@ public class BrushlessThruster extends Thruster {
      */
     @Override
     protected float calculateThrusterForce(int speed) {
-        return (Math.signum(speed)) * (0.00020655f * (float) Math.pow((float) Math.abs(speed), 2.02039525f));
+        return (Math.signum(speed)) * (4.4950211572f * (float) Math.pow(1.0234763348f, (float) Math.abs(speed)));
     }
 
     /**
@@ -88,7 +89,7 @@ public class BrushlessThruster extends Thruster {
      */
     @Override
     protected float calculateThrusterCurrent(int speed) {
-        return 0.01f * Math.abs(speed);
+        return 0.4100154271f * (float) Math.pow(1.0338512063f, (float) Math.abs(speed));
     }
 
     /**
@@ -99,7 +100,7 @@ public class BrushlessThruster extends Thruster {
     @Override
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        final BrushlessThruster self = this;
+        final GeomarThruster self = this;
         Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
         subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
             @Override

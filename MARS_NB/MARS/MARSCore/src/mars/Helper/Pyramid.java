@@ -20,22 +20,24 @@ import java.nio.IntBuffer;
  * <code>Pyramid</code> is a four sided pyramid.
  * 
  * <p>
- * A pyramid is defined by a width at the base and a height. The pyramid is a
- * 4-sided pyramid with the center at (0,0), it will be axis aligned with the
- * peak being on the positive y axis and the base being in the x-z plane.
- * <p>
+ A pyramid is defined by a width_x at the base and a height. The pyramid is a
+ 4-sided pyramid with the center at (0,0), it will be axis aligned with the
+ peak being on the positive y axis and the base being in the x-z plane.
+ <p>
  * The texture that defines the look of the pyramid has the top point of the
  * pyramid as the top center of the texture, with the remaining texture wrapping
  * around it.
  * 
  * Based on Code from Mark Powell (JME2)
  * http://hub.jmonkeyengine.org/forum/topic/jme3-pyramid/
+ * Modified for non quadratic base by Thomas Tosik
  *
  * @author Denis Hock
+ * @author Thomas Tosik
  */
 public class Pyramid extends Mesh {
 
-    private float width, height;
+    private float width_x, width_y, height;
 
     /**
      * Empty constructor for serialization only, do not use.
@@ -45,21 +47,37 @@ public class Pyramid extends Mesh {
 
     /**
      * Constructor instantiates a new <code>Pyramid</code> object. The base
-     * width and the height are provided.
+ width_x and the height are provided.
      *     
-     * @param width the base width of the pyramid.
+     * @param width the base width_x of the pyramid.
      * @param height the height of the pyramid from the base to the peak.
      */
     public Pyramid(float width, float height) {
-        updateGeometry(width, height);
+        updateGeometry(width, width, height);
+    }
+    
+    /**
+     * Constructor instantiates a new <code>Pyramid</code> object. The base
+ width_x and the height are provided.
+     *     
+     * @param width_x the base width_x of the pyramid.
+     * @param width_y the base width_y of the pyramid.
+     * @param height the height of the pyramid from the base to the peak.
+     */
+    public Pyramid(float width_x, float width_y, float height) {
+        updateGeometry(width_x, width_y, height);
     }
 
     public float getHeight() {
         return height;
     }
 
-    public float getWidth() {
-        return width;
+    public float getWidthX() {
+        return width_x;
+    }
+    
+    public float getWidthY() {
+        return width_y;
     }
 
     /**
@@ -69,10 +87,10 @@ public class Pyramid extends Mesh {
 
         // Update the vertex buffer
         float pkx = 0, pky = height / 2, pkz = 0;
-        float vx0 = -width / 2, vy0 = -height / 2, vz0 = -width / 2;
-        float vx1 = width / 2, vy1 = -height / 2, vz1 = -width / 2;
-        float vx2 = width / 2, vy2 = -height / 2, vz2 = width / 2;
-        float vx3 = -width / 2, vy3 = -height / 2, vz3 = width / 2;
+        float vx0 = -width_x / 2, vy0 = -height / 2, vz0 = -width_y / 2;
+        float vx1 = width_x / 2, vy1 = -height / 2, vz1 = -width_y / 2;
+        float vx2 = width_x / 2, vy2 = -height / 2, vz2 = width_y / 2;
+        float vx3 = -width_x / 2, vy3 = -height / 2, vz3 = width_y / 2;
         FloatBuffer verts = BufferUtils.createVector3Buffer(16);
         verts.put(new float[]{
             vx3, vy3, vz3, vx2, vy2, vz2, vx1, vy1, vz1, vx0, vy0, vz0, // base
@@ -124,8 +142,9 @@ public class Pyramid extends Mesh {
         setBuffer(Type.Index, 3, indices);
     }
 
-    public void updateGeometry(float width, float height) {
-        this.width = width;
+    public void updateGeometry(float width_x, float width_y, float height) {
+        this.width_x = width_x;
+        this.width_y = width_y;
         this.height = height;
         setGeometryData();
         setIndexData();
@@ -135,7 +154,8 @@ public class Pyramid extends Mesh {
     public void read(JmeImporter e) throws IOException {
         super.read(e);
         InputCapsule capsule = e.getCapsule(this);
-        width = capsule.readInt("width", 0);
+        width_x = capsule.readInt("width_x", 0);
+        width_y = capsule.readInt("width_y", 0);
         height = capsule.readInt("height", 0);
     }
 
@@ -143,7 +163,8 @@ public class Pyramid extends Mesh {
     public void write(JmeExporter e) throws IOException {
         super.write(e);
         OutputCapsule capsule = e.getCapsule(this);
-        capsule.write(width, "width", 0);
+        capsule.write(width_x, "width_x", 0);
+        capsule.write(width_y, "width_y", 0);
         capsule.write(height, "height", 0);
     }
 

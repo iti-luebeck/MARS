@@ -110,9 +110,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     //warter currents
     private Node currents = new Node("currents");
 
-    private Hanse auv_hanse;
-    private Monsun2 auv_monsun2;
-
     private Future simStateFuture = null;
 
     //map stuff
@@ -338,7 +335,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             initView();
 
             init = true;
-
+            
             progr.progress("Init GuiState");
             final GuiState guiState = new GuiState();
             guiState.setAuvManager(auvManager);

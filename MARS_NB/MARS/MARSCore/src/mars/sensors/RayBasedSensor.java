@@ -15,8 +15,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
-import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,6 +22,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.misc.Collider;
 import mars.Helper.NoiseType;
+import mars.Helper.Pyramid;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.misc.PickHint;
@@ -195,6 +194,22 @@ public class RayBasedSensor extends Sensor {
         SonarUp.setLocalTranslation(Vector3f.UNIT_Y);
         SonarUp.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarUp);
+        
+        if(getBeam_width() != null){
+            float pyr_width_y = (float)Math.sqrt(2f*(float)Math.pow(0.5f,2f)*(1f-(float)Math.cos(getBeam_width())));
+            Pyramid pyramid = new Pyramid(0.25f,pyr_width_y,0.5f);
+            Geometry DomeGeom = new Geometry("CameraStart", pyramid);
+            Material DomeGeom_Mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            DomeGeom_Mat.setColor("Color", ColorRGBA.Blue);
+            DomeGeom_Mat.getAdditionalRenderState().setWireframe(true);
+            DomeGeom.setMaterial(DomeGeom_Mat);
+            Quaternion quatDome = new Quaternion();
+            quatDome.fromAngles(0f, 0f, 1.57f);
+            DomeGeom.setLocalRotation(quatDome);
+            DomeGeom.setLocalTranslation(new Vector3f(0.25f, 0f, 0f));
+            DomeGeom.updateGeometricState();
+            PhysicalExchanger_Node.attachChild(DomeGeom);
+        }
 
         Vector3f ray_start = Vector3f.ZERO;
         Vector3f ray_direction = Vector3f.UNIT_X;

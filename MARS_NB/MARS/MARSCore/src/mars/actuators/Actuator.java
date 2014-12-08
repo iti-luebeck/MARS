@@ -4,6 +4,7 @@
  */
 package mars.actuators;
 
+import mars.actuators.thruster.Thruster;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
