@@ -153,9 +153,11 @@ public class MARS_Main extends SimpleApplication {
         if (stateManager.getState(FlyCamAppState.class) != null) {
             stateManager.getState(FlyCamAppState.class).setEnabled(false);
         }
-        //overrirde standard flybycam      
+        //overrirde standard flybycam/kill it completely      
         flyCam.setEnabled(false);
         flyCam.unregisterInput();
+        flyCam = null;
+        
         advFlyCam = new AdvancedFlyByCamera(cam);
         advFlyCam.setDragToRotate(true);
         advFlyCam.setEnabled(false);
