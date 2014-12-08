@@ -60,10 +60,6 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
      *
      */
     protected Node rootNode;
-    /**
-     *
-     */
-    protected MARS_Settings simauv_settings;
     /*
      * 
      */

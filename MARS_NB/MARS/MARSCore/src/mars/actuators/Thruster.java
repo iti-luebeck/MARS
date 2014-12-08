@@ -182,7 +182,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         //check if thruster is under or over water, because we get different forces depending on the density of the fluid.
 
         if (MotorStart.getWorldTranslation().y <= this.getIniter().getCurrentWaterHeight(MotorStart.getWorldTranslation().x, MotorStart.getWorldTranslation().z)) {
-            physics_control.applyImpulse(left.mult(MotorForce / ((float) simauv_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
+            physics_control.applyImpulse(left.mult(MotorForce / ((float) mars_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         }
         //physics_control.applyForce(left.mult(MotorForce), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         //physics_control.applyImpulse(left.mult(MotorForce/simauv_settings.getPhysicsFramerate()), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
