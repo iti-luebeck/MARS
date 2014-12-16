@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
@@ -49,19 +52,24 @@ public class CommunicationState extends AbstractAppState {
      */
     private List<CommunicationsRunnable> runnables = null;
     
+    
     /**
-     * 
+     * Map the AUV to its runnable
      */
+    private Map<String,CommunicationExecutorRunnable> auvProcessMap;
     
     
-    
-    
+    /**
+    * The executor for multitasking
+    */
+    private ScheduledThreadPoolExecutor executor;
+    /**
+     * Used to determine how many threads the executor should use
+     */
     private static int threadCount;
+    public static final int RESOLUTION = 30;
     
-    /**
-     * The executor for multitasking
-     */
-     ScheduledThreadPoolExecutor executor;
+
 //------------------------------- INIT -----------------------------------------
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -75,6 +83,8 @@ public class CommunicationState extends AbstractAppState {
         }
         
         executor = new ScheduledThreadPoolExecutor(threadCount);
+        auvProcessMap = new HashMap();
+        initAUVProcessMap(CentralLookup.getDefault().lookup(AUV_Manager.class));
         
         
         initRunnables();
@@ -82,7 +92,30 @@ public class CommunicationState extends AbstractAppState {
         CentralLookup.getDefault().add(this);
     }
     
+    
     /**
+     * @since 0.2
+     * fill the AUVProcessMap with some data
+     * @param auvMngr
+     * @return 
+     */
+    private boolean initAUVProcessMap(final AUV_Manager auvMngr) {
+        if(auvMngr == null) return false;
+        
+        HashMap<String,AUV> auvs = auvMngr.getAUVs();
+            for ( AUV auv : auvs.values()){
+            //Check if the AUV is enabled and has a modem
+                if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
+                    CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
+                    auvProcessMap.put(auv.getName(), runnable);
+                    executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.NANOSECONDS);
+                }
+            } 
+        return true;
+    }
+    
+    /**
+     * @since 0.1
      * @deprecated this uses normal runnables instead of the executor
      */
     private void initRunnables() {
