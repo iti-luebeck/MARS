@@ -160,7 +160,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="visualizer">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="physical_exchanger">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="physicalExchanger">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="drag">

@@ -15,6 +15,9 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="maxsubsteps">
                     <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">32</value>
                 </entry>
+				<entry xsi:type="myHashMapEntryTypeObject" key="poke">
+                    <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">5.0</value>
+                </entry>
             </value>
         </entry>
         <entry xsi:type="myHashMapEntryTypeHashMap" key="Misc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -46,6 +49,19 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Record">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                        </entry>
+                    </value>
+                </entry>
+				<entry xsi:type="myHashMapEntryTypeHashMap" key="Logging">
+                    <value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="level">
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">ALL</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="fileWrite">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                     </value>

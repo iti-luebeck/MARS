@@ -12,10 +12,15 @@ import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Noise;
+import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.actuators.Actuator;
@@ -72,6 +78,43 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
     }
+
+    /**
+     * Void constructor for JAXB
+     */
+    public PhysicalExchanger() {
+    }
+
+    public PhysicalExchanger(HashMap<String, Object> variables, Node auv_node, AUV auv, RigidBodyControl physics_control, PhysicalEnvironment pe, MARS_Settings mars_settings) {
+        this.variables = variables;
+        this.auv_node = auv_node;
+        this.auv = auv;
+        this.physics_control = physics_control;
+        this.pe = pe;
+        this.mars_settings = mars_settings;
+        
+        //setup logging
+        try {
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
+
+            if(mars_settings.getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(mars_settings.getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!mars_settings.getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
+        } catch (IOException e) {
+        }
+    }
+    
+    
 
     /**
      *
@@ -164,6 +207,10 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      */
     protected boolean rosinit = false;
+    /**
+     *
+     */
+    protected MARS_Settings mars_settings;
 
     private long oldtime = 0;
 
@@ -658,5 +705,35 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             oldtime = curtime;
             publishData();
         }
+    }
+    
+    /**
+     *
+     * @param mars_settings
+     */
+    public void setMARS_settings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
+    }
+    
+    public void setupLogger(){
+        //set the logging
+        try {
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
+
+            if(mars_settings.getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(mars_settings.getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!mars_settings.getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
+        } catch (IOException e) {
+        }  
     }
 }

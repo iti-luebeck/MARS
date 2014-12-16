@@ -63,7 +63,7 @@ public class Lamp extends Actuator {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         LampStart = new Geometry("LampStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
@@ -71,7 +71,7 @@ public class Lamp extends Actuator {
         LampStart.updateGeometricState();
         Rotation_Node.attachChild(LampStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         LampEnd = new Geometry("LampEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.White);

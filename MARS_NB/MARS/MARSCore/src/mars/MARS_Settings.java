@@ -66,6 +66,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     private HashMap<String, Object> Misc;
     private HashMap<String, Object> Camera;
     private HashMap<String, Object> Record;
+    private HashMap<String, Object> Logging;
 
     @XmlTransient
     private Initializer initer;
@@ -150,6 +151,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
         CrossHairs = (HashMap<String, Object>) Graphics.get("CrossHairs");
         Camera = (HashMap<String, Object>) Misc.get("Camera");
         Record = (HashMap<String, Object>) Misc.get("Record");
+        Logging = (HashMap<String, Object>) Misc.get("Logging");
         //initPreferences(Graphics,"Physics", mars.core.GraphicsPanel.class);
         //initPreferences(Graphics,"Server");
         //initPreferences(Graphics,"Graphics",mars.core.GraphicsPanel.class);
@@ -408,6 +410,22 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     public void setPhysicsSpeed(Float speed) {
         Physics.put("speed", speed);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getPhysicsPoke() {
+        return ((Float) Physics.get("poke") != null) ? (Float) Physics.get("poke") : 5.0f;
+    }
+
+    /**
+     *
+     * @param poke
+     */
+    public void setPhysicsPoke(Float poke) {
+        Physics.put("poke", poke);
+    }
 
     /**
      *
@@ -488,7 +506,55 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     public void setRecordEnabled(Boolean enabled) {
         Record.put("enabled", enabled);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getLoggingEnabled() {
+        return (Boolean) Logging.get("enabled");
+    }
 
+    /**
+     *
+     * @param enabled
+     */
+    public void setLoggingEnabled(Boolean enabled) {
+        Logging.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getLoggingFileWrite() {
+        return (Boolean) Logging.get("fileWrite");
+    }
+
+    /**
+     *
+     * @param fileWrite
+     */
+    public void setLoggingFileWrite(Boolean fileWrite) {
+        Logging.put("fileWrite", fileWrite);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getLoggingLevel() {
+        return (String) Logging.get("level");
+    }
+
+    /**
+     *
+     * @param level
+     */
+    public void setLoggingLevel(String level) {
+        Logging.put("level", level);
+    }
+    
     /**
      *
      * @return

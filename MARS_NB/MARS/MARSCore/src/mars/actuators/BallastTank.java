@@ -194,7 +194,7 @@ public class BallastTank extends Actuator implements Keys, ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         BallastStart = new Geometry("BallastStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.LightGray);
@@ -234,7 +234,7 @@ public class BallastTank extends Actuator implements Keys, ChartValue {
             }
         }
         float buoyancy_force = getPhysical_environment().getFluid_density() * getPhysical_environment().getGravitational_acceleration() * getCurrentVolume();
-        physics_control.applyImpulse(Vector3f.UNIT_Y.negate().mult(buoyancy_force / ((float) simauv_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(BallastStart.getWorldTranslation()));
+        physics_control.applyImpulse(Vector3f.UNIT_Y.negate().mult(buoyancy_force / ((float) mars_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(BallastStart.getWorldTranslation()));
     }
 
     public void reset() {

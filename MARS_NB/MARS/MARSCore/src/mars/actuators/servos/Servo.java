@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -102,15 +103,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      */
     public Servo() {
         super();
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -120,15 +112,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      */
     public Servo(SimState simstate, Geometry MassCenterGeom) {
         super(simstate, MassCenterGeom);
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -137,15 +120,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      */
     public Servo(SimState simstate) {
         super(simstate);
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -272,7 +246,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         ServoStart = new Geometry("ServoStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);
@@ -280,7 +254,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
         ServoStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(ServoStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         ServoEnd = new Geometry("ServoEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.White);
@@ -321,10 +295,8 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     }
 
     private void updateAnglePosition(float tpf) {
-        //System.out.println("Desired: " + desired_angle_iteration + "/ Current: " + current_angle_iteration);
         if (desired_angle_iteration != current_angle_iteration) {//when we are not on the desired position we have work to do
             int possible_iterations = howMuchIterations(tpf);
-            //System.out.println("possible_iterations: " + possible_iterations);
             if (possible_iterations > 0) {//when we dont have enough time to rotate we wait till the next frame
 
                 int do_it_iterations = 0;
@@ -340,7 +312,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
                 }
                 ///do_it_iterations = possible_iterations;
 
-                //System.out.println("do_it_iterations: " + do_it_iterations);
                 Iterator iter = slaves.iterator();
                 while (iter.hasNext()) {
                     final Moveable moves = (Moveable) iter.next();
@@ -385,7 +356,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      * @param desired_angle_iteration
      */
     public void setDesiredAnglePosition(int desired_angle_iteration) {
-        System.out.println("desired_angle_iteration: " + desired_angle_iteration);
         if (desired_angle_iteration > max_angle_iteration) {
             this.desired_angle_iteration = max_angle_iteration;
         } else if (desired_angle_iteration < -max_angle_iteration) {
@@ -409,7 +379,6 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
         float desired_angle_f = (float) desired_angle;
         int desired_angle_iterations = Math.round(1024f * ((desired_angle_f + ((float) Math.PI / 2f)) / (float) Math.PI));
 
-        System.out.println("desired_angle_iterations: " + desired_angle_iterations);
         if (desired_angle_iterations >= 512) {
             setDesiredAnglePosition(Math.round(desired_angle_iterations - 512));
         } else {

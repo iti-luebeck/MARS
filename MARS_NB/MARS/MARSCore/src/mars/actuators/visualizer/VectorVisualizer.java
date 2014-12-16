@@ -110,7 +110,7 @@ public class VectorVisualizer extends Actuator implements ChartValue {
      */
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         VectorVisualizerStart = new Geometry("VectorVisualizerLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", getColor());
@@ -118,7 +118,7 @@ public class VectorVisualizer extends Actuator implements ChartValue {
         VectorVisualizerStart.updateGeometricState();
         Rotation_Node.attachChild(VectorVisualizerStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         VectorVisualizerEnd = new Geometry("VectorVisualizerLeftEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", getColor());

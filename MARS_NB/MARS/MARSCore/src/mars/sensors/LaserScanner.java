@@ -6,9 +6,6 @@ package mars.sensors;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -28,15 +25,6 @@ public class LaserScanner extends RayBasedSensor {
      */
     public LaserScanner() {
         super();
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -69,7 +57,6 @@ public class LaserScanner extends RayBasedSensor {
     @Override
     protected float[] filterRayHitData(CollisionResults results, int i, float distance, Vector3f direction) {
         if (distance >= getMaxRange()) {//too far away
-            //System.out.println("too far away");
             return null;
         } else if (results.getCollision(i).getContactPoint().y <= pe.getWater_height()) {//forget hits under water
             return null;

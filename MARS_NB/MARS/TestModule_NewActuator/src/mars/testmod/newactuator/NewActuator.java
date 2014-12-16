@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.jme3.scene.Geometry;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
-import mars.actuators.Thruster;
+import mars.actuators.thruster.Thruster;
 import mars.states.SimState;
 import org.openide.util.lookup.ServiceProvider;
 

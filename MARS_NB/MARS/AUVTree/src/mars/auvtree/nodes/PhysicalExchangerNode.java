@@ -25,7 +25,7 @@ import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.actuators.Lamp;
 import mars.actuators.Teleporter;
-import mars.actuators.Thruster;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.servos.Servo;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV_Parameters;

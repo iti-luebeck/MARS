@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.Helper.Helper;
@@ -108,9 +109,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     //warter currents
     private Node currents = new Node("currents");
 
-    private Hanse auv_hanse;
-    private Monsun2 auv_monsun2;
-
     private Future simStateFuture = null;
 
     //map stuff
@@ -125,6 +123,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      */
     public SimState(AssetManager assetManager) {
         this.assetManager = assetManager;
+        setupLogger();
     }
 
     /**
@@ -141,6 +140,22 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         this.MARSMapComp = MARSMapComp;
         this.MARSLogComp = MARSLogComp;
         this.configManager = configManager;
+    }
+    
+    private void setupLogger(){
+        //setup logging
+        Handler[] handlers = Logger.getLogger(this.getClass().getName()).getHandlers();
+        for (Handler handler : handlers) {
+            handler.setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
+
+            if(!getMARSSettings().getLoggingFileWrite()){
+                handler.setLevel(Level.OFF);
+            }
+        }
+        if(!getMARSSettings().getLoggingEnabled()){
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+        }
     }
 
     /**
@@ -271,6 +286,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             startNiftyState();
             progr.progress("Loading Config");
             loadXML(configManager.getConfigName());
+            //setupLogger();
             progr.progress("Starting Physics");
             setupPhysics();
             progr.progress("Starting Cameras");
@@ -316,7 +332,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             initView();
 
             init = true;
-
+            
             progr.progress("Init GuiState");
             final GuiState guiState = new GuiState();
             guiState.setAuvManager(auvManager);
@@ -553,6 +569,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 bas_auv.getAuv_param().setAuv(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
+                bas_auv.setMARS_Settings(mars_settings);
+                bas_auv.setupLogger();
             }
             simobs = xml.loadSimObjects();
         } catch (Exception ex) {
@@ -566,7 +584,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, RecordManager recordManager, Initializer initer){
         auvManager.setBulletAppState(bulletAppState);
         auvManager.setPhysical_environment(pe);
-        auvManager.setSimauv_settings(mars_settings);
+        auvManager.setMARS_settings(mars_settings);
         auvManager.setRecManager(recordManager);
         if (mars_settings.getROSEnabled()) {
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
@@ -939,7 +957,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     public void restartSimulation() {
         simStateFuture = mars.enqueue(new Callable() {
             public Void call() throws Exception {
-                System.out.println("RESET!!!");
+                System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();
                 return null;
             }

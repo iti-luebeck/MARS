@@ -4,6 +4,7 @@
  */
 package mars.actuators;
 
+import mars.actuators.thruster.Thruster;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -61,13 +62,6 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
      */
     protected Node rootNode;
     /*
-     *
-     */
-    /**
-     *
-     */
-    protected MARS_Settings simauv_settings;
-    /*
      * 
      */
     private Initializer initer;
@@ -84,7 +78,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
      *
      */
     protected Actuator() {
-
+        super();
     }
 
     /**
@@ -165,15 +159,8 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
 
     /**
      *
-     * @param simauv_settings
      */
-    public void setSimauv_settings(MARS_Settings simauv_settings) {
-        this.simauv_settings = simauv_settings;
-    }
-
-    /**
-     *
-     */
+    @Override
     public abstract void reset();
 
     /**

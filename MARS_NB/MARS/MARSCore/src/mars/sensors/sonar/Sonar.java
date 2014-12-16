@@ -6,9 +6,6 @@ package mars.sensors.sonar;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -30,15 +27,6 @@ public class Sonar extends RayBasedSensor {
      */
     public Sonar() {
         super();
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**

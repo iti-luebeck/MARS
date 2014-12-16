@@ -22,6 +22,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.MARS_Main;
+import mars.MARS_Settings;
 
 /**
  * This class manages the visible waypoints of an AUV.
@@ -53,20 +54,30 @@ public class WayPoints extends Node {
      * @param name
      * @param simauv
      * @param auv_param
+     * @param settings
      */
-    public WayPoints(String name, MARS_Main simauv, AUV_Parameters auv_param) {
+    public WayPoints(String name, MARS_Main simauv, AUV_Parameters auv_param, MARS_Settings settings) {
         super(name);
         this.simauv = simauv;
         this.assetManager = simauv.getAssetManager();
         this.rootNode = simauv.getRootNode();
         this.auv_param = auv_param;
         try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(settings.getLoggingLevel()));
+
+            if(settings.getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(settings.getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!settings.getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
         } catch (IOException e) {
         }
     }

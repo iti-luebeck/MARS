@@ -10,13 +10,15 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Dome;
+import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
@@ -26,22 +28,23 @@ import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
+import mars.Helper.Pyramid;
 import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.states.SimState;
 import mars.ros.MARSNodeMain;
+import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
- * This is a common camera class for auv's.
+ * This is a common camera class for AUVs.
+ * 
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-//@XmlSeeAlso( {BlackfinCamera.class} )
 public class VideoCamera extends Sensor implements Moveable{
 
     private Geometry CameraStart;
@@ -194,15 +197,28 @@ public class VideoCamera extends Sensor implements Moveable{
     @Override
     public void init(Node auv_node){
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         CameraStart = new Geometry("CameraStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Green);
         CameraStart.setMaterial(mark_mat7);
         CameraStart.updateGeometricState();
         Rotation_Node.attachChild(CameraStart);
+        
+        Pyramid pyramid = new Pyramid(0.25f,0.5f);
+        Geometry DomeGeom = new Geometry("CameraStart", pyramid);
+        Material DomeGeom_Mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        DomeGeom_Mat.setColor("Color", ColorRGBA.Green);
+        DomeGeom_Mat.getAdditionalRenderState().setWireframe(true);
+        DomeGeom.setMaterial(DomeGeom_Mat);
+        Quaternion quatDome = new Quaternion();
+        quatDome.fromAngles(0f, 0f, 1.57f);
+        DomeGeom.setLocalRotation(quatDome);
+        DomeGeom.setLocalTranslation(new Vector3f(0.25f, 0f, 0f));
+        DomeGeom.updateGeometricState();
+        Rotation_Node.attachChild(DomeGeom);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         CameraEnd = new Geometry("CameraEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Red);
@@ -211,7 +227,7 @@ public class VideoCamera extends Sensor implements Moveable{
         CameraEnd.updateGeometricState();
         Rotation_Node.attachChild(CameraEnd);
 
-        Sphere sphere10 = new Sphere(16, 16, 0.025f);
+        Sphere sphere10 = new Sphere(8, 8, 0.025f);
         CameraTop = new Geometry("CameraTop", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.DarkGray);
@@ -502,9 +518,6 @@ public class VideoCamera extends Sensor implements Moveable{
      */
     @Override
     public void updateRotation(float alpha){
-        /*System.out.println("I(" + getName() + ")have to update my rotation to: " + alpha + " with this rot axis: " + local_rotation_axis );
-        System.out.println("My local rotation axis is:" + local_rotation_axis );
-        System.out.println("My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );*/
         Quaternion quat = new Quaternion();
         quat.fromAngleAxis(alpha, local_rotation_axis);
         Rotation_Node.setLocalRotation(quat);
@@ -523,11 +536,6 @@ public class VideoCamera extends Sensor implements Moveable{
         Rotation_Node.worldToLocal(WorldServoEnd, LocalServoEnd);
         Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
         local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
-        
-        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis );
-        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis,null) );
-        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation() );
-        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation() );
     }
     
     /**

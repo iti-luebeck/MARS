@@ -7,7 +7,7 @@ package mars.auv;
 import com.jme3.renderer.queue.RenderQueue;
 import javax.swing.tree.TreePath;
 import mars.object.CollisionType;
-import mars.actuators.Thruster;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.Actuator;
 import mars.sensors.Sensor;
 import com.jme3.asset.AssetManager;
@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -214,12 +215,21 @@ public class BasicAUV implements AUV, SceneProcessor {
     public BasicAUV(SimState simstate) {
         //set the logging
         try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+
+            if(simstate.getMARSSettings().getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!simstate.getMARSSettings().getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
         } catch (IOException e) {
         }
 
@@ -274,15 +284,6 @@ public class BasicAUV implements AUV, SceneProcessor {
      * Called by JAXB after object creation.
      */
     public void initAfterJAXB() {
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
         selectionNode.attachChild(auv_node);
     }
 
@@ -418,10 +419,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         pex.setName(name);
         if (pex instanceof Sensor) {
             sensors.put(name, (Sensor) pex);
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Sensor " + name + " added...", "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + name + " added...", "");
         } else if (pex instanceof Actuator) {
             actuators.put(name, (Actuator) pex);
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Actuator " + name + " added...", "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + name + " added...", "");
         }
     }
 
@@ -434,10 +435,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         pex.setName(pex.getName());
         if (pex instanceof Sensor) {
             sensors.put(pex.getName(), (Sensor) pex);
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
         } else if (pex instanceof Actuator) {
             actuators.put(pex.getName(), (Actuator) pex);
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
         }
     }
 
@@ -524,7 +525,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             Actuator element = (Actuator) actuators.get(elem);
             element.setNodeVisibility(visible);
         }
-        Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "All Sensors/Actuators have visibility: " + visible, "");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "All Sensors/Actuators have visibility: " + visible, "");
     }
 
     /**
@@ -597,7 +598,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                     ret.add(sens);
                 }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
         return ret;
@@ -613,10 +614,33 @@ public class BasicAUV implements AUV, SceneProcessor {
                     return true;
                 }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BasicAUV.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
+    }
+    
+    @Override
+    public void setupLogger(){
+        //set the logging
+        try {
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+
+            if(simstate.getMARSSettings().getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!simstate.getMARSSettings().getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
+        } catch (IOException e) {
+        }  
     }
 
     /**
@@ -625,7 +649,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void init() {
-        Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Initialising AUV: " + this.getName(), "");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV: " + this.getName(), "");
         loadModel();
         createGhostAUV();
         createPhysicsNode();
@@ -671,9 +695,11 @@ public class BasicAUV implements AUV, SceneProcessor {
             element.setAuv(this);
             if (element.isEnabled()) {
                 element.setSimState(simstate);
+                element.setMARS_settings(mars_settings);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                element.setupLogger();
                 if (element instanceof VideoCamera) {
                     ((VideoCamera) element).setIniter(initer);//is needed for filters
                 }
@@ -716,7 +742,8 @@ public class BasicAUV implements AUV, SceneProcessor {
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
-                element.setSimauv_settings(mars_settings);
+                element.setMARS_settings(mars_settings);
+                element.setupLogger();
                 if (element instanceof PointVisualizer || element instanceof VectorVisualizer) {
                     element.setNodeVisibility(auv_param.isDebugVisualizers());
                 } else {
@@ -1072,7 +1099,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             //physics_control.setPhysicsLocation(Vector3f.ZERO);
             //System.out.println("FORCES: " + physics_control.getLinearVelocity() + " " + physics_control.getAngularVelocity());
         } else {//if not inform
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.WARNING, "AUV PhysicsNode is not added to the rootNode!", "");
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "AUV PhysicsNode is not added to the rootNode!", "");
         }
     }
 
@@ -1260,7 +1287,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     private void initWaypoints() {
         //if(auv_param.isWaypointsEnabled()){
-        WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param);
+        WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param, getMARS_Settings());
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 rootNode.attachChild(WayPoints);
@@ -1300,7 +1327,8 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_spatial.updateModelBound();
         auv_spatial.updateGeometricState();
         auv_spatial.setName(auv_param.getModelName());
-        auv_spatial.setUserData("auv_name", getName());
+        Helper.setNodeUserData(auv_spatial, "auv_name", getName());
+        //auv_spatial.setUserData("auv_name", getName());
         auv_spatial.setCullHint(CullHint.Never);//never cull it because offscreen uses it
         auv_spatial.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
@@ -1515,7 +1543,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         debug_mat.setColor("Color", ColorRGBA.Red);
 
         if (getAuv_param().isDebugCollision()) {
-            Logger.getLogger(BasicAUV.class.getName()).log(Level.INFO, "Setting DebugHint for: " + getName(), "");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Setting DebugHint for: " + getName(), "");
             Helper.setNodeUserData(auv_node, DebugHint.DebugName, DebugHint.Debug);
         } else {
             Helper.setNodeUserData(auv_node, DebugHint.DebugName, DebugHint.NoDebug);
@@ -2533,23 +2561,24 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void setWireframeVisible(boolean visible) {
-        if (visible) {
+        List<Spatial> children = new ArrayList<Spatial>(); 
+        if(auv_spatial instanceof Node){
             Node nodes = (Node) auv_spatial;
-            List<Spatial> children = nodes.getChildren();
+            children.addAll(nodes.getChildren());
+        }else{//its a spatial or geometry
+            children.add(auv_spatial);
+        }
+        if (visible) {
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
-                System.out.println(spatial.getName());
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(true);
                 }
             }
         } else {
-            Node nodes = (Node) auv_spatial;
-            List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial = it.next();
-                System.out.println(spatial.getName());
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(false);

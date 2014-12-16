@@ -23,9 +23,11 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.texture.Texture;
 import com.rits.cloning.Cloner;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -183,7 +185,7 @@ public class Canon extends Actuator implements Moveable, Keys {
         Texture tex2 = assetManager.loadTexture(key2);
         mat2.setTexture("ColorMap", tex2);
 
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         CanonStart = new Geometry("CanonLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
@@ -191,7 +193,7 @@ public class Canon extends Actuator implements Moveable, Keys {
         CanonStart.updateGeometricState();
         Rotation_Node.attachChild(CanonStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         CanonEnd = new Geometry("CanonLeftEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);
@@ -226,7 +228,6 @@ public class Canon extends Actuator implements Moveable, Keys {
      * Create a round geometry and apply a force to it.
      */
     public void shoot() {
-        System.out.println("Shoot");
         Vector3f left = (CanonEnd.getWorldTranslation().subtract(CanonStart.getWorldTranslation())).normalize();
         physics_control.applyImpulse(left.mult(-RecoilForce), this.getMassCenterGeom().getWorldTranslation().subtract(CanonStart.getWorldTranslation()));
 

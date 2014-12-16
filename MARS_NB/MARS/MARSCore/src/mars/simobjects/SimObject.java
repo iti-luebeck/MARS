@@ -756,7 +756,6 @@ public class SimObject implements MARSObject{
             List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial2 = it.next();
-                System.out.println(spatial2.getName());
                 if (spatial2 instanceof Geometry) {
                     Geometry geom = (Geometry) spatial2;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(true);
@@ -767,7 +766,6 @@ public class SimObject implements MARSObject{
             List<Spatial> children = nodes.getChildren();
             for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
                 Spatial spatial2 = it.next();
-                System.out.println(spatial2.getName());
                 if (spatial2 instanceof Geometry) {
                     Geometry geom = (Geometry) spatial2;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(false);

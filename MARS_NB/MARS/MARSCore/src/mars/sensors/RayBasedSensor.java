@@ -15,8 +15,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Sphere;
-import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,6 +22,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.misc.Collider;
 import mars.Helper.NoiseType;
+import mars.Helper.Pyramid;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.misc.PickHint;
@@ -108,15 +107,6 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor() {
         super();
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
     }
 
     /**
@@ -125,16 +115,6 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
 
         this.RayDetectable = simstate.getCollider();
         this.pe = pe;
@@ -146,16 +126,7 @@ public class RayBasedSensor extends Sensor {
      */
     public RayBasedSensor(SimState simstate) {
         super(simstate);
-        //set the logging
-        try {
-            // Create an appending file handler
-            boolean append = true;
-            FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
-            // Add to the desired logger
-            Logger logger = Logger.getLogger(this.getClass().getName());
-            logger.addHandler(handler);
-        } catch (IOException e) {
-        }
+
         this.RayDetectable = simstate.getCollider();
         rootNode.attachChild(debug_node);
     }
@@ -198,7 +169,7 @@ public class RayBasedSensor extends Sensor {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         SonarStart = new Geometry("SonarStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Blue);
@@ -206,7 +177,7 @@ public class RayBasedSensor extends Sensor {
         SonarStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         SonarEnd = new Geometry("SonarEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Blue);
@@ -215,7 +186,7 @@ public class RayBasedSensor extends Sensor {
         SonarEnd.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarEnd);
 
-        Sphere sphere10 = new Sphere(16, 16, 0.025f);
+        Sphere sphere10 = new Sphere(8, 8, 0.025f);
         SonarUp = new Geometry("SonarUp", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Blue);
@@ -223,6 +194,22 @@ public class RayBasedSensor extends Sensor {
         SonarUp.setLocalTranslation(Vector3f.UNIT_Y);
         SonarUp.updateGeometricState();
         PhysicalExchanger_Node.attachChild(SonarUp);
+        
+        if(getBeam_width() != null){
+            float pyr_width_y = (float)Math.sqrt(2f*(float)Math.pow(0.5f,2f)*(1f-(float)Math.cos(getBeam_width())));
+            Pyramid pyramid = new Pyramid(0.25f,pyr_width_y,0.5f);
+            Geometry DomeGeom = new Geometry("CameraStart", pyramid);
+            Material DomeGeom_Mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            DomeGeom_Mat.setColor("Color", ColorRGBA.Blue);
+            DomeGeom_Mat.getAdditionalRenderState().setWireframe(true);
+            DomeGeom.setMaterial(DomeGeom_Mat);
+            Quaternion quatDome = new Quaternion();
+            quatDome.fromAngles(0f, 0f, 1.57f);
+            DomeGeom.setLocalRotation(quatDome);
+            DomeGeom.setLocalTranslation(new Vector3f(0.25f, 0f, 0f));
+            DomeGeom.updateGeometricState();
+            PhysicalExchanger_Node.attachChild(DomeGeom);
+        }
 
         Vector3f ray_start = Vector3f.ZERO;
         Vector3f ray_direction = Vector3f.UNIT_X;

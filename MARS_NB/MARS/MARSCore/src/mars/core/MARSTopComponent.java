@@ -2117,7 +2117,6 @@ public final class MARSTopComponent extends TopComponent {
     @Override
     protected void componentHidden() {
         super.componentHidden(); //To change body of generated methods, choose Tools | Templates.
-        System.out.println(getName() + " hidden");
     }
  
     /**
@@ -2414,8 +2413,6 @@ public final class MARSTopComponent extends TopComponent {
                                              getRootPane(),
                                              "Choose Color for " + elem,
                                              new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                                            System.out.println("newColor: " + newColor);
-                                            System.out.println("color: " + color);
                                             if(newColor != null){
                                                 auv_param.updateState(elem,hashmapname);
                                                 auv_param.setValue(elem, new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f), hashmapname);

@@ -62,9 +62,11 @@ public class NiftyState extends AbstractAppState implements ScreenController {
                 mars.getAudioRenderer(),
                 mars.getGuiViewPort());
         nifty = niftyDisplay.getNifty();
-
+        nifty.setIgnoreKeyboardEvents(true);
+        nifty.setIgnoreMouseEvents(true);
+                
         nifty.fromXml("nifty_energy_popup.xml", "hoverMenu");
-
+        
         //hide main panel because niftyys effect/event system sucks!
         setHoverMenuForAUV(false);
         setSpeedMenu(false);

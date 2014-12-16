@@ -102,7 +102,7 @@ public class GPSReceiver extends Sensor {
         super.init(auv_node);
         pos.init(auv_node);
 
-        Sphere sphere7 = new Sphere(16, 16, 0.04f);
+        Sphere sphere7 = new Sphere(8, 8, 0.04f);
         GPSReceiverGeom = new Geometry("PressureStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.White);

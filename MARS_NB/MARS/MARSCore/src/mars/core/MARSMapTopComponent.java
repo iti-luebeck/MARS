@@ -83,7 +83,6 @@ public final class MARSMapTopComponent extends TopComponent {
      */
     @Override
     public void componentOpened() {
-        //System.out.println("TEST!!!!!!!!!!!!!!!!!!");
         // TODO add custom code on component opening
     }
 

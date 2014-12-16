@@ -92,7 +92,7 @@ public class Compass extends Sensor {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.015f);
+        Sphere sphere7 = new Sphere(8, 8, 0.015f);
         CompassStart = new Geometry("CompassStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Black);
@@ -101,7 +101,7 @@ public class Compass extends Sensor {
         CompassStart.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.015f);
+        Sphere sphere9 = new Sphere(8, 8, 0.015f);
         CompassYawAxis = new Geometry("CompassYawAxis", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Black);
@@ -110,7 +110,7 @@ public class Compass extends Sensor {
         CompassYawAxis.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassYawAxis);
 
-        Sphere sphere10 = new Sphere(16, 16, 0.015f);
+        Sphere sphere10 = new Sphere(8, 8, 0.015f);
         CompassPitchAxis = new Geometry("CompassPitchAxis", sphere10);
         Material mark_mat10 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat10.setColor("Color", ColorRGBA.Black);
@@ -119,7 +119,7 @@ public class Compass extends Sensor {
         CompassPitchAxis.updateGeometricState();
         PhysicalExchanger_Node.attachChild(CompassPitchAxis);
 
-        Sphere sphere11 = new Sphere(16, 16, 0.015f);
+        Sphere sphere11 = new Sphere(8, 8, 0.015f);
         CompassRollAxis = new Geometry("CompassRollAxis", sphere11);
         Material mark_mat11 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat11.setColor("Color", ColorRGBA.Black);

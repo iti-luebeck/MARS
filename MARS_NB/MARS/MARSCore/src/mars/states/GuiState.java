@@ -656,8 +656,8 @@ public class GuiState extends AbstractAppState {
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
                 // Here comes the action:
-                if ((String) target.getParent().getUserData("auv_name") != null) {
-                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getParent().getUserData("auv_name"));
+                if ((String) target.getUserData("auv_name") != null) {
+                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getUserData("auv_name"));
                     if (auv != null) {
                         auvManager.deselectAllAUVs();//deselect all auvs before (....seamless tansition through two auvs)
                         auv.setSelected(true);
@@ -726,8 +726,8 @@ public class GuiState extends AbstractAppState {
                 guiControlState.setAuvContactDirection(dir.normalize());
                 guiControlState.setSelect_auv(true);
                 // Here comes the action:
-                if ((String) target.getParent().getUserData("auv_name") != null) {
-                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getParent().getUserData("auv_name"));
+                if ((String) target.getUserData("auv_name") != null) {
+                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getUserData("auv_name"));
                     if (auv != null) {
                         auv.setSelected(true);
                         guiControlState.setLatestSelectedAUV(auv);
@@ -751,7 +751,7 @@ public class GuiState extends AbstractAppState {
         if (selected_auv != null) {
             Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
             Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
-            Vector3f mult = direction.mult(selected_auv.getAuv_param().getMass() * 5f / ((float) mars_settings.getPhysicsFramerate()));
+            Vector3f mult = direction.mult(selected_auv.getAuv_param().getMass() * mars_settings.getPhysicsPoke() / ((float) mars_settings.getPhysicsFramerate()));
             selected_auv.getPhysicsControl().applyImpulse(mult, rel_pos);
         }
     }

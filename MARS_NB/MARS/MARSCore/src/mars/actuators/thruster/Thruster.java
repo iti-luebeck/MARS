@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.actuators;
+package mars.actuators.thruster;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -33,6 +33,7 @@ import mars.Keys;
 import mars.PhysicalExchange.Moveable;
 import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.actuators.Actuator;
 import mars.annotations.MARSPublicKeyBindingMethod;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -141,7 +142,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
     @Override
     public void init(Node auv_node) {
         super.init(auv_node);
-        Sphere sphere7 = new Sphere(16, 16, 0.025f);
+        Sphere sphere7 = new Sphere(8, 8, 0.025f);
         MotorStart = new Geometry("MotorLeftStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat7.setColor("Color", ColorRGBA.Orange);
@@ -149,7 +150,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         MotorStart.updateGeometricState();
         Rotation_Node.attachChild(MotorStart);
 
-        Sphere sphere9 = new Sphere(16, 16, 0.025f);
+        Sphere sphere9 = new Sphere(8, 8, 0.025f);
         MotorEnd = new Geometry("MotorLeftEnd", sphere9);
         Material mark_mat9 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mark_mat9.setColor("Color", ColorRGBA.Orange);
@@ -180,7 +181,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         //check if thruster is under or over water, because we get different forces depending on the density of the fluid.
 
         if (MotorStart.getWorldTranslation().y <= this.getIniter().getCurrentWaterHeight(MotorStart.getWorldTranslation().x, MotorStart.getWorldTranslation().z)) {
-            physics_control.applyImpulse(left.mult(MotorForce / ((float) simauv_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
+            physics_control.applyImpulse(left.mult(MotorForce / ((float) mars_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         }
         //physics_control.applyForce(left.mult(MotorForce), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         //physics_control.applyImpulse(left.mult(MotorForce/simauv_settings.getPhysicsFramerate()), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
@@ -298,10 +299,10 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         Rotation_Node.worldToLocal(WorldServoStart, LocalServoStart);
         local_rotation_axis = LocalServoEnd.subtract(LocalServoStart);
 
-        System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis);
-        System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis, null));
-        System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation());
-        System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation());
+        //System.out.println("Setting rotation axis from:" + "world_rotation_axis" + " to: " + local_rotation_axis);
+        //System.out.println("Setting My world rotation axis is:" + Rotation_Node.localToWorld(local_rotation_axis, null));
+        //System.out.println("Rotation_Node translation" + Rotation_Node.getWorldTranslation() + "rotation" + Rotation_Node.getWorldRotation());
+        //System.out.println("PhysicalExchanger_Node translation" + PhysicalExchanger_Node.getWorldTranslation() + "rotation" + PhysicalExchanger_Node.getWorldRotation());
     }
 
     /**
