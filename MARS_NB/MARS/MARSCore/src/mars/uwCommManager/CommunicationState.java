@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
@@ -28,7 +29,7 @@ import static mars.uwCommManager.options.CommOptionsConstants.*;
 
 /**
  * Entrypoint of the communications module.
- * @version 0.1
+ * @version 0.2
  * @author Jasper Schwinghammer
  */
 public class CommunicationState extends AbstractAppState {
@@ -44,12 +45,23 @@ public class CommunicationState extends AbstractAppState {
     
     /**
      * This list contains all objects that are used for multitasking
+     * @deprecated should not be used anymore
      */
     private List<CommunicationsRunnable> runnables = null;
     
+    /**
+     * 
+     */
+    
+    
+    
+    
     private static int threadCount;
     
-    
+    /**
+     * The executor for multitasking
+     */
+     ScheduledThreadPoolExecutor executor;
 //------------------------------- INIT -----------------------------------------
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -62,7 +74,18 @@ public class CommunicationState extends AbstractAppState {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Failed to load communications config");
         }
         
+        executor = new ScheduledThreadPoolExecutor(threadCount);
         
+        
+        initRunnables();
+
+        CentralLookup.getDefault().add(this);
+    }
+    
+    /**
+     * @deprecated this uses normal runnables instead of the executor
+     */
+    private void initRunnables() {
         runnables = new LinkedList<CommunicationsRunnable>();
         for(int i = 0; i<threadCount; i++) {
             CommunicationsRunnable comRunnable = new CommunicationsRunnable(this);
@@ -72,7 +95,6 @@ public class CommunicationState extends AbstractAppState {
                 comThread.start();
             }
         }
-        CentralLookup.getDefault().add(this);
     }
     
     private boolean loadAndInitPreferenceListeners() {
