@@ -43,32 +43,34 @@ public class CommunicationState extends AbstractAppState {
     private ConcurrentLinkedQueue<CommunicationMessage> msgQueue = new ConcurrentLinkedQueue<CommunicationMessage>();
     
     /**
-     * This list contains all threads that are assigned to the communications
+     * This list contains all objects that are used for multitasking
      */
-    private List<Thread> threads = null;
     private List<CommunicationsRunnable> runnables = null;
     
     private static int threadCount;
     
+    
+//------------------------------- INIT -----------------------------------------
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         if(app instanceof MARS_Main){
             app = (MARS_Main)app;
         }
-        runnables = new LinkedList<CommunicationsRunnable>();
         
         if(!loadAndInitPreferenceListeners()) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Failed to load communications config");
         }
         
+        
+        runnables = new LinkedList<CommunicationsRunnable>();
         for(int i = 0; i<threadCount; i++) {
             CommunicationsRunnable comRunnable = new CommunicationsRunnable(this);
             if(comRunnable.init()); {
                 Thread comThread = new Thread(comRunnable);
                 runnables.add(comRunnable);
                 comThread.start();
-        }
+            }
         }
         CentralLookup.getDefault().add(this);
     }
@@ -104,11 +106,14 @@ public class CommunicationState extends AbstractAppState {
         });
         return true;
     }
+
     
+//---------------------------END INIT-------------------------------------------    
+    
+
     @Override
     public void update(final float tpf) {
-        //should not take too much time to dispatch all messages, we use
-        // this timer to stop in case of too many messages
+
         
         
         //TESTCODE BEGIN
@@ -133,6 +138,10 @@ public class CommunicationState extends AbstractAppState {
         }
         //TESTCODE END
         
+        
+        
+        //should not take too much time to dispatch all messages, we use
+        // this timer to stop in case of too many messages
         Timer timer = new LwjglSmoothingTimer();
         float time = 0f;
         int counter = 0;
