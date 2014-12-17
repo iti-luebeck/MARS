@@ -47,11 +47,14 @@ public class CommunicationState extends AbstractAppState {
      * This queue will be used to store all messages until they are processed
      */
     private ConcurrentLinkedQueue<CommunicationMessage> msgQueue = new ConcurrentLinkedQueue<CommunicationMessage>();
-    
-    
-    
-    
+
+    /**
+     * The Runnable that is used to merge all byte arrays back to one messages
+     */
     private CommunicationMultiPathSimulator multiPathModule;
+    /**
+     * The Runnable that is used to check for possible ways from one AUV to another
+     */
     private CommunicationDistanceComputationRunnable distanceTraceModule;
     /**
      * Map the AUV to its runnable
@@ -65,10 +68,20 @@ public class CommunicationState extends AbstractAppState {
      * Used to determine how many threads the executor should use
      */
     private static int threadCount;
+    /**
+     * How many ticks per secound should the runnables have
+     */
     public static final int RESOLUTION = 30;
     
 
 //------------------------------- INIT -----------------------------------------
+    /**
+     * initialize all basic stuff.
+     * at the end the object is added to the CentralLookup
+     * @since 0.1
+     * @param stateManager the stateManager of MARS
+     * @param app the main application
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
@@ -76,28 +89,29 @@ public class CommunicationState extends AbstractAppState {
             app = (MARS_Main)app;
         }
         
+        //load settings
         if(!loadAndInitPreferenceListeners()) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Failed to load communications config");
         }
-        
+        //Init the threadpool
         executor = new ScheduledThreadPoolExecutor(threadCount);
+        //prepare and start the runnables for multithreading
         auvProcessMap = new HashMap();
-        initAUVProcessMap(CentralLookup.getDefault().lookup(AUV_Manager.class));
+        initRunnables(CentralLookup.getDefault().lookup(AUV_Manager.class));
         
         
-        //initRunnables();
-
+        //Init done, add to centrallookup
         CentralLookup.getDefault().add(this);
     }
     
     
     /**
      * @since 0.2
-     * fill the AUVProcessMap with some data
-     * @param auvMngr
-     * @return 
+     * Init all runnables for multithreading
+     * @param auvMngr the AUV_Manager
+     * @return if the initialization was successful
      */
-    private boolean initAUVProcessMap(final AUV_Manager auvMngr) {
+    private boolean initRunnables(final AUV_Manager auvMngr) {
         if(auvMngr == null) return false;
         
         HashMap<String,AUV> auvs = auvMngr.getAUVs();
@@ -107,7 +121,6 @@ public class CommunicationState extends AbstractAppState {
                     CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
-                    System.out.println("Added Thread for " +auv.getName() + "there: " + runnable.toString() );
                 }
                 
             }
@@ -124,6 +137,7 @@ public class CommunicationState extends AbstractAppState {
     
     /**
      * Load the preferences from the options panel
+     * @since 0.1
      * @return whether the preferences could be loaded
      */
     private boolean loadAndInitPreferenceListeners() {
@@ -138,13 +152,13 @@ public class CommunicationState extends AbstractAppState {
             public void preferenceChange(PreferenceChangeEvent e) {
                 //Distance Checkup Event
                 if(e.getKey().equals(OPTIONS_DISTANCE_CHECKUP_CHECKBOX)) {
-                    
+                    //DO WE STILL USE THIS? NEED TO BE SETUP AGAIN FOR NEW SYSTEM
                 }//Distance Checkup Event closed
                 
                 //Thread Slider Event
                 if(e.getKey().equals(OPTIONS_THREADCOUNT_SLIDER)) {
                     threadCount = Integer.parseInt(e.getNewValue());
-
+                    executor.setCorePoolSize(threadCount);
                 }//Thread Slider Event closed
             }
         });
@@ -154,7 +168,11 @@ public class CommunicationState extends AbstractAppState {
     
 //---------------------------END INIT-------------------------------------------    
     
-
+    /**
+     * update loop, called by MARS Mainthread only
+     * @since 0.1
+     * @param tpf time since last frame
+     */
     @Override
     public void update(final float tpf) {
 
@@ -194,26 +212,25 @@ public class CommunicationState extends AbstractAppState {
             if(time >= 1f/60f) break;
             CommunicationMessage msg = msgQueue.poll();
             if(msg == null) break;
+
             /*
-             *PROCESS THE MESSAGE OLD WAY
-             */
-            //runnables.get(counter).assignMessage(msg);
-            //counter++;
-            //if(counter == threadCount) counter = 0;
-            /*
-            PROCESS THE MESSAGE NEW WAY
+            PROCESS THE MESSAGE 
             */
+            //Check if the AUV allready has a Runnable
             CommunicationExecutorRunnable e1 = auvProcessMap.get(msg.getAuvName());
             if(e1 ==null ) {
+                //if not create a new one
                 CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
                 auvProcessMap.put(msg.getAuvName(), runnable);
                 executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 e1 = runnable;
             }
+            //Check if there are any distanceTriggers for the current AUV and load them
             List<DistanceTrigger> e2 = distanceTraceModule.getDistanceTriggerMap().get(msg.getAuvName());
             if(e2 != null) e1.setDistanceTriggers(e2);
             e1.assignMessage(msg);
             
+            //Get the messages from the runnables and merge them in the multiPathModule
             for(Map.Entry<String, CommunicationExecutorRunnable> entr: auvProcessMap.entrySet()) {
                 List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
                 if(!chunks.isEmpty()) {
@@ -226,6 +243,7 @@ public class CommunicationState extends AbstractAppState {
     
     /**
      * Add a message to the queue
+     * @since 0.1
      * @param msg The Message that should be processed
      */
     public void putMsg(CommunicationMessage msg) {
@@ -234,7 +252,9 @@ public class CommunicationState extends AbstractAppState {
     
     
     
-    
+    /**
+     * cleanup and kill the executer
+     */
     @Override
     public void cleanup() {
       super.cleanup();
@@ -249,6 +269,10 @@ public class CommunicationState extends AbstractAppState {
         }
     }
     
+    /**
+     * 
+     * @return the current value of threadCount
+     */
     public static int getThreadCount() {
         return threadCount;
     }
