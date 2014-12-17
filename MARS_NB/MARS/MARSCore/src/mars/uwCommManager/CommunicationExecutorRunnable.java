@@ -10,35 +10,64 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.sensors.CommunicationMessage;
 import org.openide.util.Exceptions;
 
 /**
- *
- * @author jaspe_000
+ * The new runnable is to be used with the Executer class from java.util.concurrent
+ * There should be one instance of this for each AUV with a modem
+ * @version 0.1
+ * @author Jasper Schwinghammer
  */
 public class CommunicationExecutorRunnable implements Runnable{
     
+    /**
+     * The bandwidth of the modem this AUV is using
+     */
     private final float MODEM_BANDWIDTH;
+    /**
+     * the ticks per secound
+     */
     private final float RESOLUTION;
+    /**
+     * the bandwidth we have in each of our timeframes
+     */
     private final float BANDWIDTH_PER_TICK;
     
+    /**
+     * chunks that could not yet be sent due to bandwidthlimitation
+     */
     private LinkedList<CommunicationDataChunk> waitingChunks;
     
+    /**
+     * chunks that are processed at the moment
+     */
     private LinkedList<CommunicationDataChunk> sentChunks;
     
     
-    
+    /**
+     * interface to the CommuncationState
+     */
     private ConcurrentLinkedQueue<CommunicationMessage> newMessages = null;
-    private ConcurrentLinkedQueue<CommunicationComputedDataChunk> computedMessages = null;
+    /**
+     * interface to the MultipathPropagationModule
+     */
+    private volatile List<CommunicationComputedDataChunk> computedMessages = null;
     
+    /**
+     * Construct a new CommuncationExecutorRunnable for a AUV
+     * @since 0.1
+     * @param modem_bandwidth the maximum bandwidth the modem has in kilobyte per secound
+     * @param resolution the ticks per secound
+     */
     public CommunicationExecutorRunnable(float modem_bandwidth, int resolution) {
         MODEM_BANDWIDTH = modem_bandwidth;
         RESOLUTION = resolution;
         BANDWIDTH_PER_TICK = MODEM_BANDWIDTH/RESOLUTION;
         newMessages = new ConcurrentLinkedQueue<CommunicationMessage>();
-        computedMessages = new ConcurrentLinkedQueue<CommunicationComputedDataChunk>();
+        computedMessages = new LinkedList<CommunicationComputedDataChunk>();
         
         waitingChunks = new LinkedList();
         sentChunks = new LinkedList();
@@ -58,7 +87,11 @@ public class CommunicationExecutorRunnable implements Runnable{
 
     }
     
-    
+    /**
+     * TODO DOCUMENTATION
+     * @since 0.1
+     * 
+     */
     private void computeSentChunks() {
         
         float distanceSinceLastTick = 10f;
@@ -67,12 +100,18 @@ public class CommunicationExecutorRunnable implements Runnable{
             chunk.addDistance(distanceSinceLastTick);
             while(chunk.hasNextTrigger()) {
                 CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger();
-                computedMessages.add(cChunk);
+                synchronized(this) {
+                    computedMessages.add(cChunk);
+                }
             }
         }
     }
    
-
+    /**
+     * 
+     * TODO DOCUMENTATION
+     * @since 0.1
+     */
     private void computeAllNewMessages() {
         while(newMessages.peek() != null) {
             CommunicationMessage msg = newMessages.poll();
@@ -99,9 +138,20 @@ public class CommunicationExecutorRunnable implements Runnable{
         }
     }
     
-    
+    /**
+     * add a message to the queue
+     * @since 0.1
+     * @param msg 
+     */
     public void assignMessage(CommunicationMessage msg) {
         newMessages.add(msg);
+    }
+    
+    
+    public synchronized List<CommunicationComputedDataChunk> getComputedMessages() {
+        List<CommunicationComputedDataChunk> returnList = new LinkedList(computedMessages);
+        computedMessages.clear();
+        return returnList;
     }
 
     

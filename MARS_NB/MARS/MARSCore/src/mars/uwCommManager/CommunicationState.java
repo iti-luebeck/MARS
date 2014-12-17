@@ -53,12 +53,12 @@ public class CommunicationState extends AbstractAppState {
     private List<CommunicationsRunnable> runnables = null;
     
     
+    
+    private CommunicationMultiPathSimulator multiPathModule;
     /**
      * Map the AUV to its runnable
      */
     private Map<String,CommunicationExecutorRunnable> auvProcessMap;
-    
-    
     /**
     * The executor for multitasking
     */
@@ -110,7 +110,11 @@ public class CommunicationState extends AbstractAppState {
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.NANOSECONDS);
                 }
-            } 
+                
+            }
+        multiPathModule = new CommunicationMultiPathSimulator();
+        multiPathModule.init(auvMngr, this);
+        executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.NANOSECONDS);
         return true;
     }
     
@@ -130,6 +134,10 @@ public class CommunicationState extends AbstractAppState {
         }
     }
     
+    /**
+     * Load the preferences from the options panel
+     * @return whether the preferences could be loaded
+     */
     private boolean loadAndInitPreferenceListeners() {
         Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
         if(pref == null) return false;
@@ -206,11 +214,21 @@ public class CommunicationState extends AbstractAppState {
             CommunicationMessage msg = msgQueue.poll();
             if(msg == null) break;
             /*
-             *PROCESS THE MESSAGE 
+             *PROCESS THE MESSAGE OLD WAY
              */
             runnables.get(counter).assignMessage(msg);
             counter++;
             if(counter == threadCount) counter = 0;
+            /*
+            PROCESS THE MESSAGE NEW WAY
+            */
+            auvProcessMap.get(msg.getAuvName()).assignMessage(msg);
+            for(Map.Entry<String, CommunicationExecutorRunnable> entr: auvProcessMap.entrySet()) {
+                List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
+                if(!chunks.isEmpty()) {
+                    multiPathModule.enqueueMsges(chunks);
+                }
+            }
         }
     }
     
@@ -229,6 +247,7 @@ public class CommunicationState extends AbstractAppState {
     @Override
     public void cleanup() {
       super.cleanup();
+      executor.shutdown();
     }
  
     @Override
@@ -242,6 +261,8 @@ public class CommunicationState extends AbstractAppState {
     public static int getThreadCount() {
         return threadCount;
     }
+    
+    
     
 
 }
