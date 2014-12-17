@@ -80,27 +80,27 @@ public class CommunicationMultiPathSimulator implements Runnable {
      * @since 0.1
      */
     private void computeMessages() {
-            for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
-                String name = e.getKey();
-                List<CommunicationComputedDataChunk> msgs = e.getValue();
-                if(!msgs.isEmpty()) {
-                    byte[] bytearray = msgs.get(0).getMessage();
-                    msgs.remove(0);
-                    for(CommunicationComputedDataChunk chunk : msgs) {
-                        byte[] nextArray = chunk.getMessage();
-                        for(int i = 0; i<bytearray.length; i++) {
-                            if( (nextArray.length>i))  bytearray[i] = (byte) (nextArray[i] | bytearray[i]);
-                        }
-                    }
-                    try {
-                        String message = new String(bytearray,"UTF-8");
-                        messages.put(name, message);
-                    } catch (UnsupportedEncodingException ex) {
-                        Exceptions.printStackTrace(ex);
+        for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
+            String name = e.getKey();
+            List<CommunicationComputedDataChunk> msgs = e.getValue();
+            if(!msgs.isEmpty()) {
+                byte[] bytearray = msgs.get(0).getMessage();
+                msgs.remove(0);
+                for(CommunicationComputedDataChunk chunk : msgs) {
+                    byte[] nextArray = chunk.getMessage();
+                    for(int i = 0; i<bytearray.length; i++) {
+                        if( (nextArray.length>i))  bytearray[i] = (byte) (nextArray[i] | bytearray[i]);
                     }
                 }
-                
+                try {
+                    String message = new String(bytearray,"UTF-8");
+                    messages.put(name, message);
+                } catch (UnsupportedEncodingException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
             }
+        }
+        chunks.clear();
     }
     
     /**
@@ -119,6 +119,7 @@ public class CommunicationMultiPathSimulator implements Runnable {
             }
                 
         }
+        messages.clear();
     }
     
 
