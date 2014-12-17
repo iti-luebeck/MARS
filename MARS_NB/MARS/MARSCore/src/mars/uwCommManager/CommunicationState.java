@@ -12,11 +12,9 @@ import com.jme3.system.lwjgl.LwjglSmoothingTimer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -31,7 +29,6 @@ import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
 import mars.uwCommManager.helpers.DistanceTrigger;
-import mars.uwCommManager.options.CommOptionsConstants;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
 
@@ -51,11 +48,6 @@ public class CommunicationState extends AbstractAppState {
      */
     private ConcurrentLinkedQueue<CommunicationMessage> msgQueue = new ConcurrentLinkedQueue<CommunicationMessage>();
     
-    /**
-     * This list contains all objects that are used for multitasking
-     * @deprecated should not be used anymore
-     */
-    private List<CommunicationsRunnable> runnables = null;
     
     
     
@@ -128,21 +120,7 @@ public class CommunicationState extends AbstractAppState {
         return true;
     }
     
-    /**
-     * @since 0.1
-     * @deprecated this uses normal runnables instead of the executor
-     */
-    private void initRunnables() {
-        runnables = new LinkedList<CommunicationsRunnable>();
-        for(int i = 0; i<threadCount; i++) {
-            CommunicationsRunnable comRunnable = new CommunicationsRunnable(this);
-            if(comRunnable.init()); {
-                Thread comThread = new Thread(comRunnable);
-                runnables.add(comRunnable);
-                comThread.start();
-            }
-        }
-    }
+
     
     /**
      * Load the preferences from the options panel
@@ -156,24 +134,17 @@ public class CommunicationState extends AbstractAppState {
         
         
         pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+            @Override
             public void preferenceChange(PreferenceChangeEvent e) {
                 //Distance Checkup Event
                 if(e.getKey().equals(OPTIONS_DISTANCE_CHECKUP_CHECKBOX)) {
                     
-                    for(CommunicationsRunnable runnable : runnables) {
-                        if(e.getNewValue().equals("true")) runnable.activateDistanceCheckup();
-                        else runnable.deactivateDistanceCheckup();
-                    }//END iteration runnables
                 }//Distance Checkup Event closed
                 
                 //Thread Slider Event
                 if(e.getKey().equals(OPTIONS_THREADCOUNT_SLIDER)) {
                     threadCount = Integer.parseInt(e.getNewValue());
-                    int counter = 0;
-                    for(CommunicationsRunnable runnable : runnables) {
-                        counter++;
-                        if(counter>threadCount) runnable.stop();
-                    }//End iteration runnables
+
                 }//Thread Slider Event closed
             }
         });
