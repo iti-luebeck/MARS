@@ -6,6 +6,7 @@
 package mars.uwCommManager;
 
 
+import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
@@ -17,9 +18,9 @@ import java.util.PriorityQueue;
  */
 public class CommunicationDataChunk {
     
-    private String messageDataChunk;
+    private byte[] messageDataChunk;
     private float distanceTraveled;
-    private PriorityQueue<Float> triggerDistances;
+    private PriorityQueue<DistanceTrigger> triggerDistances;
     
     private final float MAX_DISTANCE;
     private boolean dead = false;
@@ -30,14 +31,25 @@ public class CommunicationDataChunk {
      * @param triggerDistances The distances of all the paths between our AUVs
      * @param maxDistance the maximum distance of the modem
      */
-    public CommunicationDataChunk(String messageDataChunk, PriorityQueue<Float> triggerDistances, float maxDistance) {
+    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance) {
         this.MAX_DISTANCE = maxDistance;
         this.messageDataChunk = messageDataChunk;
         this.distanceTraveled = 0f;
         this.triggerDistances = triggerDistances;
-
-       
     }
+    
+    public boolean hasNextTrigger() {
+        return triggerDistances.peek().getDistance()<distanceTraveled;
+    }
+    
+    public CommunicationComputedDataChunk evalNextTrigger() {
+        if(!hasNextTrigger()) return null;
+        return new CommunicationComputedDataChunk(messageDataChunk, triggerDistances.poll().getAUVName());
+    }
+    
+    
+    
+    
     
     /**
      * Should be called each tick
@@ -53,9 +65,9 @@ public class CommunicationDataChunk {
      * Only distances are longer then the already traveled distance will be added.
      * @param triggerDistance the distance to the AUV
      */
-    public synchronized void addtriggerDistance(float triggerDistance) {
+    public synchronized void addtriggerDistance(float triggerDistance, String AUV) {
         if(triggerDistance>=distanceTraveled) {
-            triggerDistances.add(triggerDistance);
+            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV));
         }
     }
     
