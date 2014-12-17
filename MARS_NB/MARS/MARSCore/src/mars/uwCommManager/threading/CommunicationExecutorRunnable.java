@@ -60,7 +60,9 @@ public class CommunicationExecutorRunnable implements Runnable{
      */
     private volatile List<CommunicationComputedDataChunk> computedMessages = null;
     
-    
+    /**
+     * The distanceTriggers that are added to all CommuncationMessages that are moved to computeMessages
+     */
     private volatile List<DistanceTrigger> distanceTriggers = null;
     
     /**
@@ -83,7 +85,13 @@ public class CommunicationExecutorRunnable implements Runnable{
     
     
 
-
+    /**
+     * three steps:
+     * transform all new Communcation messages to CommunicationDataChunks
+     * take the next pending DataChunk and add it to the sent chunks
+     * make a tick with all sent chunks
+     * @since 0.1
+     */
     @Override
     public void run() {
         computeAllNewMessages();
@@ -92,7 +100,7 @@ public class CommunicationExecutorRunnable implements Runnable{
     }
     
     /**
-     * TODO DOCUMENTATION
+     * Make a step with all sent chunks kill all chunks that have reached maximum range
      * @since 0.1
      * 
      */
@@ -123,7 +131,7 @@ public class CommunicationExecutorRunnable implements Runnable{
    
     /**
      * 
-     * TODO DOCUMENTATION
+     * take all new enqueued CommunicationMessages and converts them into CommuncationDataChunks
      * @since 0.1
      */
     private void computeAllNewMessages() {
@@ -167,13 +175,22 @@ public class CommunicationExecutorRunnable implements Runnable{
         newMessages.add(msg);
     }
     
-    
+    /**
+     * get all computed messages since last call
+     * @since 0.1
+     * @return the computed messages
+     */
     public synchronized List<CommunicationComputedDataChunk> getComputedMessages() {
         List<CommunicationComputedDataChunk> returnList = new LinkedList(computedMessages);
         computedMessages.clear();
         return returnList;
     }
     
+    /**
+     * setDistanceTriggers for the next messages that are converted
+     * @since 0.1
+     * @param triggers 
+     */
     public void setDistanceTriggers(List<DistanceTrigger> triggers) {
         this.distanceTriggers = triggers;
     }

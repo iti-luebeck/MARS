@@ -23,15 +23,16 @@ import org.openide.util.Exceptions;
 
 
 /**
- *
+ * Used to merge all message chunks that were delivered within one tick to the modem.
  * @author Jasper Schwinghammer
+ * @version 0.1
  */
 public class CommunicationMultiPathSimulator implements Runnable {
     
     
     private Map<String,List<CommunicationComputedDataChunk>> chunks;
     private Map<String,String> messages;
-    private ConcurrentLinkedQueue<CommunicationComputedDataChunk> queue;
+    private volatile ConcurrentLinkedQueue<CommunicationComputedDataChunk> queue;
     private CommunicationState state = null;
     private AUV_Manager auvManager = null;
     
@@ -56,7 +57,11 @@ public class CommunicationMultiPathSimulator implements Runnable {
         return true;
     }
     
-    private void addNewMessages(final ConcurrentLinkedQueue<CommunicationComputedDataChunk> msgs) {
+    /**
+     * add a whole chunk of messages to be computed
+     * @param msgs the messages that should be converted with the next tick
+     */
+    private void addNewMessages() {
         while(queue.peek() != null) {
             CommunicationComputedDataChunk e = queue.poll();
             if(chunks.containsKey(e.getAUVName())) {
@@ -66,11 +71,14 @@ public class CommunicationMultiPathSimulator implements Runnable {
                 list.add(e);
                 chunks.put(e.getAUVName(),list);
             }
-            msgs.remove(e);
+            queue.remove(e);
         }
     }
     
-    
+    /**
+     * Take all the messages for each AUV and compute them back into one String
+     * @since 0.1
+     */
     private void computeMessages() {
             for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
                 String name = e.getKey();
@@ -95,6 +103,10 @@ public class CommunicationMultiPathSimulator implements Runnable {
             }
     }
     
+    /**
+     * call publish on all modems that recieve a message
+     * @since 0.1
+     */
     private void returnMessages(){
         for(Map.Entry<String,String> e : messages.entrySet()) {
             String name = e.getKey();
@@ -110,11 +122,17 @@ public class CommunicationMultiPathSimulator implements Runnable {
     }
     
 
-
+    /**
+     * three steps:
+     * Sort the messages to the corresponding AUV
+     * compute them and make all byte[] of one timeframe to one String
+     * return them to the AUV modems
+     * @since 0.1
+     */
     @Override
     public void run() {
         try {
-            addNewMessages(queue);
+            addNewMessages();
             computeMessages();
             returnMessages();
         } catch (Exception e) {
@@ -126,7 +144,10 @@ public class CommunicationMultiPathSimulator implements Runnable {
     
     
     
-    
+    /**
+     * enqueue new Messages
+     * @param msgs a list of computedDataChunks that should be computed and returned to the modems
+     */
     public void enqueueMsges(final List<CommunicationComputedDataChunk> msgs) {
         queue.addAll(msgs);
         
