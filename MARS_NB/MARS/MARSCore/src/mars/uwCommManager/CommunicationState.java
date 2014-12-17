@@ -1,6 +1,9 @@
 
 package mars.uwCommManager;
 
+import mars.uwCommManager.threading.CommunicationMultiPathSimulator;
+import mars.uwCommManager.threading.CommunicationExecutorRunnable;
+import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -27,8 +30,10 @@ import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
+import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.options.CommOptionsConstants;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
+import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
 
 /**
  * Entrypoint of the communications module.
@@ -55,6 +60,7 @@ public class CommunicationState extends AbstractAppState {
     
     
     private CommunicationMultiPathSimulator multiPathModule;
+    private CommunicationDistanceComputationRunnable distanceTraceModule;
     /**
      * Map the AUV to its runnable
      */
@@ -87,7 +93,7 @@ public class CommunicationState extends AbstractAppState {
         initAUVProcessMap(CentralLookup.getDefault().lookup(AUV_Manager.class));
         
         
-        initRunnables();
+        //initRunnables();
 
         CentralLookup.getDefault().add(this);
     }
@@ -108,13 +114,17 @@ public class CommunicationState extends AbstractAppState {
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
                     CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
                     auvProcessMap.put(auv.getName(), runnable);
-                    executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.NANOSECONDS);
+                    executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
+                    System.out.println("Added Thread for " +auv.getName() + "there: " + runnable.toString() );
                 }
                 
             }
         multiPathModule = new CommunicationMultiPathSimulator();
         multiPathModule.init(auvMngr, this);
-        executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.NANOSECONDS);
+        executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
+        distanceTraceModule = new CommunicationDistanceComputationRunnable();
+        distanceTraceModule.init(auvMngr);
+        executor.scheduleAtFixedRate(distanceTraceModule, 500000, 1000000, TimeUnit.MICROSECONDS);
         return true;
     }
     
@@ -141,7 +151,7 @@ public class CommunicationState extends AbstractAppState {
     private boolean loadAndInitPreferenceListeners() {
         Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
         if(pref == null) return false;
-        threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 3);
+        threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
         
         
         
@@ -207,7 +217,7 @@ public class CommunicationState extends AbstractAppState {
         // this timer to stop in case of too many messages
         Timer timer = new LwjglSmoothingTimer();
         float time = 0f;
-        int counter = 0;
+        //int counter = 0;
         while(true) {
             time += timer.getTimePerFrame();
             if(time >= 1f/60f) break;
@@ -216,13 +226,23 @@ public class CommunicationState extends AbstractAppState {
             /*
              *PROCESS THE MESSAGE OLD WAY
              */
-            runnables.get(counter).assignMessage(msg);
-            counter++;
-            if(counter == threadCount) counter = 0;
+            //runnables.get(counter).assignMessage(msg);
+            //counter++;
+            //if(counter == threadCount) counter = 0;
             /*
             PROCESS THE MESSAGE NEW WAY
             */
-            auvProcessMap.get(msg.getAuvName()).assignMessage(msg);
+            CommunicationExecutorRunnable e1 = auvProcessMap.get(msg.getAuvName());
+            if(e1 ==null ) {
+                CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
+                auvProcessMap.put(msg.getAuvName(), runnable);
+                executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
+                e1 = runnable;
+            }
+            List<DistanceTrigger> e2 = distanceTraceModule.getDistanceTriggerMap().get(msg.getAuvName());
+            if(e2 != null) e1.setDistanceTriggers(e2);
+            e1.assignMessage(msg);
+            
             for(Map.Entry<String, CommunicationExecutorRunnable> entr: auvProcessMap.entrySet()) {
                 List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
                 if(!chunks.isEmpty()) {

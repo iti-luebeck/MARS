@@ -333,6 +333,7 @@ public class UnderwaterModem extends CommunicationDevice {
             publisher.publish(fl);
         }
         */
+        System.out.println("Got a Message " + msg);
         notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
     }
 

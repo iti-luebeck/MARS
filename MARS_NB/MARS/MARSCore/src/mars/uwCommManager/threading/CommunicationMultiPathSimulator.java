@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.uwCommManager;
+package mars.uwCommManager.threading;
 
+import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
+import mars.uwCommManager.CommunicationState;
 import org.openide.util.Exceptions;
 
 
@@ -73,20 +75,23 @@ public class CommunicationMultiPathSimulator implements Runnable {
             for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
                 String name = e.getKey();
                 List<CommunicationComputedDataChunk> msgs = e.getValue();
-                byte[] bytearray = msgs.get(0).getMessage();
-                msgs.remove(0);
-                for(CommunicationComputedDataChunk chunk : msgs) {
-                    byte[] nextArray = chunk.getMessage();
-                    for(int i = 0; i<bytearray.length; i++) {
-                        bytearray[i] = (byte) (nextArray[i] | bytearray[i]);
+                if(!msgs.isEmpty()) {
+                    byte[] bytearray = msgs.get(0).getMessage();
+                    msgs.remove(0);
+                    for(CommunicationComputedDataChunk chunk : msgs) {
+                        byte[] nextArray = chunk.getMessage();
+                        for(int i = 0; i<bytearray.length; i++) {
+                            if( (nextArray.length>i))  bytearray[i] = (byte) (nextArray[i] | bytearray[i]);
+                        }
+                    }
+                    try {
+                        String message = new String(bytearray,"UTF-8");
+                        messages.put(name, message);
+                    } catch (UnsupportedEncodingException ex) {
+                        Exceptions.printStackTrace(ex);
                     }
                 }
-                try {
-                    String message = new String(bytearray,"UTF-8");
-                    messages.put(name, message);
-                } catch (UnsupportedEncodingException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
+                
             }
     }
     
@@ -108,9 +113,14 @@ public class CommunicationMultiPathSimulator implements Runnable {
 
     @Override
     public void run() {
-        addNewMessages(queue);
-        computeMessages();
-        returnMessages();
+        try {
+            addNewMessages(queue);
+            computeMessages();
+            returnMessages();
+        } catch (Exception e) {
+            Exceptions.printStackTrace(e);
+        }
+
     }
     
     

@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.uwCommManager;
+package mars.uwCommManager.helpers;
 
 
+import java.util.List;
+import mars.uwCommManager.helpers.DistanceTrigger;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -36,9 +38,11 @@ public class CommunicationDataChunk {
         this.messageDataChunk = messageDataChunk;
         this.distanceTraveled = 0f;
         this.triggerDistances = triggerDistances;
+        if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
     }
     
     public boolean hasNextTrigger() {
+        if(triggerDistances.peek() == null) return false;
         return triggerDistances.peek().getDistance()<distanceTraveled;
     }
     
@@ -58,6 +62,10 @@ public class CommunicationDataChunk {
     public synchronized void addDistance(float distance) {
         distanceTraveled +=distance;
         if(distanceTraveled > MAX_DISTANCE) dead = true;
+    }
+    
+    public synchronized void addDistanceTriggers(List<DistanceTrigger> triggers) {
+        triggerDistances.addAll(triggers);
     }
     
     /**

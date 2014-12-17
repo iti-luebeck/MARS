@@ -3,16 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.uwCommManager;
+package mars.uwCommManager.threading;
 
+import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
+import mars.uwCommManager.helpers.CommunicationDataChunk;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.sensors.CommunicationMessage;
+import mars.uwCommManager.helpers.DistanceTrigger;
 import org.openide.util.Exceptions;
 
 /**
@@ -56,6 +60,9 @@ public class CommunicationExecutorRunnable implements Runnable{
      */
     private volatile List<CommunicationComputedDataChunk> computedMessages = null;
     
+    
+    private volatile List<DistanceTrigger> distanceTriggers = null;
+    
     /**
      * Construct a new CommuncationExecutorRunnable for a AUV
      * @since 0.1
@@ -71,6 +78,7 @@ public class CommunicationExecutorRunnable implements Runnable{
         
         waitingChunks = new LinkedList();
         sentChunks = new LinkedList();
+        distanceTriggers = new LinkedList();
     }
     
     
@@ -78,13 +86,9 @@ public class CommunicationExecutorRunnable implements Runnable{
 
     @Override
     public void run() {
-        
         computeAllNewMessages();
-        
         if(!waitingChunks.isEmpty()) sentChunks.add(waitingChunks.poll());
-        
         computeSentChunks();
-
     }
     
     /**
@@ -94,17 +98,27 @@ public class CommunicationExecutorRunnable implements Runnable{
      */
     private void computeSentChunks() {
         
-        float distanceSinceLastTick = 10f;
+        try {
+            float distanceSinceLastTick = 10f;
+            List<CommunicationDataChunk> deadChunks = new LinkedList();
+            
         
-        for(CommunicationDataChunk chunk : sentChunks) {
-            chunk.addDistance(distanceSinceLastTick);
-            while(chunk.hasNextTrigger()) {
-                CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger();
-                synchronized(this) {
-                    computedMessages.add(cChunk);
+            for(CommunicationDataChunk chunk : sentChunks) {
+                chunk.addDistance(distanceSinceLastTick);
+                while(chunk.hasNextTrigger()) {
+                    CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger();
+                    synchronized(this) {
+                        computedMessages.add(cChunk);
+                    }
                 }
+                if(chunk.isDead()) deadChunks.add(chunk);
             }
+            sentChunks.removeAll(deadChunks);
+        } catch(Exception e) {
+            Exceptions.printStackTrace(e);
         }
+        
+
     }
    
     /**
@@ -117,23 +131,29 @@ public class CommunicationExecutorRunnable implements Runnable{
             CommunicationMessage msg = newMessages.poll();
             try {
                 byte[] msgByte = msg.getMsg().getBytes("UTF-8");
-                int chunkCount = (int) Math.ceil(((double)msgByte.length) / BANDWIDTH_PER_TICK);
+                //System.out.println("msgByte: "+ msgByte.length);
+                int chunkCount = (int) Math.ceil(((double)msgByte.length) / (BANDWIDTH_PER_TICK*1000));
+                //System.out.println("Chunk Count: " + chunkCount);
                 for(int i = 0; i<chunkCount; i++) {
                     CommunicationDataChunk chunk = null;
                     if(i != chunkCount - 1) {
                         chunk = new CommunicationDataChunk(
-                                Arrays.copyOfRange(msgByte, (int) (i*BANDWIDTH_PER_TICK), (int)((i+1)*BANDWIDTH_PER_TICK)-1),
-                                null, RESOLUTION);
+                                Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), (int)((i+1)*(BANDWIDTH_PER_TICK*1000))-1),
+                                new PriorityQueue<DistanceTrigger>() , 100);
                     } else {
                         chunk = new CommunicationDataChunk(
-                                Arrays.copyOfRange(msgByte, (int) (i*BANDWIDTH_PER_TICK), msgByte.length),
-                                null, RESOLUTION);
+                                Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), msgByte.length),
+                                new PriorityQueue<DistanceTrigger>(), 100);
                     }
+                    chunk.addDistanceTriggers(distanceTriggers);
                     //to emphasize that we will use the list as queue I use the queue methods instead of LinkedList.add
                     waitingChunks.offer(chunk);
+                    
                 }
             } catch (UnsupportedEncodingException ex) {
                 Exceptions.printStackTrace(ex);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
             }
         }
     }
@@ -152,6 +172,10 @@ public class CommunicationExecutorRunnable implements Runnable{
         List<CommunicationComputedDataChunk> returnList = new LinkedList(computedMessages);
         computedMessages.clear();
         return returnList;
+    }
+    
+    public void setDistanceTriggers(List<DistanceTrigger> triggers) {
+        this.distanceTriggers = triggers;
     }
 
     
