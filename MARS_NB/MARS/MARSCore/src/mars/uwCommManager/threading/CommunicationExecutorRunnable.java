@@ -94,9 +94,14 @@ public class CommunicationExecutorRunnable implements Runnable{
      */
     @Override
     public void run() {
-        computeAllNewMessages();
-        if(!waitingChunks.isEmpty()) sentChunks.add(waitingChunks.poll());
-        computeSentChunks();
+        try {
+            computeAllNewMessages();
+            if(!waitingChunks.isEmpty()) sentChunks.add(waitingChunks.poll());
+            computeSentChunks();
+        } catch (Exception e ) {
+            Exceptions.printStackTrace(e);
+        }
+
     }
     
     /**

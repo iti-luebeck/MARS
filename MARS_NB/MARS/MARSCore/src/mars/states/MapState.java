@@ -376,7 +376,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                             Cylinder cyl = (Cylinder) uwgeom.getMesh();
                             cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
                         } else {
-                            uwgeom.setCullHint(CullHint.Always);
+                            uwgeom.setCullHint(CullHint.Never);
                         }
                     }
 

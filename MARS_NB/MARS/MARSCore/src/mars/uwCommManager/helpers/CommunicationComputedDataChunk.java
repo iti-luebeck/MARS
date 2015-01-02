@@ -5,8 +5,11 @@
  */
 package mars.uwCommManager.helpers;
 
+import java.io.UnsupportedEncodingException;
+import org.openide.util.Exceptions;
+
 /**
- * @version 0.1
+ * @version 0.1.1
  * @author Jasper Schwinghammer
  */
 public class CommunicationComputedDataChunk {
@@ -36,14 +39,28 @@ public class CommunicationComputedDataChunk {
      * @return the message encoded as UTF-8
      */
     public byte[] getMessage() {
-        return MESSAGE;
+        return MESSAGE.clone();
     }
     
     /**
      * get the AUV that shall recieve the message
+     * @since 0.1
      * @return the AUVs name
      */
     public String getAUVName() {
         return AUV_NAME;
+    }
+    
+    /**
+     * @since 0.1.1
+     * @return the message as String (debug only method)
+     */
+    public String getMessageAsString() {
+        try {
+            return new String(MESSAGE,"UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+           Exceptions.printStackTrace(ex);
+        }
+        return null;
     }
 }

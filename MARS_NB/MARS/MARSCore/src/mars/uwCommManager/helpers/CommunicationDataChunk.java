@@ -6,15 +6,17 @@
 package mars.uwCommManager.helpers;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import java.util.Map;
 import java.util.PriorityQueue;
+import org.openide.util.Exceptions;
 
 /**
  * This class contains a chunk of a message that was send by a modem.
  * While traveling the message will be altered by noise and other sources
- * @version 0.1
+ * @version 0.1.1
  * @author Jasper Schwinghammer
  */
 public class CommunicationDataChunk {
@@ -114,5 +116,18 @@ public class CommunicationDataChunk {
      */
     public synchronized boolean isDead(){
         return dead;
+    }
+    
+    /**
+     * @since 0.1.1
+     * @return the message as String (debug only method)
+     */
+    public String getMessageAsString() {
+        try {
+            return new String(messageDataChunk,"UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+           Exceptions.printStackTrace(ex);
+        }
+        return null;
     }
 }

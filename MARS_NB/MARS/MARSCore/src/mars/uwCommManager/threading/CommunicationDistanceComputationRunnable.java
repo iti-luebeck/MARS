@@ -17,6 +17,7 @@ import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import org.openide.util.Exceptions;
 
 /**
  * This class is used to calculate distances between AUVS, right now it only calculates the direct way between two AUVs. Reflections are ignored and not implemented
@@ -61,7 +62,25 @@ public class CommunicationDistanceComputationRunnable implements Runnable {
      */
     @Override
     public void run() {
-        //We calculate every AUV to every AUV O(n^2)
+        
+        try {
+            calculatePathDistances();
+        } catch(Exception e) {
+            Exceptions.printStackTrace(e);
+        }
+       
+    }
+    
+    /**
+     * get all current Triggers
+     * @return the distances from all AUVs with modems to other AUVs with modems
+     */
+    public synchronized Map<String,List<DistanceTrigger>> getDistanceTriggerMap() {
+        return distanceMap;
+    }
+
+    private void calculatePathDistances() {
+         //We calculate every AUV to every AUV O(n^2)
         HashMap<String,AUV> auvs = auvManager.getAUVs();
         HashMap<String,AUV> targets = auvManager.getAUVs();
         
@@ -120,13 +139,5 @@ public class CommunicationDistanceComputationRunnable implements Runnable {
                 }
             }
         }
-    }
-    
-    /**
-     * get all current Triggers
-     * @return the distances from all AUVs with modems to other AUVs with modems
-     */
-    public synchronized Map<String,List<DistanceTrigger>> getDistanceTriggerMap() {
-        return distanceMap;
     }
 }
