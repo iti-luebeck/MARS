@@ -13,5 +13,6 @@ public interface CommOptionsConstants {
     
     public static final String OPTIONS_DISTANCE_CHECKUP_CHECKBOX = "distanceCheckupCheckbox";
     public static final String OPTIONS_THREADCOUNT_SLIDER = "optionsThreadcountSlider";
+    public static final String OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX = "optionsShowMiniMapRange";
     
 }

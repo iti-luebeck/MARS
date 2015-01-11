@@ -69,6 +69,22 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     public MapState(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public HashMap<String, Node> getAUVNodes() {
+        return auv_nodes;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public Texture getTexMl() {
+        return tex_ml;
+    }
 
     /**
      *
@@ -366,23 +382,25 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                     int tery_px = tex_ml.getImage().getHeight();
 
                     //update propagation distance
-                    ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
-                    Iterator it = uws.iterator();
-                    while (it.hasNext()) {
-                        UnderwaterModem uw = (UnderwaterModem) it.next();
-                        Geometry uwgeom = (Geometry) node.getChild(auv.getName() + "-" + uw.getName() + "-geom");
-                        if (uw.getDebug()) {
-                            uwgeom.setCullHint(CullHint.Never);
-                            Cylinder cyl = (Cylinder) uwgeom.getMesh();
-                            cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
-                        } else {
-                            uwgeom.setCullHint(CullHint.Never);
-                        }
-                    }
+                    //MOVED TO mars.uwCommManager.graphics.CommOnMap.java (js 2015-01-11)
+                    
+//                    ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+//                    Iterator it = uws.iterator();
+//                    while (it.hasNext()) {
+//                        UnderwaterModem uw = (UnderwaterModem) it.next();
+//                        Geometry uwgeom = (Geometry) node.getChild(auv.getName() + "-" + uw.getName() + "-geom");
+//                        if (uw.getDebug()) {
+//                            uwgeom.setCullHint(CullHint.Never);
+//                            Cylinder cyl = (Cylinder) uwgeom.getMesh();
+//                            cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
+//                        } else {
+//                            uwgeom.setCullHint(CullHint.Always);
+//                        }
+//                    }
 
                     //update roation of sonar
                     ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
-                    it = sons.iterator();
+                    Iterator it = sons.iterator();
                     while (it.hasNext()) {
                         Sonar son = (Sonar) it.next();
                         Geometry songeom = (Geometry) node.getChild(auv.getName() + "-" + son.getName() + "-geom");

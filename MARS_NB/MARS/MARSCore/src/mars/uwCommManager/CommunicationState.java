@@ -28,6 +28,9 @@ import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
+import mars.states.MapState;
+import mars.states.SimState;
+import mars.uwCommManager.graphics.CommOnMap;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
@@ -73,6 +76,16 @@ public class CommunicationState extends AbstractAppState {
      */
     public static final int RESOLUTION = 30;
     
+    /**
+     * The visualization class for the minimap
+     */
+    private CommOnMap commOnMap = null;
+    
+    /**
+     * 
+     */
+    private boolean commOnMapActive = false;
+    
 
 //------------------------------- INIT -----------------------------------------
     /**
@@ -97,8 +110,16 @@ public class CommunicationState extends AbstractAppState {
         executor = new ScheduledThreadPoolExecutor(threadCount);
         //prepare and start the runnables for multithreading
         auvProcessMap = new HashMap();
-        initRunnables(CentralLookup.getDefault().lookup(AUV_Manager.class));
+        if (!initRunnables(CentralLookup.getDefault().lookup(SimState.class).getAuvManager())) {
+            System.out.println("Something went wrong while initializing the communications minimap visualization " + CentralLookup.getDefault().lookup(AUV_Manager.class));
+        }
         
+        
+        commOnMap = new CommOnMap(commOnMapActive);
+        if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
+                CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings())) {
+            System.out.println("Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
+        }
         
         //Init done, add to centrallookup
         CentralLookup.getDefault().add(this);
@@ -108,13 +129,13 @@ public class CommunicationState extends AbstractAppState {
     /**
      * @since 0.2
      * Init all runnables for multithreading
-     * @param auvMngr the AUV_Manager
+     * @param auvManager the AUV_Manager
      * @return if the initialization was successful
      */
-    private boolean initRunnables(final AUV_Manager auvMngr) {
-        if(auvMngr == null) return false;
+    private boolean initRunnables(final AUV_Manager auvManager) {
+        if(auvManager == null) return false;
         
-        HashMap<String,AUV> auvs = auvMngr.getAUVs();
+        HashMap<String,AUV> auvs = auvManager.getAUVs();
             for ( AUV auv : auvs.values()){
             //Check if the AUV is enabled and has a modem
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
@@ -125,10 +146,10 @@ public class CommunicationState extends AbstractAppState {
                 
             }
         multiPathModule = new CommunicationMultiPathSimulator();
-        multiPathModule.init(auvMngr, this);
+        multiPathModule.init(auvManager, this);
         executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
         distanceTraceModule = new CommunicationDistanceComputationRunnable();
-        distanceTraceModule.init(auvMngr);
+        distanceTraceModule.init(auvManager);
         executor.scheduleAtFixedRate(distanceTraceModule, 500000, 1000000, TimeUnit.MICROSECONDS);
         return true;
     }
@@ -160,6 +181,12 @@ public class CommunicationState extends AbstractAppState {
                     threadCount = Integer.parseInt(e.getNewValue());
                     executor.setCorePoolSize(threadCount);
                 }//Thread Slider Event closed
+                
+                //Show Range Event
+                if(e.getKey().equals(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX)){
+                    commOnMapActive = Boolean.parseBoolean(e.getNewValue());
+                    if(!(commOnMap == null)) commOnMap.setActive(commOnMapActive);
+                }
             }
         });
         return true;
@@ -175,11 +202,13 @@ public class CommunicationState extends AbstractAppState {
      */
     @Override
     public void update(final float tpf) {
+        
+        commOnMap.update(tpf);
 
         
         
         //TESTCODE BEGIN
-        AUV_Manager auvManager = CentralLookup.getDefault().lookup(AUV_Manager.class);
+        AUV_Manager auvManager = CentralLookup.getDefault().lookup(SimState.class).getAuvManager();
         
         if(auvManager != null) {
             HashMap<String,AUV> auvs = auvManager.getAUVs();
