@@ -84,7 +84,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * 
      */
-    private boolean commOnMapActive = false;
+    private boolean commOnMapActive = true;
     
 
 //------------------------------- INIT -----------------------------------------
@@ -111,14 +111,14 @@ public class CommunicationState extends AbstractAppState {
         //prepare and start the runnables for multithreading
         auvProcessMap = new HashMap();
         if (!initRunnables(CentralLookup.getDefault().lookup(SimState.class).getAuvManager())) {
-            System.out.println("Something went wrong while initializing the communications minimap visualization " + CentralLookup.getDefault().lookup(AUV_Manager.class));
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization " + CentralLookup.getDefault().lookup(AUV_Manager.class));
         }
         
         
         commOnMap = new CommOnMap(commOnMapActive);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
-                CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings())) {
-            System.out.println("Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
+            CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings())) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
         }
         
         //Init done, add to centrallookup
@@ -165,6 +165,7 @@ public class CommunicationState extends AbstractAppState {
         Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
         if(pref == null) return false;
         threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
+        commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         
         
         
