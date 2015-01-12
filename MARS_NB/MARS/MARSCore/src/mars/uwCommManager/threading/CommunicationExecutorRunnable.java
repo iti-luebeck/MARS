@@ -95,9 +95,16 @@ public class CommunicationExecutorRunnable implements Runnable{
     @Override
     public void run() {
         try {
+            //devide all new messages into chunks that do not exceed the max bandwidth
             computeAllNewMessages();
+            //send one chunk
             if(!waitingChunks.isEmpty()) sentChunks.add(waitingChunks.poll());
+            //compute all chunks that are send
             computeSentChunks();
+            
+            //Graphics stuff
+            
+            
         } catch (Exception e ) {
             Exceptions.printStackTrace(e);
         }

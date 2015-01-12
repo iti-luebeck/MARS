@@ -211,11 +211,6 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                         uw_geom.setLocalTranslation(0f, 0f, -0.5f);
                         uw_geom.updateGeometricState();
                         auvNode.attachChild(uw_geom);
-                        if (uw.getDebug()) {
-                            uw_geom.setCullHint(CullHint.Never);
-                        } else {
-                            uw_geom.setCullHint(CullHint.Always);
-                        }
                     }
 
                     //adding sonar cones

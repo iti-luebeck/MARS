@@ -187,7 +187,7 @@ public class CommunicationState extends AbstractAppState {
                 if(e.getKey().equals(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX)){
                     commOnMapActive = Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setActive(commOnMapActive);
-                }
+                }//Show Range event closed
             }
         });
         return true;

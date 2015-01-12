@@ -5,6 +5,7 @@
  */
 package mars.uwCommManager.graphics;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -84,7 +85,9 @@ public class CommOnMap {
                     if (active) {
                         uwgeom.setCullHint(Spatial.CullHint.Never);
                         Cylinder cyl = (Cylinder) uwgeom.getMesh();
-                        cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
+                        //cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
+                        cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false, true);
+                        uwgeom.getMaterial().setColor("Color", ColorRGBA.Black);
                     } else {
                         uwgeom.setCullHint(Spatial.CullHint.Always);
                     }
