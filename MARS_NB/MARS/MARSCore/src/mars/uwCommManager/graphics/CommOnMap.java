@@ -44,6 +44,7 @@ public class CommOnMap {
     private AssetManager assetManager = null;
     private boolean active;
     private boolean borders;
+    private boolean showLinks;
     
     private Map<String,List<DistanceTrigger>> distances;
     private List<Spatial> inactivePaths;
@@ -52,9 +53,10 @@ public class CommOnMap {
      * @since 0.1
      * @param active if this class starts active or not
      */
-    public CommOnMap(boolean active, boolean borders) {
+    public CommOnMap(boolean active, boolean borders,boolean showlinks) {
         this.active = active;
         this.borders = borders;
+        this.showLinks = showlinks;
         distances = new HashMap();
         inactivePaths = new LinkedList();
     }
@@ -132,22 +134,25 @@ public class CommOnMap {
                     }
                     else {
                         inactivePaths = new LinkedList(distanceNode.getChildren());
-                        List<DistanceTrigger> targets = distances.get(auv.getName());
-                        for(DistanceTrigger i : targets) {
-                            String connectionName = auv.getName()+"->"+i.getAUVName();
-                            Geometry uwgeom = (Geometry) distanceNode.getChild(connectionName);
-                            if(uwgeom == null) {
-                                attachLine(connectionName, distanceNode, new Vector3f(0,0,0), auvNodes.get(i.getAUVName()).getWorldTranslation().subtract(node.getWorldTranslation()));
-                            } else {
-                                inactivePaths.remove(uwgeom);
-                                Line line = (Line) uwgeom.getMesh();
-                                line.updatePoints(new Vector3f(0,0,0), auvNodes.get(i.getAUVName()).getWorldTranslation().subtract(node.getWorldTranslation()));
-                                uwgeom.setCullHint(Spatial.CullHint.Inherit);
-                            }
+                        if(showLinks) {
+                            List<DistanceTrigger> targets = distances.get(auv.getName());
+                            for(DistanceTrigger i : targets) {
+                                String connectionName = auv.getName()+"->"+i.getAUVName();
+                                Geometry uwgeom = (Geometry) distanceNode.getChild(connectionName);
+                                if(uwgeom == null) {
+                                    attachLine(connectionName, distanceNode, new Vector3f(0,0,0), auvNodes.get(i.getAUVName()).getWorldTranslation().subtract(node.getWorldTranslation()));
+                                } else {
+                                    inactivePaths.remove(uwgeom);
+                                    Line line = (Line) uwgeom.getMesh();
+                                    line.updatePoints(new Vector3f(0,0,0), auvNodes.get(i.getAUVName()).getWorldTranslation().subtract(node.getWorldTranslation()));
+                                    uwgeom.setCullHint(Spatial.CullHint.Inherit);
+                                }
+                            }      
                         }
+                        //at first i wanted to set distanceNode cullHint to Always to disable all nodes, but that didn't work... why ever
                         for(Spatial i : inactivePaths) {
                             i.setCullHint(Spatial.CullHint.Always);
-                        }
+                        } 
                     }
                 }
             }
@@ -226,5 +231,12 @@ public class CommOnMap {
         this.distances = distances;
     }
     
+    /**
+     * @since 0.2
+     * @param showLinks
+     */
+    public void setShowLinks(boolean showLinks) {
+        this.showLinks = showLinks;
+    }
     
 }

@@ -87,9 +87,11 @@ public class CommunicationState extends AbstractAppState {
     private boolean commOnMapActive = true;
     
     /**
-     * 
+     * show borders or plane of communicationdistance on minimap
      */
     private boolean commOnMapBorders = true;
+    
+    private boolean commOnMapShowCommLinks = false;
 
 //------------------------------- INIT -----------------------------------------
     /**
@@ -121,7 +123,7 @@ public class CommunicationState extends AbstractAppState {
         }
         
         
-        commOnMap = new CommOnMap(commOnMapActive,commOnMapActive);
+        commOnMap = new CommOnMap(commOnMapActive,commOnMapActive,commOnMapShowCommLinks);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
             CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings(),
             app.getAssetManager(),this.app)) {
@@ -174,6 +176,7 @@ public class CommunicationState extends AbstractAppState {
         threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
         commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         commOnMapBorders = pref.getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON,false);
+        commOnMapShowCommLinks = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         
         
         
@@ -210,6 +213,10 @@ public class CommunicationState extends AbstractAppState {
                     commOnMapBorders = !Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setBorders(commOnMapBorders);
                     return;
+                }
+                if(e.getKey().equals(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX)) {
+                    commOnMapShowCommLinks = Boolean.parseBoolean(e.getNewValue());
+                    if(!(commOnMap == null)) commOnMap.setShowLinks(commOnMapShowCommLinks);
                 }
             }
         });

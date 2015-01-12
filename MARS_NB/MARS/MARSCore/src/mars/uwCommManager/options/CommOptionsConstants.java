@@ -16,5 +16,6 @@ public interface CommOptionsConstants {
     public static final String OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX = "optionsShowMiniMapRange";
     public static final String OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON = "optionsMinimapCircleBorders";
     public static final String OPTIONS_MINIMAP_OPAQUE_CIRCLE = "optionsMinimapOpaqueCircle";
+    public static final String OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX = "weltraumwetter!";
     
 }
