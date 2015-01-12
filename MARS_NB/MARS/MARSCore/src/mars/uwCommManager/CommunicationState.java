@@ -103,8 +103,10 @@ public class CommunicationState extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         if(app instanceof MARS_Main){
-            app = (MARS_Main)app;
+            this.app = (MARS_Main)app;
+           
         }
+        
         
         //load settings
         if(!loadAndInitPreferenceListeners()) {
@@ -121,7 +123,8 @@ public class CommunicationState extends AbstractAppState {
         
         commOnMap = new CommOnMap(commOnMapActive,commOnMapActive);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
-            CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings())) {
+            CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings(),
+            app.getAssetManager(),this.app)) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
         }
         
@@ -224,6 +227,7 @@ public class CommunicationState extends AbstractAppState {
     @Override
     public void update(final float tpf) {
         
+        commOnMap.setDistances(distanceTraceModule.getDistanceTriggerMap());
         commOnMap.update(tpf);
 
         
@@ -288,6 +292,7 @@ public class CommunicationState extends AbstractAppState {
                 }
             }
         }
+
     }
     
     
