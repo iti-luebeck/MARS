@@ -82,10 +82,14 @@ public class CommunicationState extends AbstractAppState {
     private CommOnMap commOnMap = null;
     
     /**
-     * 
+     * is the commMap active
      */
     private boolean commOnMapActive = true;
     
+    /**
+     * 
+     */
+    private boolean commOnMapBorders = true;
 
 //------------------------------- INIT -----------------------------------------
     /**
@@ -115,7 +119,7 @@ public class CommunicationState extends AbstractAppState {
         }
         
         
-        commOnMap = new CommOnMap(commOnMapActive);
+        commOnMap = new CommOnMap(commOnMapActive,commOnMapActive);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
             CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings())) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
@@ -166,6 +170,7 @@ public class CommunicationState extends AbstractAppState {
         if(pref == null) return false;
         threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
         commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
+        commOnMapBorders = pref.getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON,false);
         
         
         
@@ -175,19 +180,34 @@ public class CommunicationState extends AbstractAppState {
                 //Distance Checkup Event
                 if(e.getKey().equals(OPTIONS_DISTANCE_CHECKUP_CHECKBOX)) {
                     //DO WE STILL USE THIS? NEED TO BE SETUP AGAIN FOR NEW SYSTEM
+                    return;
                 }//Distance Checkup Event closed
                 
                 //Thread Slider Event
                 if(e.getKey().equals(OPTIONS_THREADCOUNT_SLIDER)) {
                     threadCount = Integer.parseInt(e.getNewValue());
                     executor.setCorePoolSize(threadCount);
+                    return;
                 }//Thread Slider Event closed
                 
                 //Show Range Event
                 if(e.getKey().equals(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX)){
                     commOnMapActive = Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setActive(commOnMapActive);
+                    return;
                 }//Show Range event closed
+                
+                //Range display Event
+                if(e.getKey().equals(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON)) {
+                    commOnMapBorders = Boolean.parseBoolean(e.getNewValue());
+                    if(!(commOnMap == null)) commOnMap.setBorders(commOnMapBorders);
+                    return;
+                }
+                if(e.getKey().equals(OPTIONS_MINIMAP_OPAQUE_CIRCLE)) {
+                    commOnMapBorders = !Boolean.parseBoolean(e.getNewValue());
+                    if(!(commOnMap == null)) commOnMap.setBorders(commOnMapBorders);
+                    return;
+                }
             }
         });
         return true;

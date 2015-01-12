@@ -32,13 +32,15 @@ public class CommOnMap {
     private AUV_Manager auvManager = null;
     private MARS_Settings marsSettings = null;
     private boolean active;
+    private boolean borders;
     
     /**
      * @since 0.1
      * @param active if this class starts active or not
      */
-    public CommOnMap(boolean active) {
+    public CommOnMap(boolean active, boolean borders) {
         this.active = active;
+        this.borders = borders;
     }
     
     /**
@@ -54,6 +56,7 @@ public class CommOnMap {
         this.auvManager = auvManager;
         this.marsSettings = marsSettings;
         return true;
+        
     }
     
     /**
@@ -82,14 +85,23 @@ public class CommOnMap {
                 while (it.hasNext()) {
                     UnderwaterModem uw = (UnderwaterModem) it.next();
                     Geometry uwgeom = (Geometry) node.getChild(auv.getName() + "-" + uw.getName() + "-geom");
+                    Geometry uwgeom_border = (Geometry) node.getChild(auv.getName() + "-" + uw.getName() + "-geom-border");
                     if (active) {
+                        if(!borders) {
                         uwgeom.setCullHint(Spatial.CullHint.Never);
+                        uwgeom_border.setCullHint(Spatial.CullHint.Always);
                         Cylinder cyl = (Cylinder) uwgeom.getMesh();
-                        //cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
-                        cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false, true);
-                        uwgeom.getMaterial().setColor("Color", ColorRGBA.Black);
+                        cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true, false);
+                        } else {
+                            uwgeom.setCullHint(Spatial.CullHint.Always);
+                            uwgeom_border.setCullHint(Spatial.CullHint.Never);
+                            Cylinder cyl = (Cylinder) uwgeom_border.getMesh();
+                            cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false, true);
+                        }
+
                     } else {
                         uwgeom.setCullHint(Spatial.CullHint.Always);
+                        uwgeom_border.setCullHint(Spatial.CullHint.Always);
                     }
                 }
             }
@@ -103,6 +115,15 @@ public class CommOnMap {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+    
+    /**
+     * Set if borders or plain is drawn
+     * @since 0.1
+     * @param borders if borders should be drawn
+     */
+    public void setBorders(boolean borders) {
+        this.borders = borders;
     }
     
     /**
