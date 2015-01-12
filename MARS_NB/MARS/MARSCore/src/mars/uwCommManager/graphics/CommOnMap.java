@@ -53,10 +53,10 @@ public class CommOnMap {
      * @since 0.1
      * @param active if this class starts active or not
      */
-    public CommOnMap(boolean active, boolean borders,boolean showlinks) {
+    public CommOnMap(boolean active, boolean borders,boolean showLinks) {
         this.active = active;
         this.borders = borders;
-        this.showLinks = showlinks;
+        this.showLinks = showLinks;
         distances = new HashMap();
         inactivePaths = new LinkedList();
     }

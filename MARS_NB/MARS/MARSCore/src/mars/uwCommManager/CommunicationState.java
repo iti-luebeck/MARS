@@ -123,7 +123,7 @@ public class CommunicationState extends AbstractAppState {
         }
         
         
-        commOnMap = new CommOnMap(commOnMapActive,commOnMapActive,commOnMapShowCommLinks);
+        commOnMap = new CommOnMap(commOnMapActive,commOnMapBorders,commOnMapShowCommLinks);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
             CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings(),
             app.getAssetManager(),this.app)) {
@@ -176,7 +176,7 @@ public class CommunicationState extends AbstractAppState {
         threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
         commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         commOnMapBorders = pref.getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON,false);
-        commOnMapShowCommLinks = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
+        commOnMapShowCommLinks = pref.getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, false);
         
         
         
