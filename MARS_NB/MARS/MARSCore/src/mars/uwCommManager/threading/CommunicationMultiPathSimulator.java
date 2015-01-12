@@ -72,13 +72,6 @@ public class CommunicationMultiPathSimulator implements Runnable {
                 list.add(e);
                 chunks.put(e.getAUVName(),list);
             }
-            if(e.getAUVName().equals("001000")) {
-                System.out.println("Das war " + e.getMessageAsString());
-                System.out.println("Chunks enthält: " + chunks.get("001000").toString());
-                for(CommunicationComputedDataChunk i : chunks.get("001000")) {
-                    System.out.println("Chunks are: " + i.getMessageAsString() +" "+ i);
-                }
-            }
             queue.remove(e);
         }
     }

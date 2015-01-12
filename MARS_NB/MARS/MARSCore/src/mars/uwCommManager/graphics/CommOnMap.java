@@ -98,7 +98,6 @@ public class CommOnMap {
                             Cylinder cyl = (Cylinder) uwgeom_border.getMesh();
                             cyl.updateGeometry(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false, true);
                         }
-
                     } else {
                         uwgeom.setCullHint(Spatial.CullHint.Always);
                         uwgeom_border.setCullHint(Spatial.CullHint.Always);

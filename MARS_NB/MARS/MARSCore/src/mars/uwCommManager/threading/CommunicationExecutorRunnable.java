@@ -98,7 +98,11 @@ public class CommunicationExecutorRunnable implements Runnable{
             //devide all new messages into chunks that do not exceed the max bandwidth
             computeAllNewMessages();
             //send one chunk
-            if(!waitingChunks.isEmpty()) sentChunks.add(waitingChunks.poll());
+            if(!waitingChunks.isEmpty()) {
+                CommunicationDataChunk chunk = waitingChunks.poll();
+                chunk.addDistanceTriggers(distanceTriggers);
+                sentChunks.add(chunk);
+            }
             //compute all chunks that are send
             computeSentChunks();
             
@@ -165,7 +169,6 @@ public class CommunicationExecutorRunnable implements Runnable{
                                 Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), msgByte.length),
                                 new PriorityQueue<DistanceTrigger>(), 100);
                     }
-                    chunk.addDistanceTriggers(distanceTriggers);
                     //to emphasize that we will use the list as queue I use the queue methods instead of LinkedList.add
                     waitingChunks.offer(chunk);
                     
