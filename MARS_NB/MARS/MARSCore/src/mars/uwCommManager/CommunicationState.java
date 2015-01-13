@@ -32,7 +32,12 @@ import mars.states.MapState;
 import mars.states.SimState;
 import mars.uwCommManager.graphics.CommOnMap;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import mars.uwCommManager.noiseGenerators.ANoiseGenerator;
+import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
+import mars.uwCommManager.noiseGenerators.NoiseNameConstants;
+import mars.uwCommManager.noiseGenerators.RandomByteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
+import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
 
 /**
@@ -74,7 +79,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * How many ticks per secound should the runnables have
      */
-    public static final int RESOLUTION = 30;
+    public static final int RESOLUTION = 1;
     
     /**
      * The visualization class for the minimap
@@ -92,6 +97,11 @@ public class CommunicationState extends AbstractAppState {
     private boolean commOnMapBorders = true;
     
     private boolean commOnMapShowCommLinks = false;
+    
+    
+    private boolean noiseRandomByteActive = false;
+    private boolean noiseAdditiveGaussianWhiteNoiseActive = false;
+    
 
 //------------------------------- INIT -----------------------------------------
     /**
@@ -119,7 +129,7 @@ public class CommunicationState extends AbstractAppState {
         //prepare and start the runnables for multithreading
         auvProcessMap = new HashMap();
         if (!initRunnables(CentralLookup.getDefault().lookup(SimState.class).getAuvManager())) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization " + CentralLookup.getDefault().lookup(AUV_Manager.class));
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Something went wrong while initializing the communications minimap visualization {0}", CentralLookup.getDefault().lookup(AUV_Manager.class));
         }
         
         
@@ -127,7 +137,7 @@ public class CommunicationState extends AbstractAppState {
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
             CentralLookup.getDefault().lookup(SimState.class).getAuvManager(), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings(),
             app.getAssetManager(),this.app)) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Something went wrong while initializing the communications minimap visualization" + app.getStateManager().getState(MapState.class) + " "  +CentralLookup.getDefault().lookup(AUV_Manager.class)+ " "+CentralLookup.getDefault().lookup(SimState.class).getMARSSettings());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Something went wrong while initializing the communications minimap visualization{0} {1} {2}", new Object[]{app.getStateManager().getState(MapState.class), CentralLookup.getDefault().lookup(AUV_Manager.class), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings()});
         }
         
         //Init done, add to centrallookup
@@ -160,6 +170,8 @@ public class CommunicationState extends AbstractAppState {
         distanceTraceModule = new CommunicationDistanceComputationRunnable();
         distanceTraceModule.init(auvManager);
         executor.scheduleAtFixedRate(distanceTraceModule, 500000, 1000000, TimeUnit.MICROSECONDS);
+        
+
         return true;
     }
     
@@ -177,8 +189,6 @@ public class CommunicationState extends AbstractAppState {
         commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         commOnMapBorders = pref.getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON,false);
         commOnMapShowCommLinks = pref.getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, false);
-        
-        
         
         pref.addPreferenceChangeListener(new PreferenceChangeListener() {
             @Override
@@ -220,6 +230,38 @@ public class CommunicationState extends AbstractAppState {
                 }
             }
         });
+        
+        Preferences pref2 = Preferences.userNodeForPackage(mars.uwCommManager.options.NoiseOptionsOptionsPanelController.class);
+        if (pref2 == null) return false;
+        noiseAdditiveGaussianWhiteNoiseActive = pref2.getBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false);
+        noiseRandomByteActive = pref2.getBoolean(OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX, false);
+        pref2.addPreferenceChangeListener(new PreferenceChangeListener() {
+            @Override
+            public void preferenceChange(PreferenceChangeEvent e) {
+                
+                if(e.getKey().equals(OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX)) {
+                    if(decide(noiseRandomByteActive,Boolean.parseBoolean(e.getNewValue()),RANDOM_BYTE_NOISE)) noiseRandomByteActive = Boolean.parseBoolean(e.getNewValue());
+
+                    return;
+                }
+                else if(e.getKey().equals(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
+                  if(decide(noiseAdditiveGaussianWhiteNoiseActive,Boolean.parseBoolean(e.getNewValue()),GAUSSIAN_WHITE_NOISE)) noiseAdditiveGaussianWhiteNoiseActive = Boolean.parseBoolean(e.getNewValue());
+                }
+            }
+            
+            private boolean decide(boolean oldvalue, boolean newvalue, String noise) {
+            if(oldvalue && !newvalue) {
+                removeNoise(noise);
+                return true;
+            } else if (!oldvalue && newvalue) {
+                addNoise(noise);
+                return true;
+            } else return false;
+            }
+            
+        });
+        
+        
         return true;
     }
 
@@ -299,10 +341,28 @@ public class CommunicationState extends AbstractAppState {
                 }
             }
         }
-
     }
     
     
+    private void addNoise(String name) {
+        for(CommunicationExecutorRunnable i : auvProcessMap.values()) {
+            if(name.equals(RANDOM_BYTE_NOISE)) {
+                i.addANoiseGenerator(new RandomByteNoise(1));
+            } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
+                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 0.1f));
+            
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING,"Tryed to create not existing noise: " + name);
+                break;
+            }
+        }
+    }
+    
+    private void removeNoise(String name) {
+        for(CommunicationExecutorRunnable i : auvProcessMap.values()) {
+            i.removeANoiseGeneratorByName(name);
+        }
+    }
     /**
      * Add a message to the queue
      * @since 0.1

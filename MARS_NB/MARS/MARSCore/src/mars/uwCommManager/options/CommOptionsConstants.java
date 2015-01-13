@@ -18,4 +18,7 @@ public interface CommOptionsConstants {
     public static final String OPTIONS_MINIMAP_OPAQUE_CIRCLE = "optionsMinimapOpaqueCircle";
     public static final String OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX = "weltraumwetter!";
     
+    public static final String OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX = "randombytenoise";
+    public static final String OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE = "randomGaussianWhiteNoise";
+    
 }

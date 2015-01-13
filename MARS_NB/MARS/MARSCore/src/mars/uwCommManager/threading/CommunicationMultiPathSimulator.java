@@ -91,7 +91,7 @@ public class CommunicationMultiPathSimulator implements Runnable {
             List<CommunicationComputedDataChunk> msgs = e.getValue();
             if(!msgs.isEmpty()) {
                 byte[] byteArray = msgs.get(0).getMessage();
-                System.out.println("Computing: " + msgs.get(0).getMessageAsString()+" Chunkname: "+ msgs.get(0)+ " with "+ msgs.get(0).getAUVName() );               
+                //System.out.println("Computing: " + msgs.get(0).getMessageAsString()+" Chunkname: "+ msgs.get(0)+ " with "+ msgs.get(0).getAUVName() );               
                 msgs.remove(0);
                 for(CommunicationComputedDataChunk chunk : msgs) {
                     byte[] nextArray = chunk.getMessage();

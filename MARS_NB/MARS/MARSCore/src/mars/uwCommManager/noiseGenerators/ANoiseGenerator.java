@@ -5,7 +5,7 @@
  */
 package mars.uwCommManager.noiseGenerators;
 
-import mars.sensors.CommunicationMessage;
+
 
 /**
  * @version 0.1
@@ -13,11 +13,13 @@ import mars.sensors.CommunicationMessage;
  */
 public abstract class ANoiseGenerator {
     
+    private final String NOISE_NAME;
+    
     /**
      * Later we will init all the stuff every noise Generator needs (like AUV List and other stuff)
      */
-    public ANoiseGenerator() {
-        
+    public ANoiseGenerator(String noiseName) {
+        this.NOISE_NAME = noiseName;
     }
     
     /**
@@ -28,4 +30,9 @@ public abstract class ANoiseGenerator {
      * @return 
      */
     public abstract byte[] noisify(byte[] msg);
+    
+    
+    public String getName() {
+        return NOISE_NAME;
+    }
 }

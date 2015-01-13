@@ -17,12 +17,13 @@ import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.sensors.CommunicationMessage;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import mars.uwCommManager.noiseGenerators.ANoiseGenerator;
 import org.openide.util.Exceptions;
 
 /**
  * The new runnable is to be used with the Executer class from java.util.concurrent
  * There should be one instance of this for each AUV with a modem
- * @version 0.1
+ * @version 0.2
  * @author Jasper Schwinghammer
  */
 public class CommunicationExecutorRunnable implements Runnable{
@@ -65,6 +66,9 @@ public class CommunicationExecutorRunnable implements Runnable{
      */
     private volatile List<DistanceTrigger> distanceTriggers = null;
     
+    
+    private volatile List<ANoiseGenerator> noiseGenerators = null;
+    
     /**
      * Construct a new CommuncationExecutorRunnable for a AUV
      * @since 0.1
@@ -81,6 +85,7 @@ public class CommunicationExecutorRunnable implements Runnable{
         waitingChunks = new LinkedList();
         sentChunks = new LinkedList();
         distanceTriggers = new LinkedList();
+        noiseGenerators = new LinkedList();
     }
     
     
@@ -99,9 +104,11 @@ public class CommunicationExecutorRunnable implements Runnable{
             computeAllNewMessages();
             //send one chunk
             if(!waitingChunks.isEmpty()) {
-                CommunicationDataChunk chunk = waitingChunks.poll();
-                chunk.addDistanceTriggers(distanceTriggers);
-                sentChunks.add(chunk);
+                CommunicationDataChunk chunk = waitingChunks.poll(); 
+                if(!distanceTriggers.isEmpty()) {
+                    chunk.addDistanceTriggers(distanceTriggers);
+                    sentChunks.add(chunk);
+                }
             }
             //compute all chunks that are send
             computeSentChunks();
@@ -129,6 +136,15 @@ public class CommunicationExecutorRunnable implements Runnable{
         
             for(CommunicationDataChunk chunk : sentChunks) {
                 chunk.addDistance(distanceSinceLastTick);
+                synchronized(this) {
+                    for (ANoiseGenerator noise : noiseGenerators) {
+                        //System.out.println("before noise " + chunk.getMessageAsString() + " " +chunk.toString() + " " + chunk.getDistanceTravled());
+                        chunk.updateMessageFromByte(noise.noisify(chunk.getMessageAsByte()));
+                        //System.out.println("After noise" + chunk.getMessageAsString());
+                    }
+                }
+                //System.out.println("After loop: " + chunk.getMessageAsString() + " " + chunk.toString() + " " + chunk.getDistanceTravled());
+
                 while(chunk.hasNextTrigger()) {
                     CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger();
                     synchronized(this) {
@@ -209,6 +225,38 @@ public class CommunicationExecutorRunnable implements Runnable{
     public void setDistanceTriggers(List<DistanceTrigger> triggers) {
         this.distanceTriggers = triggers;
     }
-
+    
+    /**
+     * @since 0.2
+     * @param noiseGen 
+     */
+    public synchronized void addANoiseGenerator(ANoiseGenerator noiseGen) {
+        noiseGenerators.add(noiseGen);
+    }
+    
+    /**
+     * @since 0.2
+     * @param noiseGen
+     */
+    public synchronized void removeANoiseGenerator(ANoiseGenerator noiseGen) {
+        noiseGenerators.remove(noiseGen);
+    }
+    
+    /**
+     * Search for a NoiseGenerator by its name and remove it from the processing
+     * @since 0.2
+     * @param name the name of the noiseGen that should be removed
+    */
+    public synchronized void removeANoiseGeneratorByName(String name) {
+        ANoiseGenerator toBeRemoved = null;
+        
+        for(ANoiseGenerator i : noiseGenerators) {
+            if (i.getName().equals(name)) {
+                toBeRemoved = i;
+                break;
+            }
+        }
+        if(toBeRemoved != null) noiseGenerators.remove(toBeRemoved);
+    }
     
 }
