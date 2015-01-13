@@ -31,7 +31,6 @@ public class RandomByteNoise extends ANoiseGenerator {
         random.nextBytes(noise);
         for(int i = 0; i<msg.length; i++) {
             noise[i] =(byte) (noise[i] ^ msg[i]);
-            //System.out.println("New byte: "+ noise[i]+" old byte: " + msg[i]);
         }
         return noise.clone();
     }

@@ -142,8 +142,6 @@ public class CommunicationDataChunk {
     }
     
     public void updateMessageFromByte(byte[] msg) {
-        for(int i = 0; i < msg.length; i++) {
-            messageDataChunk[i] = msg[i];
-        }
+        messageDataChunk = msg;
     }
 }

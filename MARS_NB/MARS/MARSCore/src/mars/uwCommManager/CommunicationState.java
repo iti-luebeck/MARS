@@ -79,7 +79,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * How many ticks per secound should the runnables have
      */
-    public static final int RESOLUTION = 1;
+    public static final int RESOLUTION = 30;
     
     /**
      * The visualization class for the minimap

@@ -138,12 +138,9 @@ public class CommunicationExecutorRunnable implements Runnable{
                 chunk.addDistance(distanceSinceLastTick);
                 synchronized(this) {
                     for (ANoiseGenerator noise : noiseGenerators) {
-                        //System.out.println("before noise " + chunk.getMessageAsString() + " " +chunk.toString() + " " + chunk.getDistanceTravled());
                         chunk.updateMessageFromByte(noise.noisify(chunk.getMessageAsByte()));
-                        //System.out.println("After noise" + chunk.getMessageAsString());
                     }
                 }
-                //System.out.println("After loop: " + chunk.getMessageAsString() + " " + chunk.toString() + " " + chunk.getDistanceTravled());
 
                 while(chunk.hasNextTrigger()) {
                     CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger();
@@ -171,9 +168,7 @@ public class CommunicationExecutorRunnable implements Runnable{
             CommunicationMessage msg = newMessages.poll();
             try {
                 byte[] msgByte = msg.getMsg().getBytes("UTF-8");
-                //System.out.println("msgByte: "+ msgByte.length);
                 int chunkCount = (int) Math.ceil(((double)msgByte.length) / (BANDWIDTH_PER_TICK*1000));
-                //System.out.println("Chunk Count: " + chunkCount);
                 for(int i = 0; i<chunkCount; i++) {
                     CommunicationDataChunk chunk = null;
                     if(i != chunkCount - 1) {
