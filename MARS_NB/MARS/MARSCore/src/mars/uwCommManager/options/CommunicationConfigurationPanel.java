@@ -161,14 +161,14 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // someCheckBox.setSelected(NbPreferences.forModule(CommunicationConfigurationPanel.class).getBoolean("someFlag", false));
         // or:
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
-        jCheckBox1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, true));
+        jCheckBox1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, false));
         jSlider1.setValue(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getInt(OPTIONS_THREADCOUNT_SLIDER, 3));
-        jCheckBox2.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, true));
+        jCheckBox2.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false));
         jRadioButton1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON, true));
         jRadioButton2.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_OPAQUE_CIRCLE, false));
         jRadioButton1.setEnabled(jCheckBox2.isSelected());
         jRadioButton2.setEnabled(jCheckBox2.isSelected());
-        jCheckBox3.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, true));
+        jCheckBox3.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, false));
     }
 
     void store() {
