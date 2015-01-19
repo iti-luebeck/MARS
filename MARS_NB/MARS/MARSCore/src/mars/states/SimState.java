@@ -95,8 +95,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private KeyConfig keyconfig;
     private PhysicalEnvironment physical_environment;
     private Initializer initer;
-    private ArrayList auvs = new ArrayList();
-    private ArrayList simobs = new ArrayList();
+    private ArrayList<AUV> auvs = new ArrayList<AUV>();
+    private ArrayList<SimObject> simobs = new ArrayList<SimObject>();
     private XML_JAXB_ConfigReaderWriter xml;
     private ConfigManager configManager;
 
@@ -110,6 +110,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     //warter currents
     private Node currents = new Node("currents");
 
+    @SuppressWarnings("unchecked")
     private Future simStateFuture = null;
 
     //map stuff
@@ -345,6 +346,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             guiState.setSimObNode(SimObNode);
             guiState.setMars_settings(mars_settings);
             final AppStateManager stateManagerFin = stateManager;
+            
+            @SuppressWarnings("unchecked")
             Future fut2 = mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     getMARS().getViewPort().attachScene(guiState.getRootNode());
@@ -489,6 +492,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         recordManager.loadRecordings(file);
     }
 
+    @SuppressWarnings("unchecked")
     private void initMap() {
         Future fut = mars.enqueue(new Callable() {
             public Void call() throws Exception {
@@ -559,9 +563,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             auvs = xml.loadAUVs();
 
             //do stuff after jaxb, see also UnmarshallListener
-            Iterator iter = auvs.iterator();
+            Iterator<AUV> iter = auvs.iterator();
             while (iter.hasNext()) {
-                BasicAUV bas_auv = (BasicAUV) iter.next();
+                AUV bas_auv = (AUV) iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
@@ -577,7 +581,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     /*
      * Setup the AUVManager and put AUVs into it.
      */
-    private void populateAUV_Manager(ArrayList auvs, PhysicalEnvironment pe, MARS_Settings mars_settings, CommunicationManager com_manager, RecordManager recordManager, Initializer initer) {
+    private void populateAUV_Manager(ArrayList<AUV> auvs, PhysicalEnvironment pe, MARS_Settings mars_settings, CommunicationManager com_manager, RecordManager recordManager, Initializer initer) {
         auvManager.setBulletAppState(bulletAppState);
         auvManager.setPhysical_environment(pe);
         auvManager.setMARS_settings(mars_settings);

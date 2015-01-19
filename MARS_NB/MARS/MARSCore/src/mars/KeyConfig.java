@@ -21,11 +21,9 @@ import mars.gui.tree.UpdateState;
  * you want to perform with a class that extends the KEYS interface.
  *
  * @author Thomas Tosik
- * @deprecated
  */
 @XmlRootElement(name = "KeyConfig")
 @XmlAccessorType(XmlAccessType.NONE)
-@Deprecated
 public class KeyConfig implements UpdateState {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)

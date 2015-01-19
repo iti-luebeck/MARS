@@ -5,11 +5,14 @@
 package mars.actuators;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import geometry_msgs.Point;
 import geometry_msgs.Quaternion;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,6 +31,10 @@ import org.ros.node.topic.Subscriber;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class Animator extends Actuator {
+
+    private final Queue<AnimationPoint> waypoints = new LinkedList<AnimationPoint>();
+    private boolean simple = false;
+
 
     /**
      *
@@ -91,26 +98,62 @@ public class Animator extends Actuator {
      */
     @Override
     public void update(float tpf) {
+        if (waypoints.peek() != null){
+            final AnimationPoint poll = waypoints.poll();
+            Vector3f moveTo = poll.getTransform().getTranslation();
+            com.jme3.math.Quaternion rotatoTo = poll.getTransform().getRotation();  
+            float timeTo = poll.getTime();
+            
+            Future simStateFuture = this.simauv.enqueue(new Callable() {
+            public Void call() throws Exception {
+                getPhysicsControl().setPhysicsLocation(poll.getTransform().getTranslation());
+                getPhysicsControl().setPhysicsRotation(poll.getTransform().getRotation());
+                return null;
+            }
+            });
+        }
     }
 
     @Override
     public void reset() {
 
     }
+    
+    /**
+     * Convience method.
+     * 
+     * @param transform
+     * @param time
+     */
+    public void addNewTransform(Transform transform,float time){
+        waypoints.add(new AnimationPoint(transform, time));
+    }
+    
+    /**
+     * Add a new point (time and pose) for the animation.
+     * 
+     * @param animationPoint
+     */
+    public void addNewAnimationPint(AnimationPoint animationPoint){
+        waypoints.add(animationPoint);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getSimple() {
+        return (Boolean) variables.get("simple");
+    }
 
     /**
      *
-     * @param vector
-     * @param quat
+     * @param simple
      */
-    public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat) {
-        Future simStateFuture = this.simauv.enqueue(new Callable() {
-            public Void call() throws Exception {
-                getPhysicsControl().setPhysicsLocation(vector);
-                getPhysicsControl().setPhysicsRotation(quat);
-                return null;
-            }
-        });
+    public void setSimple(Boolean simple) {
+        //boolean old = getEnabled();
+        variables.put("enabled", simple);
+        //fire("enabled", old, simple);
     }
 
     /**
@@ -137,7 +180,7 @@ public class Animator extends Actuator {
                 qrot.fromAngles(0f, FastMath.HALF_PI, 0);
                 quat.multLocal(qrot);
 
-                self.teleport(v_pos, quat);
+                //self.teleport(v_pos, quat);
             }
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }

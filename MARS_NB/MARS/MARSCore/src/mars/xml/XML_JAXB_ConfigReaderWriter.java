@@ -80,7 +80,7 @@ public class XML_JAXB_ConfigReaderWriter {
      *
      * @return
      */
-    public ArrayList loadSimObjects() {
+    public ArrayList<SimObject> loadSimObjects() {
         ArrayList arrlist = new ArrayList();
         FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File dir, String s) {
@@ -258,8 +258,8 @@ public class XML_JAXB_ConfigReaderWriter {
      *
      * @return
      */
-    public ArrayList loadAUVs() {
-        ArrayList arrlist = new ArrayList();
+    public ArrayList<AUV> loadAUVs() {
+        ArrayList<AUV> arrlist = new ArrayList<AUV>();
         FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File dir, String s) {
                 return s.toLowerCase().endsWith(".xml");
@@ -268,10 +268,13 @@ public class XML_JAXB_ConfigReaderWriter {
         File dir = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/auvs", "mars.core", false);
         if (dir.isDirectory()) {
             File[] files = dir.listFiles(filter);
-            for (int i = 0; i < files.length; i++) {
+            for (File file : files) {
                 //Get filename of file or directory
                 //System.out.println(files[i].getName());
-                arrlist.add(loadAUV(files[i]));
+                BasicAUV loadAUV = loadAUV(file);
+                //if(loadAUV != null){
+                    arrlist.add(loadAUV);
+                //}
             }
             return arrlist;
         } else {

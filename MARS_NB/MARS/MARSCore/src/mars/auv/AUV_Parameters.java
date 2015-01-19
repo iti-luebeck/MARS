@@ -44,7 +44,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     private HashMap<String, Object> optimize;
     private AUV auv;
 
-    private List listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList());
 
     /**
      *
@@ -84,9 +84,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
-        for (int i = 0; i < pcls.length; i++) {
-            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
         updateVariable(propertyName);
     }
@@ -94,6 +94,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      * You have to initialize first when you read the data in trough jaxb.
      */
+    @SuppressWarnings("unchecked")
     public void initAfterJAXB() {
         waypoints = (HashMap<String, Object>) params.get("Waypoints");
         model = (HashMap<String, Object>) params.get("Model");
@@ -1464,10 +1465,10 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      */
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
-            return (Object) params.get(value);
+            return params.get(value);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) params.get(hashmapname);
-            return (Object) hashmap.get(value);
+            return hashmap.get(value);
         }
     }
 

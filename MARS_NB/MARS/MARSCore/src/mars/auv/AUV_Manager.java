@@ -512,7 +512,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      *
      * @param arrlist
      */
-    public void registerAUVs(ArrayList arrlist) {
+    public void registerAUVs(ArrayList<AUV> arrlist) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUVs...", "");
         Iterator iter = arrlist.iterator();
         while (iter.hasNext()) {

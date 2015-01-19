@@ -51,7 +51,7 @@ import mars.xml.HashMapAdapter;
 public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS, PropertyChangeListenerSupport {
 
     @SuppressWarnings("FieldMayBeFinal")
-    private List listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList());
 
     /**
      *
@@ -73,7 +73,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (PropertyChangeListener pcl : pcls) {
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }

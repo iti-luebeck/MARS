@@ -216,7 +216,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      * @param classNameString
      * @return All sensors by a specific class.
      */
-    public ArrayList getSensorsOfClass(String classNameString);
+    public ArrayList<Sensor> getSensorsOfClass(String classNameString);
 
     /**
      *
@@ -492,7 +492,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      *
      * @param arrlist
      */
-    public void registerPhysicalExchangers(ArrayList arrlist);
+    public void registerPhysicalExchangers(ArrayList<PhysicalExchanger> arrlist);
 
     /**
      *
