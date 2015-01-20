@@ -32,7 +32,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import mars.auv.AUV;
 import mars.core.CentralLookup;
-import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.core.MARSTreeTopComponent;
@@ -57,7 +56,6 @@ public class MARS_Main extends SimpleApplication {
     private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
-    private MARSLogTopComponent MARSLogComp;
     private boolean startstateinit = false;
     private boolean statsDarken = true;
 
@@ -158,7 +156,7 @@ public class MARS_Main extends SimpleApplication {
         if (configManager.isAutoEnabled()) {
             //SimState simstate = new SimState(view,configManager);
             progr.progress("Creating SimState");
-            SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, MARSLogComp, configManager);
+            SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, configManager);
             simstate.setMapState(mapstate);
             stateManager.attach(simstate);
             CentralLookup.getDefault().add(simstate);
@@ -347,7 +345,7 @@ public class MARS_Main extends SimpleApplication {
     public void startSimState() {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, MARSLogComp, configManager);
+                SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, configManager);
                 simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
                 return null;
@@ -387,22 +385,6 @@ public class MARS_Main extends SimpleApplication {
      */
     public MARSMapTopComponent getMARSMapComp() {
         return MARSMapComp;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public MARSLogTopComponent getMARSLogComp() {
-        return MARSLogComp;
-    }
-
-    /**
-     *
-     * @param MARSLogComp
-     */
-    public void setMARSLogComp(MARSLogTopComponent MARSLogComp) {
-        this.MARSLogComp = MARSLogComp;
     }
 
     /**

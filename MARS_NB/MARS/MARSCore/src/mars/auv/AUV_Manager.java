@@ -16,13 +16,10 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
-import javax.swing.tree.TreePath;
 import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.gui.tree.UpdateState;
-import mars.recorder.RecordManager;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
@@ -56,7 +53,6 @@ public class AUV_Manager implements Lookup.Provider {
     private Node rootNode;
     private SimState simstate;
     private CommunicationManager com_manager;
-    private RecordManager recManager;
     private HashMap<String, MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
 
@@ -238,14 +234,6 @@ public class AUV_Manager implements Lookup.Provider {
 
     /**
      *
-     * @param recManager
-     */
-    public void setRecManager(RecordManager recManager) {
-        this.recManager = recManager;
-    }
-
-    /**
-     *
      * @return
      */
     public MARS_Settings getMARS_settings() {
@@ -318,7 +306,6 @@ public class AUV_Manager implements Lookup.Provider {
         updateCommunicationOfAUVs(tpf);
         updateWaypointsOfAUVs(tpf);
         updateAccumulatorsOfAUVs(tpf);
-        updateRecord(tpf);
     }
 
     /**
@@ -427,19 +414,6 @@ public class AUV_Manager implements Lookup.Provider {
             AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateAccumulators(tpf);
-            }
-        }
-    }
-
-    private void updateRecord(float tpf) {
-        if (recManager != null) {
-            if (recManager.isEnabled()) {
-                for (String elem : auvs.keySet()) {
-                    AUV auv = auvs.get(elem);
-                    if (auv.getAuv_param().isEnabled()) {
-                        recManager.update(auv);
-                    }
-                }
             }
         }
     }

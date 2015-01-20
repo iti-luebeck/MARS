@@ -27,7 +27,6 @@ import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.recorder.Recording;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -745,57 +744,6 @@ public class XML_JAXB_ConfigReaderWriter {
                 newBufferedWriter.flush();
             } catch (IOException ex) {
                 return "Can't write File: " + file.getAbsolutePath() + " . No Write Access";
-            }
-        } catch (JAXBException ex) {
-            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    /**
-     *
-     * @param rec
-     * @param file
-     * @return
-     */
-    public String saveRecording(Recording rec, File file) {
-        try {
-            JAXBContext context = JAXBContext.newInstance(Recording.class);
-            Marshaller m = context.createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            File recfile = new File("./config/" + getConfigName() + "/recording/" + "recorder" + ".xml");
-            recfile.setWritable(true);
-            Path toPath = recfile.toPath();
-            try {
-                BufferedWriter newBufferedWriter = Files.newBufferedWriter(toPath, StandardCharsets.UTF_8);
-                m.marshal(rec, newBufferedWriter);
-                newBufferedWriter.flush();
-            } catch (IOException ex) {
-                return "Can't write File: " + recfile.getAbsolutePath() + " . No Write Access";
-            }
-        } catch (JAXBException ex) {
-            Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    /**
-     *
-     * @param file
-     * @return
-     */
-    public Recording loadRecording(File file) {
-        try {
-            File file2 = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/recording/" + "recorder" + ".xml", "mars.core", false);
-            if (file2.exists()) {
-                JAXBContext context = JAXBContext.newInstance(Recording.class);
-                Unmarshaller u = context.createUnmarshaller();
-                UnmarshallListener ll = new UnmarshallListener();
-                u.setListener(ll);
-                Recording recorder = (Recording) u.unmarshal(file2);
-                return recorder;
-            } else {
-                return null;
             }
         } catch (JAXBException ex) {
             Logger.getLogger(XML_JAXB_ConfigReaderWriter.class.getName()).log(Level.SEVERE, null, ex);

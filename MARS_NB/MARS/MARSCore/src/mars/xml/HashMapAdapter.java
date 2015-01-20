@@ -11,7 +11,6 @@ import java.util.List;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
-import mars.recorder.Record;
 import mars.sensors.Sensor;
 
 /**
@@ -44,8 +43,6 @@ public class HashMapAdapter extends XmlAdapter<MyHashMapType, HashMap<String, Ob
                     map.put(e.getKey(), (Sensor) e.getObject());
                 } else if (e.getObject() instanceof Accumulator) {
                     map.put(e.getKey(), (Accumulator) e.getObject());
-                } else if (e.getObject() instanceof Record) {
-                    map.put(e.getKey(), (Record) e.getObject());
                 } else if (e.getObject() instanceof List) {
                     map.put(e.getKey(), (List) e.getObject());
                 } else {
