@@ -2635,28 +2635,6 @@ public class BasicAUV implements AUV, SceneProcessor {
         return WayPoints;
     }
 
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        getAuv_param().updateState(path);
-        Object obj = path.getPathComponent(3);
-        if (obj != null) {
-            if (obj instanceof HashMapWrapper) {
-                HashMapWrapper hasher = (HashMapWrapper) obj;
-                if (hasher.getUserData() instanceof PhysicalExchanger) {
-                    PhysicalExchanger pe = (PhysicalExchanger) hasher.getUserData();
-                    pe.updateState(path);
-                } else if (hasher.getUserData() instanceof Accumulator) {
-                    Accumulator acc = (Accumulator) hasher.getUserData();
-                    acc.updateState(path);
-                }
-            }
-        }
-    }
-
     private void setNodePickUserData(Spatial spatial) {
         if (spatial instanceof Node) {
             Node node = (Node) spatial;

@@ -369,7 +369,7 @@ public class Initializer {
     /**
      * Setup the generic publisher. Used to publish all sensor data.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void setupAdvServer() {
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
         Lookup bag = Lookup.getDefault();

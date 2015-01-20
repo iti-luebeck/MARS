@@ -119,7 +119,6 @@ public final class MARSTopComponent extends TopComponent {
     
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("Simple task");
     private final InstanceContent content = new InstanceContent();
-    private Lookup.Result res;
 
     /**
      *
@@ -1338,7 +1337,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    SimState simState = mars.getStateManager().getState(SimState.class);
                     //do nothing
                 }
                 return null;
@@ -1358,7 +1357,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.moveCamera(new Vector3f(Float.valueOf(moveCameraDialog_x.getText()), Float.valueOf(moveCameraDialog_y.getText()), Float.valueOf(moveCameraDialog_z.getText())),moveCameraDialog_r.isSelected());
                 }
                 return null;
@@ -1375,7 +1374,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
+                    SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.rotateCamera(new Vector3f(Float.valueOf(rotateCameraDialog_x.getText()), Float.valueOf(rotateCameraDialog_y.getText()), Float.valueOf(rotateCameraDialog_z.getText())),rotateCameraDialog_r.isSelected());
                 }
                 return null;
@@ -1392,7 +1391,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.chaseSelectedAUV();
                 }
                 return null;
@@ -1416,7 +1415,7 @@ public final class MARSTopComponent extends TopComponent {
        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.pokeSelectedAUV();
                 }
                 return null;
@@ -1428,7 +1427,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.resetSelectedAUV();
                 }
                 return null;
@@ -1440,7 +1439,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_enable_auv.isSelected();
                     guiState.enableSelectedAUV(selected);
                 }
@@ -1460,7 +1459,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jme3_delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_delete_auvActionPerformed
 
-        final AUV auv = (AUV)auvManager.getSelectedAUV();
+        final AUV auv = auvManager.getSelectedAUV();
 
         //Custom button text
         Object[] options = {"Yes",
@@ -1477,7 +1476,6 @@ public final class MARSTopComponent extends TopComponent {
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                         if(mars.getStateManager().getState(SimState.class) != null){
-                            SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
                             auvManager.deregisterAUVNoFuture(auv);
                         }
                     Runnable runt = new Runnable() {
@@ -1498,7 +1496,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_pe.isSelected();
                     guiState.debugSelectedAUV(0,selected);
                 }
@@ -1512,7 +1510,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_visualizers.isSelected();
                     guiState.debugSelectedAUV(7,selected);
                 }
@@ -1526,7 +1524,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_centers.isSelected();
                     guiState.debugSelectedAUV(1,selected);
                 }
@@ -1540,7 +1538,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_buoy.isSelected();
                     guiState.debugSelectedAUV(2,selected);
                 }
@@ -1554,7 +1552,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_collision.isSelected();
                     guiState.debugSelectedAUV(3,selected);
                 }
@@ -1568,7 +1566,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_drag.isSelected();
                     guiState.debugSelectedAUV(4,selected);
                 }
@@ -1582,7 +1580,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_wireframe.isSelected();
                     guiState.debugSelectedAUV(5,selected);
                 }
@@ -1596,7 +1594,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_bounding.isSelected();
                     guiState.debugSelectedAUV(6,selected);
                 }
@@ -1610,7 +1608,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_enable.isSelected();
                     guiState.waypointsSelectedAUV(0,selected);
                 }
@@ -1624,7 +1622,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_visible.isSelected();
                     guiState.waypointsSelectedAUV(1,selected);
                 }
@@ -1638,7 +1636,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_gradient.isSelected();
                     guiState.waypointsSelectedAUV(3,selected);
                 }
@@ -1652,7 +1650,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.waypointsSelectedAUV(2,true);
                 }
                 return null;
@@ -1669,7 +1667,7 @@ public final class MARSTopComponent extends TopComponent {
             mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.waypointsColorSelectedAUV(newColor);
                 }
                 return null;
@@ -1687,7 +1685,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.moveSelectedAUV(new Vector3f(Float.valueOf(auv_move_vector_dialog_x.getText()), Float.valueOf(auv_move_vector_dialog_y.getText()), Float.valueOf(auv_move_vector_dialog_z.getText())),auv_move_vector_dialog_r.isSelected());
                 }
                 return null;
@@ -1708,7 +1706,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.rotateSelectedAUV(new Vector3f(Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_y.getText()), Float.valueOf(auv_rotate_vector_dialog_z.getText())),auv_rotate_vector_dialog_r.isSelected());
                 }
                 return null;
@@ -1724,7 +1722,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.moveSelectedGhostAUV(new Vector3f(Float.valueOf(auv_move_vector_dialog_x.getText()), Float.valueOf(auv_move_vector_dialog_y.getText()), Float.valueOf(auv_move_vector_dialog_z.getText())));
                 }
                 return null;
@@ -1736,7 +1734,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.moveSelectedGhostAUV(new Vector3f(Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_x.getText())));
                 }
                 return null;
@@ -1794,7 +1792,7 @@ public final class MARSTopComponent extends TopComponent {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_bounding_volume.isSelected();
                     guiState.debugSelectedAUV(8,selected);
                 }
@@ -2281,7 +2279,7 @@ public final class MARSTopComponent extends TopComponent {
         while (it.hasNext()) {
             final String elem = it.next();
             
-            Object element = (Object)allVariables.get(elem);
+            Object element = allVariables.get(elem);
                         if(element instanceof Boolean){
                             boolean bool = (Boolean)element;
                             final JCheckBoxMenuItem jcm = new JCheckBoxMenuItem(elem);
@@ -2291,7 +2289,6 @@ public final class MARSTopComponent extends TopComponent {
                             jcm.addActionListener(new java.awt.event.ActionListener() {
                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                                     final boolean selected = jcm.isSelected();
-                                    auv_param.updateState(elem,hashmapname);
                                     auv_param.setValue(elem, selected, hashmapname);
                                     toggleJMenuCheckbox(jcm);
                                 }
@@ -2316,7 +2313,6 @@ public final class MARSTopComponent extends TopComponent {
                                     vectorDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, new Vector3f(Float.valueOf(vectorDialog_x.getText()), Float.valueOf(vectorDialog_y.getText()), Float.valueOf(vectorDialog_z.getText())), hashmapname);
                                                     vector_dialog.setVisible(false);
                                                 }
@@ -2341,7 +2337,6 @@ public final class MARSTopComponent extends TopComponent {
                                     floatDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, Float.valueOf(floatDialog_x.getText()), hashmapname);
                                                     float_dialog.setVisible(false);
                                                 }
@@ -2366,7 +2361,6 @@ public final class MARSTopComponent extends TopComponent {
                                     intDialog_Confirm.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, Integer.valueOf(intDialog_x.getText()), hashmapname);
                                                     int_dialog.setVisible(false);
                                                 }
@@ -2391,7 +2385,6 @@ public final class MARSTopComponent extends TopComponent {
                                     stringDialog_x.addActionListener(
                                             new java.awt.event.ActionListener() {
                                                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.updateState(elem,hashmapname);
                                                     auv_param.setValue(elem, stringDialog_x.getText(), hashmapname);
                                                     string_dialog.setVisible(false);
                                                 }
@@ -2414,7 +2407,6 @@ public final class MARSTopComponent extends TopComponent {
                                              "Choose Color for " + elem,
                                              new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                                             if(newColor != null){
-                                                auv_param.updateState(elem,hashmapname);
                                                 auv_param.setValue(elem, new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f), hashmapname);
                                             }
                                 }

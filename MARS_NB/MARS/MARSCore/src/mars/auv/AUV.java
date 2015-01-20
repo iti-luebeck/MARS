@@ -41,7 +41,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObject {
+public interface AUV extends RosNodeListener, ChartValue, MARSObject {
 
     /**
      *
@@ -444,13 +444,6 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      * @return
      */
     public WayPoints getWaypoints();
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path);
 
     /**
      *

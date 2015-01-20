@@ -37,6 +37,7 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.sonar.Sonar;
 
@@ -60,7 +61,6 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     Quad quad = new Quad(2f, 2f);
     Geometry map_geom = new Geometry("My Textured Box", quad);
     Texture tex_ml;
-    private Future simStateFuture;
 
     /**
      *
@@ -141,7 +141,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     public void init() {
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             addAUV(auv);
         }
     }
@@ -355,7 +355,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
 
         if (auv_manager != null) {
             for (String elem : auv_nodes.keySet()) {
-                Node node = (Node) auv_nodes.get(elem);
+                Node node = auv_nodes.get(elem);
                 AUV auv = auv_manager.getAUV(elem);
                 if (auv != null && auv.getAuv_param().isEnabled()) {
 
@@ -366,8 +366,8 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                     int tery_px = tex_ml.getImage().getHeight();
 
                     //update propagation distance
-                    ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
-                    Iterator it = uws.iterator();
+                    ArrayList<Sensor> uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                    Iterator<Sensor> it = uws.iterator();
                     while (it.hasNext()) {
                         UnderwaterModem uw = (UnderwaterModem) it.next();
                         Geometry uwgeom = (Geometry) node.getChild(auv.getName() + "-" + uw.getName() + "-geom");
@@ -381,7 +381,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                     }
 
                     //update roation of sonar
-                    ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                    ArrayList<Sensor> sons = auv.getSensorsOfClass(Sonar.class.getName());
                     it = sons.iterator();
                     while (it.hasNext()) {
                         Sonar son = (Sonar) it.next();

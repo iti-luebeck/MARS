@@ -38,6 +38,7 @@ import org.openide.util.NbBundle.Messages;
     "HINT_MARSLogTopComponent=This is a MARSLog window"
 })
 @Deprecated
+@SuppressWarnings({"rawtypes","unchecked","cast"})
 public final class MARSLogTopComponent extends TopComponent {
 
     private MARS_Main mars;

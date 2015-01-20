@@ -243,6 +243,7 @@ public class SimObject implements MARSObject{
     /**
      *
      */
+    @SuppressWarnings("unchecked")
     public void initAfterJAXB() {
         collision = (HashMap<String, Object>) simob_variables.get("Collision");
     }
@@ -343,6 +344,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public String getDndIcon() {
         return (String) simob_variables.get("dndIcon");
     }
@@ -359,6 +361,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Vector3f getDimensions() {
         return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("dimensions");
     }
@@ -367,6 +370,7 @@ public class SimObject implements MARSObject{
      *
      * @param dimensions
      */
+    @SuppressWarnings("unchecked")
     public void setDimensions(Vector3f dimensions) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("dimensions", dimensions);
     }
@@ -375,6 +379,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Vector3f getCollisionPosition() {
         return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("position");
     }
@@ -383,6 +388,7 @@ public class SimObject implements MARSObject{
      *
      * @param position
      */
+    @SuppressWarnings("unchecked")
     public void setCollisionPosition(Vector3f position) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("position", position);
     }
@@ -391,6 +397,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public int getType() {
         return (Integer) ((HashMap<String, Object>) simob_variables.get("Collision")).get("type");
     }
@@ -399,6 +406,7 @@ public class SimObject implements MARSObject{
      *
      * @param type
      */
+    @SuppressWarnings("unchecked")
     public void setType(int type) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("type", type);
     }
@@ -407,6 +415,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public boolean isCollidable() {
         return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("collidable");
     }
@@ -415,27 +424,9 @@ public class SimObject implements MARSObject{
      *
      * @param collidable
      */
+    @SuppressWarnings("unchecked")
     public void setCollidable(boolean collidable) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("collidable", collidable);
-    }
-
-    /**
-     *
-     * @return @deprecated
-     */
-    @Deprecated
-    public boolean isSonar_detectable() {
-        return (Boolean) simob_variables.get("sonar_detectable");
-    }
-
-    /**
-     *
-     * @param sonar_detectable
-     * @deprecated
-     */
-    @Deprecated
-    public void setSonar_detectable(boolean sonar_detectable) {
-        simob_variables.put("sonar_detectable", sonar_detectable);
     }
 
     /**
@@ -450,6 +441,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Boolean getRayDetectable() {
         return (Boolean) simob_variables.get("rayDetectable");
     }
@@ -626,6 +618,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public boolean isDebugCollision() {
         return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug_collision");
     }
@@ -634,6 +627,7 @@ public class SimObject implements MARSObject{
      *
      * @param debug_collision
      */
+    @SuppressWarnings("unchecked")
     public void setDebugCollision(boolean debug_collision) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug_collision", debug_collision);
     }
@@ -644,12 +638,13 @@ public class SimObject implements MARSObject{
      * @param hashmapname
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
-            return (Object) simob_variables.get(value);
+            return simob_variables.get(value);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) simob_variables.get(hashmapname);
-            return (Object) hashmap.get(value);
+            return hashmap.get(value);
         }
     }
 
@@ -659,6 +654,7 @@ public class SimObject implements MARSObject{
      * @param object
      * @param hashmapname
      */
+    @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             simob_variables.put(value, object);

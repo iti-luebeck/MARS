@@ -81,7 +81,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @return
      */
     public ArrayList<SimObject> loadSimObjects() {
-        ArrayList arrlist = new ArrayList();
+        ArrayList<SimObject> arrlist = new ArrayList<SimObject>();
         FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File dir, String s) {
                 return s.toLowerCase().endsWith(".xml");
@@ -106,6 +106,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public SimObject loadSimObject(File file) {
         try {
             if (file.exists()) {
@@ -140,6 +141,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param name
      * @return
      */
+     @SuppressWarnings({"unchecked","rawtypes"})
     public SimObject loadSimObject(String name) {
         try {
             File file = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/simobjects/" + name + ".xml", "mars.core", false);
@@ -203,10 +205,10 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
-    public static String saveSimObjects(ArrayList simobs, File file) {
-        Iterator iter = simobs.iterator();
+    public static String saveSimObjects(ArrayList<SimObject> simobs, File file) {
+        Iterator<SimObject> iter = simobs.iterator();
         while (iter.hasNext()) {
-            SimObject simob = (SimObject) iter.next();
+            SimObject simob = iter.next();
             String failure = saveSimObject(simob, file);
             if (failure != null) {
                 return failure;
@@ -223,7 +225,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static String saveSimObjects(HashMap<String, SimObject> simobs, File file) {
         for (String elem : simobs.keySet()) {
-            SimObject simob = (SimObject) simobs.get(elem);
+            SimObject simob = simobs.get(elem);
             String failure = saveSimObject(simob, file);
             if (failure != null) {
                 return failure;
@@ -234,7 +236,7 @@ public class XML_JAXB_ConfigReaderWriter {
 
     /**
      *
-     * @param auvs
+     * @param simobs
      * @param file
      * @return
      */
@@ -287,6 +289,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public BasicAUV loadAUV(File file) {
         try {
             if (file.exists()) {
@@ -337,6 +340,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param name
      * @return
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public BasicAUV loadAUV(String name) {
         try {
             File file = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/auvs/" + name + ".xml", "mars.core", false);
@@ -400,8 +404,8 @@ public class XML_JAXB_ConfigReaderWriter {
      * @param file
      * @return
      */
-    public static String saveAUVs(ArrayList auvs, File file) {
-        Iterator iter = auvs.iterator();
+    public static String saveAUVs(ArrayList<AUV> auvs, File file) {
+        Iterator<AUV>  iter = auvs.iterator();
         while (iter.hasNext()) {
             BasicAUV auv = (BasicAUV) iter.next();
             String failure = saveAUV(auv, file);

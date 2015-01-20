@@ -89,6 +89,7 @@ import org.openide.util.NbBundle.Messages;
     "HINT_MARSTreeTopComponent=This is a MARSTree window"
 })
 @Deprecated
+@SuppressWarnings({"rawtypes", "unchecked", "static", "cast"})
 public final class MARSTreeTopComponent extends TopComponent {
     
     private MARS_Settings mars_settings;

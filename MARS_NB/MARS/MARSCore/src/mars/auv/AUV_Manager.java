@@ -42,7 +42,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager implements UpdateState, Lookup.Provider {
+public class AUV_Manager implements Lookup.Provider {
 
     //auv HashMap to store and load auv's
     private HashMap<String, AUV> auvs = new HashMap<String, AUV>();
@@ -777,16 +777,6 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     @Override
     public String toString() {
         return "AUVs";
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        AUV auv = (AUV) path.getPathComponent(1);
-        auv.updateState(path);
     }
 
     /**
