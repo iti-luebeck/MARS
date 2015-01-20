@@ -383,9 +383,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         MARSTopComp.setSimob_manager(simobManager);
         TreeTopComp.initAUVTree(auvManager);
         TreeTopComp.initSimObjectTree(simobManager);
-        TreeTopComp.initEnvironmentTree(physical_environment);
-        TreeTopComp.initSettingsTree(mars_settings);
-        TreeTopComp.initKeysTree(keyconfig);
         TreeTopComp.initPopUpMenues(auvManager);
         TreeTopComp.initDND();
         MARSTopComp.initDND();

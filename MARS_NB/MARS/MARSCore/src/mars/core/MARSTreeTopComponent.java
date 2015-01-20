@@ -42,10 +42,7 @@ import mars.auv.AUV_Parameters;
 import mars.gui.tree.AUVManagerModel;
 import mars.gui.tree.GenericTreeModel;
 import mars.gui.tree.HashMapWrapper;
-import mars.gui.tree.KeyConfigModel;
-import mars.gui.tree.MarsSettingsModel;
 import mars.gui.tree.MyTreeCellRenderer;
-import mars.gui.tree.PhysicalEnvironmentModel;
 import mars.gui.tree.SimObjectManagerModel;
 import mars.gui.dnd.AUVTransferHandler;
 import mars.gui.dnd.SimObTransferHandler;
@@ -191,15 +188,6 @@ public final class MARSTreeTopComponent extends TopComponent {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         simob_tree = new javax.swing.JTree();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        pe_tree = new javax.swing.JTree();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        settings_tree = new javax.swing.JTree();
-        jPanel5 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        keys_tree = new javax.swing.JTree();
 
         forceValuePopUp.setName("forceValuePopUp"); // NOI18N
 
@@ -565,102 +553,6 @@ public final class MARSTreeTopComponent extends TopComponent {
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jPanel2.TabConstraints.tabTitle"), new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/box_closed.png")), jPanel2); // NOI18N
 
-        DefaultMutableTreeNode top3 = new DefaultMutableTreeNode("PhysicalEnviroment");
-        pe_tree = new javax.swing.JTree(top3);
-        pe_tree.setCellRenderer(new MyTreeCellRenderer());
-        renderer3 = (DefaultTreeCellRenderer) pe_tree
-        .getCellRenderer();
-        textfieldEditor3 = new mars.gui.TextFieldCellEditor(pe_tree);
-        DefaultTreeCellEditor editor3 = new DefaultTreeCellEditor(pe_tree,
-            renderer3, textfieldEditor3);
-        pe_tree.setCellEditor(editor3);
-        pe_tree.setEditable(true);
-        pe_tree.setRootVisible(false);
-        pe_tree.setDragEnabled(true);
-        pe_tree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pe_treeMouseClicked(evt);
-            }
-        });
-        jScrollPane3.setViewportView(pe_tree);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jPanel3.TabConstraints.tabTitle"), new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/globe-green.png")), jPanel3); // NOI18N
-
-        DefaultMutableTreeNode top4 = new DefaultMutableTreeNode("Settings");
-        settings_tree = new javax.swing.JTree(top4);
-        settings_tree.setCellRenderer(new MyTreeCellRenderer());
-        renderer4 = (DefaultTreeCellRenderer) settings_tree
-        .getCellRenderer();
-        textfieldEditor4 = new mars.gui.TextFieldCellEditor(settings_tree);
-        DefaultTreeCellEditor editor4 = new DefaultTreeCellEditor(settings_tree,
-            renderer4, textfieldEditor4);
-        settings_tree.setCellEditor(editor4);
-        settings_tree.setEditable(true);
-        settings_tree.setRootVisible(false);
-        settings_tree.setDragEnabled(true);
-        settings_tree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                settings_treeMouseClicked(evt);
-            }
-        });
-        jScrollPane4.setViewportView(settings_tree);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jPanel4.TabConstraints.tabTitle"), new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/hammer-screwdriver.png")), jPanel4); // NOI18N
-
-        DefaultMutableTreeNode top5 = new DefaultMutableTreeNode("Keys");
-        keys_tree = new javax.swing.JTree(top5);
-        keys_tree.setCellRenderer(new MyTreeCellRenderer());
-        renderer5 = (DefaultTreeCellRenderer) keys_tree
-        .getCellRenderer();
-        textfieldEditor5 = new mars.gui.TextFieldCellEditor(keys_tree);
-        DefaultTreeCellEditor editor5 = new DefaultTreeCellEditor(keys_tree,
-            renderer5, textfieldEditor5);
-        keys_tree.setCellEditor(editor5);
-        keys_tree.setEditable(true);
-        keys_tree.setRootVisible(false);
-        keys_tree.setDragEnabled(true);
-        keys_tree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                keys_treeMouseClicked(evt);
-            }
-        });
-        jScrollPane5.setViewportView(keys_tree);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jPanel5.TabConstraints.tabTitle"), new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/keyboard.png")), jPanel5); // NOI18N
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -678,434 +570,6 @@ public final class MARSTreeTopComponent extends TopComponent {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());  
-            if (selRow != -1) { 
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
-                auv_tree.setSelectionPath(selPath);
-                //System.out.println(selPath.toString());         
-                //System.out.println(selPath.getLastPathComponent().toString()); 
-                try {  
-                    if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {// ctrl key used (force value)
-                        //dont forget to clean and populate this popup with auvs
-                        //initPopUpMenues(auvManager);
-                        //show it only when deep enough for value
-                        if(selPath.getLastPathComponent() instanceof Boolean || selPath.getLastPathComponent() instanceof Float || selPath.getLastPathComponent() instanceof Double || selPath.getLastPathComponent() instanceof String || selPath.getLastPathComponent() instanceof Integer){
-                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }
-                        if(selPath.getLastPathComponent() instanceof AUV_Parameters){
-                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }else if(selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                            if(hashwrap.getUserData() instanceof PhysicalExchanger){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof Accumulator){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof Boolean || hashwrap.getUserData() instanceof Float || hashwrap.getUserData() instanceof Double || hashwrap.getUserData() instanceof String || hashwrap.getUserData() instanceof Integer){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof HashMap && !hashwrap.getName().equals("Sensors") && !hashwrap.getName().equals("Actuators") && !hashwrap.getName().equals("Accumulators")){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }
-                        }
-                    }else{
-                        if (selPath.getLastPathComponent() instanceof AUV) { 
-                            AUV auv = (AUV)selPath.getLastPathComponent();
-                            lastSelectedAUV = auv;
-                            enable_auv.setSelected(auv.getAuv_param().isEnabled());
-                            auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
-                        }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                             HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                             if(hashwrap.getUserData() instanceof Boolean){
-                                 if((Boolean)hashwrap.getUserData()){
-                                     booleanPopUpEnable.setVisible(false);
-                                     booleanPopUpDisable.setVisible(true);
-                                 }else{
-                                     booleanPopUpEnable.setVisible(true);
-                                     booleanPopUpDisable.setVisible(false);
-                                 }
-                                 booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                             }else if(hashwrap.getUserData() instanceof ColorRGBA){
-                                ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
-                                Color newColor = color_dialog.showDialog(getRootPane(),
-                                                 "Choose Color for " + hashwrap.getName(),
-                                                 new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                                if(newColor != null){
-                                    ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
-                                    AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                    mod.valueForPathChanged(selPath, newColorRGBA);
-                                }
-                             }else if (hashwrap.getUserData() instanceof PhysicalExchanger || hashwrap.getUserData() instanceof Accumulator) {    
-                                if(hashwrap.getUserData() instanceof RayBasedSensor){
-                                    //addDataToChart.setVisible(false);
-                                    RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
-                                    lastSelectedRayBasedSensor = rays;
-                                    if(rays.getScanning()){
-                                        viewSonarPolar.setEnabled(true);
-                                        viewSonarPlanar.setEnabled(true);
-                                    }else{
-                                        viewSonarPolar.setEnabled(false);
-                                        viewSonarPlanar.setEnabled(true);
-                                    }
-                                }else{
-                                    viewSonarPolar.setEnabled(false);
-                                    viewSonarPlanar.setEnabled(false);
-                                }
-                                
-                                if(hashwrap.getUserData() instanceof VideoCamera){
-                                    lastSelectedVideoCamera = (VideoCamera)hashwrap.getUserData();
-                                    viewCamera.setEnabled(true);
-                                }else{
-                                    viewCamera.setEnabled(false);
-                                }
-                                
-                                if(hashwrap.getUserData() instanceof ChartValue){
-                                    lastSelectedChartValue = (ChartValue)hashwrap.getUserData();
-                                    addDataToChart.setEnabled(true);
-                                }else{
-                                    addDataToChart.setEnabled(false);
-                                }
-                                
-                                if(hashwrap.getUserData() instanceof Compass){
-                                    lastSelectedCompass = (Compass)hashwrap.getUserData();
-                                    viewCompass.setEnabled(true);
-                                }else{
-                                    viewCompass.setEnabled(false);
-                                }
-                                
-                                if(hashwrap.getUserData() instanceof CommunicationDevice){
-                                    lastSelectedCommunicationDevice = (CommunicationDevice)hashwrap.getUserData();
-                                    viewCommunicationDevice.setEnabled(true);
-                                }else{
-                                    viewCommunicationDevice.setEnabled(false);
-                                }
-                                
-                                jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY()); 
-                             }
-                        }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                            if((Boolean)selPath.getLastPathComponent()){
-                                     booleanPopUpEnable.setVisible(false);
-                                     booleanPopUpDisable.setVisible(true);
-                                 }else{
-                                     booleanPopUpEnable.setVisible(true);
-                                     booleanPopUpDisable.setVisible(false);
-                                 }
-                            booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }   
-                    }
-                } catch (IllegalArgumentException e) {       
-                }         
-            }       
-        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());      
-            if (selRow != -1) { 
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());  
-                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                //System.out.println(selPath.toString());         
-                //System.out.println(selPath.getLastPathComponent().toString()); 
-                
-                //deselect all auvs before we start to selcting it clean
-                mars.enqueue(new Callable<Void>() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                    guiState.deselectAllAUVs();
-                                }
-                                return null;
-                            }
-                        }); 
-                if(selectionPaths != null){
-                    for (int i = 0; i < selectionPaths.length; i++) {
-                        TreePath treePath = selectionPaths[i];
-                        try {  
-                            if (treePath.getLastPathComponent() instanceof AUV) {   
-                                final AUV auv = (AUV)treePath.getLastPathComponent();
-                                mars.enqueue(new Callable<Void>() {
-                                    public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                            //simState.deselectAllAUVs();
-                                            guiState.selectAUV(auv);
-                                        }
-                                        return null;
-                                    }
-                                });  
-                            }else{
-                                    mars.enqueue(new Callable<Void>() {
-                                        public Void call() throws Exception {
-                                            if(mars.getStateManager().getState(GuiState.class) != null){
-                                                GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                                guiState.deselectAllAUVs();
-                                            }
-                                            return null;
-                                        }
-                                    });
-                            }        
-                        } catch (IllegalArgumentException e) {
-                                mars.enqueue(new Callable<Void>() {
-                                    public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                            guiState.deselectAllAUVs();
-                                        }
-                                        return null;
-                                    }
-                                });
-                        } 
-                    } 
-                }
-            }else{
-                //expand/collapse all implementation
-                if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {
-                    if(ExpandedPath != null){
-                        treeExpand = false;
-                        auv_tree.expandPath(ExpandedPath);
-                        Object lastPathComponent = ExpandedPath.getLastPathComponent();
-                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
-                        for (int i = 0; i < childCount; i++) {
-                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
-                            TreePath pathByAddingChild = ExpandedPath.pathByAddingChild(child);
-                            auv_tree.expandPath(pathByAddingChild);
-                        }
-                        ExpandedPath = null;
-                        treeExpand = true;
-                    }
-                    /*if(CollapsedPath != null){
-                        treeCollapse = false;
-                        
-                        Object lastPathComponent = CollapsedPath.getLastPathComponent();
-                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
-                        for (int i = 0; i < childCount; i++) {
-                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
-                            TreePath pathByAddingChild = CollapsedPath.pathByAddingChild(child);
-                            auv_tree.collapsePath(pathByAddingChild);
-                        }
-                        auv_tree.collapsePath(CollapsedPath);//clean up
-                        CollapsedPath = null;
-                        treeCollapse = true;
-                    }*/
-                }
-                //clear the selected auvs
-                        Future simStateFuture = mars.enqueue(new Callable() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                                    guiState.deselectAllAUVs();
-                                }
-                                return null;
-                            }
-                        });
-            }
-        }  
-    }//GEN-LAST:event_auv_treeMouseClicked
-
-    private void auv_treeTreeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillCollapse
-        /*if(treeCollapse){
-            CollapsedPath = evt.getPath();
-        }*/
-    }//GEN-LAST:event_auv_treeTreeWillCollapse
-
-    private void auv_treeTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillExpand
-        if(treeExpand){
-            ExpandedPath = evt.getPath();
-        }
-    }//GEN-LAST:event_auv_treeTreeWillExpand
-
-    private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());         
-            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
-            if (selRow != -1) { 
-                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
-                simob_tree.setSelectionPath(selPath);
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString()); 
-                try {  
-                    if (selPath.getLastPathComponent() instanceof SimObject) {   
-                        //auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());   
-                    }/*else if (selPath.getLastPathComponent() instanceof AUV_Manager) {   
-                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());      
-                    }*/else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                         if(hashwrap.getUserData() instanceof Boolean){
-                             if((Boolean)hashwrap.getUserData()){
-                                 booleanPopUpEnable1.setVisible(false);
-                                 booleanPopUpDisable1.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable1.setVisible(true);
-                                 booleanPopUpDisable1.setVisible(false);
-                             }
-                             booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
-                         }else if(hashwrap.getUserData() instanceof ColorRGBA){
-                            ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
-                            Color newColor = color_dialog.showDialog(getRootPane(),
-                                             "Choose Color for " + hashwrap.getName(),
-                                             new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                            if(newColor != null){
-                                ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
-                                SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
-                                mod.valueForPathChanged(simob_tree.getSelectionPath(), newColorRGBA);
-                            }
-                         }
-                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                        if((Boolean)selPath.getLastPathComponent()){
-                                 booleanPopUpEnable1.setVisible(false);
-                                 booleanPopUpDisable1.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable1.setVisible(true);
-                                 booleanPopUpDisable1.setVisible(false);
-                             }
-                        booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }       
-                } catch (IllegalArgumentException e) {       
-                }         
-            }       
-        }else if (evt.getButton() == MouseEvent.BUTTON1) {
-            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());      
-            if (selRow != -1) { 
-                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());   
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString()); 
-                try {  
-                    if (selPath.getLastPathComponent() instanceof SimObject) {   
-                        final SimObject simob = (SimObject)selPath.getLastPathComponent();
-                        Future simStateFuture = mars.enqueue(new Callable() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                                    guiState.deselectSimObs(null);
-                                    guiState.selectSimObs(simob);
-                                }
-                                return null;
-                            }
-                        });  
-                    }else{
-                            Future simStateFuture = mars.enqueue(new Callable() {
-                                public Void call() throws Exception {
-                                    if(mars.getStateManager().getState(GuiState.class) != null){
-                                        GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                                        guiState.deselectSimObs(null);
-                                    }
-                                    return null;
-                                }
-                            });
-                    }        
-                } catch (IllegalArgumentException e) {
-                        Future simStateFuture = mars.enqueue(new Callable() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                                    guiState.deselectSimObs(null);
-                                }
-                                return null;
-                            }
-                        });
-                }         
-            }else{
-                        Future simStateFuture = mars.enqueue(new Callable() {
-                            public Void call() throws Exception {
-                                if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                                    guiState.deselectSimObs(null);
-                                }
-                                return null;
-                            }
-                        });
-            }
-        } 
-    }//GEN-LAST:event_simob_treeMouseClicked
-
-    private void pe_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pe_treeMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = pe_tree.getRowForLocation(evt.getX(), evt.getY());         
-            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
-            if (selRow != -1) { 
-                TreePath selPath = pe_tree.getPathForLocation(evt.getX(), evt.getY()); 
-                pe_tree.setSelectionPath(selPath);
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString());  
-                pe_tree.setSelectionPath(selPath);  
-                try {  
-                    if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                         if(hashwrap.getUserData() instanceof Boolean){
-                             if((Boolean)hashwrap.getUserData()){
-                                 booleanPopUpEnable2.setVisible(false);
-                                 booleanPopUpDisable2.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable2.setVisible(true);
-                                 booleanPopUpDisable2.setVisible(false);
-                             }
-                             booleanPopUpEnv.show(evt.getComponent(), evt.getX(), evt.getY());
-                         }
-                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                        if((Boolean)selPath.getLastPathComponent()){
-                                 booleanPopUpEnable2.setVisible(false);
-                                 booleanPopUpDisable2.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable2.setVisible(true);
-                                 booleanPopUpDisable2.setVisible(false);
-                             }
-                        booleanPopUpEnv.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }        
-                } catch (IllegalArgumentException e) {       
-                }         
-            }       
-        }
-    }//GEN-LAST:event_pe_treeMouseClicked
-
-    private void settings_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settings_treeMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON3) {   
-            int selRow = settings_tree.getRowForLocation(evt.getX(), evt.getY());         
-            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();    
-            if (selRow != -1) { 
-                TreePath selPath = settings_tree.getPathForLocation(evt.getX(), evt.getY());   
-                settings_tree.setSelectionPath(selPath);
-                System.out.println(selPath.toString());         
-                System.out.println(selPath.getLastPathComponent().toString());   
-                try {  
-                    if (selPath.getLastPathComponent() instanceof HashMapWrapper) {       
-                         HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                         if(hashwrap.getUserData() instanceof Boolean){
-                             if((Boolean)hashwrap.getUserData()){
-                                 booleanPopUpEnable3.setVisible(false);
-                                 booleanPopUpDisable3.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable3.setVisible(true);
-                                 booleanPopUpDisable3.setVisible(false);
-                             }
-                             booleanPopUpSettings.show(evt.getComponent(), evt.getX(), evt.getY());
-                         }else if(hashwrap.getUserData() instanceof ColorRGBA){
-                            ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
-                            Color newColor = color_dialog.showDialog(getRootPane(),
-                                             "Choose Color for " + hashwrap.getName(),
-                                             new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                            if(newColor != null){
-                                ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
-                                MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
-                                mod.valueForPathChanged(settings_tree.getSelectionPath(), newColorRGBA);
-                            }
-                         }
-                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                        if((Boolean)selPath.getLastPathComponent()){
-                                 booleanPopUpEnable3.setVisible(false);
-                                 booleanPopUpDisable3.setVisible(true);
-                             }else{
-                                 booleanPopUpEnable3.setVisible(true);
-                                 booleanPopUpDisable3.setVisible(false);
-                             }
-                        booleanPopUpSettings.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }        
-                } catch (IllegalArgumentException e) {       
-                }         
-            }       
-        }
-    }//GEN-LAST:event_settings_treeMouseClicked
-
-    private void keys_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keys_treeMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_keys_treeMouseClicked
 
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed
         final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
@@ -1372,55 +836,19 @@ public final class MARSTreeTopComponent extends TopComponent {
     }//GEN-LAST:event_booleanPopUpDisable1ActionPerformed
 
     private void booleanPopUpEnable2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnable2ActionPerformed
-        if (pe_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)pe_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
-                mod.valueForPathChanged(pe_tree.getSelectionPath(), true);
-            }
-        }else if(pe_tree.getLastSelectedPathComponent() instanceof Boolean){
-            PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
-            mod.valueForPathChanged(pe_tree.getSelectionPath(), true);
-        }
+
     }//GEN-LAST:event_booleanPopUpEnable2ActionPerformed
 
     private void booleanPopUpDisable2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisable2ActionPerformed
-        if (pe_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)pe_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
-                mod.valueForPathChanged(pe_tree.getSelectionPath(), false);
-            }
-        }else if(pe_tree.getLastSelectedPathComponent() instanceof Boolean){
-            PhysicalEnvironmentModel mod = (PhysicalEnvironmentModel)pe_tree.getModel();
-            mod.valueForPathChanged(pe_tree.getSelectionPath(), false);
-        }
+
     }//GEN-LAST:event_booleanPopUpDisable2ActionPerformed
 
     private void booleanPopUpEnable3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnable3ActionPerformed
-        if (settings_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)settings_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
-                mod.valueForPathChanged(settings_tree.getSelectionPath(), true);
-            }
-        }else if(settings_tree.getLastSelectedPathComponent() instanceof Boolean){
-            MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
-            mod.valueForPathChanged(settings_tree.getSelectionPath(), true);
-        }
+
     }//GEN-LAST:event_booleanPopUpEnable3ActionPerformed
 
     private void booleanPopUpDisable3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisable3ActionPerformed
-         if (settings_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)settings_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
-                mod.valueForPathChanged(settings_tree.getSelectionPath(), false);
-            }
-        }else if(settings_tree.getLastSelectedPathComponent() instanceof Boolean){
-            MarsSettingsModel mod = (MarsSettingsModel)settings_tree.getModel();
-            mod.valueForPathChanged(settings_tree.getSelectionPath(), false);
-        }
+
     }//GEN-LAST:event_booleanPopUpDisable3ActionPerformed
 
     private void addDataToChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDataToChartActionPerformed
@@ -1507,6 +935,343 @@ public final class MARSTreeTopComponent extends TopComponent {
         forceValueDialog.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());
+            //DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+            if (selRow != -1) {
+                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());
+                simob_tree.setSelectionPath(selPath);
+                System.out.println(selPath.toString());
+                System.out.println(selPath.getLastPathComponent().toString());
+                try {
+                    if (selPath.getLastPathComponent() instanceof SimObject) {
+                        //auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }/*else if (selPath.getLastPathComponent() instanceof AUV_Manager) {
+                        addAUVPopUpMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }*/else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {
+                        HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                        if(hashwrap.getUserData() instanceof Boolean){
+                            if((Boolean)hashwrap.getUserData()){
+                                booleanPopUpEnable1.setVisible(false);
+                                booleanPopUpDisable1.setVisible(true);
+                            }else{
+                                booleanPopUpEnable1.setVisible(true);
+                                booleanPopUpDisable1.setVisible(false);
+                            }
+                            booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }else if(hashwrap.getUserData() instanceof ColorRGBA){
+                            ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
+                            Color newColor = color_dialog.showDialog(getRootPane(),
+                                "Choose Color for " + hashwrap.getName(),
+                                new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                            if(newColor != null){
+                                ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
+                                SimObjectManagerModel mod = (SimObjectManagerModel)simob_tree.getModel();
+                                mod.valueForPathChanged(simob_tree.getSelectionPath(), newColorRGBA);
+                            }
+                        }
+                    }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                        if((Boolean)selPath.getLastPathComponent()){
+                            booleanPopUpEnable1.setVisible(false);
+                            booleanPopUpDisable1.setVisible(true);
+                        }else{
+                            booleanPopUpEnable1.setVisible(true);
+                            booleanPopUpDisable1.setVisible(false);
+                        }
+                        booleanPopUpSimObject.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                } catch (IllegalArgumentException e) {
+                }
+            }
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {
+            int selRow = simob_tree.getRowForLocation(evt.getX(), evt.getY());
+            if (selRow != -1) {
+                TreePath selPath = simob_tree.getPathForLocation(evt.getX(), evt.getY());
+                System.out.println(selPath.toString());
+                System.out.println(selPath.getLastPathComponent().toString());
+                try {
+                    if (selPath.getLastPathComponent() instanceof SimObject) {
+                        final SimObject simob = (SimObject)selPath.getLastPathComponent();
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectSimObs(null);
+                                    guiState.selectSimObs(simob);
+                                }
+                                return null;
+                            }
+                        });
+                    }else{
+                        Future simStateFuture = mars.enqueue(new Callable() {
+                            public Void call() throws Exception {
+                                if(mars.getStateManager().getState(GuiState.class) != null){
+                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    guiState.deselectSimObs(null);
+                                }
+                                return null;
+                            }
+                        });
+                    }
+                } catch (IllegalArgumentException e) {
+                    Future simStateFuture = mars.enqueue(new Callable() {
+                        public Void call() throws Exception {
+                            if(mars.getStateManager().getState(GuiState.class) != null){
+                                GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                guiState.deselectSimObs(null);
+                            }
+                            return null;
+                        }
+                    });
+                }
+            }else{
+                Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(mars.getStateManager().getState(GuiState.class) != null){
+                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                            guiState.deselectSimObs(null);
+                        }
+                        return null;
+                    }
+                });
+            }
+        }
+    }//GEN-LAST:event_simob_treeMouseClicked
+
+    private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());
+            if (selRow != -1) {
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());
+                auv_tree.setSelectionPath(selPath);
+                //System.out.println(selPath.toString());
+                //System.out.println(selPath.getLastPathComponent().toString());
+                try {
+                    if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {// ctrl key used (force value)
+                        //dont forget to clean and populate this popup with auvs
+                        //initPopUpMenues(auvManager);
+                        //show it only when deep enough for value
+                        if(selPath.getLastPathComponent() instanceof Boolean || selPath.getLastPathComponent() instanceof Float || selPath.getLastPathComponent() instanceof Double || selPath.getLastPathComponent() instanceof String || selPath.getLastPathComponent() instanceof Integer){
+                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }
+                        if(selPath.getLastPathComponent() instanceof AUV_Parameters){
+                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }else if(selPath.getLastPathComponent() instanceof HashMapWrapper) {
+                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                            if(hashwrap.getUserData() instanceof PhysicalExchanger){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof Accumulator){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof Boolean || hashwrap.getUserData() instanceof Float || hashwrap.getUserData() instanceof Double || hashwrap.getUserData() instanceof String || hashwrap.getUserData() instanceof Integer){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof HashMap && !hashwrap.getName().equals("Sensors") && !hashwrap.getName().equals("Actuators") && !hashwrap.getName().equals("Accumulators")){
+                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }
+                        }
+                    }else{
+                        if (selPath.getLastPathComponent() instanceof AUV) {
+                            AUV auv = (AUV)selPath.getLastPathComponent();
+                            lastSelectedAUV = auv;
+                            enable_auv.setSelected(auv.getAuv_param().isEnabled());
+                            auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {
+                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
+                            if(hashwrap.getUserData() instanceof Boolean){
+                                if((Boolean)hashwrap.getUserData()){
+                                    booleanPopUpEnable.setVisible(false);
+                                    booleanPopUpDisable.setVisible(true);
+                                }else{
+                                    booleanPopUpEnable.setVisible(true);
+                                    booleanPopUpDisable.setVisible(false);
+                                }
+                                booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }else if(hashwrap.getUserData() instanceof ColorRGBA){
+                                ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
+                                Color newColor = color_dialog.showDialog(getRootPane(),
+                                    "Choose Color for " + hashwrap.getName(),
+                                    new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                                if(newColor != null){
+                                    ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
+                                    AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
+                                    mod.valueForPathChanged(selPath, newColorRGBA);
+                                }
+                            }else if (hashwrap.getUserData() instanceof PhysicalExchanger || hashwrap.getUserData() instanceof Accumulator) {
+                                if(hashwrap.getUserData() instanceof RayBasedSensor){
+                                    //addDataToChart.setVisible(false);
+                                    RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
+                                    lastSelectedRayBasedSensor = rays;
+                                    if(rays.getScanning()){
+                                        viewSonarPolar.setEnabled(true);
+                                        viewSonarPlanar.setEnabled(true);
+                                    }else{
+                                        viewSonarPolar.setEnabled(false);
+                                        viewSonarPlanar.setEnabled(true);
+                                    }
+                                }else{
+                                    viewSonarPolar.setEnabled(false);
+                                    viewSonarPlanar.setEnabled(false);
+                                }
+
+                                if(hashwrap.getUserData() instanceof VideoCamera){
+                                    lastSelectedVideoCamera = (VideoCamera)hashwrap.getUserData();
+                                    viewCamera.setEnabled(true);
+                                }else{
+                                    viewCamera.setEnabled(false);
+                                }
+
+                                if(hashwrap.getUserData() instanceof ChartValue){
+                                    lastSelectedChartValue = (ChartValue)hashwrap.getUserData();
+                                    addDataToChart.setEnabled(true);
+                                }else{
+                                    addDataToChart.setEnabled(false);
+                                }
+
+                                if(hashwrap.getUserData() instanceof Compass){
+                                    lastSelectedCompass = (Compass)hashwrap.getUserData();
+                                    viewCompass.setEnabled(true);
+                                }else{
+                                    viewCompass.setEnabled(false);
+                                }
+
+                                if(hashwrap.getUserData() instanceof CommunicationDevice){
+                                    lastSelectedCommunicationDevice = (CommunicationDevice)hashwrap.getUserData();
+                                    viewCommunicationDevice.setEnabled(true);
+                                }else{
+                                    viewCommunicationDevice.setEnabled(false);
+                                }
+
+                                jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY());
+                            }
+                        }else if (selPath.getLastPathComponent() instanceof Boolean) {
+                            if((Boolean)selPath.getLastPathComponent()){
+                                booleanPopUpEnable.setVisible(false);
+                                booleanPopUpDisable.setVisible(true);
+                            }else{
+                                booleanPopUpEnable.setVisible(true);
+                                booleanPopUpDisable.setVisible(false);
+                            }
+                            booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
+                        }
+                    }
+                } catch (IllegalArgumentException e) {
+                }
+            }
+        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
+            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());
+            if (selRow != -1) {
+                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());
+                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
+                //System.out.println(selPath.toString());
+                //System.out.println(selPath.getLastPathComponent().toString());
+
+                //deselect all auvs before we start to selcting it clean
+                mars.enqueue(new Callable<Void>() {
+                    public Void call() throws Exception {
+                        if(mars.getStateManager().getState(GuiState.class) != null){
+                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
+                            guiState.deselectAllAUVs();
+                        }
+                        return null;
+                    }
+                });
+                if(selectionPaths != null){
+                    for (int i = 0; i < selectionPaths.length; i++) {
+                        TreePath treePath = selectionPaths[i];
+                        try {
+                            if (treePath.getLastPathComponent() instanceof AUV) {
+                                final AUV auv = (AUV)treePath.getLastPathComponent();
+                                mars.enqueue(new Callable<Void>() {
+                                    public Void call() throws Exception {
+                                        if(mars.getStateManager().getState(GuiState.class) != null){
+                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
+                                            //simState.deselectAllAUVs();
+                                            guiState.selectAUV(auv);
+                                        }
+                                        return null;
+                                    }
+                                });
+                            }else{
+                                mars.enqueue(new Callable<Void>() {
+                                    public Void call() throws Exception {
+                                        if(mars.getStateManager().getState(GuiState.class) != null){
+                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
+                                            guiState.deselectAllAUVs();
+                                        }
+                                        return null;
+                                    }
+                                });
+                            }
+                        } catch (IllegalArgumentException e) {
+                            mars.enqueue(new Callable<Void>() {
+                                public Void call() throws Exception {
+                                    if(mars.getStateManager().getState(GuiState.class) != null){
+                                        GuiState guiState = mars.getStateManager().getState(GuiState.class);
+                                        guiState.deselectAllAUVs();
+                                    }
+                                    return null;
+                                }
+                            });
+                        }
+                    }
+                }
+            }else{
+                //expand/collapse all implementation
+                if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+                    if(ExpandedPath != null){
+                        treeExpand = false;
+                        auv_tree.expandPath(ExpandedPath);
+                        Object lastPathComponent = ExpandedPath.getLastPathComponent();
+                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
+                        for (int i = 0; i < childCount; i++) {
+                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
+                            TreePath pathByAddingChild = ExpandedPath.pathByAddingChild(child);
+                            auv_tree.expandPath(pathByAddingChild);
+                        }
+                        ExpandedPath = null;
+                        treeExpand = true;
+                    }
+                    /*if(CollapsedPath != null){
+                        treeCollapse = false;
+
+                        Object lastPathComponent = CollapsedPath.getLastPathComponent();
+                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
+                        for (int i = 0; i < childCount; i++) {
+                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
+                            TreePath pathByAddingChild = CollapsedPath.pathByAddingChild(child);
+                            auv_tree.collapsePath(pathByAddingChild);
+                        }
+                        auv_tree.collapsePath(CollapsedPath);//clean up
+                        CollapsedPath = null;
+                        treeCollapse = true;
+                    }*/
+                }
+                //clear the selected auvs
+                Future simStateFuture = mars.enqueue(new Callable() {
+                    public Void call() throws Exception {
+                        if(mars.getStateManager().getState(GuiState.class) != null){
+                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                            guiState.deselectAllAUVs();
+                        }
+                        return null;
+                    }
+                });
+            }
+        }
+    }//GEN-LAST:event_auv_treeMouseClicked
+
+    private void auv_treeTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillExpand
+        if(treeExpand){
+            ExpandedPath = evt.getPath();
+        }
+    }//GEN-LAST:event_auv_treeTreeWillExpand
+
+    private void auv_treeTreeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillCollapse
+        /*if(treeCollapse){
+            CollapsedPath = evt.getPath();
+        }*/
+    }//GEN-LAST:event_auv_treeTreeWillCollapse
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JPopupMenu auv_popup_menu;
@@ -1540,31 +1305,16 @@ public final class MARSTreeTopComponent extends TopComponent {
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JMenu jme3_auv_debug_data;
     private javax.swing.JMenuItem jme3_auv_debug_data_buy;
     private javax.swing.JPopupMenu jme3_auv_sens;
-    private javax.swing.JTree keys_tree;
-    public mars.gui.TextFieldCellEditor textfieldEditor5;
-    private DefaultTreeCellRenderer renderer5;
-    private javax.swing.JTree pe_tree;
-    public mars.gui.TextFieldCellEditor textfieldEditor3;
-    private DefaultTreeCellRenderer renderer3;
     private javax.swing.JMenuItem reset_auv;
     private javax.swing.JCheckBox saveIdentity;
-    private javax.swing.JTree settings_tree;
-    public mars.gui.TextFieldCellEditor textfieldEditor4;
-    private DefaultTreeCellRenderer renderer4;
     private javax.swing.JTree simob_tree;
     public mars.gui.TextFieldCellEditor textfieldEditor2;
     private DefaultTreeCellRenderer renderer2;
@@ -1636,51 +1386,6 @@ public final class MARSTreeTopComponent extends TopComponent {
     
     /**
      * 
-     * @param penv
-     */
-    public void initEnvironmentTree(final PhysicalEnvironment penv){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    pe_tree.setModel(new PhysicalEnvironmentModel(penv));
-                    pe_tree.updateUI();
-                }
-            }
-        );
-    }
-    
-    /**
-     * 
-     * @param mars_settings
-     */
-    public void initSettingsTree(final MARS_Settings mars_settings){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    settings_tree.setModel(new MarsSettingsModel(mars_settings));
-                    settings_tree.updateUI();
-                }
-            }
-        );
-    }
-    
-    /**
-     * 
-     * @param keys
-     */
-    public void initKeysTree(final KeyConfig keys){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    keys_tree.setModel(new KeyConfigModel(keys));
-                    keys_tree.updateUI();
-                }
-            }
-        );
-    }
-    
-    /**
-     * 
      */
     public void updateTrees(){
         EventQueue.invokeLater(new Runnable(){
@@ -1688,9 +1393,6 @@ public final class MARSTreeTopComponent extends TopComponent {
                 public void run() {
                     auv_tree.updateUI();
                     simob_tree.updateUI();
-                    pe_tree.updateUI();
-                    settings_tree.updateUI();
-                    keys_tree.updateUI();
                 }
             }  
         );
