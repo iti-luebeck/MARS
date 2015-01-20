@@ -22,6 +22,7 @@ import javax.swing.tree.TreePath;
  * @author Thomas Tosik
  */
 @Deprecated
+@SuppressWarnings({"cast","unchecked","rawtypes"})
 public class TextFieldEditor extends JTextField implements CellEditor {
     Object value;
     TreePath treepath;

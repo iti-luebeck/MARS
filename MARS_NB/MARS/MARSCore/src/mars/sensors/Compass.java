@@ -25,6 +25,7 @@ import mars.states.SimState;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @Deprecated
+@SuppressWarnings({"cast","unchecked","rawtypes"})
 public class Compass extends Sensor {
 
     private Geometry CompassStart;

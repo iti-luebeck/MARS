@@ -36,6 +36,7 @@ import mars.sensors.VideoCamera;
  * @author Thomas Tosik
  */
 @Deprecated
+@SuppressWarnings({"cast","unchecked","rawtypes"})
 public class Connection extends Thread {
 
     private Socket sockConnected;

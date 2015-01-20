@@ -247,7 +247,7 @@ public class UnderwaterModem extends CommunicationDevice {
         });
         final Vector3f modPos = this.getWorldPosition();
         for (String elem : uws.keySet()) {
-            final UnderwaterModem uw = (UnderwaterModem) uws.get(elem);
+            final UnderwaterModem uw = uws.get(elem);
             if (uw != this) {//ignore myself
                 Vector3f distance = modPos.subtract(uw.getWorldPosition());
                 final float proDist = this.getPropagationDistance();

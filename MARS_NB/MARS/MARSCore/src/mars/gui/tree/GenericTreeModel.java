@@ -38,6 +38,7 @@ import mars.xml.HashMapEntry;
  * @deprecated 
  */
 @Deprecated
+@SuppressWarnings({"cast","unchecked","rawtypes"})
 public class GenericTreeModel implements TreeModel{
     
     private ArrayList<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
@@ -327,7 +328,7 @@ public class GenericTreeModel implements TreeModel{
             while (it.hasNext()) {
                 String elem = it.next();
                 if(i == index){
-                    Object obj = (Object)simob.getAllVariables().get(elem);
+                    Object obj = simob.getAllVariables().get(elem);
                     return new HashMapWrapper(obj,elem);
                 }else if(i > index){
                     return null;
@@ -343,7 +344,7 @@ public class GenericTreeModel implements TreeModel{
             while (it.hasNext()) {
                 String elem = it.next();
                 if(i == index){
-                    Object obj = (Object)auv_param.getAllVariables().get(elem);
+                    Object obj = auv_param.getAllVariables().get(elem);
                     return new HashMapWrapper(obj,elem);
                 }else if(i > index){
                     return null;
@@ -385,7 +386,7 @@ public class GenericTreeModel implements TreeModel{
             while (it.hasNext()) {
                 String elem = it.next();
                 if(i == index){
-                    Object obj = (Object)hashmap.get(elem);
+                    Object obj = hashmap.get(elem);
                     return new HashMapWrapper(obj,elem);
                 }else if(i > index){
                     return null;
@@ -486,7 +487,7 @@ public class GenericTreeModel implements TreeModel{
             if(hasher.getUserData() instanceof LeafWrapper){
                 saveValue(originalPath,path.getParentPath(),value);
             }else if(hasher.getUserData() instanceof Float || hasher.getUserData() instanceof Double || hasher.getUserData() instanceof Integer || hasher.getUserData() instanceof String || hasher.getUserData() instanceof Boolean){
-                Object preObj = (Object)path.getParentPath().getLastPathComponent();
+                Object preObj = path.getParentPath().getLastPathComponent();
                 if(preObj instanceof AUV_Parameters){
                     AUV_Parameters auv_param = (AUV_Parameters)preObj;
                     auv_param.getAllVariables().put(hasher.getName(), value);

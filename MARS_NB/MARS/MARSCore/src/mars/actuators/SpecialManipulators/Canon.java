@@ -317,7 +317,7 @@ public class Canon extends Actuator implements Moveable, Keys {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            final String action = (String) action_mapping.get(elem);
+            final String action = action_mapping.get(elem);
             final String mapping = elem;
             final Canon self = this;
             inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
