@@ -369,6 +369,7 @@ public class Initializer {
     /**
      * Setup the generic publisher. Used to publish all sensor data.
      */
+    @SuppressWarnings("unchecked")
     public void setupAdvServer() {
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
         Lookup bag = Lookup.getDefault();
@@ -735,7 +736,7 @@ public class Initializer {
                 if (water_plane != null) {
                     water_plane.removeFromParent();
                 }
-                Box boxshape = new Box(new Vector3f(0f, 0f, 0f), 2000f, 0.01f, 2000f);
+                Box boxshape = new Box(2000f, 0.01f, 2000f);
                 water_plane = new Geometry("water_plane", boxshape);
                 water_plane.setLocalTranslation(0.0f, water_height, 5.0f);
                 Material mat_tt = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -772,8 +773,7 @@ public class Initializer {
     }
 
     private void setupFishEye() {
-        FishEyeFilter fisheye = new FishEyeFilter();
-        fpp.addFilter(fisheye);
+
     }
 
     private void setupTranslucentBucketFilter() {

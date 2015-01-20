@@ -10,14 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import mars.misc.CommunicationType;
 import mars.PhysicalEnvironment;
+import mars.misc.CommunicationType;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
-import mars.states.SimState;
+import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.WiFi;
 import mars.server.MARS_Server;
+import mars.states.SimState;
 
 /**
  * This class is responsible for the underwater communication. It assures that
@@ -78,16 +79,16 @@ public class CommunicationManager {
      * checks for distance and noise is also made here
      */
     private void updateCommunication(String auv_name, String msg, int communicationType) {
-        AUV sender = (AUV) auv_manager.getAUV(auv_name);
+        AUV sender = auv_manager.getAUV(auv_name);
 
         CommunicationDevice senderUW;
         Vector3f senderUWPos;
         if (communicationType == CommunicationType.UNDERWATERSOUND) {
-            ArrayList sender_uwmo = sender.getSensorsOfClass(UnderwaterModem.class.getName());
+            ArrayList<Sensor> sender_uwmo = sender.getSensorsOfClass(UnderwaterModem.class.getName());
             senderUW = (UnderwaterModem) sender_uwmo.get(0);
             senderUWPos = senderUW.getWorldPosition();
         } else if (communicationType == CommunicationType.WIFI) {
-            ArrayList sender_uwmo = sender.getSensorsOfClass(WiFi.class.getName());
+            ArrayList<Sensor> sender_uwmo = sender.getSensorsOfClass(WiFi.class.getName());
             senderUW = (WiFi) sender_uwmo.get(0);
             senderUWPos = senderUW.getWorldPosition();
         } else {//no type -> error
@@ -97,11 +98,11 @@ public class CommunicationManager {
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
 
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
 
             if (auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName()) && !auv.getName().equals(auv_name)) {
-                ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
-                Iterator it = uwmo.iterator();
+                ArrayList<Sensor> uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+                Iterator<Sensor> it = uwmo.iterator();
                 while (it.hasNext()) {
                     CommunicationDevice mod = (CommunicationDevice) it.next();
                     Vector3f modPos = mod.getWorldPosition();
@@ -127,9 +128,9 @@ public class CommunicationManager {
         //update list of modems
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName())) {
-                ArrayList sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                ArrayList<Sensor> sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
                 UnderwaterModem senderUW = (UnderwaterModem) sender_uwmo.get(0);
                 uws.put(auv.getName(), senderUW);
             }
@@ -137,9 +138,9 @@ public class CommunicationManager {
 
         //filter them if dictance to great and send them to the modem for updates
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName())) {
-                ArrayList sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                ArrayList<Sensor> sender_uwmo = auv.getSensorsOfClass(UnderwaterModem.class.getName());
                 UnderwaterModem senderUW = (UnderwaterModem) sender_uwmo.get(0);
                 senderUW.updateComNet(uws);
             }

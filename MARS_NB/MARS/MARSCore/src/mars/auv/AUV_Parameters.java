@@ -1463,6 +1463,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param hashmapname
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             return params.get(value);
@@ -1479,6 +1480,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param object
      * @param hashmapname
      */
+    @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             params.put(value, object);

@@ -31,8 +31,8 @@ import mars.MARS_Settings;
  */
 public class WayPoints extends Node {
 
-    private ArrayList waypoints = new ArrayList();
-    private ArrayList waypoints_geom = new ArrayList();
+    private ArrayList<Vector3f> waypoints = new ArrayList<Vector3f>();
+    private ArrayList<Geometry> waypoints_geom = new ArrayList<Geometry>();
     /**
      *
      */
@@ -89,14 +89,14 @@ public class WayPoints extends Node {
     public void addWaypoint(Vector3f waypoint) {
         if (waypoints.size() >= 1) {//add a line if we have minimum two points
             if (auv_param.getWaypointsMaxWaypoints() == 0) {//unlimited waypoints
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
             } else if (waypoints.size() >= auv_param.getWaypointsMaxWaypoints()) {//limited waypoints
                 waypoints.remove(0);
                 waypoints_geom.remove(0);
                 destroyLine();
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
             } else {
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), (Vector3f) waypoints.get(waypoints.size() - 1), waypoint);
+                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
             }
         }
         waypoints.add(waypoint);
@@ -175,7 +175,7 @@ public class WayPoints extends Node {
      *
      * @return A list of all waypoints.
      */
-    public ArrayList getWaypoints() {
+    public ArrayList<Vector3f> getWaypoints() {
         return waypoints;
     }
 
@@ -185,7 +185,7 @@ public class WayPoints extends Node {
      * @return A specific waypoint at point index.
      */
     public Vector3f getWaypoint(int index) {
-        return (Vector3f) waypoints.get(index);
+        return waypoints.get(index);
     }
 
     /**

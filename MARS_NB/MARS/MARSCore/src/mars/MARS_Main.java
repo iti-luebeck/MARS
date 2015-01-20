@@ -61,7 +61,6 @@ public class MARS_Main extends SimpleApplication {
     private boolean startstateinit = false;
     private boolean statsDarken = true;
 
-    StartState startstate;
     MapState mapstate;
     NiftyState niftystate;
 
@@ -126,12 +125,6 @@ public class MARS_Main extends SimpleApplication {
         progr.progress("Init Map ViewPort");
         initMapViewPort();
         progr.progress("Creating StartState");
-        startstate = new StartState(assetManager);
-        startstate.setEnabled(true);
-        if (!configManager.isAutoEnabled()) {
-            viewPort.attachScene(startstate.getRootNode());
-            stateManager.attach(startstate);
-        }
 
         progr.progress("Creating MapState");
         mapstate = new MapState(assetManager);
@@ -311,7 +304,7 @@ public class MARS_Main extends SimpleApplication {
             statsDarken = false;
         }
 
-        if (startstate != null && startstate.isInitialized() && TreeTopComp != null && MARSTopComp != null && startstateinit == false) {// little hack to allow the starting of a config only when the startstate was initialized
+        if (TreeTopComp != null && MARSTopComp != null && startstateinit == false) {// little hack to allow the starting of a config only when the startstate was initialized
             MARSTopComp.allowStateInteraction();
             startstateinit = true;
         }
@@ -336,7 +329,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Boolean> simStateFuture = this.enqueue(new Callable<Boolean>() {
             public Boolean call() throws Exception {
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.disconnectFromServer();
                     while (simState.getIniter().ServerRunning()) {
 
@@ -463,7 +456,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(NiftyState.class) != null) {
-                    NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                    NiftyState niftyState = stateManager.getState(NiftyState.class);
                     niftyState.setHoverMenuForAUV(auv, x, y);
                 }
                 return null;
@@ -480,7 +473,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(NiftyState.class) != null) {
-                    NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                    NiftyState niftyState = stateManager.getState(NiftyState.class);
                     niftyState.setHoverMenuForAUV(visible);
                 }
                 return null;
@@ -497,7 +490,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(NiftyState.class) != null) {
-                    NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                    NiftyState niftyState = stateManager.getState(NiftyState.class);
                     niftyState.setSpeedUp(visible);
                 }
                 return null;
@@ -512,7 +505,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.startSimulation();
                 }
                 return null;
@@ -530,7 +523,7 @@ public class MARS_Main extends SimpleApplication {
             Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     if (stateManager.getState(SimState.class) != null) {
-                        SimState simState = (SimState) stateManager.getState(SimState.class);
+                        SimState simState = stateManager.getState(SimState.class);
                         simState.getMARSSettings().setPhysicsSpeed(speed);
                     }
                     return null;
@@ -550,7 +543,7 @@ public class MARS_Main extends SimpleApplication {
             Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     if (stateManager.getState(SimState.class) != null) {
-                        SimState simState = (SimState) stateManager.getState(SimState.class);
+                        SimState simState = stateManager.getState(SimState.class);
                         simState.getMARSSettings().setPhysicsSpeed(speed);
                     }
                     return null;
@@ -569,7 +562,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.getMARSSettings().setPhysicsSpeed(speed);
                 }
                 return null;
@@ -602,7 +595,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.pauseSimulation();
                 }
                 return null;
@@ -617,7 +610,7 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.restartSimulation();
                 }
                 return null;
@@ -666,7 +659,7 @@ public class MARS_Main extends SimpleApplication {
     public void setStatsStateDark(boolean darken) {
         //we dont want a dark underlay in the stats
         if (stateManager.getState(StatsAppState.class) != null) {
-            StatsAppState statsState = (StatsAppState) stateManager.getState(StatsAppState.class);
+            StatsAppState statsState = stateManager.getState(StatsAppState.class);
             statsState.setDarkenBehind(darken);
         }
     }
@@ -678,17 +671,17 @@ public class MARS_Main extends SimpleApplication {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (stateManager.getState(BulletAppState.class) != null) {
-                    BulletAppState bulletAppState = (BulletAppState) stateManager.getState(BulletAppState.class);
+                    BulletAppState bulletAppState = stateManager.getState(BulletAppState.class);
                     bulletAppState.setEnabled(false);
                     stateManager.detach(bulletAppState);
                 }
                 if (stateManager.getState(MapState.class) != null) {
-                    MapState mapState = (MapState) stateManager.getState(MapState.class);
+                    MapState mapState = stateManager.getState(MapState.class);
                     //mapState.setEnabled(false);
                     mapState.clear();
                 }
                 if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = (SimState) stateManager.getState(SimState.class);
+                    SimState simState = stateManager.getState(SimState.class);
                     simState.setEnabled(false);
                     stateManager.detach(simState);
                 }

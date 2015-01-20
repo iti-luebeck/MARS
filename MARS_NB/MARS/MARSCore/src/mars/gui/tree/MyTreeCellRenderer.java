@@ -20,7 +20,6 @@ import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV;
 import mars.auv.AUV_Parameters;
 import mars.sensors.AmpereMeter;
-import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -171,9 +170,6 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
                     }else{
                         if(hasher.getUserData() instanceof Sonar){
                             File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "radar.png", "mars.core", false);
-                            setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
-                        }else if(hasher.getUserData() instanceof Compass){
-                            File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "compass.png", "mars.core", false);
                             setIcon(new javax.swing.ImageIcon(file.getAbsolutePath()));
                         }else if(hasher.getUserData() instanceof VideoCamera){
                             File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + "cctv_camera.png", "mars.core", false);

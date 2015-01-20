@@ -41,8 +41,6 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.auv.CommunicationManager;
-import mars.auv.example.Hanse;
-import mars.auv.example.Monsun2;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XML_JAXB_ConfigReaderWriter;

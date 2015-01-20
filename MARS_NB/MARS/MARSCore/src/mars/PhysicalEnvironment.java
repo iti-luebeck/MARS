@@ -377,6 +377,7 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
      * @param hashmapname
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             return environment.get(value);
@@ -392,6 +393,7 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
      * @param object
      * @param hashmapname
      */
+    @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             environment.put(value, object);

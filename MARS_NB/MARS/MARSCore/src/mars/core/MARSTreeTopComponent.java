@@ -806,10 +806,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                 //System.out.println(selPath.getLastPathComponent().toString()); 
                 
                 //deselect all auvs before we start to selcting it clean
-                Future simStateFutureD = mars.enqueue(new Callable() {
+                mars.enqueue(new Callable<Void>() {
                             public Void call() throws Exception {
                                 if(mars.getStateManager().getState(GuiState.class) != null){
-                                    GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
                                     guiState.deselectAllAUVs();
                                 }
                                 return null;
@@ -821,10 +821,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                         try {  
                             if (treePath.getLastPathComponent() instanceof AUV) {   
                                 final AUV auv = (AUV)treePath.getLastPathComponent();
-                                Future simStateFuture = mars.enqueue(new Callable() {
+                                mars.enqueue(new Callable<Void>() {
                                     public Void call() throws Exception {
                                         if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
                                             //simState.deselectAllAUVs();
                                             guiState.selectAUV(auv);
                                         }
@@ -832,10 +832,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                                     }
                                 });  
                             }else{
-                                    Future simStateFuture = mars.enqueue(new Callable() {
+                                    mars.enqueue(new Callable<Void>() {
                                         public Void call() throws Exception {
                                             if(mars.getStateManager().getState(GuiState.class) != null){
-                                                GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                                GuiState guiState = mars.getStateManager().getState(GuiState.class);
                                                 guiState.deselectAllAUVs();
                                             }
                                             return null;
@@ -843,10 +843,10 @@ public final class MARSTreeTopComponent extends TopComponent {
                                     });
                             }        
                         } catch (IllegalArgumentException e) {
-                                Future simStateFuture = mars.enqueue(new Callable() {
+                                mars.enqueue(new Callable<Void>() {
                                     public Void call() throws Exception {
                                         if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
+                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
                                             guiState.deselectAllAUVs();
                                         }
                                         return null;
