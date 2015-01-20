@@ -311,8 +311,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
 
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, initer);
-
-            Future<Void> fut = mars.enqueue(new Callable<Void>() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
                     return null;
@@ -321,6 +320,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
 
             progr.progress("Populate SimObjectManager");
             populateSim_Object_Manager(simobs);
+            mars.enqueue(new Callable<Void>() {
+                public Void call() throws Exception {
+                    CentralLookup.getDefault().add(simobManager);
+                    return null;
+                }
+            });
 
             progr.progress("Init View");
             initView();

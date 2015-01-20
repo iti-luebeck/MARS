@@ -72,7 +72,7 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer{
             AUV_Parameters auvParams = auv.getAuv_param();
             if(auvParams.getIcon() != null && !(auvParams.getIcon().equals(""))){
                 File file = InstalledFileLocator.getDefault().locate("Assets/Icons/" + auvParams.getIcon(), "mars.core", false);
-                setIcon(new javax.swing.ImageIcon(file.getAbsolutePath())); 
+                //setIcon(new javax.swing.ImageIcon(file.getAbsolutePath())); 
             }else{
                setIcon(new javax.swing.ImageIcon(this.getClass().getResource("/mars/gui/resources/icons/yellow_submarine.png"))); 
             }

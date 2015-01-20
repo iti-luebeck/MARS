@@ -25,8 +25,12 @@ import mars.object.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,6 +44,7 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.misc.PickHint;
 import mars.gui.tree.HashMapWrapper;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.object.MARSObject;
 import mars.xml.HashMapAdapter;
 
@@ -52,7 +57,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement(name = "SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({OilBurst.class})
-public class SimObject implements MARSObject{
+public class SimObject implements MARSObject,PropertyChangeListenerSupport{
 
     /**
      *
@@ -89,6 +94,8 @@ public class SimObject implements MARSObject{
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
     private Spatial debugShape;
+    
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *
@@ -105,6 +112,33 @@ public class SimObject implements MARSObject{
         HashMap<String, Object> variablesOriginal = simob.getAllVariables();
         Cloner cloner = new Cloner();
         simob_variables = cloner.deepClone(variablesOriginal);
+    }
+    
+    /**
+     *
+     * @param pcl
+     */
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    /**
+     *
+     * @param pcl
+     */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<updateVariable(propertyName);
     }
 
     /**

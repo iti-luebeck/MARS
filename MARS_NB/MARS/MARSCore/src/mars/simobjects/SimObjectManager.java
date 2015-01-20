@@ -23,13 +23,16 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.gui.tree.UpdateState;
 import mars.states.SimState;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  * This manager manages the SimObjects. Intialises them...
  *
  * @author Thomas Tosik
  */
-public class SimObjectManager implements UpdateState {
+public class SimObjectManager implements UpdateState, Lookup.Provider {
 
     //auv HashMap to store and load auv's
 
@@ -43,6 +46,10 @@ public class SimObjectManager implements UpdateState {
     private Node rootNode;
     private MARS_Settings mars_settings;
 
+    //lookup stuff
+    private InstanceContent content = new InstanceContent();
+    private Lookup lookup = new AbstractLookup(content);
+    
     /**
      *
      * @param simstate
@@ -80,6 +87,15 @@ public class SimObjectManager implements UpdateState {
         this.mars_settings = simstate.getMARSSettings();
     }
 
+        /**
+     *
+     * @return
+     */
+    @Override
+    public Lookup getLookup() {
+        return lookup;
+    }
+    
     /**
      * With this method you register pre created auv like hanse.
      *
