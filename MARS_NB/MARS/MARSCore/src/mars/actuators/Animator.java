@@ -104,7 +104,7 @@ public class Animator extends Actuator {
             com.jme3.math.Quaternion rotatoTo = poll.getTransform().getRotation();  
             float timeTo = poll.getTime();
             
-            Future simStateFuture = this.simauv.enqueue(new Callable() {
+            Future<Void> simStateFuture = this.simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 getPhysicsControl().setPhysicsLocation(poll.getTransform().getTranslation());
                 getPhysicsControl().setPhysicsRotation(poll.getTransform().getRotation());

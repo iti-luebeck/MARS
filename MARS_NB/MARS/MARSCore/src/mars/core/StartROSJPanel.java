@@ -161,7 +161,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonServerConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerConnectActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+       Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -173,7 +173,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonServerConnectActionPerformed
 
     private void jButtonServerDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerDisconnectActionPerformed
-         Future simStateFuture = mars.enqueue(new Callable() {
+         Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -187,7 +187,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
     private void jButtonServerPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPlayActionPerformed
         jButtonServerPause.setEnabled(true);
         jButtonServerPlay.setEnabled(false);
-        Future simStateFuture = mars.enqueue(new Callable() {
+        Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -201,7 +201,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
     private void jButtonServerPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPauseActionPerformed
         jButtonServerPause.setEnabled(false);
         jButtonServerPlay.setEnabled(true);
-        Future simStateFuture = mars.enqueue(new Callable() {
+        Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);

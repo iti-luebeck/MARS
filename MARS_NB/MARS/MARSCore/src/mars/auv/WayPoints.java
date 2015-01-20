@@ -107,7 +107,7 @@ public class WayPoints extends Node {
      * Updates the gradient effect of all connected waypoints.
      */
     public void updateGradient() {
-        Future fut = simauv.enqueue(new Callable() {
+        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 float ways = (float) waypoints_geom.size();
                 int counter = 1;
@@ -134,7 +134,7 @@ public class WayPoints extends Node {
      * Updates the color of all connected waypoints.
      */
     public void updateColor() {
-        Future fut = simauv.enqueue(new Callable() {
+        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 Iterator iter = waypoints_geom.iterator();
                 while (iter.hasNext()) {
@@ -220,7 +220,7 @@ public class WayPoints extends Node {
         geom.setMaterial(mat);
         geom.updateGeometricState();
         waypoints_geom.add(geom);
-        Future fut = simauv.enqueue(new Callable() {
+        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.attachChild(geom);
                 return null;
@@ -229,7 +229,7 @@ public class WayPoints extends Node {
     }
 
     private void destroyLine() {
-        Future fut = simauv.enqueue(new Callable() {
+        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.detachChildAt(0);
                 return null;
@@ -238,7 +238,7 @@ public class WayPoints extends Node {
     }
 
     private void destroyLines() {
-        Future fut = simauv.enqueue(new Callable() {
+        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.detachAllChildren();
                 return null;

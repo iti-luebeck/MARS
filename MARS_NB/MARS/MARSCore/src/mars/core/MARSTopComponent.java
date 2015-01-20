@@ -1335,7 +1335,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_view_rotateCameraActionPerformed
 
     private void split_viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_split_viewActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -1355,7 +1355,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -1372,7 +1372,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -1389,7 +1389,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_rotateCameraDialog_xActionPerformed
 
     private void jme3_chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_chase_auvActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1413,7 +1413,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_rotate_auvActionPerformed
 
     private void jme3_pokeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_pokeActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+       mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1425,7 +1425,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_pokeActionPerformed
 
     private void jme3_reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_reset_auvActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1437,7 +1437,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_reset_auvActionPerformed
 
     private void jme3_enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_enable_auvActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1474,7 +1474,7 @@ public final class MARSTopComponent extends TopComponent {
         options,
         options[1]);
         if(delete == 0){
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                         if(mars.getStateManager().getState(SimState.class) != null){
                             SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
@@ -1495,7 +1495,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_delete_auvActionPerformed
 
     private void jme3_debug_auv_peActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_peActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1509,7 +1509,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_peActionPerformed
 
     private void jme3_debug_auv_visualizersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_visualizersActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1523,7 +1523,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_visualizersActionPerformed
 
     private void jme3_debug_auv_centersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_centersActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1537,7 +1537,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_centersActionPerformed
 
     private void jme3_debug_auv_buoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_buoyActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1551,7 +1551,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_buoyActionPerformed
 
     private void jme3_debug_auv_collisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_collisionActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1565,7 +1565,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_collisionActionPerformed
 
     private void jme3_debug_auv_dragActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_dragActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1579,7 +1579,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_dragActionPerformed
 
     private void jme3_debug_auv_wireframeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_wireframeActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1593,7 +1593,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_wireframeActionPerformed
 
     private void jme3_debug_auv_boundingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_boundingActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1607,7 +1607,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_debug_auv_boundingActionPerformed
 
     private void jme3_waypoints_auv_enableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_enableActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1621,7 +1621,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_waypoints_auv_enableActionPerformed
 
     private void jme3_waypoints_auv_visibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_visibleActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1635,7 +1635,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_waypoints_auv_visibleActionPerformed
 
     private void jme3_waypoints_auv_gradientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_gradientActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1649,7 +1649,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_waypoints_auv_gradientActionPerformed
 
     private void jme3_waypoints_auv_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_resetActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1666,7 +1666,7 @@ public final class MARSTopComponent extends TopComponent {
                      "Choose Color for Waypoints",
                      Color.WHITE);
         if(newColor != null){
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1684,7 +1684,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         auv_move_vector_dialog.setVisible(false);
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1705,7 +1705,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         auv_move_vector_dialog.setVisible(false);
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(SimState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1721,7 +1721,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_auv_rotate_vector_dialog_xActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-       Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1733,7 +1733,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-         Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -1791,7 +1791,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_auv_name_textKeyPressed
 
     private void jme3_debug_auv_bounding_volumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_bounding_volumeActionPerformed
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if(mars.getStateManager().getState(GuiState.class) != null){
                     GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -2672,7 +2672,7 @@ public final class MARSTopComponent extends TopComponent {
      * @param f
      */
     public void loadSimState(final File f){
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 mars.setConfigName(f.getName());
                 mars.restartSimState();
@@ -2685,7 +2685,7 @@ public final class MARSTopComponent extends TopComponent {
      *
      */
     public void activateFlyByCam(){
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 mars.getChaseCam().setEnabled(false);         
                 mars.getFlyByCamera().setEnabled(true);
@@ -2747,7 +2747,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     public void restartSimState(){
         if(mars != null){
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     mars.restartSimState();
                     return null;

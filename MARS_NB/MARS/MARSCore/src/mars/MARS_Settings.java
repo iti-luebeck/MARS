@@ -71,7 +71,7 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
     @XmlTransient
     private Initializer initer;
     @XmlTransient
-    private List listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     private boolean setupAxis = true;
     private boolean setupFog = false;

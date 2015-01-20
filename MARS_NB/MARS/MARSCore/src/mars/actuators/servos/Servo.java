@@ -316,7 +316,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
                 while (iter.hasNext()) {
                     final Moveable moves = (Moveable) iter.next();
                     final int fin_do_it_iterations = do_it_iterations;
-                    Future fut = this.simState.getMARS().enqueue(new Callable() {
+                    Future<Void> fut = this.simState.getMARS().enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             moves.updateRotation(getResolution() * (fin_do_it_iterations + current_angle_iteration + getServoNeutralPosition()));
                             return null;

@@ -477,7 +477,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
@@ -1310,7 +1310,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void initWaypoints() {
         //if(auv_param.isWaypointsEnabled()){
         WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param, getMARS_Settings());
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 rootNode.attachChild(WayPoints);
                 return null;
@@ -2225,7 +2225,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
 
         final Vector3f in = volume_center_local.clone();
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 VolumeCenterGeom.setLocalTranslation(in);
                 VolumeCenterGeom.updateGeometricState();
@@ -2234,7 +2234,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         });
 
         if (VolumeCenterPreciseGeom.getWorldTranslation().equals(this.volume_center_precise)) {//save the precise only once
-            Future fut2 = mars.enqueue(new Callable() {
+            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     VolumeCenterPreciseGeom.setLocalTranslation(in);
                     VolumeCenterPreciseGeom.updateGeometricState();

@@ -151,7 +151,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
      * @param auv
      */
     public void addAUV(final AUV auv) {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (auv.getAuv_param().isEnabled()) {
                     Node auvNode = new Node(auv.getName());

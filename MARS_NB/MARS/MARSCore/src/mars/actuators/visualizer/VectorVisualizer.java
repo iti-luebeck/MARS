@@ -168,7 +168,7 @@ public class VectorVisualizer extends Actuator implements ChartValue {
      */
     public void updateVector(final Vector3f vector) {
         this.vector = vector;
-        Future fut = this.simauv.enqueue(new Callable() {
+        Future<Void> fut = this.simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 VectorVisualizerEnd.setLocalTranslation(vector);
                 arrow.setArrowExtent(vector);

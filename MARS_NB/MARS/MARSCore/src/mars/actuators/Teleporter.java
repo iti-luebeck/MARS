@@ -104,7 +104,7 @@ public class Teleporter extends Actuator {
      * @param quat
      */
     public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat) {
-        Future simStateFuture = this.simauv.enqueue(new Callable() {
+        Future<Void> simStateFuture = this.simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 getPhysicsControl().setPhysicsLocation(vector);
                 getPhysicsControl().setPhysicsRotation(quat);

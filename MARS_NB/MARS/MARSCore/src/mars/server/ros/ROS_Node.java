@@ -282,7 +282,7 @@ public class ROS_Node implements Runnable {
         try {
             while (running) {
 
-                Future fut = mars.enqueue(new Callable() {
+                Future<Void> fut = mars.enqueue(new Callable<Void>() {
                     public Void call() throws Exception {
                         if (marsSettings.getROSPublish()) {
                             auv_manager.publishSensorsOfAUVs();

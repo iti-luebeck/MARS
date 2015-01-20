@@ -29,7 +29,7 @@ import mars.xml.HashMapAdapter;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
-    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *

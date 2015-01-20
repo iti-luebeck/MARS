@@ -82,7 +82,7 @@ public class MapStateTransferHandler extends TransferHandler {
                 return false;
             }
 
-            Future simStateFuture = mars.enqueue(new Callable() {
+            Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(MapState.class) != null) {
                         MapState mapState = (MapState) mars.getStateManager().getState(MapState.class);

@@ -44,7 +44,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     private HashMap<String, Object> optimize;
     private AUV auv;
 
-    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *

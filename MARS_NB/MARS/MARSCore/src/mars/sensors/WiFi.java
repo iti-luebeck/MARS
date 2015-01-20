@@ -238,7 +238,7 @@ public class WiFi extends CommunicationDevice {
      * @param uws
      */
     public void updateComNet(HashMap<String, WiFi> uws) {
-        Future fut2 = simState.getMARS().enqueue(new Callable() {
+        Future<Void> fut2 = simState.getMARS().enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 comNet.detachAllChildren();
                 return null;
@@ -254,7 +254,7 @@ public class WiFi extends CommunicationDevice {
                 if (dis <= proDist) {//ignore uws far away
                     final Vector3f newVec = new Vector3f();
                     comNet.worldToLocal(uw.getWorldPosition(), newVec);
-                    Future fut = simState.getMARS().enqueue(new Callable() {
+                    Future<Void> fut = simState.getMARS().enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             Geometry x_axis = new Geometry("x_axis!", new Line(Vector3f.ZERO, newVec.mult(0.5f)));
                             Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

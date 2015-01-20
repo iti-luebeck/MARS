@@ -111,7 +111,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private Node currents = new Node("currents");
 
     @SuppressWarnings("unchecked")
-    private Future simStateFuture = null;
+    private Future<Void> simStateFuture = null;
 
     //map stuff
     private MapState mapState;
@@ -322,7 +322,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, recordManager, initer);
 
-            Future fut = mars.enqueue(new Callable() {
+            Future<Void> fut = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
                     return null;
@@ -348,7 +348,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             final AppStateManager stateManagerFin = stateManager;
             
             @SuppressWarnings("unchecked")
-            Future fut2 = mars.enqueue(new Callable() {
+            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     getMARS().getViewPort().attachScene(guiState.getRootNode());
                     stateManagerFin.attach(guiState);
@@ -494,7 +494,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
 
     @SuppressWarnings("unchecked")
     private void initMap() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 mapState.loadMap(mars_settings.getTerrainColorMap());
                 mapState.setMars_settings(mars_settings);
@@ -565,7 +565,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             //do stuff after jaxb, see also UnmarshallListener
             Iterator<AUV> iter = auvs.iterator();
             while (iter.hasNext()) {
-                AUV bas_auv = (AUV) iter.next();
+                AUV bas_auv = iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
@@ -592,23 +592,25 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         }
         auvManager.registerAUVs(auvs);
         //update the view in the next frame
-        Future fut = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                TreeTopComp.updateTrees();
-                TreeTopComp.initPopUpMenues(auvManager);
-                return null;
+        Future<Void> fut = mars.enqueue(
+            new Callable<Void>(){
+                public Void call() throws Exception {
+                    TreeTopComp.updateTrees();
+                    TreeTopComp.initPopUpMenues(auvManager);
+                    return null;
+                }
             }
-        });
+        );
     }
 
     /*
      *
      */
-    private void populateSim_Object_Manager(ArrayList simobs) {
+    private void populateSim_Object_Manager(ArrayList<SimObject> simobs) {
         simobManager.setBulletAppState(bulletAppState);
         simobManager.registerSimObjects(simobs);
         //update the view in the next frame
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 TreeTopComp.updateTrees();
                 return null;
@@ -924,7 +926,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void startSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
                 initial_ready = true;
@@ -940,7 +942,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void pauseSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.setEnabled(false);
                 bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -957,7 +959,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void restartSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();
@@ -1037,7 +1039,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 auvCopy.setState(this);
                 auvManager.registerAUV(auvCopy);
                 //we have to update the view AFTER the AUV register
-                Future simStateFutureView = mars.enqueue(new Callable() {
+                Future<Void> simStateFutureView = mars.enqueue(new Callable<Void>() {
                     public Void call() throws Exception {
                         if (TreeTopComp != null) {
                             TreeTopComp.updateTrees();
@@ -1121,7 +1123,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 simobCopy.setPosition(pos);
                 simobManager.registerSimObject(simobCopy);
                 TreeTopComp.updateTrees();
-                Future simStateFutureView = mars.enqueue(new Callable() {
+                Future<Void> simStateFutureView = mars.enqueue(new Callable<Void>() {
                     public Void call() throws Exception {
                         if (TreeTopComp != null) {
                             TreeTopComp.updateTrees();

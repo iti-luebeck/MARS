@@ -85,7 +85,6 @@ import jme3utilities.sky.SkyControl;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
 import mars.filter.FishEyeFilter;
-import mars.filter.LensFlareFilter;
 import mars.server.MARSClient;
 import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
@@ -731,7 +730,7 @@ public class Initializer {
      */
     public void setupPlaneWater() {
         // A translucent/transparent texture, similar to a window frame.
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (water_plane != null) {
                     water_plane.removeFromParent();
@@ -783,11 +782,7 @@ public class Initializer {
     }
 
     private void setupLensFlare() {
-        //LensFlareFilter lf = new LensFlareFilter("Textures/lensdirt.png"); // or null if you don't own a +1 Lens Cloth of Smiting
-        LensFlareFilter lf = new LensFlareFilter(null); // or null if you don't own a +1 Lens Cloth of Smiting
-        lf.setGhostSpacing(0.125f);
-        lf.setHaloDistance(0.48f);
-        fpp.addFilter(lf);
+        
     }
 
     /**
@@ -803,7 +798,7 @@ public class Initializer {
      */
     public void setupLight() {
         final Node rootNodeMars = mars.getRootNode();
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 rootNodeMars.removeLight(sun);//remove all old stuff before
                 rootNodeMars.removeLight(ambLight);
@@ -849,7 +844,7 @@ public class Initializer {
      * This creates a dynamic sky.
      */
     private void setupSkyDome() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 /*
                  * Create a SkyControl to animate the sky.
@@ -951,7 +946,7 @@ public class Initializer {
      *
      */
     public void setupGrid() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 gridNode.detachAllChildren();
                 Geometry grid = new Geometry("wireframe grid", new Grid(mars_settings.getGridSizeX(), mars_settings.getGridSizeY(), mars_settings.getGridLineDistance()));
@@ -1442,7 +1437,7 @@ public class Initializer {
      *
      */
     public void updateTerrain() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (terrain_node != null) {
                     terrain_node.setLocalTranslation(mars_settings.getTerrainPosition());
@@ -1566,7 +1561,7 @@ public class Initializer {
         rootNode.attachChild(pollutionNode);
 
         //let us see the pollution
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (pollution_plane != null) {
                     pollution_plane.removeFromParent();
@@ -1598,7 +1593,7 @@ public class Initializer {
      *
      */
     public void updatePollution() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (pollution_plane != null) {
                     pollution_plane.removeFromParent();
@@ -1699,7 +1694,7 @@ public class Initializer {
      *
      */
     public void updateGrass() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (grassLoader != null) {
                     grassLoader.setFarViewingDistance(mars_settings.getGrassFarViewingDistance());
@@ -1905,7 +1900,7 @@ public class Initializer {
      * @param hour
      */
     public void resetTimeOfDay(final float hour) {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 timeOfDay = new TimeOfDay(hour);
                 return null;

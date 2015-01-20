@@ -90,7 +90,7 @@ public class SimObjectManager implements UpdateState {
         simob.setName(name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 addSimObjectToScene(fin_simob);
                 simobs.put(fin_simob.getName(), fin_simob);
@@ -106,7 +106,7 @@ public class SimObjectManager implements UpdateState {
     public void registerSimObject(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 addSimObjectToScene(fin_simob);
                 simobs.put(fin_simob.getName(), fin_simob);
@@ -135,7 +135,7 @@ public class SimObjectManager implements UpdateState {
     public void deregisterSimObject(String name) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + name + " deleted...", "");
         final String fin_name = name;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 SimObject ret = simobs.remove(fin_name);
                 removeSimObjectFromScene(ret);
@@ -151,7 +151,7 @@ public class SimObjectManager implements UpdateState {
     public void deregisterSimObject(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " deleted...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 removeSimObjectFromScene(fin_simob);
                 simobs.remove(fin_simob.getName());
@@ -268,7 +268,7 @@ public class SimObjectManager implements UpdateState {
             if (simob.isEnabled()) {
                 final Spatial final_spatial = simob.getSpatial();
                 if (simob.isRayDetectable()) {
-                    Future fut = mars.enqueue(new Callable() {
+                    Future<Void> fut = mars.enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             //SonarDetectableNode.attachChild(final_spatial);
                             return null;
@@ -276,7 +276,7 @@ public class SimObjectManager implements UpdateState {
                     });
                 } else {
                     final Node final_node = node;
-                    Future fut = mars.enqueue(new Callable() {
+                    Future<Void> fut = mars.enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             final_node.attachChild(final_spatial);
                             return null;

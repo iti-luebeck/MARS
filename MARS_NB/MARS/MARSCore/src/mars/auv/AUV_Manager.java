@@ -478,7 +478,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         auv.setName(name);
         final AUV fin_auv = auv;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 auvs.put(fin_auv.getName(), fin_auv);
                 preloadAUV(fin_auv);
@@ -494,7 +494,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void registerAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
         final AUV fin_auv = auv;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 final ProgressHandle progr = ProgressHandleFactory.createHandle("AUVManager: " + fin_auv.getName());
                 progr.start();
@@ -528,7 +528,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void deregisterAUV(String auv_name) {
         final String fin_auv_name = auv_name;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv_name + " deleted...", "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 AUV ret = auvs.remove(fin_auv_name);
                 removeAUVFromScene(ret);
@@ -544,7 +544,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void deregisterAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
         final AUV fin_auv = auv;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 removeAUVFromScene(fin_auv);
                 auvs.remove(fin_auv.getName());
