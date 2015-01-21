@@ -32,7 +32,7 @@ import org.openide.util.lookup.InstanceContent;
  *
  * @author Thomas Tosik
  */
-public class SimObjectManager implements UpdateState, Lookup.Provider {
+public class SimObjectManager implements Lookup.Provider {
 
     //auv HashMap to store and load auv's
 
@@ -251,7 +251,7 @@ public class SimObjectManager implements UpdateState, Lookup.Provider {
     private void addSimObjectToNode(SimObject simob, Node node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
         if (simob.isEnabled()) {
-            if (simob.isRayDetectable()) {
+            if (simob.getRayDetectable()) {
                 RayDetectable.attachChild(simob.getSimObNode());
             }
             node.attachChild(simob.getSimObNode());
@@ -283,7 +283,7 @@ public class SimObjectManager implements UpdateState, Lookup.Provider {
             SimObject simob = simobs.get(elem);
             if (simob.isEnabled()) {
                 final Spatial final_spatial = simob.getSpatial();
-                if (simob.isRayDetectable()) {
+                if (simob.getRayDetectable()) {
                     Future<Void> fut = mars.enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             //SonarDetectableNode.attachChild(final_spatial);
@@ -309,7 +309,7 @@ public class SimObjectManager implements UpdateState, Lookup.Provider {
      * @param simob
      */
     public void addSimObjectToBulletAppState(SimObject simob) {
-        if (simob.isCollidable() && simob.isEnabled()) {
+        if (simob.getCollisionCollidable() && simob.isEnabled()) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObject " + simob.getName() + " to BulletAppState...", "");
             bulletAppState.getPhysicsSpace().add(simob.getSpatial());
         }
@@ -398,15 +398,5 @@ public class SimObjectManager implements UpdateState, Lookup.Provider {
     @Override
     public String toString() {
         return "SimObjects";
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        SimObject simob = (SimObject) path.getPathComponent(1);
-        simob.updateState(path);
     }
 }

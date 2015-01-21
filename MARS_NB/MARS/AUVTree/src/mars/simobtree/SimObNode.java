@@ -1,5 +1,7 @@
 package mars.simobtree;
 
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -8,6 +10,11 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.swing.AbstractAction;
@@ -18,22 +25,33 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import mars.MARS_Main;
+import mars.PhysicalExchange.Manipulating;
+import mars.PhysicalExchange.PhysicalExchanger;
+import mars.accumulators.Accumulator;
+import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
 import mars.auvtree.TreeUtil;
 import mars.auvtree.nodes.*;
 import mars.core.CentralLookup;
 import mars.core.MARSChartTopComponent;
+import mars.gui.PropertyEditors.ColorPropertyEditor;
+import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import mars.gui.dnd.TransferHandlerObject;
 import mars.gui.dnd.TransferHandlerObjectDataFlavor;
 import mars.gui.dnd.TransferHandlerObjectType;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
+import org.openide.ErrorManager;
 import org.openide.actions.CopyAction;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.nodes.PropertySupport;
+import org.openide.nodes.Sheet;
+import org.openide.util.Exceptions;
 import org.openide.util.actions.Presenter;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.ExTransferable;
@@ -78,10 +96,12 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
      * @param obj
      * @param name
      */
-    public SimObNode(Object obj, String name) {
-        super(Children.create(new ParamChildNodeFactory(name), true), Lookups.singleton(obj));
+    public SimObNode(SimObject simob, String name) {
+        //super(Children.create(new ParamChildNodeFactory(name), true), Lookups.singleton(obj));
+        super(Children.LEAF, Lookups.singleton(simob));
         this.name = name;
-        Lookups.singleton(obj);
+        this.simob = simob;
+        Lookups.singleton(simob);
 
         // use lookup to get simob out of mars
         CentralLookup cl = CentralLookup.getDefault();
@@ -111,7 +131,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(), new ResetAction(), new EnableAction(), SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class), new DebugAction()};
+        return new Action[]{/*new ChaseAction(), new ResetAction(),*/ new EnableAction(), SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class), /*new DebugAction()*/};
     }
 
     /**
@@ -151,6 +171,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         this.fireDisplayNameChange(null, getDisplayName());
         this.fireIconChange();
+        setSheet(getSheet());
     }
 
     /**
@@ -176,7 +197,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
 
             @Override
             public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                return new TransferHandlerObject(TransferHandlerObjectType.AUV, simob.getName());
+                return new TransferHandlerObject(TransferHandlerObjectType.SIMOBJECT, simob.getName());
             }
         };
         ExTransferable create = ExTransferable.create(transferable);
@@ -219,10 +240,10 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
         public void actionPerformed(ActionEvent e) {
             final boolean auvEnabled = simob.isEnabled();
             simob.setEnabled(!auvEnabled);
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(SimState.class) != null) {
-                        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<simobManager.enableAUV(simob, !auvEnabled);
+                        simobManager.enableSimObject(simob, !auvEnabled);
                     }
                     return null;
                 }
@@ -237,7 +258,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
      * Inner class for the actions on right click. Provides action to enable and
  disable an simob.
      */
-    private class ChaseAction extends AbstractAction {
+    /*private class ChaseAction extends AbstractAction {
 
         public ChaseAction() {
             putValue(NAME, "Chase");
@@ -250,7 +271,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(SimState.class) != null) {
                         SimState simState = mars.getStateManager().getState(SimState.class);
-                        //<<<<<<<<<<<<<<<<<<<<<<<<<simState.chaseAUV(simob);
+                        simState.chaseAUV(simob);
                     }
                     return null;
                 }
@@ -258,13 +279,13 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 
-    }
+    }*/
 
     /**
      * Inner class for the actions on right click. Provides action to enable and
  disable an simob.
      */
-    private class ResetAction extends AbstractAction {
+    /*private class ResetAction extends AbstractAction {
 
         public ResetAction() {
             putValue(NAME, "Reset");
@@ -275,20 +296,20 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
-                    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<simob.reset();
+                    simob.reset();
                     return null;
                 }
             });
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 
-    }
+    }*/
 
     /**
      * Inner class for the actions on right click. Provides action to enable and
  disable an simob.
      */
-    private class DebugAction extends AbstractAction implements Presenter.Popup {
+    /*private class DebugAction extends AbstractAction implements Presenter.Popup {
 
         public DebugAction() {
             putValue(NAME, "Buoyancy");
@@ -303,15 +324,15 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MARSChartTopComponent chart = new MARSChartTopComponent(simob);
+            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MARSChartTopComponent chart = new MARSChartTopComponent(simob);
 
             chart.setName("Chart of: " + simob.getName());
             chart.open();
             chart.requestActive();
 
-            chart.repaint();*/
+            chart.repaint();
         }
-    }
+    }*/
 
     /**
      *
@@ -319,10 +340,10 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public void destroy() throws IOException {
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (mars.getStateManager().getState(SimState.class) != null) {
-                    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<simobManager.deregisterAUVNoFuture(simob);
+                    simobManager.deregisterSimObject(simob);
                 }
                 return null;
             }
@@ -353,12 +374,12 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
     public void setName(final String s) {
         final String oldName = this.name;
         this.name = s;
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (mars.getStateManager().getState(SimState.class) != null) {
-                                //AUV simob = simobManager.getAUV(oldName);
+                     //AUV simob = simobManager.getAUV(oldName);
                     //auv.setName(s);
-                    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<simobManager.updateAUVName(oldName, s);
+                    //<<<<<<<<<<<<<<<<<<simobManager.updateAUVName(oldName, s);
                 }
                 return null;
             }
@@ -430,5 +451,140 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
         } else {
             return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
         }
+    }
+    
+      /**
+     * This method generates the properties for the property sheet. It adds an
+     * property change listener for each displayed property. This is used to
+     * update the property sheet when values in an external editor are adjusted.
+     *
+     * @return Returns instance of sheet.
+     */
+    @Override
+    protected Sheet createSheet() {
+        Sheet sheet = Sheet.createDefault();
+        
+        if (simob.getAllVariables() != null) {
+            createPropertiesSet(simob, simob.getAllVariables(), "Properties", false, sheet);
+        }
+
+        // add listener to react of changes from external editors (AUVEditor)
+        if (simob.getAllVariables() != null) {
+            ((PropertyChangeListenerSupport) (simob)).addPropertyChangeListener(this);
+        }
+        return sheet;
+    }
+    
+    private void createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert, Sheet sheet) {
+        Sheet.Set set;
+        if (expert) {
+            set = Sheet.createExpertSet();
+        } else {
+            set = Sheet.createPropertiesSet();
+        }
+
+        set.setDisplayName(displayName);
+        set.setName(displayName);
+        sheet.put(set);
+        Property prop;
+        String name;
+
+        SortedSet<String> sortedset = new TreeSet<String>(params.keySet());
+        for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
+            String key = it2.next();
+            Object value = params.get(key);
+
+            if (value instanceof HashMap) {//make a new set 
+                Sheet.Set setHM = Sheet.createExpertSet();
+                HashMap hasher = (HashMap) value;
+                SortedSet<String> sortedset2 = new TreeSet<String>(hasher.keySet());
+                for (Iterator<String> it3 = sortedset2.iterator(); it3.hasNext();) {
+                    String key2 = it3.next();
+                    Object value2 = hasher.get(key2);
+                    String namehm = key + key2.substring(0, 1).toUpperCase() + key2.substring(1);
+                    try {
+                        Property prophm = new PropertySupport.Reflection(obj, value2.getClass(), namehm);
+                        // set custom property editor for position and rotation params
+                        if (value2 instanceof Vector3f) {
+                            ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                        } else if (value2 instanceof ColorRGBA) {
+                            ((PropertySupport.Reflection) (prophm)).setPropertyEditorClass(ColorPropertyEditor.class);
+                        }
+
+                        prophm.setName(key2);
+                        setHM.put(prophm);
+                    } catch (NoSuchMethodException ex) {
+                        ErrorManager.getDefault();
+                    }
+                }
+                setHM.setDisplayName(key);
+                setHM.setName(key);
+                sheet.put(setHM);
+            } else {//ueber set (properties)
+                name = key.substring(0, 1).toUpperCase() + key.substring(1);
+                try {
+                    prop = new PropertySupport.Reflection(obj, value.getClass(), name);
+                    // set custom property editor for position and rotation params
+                    if (value instanceof Vector3f) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+                    } else if (value instanceof ColorRGBA) {
+                        ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+                    }
+
+                    prop.setName(name);
+                    prop.setShortDescription("test lirum ipsum");
+                    set.put(prop);
+                } catch (NoSuchMethodException ex) {
+                    ErrorManager.getDefault();
+                }
+            }
+        }
+    }
+
+    private Sheet.Set createPropertiesSet(Object obj, ArrayList params, String displayName, boolean expert) {
+        Sheet.Set set;
+        if (expert) {
+            set = Sheet.createExpertSet();
+        } else {
+            set = Sheet.createPropertiesSet();
+        }
+
+        Property prop;
+        String name;
+        for (Iterator it = params.iterator(); it.hasNext();) {
+            String slaveName = (String) it.next();
+            try {
+                prop = new PropertySupport.Reflection(obj, String.class, "SlavesNames");
+                prop.setName(slaveName);
+                set.put(prop);
+            } catch (NoSuchMethodException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+        /*Iterator<Map.Entry<String, Object>> i = params.entrySet().iterator();
+        
+         for (; i.hasNext();) {
+         Map.Entry<String, Object> mE = i.next();
+
+         if (!mE.getKey().isEmpty()) {
+         name = mE.getKey().substring(0, 1).toUpperCase() + mE.getKey().substring(1);
+         try {
+         prop = new PropertySupport.Reflection(obj, mE.getValue().getClass(), "getSlavesNames");
+         // set custom property editor for position and rotation params
+         if (mE.getValue() instanceof Vector3f) {
+         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(Vector3fPropertyEditor.class);
+         } else if (mE.getValue() instanceof ColorRGBA) {
+         ((PropertySupport.Reflection) (prop)).setPropertyEditorClass(ColorPropertyEditor.class);
+         }
+
+         prop.setName(name);
+         set.put(prop);
+         } catch (NoSuchMethodException ex) {
+         ErrorManager.getDefault();
+         }
+         }
+         }*/
+        set.setDisplayName(displayName);
+        return set;
     }
 }

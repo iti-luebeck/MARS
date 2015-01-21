@@ -40,7 +40,7 @@
                 <entry xsi:type="myHashMapEntryTypeObject" key="type">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">4</value>
                 </entry>
-                <entry xsi:type="myHashMapEntryTypeObject" key="debug_collision">
+                <entry xsi:type="myHashMapEntryTypeObject" key="debug">
                     <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:boolean">false</value>
                 </entry>
                 <entry xsi:type="myHashMapEntryTypeObject" key="collidable">

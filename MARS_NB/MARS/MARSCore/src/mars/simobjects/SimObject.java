@@ -153,22 +153,6 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
 
     /**
      *
-     * @param path
-     */
-    public void updateState(TreePath path) {
-        if (path.getPathComponent(1).equals(this)) {//make sure we want to change auv params 
-            //System.out.println("update tts " + path);
-            Object obj = path.getParentPath().getLastPathComponent();
-            if (path.getParentPath().getLastPathComponent() instanceof HashMapWrapper) {
-                updateState(path.getLastPathComponent().toString(), path.getParentPath().getLastPathComponent().toString());
-            } else {
-                updateState(path.getLastPathComponent().toString(), "");
-            }
-        }
-    }
-
-    /**
-     *
      * @param target
      * @param hashmapname
      */
@@ -188,12 +172,12 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
         } else if (target.equals("scale") && hashmapname.equals("")) {
             getSpatial().setLocalScale(getScale());
         } else if (target.equals("debug_collision") && hashmapname.equals("Collision")) {
-            setCollisionVisible(isDebugCollision());
+            setCollisionVisible(getCollisionDebug());
         } else if (target.equals("color") && hashmapname.equals("")) {
 
             spatialMaterial.setColor("Color", getColor());
         } else if (target.equals("light") && hashmapname.equals("")) {
-            if (!isLight()) {
+            if (!getLight()) {
                 spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 spatialMaterial.setColor("Color", getColor());
                 spatial.setMaterial(spatialMaterial);
@@ -220,7 +204,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
         spatial.setUserData("simob_name", getName());
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
-        if (!isLight()) {
+        if (!getLight()) {
             spatialMaterial.setColor("Color", getColor());
             spatial.setMaterial(spatialMaterial);
         }
@@ -238,19 +222,19 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      */
     private void createPhysicsNode() {
         CollisionShape collisionShape;
-        if (getType() == CollisionType.BOXCOLLISIONSHAPE) {
-            collisionShape = new BoxCollisionShape(getDimensions());
-        } else if (getType() == CollisionType.SPHERECOLLISIONSHAPE) {
-            collisionShape = new SphereCollisionShape(getDimensions().x);
-        } else if (getType() == CollisionType.CONECOLLISIONSHAPE) {
-            collisionShape = new ConeCollisionShape(getDimensions().x, getDimensions().y);
-        } else if (getType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
-            //collisionShape = new CylinderCollisionShape(auv_param.getDimensions().x,auv_param.getDimensions().y);
-            collisionShape = new BoxCollisionShape(getDimensions());
-        } else if (getType() == CollisionType.MESHACCURATE) {
+        if (getCollisionType() == CollisionType.BOXCOLLISIONSHAPE) {
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
+        } else if (getCollisionType() == CollisionType.SPHERECOLLISIONSHAPE) {
+            collisionShape = new SphereCollisionShape(getCollisionDimensions().x);
+        } else if (getCollisionType() == CollisionType.CONECOLLISIONSHAPE) {
+            collisionShape = new ConeCollisionShape(getCollisionDimensions().x, getCollisionDimensions().y);
+        } else if (getCollisionType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
+            //collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions().x,auv_param.getCollisionDimensions().y);
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
+        } else if (getCollisionType() == CollisionType.MESHACCURATE) {
             collisionShape = CollisionShapeFactory.createMeshShape(spatial);
         } else {
-            collisionShape = new BoxCollisionShape(getDimensions());
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
         }
         physics_control = new RigidBodyControl(collisionShape, 0f);
         physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
@@ -264,7 +248,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
         debug_mat.setColor("Color", ColorRGBA.Red);
         /*debugShape = physics_control.createDebugShape(assetManager);
          debugNode.attachChild(debugShape);
-         if(isDebugCollision()){
+         if(getCollisionDebug()){
          debugShape.setCullHint(CullHint.Inherit);
          }else{
          debugShape.setCullHint(CullHint.Always);
@@ -396,7 +380,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @return
      */
     @SuppressWarnings("unchecked")
-    public Vector3f getDimensions() {
+    public Vector3f getCollisionDimensions() {
         return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("dimensions");
     }
 
@@ -405,7 +389,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @param dimensions
      */
     @SuppressWarnings("unchecked")
-    public void setDimensions(Vector3f dimensions) {
+    public void setCollisionDimensions(Vector3f dimensions) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("dimensions", dimensions);
     }
 
@@ -432,7 +416,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @return
      */
     @SuppressWarnings("unchecked")
-    public int getType() {
+    public Integer getCollisionType() {
         return (Integer) ((HashMap<String, Object>) simob_variables.get("Collision")).get("type");
     }
 
@@ -441,7 +425,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @param type
      */
     @SuppressWarnings("unchecked")
-    public void setType(int type) {
+    public void setCollisionType(Integer type) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("type", type);
     }
 
@@ -450,7 +434,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @return
      */
     @SuppressWarnings("unchecked")
-    public boolean isCollidable() {
+    public Boolean getCollisionCollidable() {
         return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("collidable");
     }
 
@@ -459,16 +443,8 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @param collidable
      */
     @SuppressWarnings("unchecked")
-    public void setCollidable(boolean collidable) {
+    public void setCollisionCollidable(Boolean collidable) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("collidable", collidable);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isRayDetectable() {
-        return (Boolean) simob_variables.get("rayDetectable");
     }
 
     /**
@@ -484,7 +460,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param rayDetectable
      */
-    public void setRayDetectable(boolean rayDetectable) {
+    public void setRayDetectable(Boolean rayDetectable) {
         simob_variables.put("rayDetectable", rayDetectable);
     }
 
@@ -492,7 +468,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isPinger() {
+    public Boolean getPinger() {
         return (Boolean) simob_variables.get("pinger");
     }
 
@@ -500,7 +476,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param pinger
      */
-    public void setPinger(boolean pinger) {
+    public void setPinger(Boolean pinger) {
         simob_variables.put("pinger", pinger);
     }
 
@@ -508,7 +484,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isLight() {
+    public Boolean getLight() {
         return (Boolean) simob_variables.get("light");
     }
 
@@ -516,7 +492,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param light
      */
-    public void setLight(boolean light) {
+    public void setLight(Boolean light) {
         simob_variables.put("light", light);
     }
 
@@ -556,7 +532,15 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @return
      */
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
+        return (Boolean) simob_variables.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getEnabled() {
         return (Boolean) simob_variables.get("enabled");
     }
 
@@ -564,7 +548,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param enabled
      */
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         simob_variables.put("enabled", enabled);
     }
 
@@ -653,8 +637,8 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @return
      */
     @SuppressWarnings("unchecked")
-    public boolean isDebugCollision() {
-        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug_collision");
+    public Boolean getCollisionDebug() {
+        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug");
     }
 
     /**
@@ -662,8 +646,8 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      * @param debug_collision
      */
     @SuppressWarnings("unchecked")
-    public void setDebugCollision(boolean debug_collision) {
-        ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug_collision", debug_collision);
+    public void setCollisionDebug(Boolean debug) {
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug", debug);
     }
 
     /**
