@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -65,7 +64,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.Toolbar;
 import org.openide.awt.ToolbarPool;
 import org.openide.modules.InstalledFileLocator;
-import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
@@ -1443,14 +1441,6 @@ public final class MARSTopComponent extends TopComponent {
                     final boolean selected = jme3_enable_auv.isSelected();
                     guiState.enableSelectedAUV(selected);
                 }
-                Runnable runt = new Runnable() {
-                    public void run() {
-                        TopComponent tc = WindowManager.getDefault().findTopComponent("MARSTreeTopComponent");
-                        MARSTreeTopComponent mtc = (MARSTreeTopComponent) tc;
-                        mtc.updateTrees();
-                    };
-                };
-                WindowManager.getDefault().invokeWhenUIReady(runt);
                 return null;
             }
         });
@@ -1478,14 +1468,6 @@ public final class MARSTopComponent extends TopComponent {
                         if(mars.getStateManager().getState(SimState.class) != null){
                             auvManager.deregisterAUVNoFuture(auv);
                         }
-                    Runnable runt = new Runnable() {
-                        public void run() {
-                            TopComponent tc = WindowManager.getDefault().findTopComponent("MARSTreeTopComponent");
-                            MARSTreeTopComponent mtc = (MARSTreeTopComponent) tc;
-                            mtc.updateTrees();
-                        };
-                    };
-                    WindowManager.getDefault().invokeWhenUIReady(runt);
                     return null;
                 }
             });
@@ -1972,11 +1954,6 @@ public final class MARSTopComponent extends TopComponent {
                         
                         Runnable runt = new Runnable() {
                                     public void run() {
-                                        TopComponent tc = WindowManager.getDefault().findTopComponent("MARSTreeTopComponent");
-                                        MARSTreeTopComponent mtc = (MARSTreeTopComponent) tc;
-                                        mtc.setMARS(mars);
-                                        mars.setTreeTopComp(mtc);
-                                        
                                         TopComponent tc2 = WindowManager.getDefault().findTopComponent("MARSTopComponent");
                                         MARSTopComponent mtc2 = (MARSTopComponent) tc2;
                                         mars.setMARSTopComp(mtc2);

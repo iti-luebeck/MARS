@@ -145,7 +145,7 @@ public class ImagenexSonar_852_Scanning extends Sonar {
 
         byte[] sonData = getRawData();
         float lastHeadPosition = getLastHeadPosition();
-        this.mars.getTreeTopComp().initRayBasedData(sonData, lastHeadPosition, this);
+        //this.mars.getTreeTopComp().initRayBasedData(sonData, lastHeadPosition, this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
         fl.setHeadPosition(lastHeadPosition);
         fl.setStartGain((byte) getScanningGain().shortValue());

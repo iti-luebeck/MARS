@@ -5,7 +5,6 @@
 package mars.auv;
 
 import com.jme3.renderer.queue.RenderQueue;
-import javax.swing.tree.TreePath;
 import mars.object.CollisionType;
 import mars.actuators.thruster.Thruster;
 import mars.actuators.Actuator;
@@ -57,7 +56,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -96,7 +94,6 @@ import mars.auv.example.Manta;
 import mars.auv.example.ROMP;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
-import mars.gui.tree.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;

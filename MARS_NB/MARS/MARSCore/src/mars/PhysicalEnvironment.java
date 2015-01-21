@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
 
@@ -31,7 +30,7 @@ import mars.xml.HashMapEntry;
  */
 @XmlRootElement(name = "PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerSupport {
+public class PhysicalEnvironment implements PropertyChangeListenerSupport {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String, Object> environment;
@@ -102,17 +101,6 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (int i = 0; i < pcls.length; i++) {
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
-        }
-    }
-
-    /**
-     * Called to update world stuff when parameters changed.
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
-            updateState(path.getLastPathComponent().toString(), "");
         }
     }
 

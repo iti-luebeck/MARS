@@ -10,7 +10,6 @@ import com.jme3.app.FlyCamAppState;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.states.SimState;
-import mars.states.StartState;
 import com.jme3.font.BitmapFont;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
@@ -34,7 +33,6 @@ import mars.auv.AUV;
 import mars.core.CentralLookup;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
-import mars.core.MARSTreeTopComponent;
 import mars.states.AppStateExtension;
 import mars.states.MapState;
 import mars.states.NiftyState;
@@ -53,7 +51,6 @@ import org.openide.modules.InstalledFileLocator;
 public class MARS_Main extends SimpleApplication {
 
     //needed for graphs
-    private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
     private boolean startstateinit = false;
@@ -156,7 +153,7 @@ public class MARS_Main extends SimpleApplication {
         if (configManager.isAutoEnabled()) {
             //SimState simstate = new SimState(view,configManager);
             progr.progress("Creating SimState");
-            SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, configManager);
+            SimState simstate = new SimState(MARSTopComp, MARSMapComp, configManager);
             simstate.setMapState(mapstate);
             stateManager.attach(simstate);
             CentralLookup.getDefault().add(simstate);
@@ -302,7 +299,7 @@ public class MARS_Main extends SimpleApplication {
             statsDarken = false;
         }
 
-        if (TreeTopComp != null && MARSTopComp != null && startstateinit == false) {// little hack to allow the starting of a config only when the startstate was initialized
+        if (MARSTopComp != null && startstateinit == false) {// little hack to allow the starting of a config only when the startstate was initialized
             MARSTopComp.allowStateInteraction();
             startstateinit = true;
         }
@@ -345,30 +342,12 @@ public class MARS_Main extends SimpleApplication {
     public void startSimState() {
         Future<Void> simStateFuture = this.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                SimState simstate = new SimState(MARSTopComp, TreeTopComp, MARSMapComp, configManager);
+                SimState simstate = new SimState(MARSTopComp, MARSMapComp, configManager);
                 simstate.setMapState(mapstate);
                 stateManager.attach(simstate);
                 return null;
             }
         });
-    }
-
-    /**
-     *
-     * @param TreeTopComp
-     */
-    @Deprecated
-    public void setTreeTopComp(MARSTreeTopComponent TreeTopComp) {
-        this.TreeTopComp = TreeTopComp;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public MARSTreeTopComponent getTreeTopComp() {
-        return TreeTopComp;
     }
 
     /**

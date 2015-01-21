@@ -13,16 +13,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
-import org.openide.util.NbPreferences;
 
 /**
  * Holds the major of all settings that are useful for SIMAUV like activating
@@ -32,7 +29,7 @@ import org.openide.util.NbPreferences;
  */
 @XmlRootElement(name = "Settings")
 @XmlAccessorType(XmlAccessType.NONE)
-public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport {
+public class MARS_Settings implements PropertyChangeListenerSupport {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String, Object> settings;
@@ -223,21 +220,6 @@ public class MARS_Settings implements UpdateState, PropertyChangeListenerSupport
         } else if (target.equals("hour") && hashmapname.equals("SkyDome")) {
             initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
             initer.resetTimeOfDay(getSkyDomeHour());
-        }
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
-            if (path.getParentPath().getLastPathComponent().toString().equals("Settings")) {
-                updateState(path.getLastPathComponent().toString(), "");
-            } else {
-                updateState(path.getLastPathComponent().toString(), path.getParentPath().getLastPathComponent().toString());
-            }
         }
     }
 

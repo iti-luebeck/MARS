@@ -78,7 +78,7 @@ public class Hakuyo extends LaserScanner {
 
         float[] instantData = getInstantData();
         float lastHeadPosition = getLastHeadPosition();
-        this.mars.getTreeTopComp().initRayBasedData(instantData, lastHeadPosition, this);
+        //this.mars.getTreeTopComp().initRayBasedData(instantData, lastHeadPosition, this);
         fl.setAngleIncrement(getScanning_resolution());
         fl.setRangeMax(getMaxRange());
         fl.setRangeMin(getMinRange());

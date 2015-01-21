@@ -11,7 +11,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
@@ -23,7 +22,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -50,7 +48,6 @@ import mars.misc.MyDebugAppStateFilter;
 import mars.core.CentralLookup;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
-import mars.core.MARSTreeTopComponent;
 import mars.xml.ConfigManager;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -75,7 +72,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private boolean initial_ready = false;
 
     //needed for graphs
-    private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
     private boolean view_init = false;
@@ -124,12 +120,10 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     /**
      *
      * @param MARSTopComp
-     * @param TreeTopComp
      * @param MARSMapComp
      * @param configManager
      */
-    public SimState(MARSTopComponent MARSTopComp, MARSTreeTopComponent TreeTopComp, MARSMapTopComponent MARSMapComp, ConfigManager configManager) {
-        this.TreeTopComp = TreeTopComp;
+    public SimState(MARSTopComponent MARSTopComp, MARSMapTopComponent MARSMapComp, ConfigManager configManager) {
         this.MARSTopComp = MARSTopComp;
         this.MARSMapComp = MARSMapComp;
         this.configManager = configManager;
@@ -366,23 +360,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     }
 
     private void initView() {
-        TreeTopComp.setMarsSettings(mars_settings);
         MARSTopComp.setMarsSettings(mars_settings);
-        TreeTopComp.setPenv(physical_environment);
         MARSTopComp.setPenv(physical_environment);
-        TreeTopComp.setKeyConfig(keyconfig);
         MARSTopComp.setKeyConfig(keyconfig);
-        TreeTopComp.setConfigManager(configManager);
         MARSTopComp.setConfigManager(configManager);
-        TreeTopComp.setAuv_manager(auvManager);
         MARSTopComp.setAuv_manager(auvManager);
-        TreeTopComp.setSimob_manager(simobManager);
         MARSTopComp.setSimob_manager(simobManager);
-        TreeTopComp.initSimObjectTree(simobManager);
-        TreeTopComp.initDND();
         MARSTopComp.initDND();
         MARSTopComp.allowSimInteraction();
-        TreeTopComp.updateTrees();
         MARSMapComp.initDND();
 
         if (mars_settings.getROSEnabled()) {
@@ -525,15 +510,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
         }
         auvManager.registerAUVs(auvs);
-        //update the view in the next frame
-        Future<Void> fut = mars.enqueue(
-            new Callable<Void>(){
-                public Void call() throws Exception {
-                    TreeTopComp.updateTrees();
-                    return null;
-                }
-            }
-        );
     }
 
     /*
@@ -542,13 +518,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private void populateSim_Object_Manager(ArrayList<SimObject> simobs) {
         simobManager.setBulletAppState(bulletAppState);
         simobManager.registerSimObjects(simobs);
-        //update the view in the next frame
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                TreeTopComp.updateTrees();
-                return null;
-            }
-        });
     }
 
     /**
@@ -636,9 +605,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         }
         super.update(tpf);
 
-        if (TreeTopComp == null) {
-            System.out.println("TreeTopComp is NULL");
-        }
         if (MARSTopComp == null) {
             System.out.println("MARSTopComp is NULL");
         }
@@ -968,15 +934,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
                 auvManager.registerAUV(auvCopy);
-                //we have to update the view AFTER the AUV register
-                Future<Void> simStateFutureView = mars.enqueue(new Callable<Void>() {
-                    public Void call() throws Exception {
-                        if (TreeTopComp != null) {
-                            TreeTopComp.updateTrees();
-                        }
-                        return null;
-                    }
-                });
             } else {
                 if (auv.getAuv_param().isEnabled()) {//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(intersection);
@@ -1052,15 +1009,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 simobCopy.setName(name);
                 simobCopy.setPosition(pos);
                 simobManager.registerSimObject(simobCopy);
-                TreeTopComp.updateTrees();
-                Future<Void> simStateFutureView = mars.enqueue(new Callable<Void>() {
-                    public Void call() throws Exception {
-                        if (TreeTopComp != null) {
-                            TreeTopComp.updateTrees();
-                        }
-                        return null;
-                    }
-                });
             } else {
                 if (simob.isEnabled()) {//check if auf simob already enabled, then only new position
                     simob.setPosition(pos);
@@ -1125,24 +1073,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         if (mars.getStateManager().getState(NiftyState.class) != null) {
             mars.getStateManager().getState(NiftyState.class).show();
         }
-    }
-
-    /**
-     *
-     * @param TreeTopComp
-     */
-    @Deprecated
-    public void setTreeTopComp(MARSTreeTopComponent TreeTopComp) {
-        this.TreeTopComp = TreeTopComp;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public MARSTreeTopComponent getTreeTopComp() {
-        return TreeTopComp;
     }
 
     /**
