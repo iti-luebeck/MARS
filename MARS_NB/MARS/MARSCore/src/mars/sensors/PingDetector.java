@@ -148,7 +148,7 @@ public class PingDetector extends Sensor implements ChartValue {
         float ret = getDetection_range();
         for (String elem : simobs.keySet()) {
             SimObject simob = (SimObject) simobs.get(elem);
-            if (simob.isPinger()) {
+            if (simob.getPinger()) {
                 float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
                 if (distance <= getDetection_range() && distance < ret) {
                     ret = distance;
@@ -165,7 +165,7 @@ public class PingDetector extends Sensor implements ChartValue {
      */
     public float getPingerDistance(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if (simob != null && simob.isPinger()) {
+        if (simob != null && simob.getPinger()) {
             float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
             if (distance <= getDetection_range()) {
                 return distance;
@@ -234,7 +234,7 @@ public class PingDetector extends Sensor implements ChartValue {
      */
     public float getPingerAngleRadiant(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if (simob != null && simob.isPinger()) {
+        if (simob != null && simob.getPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
             float yaw = getYawRadiant(pinger_vector);
             return yaw;
@@ -249,7 +249,7 @@ public class PingDetector extends Sensor implements ChartValue {
      */
     public float getPingerAngleDegree(String pinger) {
         SimObject simob = simob_manager.getSimObject(pinger);
-        if (simob != null && simob.isPinger()) {
+        if (simob != null && simob.getPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
             float yaw = getYawDegree(pinger_vector);
             return yaw;

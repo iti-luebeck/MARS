@@ -26,7 +26,7 @@ public interface Manipulating {
      *
      * @return A list of all attached sensors/actuators that will be moved.
      */
-    public ArrayList getSlavesNames();
+    public ArrayList<String> getSlavesNames();
 
     /**
      *
@@ -44,5 +44,5 @@ public interface Manipulating {
      *
      * @param slaves
      */
-    public void addSlaves(ArrayList slaves);
+    public void addSlaves(ArrayList<Moveable> slaves);
 }
