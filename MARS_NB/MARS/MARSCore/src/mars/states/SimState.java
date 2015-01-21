@@ -378,9 +378,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         MARSTopComp.setAuv_manager(auvManager);
         TreeTopComp.setSimob_manager(simobManager);
         MARSTopComp.setSimob_manager(simobManager);
-        TreeTopComp.initAUVTree(auvManager);
         TreeTopComp.initSimObjectTree(simobManager);
-        TreeTopComp.initPopUpMenues(auvManager);
         TreeTopComp.initDND();
         MARSTopComp.initDND();
         MARSTopComp.allowSimInteraction();
@@ -532,7 +530,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             new Callable<Void>(){
                 public Void call() throws Exception {
                     TreeTopComp.updateTrees();
-                    TreeTopComp.initPopUpMenues(auvManager);
                     return null;
                 }
             }

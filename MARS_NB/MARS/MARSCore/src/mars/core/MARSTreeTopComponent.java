@@ -39,7 +39,6 @@ import mars.accumulators.Accumulator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.AUV_Parameters;
-import mars.gui.tree.AUVManagerModel;
 import mars.gui.tree.GenericTreeModel;
 import mars.gui.tree.HashMapWrapper;
 import mars.gui.tree.MyTreeCellRenderer;
@@ -182,10 +181,6 @@ public final class MARSTreeTopComponent extends TopComponent {
         jButton2 = new javax.swing.JButton();
         saveIdentity = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        DefaultMutableTreeNode top = new DefaultMutableTreeNode("AUVs");
-        auv_tree = new javax.swing.JTree(top);
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         simob_tree = new javax.swing.JTree();
@@ -478,50 +473,6 @@ public final class MARSTreeTopComponent extends TopComponent {
                 .addContainerGap())
         );
 
-        auv_tree.setCellRenderer(new MyTreeCellRenderer());
-        renderer = (DefaultTreeCellRenderer) auv_tree
-        .getCellRenderer();
-        textfieldEditor = new mars.gui.TextFieldCellEditor(auv_tree);
-        DefaultTreeCellEditor editor = new DefaultTreeCellEditor(auv_tree,
-            renderer, textfieldEditor);
-        auv_tree.setCellEditor(editor);
-        auv_tree.setEditable(true);
-        auv_tree.setRootVisible(false);
-        auv_tree.getSelectionModel().setSelectionMode
-        (TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        auv_tree.setDragEnabled(true);
-        auv_tree.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
-            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-                auv_treeTreeWillCollapse(evt);
-            }
-            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-                auv_treeTreeWillExpand(evt);
-            }
-        });
-        auv_tree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                auv_treeMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(auv_tree);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 375, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 246, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MARSTreeTopComponent.class, "MARSTreeTopComponent.jPanel1.TabConstraints.tabTitle"), new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/yellow_submarine.png")), jPanel1); // NOI18N
-
         DefaultMutableTreeNode top2 = new DefaultMutableTreeNode("SimObjects");
         simob_tree = new javax.swing.JTree(top2);
         simob_tree.setCellRenderer(new MyTreeCellRenderer());
@@ -573,168 +524,39 @@ public final class MARSTreeTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chase_auvActionPerformed
-        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
-        Future simStateFuture = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
-                    SimState simState = (SimState)mars.getStateManager().getState(SimState.class);
-                    simState.chaseAUV(auv);
-                }
-                return null;
-            }
-        });
+        
     }//GEN-LAST:event_chase_auvActionPerformed
 
     private void reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_auvActionPerformed
-        //final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
-        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-        for (int i = 0; i < selectionPaths.length; i++) {
-            TreePath treePath = selectionPaths[i];
-            final AUV auv = (AUV)treePath.getLastPathComponent();
-            Future simStateFuture = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    if(mars.getStateManager().getState(SimState.class) != null){
-                        auv.reset();
-                    }
-                    return null;
-                }
-            });
-        }
+        
     }//GEN-LAST:event_reset_auvActionPerformed
 
     private void delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_auvActionPerformed
-        final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
         
-        //Custom button text
-        Object[] options = {"Yes",
-                    "No"};
-        int delete = JOptionPane.showOptionDialog(this.getRootPane(),
-        "Are you sure you want to delete the auv: " + auv.getName(),
-        "AUV deletion",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,
-        options,
-        options[1]);
-        if(delete == 0){
-            Future simStateFuture = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                        if(mars.getStateManager().getState(SimState.class) != null){
-                            auvManager.deregisterAUVNoFuture(auv);
-                        }
-                    updateTrees();
-                    return null;
-                }
-            });
-        }
     }//GEN-LAST:event_delete_auvActionPerformed
 
     private void enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enable_auvActionPerformed
-        //final AUV auv = (AUV)auv_tree.getLastSelectedPathComponent();
-        TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-        for (int i = 0; i < selectionPaths.length; i++) {
-            TreePath treePath = selectionPaths[i];
-            final AUV auv = (AUV)treePath.getLastPathComponent();
-            Future simStateFuture = mars.enqueue(new Callable() {
-                public Void call() throws Exception {
-                    if(mars.getStateManager().getState(SimState.class) != null){
-                        if(!enable_auv.isSelected()){
-                            auv.getAuv_param().setEnabled(false);
-                            auvManager.enableAUV(auv, false);
-                        }else{
-                            auv.getAuv_param().setEnabled(true);
-                            auvManager.enableAUV(auv, true);
-                        }
-                    }
-                    updateTrees();
-                    return null;
-                }
-            });
-            toggleJMenuCheckbox(enable_auv);
-        }
+        
     }//GEN-LAST:event_enable_auvActionPerformed
 
     private void booleanPopUpEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpEnableActionPerformed
-        if (auv_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)auv_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                mod.valueForPathChanged(auv_tree.getSelectionPath(), true);
-            }
-        }else if(auv_tree.getLastSelectedPathComponent() instanceof Boolean){
-            AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-            mod.valueForPathChanged(auv_tree.getSelectionPath(), true);
-        }
+
     }//GEN-LAST:event_booleanPopUpEnableActionPerformed
 
     private void booleanPopUpDisableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_booleanPopUpDisableActionPerformed
-        if (auv_tree.getLastSelectedPathComponent() instanceof HashMapWrapper) {       
-            HashMapWrapper hashwrap = (HashMapWrapper)auv_tree.getLastSelectedPathComponent();
-            if(hashwrap.getUserData() instanceof Boolean){
-                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                mod.valueForPathChanged(auv_tree.getSelectionPath(), false);
-            }
-        }else if(auv_tree.getLastSelectedPathComponent() instanceof Boolean){
-            AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-            mod.valueForPathChanged(auv_tree.getSelectionPath(), false);
-        }
+
     }//GEN-LAST:event_booleanPopUpDisableActionPerformed
 
     private void forceValuePopUpForceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpForceActionPerformed
-        //get the table model
-        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-        //clean it
-        model.setRowCount(0);
-        //get the last selected auv
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        AUV oauv = (AUV)selectionPath.getPathComponent(1);//its always the second one, first one is auv_manager 
-                
-        //get auv data from manager
-        HashMap<String, AUV> auvs = auvManager.getAUVs();
-        for (Map.Entry<String, AUV> entry : auvs.entrySet()) {
-            AUV auv = entry.getValue();
-            //add data to table
-            if(!oauv.getName().equals(auv.getName())){//but dont add ourself from selection
-                int ai = auv.getClass().getName().lastIndexOf(".");
-                Object[] rowData = {auv.getName(),auv.getClass().getName().substring(ai+1),false}; 
-                model.addRow(rowData);
-            }
-        }
-        //sort it all
-        jTable1.getRowSorter().toggleSortOrder(0);
-        //show it
-        forceValueDialog.setLocationRelativeTo(this);
-        forceValueDialog.setVisible(true);
+        
     }//GEN-LAST:event_forceValuePopUpForceActionPerformed
 
     private void forceValuePopUpAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpAllActionPerformed
-        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-        HashMap<String, AUV> auvs = auvManager.getAUVs();
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            AUV oauv = (AUV)selectionPath.getPathComponent(1);
-            if(auv != oauv){ //not myself
-                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
-            }
-        }
-        auv_tree.updateUI();
+        
     }//GEN-LAST:event_forceValuePopUpAllActionPerformed
 
     private void forceValuePopUpAllClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forceValuePopUpAllClassActionPerformed
-        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-        HashMap<String, AUV> auvs = auvManager.getAUVs();
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            AUV oauv = (AUV)selectionPath.getPathComponent(1);
-            if(auv != oauv){ //not myself
-                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
-            }
-        }
-        auv_tree.updateUI();
+        
     }//GEN-LAST:event_forceValuePopUpAllClassActionPerformed
 
     private void viewSonarPolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSonarPolarActionPerformed
@@ -917,23 +739,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String auvName = (String)model.getValueAt(i, 0);
-            Boolean force = (Boolean)model.getValueAt(i, 2);
-            if(force){
-                AUV auv = auvManager.getAUV(auvName);
-                AUV oauv = (AUV)selectionPath.getPathComponent(1);
-                if(auv != oauv){ //not myself
-                    setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
-                }
-                auv_tree.updateUI();
-            }
-        }
-        forceValueDialog.setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void simob_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simob_treeMouseClicked
@@ -1040,245 +846,9 @@ public final class MARSTreeTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_simob_treeMouseClicked
 
-    private void auv_treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_auv_treeMouseClicked
-        if (evt.getButton() == MouseEvent.BUTTON3) {
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());
-            if (selRow != -1) {
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());
-                auv_tree.setSelectionPath(selPath);
-                //System.out.println(selPath.toString());
-                //System.out.println(selPath.getLastPathComponent().toString());
-                try {
-                    if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {// ctrl key used (force value)
-                        //dont forget to clean and populate this popup with auvs
-                        //initPopUpMenues(auvManager);
-                        //show it only when deep enough for value
-                        if(selPath.getLastPathComponent() instanceof Boolean || selPath.getLastPathComponent() instanceof Float || selPath.getLastPathComponent() instanceof Double || selPath.getLastPathComponent() instanceof String || selPath.getLastPathComponent() instanceof Integer){
-                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }
-                        if(selPath.getLastPathComponent() instanceof AUV_Parameters){
-                            forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }else if(selPath.getLastPathComponent() instanceof HashMapWrapper) {
-                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                            if(hashwrap.getUserData() instanceof PhysicalExchanger){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof Accumulator){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof Boolean || hashwrap.getUserData() instanceof Float || hashwrap.getUserData() instanceof Double || hashwrap.getUserData() instanceof String || hashwrap.getUserData() instanceof Integer){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof HashMap && !hashwrap.getName().equals("Sensors") && !hashwrap.getName().equals("Actuators") && !hashwrap.getName().equals("Accumulators")){
-                                forceValuePopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }
-                        }
-                    }else{
-                        if (selPath.getLastPathComponent() instanceof AUV) {
-                            AUV auv = (AUV)selPath.getLastPathComponent();
-                            lastSelectedAUV = auv;
-                            enable_auv.setSelected(auv.getAuv_param().isEnabled());
-                            auv_popup_menu.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }else if (selPath.getLastPathComponent() instanceof HashMapWrapper) {
-                            HashMapWrapper hashwrap = (HashMapWrapper)selPath.getLastPathComponent();
-                            if(hashwrap.getUserData() instanceof Boolean){
-                                if((Boolean)hashwrap.getUserData()){
-                                    booleanPopUpEnable.setVisible(false);
-                                    booleanPopUpDisable.setVisible(true);
-                                }else{
-                                    booleanPopUpEnable.setVisible(true);
-                                    booleanPopUpDisable.setVisible(false);
-                                }
-                                booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }else if(hashwrap.getUserData() instanceof ColorRGBA){
-                                ColorRGBA color =  (ColorRGBA)hashwrap.getUserData();
-                                Color newColor = color_dialog.showDialog(getRootPane(),
-                                    "Choose Color for " + hashwrap.getName(),
-                                    new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                                if(newColor != null){
-                                    ColorRGBA newColorRGBA = new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, newColor.getAlpha()/255f);
-                                    AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                    mod.valueForPathChanged(selPath, newColorRGBA);
-                                }
-                            }else if (hashwrap.getUserData() instanceof PhysicalExchanger || hashwrap.getUserData() instanceof Accumulator) {
-                                if(hashwrap.getUserData() instanceof RayBasedSensor){
-                                    //addDataToChart.setVisible(false);
-                                    RayBasedSensor rays = (RayBasedSensor)hashwrap.getUserData();
-                                    lastSelectedRayBasedSensor = rays;
-                                    if(rays.getScanning()){
-                                        viewSonarPolar.setEnabled(true);
-                                        viewSonarPlanar.setEnabled(true);
-                                    }else{
-                                        viewSonarPolar.setEnabled(false);
-                                        viewSonarPlanar.setEnabled(true);
-                                    }
-                                }else{
-                                    viewSonarPolar.setEnabled(false);
-                                    viewSonarPlanar.setEnabled(false);
-                                }
-
-                                if(hashwrap.getUserData() instanceof VideoCamera){
-                                    lastSelectedVideoCamera = (VideoCamera)hashwrap.getUserData();
-                                    viewCamera.setEnabled(true);
-                                }else{
-                                    viewCamera.setEnabled(false);
-                                }
-
-                                if(hashwrap.getUserData() instanceof ChartValue){
-                                    lastSelectedChartValue = (ChartValue)hashwrap.getUserData();
-                                    addDataToChart.setEnabled(true);
-                                }else{
-                                    addDataToChart.setEnabled(false);
-                                }
-
-                                if(hashwrap.getUserData() instanceof Compass){
-                                    lastSelectedCompass = (Compass)hashwrap.getUserData();
-                                    viewCompass.setEnabled(true);
-                                }else{
-                                    viewCompass.setEnabled(false);
-                                }
-
-                                if(hashwrap.getUserData() instanceof CommunicationDevice){
-                                    lastSelectedCommunicationDevice = (CommunicationDevice)hashwrap.getUserData();
-                                    viewCommunicationDevice.setEnabled(true);
-                                }else{
-                                    viewCommunicationDevice.setEnabled(false);
-                                }
-
-                                jme3_auv_sens.show(evt.getComponent(), evt.getX(), evt.getY());
-                            }
-                        }else if (selPath.getLastPathComponent() instanceof Boolean) {
-                            if((Boolean)selPath.getLastPathComponent()){
-                                booleanPopUpEnable.setVisible(false);
-                                booleanPopUpDisable.setVisible(true);
-                            }else{
-                                booleanPopUpEnable.setVisible(true);
-                                booleanPopUpDisable.setVisible(false);
-                            }
-                            booleanPopUp.show(evt.getComponent(), evt.getX(), evt.getY());
-                        }
-                    }
-                } catch (IllegalArgumentException e) {
-                }
-            }
-        }else if (evt.getButton() == MouseEvent.BUTTON1) {//selecting auvs (glow/mark)
-            int selRow = auv_tree.getRowForLocation(evt.getX(), evt.getY());
-            if (selRow != -1) {
-                TreePath selPath = auv_tree.getPathForLocation(evt.getX(), evt.getY());
-                TreePath[] selectionPaths = auv_tree.getSelectionPaths();
-                //System.out.println(selPath.toString());
-                //System.out.println(selPath.getLastPathComponent().toString());
-
-                //deselect all auvs before we start to selcting it clean
-                mars.enqueue(new Callable<Void>() {
-                    public Void call() throws Exception {
-                        if(mars.getStateManager().getState(GuiState.class) != null){
-                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                            guiState.deselectAllAUVs();
-                        }
-                        return null;
-                    }
-                });
-                if(selectionPaths != null){
-                    for (int i = 0; i < selectionPaths.length; i++) {
-                        TreePath treePath = selectionPaths[i];
-                        try {
-                            if (treePath.getLastPathComponent() instanceof AUV) {
-                                final AUV auv = (AUV)treePath.getLastPathComponent();
-                                mars.enqueue(new Callable<Void>() {
-                                    public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                            //simState.deselectAllAUVs();
-                                            guiState.selectAUV(auv);
-                                        }
-                                        return null;
-                                    }
-                                });
-                            }else{
-                                mars.enqueue(new Callable<Void>() {
-                                    public Void call() throws Exception {
-                                        if(mars.getStateManager().getState(GuiState.class) != null){
-                                            GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                            guiState.deselectAllAUVs();
-                                        }
-                                        return null;
-                                    }
-                                });
-                            }
-                        } catch (IllegalArgumentException e) {
-                            mars.enqueue(new Callable<Void>() {
-                                public Void call() throws Exception {
-                                    if(mars.getStateManager().getState(GuiState.class) != null){
-                                        GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                                        guiState.deselectAllAUVs();
-                                    }
-                                    return null;
-                                }
-                            });
-                        }
-                    }
-                }
-            }else{
-                //expand/collapse all implementation
-                if ((evt.getModifiers() & InputEvent.CTRL_MASK) != 0) {
-                    if(ExpandedPath != null){
-                        treeExpand = false;
-                        auv_tree.expandPath(ExpandedPath);
-                        Object lastPathComponent = ExpandedPath.getLastPathComponent();
-                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
-                        for (int i = 0; i < childCount; i++) {
-                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
-                            TreePath pathByAddingChild = ExpandedPath.pathByAddingChild(child);
-                            auv_tree.expandPath(pathByAddingChild);
-                        }
-                        ExpandedPath = null;
-                        treeExpand = true;
-                    }
-                    /*if(CollapsedPath != null){
-                        treeCollapse = false;
-
-                        Object lastPathComponent = CollapsedPath.getLastPathComponent();
-                        int childCount = auv_tree.getModel().getChildCount(lastPathComponent);
-                        for (int i = 0; i < childCount; i++) {
-                            Object child = auv_tree.getModel().getChild(lastPathComponent, i);
-                            TreePath pathByAddingChild = CollapsedPath.pathByAddingChild(child);
-                            auv_tree.collapsePath(pathByAddingChild);
-                        }
-                        auv_tree.collapsePath(CollapsedPath);//clean up
-                        CollapsedPath = null;
-                        treeCollapse = true;
-                    }*/
-                }
-                //clear the selected auvs
-                Future simStateFuture = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        if(mars.getStateManager().getState(GuiState.class) != null){
-                            GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                            guiState.deselectAllAUVs();
-                        }
-                        return null;
-                    }
-                });
-            }
-        }
-    }//GEN-LAST:event_auv_treeMouseClicked
-
-    private void auv_treeTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillExpand
-        if(treeExpand){
-            ExpandedPath = evt.getPath();
-        }
-    }//GEN-LAST:event_auv_treeTreeWillExpand
-
-    private void auv_treeTreeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_auv_treeTreeWillCollapse
-        /*if(treeCollapse){
-            CollapsedPath = evt.getPath();
-        }*/
-    }//GEN-LAST:event_auv_treeTreeWillCollapse
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addDataToChart;
     private javax.swing.JPopupMenu auv_popup_menu;
-    private javax.swing.JTree auv_tree;
-    public mars.gui.TextFieldCellEditor textfieldEditor;
-    private DefaultTreeCellRenderer renderer;
     private javax.swing.JPopupMenu booleanPopUp;
     private javax.swing.JMenuItem booleanPopUpDisable;
     private javax.swing.JMenuItem booleanPopUpDisable1;
@@ -1304,9 +874,7 @@ public final class MARSTreeTopComponent extends TopComponent {
     private javax.swing.JMenuItem forceValuePopUpForce;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -1353,21 +921,6 @@ public final class MARSTreeTopComponent extends TopComponent {
         // TODO read your settings according to their version
     }
     
-    /**
-     * 
-     * @param auvManager
-     */
-    public void initAUVTree(final AUV_Manager auvManager){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    auv_tree.setModel(new AUVManagerModel(auvManager));
-                    auv_tree.updateUI();    
-                }
-            }
-        );
-    }
-    
         /**
      * 
      * @param simobManager
@@ -1392,7 +945,6 @@ public final class MARSTreeTopComponent extends TopComponent {
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    auv_tree.updateUI();
                     simob_tree.updateUI();
                 }
             }  
@@ -1576,90 +1128,14 @@ public final class MARSTreeTopComponent extends TopComponent {
     
         /**
      * 
-     * @param auvManager 
-     */
-    public void initPopUpMenues(final AUV_Manager auvManager){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    //add all auvs to force value
-                    SortedSet<String> sortedset= new TreeSet<String>(auvManager.getAUVs().keySet());
-                    Iterator<String> it = sortedset.iterator();
-                    int i = 0;
-                    while (it.hasNext()) {
-                        String elem = it.next();
-                        final AUV auv = (AUV)auvManager.getAUVs().get(elem);
-                        final Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-                        final TreePath selectionPath = auv_tree.getSelectionPath();
-                        final AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                        final JMenuItem jcm = new JMenuItem(auv.getName());
-                        //listener for changes
-                        jcm.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-                                TreePath selectionPath = auv_tree.getSelectionPath();
-                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
-                            }
-                        });
-                        forceValuePopUpAUV.add(jcm);
-                    }
-                    
-                    //add all classes to force value
-                    ArrayList<Class<? extends AUV>> AUVClasses = auvManager.getAUVClasses();
-                    java.util.Collections.sort(AUVClasses,new ClassComparator());
-                    Iterator<Class<? extends AUV>> it2 = AUVClasses.iterator();
-                    while (it2.hasNext()) {
-                        Class<? extends AUV> elem = (Class<? extends AUV>)it2.next();
-                        final String className = elem.getName();
-                        int ai = elem.getName().lastIndexOf(".");
-                        final JMenuItem jcm = new JMenuItem(elem.getName().substring(ai+1));
-                        //listener for changes
-                        jcm.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-                                TreePath selectionPath = auv_tree.getSelectionPath();
-                                AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-                                ArrayList aUVsOfClass = auvManager.getAUVsOfClass(className);
-                                Iterator<AUV> it = aUVsOfClass.iterator();
-                                while (it.hasNext()) {
-                                    setValueForAUVinModel(selectionPath, lastSelectedPathComponent, it.next(), mod);
-                                }
-                            }
-                        });
-                        forceValuePopUpClass.add(jcm);
-                    }
-                }
-            }
-        );
-    }
-    
-        /**
-     * 
      */
     public void initDND(){
         EventQueue.invokeLater(new Runnable(){
                 @Override
                 public void run() {
-                    auv_tree.setTransferHandler(new AUVTransferHandler());
                     simob_tree.setTransferHandler(new SimObTransferHandler());
                 }
             }
         );
-    }
-    
-    private void forceValue(){
-        Object lastSelectedPathComponent = auv_tree.getLastSelectedPathComponent();
-        TreePath selectionPath = auv_tree.getSelectionPath();
-        AUVManagerModel mod = (AUVManagerModel)auv_tree.getModel();
-        HashMap<String, AUV> auvs = auvManager.getAUVs();
-        for ( String elem : auvs.keySet() ){
-            AUV auv = (AUV)auvs.get(elem);
-            AUV oauv = (AUV)selectionPath.getPathComponent(1);
-            if(auv != oauv){ //not myself
-                setValueForAUVinModel(selectionPath, lastSelectedPathComponent, auv, mod);
-            }
-        }
-        auv_tree.updateUI();
     }
 }
