@@ -84,7 +84,6 @@ import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
-import mars.filter.FishEyeFilter;
 import mars.server.MARSClient;
 import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
@@ -383,6 +382,7 @@ public class Initializer {
         for (Class<? extends MARSClient> next : allClasses) {
             try {
                 MARSClient marsClient = next.newInstance();
+                marsClient.init();
                 marsClient.setAUVManager(auv_manager);
                 auv_manager.addAdListener(marsClient);
                 PhysicalExchangerPublisher puber = new PhysicalExchangerPublisher(mars, auv_manager, mars_settings);
