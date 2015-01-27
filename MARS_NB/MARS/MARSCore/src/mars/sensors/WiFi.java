@@ -205,16 +205,6 @@ public class WiFi extends CommunicationDevice {
         }
     }
 
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        super.updateState(path);
-        updateState(path.getLastPathComponent().toString(), "");
-    }
-
     private void updateState(String target, String hashmapname) {
         if (target.equals("debug") && hashmapname.equals("")) {
             setDebugVisible(getDebug());

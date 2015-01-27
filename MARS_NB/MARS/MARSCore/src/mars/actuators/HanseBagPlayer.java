@@ -127,7 +127,7 @@ public class HanseBagPlayer extends Teleporter {
                 float dep = 0f;
                 int pos = (int) message.getData();
 
-                dep = (getPressureRelative() - pos) / (float) (pe.getFluid_density() * pe.getGravitational_acceleration()) * 100f;
+                dep = (getPressureRelative() - pos) / (pe.getFluid_density() * pe.getGravitational_acceleration()) * 100f;
                 setDepth(dep);
             }
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());

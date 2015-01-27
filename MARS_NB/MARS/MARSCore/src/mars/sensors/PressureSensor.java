@@ -111,14 +111,14 @@ public class PressureSensor extends Sensor implements ChartValue {
      * @return The exact depth of the current auv
      */
     public float getDepth() {
-        if (getNoiseType() == (Integer) NoiseType.NO_NOISE) {
+        if (getNoiseType() == NoiseType.NO_NOISE) {
             return getRawDepth();
-        } else if (getNoiseType() == (Integer) NoiseType.UNIFORM_DISTRIBUTION) {
+        } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getRawDepth() + ((float) ((1f / 100f) * noise));
-        } else if (getNoiseType() == (Integer) NoiseType.GAUSSIAN_NOISE_FUNCTION) {
+            return getRawDepth() + ( ((1f / 100f) * noise));
+        } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getRawDepth() + ((float) ((1f / 100f) * noise));
+            return getRawDepth() + (((1f / 100f) * noise));
         } else {
             return getRawDepth();
         }
@@ -139,7 +139,7 @@ public class PressureSensor extends Sensor implements ChartValue {
      */
     public float getPressureBar() {
         if (getDepth() <= pe.getWater_height()) {//underwater
-            return (pe.getPressure_water_height() / 1000f) + (float) ((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth())) / 100000f);
+            return (pe.getPressure_water_height() / 1000f) + ((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth())) / 100000f);
         } else {//air
             return (pe.getPressure_water_height() / 1000f);
         }
@@ -152,7 +152,7 @@ public class PressureSensor extends Sensor implements ChartValue {
      */
     public float getPressureMbar() {
         if (getDepth() <= pe.getWater_height()) {//underwater
-            return pe.getPressure_water_height() + (float) ((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth())) / 100f);
+            return pe.getPressure_water_height() + ((pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth())) / 100f);
         } else {//air
             return (pe.getPressure_water_height());
         }
@@ -165,7 +165,7 @@ public class PressureSensor extends Sensor implements ChartValue {
      */
     public float getPressurePascal() {
         if (getDepth() <= pe.getWater_height()) {//underwater
-            return (pe.getPressure_water_height() * 100f) + (float) (pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth()));
+            return (pe.getPressure_water_height() * 100f) + (pe.getFluid_density() * pe.getGravitational_acceleration() * Math.abs(getDepth()));
         } else {//air
             return (pe.getPressure_water_height() * 100f);
         }
@@ -190,6 +190,7 @@ public class PressureSensor extends Sensor implements ChartValue {
     /**
      *
      */
+    @Override
     public void reset() {
 
     }
@@ -200,9 +201,10 @@ public class PressureSensor extends Sensor implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.pressure._TYPE);
+        publisher = (Publisher<hanse_msgs.pressure>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.pressure._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.pressure._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

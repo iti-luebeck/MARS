@@ -229,12 +229,12 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
             MotorCurrent = calculateThrusterCurrent(speed);
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            MotorForce = calculateThrusterForce(speed) + ((float) ((1f / 100f) * noise));
-            MotorCurrent = calculateThrusterCurrent(speed) + ((float) ((1f / 100f) * noise));
+            MotorForce = calculateThrusterForce(speed) + (((1f / 100f) * noise));
+            MotorCurrent = calculateThrusterCurrent(speed) + (((1f / 100f) * noise));
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            MotorForce = calculateThrusterForce(speed) + ((float) ((1f / 100f) * noise));
-            MotorCurrent = calculateThrusterCurrent(speed) + ((float) ((1f / 100f) * noise));
+            MotorForce = calculateThrusterForce(speed) + (((1f / 100f) * noise));
+            MotorCurrent = calculateThrusterCurrent(speed) + (((1f / 100f) * noise));
         } else {
             MotorForce = calculateThrusterForce(speed);
             MotorCurrent = calculateThrusterCurrent(speed);
@@ -341,7 +341,7 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            final String action = (String) action_mapping.get(elem);
+            final String action = action_mapping.get(elem);
             final String mapping = elem;
             final Thruster self = this;
 

@@ -43,12 +43,12 @@ public class Hakuyo extends LaserScanner {
 
     @Override
     protected float calculateAverageNoiseFunction(float x) {
-        return 14.22898616f * ((float) Math.pow(1.03339750f, (float) Math.abs(x)));
+        return 14.22898616f * ((float) Math.pow(1.03339750f, Math.abs(x)));
     }
 
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x) {
-        return 7.50837174f * ((float) Math.pow(1.02266704f, (float) Math.abs(x)));
+        return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
     }
 
     /**

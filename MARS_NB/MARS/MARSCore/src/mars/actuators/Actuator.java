@@ -173,14 +173,6 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
 
     /**
      *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-    }
-
-    /**
-     *
      * @return
      */
     public Initializer getIniter() {

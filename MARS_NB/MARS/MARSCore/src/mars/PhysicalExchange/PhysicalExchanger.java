@@ -682,13 +682,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     *
-     * @param path
-     */
-    @Deprecated
-    public abstract void updateState(TreePath path);
-
-    /**
      * Make a periodic action on call. Called by publishDataUpdate.
      */
     public void publishData() {

@@ -112,10 +112,10 @@ public class TemperatureSensor extends Sensor implements ChartValue {
             return getTemperatureRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getTemperatureRaw() + ((float) ((1f / 100f) * noise));
+            return getTemperatureRaw() + (((1f / 100f) * noise));
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getTemperatureRaw() + ((float) ((1f / 100f) * noise));
+            return getTemperatureRaw() + (((1f / 100f) * noise));
         } else {
             return getTemperatureRaw();
         }
@@ -151,6 +151,7 @@ public class TemperatureSensor extends Sensor implements ChartValue {
     /**
      *
      */
+    @Override
     public void reset() {
 
     }
@@ -161,9 +162,10 @@ public class TemperatureSensor extends Sensor implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.temperature._TYPE);
+        publisher = (Publisher<hanse_msgs.temperature>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.temperature._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.temperature._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

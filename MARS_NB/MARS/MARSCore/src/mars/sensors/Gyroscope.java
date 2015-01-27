@@ -82,11 +82,11 @@ public class Gyroscope extends Sensor {
             return getAngularVelocityRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getAngularVelocityRaw().x + ((float) ((1f / 100f) * noise)), getAngularVelocityRaw().y + ((float) ((1f / 100f) * noise)), getAngularVelocityRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getAngularVelocityRaw().x + (((1f / 100f) * noise)), getAngularVelocityRaw().y + (((1f / 100f) * noise)), getAngularVelocityRaw().z + (((1f / 100f) * noise)));
             return noised;
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getAngularVelocityRaw().x + ((float) ((1f / 100f) * noise)), getAngularVelocityRaw().y + ((float) ((1f / 100f) * noise)), getAngularVelocityRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getAngularVelocityRaw().x + (((1f / 100f) * noise)), getAngularVelocityRaw().y + (((1f / 100f) * noise)), getAngularVelocityRaw().z + (((1f / 100f) * noise)));
             return noised;
         } else {
             return getAngularVelocityRaw();

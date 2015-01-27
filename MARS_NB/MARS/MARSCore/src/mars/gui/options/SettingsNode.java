@@ -36,7 +36,7 @@ public class SettingsNode extends AbstractNode implements PropertyChangeListener
     /**
      * Hashmap with paramaeters of object.
      */
-    private HashMap params;
+    private HashMap<String,Object> params;
             
     /**
      * Name of the image file on the harddisk.
@@ -152,7 +152,7 @@ public class SettingsNode extends AbstractNode implements PropertyChangeListener
         return sheet;
     }
     
-    private void createPropertiesSet(Object obj, HashMap params, String displayName, boolean expert, Sheet sheet){
+    private void createPropertiesSet(Object obj, HashMap<String,Object> params, String displayName, boolean expert, Sheet sheet){
         Sheet.Set set;
         if(expert){
             set = Sheet.createExpertSet();

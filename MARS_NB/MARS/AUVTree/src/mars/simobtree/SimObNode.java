@@ -466,10 +466,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
         
         if (simob.getAllVariables() != null) {
             createPropertiesSet(simob, simob.getAllVariables(), "Properties", false, sheet);
-        }
-
-        // add listener to react of changes from external editors (AUVEditor)
-        if (simob.getAllVariables() != null) {
+            // add listener to react of changes from external editors (AUVEditor)
             ((PropertyChangeListenerSupport) (simob)).addPropertyChangeListener(this);
         }
         return sheet;

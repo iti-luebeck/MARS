@@ -82,13 +82,13 @@ public class MapStateTransferHandler extends TransferHandler {
                 return false;
             }
 
-            Future<Void> simStateFuture = mars.enqueue(new Callable<Void>() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(MapState.class) != null) {
-                        MapState mapState = (MapState) mars.getStateManager().getState(MapState.class);
+                        MapState mapState = mars.getStateManager().getState(MapState.class);
                         Vector3f simStatePosition = mapState.getSimStatePosition(loc.getDropPoint());
                         if (mars.getStateManager().getState(SimState.class) != null) {
-                            SimState simState = (SimState) mars.getStateManager().getState(SimState.class);
+                            SimState simState = mars.getStateManager().getState(SimState.class);
                             if (data.getType() == TransferHandlerObjectType.AUV) {
                                 simState.enableAUV(data.getName(), simStatePosition, support.getDropAction(), newNameA);
                             } else if (data.getType() == TransferHandlerObjectType.SIMOBJECT) {

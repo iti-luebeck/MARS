@@ -102,11 +102,11 @@ public class Transformer extends Sensor {
             return getPositionRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getPositionRaw().x + ((float) ((1f / 100f) * noise)), getPositionRaw().y + ((float) ((1f / 100f) * noise)), getPositionRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getPositionRaw().x + (((1f / 100f) * noise)), getPositionRaw().y + (((1f / 100f) * noise)), getPositionRaw().z + (((1f / 100f) * noise)));
             return noised;
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getPositionRaw().x + ((float) ((1f / 100f) * noise)), getPositionRaw().y + ((float) ((1f / 100f) * noise)), getPositionRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getPositionRaw().x + (((1f / 100f) * noise)), getPositionRaw().y + (((1f / 100f) * noise)), getPositionRaw().z + ( ((1f / 100f) * noise)));
             return noised;
         } else {
             return getPositionRaw();
@@ -133,9 +133,10 @@ public class Transformer extends Sensor {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
+        publisher = (Publisher<tf.tfMessage>)ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(tf.tfMessage._TYPE);
         tfs = this.mars_node.getMessageFactory().newFromType(geometry_msgs.TransformStamped._TYPE);
         tfs2 = this.mars_node.getMessageFactory().newFromType(geometry_msgs.TransformStamped._TYPE);

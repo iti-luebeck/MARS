@@ -472,7 +472,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            String action = (String) action_mapping.get(elem);
+            String action = action_mapping.get(elem);
             final String mapping = elem;
             final Servo self = this;
             if (action.equals("setDesiredAnglePosition3")) {

@@ -1867,7 +1867,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     private Vector3f calculateVolumeCentroid(Vector3f old_centroid, Vector3f new_centroid, float old_mass, float new_mass) {
         float all_mass = old_mass + new_mass;
-        Vector3f ret = new Vector3f((float) (((old_centroid.x * old_mass) + (new_centroid.x * new_mass)) / (all_mass)), (float) (((old_centroid.y * old_mass) + (new_centroid.y * new_mass)) / (all_mass)), (float) (((old_centroid.z * old_mass) + (new_centroid.z * new_mass)) / (all_mass)));
+        Vector3f ret = new Vector3f((((old_centroid.x * old_mass) + (new_centroid.x * new_mass)) / (all_mass)), (((old_centroid.y * old_mass) + (new_centroid.y * new_mass)) / (all_mass)), (((old_centroid.z * old_mass) + (new_centroid.z * new_mass)) / (all_mass)));
         return ret;
     }
 
