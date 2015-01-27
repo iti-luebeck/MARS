@@ -196,32 +196,32 @@ public class MapState extends AbstractAppState implements AppStateExtension {
                     //adding propagation distance of underwater modems
                     ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
                     Iterator it = uws.iterator();
-                    while (it.hasNext()) {
-                        UnderwaterModem uw = (UnderwaterModem) it.next();
-                        Cylinder uw_geom_sphere = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true);
-                        Geometry uw_geom = new Geometry(auv.getName() + "-" + uw.getName() + "-geom", uw_geom_sphere);
-                        Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                        uw_geom_mat.setColor("Color", uw.getDebugColor());
-                        
-                        Cylinder uw_geom_sphere_border = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false,true);
-                        Geometry uw_geom_border = new Geometry(auv.getName() + "-" + uw.getName() + "-geom-border", uw_geom_sphere_border);
-                        Material uw_geom_border_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                        uw_geom_border_mat.setColor("Color", ColorRGBA.Black);
-                        
-
-                        //don't forget transparency for depth
-                        uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                        uw_geom.setQueueBucket(Bucket.Transparent);
-
-                        uw_geom.setMaterial(uw_geom_mat);
-                        uw_geom_border.setMaterial(uw_geom_border_mat);
-                        uw_geom.setLocalTranslation(0f, 0f, -0.5f);
-                        uw_geom_border.setLocalTranslation(0f, 0f, -0.5f);
-                        uw_geom.updateGeometricState();
-                        uw_geom_border.updateGeometricState();
-                        auvNode.attachChild(uw_geom);
-                        auvNode.attachChild(uw_geom_border);
-                    }
+//                    while (it.hasNext()) {
+//                        UnderwaterModem uw = (UnderwaterModem) it.next();
+//                        Cylinder uw_geom_sphere = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true);
+//                        Geometry uw_geom = new Geometry(auv.getName() + "-" + uw.getName() + "-geom", uw_geom_sphere);
+//                        Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//                        uw_geom_mat.setColor("Color", uw.getDebugColor());
+//                        
+//                        Cylinder uw_geom_sphere_border = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false,true);
+//                        Geometry uw_geom_border = new Geometry(auv.getName() + "-" + uw.getName() + "-geom-border", uw_geom_sphere_border);
+//                        Material uw_geom_border_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//                        uw_geom_border_mat.setColor("Color", ColorRGBA.Black);
+//                        
+//
+//                        //don't forget transparency for depth
+//                        uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+//                        uw_geom.setQueueBucket(Bucket.Transparent);
+//
+//                        uw_geom.setMaterial(uw_geom_mat);
+//                        uw_geom_border.setMaterial(uw_geom_border_mat);
+//                        uw_geom.setLocalTranslation(0f, 0f, -0.5f);
+//                        uw_geom_border.setLocalTranslation(0f, 0f, -0.5f);
+//                        uw_geom.updateGeometricState();
+//                        uw_geom_border.updateGeometricState();
+//                        auvNode.attachChild(uw_geom);
+//                        auvNode.attachChild(uw_geom_border);
+//                    }
 
                     //adding sonar cones
                     ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());

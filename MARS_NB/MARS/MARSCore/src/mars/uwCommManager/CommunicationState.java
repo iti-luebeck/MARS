@@ -42,7 +42,7 @@ import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
 
 /**
  * Entrypoint of the communications module.
- * @version 0.2
+ * @version 0.2.1
  * @author Jasper Schwinghammer
  */
 public class CommunicationState extends AbstractAppState {
@@ -391,6 +391,16 @@ public class CommunicationState extends AbstractAppState {
         }
     }
     
+    
+    /**
+     * Add AUV to communicationssystem
+     * @since 0.2.1
+     * @param auv 
+     */
+    public void addAUV(AUV auv) {
+        commOnMap.addMapGraphicsToAUV(auv);
+    }
+    
     /**
      * 
      * @return the current value of threadCount
@@ -398,6 +408,7 @@ public class CommunicationState extends AbstractAppState {
     public static int getThreadCount() {
         return threadCount;
     }
+    
     
     
     

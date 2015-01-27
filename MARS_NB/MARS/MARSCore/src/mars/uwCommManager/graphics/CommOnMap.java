@@ -7,8 +7,10 @@ package mars.uwCommManager.graphics;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -76,7 +78,56 @@ public class CommOnMap {
         this.assetManager = assetManager;
         this.app = app;
         return true;
-        
+    }
+    
+    /**
+     * Add propagation distance features to AUVs
+     * code moved from mars.states.MapState
+     * @since 0.2.1
+     * @param auv the AUV that was added
+     */
+    public void addMapGraphicsToAUV(final AUV auv) {
+        app.enqueue(new Callable<Object>(){
+            @Override
+            public Object call() {
+                Node auvNode = mapState.getAUVNodes().get(auv.getName());
+                int terx_px = mapState.getTexMl().getImage().getWidth();
+                int tery_px = mapState.getTexMl().getImage().getHeight();
+                Vector3f ter_pos = marsSettings.getTerrainPosition();
+                float tile_length = marsSettings.getTerrainScale().getX();
+                //adding propagation distance of underwater modems
+                ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                Iterator it = uws.iterator();
+                while (it.hasNext()) {
+                    UnderwaterModem uw = (UnderwaterModem) it.next();
+                    Cylinder uw_geom_sphere = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true);
+                    Geometry uw_geom = new Geometry(auv.getName() + "-" + uw.getName() + "-geom", uw_geom_sphere);
+                    Material uw_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    uw_geom_mat.setColor("Color", uw.getDebugColor());
+                        
+                    Cylinder uw_geom_sphere_border = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length))+0.01f, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, false,true);
+                    Geometry uw_geom_border = new Geometry(auv.getName() + "-" + uw.getName() + "-geom-border", uw_geom_sphere_border);
+                    Material uw_geom_border_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                    uw_geom_border_mat.setColor("Color", ColorRGBA.Black);
+                        
+
+                    //don't forget transparency for depth
+                    uw_geom_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                    uw_geom.setQueueBucket(Bucket.Transparent);
+
+                    uw_geom.setMaterial(uw_geom_mat);
+                    uw_geom_border.setMaterial(uw_geom_border_mat);
+                    uw_geom.setLocalTranslation(0f, 0f, -0.5f);
+                    uw_geom_border.setLocalTranslation(0f, 0f, -0.5f);
+                    uw_geom.updateGeometricState();
+                    uw_geom_border.updateGeometricState();
+                    auvNode.attachChild(uw_geom);
+                    auvNode.attachChild(uw_geom_border);
+                    System.out.println("Added the geometry for " + auv.getName());
+                }
+                return null;
+            }
+        });
     }
     
     /**

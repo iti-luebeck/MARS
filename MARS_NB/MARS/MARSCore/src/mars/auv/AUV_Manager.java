@@ -28,6 +28,7 @@ import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
 import mars.states.MapState;
 import mars.states.SimState;
+import mars.uwCommManager.CommunicationState;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Lookup;
@@ -698,6 +699,10 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         if (mars.getStateManager().getState(MapState.class) != null) {
             MapState mapState = (MapState) mars.getStateManager().getState(MapState.class);
             mapState.addAUV(auv);
+            if(mars.getStateManager().getState(CommunicationState.class) != null) {
+                CommunicationState comState = (CommunicationState) mars.getStateManager().getState(CommunicationState.class);
+                comState.addAUV(auv);
+            }
         }
     }
 
