@@ -686,7 +686,7 @@ public class GuiState extends AbstractAppState {
                 if (((String) target.getUserData("simob_name") != null)) {
                     Integer pickType = (Integer) target.getUserData(PickHint.PickName);
                     if ((pickType == null) || (pickType == PickHint.Pick)) {//only pick spatials who are pickable
-                        SimObject simob = (SimObject) simobManager.getSimObject((String) target.getUserData("simob_name"));
+                        SimObject simob = simobManager.getSimObject((String) target.getUserData("simob_name"));
                         if (simob != null) {
                             simobManager.deselectAllSimObs();
                             simob.setSelected(true);

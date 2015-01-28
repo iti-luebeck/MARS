@@ -97,7 +97,7 @@ public class Sonar extends RayBasedSensor {
      */
     @Override
     protected float calculateAverageNoiseFunction(float x) {
-        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
+        return ((float) Math.pow(1.1f, Math.abs(x)));
     }
 
     /**
@@ -107,6 +107,6 @@ public class Sonar extends RayBasedSensor {
      */
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x) {
-        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
+        return ((float) Math.pow(1.1f, Math.abs(x)));
     }
 }

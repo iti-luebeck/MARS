@@ -236,7 +236,7 @@ public class WiFi extends CommunicationDevice {
         });
         final Vector3f modPos = this.getWorldPosition();
         for (String elem : uws.keySet()) {
-            final WiFi uw = (WiFi) uws.get(elem);
+            final WiFi uw = uws.get(elem);
             if (uw != this) {//ignore myself
                 Vector3f distance = modPos.subtract(uw.getWorldPosition());
                 final float proDist = this.getPropagationDistance();
