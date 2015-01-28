@@ -17,19 +17,20 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.tree.TreePath;
 import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.gui.tree.UpdateState;
 import mars.states.SimState;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  * This manager manages the SimObjects. Intialises them...
  *
  * @author Thomas Tosik
  */
-public class SimObjectManager implements UpdateState {
+public class SimObjectManager implements Lookup.Provider {
 
     //auv HashMap to store and load auv's
 
@@ -43,6 +44,10 @@ public class SimObjectManager implements UpdateState {
     private Node rootNode;
     private MARS_Settings mars_settings;
 
+    //lookup stuff
+    private InstanceContent content = new InstanceContent();
+    private Lookup lookup = new AbstractLookup(content);
+    
     /**
      *
      * @param simstate
@@ -80,6 +85,15 @@ public class SimObjectManager implements UpdateState {
         this.mars_settings = simstate.getMARSSettings();
     }
 
+        /**
+     *
+     * @return
+     */
+    @Override
+    public Lookup getLookup() {
+        return lookup;
+    }
+    
     /**
      * With this method you register pre created auv like hanse.
      *
@@ -90,7 +104,7 @@ public class SimObjectManager implements UpdateState {
         simob.setName(name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 addSimObjectToScene(fin_simob);
                 simobs.put(fin_simob.getName(), fin_simob);
@@ -106,7 +120,7 @@ public class SimObjectManager implements UpdateState {
     public void registerSimObject(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 addSimObjectToScene(fin_simob);
                 simobs.put(fin_simob.getName(), fin_simob);
@@ -119,11 +133,11 @@ public class SimObjectManager implements UpdateState {
      *
      * @param arrlist
      */
-    public void registerSimObjects(ArrayList arrlist) {
+    public void registerSimObjects(ArrayList<SimObject> arrlist) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding Sim_Objects...", "");
-        Iterator iter = arrlist.iterator();
+        Iterator<SimObject> iter = arrlist.iterator();
         while (iter.hasNext()) {
-            SimObject simob = (SimObject) iter.next();
+            SimObject simob = iter.next();
             registerSimObject(simob);
         }
     }
@@ -135,7 +149,7 @@ public class SimObjectManager implements UpdateState {
     public void deregisterSimObject(String name) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + name + " deleted...", "");
         final String fin_name = name;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 SimObject ret = simobs.remove(fin_name);
                 removeSimObjectFromScene(ret);
@@ -151,7 +165,7 @@ public class SimObjectManager implements UpdateState {
     public void deregisterSimObject(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " deleted...", "");
         final SimObject fin_simob = simob;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 removeSimObjectFromScene(fin_simob);
                 simobs.remove(fin_simob.getName());
@@ -166,7 +180,7 @@ public class SimObjectManager implements UpdateState {
     public void deregisterAllSimObjects() {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All Sim_Objects...", "");
         for (String elem : simobs.keySet()) {
-            SimObject simob = (SimObject) simobs.get(elem);
+            SimObject simob = simobs.get(elem);
             deregisterSimObject(simob);
         }
     }
@@ -175,11 +189,11 @@ public class SimObjectManager implements UpdateState {
      *
      * @param simobs
      */
-    public void deregisterSimObjects(ArrayList simobs) {
+    public void deregisterSimObjects(ArrayList<SimObject> simobs) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting Sim_Objects...", "");
-        Iterator iter = simobs.iterator();
+        Iterator<SimObject> iter = simobs.iterator();
         while (iter.hasNext()) {
-            SimObject simob = (SimObject) iter.next();
+            SimObject simob = iter.next();
             deregisterSimObject(simob);
         }
     }
@@ -190,7 +204,7 @@ public class SimObjectManager implements UpdateState {
     public void deselectAllSimObs() {
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
         for (String elem : simobs.keySet()) {
-            SimObject simob = (SimObject) simobs.get(elem);
+            SimObject simob = simobs.get(elem);
             simob.setSelected(false);
         }
     }
@@ -235,7 +249,7 @@ public class SimObjectManager implements UpdateState {
     private void addSimObjectToNode(SimObject simob, Node node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
         if (simob.isEnabled()) {
-            if (simob.isRayDetectable()) {
+            if (simob.getRayDetectable()) {
                 RayDetectable.attachChild(simob.getSimObNode());
             }
             node.attachChild(simob.getSimObNode());
@@ -264,11 +278,11 @@ public class SimObjectManager implements UpdateState {
     private void addSimObjectsToNode(Node node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObjects to Node: " + node.getName(), "");
         for (String elem : simobs.keySet()) {
-            SimObject simob = (SimObject) simobs.get(elem);
+            SimObject simob = simobs.get(elem);
             if (simob.isEnabled()) {
                 final Spatial final_spatial = simob.getSpatial();
-                if (simob.isRayDetectable()) {
-                    Future fut = mars.enqueue(new Callable() {
+                if (simob.getRayDetectable()) {
+                    Future<Void> fut = mars.enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             //SonarDetectableNode.attachChild(final_spatial);
                             return null;
@@ -276,7 +290,7 @@ public class SimObjectManager implements UpdateState {
                     });
                 } else {
                     final Node final_node = node;
-                    Future fut = mars.enqueue(new Callable() {
+                    Future<Void> fut = mars.enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             final_node.attachChild(final_spatial);
                             return null;
@@ -293,7 +307,7 @@ public class SimObjectManager implements UpdateState {
      * @param simob
      */
     public void addSimObjectToBulletAppState(SimObject simob) {
-        if (simob.isCollidable() && simob.isEnabled()) {
+        if (simob.getCollisionCollidable() && simob.isEnabled()) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding SimObject " + simob.getName() + " to BulletAppState...", "");
             bulletAppState.getPhysicsSpace().add(simob.getSpatial());
         }
@@ -310,7 +324,7 @@ public class SimObjectManager implements UpdateState {
     }
 
     private void initSimObject(String simob_name) {
-        SimObject simob = (SimObject) getSimObject(simob_name);
+        SimObject simob = getSimObject(simob_name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising SimObject " + simob.getName() + "...", "");
         if (simob.isEnabled()) {
             simob.setSimauv(mars);
@@ -351,7 +365,7 @@ public class SimObjectManager implements UpdateState {
     public SimObject getSelectedSimObject() {
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
         for (String elem : simobs.keySet()) {
-            SimObject simob = (SimObject) simobs.get(elem);
+            SimObject simob = simobs.get(elem);
             if (simob.isSelected()) {
                 return simob;
             }
@@ -371,7 +385,7 @@ public class SimObjectManager implements UpdateState {
     }
 
     private void enableSimObject(String simob_name, boolean enable) {
-        SimObject simob = (SimObject) simobs.get(simob_name);
+        SimObject simob = simobs.get(simob_name);
         if (enable) {
             addSimObjectToScene(simob);
         } else {
@@ -382,15 +396,5 @@ public class SimObjectManager implements UpdateState {
     @Override
     public String toString() {
         return "SimObjects";
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        SimObject simob = (SimObject) path.getPathComponent(1);
-        simob.updateState(path);
     }
 }

@@ -45,6 +45,7 @@ public class TF_ROS_Publisher {
      * @param ros_node
      * @param auv_name
      */
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         tf_publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
         tf_fl = pe.getMARS_Node().getMessageFactory().newFromType(tf.tfMessage._TYPE);

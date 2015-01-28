@@ -5,7 +5,6 @@
 package mars.auv;
 
 import com.jme3.renderer.queue.RenderQueue;
-import javax.swing.tree.TreePath;
 import mars.object.CollisionType;
 import mars.actuators.thruster.Thruster;
 import mars.actuators.Actuator;
@@ -57,7 +56,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -96,7 +94,6 @@ import mars.auv.example.Manta;
 import mars.auv.example.ROMP;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
-import mars.gui.tree.HashMapWrapper;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;
@@ -265,7 +262,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         HashMap<String, Actuator> actuatorOriginal = auv.getActuators();
         for (String elem : actuatorOriginal.keySet()) {
-            Actuator element = (Actuator) actuatorOriginal.get(elem);
+            Actuator element = actuatorOriginal.get(elem);
             PhysicalExchanger copy = element.copy();
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
@@ -273,7 +270,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         HashMap<String, Sensor> sensorsOriginal = auv.getSensors();
         for (String elem : sensorsOriginal.keySet()) {
-            Sensor element = (Sensor) sensorsOriginal.get(elem);
+            Sensor element = sensorsOriginal.get(elem);
             PhysicalExchanger copy = element.copy();
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
@@ -302,11 +299,11 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void cleanupAUV() {
         cleanupOffscreenView();
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             element.cleanup();
         }
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             element.cleanup();
         }
     }
@@ -447,10 +444,10 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param arrlist
      */
     @Override
-    public void registerPhysicalExchangers(ArrayList arrlist) {
-        Iterator iter = arrlist.iterator();
+    public void registerPhysicalExchangers(ArrayList<PhysicalExchanger> arrlist) {
+        Iterator<PhysicalExchanger>  iter = arrlist.iterator();
         while (iter.hasNext()) {
-            PhysicalExchanger pex = (PhysicalExchanger) iter.next();
+            PhysicalExchanger pex = iter.next();
             registerPhysicalExchanger(pex);
         }
     }
@@ -458,7 +455,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
@@ -517,12 +514,12 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void debugView(boolean visible) {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             element.setNodeVisibility(visible);
         }
 
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             element.setNodeVisibility(visible);
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "All Sensors/Actuators have visibility: " + visible, "");
@@ -589,10 +586,10 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @return
      */
     @Override
-    public ArrayList getSensorsOfClass(String classNameString) {
-        ArrayList ret = new ArrayList();
+    public ArrayList<Sensor> getSensorsOfClass(String classNameString) {
+        ArrayList<Sensor> ret = new ArrayList<Sensor>();
         for (String elem : sensors.keySet()) {
-            Sensor sens = (Sensor) sensors.get(elem);
+            Sensor sens = sensors.get(elem);
             try {
                 if (Class.forName(classNameString).isInstance(sens)) {
                     ret.add(sens);
@@ -607,7 +604,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public boolean hasSensorsOfClass(String classNameString) {
         for (String elem : sensors.keySet()) {
-            Sensor sens = (Sensor) sensors.get(elem);
+            Sensor sens = sensors.get(elem);
             try {
                 boolean ret = (Class.forName(classNameString).isInstance(sens));
                 if (ret) {
@@ -666,7 +663,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //float[] vol = (float[])calculateVolumeAuto(auv_spatial,0.015625f,60,60,true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
         //used primarly for auftriebspunkt
         if (getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE) {
-            float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
+            float[] vol = calculateVolumeAutoRound(auv_spatial, 0.015625f, true);//0.03125f,30,30      0.0625f,80,60     0.03125f,160,120   0.0078125f,640,480
             completeVolume = vol[0];
         } else {
             float[] calculateVolumeExcact = calculateVolumeExcact(auv_spatial, true);
@@ -690,7 +687,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void initPhysicalExchangers() {
         //init sensors
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
             if (element.isEnabled()) {
@@ -734,7 +731,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         }
         //init actuators
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
             if (element.isEnabled()) {
@@ -759,13 +756,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         }
         //init special actuators like manipulating ones(servos)
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element instanceof Manipulating && element.isEnabled()) {
                 Manipulating mani = (Manipulating) element;
                 ArrayList<String> slaves_names = mani.getSlavesNames();
-                Iterator iter = slaves_names.iterator();
+                Iterator<String> iter = slaves_names.iterator();
                 while (iter.hasNext()) {//search for the moveables(slaves) and add them to the master
-                    String slave_name = (String) iter.next();
+                    String slave_name = iter.next();
                     Moveable moves = getMoveable(slave_name);
                     moves.setLocalRotationAxisPoints(mani.getWorldRotationAxisPoints());
                     mani.addSlave(moves);
@@ -776,13 +773,13 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     private Moveable getMoveable(String name) {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.getName().equals(name) && element instanceof Moveable) {
                 return (Moveable) element;
             }
         }
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.getName().equals(name) && element instanceof Moveable) {
                 return (Moveable) element;
             }
@@ -799,13 +796,13 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void initROS() {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.isEnabled()) {
                 element.initROS(mars_node, auv_param.getName());
             }
         }
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled()) {
                 element.initROS(mars_node, auv_param.getName());
             }
@@ -814,7 +811,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     private void updateActuatorForces() {
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element instanceof Thruster) {
                 element.update();
             } else if (element instanceof BallastTank) {
@@ -910,11 +907,11 @@ public class BasicAUV implements AUV, SceneProcessor {
 
             //float[] vol = (float[])calculateVolume(auv_spatial,0.03125f,30,30,false);
             if (getAuv_param().getBuoyancyType() == BuoyancyType.NOSHAPE) {
-                float[] vol = (float[]) calculateVolumeAutoRound(auv_spatial, 0.03125f, false);
+                float[] vol = calculateVolumeAutoRound(auv_spatial, 0.03125f, false);
                 actual_vol = vol[0] * auv_param.getBuoyancyFactor();
                 actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
             } else {
-                float[] vol = (float[]) calculateVolumeExcact(auv_spatial, false);
+                float[] vol = calculateVolumeExcact(auv_spatial, false);
                 actual_vol = vol[0] * auv_param.getBuoyancyFactor();
                 actual_vol_air = vol[1] * auv_param.getBuoyancyFactor();
             }
@@ -1110,7 +1107,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void updateSensors(float tpf) {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.isEnabled()) {
                 element.update(tpf);
             }
@@ -1124,7 +1121,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void updateActuators(float tpf) {
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled()) {
                 element.update(tpf);
             }
@@ -1135,9 +1132,9 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void updateAccumulators(float tpf) {
         //update current consumption for the activated sensors
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.isEnabled()) {
-                Accumulator acc = (Accumulator) accumulators.get(element.getAccumulator());
+                Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
                     Float currentConsumption = element.getCurrentConsumption();
                     if (currentConsumption != null) {//suck energy
@@ -1149,9 +1146,9 @@ public class BasicAUV implements AUV, SceneProcessor {
         }
         //update current consumption for the activated actuators and thrusters
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled()) {
-                Accumulator acc = (Accumulator) accumulators.get(element.getAccumulator());
+                Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
                     if (element instanceof Thruster) {//check if thruster(curent function) or normal actuator
                         Thruster th = (Thruster) element;
@@ -1288,7 +1285,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void initWaypoints() {
         //if(auv_param.isWaypointsEnabled()){
         WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param, getMARS_Settings());
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 rootNode.attachChild(WayPoints);
                 return null;
@@ -1848,7 +1845,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     private Vector3f calculateVolumeCentroid(Vector3f old_centroid, Vector3f new_centroid, float old_mass, float new_mass) {
         float all_mass = old_mass + new_mass;
-        Vector3f ret = new Vector3f((float) (((old_centroid.x * old_mass) + (new_centroid.x * new_mass)) / (all_mass)), (float) (((old_centroid.y * old_mass) + (new_centroid.y * new_mass)) / (all_mass)), (float) (((old_centroid.z * old_mass) + (new_centroid.z * new_mass)) / (all_mass)));
+        Vector3f ret = new Vector3f((((old_centroid.x * old_mass) + (new_centroid.x * new_mass)) / (all_mass)), (((old_centroid.y * old_mass) + (new_centroid.y * new_mass)) / (all_mass)), (((old_centroid.z * old_mass) + (new_centroid.z * new_mass)) / (all_mass)));
         return ret;
     }
 
@@ -2203,7 +2200,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
 
         final Vector3f in = volume_center_local.clone();
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 VolumeCenterGeom.setLocalTranslation(in);
                 VolumeCenterGeom.updateGeometricState();
@@ -2212,7 +2209,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         });
 
         if (VolumeCenterPreciseGeom.getWorldTranslation().equals(this.volume_center_precise)) {//save the precise only once
-            Future fut2 = mars.enqueue(new Callable() {
+            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     VolumeCenterPreciseGeom.setLocalTranslation(in);
                     VolumeCenterPreciseGeom.updateGeometricState();
@@ -2247,7 +2244,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void publishSensorsOfAUV() {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.isEnabled()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
@@ -2261,7 +2258,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void publishActuatorsOfAUV() {
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
@@ -2285,21 +2282,21 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     private void resetAllActuators() {
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             element.reset();
         }
     }
 
     private void resetAllSensors() {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             element.reset();
         }
     }
 
     private void resetAllAccumulators() {
         for (String elem : accumulators.keySet()) {
-            Accumulator element = (Accumulator) accumulators.get(elem);
+            Accumulator element = accumulators.get(elem);
             element.reset();
         }
     }
@@ -2464,7 +2461,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setVisualizerVisible(boolean visible) {
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled()) {
                 if (element instanceof PointVisualizer) {
                     element.setNodeVisibility(auv_param.isDebugVisualizers());
@@ -2482,13 +2479,13 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setPhysicalExchangerVisible(boolean visible) {
         for (String elem : sensors.keySet()) {
-            Sensor element = (Sensor) sensors.get(elem);
+            Sensor element = sensors.get(elem);
             if (element.isEnabled()) {
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
             }
         }
         for (String elem : actuators.keySet()) {
-            Actuator element = (Actuator) actuators.get(elem);
+            Actuator element = actuators.get(elem);
             if (element.isEnabled() && !(element instanceof PointVisualizer) && !(element instanceof VectorVisualizer)) {
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
             }
@@ -2611,28 +2608,6 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public WayPoints getWaypoints() {
         return WayPoints;
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        getAuv_param().updateState(path);
-        Object obj = path.getPathComponent(3);
-        if (obj != null) {
-            if (obj instanceof HashMapWrapper) {
-                HashMapWrapper hasher = (HashMapWrapper) obj;
-                if (hasher.getUserData() instanceof PhysicalExchanger) {
-                    PhysicalExchanger pe = (PhysicalExchanger) hasher.getUserData();
-                    pe.updateState(path);
-                } else if (hasher.getUserData() instanceof Accumulator) {
-                    Accumulator acc = (Accumulator) hasher.getUserData();
-                    acc.updateState(path);
-                }
-            }
-        }
     }
 
     private void setNodePickUserData(Spatial spatial) {

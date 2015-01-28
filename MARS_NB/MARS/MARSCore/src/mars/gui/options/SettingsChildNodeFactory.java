@@ -38,6 +38,7 @@ public class SettingsChildNodeFactory extends ChildFactory<String> implements No
      * @return
      */
     @Override
+    @SuppressWarnings({"rawtypes","unchecked"})
     protected boolean createKeys(List toPopulate) {
         //sorted output
         /*SortedSet<String> sortedset= new TreeSet<String>(settings.getSettings().keySet());

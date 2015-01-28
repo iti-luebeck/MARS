@@ -259,7 +259,7 @@ public class BallastTank extends Actuator implements Keys, ChartValue {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            String action = (String) action_mapping.get(elem);
+            String action = action_mapping.get(elem);
             final String mapping = elem;
             final BallastTank self = this;
             if (action.equals("setDesiredVolumePrecent")) {

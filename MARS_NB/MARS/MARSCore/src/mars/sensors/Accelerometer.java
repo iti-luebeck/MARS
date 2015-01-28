@@ -130,11 +130,11 @@ public class Accelerometer extends Sensor implements ChartValue {
             return getAccelerationRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getAccelerationRaw().x + ((float) ((1f / 100f) * noise)), getAccelerationRaw().y + ((float) ((1f / 100f) * noise)), getAccelerationRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getAccelerationRaw().x + (((1f / 100f) * noise)), getAccelerationRaw().y + (((1f / 100f) * noise)), getAccelerationRaw().z + (((1f / 100f) * noise)));
             return noised;
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getAccelerationRaw().x + ((float) ((1f / 100f) * noise)), getAccelerationRaw().y + ((float) ((1f / 100f) * noise)), getAccelerationRaw().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getAccelerationRaw().x + (((1f / 100f) * noise)), getAccelerationRaw().y + (((1f / 100f) * noise)), getAccelerationRaw().z + (((1f / 100f) * noise)));
             return noised;
         } else {
             return getAccelerationRaw();

@@ -215,16 +215,6 @@ public class UnderwaterModem extends CommunicationDevice {
         }
     }
 
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        super.updateState(path);
-        updateState(path.getLastPathComponent().toString(), "");
-    }
-
     private void updateState(String target, String hashmapname) {
         if (target.equals("debug") && hashmapname.equals("")) {
             setDebugVisible(getDebug());
@@ -248,7 +238,7 @@ public class UnderwaterModem extends CommunicationDevice {
      * @param uws
      */
     public void updateComNet(HashMap<String, UnderwaterModem> uws) {
-        Future fut2 = simState.getMARS().enqueue(new Callable() {
+        Future<Void> fut2 = simState.getMARS().enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 comNet.detachAllChildren();
                 return null;
@@ -256,7 +246,7 @@ public class UnderwaterModem extends CommunicationDevice {
         });
         final Vector3f modPos = this.getWorldPosition();
         for (String elem : uws.keySet()) {
-            final UnderwaterModem uw = (UnderwaterModem) uws.get(elem);
+            final UnderwaterModem uw = uws.get(elem);
             if (uw != this) {//ignore myself
                 Vector3f distance = modPos.subtract(uw.getWorldPosition());
                 final float proDist = this.getPropagationDistance();
@@ -264,7 +254,7 @@ public class UnderwaterModem extends CommunicationDevice {
                 if (dis <= proDist) {//ignore uws far away
                     final Vector3f newVec = new Vector3f();
                     comNet.worldToLocal(uw.getWorldPosition(), newVec);
-                    Future fut = simState.getMARS().enqueue(new Callable() {
+                    Future<Void> fut = simState.getMARS().enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             Geometry x_axis = new Geometry("x_axis!", new Line(Vector3f.ZERO, newVec.mult(0.5f)));
                             Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

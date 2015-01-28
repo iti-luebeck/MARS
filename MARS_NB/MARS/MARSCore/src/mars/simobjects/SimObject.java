@@ -25,10 +25,13 @@ import mars.object.CollisionType;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -39,7 +42,7 @@ import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.misc.PickHint;
-import mars.gui.tree.HashMapWrapper;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.object.MARSObject;
 import mars.xml.HashMapAdapter;
 
@@ -52,7 +55,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement(name = "SimObject")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({OilBurst.class})
-public class SimObject implements MARSObject{
+public class SimObject implements MARSObject,PropertyChangeListenerSupport{
 
     /**
      *
@@ -89,6 +92,8 @@ public class SimObject implements MARSObject{
     private RigidBodyControl physics_control;
     private MARS_Settings mars_settings;
     private Spatial debugShape;
+    
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *
@@ -106,6 +111,33 @@ public class SimObject implements MARSObject{
         Cloner cloner = new Cloner();
         simob_variables = cloner.deepClone(variablesOriginal);
     }
+    
+    /**
+     *
+     * @param pcl
+     */
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.add(pcl);
+    }
+
+    /**
+     *
+     * @param pcl
+     */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        listeners.remove(pcl);
+    }
+
+    private void fire(String propertyName, Object old, Object nue) {
+        //Passing 0 below on purpose, so you only synchronize for one atomic call:
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        }
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<updateVariable(propertyName);
+    }
 
     /**
      *
@@ -115,22 +147,6 @@ public class SimObject implements MARSObject{
         SimObject simob = new SimObject(this);
         simob.initAfterJAXB();
         return simob;
-    }
-
-    /**
-     *
-     * @param path
-     */
-    public void updateState(TreePath path) {
-        if (path.getPathComponent(1).equals(this)) {//make sure we want to change auv params 
-            //System.out.println("update tts " + path);
-            Object obj = path.getParentPath().getLastPathComponent();
-            if (path.getParentPath().getLastPathComponent() instanceof HashMapWrapper) {
-                updateState(path.getLastPathComponent().toString(), path.getParentPath().getLastPathComponent().toString());
-            } else {
-                updateState(path.getLastPathComponent().toString(), "");
-            }
-        }
     }
 
     /**
@@ -154,12 +170,12 @@ public class SimObject implements MARSObject{
         } else if (target.equals("scale") && hashmapname.equals("")) {
             getSpatial().setLocalScale(getScale());
         } else if (target.equals("debug_collision") && hashmapname.equals("Collision")) {
-            setCollisionVisible(isDebugCollision());
+            setCollisionVisible(getCollisionDebug());
         } else if (target.equals("color") && hashmapname.equals("")) {
 
             spatialMaterial.setColor("Color", getColor());
         } else if (target.equals("light") && hashmapname.equals("")) {
-            if (!isLight()) {
+            if (!getLight()) {
                 spatialMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 spatialMaterial.setColor("Color", getColor());
                 spatial.setMaterial(spatialMaterial);
@@ -186,7 +202,7 @@ public class SimObject implements MARSObject{
         spatial.setUserData("simob_name", getName());
         spatial.setLocalTranslation(getPosition());
         spatial.rotate(getRotation().x, getRotation().y, getRotation().z);
-        if (!isLight()) {
+        if (!getLight()) {
             spatialMaterial.setColor("Color", getColor());
             spatial.setMaterial(spatialMaterial);
         }
@@ -204,19 +220,19 @@ public class SimObject implements MARSObject{
      */
     private void createPhysicsNode() {
         CollisionShape collisionShape;
-        if (getType() == CollisionType.BOXCOLLISIONSHAPE) {
-            collisionShape = new BoxCollisionShape(getDimensions());
-        } else if (getType() == CollisionType.SPHERECOLLISIONSHAPE) {
-            collisionShape = new SphereCollisionShape(getDimensions().x);
-        } else if (getType() == CollisionType.CONECOLLISIONSHAPE) {
-            collisionShape = new ConeCollisionShape(getDimensions().x, getDimensions().y);
-        } else if (getType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
-            //collisionShape = new CylinderCollisionShape(auv_param.getDimensions().x,auv_param.getDimensions().y);
-            collisionShape = new BoxCollisionShape(getDimensions());
-        } else if (getType() == CollisionType.MESHACCURATE) {
+        if (getCollisionType() == CollisionType.BOXCOLLISIONSHAPE) {
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
+        } else if (getCollisionType() == CollisionType.SPHERECOLLISIONSHAPE) {
+            collisionShape = new SphereCollisionShape(getCollisionDimensions().x);
+        } else if (getCollisionType() == CollisionType.CONECOLLISIONSHAPE) {
+            collisionShape = new ConeCollisionShape(getCollisionDimensions().x, getCollisionDimensions().y);
+        } else if (getCollisionType() == CollisionType.CYLINDERCOLLISIONSHAPE) {
+            //collisionShape = new CylinderCollisionShape(auv_param.getCollisionDimensions().x,auv_param.getCollisionDimensions().y);
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
+        } else if (getCollisionType() == CollisionType.MESHACCURATE) {
             collisionShape = CollisionShapeFactory.createMeshShape(spatial);
         } else {
-            collisionShape = new BoxCollisionShape(getDimensions());
+            collisionShape = new BoxCollisionShape(getCollisionDimensions());
         }
         physics_control = new RigidBodyControl(collisionShape, 0f);
         physics_control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_03);
@@ -230,7 +246,7 @@ public class SimObject implements MARSObject{
         debug_mat.setColor("Color", ColorRGBA.Red);
         /*debugShape = physics_control.createDebugShape(assetManager);
          debugNode.attachChild(debugShape);
-         if(isDebugCollision()){
+         if(getCollisionDebug()){
          debugShape.setCullHint(CullHint.Inherit);
          }else{
          debugShape.setCullHint(CullHint.Always);
@@ -243,6 +259,7 @@ public class SimObject implements MARSObject{
     /**
      *
      */
+    @SuppressWarnings("unchecked")
     public void initAfterJAXB() {
         collision = (HashMap<String, Object>) simob_variables.get("Collision");
     }
@@ -343,6 +360,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public String getDndIcon() {
         return (String) simob_variables.get("dndIcon");
     }
@@ -359,7 +377,8 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public Vector3f getDimensions() {
+    @SuppressWarnings("unchecked")
+    public Vector3f getCollisionDimensions() {
         return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("dimensions");
     }
 
@@ -367,7 +386,8 @@ public class SimObject implements MARSObject{
      *
      * @param dimensions
      */
-    public void setDimensions(Vector3f dimensions) {
+    @SuppressWarnings("unchecked")
+    public void setCollisionDimensions(Vector3f dimensions) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("dimensions", dimensions);
     }
 
@@ -375,6 +395,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Vector3f getCollisionPosition() {
         return (Vector3f) ((HashMap<String, Object>) simob_variables.get("Collision")).get("position");
     }
@@ -383,6 +404,7 @@ public class SimObject implements MARSObject{
      *
      * @param position
      */
+    @SuppressWarnings("unchecked")
     public void setCollisionPosition(Vector3f position) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("position", position);
     }
@@ -391,7 +413,8 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public int getType() {
+    @SuppressWarnings("unchecked")
+    public Integer getCollisionType() {
         return (Integer) ((HashMap<String, Object>) simob_variables.get("Collision")).get("type");
     }
 
@@ -399,7 +422,8 @@ public class SimObject implements MARSObject{
      *
      * @param type
      */
-    public void setType(int type) {
+    @SuppressWarnings("unchecked")
+    public void setCollisionType(Integer type) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("type", type);
     }
 
@@ -407,7 +431,8 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public boolean isCollidable() {
+    @SuppressWarnings("unchecked")
+    public Boolean getCollisionCollidable() {
         return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("collidable");
     }
 
@@ -415,41 +440,16 @@ public class SimObject implements MARSObject{
      *
      * @param collidable
      */
-    public void setCollidable(boolean collidable) {
+    @SuppressWarnings("unchecked")
+    public void setCollisionCollidable(Boolean collidable) {
         ((HashMap<String, Object>) simob_variables.get("Collision")).put("collidable", collidable);
     }
 
     /**
      *
-     * @return @deprecated
-     */
-    @Deprecated
-    public boolean isSonar_detectable() {
-        return (Boolean) simob_variables.get("sonar_detectable");
-    }
-
-    /**
-     *
-     * @param sonar_detectable
-     * @deprecated
-     */
-    @Deprecated
-    public void setSonar_detectable(boolean sonar_detectable) {
-        simob_variables.put("sonar_detectable", sonar_detectable);
-    }
-
-    /**
-     *
      * @return
      */
-    public boolean isRayDetectable() {
-        return (Boolean) simob_variables.get("rayDetectable");
-    }
-
-    /**
-     *
-     * @return
-     */
+    @SuppressWarnings("unchecked")
     public Boolean getRayDetectable() {
         return (Boolean) simob_variables.get("rayDetectable");
     }
@@ -458,7 +458,7 @@ public class SimObject implements MARSObject{
      *
      * @param rayDetectable
      */
-    public void setRayDetectable(boolean rayDetectable) {
+    public void setRayDetectable(Boolean rayDetectable) {
         simob_variables.put("rayDetectable", rayDetectable);
     }
 
@@ -466,7 +466,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public boolean isPinger() {
+    public Boolean getPinger() {
         return (Boolean) simob_variables.get("pinger");
     }
 
@@ -474,7 +474,7 @@ public class SimObject implements MARSObject{
      *
      * @param pinger
      */
-    public void setPinger(boolean pinger) {
+    public void setPinger(Boolean pinger) {
         simob_variables.put("pinger", pinger);
     }
 
@@ -482,7 +482,7 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public boolean isLight() {
+    public Boolean getLight() {
         return (Boolean) simob_variables.get("light");
     }
 
@@ -490,7 +490,7 @@ public class SimObject implements MARSObject{
      *
      * @param light
      */
-    public void setLight(boolean light) {
+    public void setLight(Boolean light) {
         simob_variables.put("light", light);
     }
 
@@ -530,7 +530,15 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
+        return (Boolean) simob_variables.get("enabled");
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getEnabled() {
         return (Boolean) simob_variables.get("enabled");
     }
 
@@ -538,7 +546,7 @@ public class SimObject implements MARSObject{
      *
      * @param enabled
      */
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         simob_variables.put("enabled", enabled);
     }
 
@@ -626,16 +634,18 @@ public class SimObject implements MARSObject{
      *
      * @return
      */
-    public boolean isDebugCollision() {
-        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug_collision");
+    @SuppressWarnings("unchecked")
+    public Boolean getCollisionDebug() {
+        return (Boolean) ((HashMap<String, Object>) simob_variables.get("Collision")).get("debug");
     }
 
     /**
      *
      * @param debug_collision
      */
-    public void setDebugCollision(boolean debug_collision) {
-        ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug_collision", debug_collision);
+    @SuppressWarnings("unchecked")
+    public void setCollisionDebug(Boolean debug) {
+        ((HashMap<String, Object>) simob_variables.get("Collision")).put("debug", debug);
     }
 
     /**
@@ -644,12 +654,13 @@ public class SimObject implements MARSObject{
      * @param hashmapname
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
-            return (Object) simob_variables.get(value);
+            return simob_variables.get(value);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) simob_variables.get(hashmapname);
-            return (Object) hashmap.get(value);
+            return hashmap.get(value);
         }
     }
 
@@ -659,6 +670,7 @@ public class SimObject implements MARSObject{
      * @param object
      * @param hashmapname
      */
+    @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             simob_variables.put(value, object);

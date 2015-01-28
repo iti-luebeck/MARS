@@ -104,7 +104,7 @@ public class Teleporter extends Actuator {
      * @param quat
      */
     public void teleport(final Vector3f vector, final com.jme3.math.Quaternion quat) {
-        Future simStateFuture = this.simauv.enqueue(new Callable() {
+        Future<Void> simStateFuture = this.simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 getPhysicsControl().setPhysicsLocation(vector);
                 getPhysicsControl().setPhysicsRotation(quat);
@@ -127,11 +127,11 @@ public class Teleporter extends Actuator {
             @Override
             public void onNewMessage(geometry_msgs.PoseStamped message) {
 
-                Point pos = (Point) message.getPose().getPosition();
+                Point pos = message.getPose().getPosition();
                 Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
 
                 //getting from ROS Co-S to MARS Co-S
-                Quaternion ori = (Quaternion) message.getPose().getOrientation();
+                Quaternion ori = message.getPose().getOrientation();
                 com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
                 com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
                 qrot.fromAngles(0f, FastMath.HALF_PI, 0);

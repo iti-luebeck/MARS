@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
-import mars.recorder.Record;
 import mars.sensors.Sensor;
 
 /**
@@ -66,8 +65,6 @@ public class MyHashMapType {
                 entry.add(new MyHashMapEntryTypeSensors(e));
             } else if (e.getValue() instanceof Accumulator) {
                 entry.add(new MyHashMapEntryTypeAccumulators(e));
-            } else if (e.getValue() instanceof Record) {
-                entry.add(new MyHashMapEntryTypeRecord(e));
             } else if (e.getValue() instanceof List) {
                 entry.add(new MyHashMapEntryTypeArrayList(e));
             } else {

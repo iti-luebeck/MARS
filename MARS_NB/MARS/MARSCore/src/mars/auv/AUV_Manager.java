@@ -16,13 +16,10 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
-import javax.swing.tree.TreePath;
 import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.gui.tree.UpdateState;
-import mars.recorder.RecordManager;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
@@ -43,7 +40,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager implements UpdateState, Lookup.Provider {
+public class AUV_Manager implements Lookup.Provider {
 
     //auv HashMap to store and load auv's
     private HashMap<String, AUV> auvs = new HashMap<String, AUV>();
@@ -56,7 +53,6 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     private BulletAppState bulletAppState;
     private Node rootNode;
     private SimState simstate;
-    private RecordManager recManager;
     private HashMap<String, MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
 
@@ -158,7 +154,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public ArrayList<Class<? extends AUV>> getAUVClasses() {
         ArrayList<Class<? extends AUV>> ret = new ArrayList<Class<? extends AUV>>();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             Class<? extends AUV> aClass = auv.getClass();
             if (!ret.contains(aClass)) {
                 ret.add(aClass);
@@ -172,10 +168,10 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      * @param classNameString
      * @return All AUVs of a specific class.
      */
-    public ArrayList getAUVsOfClass(String classNameString) {
-        ArrayList ret = new ArrayList();
+    public ArrayList<AUV> getAUVsOfClass(String classNameString) {
+        ArrayList<AUV> ret = new ArrayList<AUV>();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             try {
                 if (Class.forName(classNameString).isInstance(auv)) {
                     ret.add(auv);
@@ -194,7 +190,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public boolean hasAUVsOfClass(String classNameString) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             try {
                 return (Class.forName(classNameString).isInstance(auv));
             } catch (ClassNotFoundException ex) {
@@ -220,14 +216,6 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         this.physical_environment = physical_environment;
     }
     
-
-    /**
-     *
-     * @param recManager
-     */
-    public void setRecManager(RecordManager recManager) {
-        this.recManager = recManager;
-    }
 
     /**
      *
@@ -283,7 +271,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void updateMARSNode() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.setROS_Node(getMARSNodeForAUV(elem));
                 auv.initROS();
@@ -303,7 +291,6 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         updateCommunicationOfAUVs(tpf);
         updateWaypointsOfAUVs(tpf);
         updateAccumulatorsOfAUVs(tpf);
-        updateRecord(tpf);
     }
 
     /**
@@ -311,7 +298,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void publishSensorsOfAUVs() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.publishSensorsOfAUV();
             }
@@ -323,7 +310,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void publishActuatorsOfAUVs() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.publishActuatorsOfAUV();
             }
@@ -336,7 +323,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     private void updateWaypointsOfAUVs(float tpf) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateWaypoints(tpf);
             }
@@ -351,7 +338,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     private void updateSensorsOfAUVs(float tpf) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateSensors(tpf);
             }
@@ -363,7 +350,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     private void updateActuatorsOfAUVs(float tpf) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateActuators(tpf);
             }
@@ -379,7 +366,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     @Deprecated
     private void updateCommunicationOfAUVs(float tpf) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 //auv.updateSensors(tpf);
             }
@@ -394,7 +381,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     private void updateForcesOfAUVs(final float tpf) {
         for (String elem : auvs.keySet()) {
-            final AUV auv = (AUV) auvs.get(elem);
+            final AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 /*  Future fut = mars.enqueue(new Callable() {
                  public Void call() throws Exception {
@@ -409,22 +396,9 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
 
     private void updateAccumulatorsOfAUVs(float tpf) {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateAccumulators(tpf);
-            }
-        }
-    }
-
-    private void updateRecord(float tpf) {
-        if (recManager != null) {
-            if (recManager.isEnabled()) {
-                for (String elem : auvs.keySet()) {
-                    AUV auv = (AUV) auvs.get(elem);
-                    if (auv.getAuv_param().isEnabled()) {
-                        recManager.update(auv);
-                    }
-                }
             }
         }
     }
@@ -434,7 +408,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void clearForcesOfAUVs() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.clearForces();
             }
@@ -446,7 +420,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void resetAllAUVs() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.reset();
             }
@@ -463,7 +437,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         auv.setName(name);
         final AUV fin_auv = auv;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 auvs.put(fin_auv.getName(), fin_auv);
                 preloadAUV(fin_auv);
@@ -479,7 +453,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void registerAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
         final AUV fin_auv = auv;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 final ProgressHandle progr = ProgressHandleFactory.createHandle("AUVManager: " + fin_auv.getName());
                 progr.start();
@@ -497,11 +471,11 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      *
      * @param arrlist
      */
-    public void registerAUVs(ArrayList arrlist) {
+    public void registerAUVs(ArrayList<AUV> arrlist) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUVs...", "");
-        Iterator iter = arrlist.iterator();
+        Iterator<AUV> iter = arrlist.iterator();
         while (iter.hasNext()) {
-            AUV auv = (AUV) iter.next();
+            AUV auv = iter.next();
             registerAUV(auv);
         }
     }
@@ -513,7 +487,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void deregisterAUV(String auv_name) {
         final String fin_auv_name = auv_name;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv_name + " deleted...", "");
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 AUV ret = auvs.remove(fin_auv_name);
                 removeAUVFromScene(ret);
@@ -529,7 +503,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void deregisterAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
         final AUV fin_auv = auv;
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 removeAUVFromScene(fin_auv);
                 auvs.remove(fin_auv.getName());
@@ -553,11 +527,11 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      *
      * @param auvs
      */
-    public void deregisterAUVs(ArrayList auvs) {
+    public void deregisterAUVs(ArrayList<AUV> auvs) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting AUVs...", "");
-        Iterator iter = auvs.iterator();
+        Iterator<AUV> iter = auvs.iterator();
         while (iter.hasNext()) {
-            AUV auv = (AUV) iter.next();
+            AUV auv = iter.next();
             deregisterAUV(auv);
         }
     }
@@ -568,7 +542,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void deregisterAllAUVs() {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All AUVs...", "");
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             deregisterAUV(auv);
         }
     }
@@ -604,7 +578,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     }
 
     private void enableAUV(String auv_name, boolean enable) {
-        AUV auv = (AUV) auvs.get(auv_name);
+        AUV auv = auvs.get(auv_name);
         if (enable) {
             addAUVToScene(auv);
         } else {
@@ -656,7 +630,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     private void addAUVsToNode(Node node) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to Node: " + node.getName(), "");
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             addAUVToNode(auv, node);
         }
     }
@@ -686,7 +660,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public void addAUVsToBulletAppState(BulletAppState bulletAppState) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to BulletAppState...", "");
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             bulletAppState.getPhysicsSpace().add(auv.getAUVNode());
         }
     }
@@ -697,24 +671,12 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void addAUVtoMap(AUV auv) {
         if (mars.getStateManager().getState(MapState.class) != null) {
-            MapState mapState = (MapState) mars.getStateManager().getState(MapState.class);
+            MapState mapState = mars.getStateManager().getState(MapState.class);
             mapState.addAUV(auv);
             if(mars.getStateManager().getState(CommunicationState.class) != null) {
                 CommunicationState comState = (CommunicationState) mars.getStateManager().getState(CommunicationState.class);
                 comState.addAUV(auv);
             }
-        }
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    private void initAUVs() {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV's...", "");
-        for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
-            auv.init();
         }
     }
 
@@ -726,20 +688,13 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
         auv.init();
     }
 
-    @Deprecated
-    private void initAUV(String auv_name) {
-        AUV auv = (AUV) getAUV(auv_name);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
-        auv.init();
-    }
-
     /**
      * GUI stuff.
      */
     public void deselectAllAUVs() {
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "DeSelecting all AUVs...", "");
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             auv.setSelected(false);
         }
     }
@@ -759,7 +714,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
      */
     public void cleanup() {
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             auv.cleanupAUV();
         }
         auvs.clear();
@@ -773,7 +728,7 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     public AUV getSelectedAUV() {
         //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Getting selected AUV...", "");
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             if (auv.isSelected()) {
                 return auv;
             }
@@ -784,16 +739,6 @@ public class AUV_Manager implements UpdateState, Lookup.Provider {
     @Override
     public String toString() {
         return "AUVs";
-    }
-
-    /**
-     *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        AUV auv = (AUV) path.getPathComponent(1);
-        auv.updateState(path);
     }
 
     /**

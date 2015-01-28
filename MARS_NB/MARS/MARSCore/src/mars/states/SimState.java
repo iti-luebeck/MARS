@@ -11,7 +11,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.debug.BulletDebugAppState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
@@ -23,7 +22,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -40,8 +38,6 @@ import mars.PhysicalEnvironment;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
-import mars.auv.example.Hanse;
-import mars.auv.example.Monsun2;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.xml.XML_JAXB_ConfigReaderWriter;
@@ -49,12 +45,8 @@ import javax.swing.TransferHandler;
 import mars.misc.Collider;
 import mars.misc.MyDebugAppStateFilter;
 import mars.core.CentralLookup;
-import mars.core.MARSLogTopComponent;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
-import mars.core.MARSTreeTopComponent;
-import mars.recorder.RecordControl;
-import mars.recorder.RecordManager;
 import mars.uwCommManager.CommunicationState;
 import mars.xml.ConfigManager;
 import org.netbeans.api.progress.ProgressHandle;
@@ -72,7 +64,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private AssetManager assetManager;
     private InputManager inputManager;
     private AUV_Manager auvManager;
-    private RecordManager recordManager;
     private SimObjectManager simobManager;
     private BulletAppState bulletAppState;
     private MARS_Main mars;
@@ -80,10 +71,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private boolean initial_ready = false;
 
     //needed for graphs
-    private MARSTreeTopComponent TreeTopComp;
     private MARSTopComponent MARSTopComp;
     private MARSMapTopComponent MARSMapComp;
-    private MARSLogTopComponent MARSLogComp;
     private boolean view_init = false;
     private boolean server_init = false;
     private boolean debugFilter = false;
@@ -94,8 +83,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     private KeyConfig keyconfig;
     private PhysicalEnvironment physical_environment;
     private Initializer initer;
-    private ArrayList auvs = new ArrayList();
-    private ArrayList simobs = new ArrayList();
+    private ArrayList<AUV> auvs = new ArrayList<AUV>();
+    private ArrayList<SimObject> simobs = new ArrayList<SimObject>();
     private XML_JAXB_ConfigReaderWriter xml;
     private ConfigManager configManager;
 
@@ -109,7 +98,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     //warter currents
     private Node currents = new Node("currents");
 
-    private Future simStateFuture = null;
+    @SuppressWarnings("unchecked")
+    private Future<Void> simStateFuture = null;
 
     //map stuff
     private MapState mapState;
@@ -129,16 +119,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     /**
      *
      * @param MARSTopComp
-     * @param TreeTopComp
      * @param MARSMapComp
-     * @param MARSLogComp
      * @param configManager
      */
-    public SimState(MARSTopComponent MARSTopComp, MARSTreeTopComponent TreeTopComp, MARSMapTopComponent MARSMapComp, MARSLogTopComponent MARSLogComp, ConfigManager configManager) {
-        this.TreeTopComp = TreeTopComp;
+    public SimState(MARSTopComponent MARSTopComp, MARSMapTopComponent MARSMapComp, ConfigManager configManager) {
         this.MARSTopComp = MARSTopComp;
         this.MARSMapComp = MARSMapComp;
-        this.MARSLogComp = MARSLogComp;
         this.configManager = configManager;
     }
     
@@ -293,7 +279,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             setupCams();
 
             progr.progress("Creating Managers");
-            recordManager = new RecordManager(xml);
             auvManager = new AUV_Manager(this);
             simobManager = new SimObjectManager(this);
         
@@ -316,9 +301,8 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             initMap();//for mars_settings
 
             progr.progress("Populate AUVManager");
-            populateAUV_Manager(auvs, physical_environment, mars_settings, recordManager, initer);
-
-            Future fut = mars.enqueue(new Callable() {
+            populateAUV_Manager(auvs, physical_environment, mars_settings, initer);
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
                     return null;
@@ -327,6 +311,12 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
 
             progr.progress("Populate SimObjectManager");
             populateSim_Object_Manager(simobs);
+            mars.enqueue(new Callable<Void>() {
+                public Void call() throws Exception {
+                    CentralLookup.getDefault().add(simobManager);
+                    return null;
+                }
+            });
 
             progr.progress("Init View");
             initView();
@@ -342,7 +332,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             guiState.setSimObNode(SimObNode);
             guiState.setMars_settings(mars_settings);
             final AppStateManager stateManagerFin = stateManager;
-            Future fut2 = mars.enqueue(new Callable() {
+            
+            @SuppressWarnings("unchecked")
+            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     getMARS().getViewPort().attachScene(guiState.getRootNode());
                     stateManagerFin.attach(guiState);
@@ -372,28 +364,14 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     }
 
     private void initView() {
-        TreeTopComp.setMarsSettings(mars_settings);
         MARSTopComp.setMarsSettings(mars_settings);
-        TreeTopComp.setPenv(physical_environment);
         MARSTopComp.setPenv(physical_environment);
-        TreeTopComp.setKeyConfig(keyconfig);
         MARSTopComp.setKeyConfig(keyconfig);
-        TreeTopComp.setConfigManager(configManager);
         MARSTopComp.setConfigManager(configManager);
-        TreeTopComp.setAuv_manager(auvManager);
         MARSTopComp.setAuv_manager(auvManager);
-        TreeTopComp.setSimob_manager(simobManager);
         MARSTopComp.setSimob_manager(simobManager);
-        TreeTopComp.initAUVTree(auvManager);
-        TreeTopComp.initSimObjectTree(simobManager);
-        TreeTopComp.initEnvironmentTree(physical_environment);
-        TreeTopComp.initSettingsTree(mars_settings);
-        TreeTopComp.initKeysTree(keyconfig);
-        TreeTopComp.initPopUpMenues(auvManager);
-        TreeTopComp.initDND();
         MARSTopComp.initDND();
         MARSTopComp.allowSimInteraction();
-        TreeTopComp.updateTrees();
         MARSMapComp.initDND();
 
         if (mars_settings.getROSEnabled()) {
@@ -438,63 +416,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         mars_settings.setROSPublish(enable);
     }
 
-    /**
-     *
-     * @param enable
-     */
-    public void enableRecording(boolean enable) {
-        if (recordManager != null) {
-            recordManager.setEnabled(enable);
-        }
-    }
-
-    /**
-     *
-     */
-    public void playRecording() {
-        recordManager.play();
-        AUV auv = auvManager.getAUV("hanse");
-        RigidBodyControl control = auv.getAUVNode().getControl(RigidBodyControl.class);
-        control.setEnabled(false);
-        RecordControl recordControl = new RecordControl(recordManager, auv, MARSLogComp);
-        auv.getAUVNode().addControl(recordControl);
-    }
-
-    /**
-     *
-     * @param step
-     */
-    public void setRecord(int step) {
-        System.out.println("Step set to: " + step);
-        recordManager.setRecord(step);
-    }
-
-    /**
-     *
-     */
-    public void pauseRecording() {
-        recordManager.pause();
-        recordManager.setEnabled(false);
-    }
-
-    /**
-     *
-     * @param file
-     */
-    public void saveRecording(File file) {
-        recordManager.saveRecording(file);
-    }
-
-    /**
-     *
-     * @param file
-     */
-    public void loadRecording(File file) {
-        recordManager.loadRecordings(file);
-    }
-
+    @SuppressWarnings("unchecked")
     private void initMap() {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 mapState.loadMap(mars_settings.getTerrainColorMap());
                 mapState.setMars_settings(mars_settings);
@@ -563,9 +487,9 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             auvs = xml.loadAUVs();
 
             //do stuff after jaxb, see also UnmarshallListener
-            Iterator iter = auvs.iterator();
+            Iterator<AUV> iter = auvs.iterator();
             while (iter.hasNext()) {
-                BasicAUV bas_auv = (BasicAUV) iter.next();
+                AUV bas_auv = iter.next();
                 bas_auv.getAuv_param().setAuv(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
@@ -581,38 +505,23 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
     /*
      * Setup the AUVManager and put AUVs into it.
      */
-    private void populateAUV_Manager(ArrayList auvs,PhysicalEnvironment pe, MARS_Settings mars_settings, RecordManager recordManager, Initializer initer){
+
+    private void populateAUV_Manager(ArrayList<AUV> auvs, PhysicalEnvironment pe, MARS_Settings mars_settings, Initializer initer) {
         auvManager.setBulletAppState(bulletAppState);
         auvManager.setPhysical_environment(pe);
         auvManager.setMARS_settings(mars_settings);
-        auvManager.setRecManager(recordManager);
         if (mars_settings.getROSEnabled()) {
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
         }
         auvManager.registerAUVs(auvs);
-        //update the view in the next frame
-        Future fut = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                TreeTopComp.updateTrees();
-                TreeTopComp.initPopUpMenues(auvManager);
-                return null;
-            }
-        });
     }
 
     /*
      *
      */
-    private void populateSim_Object_Manager(ArrayList simobs) {
+    private void populateSim_Object_Manager(ArrayList<SimObject> simobs) {
         simobManager.setBulletAppState(bulletAppState);
         simobManager.registerSimObjects(simobs);
-        //update the view in the next frame
-        Future fut = mars.enqueue(new Callable() {
-            public Void call() throws Exception {
-                TreeTopComp.updateTrees();
-                return null;
-            }
-        });
     }
 
     /**
@@ -700,9 +609,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         }
         super.update(tpf);
 
-        if (TreeTopComp == null) {
-            System.out.println("TreeTopComp is NULL");
-        }
         if (MARSTopComp == null) {
             System.out.println("MARSTopComp is NULL");
         }
@@ -872,9 +778,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
          System.out.println("ghostControl.getOverlappingCount(): " + ghostControl.getOverlappingCount());
          }
          }*/
-        if (recordManager != null) {
-            recordManager.update(tpf);
-        }
 
         //setting Filter in the DebugState so we can show specific collision boxes
         if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
@@ -922,7 +825,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void startSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
                 initial_ready = true;
@@ -938,7 +841,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void pauseSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.setEnabled(false);
                 bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -955,7 +858,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
      *
      */
     public void restartSimulation() {
-        simStateFuture = mars.enqueue(new Callable() {
+        simStateFuture = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();
@@ -1034,15 +937,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
                 auvManager.registerAUV(auvCopy);
-                //we have to update the view AFTER the AUV register
-                Future simStateFutureView = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        if (TreeTopComp != null) {
-                            TreeTopComp.updateTrees();
-                        }
-                        return null;
-                    }
-                });
             } else {
                 if (auv.getAuv_param().isEnabled()) {//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(intersection);
@@ -1118,15 +1012,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
                 simobCopy.setName(name);
                 simobCopy.setPosition(pos);
                 simobManager.registerSimObject(simobCopy);
-                TreeTopComp.updateTrees();
-                Future simStateFutureView = mars.enqueue(new Callable() {
-                    public Void call() throws Exception {
-                        if (TreeTopComp != null) {
-                            TreeTopComp.updateTrees();
-                        }
-                        return null;
-                    }
-                });
             } else {
                 if (simob.isEnabled()) {//check if auf simob already enabled, then only new position
                     simob.setPosition(pos);
@@ -1191,24 +1076,6 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
         if (mars.getStateManager().getState(NiftyState.class) != null) {
             mars.getStateManager().getState(NiftyState.class).show();
         }
-    }
-
-    /**
-     *
-     * @param TreeTopComp
-     */
-    @Deprecated
-    public void setTreeTopComp(MARSTreeTopComponent TreeTopComp) {
-        this.TreeTopComp = TreeTopComp;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Deprecated
-    public MARSTreeTopComponent getTreeTopComp() {
-        return TreeTopComp;
     }
 
     /**

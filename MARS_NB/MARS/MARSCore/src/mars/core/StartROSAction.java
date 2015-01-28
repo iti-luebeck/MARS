@@ -23,7 +23,8 @@ import org.openide.util.actions.Presenter;
         id = "mars.core.StartROSAction")
 @ActionRegistration(
         iconBase = "",
-        displayName = "#CTL_StartROSAction")
+        displayName = "#CTL_StartROSAction",
+        lazy = false)
 @ActionReference(path = "Toolbars/ROS", position = 700)
 @Messages("CTL_StartROSAction=ROS")
 public final class StartROSAction extends AbstractAction implements Presenter.Toolbar {

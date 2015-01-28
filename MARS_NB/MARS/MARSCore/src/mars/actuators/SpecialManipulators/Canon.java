@@ -23,11 +23,9 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.texture.Texture;
 import com.rits.cloning.Cloner;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -319,7 +317,7 @@ public class Canon extends Actuator implements Moveable, Keys {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            final String action = (String) action_mapping.get(elem);
+            final String action = action_mapping.get(elem);
             final String mapping = elem;
             final Canon self = this;
             inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));

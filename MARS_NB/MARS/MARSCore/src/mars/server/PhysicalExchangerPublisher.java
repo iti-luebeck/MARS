@@ -78,7 +78,7 @@ public class PhysicalExchangerPublisher implements Runnable {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server running...", "");
         try {
             while (running) {
-                Future fut = mars.enqueue(new Callable() {
+                Future<Void> fut = mars.enqueue(new Callable<Void>() {
                     public Void call() throws Exception {
                         //if(marsSettings.isROS_Server_publish()){
                         auv_manager.publishSensorsOfAUVs();

@@ -873,7 +873,7 @@ public class RayBasedSensor extends Sensor {
         if (getScanning()) {//rotate the sonar to the next position
             last_head_position = getCurrentHeadPosition();
             float angle = (float) Math.PI * 2f;
-            if ((Float) getScanningAngleMax() != null) {
+            if (getScanningAngleMax() != null) {
                 angle = Math.abs(getScanningAngleMax()) + Math.abs(getScanningAngleMin());
             }
             if (scanning_iterations * getScanning_resolution() < angle) {
@@ -1092,10 +1092,10 @@ public class RayBasedSensor extends Sensor {
                     }
                     if (isFailureSwitch()) {//overwrite the data at position or switch
                         byte sondatSave = sondat[position];
-                        sondat[position] = (byte) sondat[i];
+                        sondat[position] = sondat[i];
                         sondat[i] = sondatSave;
                     } else {
-                        sondat[position] = (byte) sondat[i];
+                        sondat[position] = sondat[i];
                     }
                 }
             }
@@ -1124,7 +1124,7 @@ public class RayBasedSensor extends Sensor {
      * @return
      */
     protected float calculateAverageNoiseFunction(float x) {
-        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
+        return ((float) Math.pow(1.1f, Math.abs(x)));
     }
 
     /**
@@ -1133,7 +1133,7 @@ public class RayBasedSensor extends Sensor {
      * @return
      */
     protected float calculateStandardDeviationNoiseFunction(float x) {
-        return ((float) Math.pow(1.1f, (float) Math.abs(x)));
+        return ((float) Math.pow(1.1f, Math.abs(x)));
     }
 
     /**

@@ -60,8 +60,8 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     private double desired_angle = 0d;
 
     @XmlElement(name = "Slaves")
-    private List<String> slaves_names = new ArrayList<String>();
-    private List<Moveable> slaves = new ArrayList<Moveable>();
+    private ArrayList<String> slaves_names = new ArrayList<String>();
+    private ArrayList<Moveable> slaves = new ArrayList<Moveable>();
 
     /**
      *
@@ -312,11 +312,11 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
                 }
                 ///do_it_iterations = possible_iterations;
 
-                Iterator iter = slaves.iterator();
+                Iterator<Moveable> iter = slaves.iterator();
                 while (iter.hasNext()) {
-                    final Moveable moves = (Moveable) iter.next();
+                    final Moveable moves = iter.next();
                     final int fin_do_it_iterations = do_it_iterations;
-                    Future fut = this.simState.getMARS().enqueue(new Callable() {
+                    Future<Void> fut = this.simState.getMARS().enqueue(new Callable<Void>() {
                         public Void call() throws Exception {
                             moves.updateRotation(getResolution() * (fin_do_it_iterations + current_angle_iteration + getServoNeutralPosition()));
                             return null;
@@ -418,9 +418,9 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      */
     @Override
     public Moveable getSlave(String name) {
-        Iterator iter = slaves.iterator();
+        Iterator<Moveable> iter = slaves.iterator();
         while (iter.hasNext()) {
-            Moveable moves = (Moveable) iter.next();
+            Moveable moves = iter.next();
             if (moves.getSlaveName().equals(name)) {
                 return moves;
             }
@@ -433,8 +433,8 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      * @return
      */
     @Override
-    public ArrayList getSlavesNames() {
-        return (ArrayList) slaves_names;
+    public ArrayList<String> getSlavesNames() {
+        return slaves_names;
     }
 
     /**
@@ -456,10 +456,10 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
      * @param slaves
      */
     @Override
-    public void addSlaves(ArrayList slaves) {
-        Iterator iter = slaves.iterator();
+    public void addSlaves(ArrayList<Moveable> slaves) {
+        Iterator<Moveable> iter = slaves.iterator();
         while (iter.hasNext()) {
-            Moveable moves = (Moveable) iter.next();
+            Moveable moves = iter.next();
             addSlave(moves);
         }
     }
@@ -472,7 +472,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     @Override
     public void addKeys(InputManager inputManager, KeyConfig keyconfig) {
         for (String elem : action_mapping.keySet()) {
-            String action = (String) action_mapping.get(elem);
+            String action = action_mapping.get(elem);
             final String mapping = elem;
             final Servo self = this;
             if (action.equals("setDesiredAnglePosition3")) {

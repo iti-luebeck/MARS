@@ -176,7 +176,7 @@ public class ROS_Node implements Runnable {
      */
     public boolean checkNodes() {
         for (String elem : nodes.keySet()) {
-            MARSNodeMain node = (MARSNodeMain) nodes.get(elem);
+            MARSNodeMain node = nodes.get(elem);
             checkNode(node);
         }
         return true;
@@ -228,7 +228,7 @@ public class ROS_Node implements Runnable {
         createSystemNode(own_ip_string, muri);
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             createNode(auv, own_ip_string, muri);
         }
     }
@@ -282,7 +282,7 @@ public class ROS_Node implements Runnable {
         try {
             while (running) {
 
-                Future fut = mars.enqueue(new Callable() {
+                Future<Void> fut = mars.enqueue(new Callable<Void>() {
                     public Void call() throws Exception {
                         if (marsSettings.getROSPublish()) {
                             auv_manager.publishSensorsOfAUVs();

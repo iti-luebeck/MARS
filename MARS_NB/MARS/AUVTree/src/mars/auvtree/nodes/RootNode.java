@@ -15,6 +15,8 @@ import javax.swing.Action;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.NodeRefreshEvent;
+import mars.simobjects.SimObjectManager;
+import mars.simobtree.SimObNodeFactory;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -48,6 +50,12 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
     public RootNode(HashMap s, AUV_Manager auv_manager) {
         super(Children.create(new AUVNodeFactory(s, auv_manager), true));
         lookupResult = auv_manager.getLookup().lookupResult(NodeRefreshEvent.class);
+        lookupResult.addLookupListener(this);
+    }
+
+    public RootNode(HashMap s, SimObjectManager simob_manager) {
+        super(Children.create(new SimObNodeFactory(s, simob_manager), true));
+        lookupResult = simob_manager.getLookup().lookupResult(NodeRefreshEvent.class);
         lookupResult.addLookupListener(this);
     }
 

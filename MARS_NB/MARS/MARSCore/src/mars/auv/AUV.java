@@ -12,7 +12,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,7 +24,6 @@ import mars.actuators.Actuator;
 import mars.control.MyCustomGhostControl;
 import mars.gui.plot.AUVListener;
 import mars.gui.plot.ChartEvent;
-import mars.gui.tree.UpdateState;
 import mars.misc.ChartValue;
 import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
@@ -41,7 +39,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObject {
+public interface AUV extends RosNodeListener, ChartValue, MARSObject {
 
     /**
      *
@@ -216,7 +214,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      * @param classNameString
      * @return All sensors by a specific class.
      */
-    public ArrayList getSensorsOfClass(String classNameString);
+    public ArrayList<Sensor> getSensorsOfClass(String classNameString);
 
     /**
      *
@@ -428,13 +426,6 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
 
     /**
      *
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path);
-
-    /**
-     *
      * @param listener
      */
     public void addAdListener(AUVListener listener);
@@ -473,7 +464,7 @@ public interface AUV extends RosNodeListener, UpdateState, ChartValue, MARSObjec
      *
      * @param arrlist
      */
-    public void registerPhysicalExchangers(ArrayList arrlist);
+    public void registerPhysicalExchangers(ArrayList<PhysicalExchanger> arrlist);
 
     /**
      *

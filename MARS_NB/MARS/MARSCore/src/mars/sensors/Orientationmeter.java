@@ -121,11 +121,11 @@ public class Orientationmeter extends Sensor implements ChartValue {
             return getOrientationRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Quaternion noised = new Quaternion(getOrientationRaw().getX() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getW() + ((float) ((1f / 100f) * noise)));
+            Quaternion noised = new Quaternion(getOrientationRaw().getX() + (((1f / 100f) * noise)), getOrientationRaw().getY() + (((1f / 100f) * noise)), getOrientationRaw().getY() + (((1f / 100f) * noise)), getOrientationRaw().getW() + (((1f / 100f) * noise)));
             return noised;
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Quaternion noised = new Quaternion(getOrientationRaw().getX() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getY() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getZ() + ((float) ((1f / 100f) * noise)), getOrientationRaw().getW() + ((float) ((1f / 100f) * noise)));
+            Quaternion noised = new Quaternion(getOrientationRaw().getX() + (((1f / 100f) * noise)), getOrientationRaw().getY() + (((1f / 100f) * noise)), getOrientationRaw().getZ() + (((1f / 100f) * noise)), getOrientationRaw().getW() + ( ((1f / 100f) * noise)));
             return noised;
         } else {
             return getOrientationRaw();
@@ -154,9 +154,10 @@ public class Orientationmeter extends Sensor implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE);
+        publisher = (Publisher<geometry_msgs.PoseStamped>)ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

@@ -118,11 +118,11 @@ public class FlowMeter extends Sensor implements ChartValue {
             return getRawFlowForce();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getRawFlowForce().x + ((float) ((1f / 100f) * noise)), getRawFlowForce().y + ((float) ((1f / 100f) * noise)), getRawFlowForce().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getRawFlowForce().x + (((1f / 100f) * noise)), getRawFlowForce().y + (((1f / 100f) * noise)), getRawFlowForce().z + (((1f / 100f) * noise)));
             return noised;
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            Vector3f noised = new Vector3f(getRawFlowForce().x + ((float) ((1f / 100f) * noise)), getRawFlowForce().y + ((float) ((1f / 100f) * noise)), getRawFlowForce().z + ((float) ((1f / 100f) * noise)));
+            Vector3f noised = new Vector3f(getRawFlowForce().x + (((1f / 100f) * noise)), getRawFlowForce().y + (((1f / 100f) * noise)), getRawFlowForce().z + (((1f / 100f) * noise)));
             return noised;
         } else {
             return getRawFlowForce();

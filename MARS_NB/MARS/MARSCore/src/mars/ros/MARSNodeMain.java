@@ -21,6 +21,7 @@ import org.ros.node.topic.Subscriber;
  *
  * @author Thomas Tosik
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public class MARSNodeMain extends AbstractNodeMain {
 
     private ConnectedNode connectedNode;

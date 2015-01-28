@@ -29,7 +29,7 @@ import mars.xml.HashMapAdapter;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
-    private List listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *
@@ -51,7 +51,7 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (int i = 0; i < pcls.length; i++) {
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }

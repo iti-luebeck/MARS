@@ -24,7 +24,8 @@ import org.openide.util.actions.Presenter;
         id = "mars.core.StartSimulationAction")
 @ActionRegistration(
         iconBase = "",
-        displayName = "#CTL_StartSimulationAction")
+        displayName = "#CTL_StartSimulationAction",
+        lazy = false)
 @ActionReference(path = "Toolbars/Simulation", position = 100)
 @Messages("CTL_StartSimulationAction=Start Simulation")
 public final class StartSimulationAction extends AbstractAction implements Presenter.Toolbar {

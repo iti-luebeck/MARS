@@ -6,7 +6,6 @@ package mars.core;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -23,7 +22,8 @@ import org.openide.util.actions.Presenter;
         id = "mars.core.SimulationSpeedAction")
 @ActionRegistration(
         iconBase = "",
-        displayName = "#CTL_SimulationSpeedAction")
+        displayName = "#CTL_SimulationSpeedAction",
+        lazy = false)
 @ActionReference(path = "Toolbars/Speed", position = 300)
 @Messages("CTL_SimulationSpeedAction=Simulation Speed")
 public final class SimulationSpeedAction extends AbstractAction implements Presenter.Toolbar {

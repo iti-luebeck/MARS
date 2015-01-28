@@ -31,7 +31,9 @@ public class TreeUtil {
         File img = InstalledFileLocator.getDefault().locate("Assets/Icons/" + iconName, "mars.core", false);
         BufferedImage bufImg = null;
         try {
-            bufImg = ImageIO.read(img);
+            if(img != null){
+                bufImg = ImageIO.read(img);
+            }
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }

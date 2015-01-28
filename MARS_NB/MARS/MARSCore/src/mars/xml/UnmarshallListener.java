@@ -8,7 +8,6 @@ import javax.xml.bind.Unmarshaller.Listener;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.recorder.Recording;
 import mars.accumulators.Accumulator;
 import mars.auv.AUV_Parameters;
 import mars.auv.BasicAUV;
@@ -58,9 +57,6 @@ public class UnmarshallListener extends Listener {
         } else if (target instanceof PhysicalExchanger) {
             PhysicalExchanger pe = (PhysicalExchanger) target;
             pe.initAfterJAXB();
-        } else if (target instanceof Recording) {
-            Recording rec = (Recording) target;
-            rec.initAfterJAXB();
         }
     }
 }

@@ -50,14 +50,14 @@ public class PopupControl extends AbstractControl {
     protected void controlUpdate(float f) {
         if ((cam.getLocation().subtract(spatial.getWorldTranslation())).length() > auv.getMARS_Settings().getGuiPopUpAUVNameDistance() && auv.getMARS_Settings().getGuiPopUpAUVName()) {
             if (stateManager.getState(NiftyState.class) != null) {
-                NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                NiftyState niftyState = stateManager.getState(NiftyState.class);
                 Vector3f worldTranslation = cam.getScreenCoordinates(auv.getAUVNode().getWorldTranslation());
                 niftyState.setPopUpNameForAUV(auv, (int) worldTranslation.x, cam.getHeight() - (int) worldTranslation.y);
                 niftyState.setPopupMenu(auv, true);
             }
         } else {
             if (stateManager.getState(NiftyState.class) != null) {
-                NiftyState niftyState = (NiftyState) stateManager.getState(NiftyState.class);
+                NiftyState niftyState = stateManager.getState(NiftyState.class);
                 niftyState.setPopupMenu(auv, false);
             }
         }

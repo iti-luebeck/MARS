@@ -35,6 +35,7 @@ import mars.sensors.VideoCamera;
  * @author Thomas Tosik
  */
 @Deprecated
+@SuppressWarnings({"cast","unchecked","rawtypes"})
 public class Connection extends Thread {
 
     private Socket sockConnected;
@@ -195,7 +196,7 @@ public class Connection extends Thread {
                 //we have to use callables here because we change the some nodes in the rootNode in the
                 //getMultiRaySonarData method. rotation and stuff. and because we are in a different thread
                 //we must synchronize with the opengl trender thread
-                Future fut = mars.enqueue(new Callable() {
+                Future<Object> fut = mars.enqueue(new Callable() {
                     public byte[] call() throws Exception {
                         return son.getData();
                     }
@@ -222,7 +223,7 @@ public class Connection extends Thread {
                 //we have to use callables here because we change the some nodes in the rootNode in the
                 //getMultiRaySonarData method. rotation and stuff. and because we are in a different thread
                 //we must synchronize with the opengl trender thread
-                Future fut = mars.enqueue(new Callable() {
+                Future<Object> fut = mars.enqueue(new Callable() {
                     public byte[] call() throws Exception {
                         return son.getData();
                     }
@@ -342,7 +343,7 @@ public class Connection extends Thread {
             final VideoCamera vcam = (VideoCamera) auv.getSensor(cam_name);
 
             if (vcam != null) {
-                Future fut = mars.enqueue(new Callable() {
+                Future<Object> fut = mars.enqueue(new Callable() {
                     public byte[] call() throws Exception {
                         return vcam.getImage();
                     }

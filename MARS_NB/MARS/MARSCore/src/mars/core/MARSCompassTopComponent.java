@@ -40,6 +40,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_MARSCompassTopComponent=MARSCompass Window",
     "HINT_MARSCompassTopComponent=This is a MARSCompass window"
 })
+@Deprecated
 public final class MARSCompassTopComponent extends TopComponent {
     
     private static long m_starttime = System.currentTimeMillis();

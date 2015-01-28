@@ -64,7 +64,7 @@ public class WaterHeightGenerator implements HeightGenerator {
 		height *= heightbig;
 
 		if( octaves > 0 ) {
-			float height2 = (float) ImprovedNoise.noise( x * scaleybig, z * scalexbig, time * speedbig ) * heightbig;
+			float height2 = ImprovedNoise.noise( x * scaleybig, z * scalexbig, time * speedbig ) * heightbig;
 			height = height * 0.4f + height2 * 0.6f;
 		}
 		if( octaves > 1 )

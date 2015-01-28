@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.gui.tree.UpdateState;
 import mars.xml.HashMapAdapter;
 import mars.xml.HashMapEntry;
 
@@ -31,14 +30,14 @@ import mars.xml.HashMapEntry;
  */
 @XmlRootElement(name = "PhysicalEnvironment")
 @XmlAccessorType(XmlAccessType.NONE)
-public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerSupport {
+public class PhysicalEnvironment implements PropertyChangeListenerSupport {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String, Object> environment;
     private BulletAppState bulletAppState;
 
     @XmlTransient
-    private List listeners = Collections.synchronizedList(new LinkedList());
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     //physics
     private float fluid_density = 998.2071f;//kg/m³
@@ -99,20 +98,9 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (int i = 0; i < pcls.length; i++) {
             pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
-        }
-    }
-
-    /**
-     * Called to update world stuff when parameters changed.
-     * @param path
-     */
-    @Override
-    public void updateState(TreePath path) {
-        if (path.getPathComponent(0).equals(this)) {//make sure we want to change auv params
-            updateState(path.getLastPathComponent().toString(), "");
         }
     }
 
@@ -377,12 +365,13 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
      * @param hashmapname
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
-            return (Object) environment.get(value);
+            return environment.get(value);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) environment.get(hashmapname);
-            return (Object) hashmap.get(value);
+            return hashmap.get(value);
         }
     }
 
@@ -392,6 +381,7 @@ public class PhysicalEnvironment implements UpdateState, PropertyChangeListenerS
      * @param object
      * @param hashmapname
      */
+    @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
         if (hashmapname.equals("") || hashmapname == null) {
             environment.put(value, object);

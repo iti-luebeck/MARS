@@ -138,10 +138,10 @@ public class AmpereMeter extends Sensor implements ChartValue {
             return getAmpereRaw();
         } else if (getNoiseType() == NoiseType.UNIFORM_DISTRIBUTION) {
             float noise = getUnifromDistributionNoise(getNoiseValue());
-            return getAmpereRaw() + ((float) ((1f / 100f) * noise));
+            return getAmpereRaw() + (((1f / 100f) * noise));
         } else if (getNoiseType() == NoiseType.GAUSSIAN_NOISE_FUNCTION) {
             float noise = getGaussianDistributionNoise(getNoiseValue());
-            return getAmpereRaw() + ((float) ((1f / 100f) * noise));
+            return getAmpereRaw() + (((1f / 100f) * noise));
         } else {
             return getAmpereRaw();
         }
@@ -158,7 +158,7 @@ public class AmpereMeter extends Sensor implements ChartValue {
         HashMap<String, String> accus = getAccumulators();
         double capacity = 0f;
         for (String elem : accus.keySet()) {
-            String element = (String) accus.get(elem);
+            String element = accus.get(elem);
             capacity = capacity + auv.getAccumulator(element).getActualCurrent();
         }
         return capacity;
@@ -193,9 +193,10 @@ public class AmpereMeter extends Sensor implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.Ampere._TYPE);
+        publisher = (Publisher<hanse_msgs.Ampere>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.Ampere._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.Ampere._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

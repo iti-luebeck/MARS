@@ -37,6 +37,7 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.sonar.Sonar;
 
@@ -60,7 +61,6 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     Quad quad = new Quad(2f, 2f);
     Geometry map_geom = new Geometry("My Textured Box", quad);
     Texture tex_ml;
-    private Future simStateFuture;
 
     /**
      *
@@ -157,7 +157,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     public void init() {
         HashMap<String, AUV> auvs = auv_manager.getAUVs();
         for (String elem : auvs.keySet()) {
-            AUV auv = (AUV) auvs.get(elem);
+            AUV auv = auvs.get(elem);
             addAUV(auv);
         }
     }
@@ -167,7 +167,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
      * @param auv
      */
     public void addAUV(final AUV auv) {
-        Future fut = mars.enqueue(new Callable() {
+        Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (auv.getAuv_param().isEnabled()) {
                     Node auvNode = new Node(auv.getName());
@@ -376,7 +376,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
 
         if (auv_manager != null) {
             for (String elem : auv_nodes.keySet()) {
-                Node node = (Node) auv_nodes.get(elem);
+                Node node = auv_nodes.get(elem);
                 AUV auv = auv_manager.getAUV(elem);
                 if (auv != null && auv.getAuv_param().isEnabled()) {
 
@@ -404,7 +404,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
 //                    }
 
                     //update roation of sonar
-                    ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                    ArrayList<Sensor> sons = auv.getSensorsOfClass(Sonar.class.getName());
                     Iterator it = sons.iterator();
                     while (it.hasNext()) {
                         Sonar son = (Sonar) it.next();
