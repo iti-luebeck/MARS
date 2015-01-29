@@ -45,6 +45,7 @@ public class MyHashMapEntryTypeHashMap extends MyHashMapEntryType{
      * 
      * @param e
      */
+    @SuppressWarnings("unchecked")
     public MyHashMapEntryTypeHashMap(Map.Entry<String,Object> e) {
        key = e.getKey();
        if(e.getValue() instanceof HashMap){

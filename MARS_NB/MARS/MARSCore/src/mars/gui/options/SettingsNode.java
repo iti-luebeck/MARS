@@ -152,6 +152,7 @@ public class SettingsNode extends AbstractNode implements PropertyChangeListener
         return sheet;
     }
     
+    @SuppressWarnings({"unchecked","rawtypes"})
     private void createPropertiesSet(Object obj, HashMap<String,Object> params, String displayName, boolean expert, Sheet sheet){
         Sheet.Set set;
         if(expert){
