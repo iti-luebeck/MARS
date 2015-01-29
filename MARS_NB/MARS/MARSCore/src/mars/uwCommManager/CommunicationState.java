@@ -132,6 +132,9 @@ public class CommunicationState extends AbstractAppState {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Something went wrong while initializing the communications minimap visualization {0}", CentralLookup.getDefault().lookup(AUV_Manager.class));
         }
         
+        if(noiseAdditiveGaussianWhiteNoiseActive) addNoise(GAUSSIAN_WHITE_NOISE);
+        if(noiseRandomByteActive) addNoise(RANDOM_BYTE_NOISE);
+        
         
         commOnMap = new CommOnMap(commOnMapActive,commOnMapBorders,commOnMapShowCommLinks);
         if(!commOnMap.init(app.getStateManager().getState(MapState.class), 
@@ -241,8 +244,6 @@ public class CommunicationState extends AbstractAppState {
                 
                 if(e.getKey().equals(OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX)) {
                     if(decide(noiseRandomByteActive,Boolean.parseBoolean(e.getNewValue()),RANDOM_BYTE_NOISE)) noiseRandomByteActive = Boolean.parseBoolean(e.getNewValue());
-
-                    return;
                 }
                 else if(e.getKey().equals(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
                   if(decide(noiseAdditiveGaussianWhiteNoiseActive,Boolean.parseBoolean(e.getNewValue()),GAUSSIAN_WHITE_NOISE)) noiseAdditiveGaussianWhiteNoiseActive = Boolean.parseBoolean(e.getNewValue());
@@ -349,10 +350,10 @@ public class CommunicationState extends AbstractAppState {
             if(name.equals(RANDOM_BYTE_NOISE)) {
                 i.addANoiseGenerator(new RandomByteNoise(1));
             } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
-                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 0.1f));
+                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 1/3f));
             
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING,"Tryed to create not existing noise: " + name);
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tryed to create not existing noise: {0}", name);
                 break;
             }
         }

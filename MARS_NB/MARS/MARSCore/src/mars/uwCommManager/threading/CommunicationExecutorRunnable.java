@@ -130,7 +130,7 @@ public class CommunicationExecutorRunnable implements Runnable{
     private void computeSentChunks() {
         
         try {
-            float distanceSinceLastTick = 10f;
+            float distanceSinceLastTick = 1f;
             List<CommunicationDataChunk> deadChunks = new LinkedList();
             
         

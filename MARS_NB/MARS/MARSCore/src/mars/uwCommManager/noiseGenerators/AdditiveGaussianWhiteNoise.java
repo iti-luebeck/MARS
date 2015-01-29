@@ -31,17 +31,20 @@ public class AdditiveGaussianWhiteNoise extends ANoiseGenerator{
 
     @Override
     public byte[] noisify(byte[] msg) {
+        byte[] res = new byte[msg.length];
         for(int i = 0; i<msg.length;i++) {
             int result = 0;
             for(int j = 1; j<=8; j++) {
-                float rand = ((float) random.nextGaussian() * standardDeviation)+0.5f;
-                result += Math.round(rand);
-                result = result << 1;  
+                float rand = Math.abs(((float) random.nextGaussian() * standardDeviation));
+                if(rand>= 1) {
+                    result += (1 << j-1);
+                }
             }
-            byte res = (byte) (result+msg[i]);
-            //System.out.println("Here we go: " + result + " <- result of noise " + msg[i] + " <- current byte" + res + "done");
+            //System.out.println("Result: " + result + " msg[i] " + msg[i] + " res: " + ((byte) result^msg[i]));
+            res[i] = (byte) (result^msg[i]);
+            
         }
-        return null;
+        return res;
     }
     
     
