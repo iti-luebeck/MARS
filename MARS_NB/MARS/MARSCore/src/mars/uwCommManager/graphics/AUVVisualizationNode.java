@@ -18,5 +18,24 @@ public class AUVVisualizationNode {
     String name = null;
     AUV auv = null;
     Node visRootNode = null;
+    Node auvNode = null;
+    
+    /**
+     * @since 0.1
+     * @param auv The AUV this Node will visualize
+     * @param auvNode the node of the AUV we are interested in
+     */
+    public AUVVisualizationNode(AUV auv, Node auvNode) {
+        this.auv = auv;
+        this.auvNode = auvNode;
+    }
+    
+    public boolean init() {
+        if(auv==null || auvNode == null) return false;
+        this.name = auv.getName() + "-visualisation-Node";
+        this.visRootNode = new Node(name);
+        auvNode.attachChild(visRootNode);
+        return true;
+    }
     
 }

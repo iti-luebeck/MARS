@@ -8,7 +8,7 @@ package mars.uwCommManager.noiseGenerators;
 
 
 /**
- * @version 0.1
+ * @version 0.2
  * @author Jasper Schwinghammer
  */
 public abstract class ANoiseGenerator {
@@ -31,8 +31,27 @@ public abstract class ANoiseGenerator {
      */
     public abstract byte[] noisify(byte[] msg);
     
-    
+    /**
+     * @since 0.1
+     * @return Noise name
+     */
     public String getName() {
         return NOISE_NAME;
+    }
+    
+    /**
+     * @since 0.2
+     * @param message the message as byte array
+     * @param noiseMask the noisemask
+     * @return 
+     */
+    public byte[] xORNoises(byte[] message, byte[] noiseMask) {
+        if(message.length != noiseMask.length) return null;
+        byte[] result = new byte[message.length];
+        
+        for(int i = 0; i<result.length; i++) {
+            result[i] = (byte) (noiseMask[i]^message[i]);
+        }
+        return result;
     }
 }

@@ -130,6 +130,7 @@ public class CommunicationExecutorRunnable implements Runnable{
     private void computeSentChunks() {
         
         try {
+            //DISTANCE PER TICK DUMMY, SHOULD BE REPLACED WITH PROPER SPEED OF SOUND
             float distanceSinceLastTick = 1f;
             List<CommunicationDataChunk> deadChunks = new LinkedList();
             

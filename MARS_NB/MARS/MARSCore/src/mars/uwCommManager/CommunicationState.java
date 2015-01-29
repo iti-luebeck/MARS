@@ -132,6 +132,8 @@ public class CommunicationState extends AbstractAppState {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Something went wrong while initializing the communications minimap visualization {0}", CentralLookup.getDefault().lookup(AUV_Manager.class));
         }
         
+        
+        //Load up noises if they were activated on startup this should be done dynamicly in future
         if(noiseAdditiveGaussianWhiteNoiseActive) addNoise(GAUSSIAN_WHITE_NOISE);
         if(noiseRandomByteActive) addNoise(RANDOM_BYTE_NOISE);
         
@@ -221,7 +223,7 @@ public class CommunicationState extends AbstractAppState {
                     commOnMapBorders = Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setBorders(commOnMapBorders);
                     return;
-                }
+                }//Range display event closed
                 if(e.getKey().equals(OPTIONS_MINIMAP_OPAQUE_CIRCLE)) {
                     commOnMapBorders = !Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setBorders(commOnMapBorders);
@@ -345,12 +347,14 @@ public class CommunicationState extends AbstractAppState {
     }
     
     
+//----------------------------END MAINLOOP BEGIN HELPERS SETTER GETTERS------------------------------
+    
     private void addNoise(String name) {
         for(CommunicationExecutorRunnable i : auvProcessMap.values()) {
             if(name.equals(RANDOM_BYTE_NOISE)) {
                 i.addANoiseGenerator(new RandomByteNoise(1));
             } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
-                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 1/3f));
+                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
             
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tryed to create not existing noise: {0}", name);
@@ -373,6 +377,25 @@ public class CommunicationState extends AbstractAppState {
         this.msgQueue.add(msg);
     }
     
+       
+    
+    /**
+     * Add AUV to communicationssystem
+     * @since 0.2.1
+     * @param auv 
+     */
+    public void addAUV(AUV auv) {
+        commOnMap.addMapGraphicsToAUV(auv);
+    }
+    
+    /**
+     * 
+     * @return the current value of threadCount
+     */
+    public static int getThreadCount() {
+        return threadCount;
+    }
+    
     
     
     /**
@@ -391,24 +414,7 @@ public class CommunicationState extends AbstractAppState {
         } else {
         }
     }
-    
-    
-    /**
-     * Add AUV to communicationssystem
-     * @since 0.2.1
-     * @param auv 
-     */
-    public void addAUV(AUV auv) {
-        commOnMap.addMapGraphicsToAUV(auv);
-    }
-    
-    /**
-     * 
-     * @return the current value of threadCount
-     */
-    public static int getThreadCount() {
-        return threadCount;
-    }
+ 
     
     
     
