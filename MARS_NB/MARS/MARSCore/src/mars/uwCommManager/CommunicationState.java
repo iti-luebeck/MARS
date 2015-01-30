@@ -96,10 +96,18 @@ public class CommunicationState extends AbstractAppState {
      */
     private boolean commOnMapBorders = true;
     
+    /**
+     * show links between AUVs on minimap
+     */
     private boolean commOnMapShowCommLinks = false;
     
-    
+    /**
+     * indicates the status of the random byte noise
+     */
     private boolean noiseRandomByteActive = false;
+    /**
+     * indicates the status of the gaussian white noise
+     */
     private boolean noiseAdditiveGaussianWhiteNoiseActive = false;
     
 
