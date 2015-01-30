@@ -1,10 +1,15 @@
 
 package mars.uwCommManager.graphics;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 import mars.MARS_Main;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.sensors.Sensor;
+import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.CommunicationState;
 
 /**
@@ -26,6 +31,26 @@ public class CommunicationVisualizer {
         this.auvMngr = auvMngr;
         
         nodeMap = new HashMap();
+    }
+    
+    public boolean init() {
+        
+        for(Map.Entry<String, AUV> entry : auvMngr.getAUVs().entrySet()) {
+            AUV auv = entry.getValue();
+            ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+            Iterator it = uws.iterator();
+            while (it.hasNext()) {
+                UnderwaterModem uw = (UnderwaterModem) it.next();
+                //1. Erstelle AUVVisualisationNode
+                //2. Füttere sie mit allen Informationen
+                //3. adde sie zur Map
+            }
+        }
+        return true;
+    }
+    
+    public void update(float tpf) {
+        
     }
     
 }

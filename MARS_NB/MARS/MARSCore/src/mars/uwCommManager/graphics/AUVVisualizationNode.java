@@ -38,4 +38,8 @@ public class AUVVisualizationNode {
         return true;
     }
     
+    public void update(float tpf) {
+        
+    }
+    
 }
