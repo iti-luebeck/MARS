@@ -33,6 +33,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.system.awt.AwtPanelsContext;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
@@ -272,7 +273,6 @@ public class GuiState extends AbstractAppState {
      * what actions should be done when pressing a registered button?
      */
     private ActionListener actionListener = new ActionListener() {
-
         public void onAction(String name, boolean keyPressed, float tpf) {
             if (name.equals("start") && !keyPressed) {
                 if (mars.getStateManager().getState(SimState.class) != null) {

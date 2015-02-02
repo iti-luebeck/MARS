@@ -7,21 +7,11 @@ package mars.auvtree;
 
 import mars.auvtree.nodes.RootNode;
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Event;
-import java.awt.Rectangle;
-import java.awt.dnd.DragSource;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import javax.swing.ActionMap;
-import javax.swing.TransferHandler;
 import javax.swing.text.DefaultEditorKit;
 import mars.MARS_Main;
 import mars.auv.AUV;
@@ -32,7 +22,6 @@ import org.openide.explorer.view.BeanTreeView;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import mars.auv.AUV_Manager;
-import mars.auvtree.nodes.AUVNode;
 import mars.core.CentralLookup;
 import mars.gui.dnd.AUVTransferHandler;
 import mars.states.GuiState;
@@ -41,7 +30,6 @@ import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.openide.util.Utilities;
-import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -176,7 +164,7 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         getAUVs();
         Collection<? extends AUV> allEvents = result2.allInstances();
         if (!allEvents.isEmpty()) {
-            Future simStateFutureD = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         if(mars.getStateManager().getState(GuiState.class) != null){
                             GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
@@ -187,7 +175,7 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
                 });
             for (Iterator<? extends AUV> it = allEvents.iterator(); it.hasNext();) {
                 final AUV event = it.next();
-                Future simStateFutureD2 = mars.enqueue(new Callable() {
+                mars.enqueue(new Callable() {
                     public Void call() throws Exception {
                         if(mars.getStateManager().getState(GuiState.class) != null){
                             GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);

@@ -12,5 +12,15 @@ package mars.object;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public interface MARSObject {
-    
+    /** 
+     *
+     * @return Unique name of the MARSObject
+     */
+    public String getName();
+
+    /**
+     * Unique name of the MARSObject
+     * @param name
+     */
+    public void setName(String name);
 }

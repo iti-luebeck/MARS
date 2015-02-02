@@ -570,6 +570,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @return
      */
+    @Override
     public String getName() {
         return (String) simob_variables.get("name");
     }
@@ -578,6 +579,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param name
      */
+    @Override
     public void setName(String name) {
         simob_variables.put("name", name);
     }

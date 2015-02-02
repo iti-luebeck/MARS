@@ -16,6 +16,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -64,11 +66,11 @@ import org.openide.awt.ActionID;
 import org.openide.awt.Toolbar;
 import org.openide.awt.ToolbarPool;
 import org.openide.modules.InstalledFileLocator;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.IOProvider;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
@@ -2014,11 +2016,34 @@ public final class MARSTopComponent extends TopComponent {
                                     //sim_panel.setMinimumSize(new Dimension(1280, 800));
                                     sim_panel.transferFocus();
                                     ctx.setInputSource(sim_panel);
+                                    sim_panel.addFocusListener(new FocusListener() {
+
+                                        @Override
+                                        public void focusGained(FocusEvent e) {
+                                            ctx.setInputSource(sim_panel);
+                                        }
+
+                                        @Override
+                                        public void focusLost(FocusEvent e) {
+                                            
+                                        }
+                                    });
 
                                     map_panel = ctx.createPanel(PaintMode.Accelerated);
                                     map_panel.setPreferredSize(new Dimension(256, 256));
                                     map_panel.setMinimumSize(new Dimension(256, 256));
+                                    map_panel.addFocusListener(new FocusListener() {
 
+                                        @Override
+                                        public void focusGained(FocusEvent e) {
+                                            ctx.setInputSource(map_panel);
+                                        }
+
+                                        @Override
+                                        public void focusLost(FocusEvent e) {
+                                        }
+                                    });
+ 
                                     addAWTMainPanel(sim_panel);
                                     
                                     /*JFrame jf = new JFrame();

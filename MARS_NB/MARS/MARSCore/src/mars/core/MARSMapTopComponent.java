@@ -59,7 +59,17 @@ public final class MARSMapTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenuCamJump = new javax.swing.JPopupMenu();
+        jMenuItemCamJump = new javax.swing.JMenuItem();
         MapPanel = new javax.swing.JPanel();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jMenuItemCamJump, org.openide.util.NbBundle.getMessage(MARSMapTopComponent.class, "MARSMapTopComponent.jMenuItemCamJump.text")); // NOI18N
+        jMenuItemCamJump.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCamJumpActionPerformed(evt);
+            }
+        });
+        jPopupMenuCamJump.add(jMenuItemCamJump);
 
         MapPanel.setLayout(new javax.swing.BoxLayout(MapPanel, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -75,8 +85,14 @@ public final class MARSMapTopComponent extends TopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItemCamJumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCamJumpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemCamJumpActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel MapPanel;
+    private javax.swing.JMenuItem jMenuItemCamJump;
+    private javax.swing.JPopupMenu jPopupMenuCamJump;
     // End of variables declaration//GEN-END:variables
     /**
      *
@@ -113,6 +129,22 @@ public final class MARSMapTopComponent extends TopComponent {
      */
     public void addAWTMapPanel(AwtPanel map_panel){
         this.MapPanel.add(map_panel);
+    }
+    
+   /**
+     * 
+     * @param x
+     * @param y
+     */
+    public void showpopupAUV(final int x, final int y){
+        final MARSMapTopComponent mmtc = this;
+        EventQueue.invokeLater(new Runnable(){
+                @Override
+                public void run() {
+                    jPopupMenuCamJump.show(mmtc,x,y);
+                }
+            }
+        );
     }
     
             /**

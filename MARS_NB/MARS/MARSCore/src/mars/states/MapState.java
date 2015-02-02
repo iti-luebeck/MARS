@@ -8,11 +8,17 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResults;
+import com.jme3.input.InputManager;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -37,9 +43,14 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.auv.BasicAUV;
+import mars.core.MARSMapTopComponent;
+import mars.core.MARSTopComponent;
 import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.sonar.Sonar;
+import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 
 /**
  * This state is for updating the map in the gui. The position of the AUVs are
@@ -47,15 +58,17 @@ import mars.sensors.sonar.Sonar;
  *
  * @author Thomas Tosik
  */
-public class MapState extends AbstractAppState implements AppStateExtension {
+public class MapState extends MARSAppState implements AppStateExtension {
 
     private Node rootNode = new Node("MapState Root Node");
     private Node auvsNode = new Node("AUVS Node");
     private AssetManager assetManager;
+    private InputManager inputManager;
     private MARS_Main mars;
     private AUV_Manager auv_manager;
     private HashMap<String, Node> auv_nodes = new HashMap<String, Node>();
     private MARS_Settings mars_settings;
+    private ActionListener actionListener;
 
     //map stuff
     Quad quad = new Quad(2f, 2f);
@@ -84,6 +97,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
     @Override
     public void cleanup() {
         super.cleanup();
+        inputManager.removeListener(actionListener);
         mars.getRootNode().detachChild(getRootNode());
     }
 
@@ -115,6 +129,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
             if (app instanceof MARS_Main) {
                 mars = (MARS_Main) app;
                 assetManager = mars.getAssetManager();
+                inputManager = mars.getInputManager();
             } else {
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
@@ -124,6 +139,7 @@ public class MapState extends AbstractAppState implements AppStateExtension {
             rootNode.attachChild(auvsNode);
         }
         super.initialize(stateManager, app);
+        initPrivateKeys();
     }
 
     /**
@@ -143,6 +159,37 @@ public class MapState extends AbstractAppState implements AppStateExtension {
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             addAUV(auv);
+        }
+    }
+    
+       /**
+     * Declaring the "Shoot" action and mapping to its triggers.
+     */
+    private void initPrivateKeys() {
+        
+        final MapState mapState = this;
+        /*
+        * what actions should be done when pressing a registered button?
+        */
+        actionListener = new ActionListener() {
+           public void onAction(String name, boolean keyPressed, float tpf) {
+               if(mars.getActiveInputState() != null && mars.getActiveInputState() == mapState){
+                   if (name.equals("context_menue_map") && !keyPressed) {
+                       pickRightClick();
+                   }
+               }
+           }
+        };
+    
+        inputManager.addMapping("context_menue_map", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));         // trigger 2: left-button click
+        inputManager.addListener(actionListener, "context_menue_map");
+    }
+
+    private void pickRightClick() {
+        TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
+        if(tc != null){
+            MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
+            mtc.showpopupAUV((int) inputManager.getCursorPosition().x, (int) inputManager.getCursorPosition().y);
         }
     }
 

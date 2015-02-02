@@ -93,19 +93,6 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
 
     /**
      *
-     * @return Unique name of the AUV.
-     */
-    public String getName();
-
-    /**
-     * Unique name of the AUV.
-     * 
-     * @param auv_name
-     */
-    public void setName(String auv_name);
-
-    /**
-     *
      * @return
      */
     public RigidBodyControl getPhysicsControl();
