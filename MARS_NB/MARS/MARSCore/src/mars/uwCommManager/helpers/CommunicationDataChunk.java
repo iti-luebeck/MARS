@@ -8,8 +8,6 @@ package mars.uwCommManager.helpers;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import mars.uwCommManager.helpers.DistanceTrigger;
-import java.util.Map;
 import java.util.PriorityQueue;
 import org.openide.util.Exceptions;
 
@@ -21,9 +19,14 @@ import org.openide.util.Exceptions;
  */
 public class CommunicationDataChunk {
     
+    private float frequence;
+    
+    private float signalStrength;
+    
     private byte[] messageDataChunk;
     private float distanceTraveled;
     private PriorityQueue<DistanceTrigger> triggerDistances;
+    
     
     private final float MAX_DISTANCE;
     private boolean dead = false;
@@ -34,12 +37,16 @@ public class CommunicationDataChunk {
      * @param messageDataChunk The chunk of data
      * @param triggerDistances The distances of all the paths between our AUVs
      * @param maxDistance the maximum distance of the modem
+     * @param signalStrength The initial strength of the soundsignal
+     * @param frequence The frequence of the message
      */
-    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance) {
+    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence) {
         this.MAX_DISTANCE = maxDistance;
         this.messageDataChunk = messageDataChunk;
         this.distanceTraveled = 0f;
         this.triggerDistances = triggerDistances;
+        this.signalStrength = signalStrength;
+        this.frequence = frequence;
         if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
     }
     
@@ -143,5 +150,13 @@ public class CommunicationDataChunk {
     
     public void updateMessageFromByte(byte[] msg) {
         messageDataChunk = msg;
+    }
+    
+    public float getFrequence() {
+        return frequence;
+    }
+    
+    public float getSignalStrength() { 
+        return signalStrength;
     }
 }

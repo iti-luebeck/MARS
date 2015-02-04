@@ -1,8 +1,8 @@
 
 package mars.uwCommManager;
 
-import mars.uwCommManager.threading.CommunicationMultiPathSimulator;
-import mars.uwCommManager.threading.CommunicationExecutorRunnable;
+import mars.uwCommManager.threading.MultiMessageMerger;
+import mars.uwCommManager.threading.ModemMessageRunnable;
 import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -38,7 +38,7 @@ import mars.uwCommManager.noiseGenerators.NoiseNameConstants;
 import mars.uwCommManager.noiseGenerators.RandomByteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
-import mars.uwCommManager.threading.CommunicationDistanceComputationRunnable;
+import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
  * Entrypoint of the communications module.
@@ -59,15 +59,15 @@ public class CommunicationState extends AbstractAppState {
     /**
      * The Runnable that is used to merge all byte arrays back to one messages
      */
-    private CommunicationMultiPathSimulator multiPathModule;
+    private MultiMessageMerger multiPathModule;
     /**
      * The Runnable that is used to check for possible ways from one AUV to another
      */
-    private CommunicationDistanceComputationRunnable distanceTraceModule;
+    private DistanceTriggerCalculator distanceTraceModule;
     /**
      * Map the AUV to its runnable
      */
-    private Map<String,CommunicationExecutorRunnable> auvProcessMap;
+    private Map<String,ModemMessageRunnable> auvProcessMap;
     /**
     * The executor for multitasking
     */
@@ -171,16 +171,16 @@ public class CommunicationState extends AbstractAppState {
             for ( AUV auv : auvs.values()){
             //Check if the AUV is enabled and has a modem
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
-                    CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
+                    ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION);
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
                 
             }
-        multiPathModule = new CommunicationMultiPathSimulator();
+        multiPathModule = new MultiMessageMerger();
         multiPathModule.init(auvManager, this);
         executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
-        distanceTraceModule = new CommunicationDistanceComputationRunnable();
+        distanceTraceModule = new DistanceTriggerCalculator();
         distanceTraceModule.init(auvManager);
         executor.scheduleAtFixedRate(distanceTraceModule, 500000, 1000000, TimeUnit.MICROSECONDS);
         
@@ -331,10 +331,10 @@ public class CommunicationState extends AbstractAppState {
             PROCESS THE MESSAGE 
             */
             //Check if the AUV allready has a Runnable
-            CommunicationExecutorRunnable e1 = auvProcessMap.get(msg.getAuvName());
+            ModemMessageRunnable e1 = auvProcessMap.get(msg.getAuvName());
             if(e1 ==null ) {
                 //if not create a new one
-                CommunicationExecutorRunnable runnable = new CommunicationExecutorRunnable(5.6f,RESOLUTION);
+                ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION);
                 auvProcessMap.put(msg.getAuvName(), runnable);
                 executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 e1 = runnable;
@@ -345,7 +345,7 @@ public class CommunicationState extends AbstractAppState {
             e1.assignMessage(msg);
             
             //Get the messages from the runnables and merge them in the multiPathModule
-            for(Map.Entry<String, CommunicationExecutorRunnable> entr: auvProcessMap.entrySet()) {
+            for(Map.Entry<String, ModemMessageRunnable> entr: auvProcessMap.entrySet()) {
                 List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
                 if(!chunks.isEmpty()) {
                     multiPathModule.enqueueMsges(chunks);
@@ -358,7 +358,7 @@ public class CommunicationState extends AbstractAppState {
 //----------------------------END MAINLOOP BEGIN HELPERS SETTER GETTERS------------------------------
     
     private void addNoise(String name) {
-        for(CommunicationExecutorRunnable i : auvProcessMap.values()) {
+        for(ModemMessageRunnable i : auvProcessMap.values()) {
             if(name.equals(RANDOM_BYTE_NOISE)) {
                 i.addANoiseGenerator(new RandomByteNoise(1));
             } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
@@ -372,7 +372,7 @@ public class CommunicationState extends AbstractAppState {
     }
     
     private void removeNoise(String name) {
-        for(CommunicationExecutorRunnable i : auvProcessMap.values()) {
+        for(ModemMessageRunnable i : auvProcessMap.values()) {
             i.removeANoiseGeneratorByName(name);
         }
     }

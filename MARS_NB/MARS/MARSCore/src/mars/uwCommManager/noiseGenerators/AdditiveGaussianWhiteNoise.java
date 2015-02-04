@@ -12,7 +12,7 @@ import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
  * @version 1.0
  * @author Jasper Schwinghammer
  */
-public class AdditiveGaussianWhiteNoise extends ANoiseGenerator{
+public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
     /**
      * @since 0.5
      */
@@ -61,6 +61,9 @@ public class AdditiveGaussianWhiteNoise extends ANoiseGenerator{
         }
         return xORNoises(msg,res);
     }
-    
-    
+
+    @Override
+    public byte[] noisifyByDistance(byte[] message, float distance) {
+        return null;
+    }
 }

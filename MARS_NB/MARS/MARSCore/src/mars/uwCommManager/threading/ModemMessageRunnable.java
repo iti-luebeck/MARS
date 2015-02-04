@@ -26,7 +26,14 @@ import org.openide.util.Exceptions;
  * @version 0.2
  * @author Jasper Schwinghammer
  */
-public class CommunicationExecutorRunnable implements Runnable{
+public class ModemMessageRunnable implements Runnable{
+    
+    /*
+     * DEBUG VALUES
+     */
+    public static final float MODEM_SIGNAL_STRENGTH = 80;
+    public static final float MODEM_REACH = 100;
+    public static final float MODEM_FREQUENCE = 100000;
     
     /**
      * The bandwidth of the modem this AUV is using
@@ -75,7 +82,7 @@ public class CommunicationExecutorRunnable implements Runnable{
      * @param modem_bandwidth the maximum bandwidth the modem has in kilobyte per secound
      * @param resolution the ticks per secound
      */
-    public CommunicationExecutorRunnable(float modem_bandwidth, int resolution) {
+    public ModemMessageRunnable(float modem_bandwidth, int resolution) {
         MODEM_BANDWIDTH = modem_bandwidth;
         RESOLUTION = resolution;
         BANDWIDTH_PER_TICK = MODEM_BANDWIDTH/RESOLUTION;
@@ -175,11 +182,11 @@ public class CommunicationExecutorRunnable implements Runnable{
                     if(i != chunkCount - 1) {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), (int)((i+1)*(BANDWIDTH_PER_TICK*1000))-1),
-                                new PriorityQueue<DistanceTrigger>() , 100);
+                                new PriorityQueue<DistanceTrigger>() , MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE);
                     } else {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), msgByte.length),
-                                new PriorityQueue<DistanceTrigger>(), 100);
+                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE);
                     }
                     //to emphasize that we will use the list as queue I use the queue methods instead of LinkedList.add
                     waitingChunks.offer(chunk);

@@ -24,7 +24,7 @@ import org.openide.util.Exceptions;
  * @version 0.1
  * @author Jasper Schwinghammer
  */
-public class CommunicationDistanceComputationRunnable implements Runnable {
+public class DistanceTriggerCalculator implements Runnable {
     
     /**
      * the AUV Manager
@@ -40,7 +40,7 @@ public class CommunicationDistanceComputationRunnable implements Runnable {
      * Does nothing but initialize variables
      * @since 0.1 
      */
-    public CommunicationDistanceComputationRunnable() {
+    public DistanceTriggerCalculator() {
         distanceMap = new HashMap();
     }
     

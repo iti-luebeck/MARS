@@ -27,7 +27,7 @@ import org.openide.util.Exceptions;
  * @author Jasper Schwinghammer
  * @version 0.1
  */
-public class CommunicationMultiPathSimulator implements Runnable {
+public class MultiMessageMerger implements Runnable {
     
     
     private volatile Map<String,List<CommunicationComputedDataChunk>> chunks;
@@ -36,7 +36,7 @@ public class CommunicationMultiPathSimulator implements Runnable {
     private CommunicationState state = null;
     private AUV_Manager auvManager = null;
     
-    public CommunicationMultiPathSimulator() {
+    public MultiMessageMerger() {
         this.chunks = new HashMap();
         this.messages = new HashMap();
         queue = new ConcurrentLinkedQueue<CommunicationComputedDataChunk>();
