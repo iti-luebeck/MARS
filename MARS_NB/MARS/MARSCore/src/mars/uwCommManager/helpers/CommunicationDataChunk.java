@@ -9,6 +9,7 @@ package mars.uwCommManager.helpers;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.PriorityQueue;
+import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
 import org.openide.util.Exceptions;
 
 /**
@@ -69,7 +70,7 @@ public class CommunicationDataChunk {
      * @since 0.1
      * @return the next trigger within distance, or null if there is none
      */
-    public CommunicationComputedDataChunk evalNextTrigger() {
+    public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
         if(!hasNextTrigger()) return null;
         CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageDataChunk, triggerDistances.poll().getAUVName());
         if(triggerDistances.isEmpty()) dead = true;

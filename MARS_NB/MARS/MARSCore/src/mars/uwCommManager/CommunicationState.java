@@ -360,9 +360,10 @@ public class CommunicationState extends AbstractAppState {
     private void addNoise(String name) {
         for(ModemMessageRunnable i : auvProcessMap.values()) {
             if(name.equals(RANDOM_BYTE_NOISE)) {
-                i.addANoiseGenerator(new RandomByteNoise(1));
+                //i.addANoiseByDistanceGenerator(new RandomByteNoise(1));
+                //NOT YET UPDATED
             } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
-                i.addANoiseGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
+                i.addANoiseByDistanceGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
             
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tryed to create not existing noise: {0}", name);

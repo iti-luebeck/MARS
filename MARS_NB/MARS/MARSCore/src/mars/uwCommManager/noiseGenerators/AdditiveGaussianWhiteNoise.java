@@ -63,7 +63,10 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
     }
 
     @Override
-    public byte[] noisifyByDistance(byte[] message, float distance) {
-        return null;
+    public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength) {
+        float temp = standardDeviation;
+        standardDeviation = 
     }
+    
+    
 }
