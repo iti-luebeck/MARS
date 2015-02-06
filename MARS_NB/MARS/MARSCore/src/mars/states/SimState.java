@@ -308,6 +308,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
+                    CentralLookup.getDefault().add(physical_environment);
                     return null;
                 }
             });
