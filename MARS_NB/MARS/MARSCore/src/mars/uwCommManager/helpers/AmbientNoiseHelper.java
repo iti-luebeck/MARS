@@ -18,10 +18,10 @@ public class AmbientNoiseHelper {
     }
     
     public static float calculateAmbientNoise(float frequence, float shippingFactor, float windSpeed) {
-        float nT = 1;
-        float nS = 1;
-        float nW = 1;
-        float nTH= 1;
+        float nT = (float) (17-30*Math.log10(frequence));
+        float nS = (float) (40+ 20*(shippingFactor-0.5)+26*Math.log10(frequence)-60*Math.log10(frequence+0.03));
+        float nW = (float) (50+7.5*windSpeed+20*Math.log10(frequence)-40*Math.log10(frequence+ 0.4));
+        float nTH= (float) (-15+20*Math.log(frequence));
         return nT + nS + nW + nTH;
     }
     

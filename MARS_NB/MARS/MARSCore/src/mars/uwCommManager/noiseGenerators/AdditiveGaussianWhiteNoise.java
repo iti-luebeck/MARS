@@ -6,6 +6,9 @@
 package mars.uwCommManager.noiseGenerators;
 
 import java.util.Random;
+import mars.core.CentralLookup;
+import mars.states.SimState;
+import mars.uwCommManager.helpers.AttenuationHelper;
 import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 
 /**
@@ -63,8 +66,10 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
     }
 
     @Override
-    public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength) {
+    public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength, float waterDepth) {
         float temp = standardDeviation;
+        AttenuationHelper attHelper = new AttenuationHelper(((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment());
+        float attentuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
         standardDeviation = 
     }
     
