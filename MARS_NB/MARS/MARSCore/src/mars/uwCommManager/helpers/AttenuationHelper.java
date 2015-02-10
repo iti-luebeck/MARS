@@ -40,6 +40,6 @@ public class AttenuationHelper {
     
     
     public float carculateAttenuationInDB(float distance, float frequence,float spreadingModel,float depth) {
-        return (float) (spreadingModel * 10 * Math.log10(distance)+distance * calculateAlpha(frequence, environment.getFluid_temp(), environment.getFluid_salinity(), depth));
+        return (float) (spreadingModel * 10 * Math.log10(distance*1000)+distance * calculateAlpha(frequence, environment.getFluid_temp(), environment.getFluid_salinity(), depth));
     }
 }
