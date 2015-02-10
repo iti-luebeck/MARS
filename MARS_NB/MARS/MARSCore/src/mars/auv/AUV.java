@@ -22,8 +22,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.control.MyCustomGhostControl;
-import mars.gui.plot.AUVListener;
-import mars.gui.plot.ChartEvent;
 import mars.misc.ChartValue;
 import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
@@ -429,29 +427,6 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
      * @return
      */
     public WayPoints getWaypoints();
-
-    /**
-     *
-     * @param listener
-     */
-    public void addAdListener(AUVListener listener);
-
-    /**
-     *
-     * @param listener
-     */
-    public void removeAdListener(AUVListener listener);
-
-    /**
-     *
-     */
-    public void removeAllListener();
-
-    /**
-     *
-     * @param event
-     */
-    public void notifyAdvertisement(ChartEvent event);
 
     /**
      *

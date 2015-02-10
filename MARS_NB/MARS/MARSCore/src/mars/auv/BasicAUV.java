@@ -4,11 +4,6 @@
  */
 package mars.auv;
 
-import com.jme3.renderer.queue.RenderQueue;
-import mars.object.CollisionType;
-import mars.actuators.thruster.Thruster;
-import mars.actuators.Actuator;
-import mars.sensors.Sensor;
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
@@ -33,6 +28,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -40,22 +36,22 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
-import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import com.rits.cloning.Cloner;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -64,36 +60,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import jme3tools.optimize.LodGenerator;
-import mars.object.BuoyancyType;
-import mars.misc.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.Keys;
-import mars.PhysicalEnvironment;
-import mars.PhysicalExchange.PhysicalExchanger;
-import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.Manipulating;
 import mars.PhysicalExchange.Moveable;
-import mars.control.MyCustomGhostControl;
-import mars.misc.PickHint;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
+import mars.actuators.Actuator;
 import mars.actuators.BallastTank;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
-import mars.states.SimState;
-import mars.auv.example.Hanse;
 import mars.auv.example.ASV;
-import mars.auv.example.Monsun2;
-import mars.auv.example.SMARTE;
-import mars.gui.plot.AUVListener;
-import mars.gui.plot.ChartEvent;
-import mars.control.LimitedRigidBodyControl;
 import mars.auv.example.Buoy;
+import mars.auv.example.Hanse;
 import mars.auv.example.Manta;
+import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
+import mars.auv.example.SMARTE;
+import mars.control.LimitedRigidBodyControl;
+import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
+import mars.events.MARSObjectEvent;
+import mars.events.MARSObjectListener;
+import mars.misc.DebugHint;
+import mars.misc.PickHint;
+import mars.object.BuoyancyType;
+import mars.object.CollisionType;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.sensors.AmpereMeter;
@@ -103,8 +101,10 @@ import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
 import mars.sensors.PollutionMeter;
 import mars.sensors.RayBasedSensor;
+import mars.sensors.Sensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
+import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -968,7 +968,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f, buoyancy_force / ((float) mars_settings.getPhysicsFramerate()), 0.0f);
         //notifySafeAdvertisement(new ChartEvent(this, OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()), 0));
-        notifySafeAdvertisement(new ChartEvent(this, actual_vol, 0));
+        notifySafeAdvertisementMARSObject(new MARSObjectEvent(this, actual_vol, 0));
         //notifySafeAdvertisement(new ChartEvent(this,VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()).length(), 0));
 
         //physics_control.applyCentralForce(buoyancy_force_vec);
@@ -2680,8 +2680,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param listener
      */
     @Override
-    public void addAdListener(AUVListener listener) {
-        listeners.add(AUVListener.class, listener);
+    public void addMARSObjectListener(MARSObjectListener listener) {
+        listeners.add(MARSObjectListener.class, listener);
     }
 
     /**
@@ -2689,16 +2689,16 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param listener
      */
     @Override
-    public void removeAdListener(AUVListener listener) {
-        listeners.remove(AUVListener.class, listener);
+    public void removeMARSObjectListener(MARSObjectListener listener) {
+        listeners.remove(MARSObjectListener.class, listener);
     }
 
     /**
      *
      */
     @Override
-    public void removeAllListener() {
-        //listeners.
+    public void removeAllMARSObjectListener() {
+        //listeners.remove(MARSObjectListener.class, null);
     }
 
     /**
@@ -2706,8 +2706,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param event
      */
     @Override
-    public void notifyAdvertisement(ChartEvent event) {
-        for (AUVListener l : listeners.getListeners(AUVListener.class)) {
+    public void notifyAdvertisementMARSObject(MARSObjectEvent event) {
+        for (MARSObjectListener l : listeners.getListeners(MARSObjectListener.class)) {
             l.onNewData(event);
         }
     }
@@ -2716,7 +2716,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      * @param event
      */
-    protected synchronized void notifySafeAdvertisement(ChartEvent event) {
-        notifyAdvertisement(event);
+    protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
+        notifyAdvertisementMARSObject(event);
     }
 }

@@ -2,22 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui.plot;
+package mars.events;
 
 import java.util.EventListener;
-import mars.misc.CommunicationDeviceEvent;
 
 /**
  * Same as AUVListener but for PhysicalExchangers.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-@Deprecated
-public interface PhysicalExchangerListener extends EventListener {
+public interface MARSObjectListener extends EventListener {
 
     /**
      *
      * @param e
      */
-    void onNewData(CommunicationDeviceEvent e);
+    void onNewData(MARSObjectEvent e);
 }

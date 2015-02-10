@@ -6,6 +6,9 @@
 
 package mars.object;
 
+import mars.events.MARSObjectEvent;
+import mars.events.MARSObjectListener;
+
 /**
  * This the base interface for all objects that are in MARS. For example: AUVs, SimObjects
  * 
@@ -23,4 +26,27 @@ public interface MARSObject {
      * @param name
      */
     public void setName(String name);
+    
+    /**
+     *
+     * @param listener
+     */
+    public void addMARSObjectListener(MARSObjectListener listener);
+
+    /**
+     *
+     * @param listener
+     */
+    public void removeMARSObjectListener(MARSObjectListener listener);
+
+    /**
+     *
+     */
+    public void removeAllMARSObjectListener();
+
+    /**
+     *
+     * @param event
+     */
+    public void notifyAdvertisementMARSObject(MARSObjectEvent event);
 }

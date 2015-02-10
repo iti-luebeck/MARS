@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui.plot;
+package mars.events;
 
 import java.util.EventListener;
 import mars.misc.CommunicationDeviceEvent;
@@ -12,8 +12,7 @@ import mars.misc.CommunicationDeviceEvent;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-@Deprecated
-public interface PhysicalExchangerListener extends EventListener {
+public interface AUVObjectListener extends EventListener {
 
     /**
      *

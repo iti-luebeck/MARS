@@ -1,40 +1,34 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.gui.plot;
+
+package mars.events;
 
 import java.util.EventObject;
-import mars.auv.AUV;
+import mars.PhysicalExchange.AUVObject;
 
 /**
- * A Special EventObject for Charts/Plots. So we can see some debug data in a
- * pretty way.
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class ChartEvent extends EventObject {
+public class AUVObjectEvent extends EventObject{
 
     private Object msg = "";
     private long time = 0;
-
-    /**
-     *
-     * @param auv
-     * @param msg
-     * @param time
-     */
-    public ChartEvent(AUV auv, Object msg, long time) {
-        super(auv);
+    
+    public AUVObjectEvent(AUVObject auvObject, Object msg, long time) {
+        super(auvObject);
         this.msg = msg;
         this.time = time;
     }
-
+    
     /**
      *
      * @return
      */
-    public Object getObject() {
+    public Object getMsg() {
         return msg;
     }
 
