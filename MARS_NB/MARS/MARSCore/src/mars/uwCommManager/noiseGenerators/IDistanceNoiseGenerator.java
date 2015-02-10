@@ -16,6 +16,6 @@ public interface IDistanceNoiseGenerator {
      * @param the signalStrength at the source of the signal
      * @return 
      */
-    public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength);
+    public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength, float waterDepth);
     
 }

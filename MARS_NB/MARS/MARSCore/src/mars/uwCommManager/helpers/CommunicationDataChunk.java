@@ -72,6 +72,10 @@ public class CommunicationDataChunk {
      */
     public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
         if(!hasNextTrigger()) return null;
+        byte[] messageTemp = messageDataChunk.clone();
+        for(ANoiseByDistanceGenerator gen: noiseGenerators) {
+           messageTemp = gen.noisifyByDistance(messageTemp,triggerDistances.peek().getDistance(),frequence,signalStrength,0.05f);
+        }
         CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageDataChunk, triggerDistances.poll().getAUVName());
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;

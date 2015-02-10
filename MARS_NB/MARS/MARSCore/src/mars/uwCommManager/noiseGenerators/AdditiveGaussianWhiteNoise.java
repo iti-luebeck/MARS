@@ -70,7 +70,9 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
         float temp = standardDeviation;
         AttenuationHelper attHelper = new AttenuationHelper(((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment());
         float attentuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
-        standardDeviation = 
+        standardDeviation = 3.4f;
+        return noisify(message);
+        
     }
     
     

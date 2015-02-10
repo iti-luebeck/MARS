@@ -79,7 +79,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * How many ticks per secound should the runnables have
      */
-    public static final int RESOLUTION = 30;
+    public static final int RESOLUTION = 1000;
     
     /**
      * The visualization class for the minimap
@@ -171,7 +171,7 @@ public class CommunicationState extends AbstractAppState {
             for ( AUV auv : auvs.values()){
             //Check if the AUV is enabled and has a modem
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
-                    ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION);
+                    ModemMessageRunnable runnable = new ModemMessageRunnable(20f,RESOLUTION);
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
@@ -182,7 +182,7 @@ public class CommunicationState extends AbstractAppState {
         executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
         distanceTraceModule = new DistanceTriggerCalculator();
         distanceTraceModule.init(auvManager);
-        executor.scheduleAtFixedRate(distanceTraceModule, 500000, 1000000, TimeUnit.MICROSECONDS);
+        executor.scheduleAtFixedRate(distanceTraceModule, 500000, 100000, TimeUnit.MICROSECONDS);
         
 
         return true;

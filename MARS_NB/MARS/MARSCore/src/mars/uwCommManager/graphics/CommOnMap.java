@@ -182,6 +182,7 @@ public class CommOnMap {
                     Node distanceNode = (Node) node.getChild(distanceNodeName);
                     if(distanceNode == null) {
                         attachDistanceNode(node,distanceNodeName);
+                        return;
                     }
                     else {
                         inactivePaths = new LinkedList(distanceNode.getChildren());
