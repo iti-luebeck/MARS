@@ -286,7 +286,7 @@ public class UnderwaterModem extends CommunicationDevice {
             @Override
             public void onNewMessage(std_msgs.String message) {
                 System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
-                notifyAdvertisement(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN));
+                notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN));
                 com_manager.putMsg(fin_auv_name, message.getData(), CommunicationType.UNDERWATERSOUND);
             }
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
@@ -310,7 +310,7 @@ public class UnderwaterModem extends CommunicationDevice {
         fl.setData(msg);
         if (publisher != null) {
             System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisement(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
+            notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
     }

@@ -4,6 +4,9 @@
  */
 package mars.PhysicalExchange;
 
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
+
 /**
  * This is the base interface for all AUV related objects.
  *
@@ -34,4 +37,27 @@ public interface AUVObject {
      * @return The unique name of the object.
      */
     public String getName();
+    
+        /**
+     *
+     * @param listener
+     */
+    public void addAUVObjectListener(AUVObjectListener listener);
+
+    /**
+     *
+     * @param listener
+     */
+    public void removeAUVObjectListener(AUVObjectListener listener);
+
+    /**
+     *
+     */
+    public void removeAllAUVObjectListener();
+
+    /**
+     *
+     * @param event
+     */
+    public void notifyAdvertisementAUVObject(AUVObjectEvent event);
 }

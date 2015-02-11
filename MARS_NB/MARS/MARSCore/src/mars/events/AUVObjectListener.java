@@ -5,7 +5,6 @@
 package mars.events;
 
 import java.util.EventListener;
-import mars.misc.CommunicationDeviceEvent;
 
 /**
  * Same as AUVListener but for PhysicalExchangers.
@@ -18,5 +17,5 @@ public interface AUVObjectListener extends EventListener {
      *
      * @param e
      */
-    void onNewData(CommunicationDeviceEvent e);
+    void onNewData(AUVObjectEvent e);
 }

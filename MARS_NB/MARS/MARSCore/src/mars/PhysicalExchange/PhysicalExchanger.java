@@ -18,10 +18,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.tree.TreePath;
+import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,9 +29,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Noise;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
-import mars.misc.PropertyChangeListenerSupport;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.ros.MARSNodeMain;
 import mars.ros.ROS;
 import mars.ros.TF_ROS_Publisher;
@@ -52,6 +53,8 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
     @SuppressWarnings("FieldMayBeFinal")
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
+    
+    private EventListenerList evtlisteners = new EventListenerList();
 
     /**
      *
@@ -728,5 +731,50 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             }
         } catch (IOException e) {
         }  
+    }
+    
+    /**
+     *
+     * @param listener
+     */
+    @Override
+    public void addAUVObjectListener(AUVObjectListener listener) {
+        evtlisteners.add(AUVObjectListener.class, listener);
+    }
+
+    /**
+     *
+     * @param listener
+     */
+    @Override
+    public void removeAUVObjectListener(AUVObjectListener listener) {
+        evtlisteners.remove(AUVObjectListener.class, listener);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void removeAllAUVObjectListener() {
+        //evtlisteners.remove(MARSObjectListener.class, null);
+    }
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void notifyAdvertisementAUVObject(AUVObjectEvent event) {
+        for (AUVObjectListener l : evtlisteners.getListeners(AUVObjectListener.class)) {
+            l.onNewData(event);
+        }
+    }
+
+    /**
+     *
+     * @param event
+     */
+    protected synchronized void notifySafeAdvertisementAUVObject(AUVObjectEvent event) {
+        notifyAdvertisementAUVObject(event);
     }
 }

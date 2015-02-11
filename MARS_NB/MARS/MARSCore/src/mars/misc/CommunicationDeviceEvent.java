@@ -4,17 +4,15 @@
  */
 package mars.misc;
 
-import java.util.EventObject;
+import mars.events.AUVObjectEvent;
 import mars.sensors.CommunicationDevice;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class CommunicationDeviceEvent extends EventObject{
-    
-    private String msg = "";
-    private long time = 0;
+public class CommunicationDeviceEvent extends AUVObjectEvent{
+
     private int type = CommunicationDeviceEventType.IN;
     
     /**
@@ -26,26 +24,8 @@ public class CommunicationDeviceEvent extends EventObject{
      */
     public CommunicationDeviceEvent( CommunicationDevice source, String msg, long time, int type )
     {
-      super( source );
-      this.msg = msg;
-      this.time = time;
+      super(source ,msg , time);
       this.type = type;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public long getTime() {
-        return time;
     }
 
     /**

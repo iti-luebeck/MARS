@@ -4,16 +4,17 @@
  */
 package mars.core;
 
-import mars.misc.CommunicationDeviceEvent;
-import mars.misc.CommunicationDeviceEventType;
-import mars.gui.plot.PhysicalExchangerListener;
 import java.util.Calendar;
 import javax.swing.text.DefaultCaret;
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
+import mars.misc.CommunicationDeviceEvent;
+import mars.misc.CommunicationDeviceEventType;
 import mars.sensors.CommunicationDevice;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays a textual view of what is happening in an underwater modem.
@@ -167,7 +168,7 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
     @Override
     public void componentClosed() {
         if(comDev != null){
-            comDev.removeAdListener(null);
+            comDev.removeAUVObjectListener(null);
         }
     }
 
@@ -184,18 +185,21 @@ public final class MARSUnderwaterModemTopComponent extends TopComponent {
     }
     
     void initListener(){
-        class ComplainingAdListener implements PhysicalExchangerListener{
-            @Override public void onNewData( CommunicationDeviceEvent e ) {
+        class ComplainingAdListener implements AUVObjectListener{
+            @Override public void onNewData( AUVObjectEvent e ) {
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(e.getTime());
-                if(e.getType() == CommunicationDeviceEventType.OUT){
-                    out.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + e.getMsg() + "\n");
-                }else{
-                    in.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + e.getMsg() + "\n");
+                if(e instanceof CommunicationDeviceEvent){
+                    CommunicationDeviceEvent cde = (CommunicationDeviceEvent)e;
+                    if(cde.getType() == CommunicationDeviceEventType.OUT){
+                        out.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + cde.getMsg() + "\n");
+                    }else{
+                        in.append(c.get(Calendar.HOUR) +":"+ c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + ":" + c.get(Calendar.MILLISECOND) + ":" + cde.getMsg() + "\n");
+                    }
                 }
             }
         }
 
-        comDev.addAdListener( new ComplainingAdListener() );
+        comDev.addAUVObjectListener(new ComplainingAdListener() );
     }
 }

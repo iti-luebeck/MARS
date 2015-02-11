@@ -11,12 +11,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.PhysicalExchange.AUVObject;
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.xml.HashMapAdapter;
 
@@ -31,6 +34,8 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
+    private EventListenerList evtlisteners = new EventListenerList();
+    
     /**
      *
      * @param pcl
@@ -243,5 +248,50 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
     @Override
     public String toString() {
         return "Accumulators";
+    }
+    
+        /**
+     *
+     * @param listener
+     */
+    @Override
+    public void addAUVObjectListener(AUVObjectListener listener) {
+        evtlisteners.add(AUVObjectListener.class, listener);
+    }
+
+    /**
+     *
+     * @param listener
+     */
+    @Override
+    public void removeAUVObjectListener(AUVObjectListener listener) {
+        evtlisteners.remove(AUVObjectListener.class, listener);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void removeAllAUVObjectListener() {
+        //evtlisteners.remove(MARSObjectListener.class, null);
+    }
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void notifyAdvertisementAUVObject(AUVObjectEvent event) {
+        for (AUVObjectListener l : evtlisteners.getListeners(AUVObjectListener.class)) {
+            l.onNewData(event);
+        }
+    }
+
+    /**
+     *
+     * @param event
+     */
+    protected synchronized void notifySafeAdvertisementAUVObject(AUVObjectEvent event) {
+        notifyAdvertisementAUVObject(event);
     }
 }
