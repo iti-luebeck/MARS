@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.misc;
+package mars.events;
 
-import mars.events.AUVObjectEvent;
 import mars.sensors.CommunicationDevice;
 
 /**

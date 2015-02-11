@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.PhysicalEnvironment;
-import mars.misc.CommunicationType;
+import mars.events.CommunicationType;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
 import mars.sensors.Sensor;

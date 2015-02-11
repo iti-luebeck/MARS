@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mars.misc;
+package mars.events;
 
 /**
  *

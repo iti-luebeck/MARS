@@ -24,9 +24,9 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
-import mars.misc.CommunicationDeviceEvent;
-import mars.misc.CommunicationDeviceEventType;
-import mars.misc.CommunicationType;
+import mars.events.CommunicationDeviceEvent;
+import mars.events.CommunicationDeviceEventType;
+import mars.events.CommunicationType;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 

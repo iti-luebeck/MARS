@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.misc.CommunicationType;
+import mars.events.CommunicationType;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.MARS_Main;
