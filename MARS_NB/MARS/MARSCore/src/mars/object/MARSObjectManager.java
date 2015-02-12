@@ -19,8 +19,8 @@ import org.openide.util.lookup.InstanceContent;
 public class MARSObjectManager implements Lookup.Provider{
 
     //lookup stuff
-    private InstanceContent content = new InstanceContent();
-    private Lookup lookup = new AbstractLookup(content);
+    protected InstanceContent content = new InstanceContent();
+    protected Lookup lookup = new AbstractLookup(content);
     
     @Override
     public Lookup getLookup() {

@@ -20,17 +20,15 @@ import java.util.logging.Logger;
 import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.object.MARSObjectManager;
 import mars.states.SimState;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.AbstractLookup;
-import org.openide.util.lookup.InstanceContent;
 
 /**
  * This manager manages the SimObjects. Intialises them...
  *
  * @author Thomas Tosik
  */
-public class SimObjectManager implements Lookup.Provider {
+public class SimObjectManager extends MARSObjectManager{
 
     //auv HashMap to store and load auv's
 
@@ -43,10 +41,6 @@ public class SimObjectManager implements Lookup.Provider {
     private BulletAppState bulletAppState;
     private Node rootNode;
     private MARS_Settings mars_settings;
-
-    //lookup stuff
-    private InstanceContent content = new InstanceContent();
-    private Lookup lookup = new AbstractLookup(content);
     
     /**
      *
@@ -83,15 +77,6 @@ public class SimObjectManager implements Lookup.Provider {
         this.SimObNode = simstate.getSimObNode();
         this.bulletAppState = simstate.getBulletAppState();
         this.mars_settings = simstate.getMARSSettings();
-    }
-
-        /**
-     *
-     * @return
-     */
-    @Override
-    public Lookup getLookup() {
-        return lookup;
     }
     
     /**
