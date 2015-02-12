@@ -77,7 +77,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      * @param obj
      * @param name
      */
-    public AUVNode(Object obj, String name) {
+    public AUVNode(AUV obj, String name) {
         super(Children.create(new ParamChildNodeFactory(name), true), Lookups.singleton(obj));
         this.name = name;
         Lookups.singleton(obj);
@@ -338,10 +338,9 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public Transferable clipboardCopy() throws IOException {
         Transferable deflt = super.clipboardCopy();
         ExTransferable added = ExTransferable.create(deflt);
-        added.put(new ExTransferable.Single(CustomerFlavor.CUSTOMER_FLAVOR) {
+        added.put(new ExTransferable.Single(AUVFlavor.CUSTOMER_FLAVOR) {
             @Override
             protected AUV getData() {
-
                 return getLookup().lookup(AUV.class);
             }
         });
@@ -352,7 +351,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     public void setName(final String s) {
         final String oldName = this.name;
         this.name = s;
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (mars.getStateManager().getState(SimState.class) != null) {
                                 //AUV auv = auvManager.getAUV(oldName);

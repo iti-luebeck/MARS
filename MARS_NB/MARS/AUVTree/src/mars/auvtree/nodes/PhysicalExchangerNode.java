@@ -3,6 +3,7 @@ package mars.auvtree.nodes;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.awt.Image;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -10,33 +11,37 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
-import mars.PhysicalExchange.AUVObject;
 import mars.MARS_Main;
+import mars.PhysicalExchange.AUVObject;
 import mars.PhysicalExchange.Manipulating;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.misc.PropertyChangeListenerSupport;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.actuators.Lamp;
 import mars.actuators.Teleporter;
-import mars.actuators.thruster.Thruster;
 import mars.actuators.servos.Servo;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.auv.AUV_Parameters;
+import mars.auvtree.TreeUtil;
 import mars.core.CentralLookup;
 import mars.core.MARSChartTopComponent;
 import mars.core.MARSCompassTopComponent;
 import mars.core.MARSUnderwaterModemTopComponent;
 import mars.core.MARSVideoCameraTopComponent;
 import mars.core.RayBasedSensorTopComponent;
+import mars.gui.PropertyEditors.ColorPropertyEditor;
+import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import mars.gui.sonarview.PlanarView;
 import mars.gui.sonarview.PolarView;
+import mars.misc.PropertyChangeListenerSupport;
 import mars.sensors.AmpereMeter;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.Compass;
@@ -56,10 +61,8 @@ import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
 import mars.sensors.WiFi;
 import mars.sensors.sonar.Sonar;
-import mars.gui.PropertyEditors.ColorPropertyEditor;
-import mars.auvtree.TreeUtil;
-import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import org.openide.ErrorManager;
+import org.openide.actions.CopyAction;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
@@ -69,6 +72,8 @@ import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.ExTransferable;
+import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.Lookups;
 
 /**
@@ -271,6 +276,15 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     public boolean canRename() {
         return true;
     }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean canCopy() {
+        return true;
+    }
 
     @Override
     public void setName(String s) {
@@ -463,6 +477,24 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         pe.getAuv().deregisterPhysicalExchanger(pe);
         fireNodeDestroyed();
     }
+    
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public Transferable clipboardCopy() throws IOException {
+        Transferable deflt = super.clipboardCopy();
+        ExTransferable added = ExTransferable.create(deflt);
+        added.put(new ExTransferable.Single(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) {
+            @Override
+            protected PhysicalExchanger getData() {
+                return getLookup().lookup(PhysicalExchanger.class);
+            }
+        });
+        return added;
+    }
 
     /**
      * This one is overridden to define left click actions.
@@ -474,17 +506,17 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Action[] getActions(boolean popup) {
         if (obj instanceof Compass) {
-            return new Action[]{new DataChartAction(), new ViewCompassAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new DataChartAction(), new ViewCompassAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof VideoCamera) {
-            return new Action[]{new ViewCameraAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new ViewCameraAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof RayBasedSensor) {
-            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof CommunicationDevice) {
-            return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof mars.misc.ChartValue) {
-            return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else {
-            return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class)};
+            return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         }
     }
 

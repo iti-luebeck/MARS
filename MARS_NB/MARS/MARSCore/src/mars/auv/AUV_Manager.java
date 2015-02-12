@@ -453,7 +453,7 @@ public class AUV_Manager extends MARSObjectManager{
     public void registerAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
         final AUV fin_auv = auv;
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 final ProgressHandle progr = ProgressHandleFactory.createHandle("AUVManager: " + fin_auv.getName());
                 progr.start();

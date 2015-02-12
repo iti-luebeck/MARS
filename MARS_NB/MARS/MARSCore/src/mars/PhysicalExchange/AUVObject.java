@@ -38,6 +38,23 @@ public interface AUVObject {
      */
     public String getName();
     
+    /**
+     * 
+     * @return 
+     */
+    public boolean isInitialized();
+    
+    /**
+     * 
+     * @param initialized
+     */
+    public void setInitialized(boolean initialized);
+    
+    /**
+     * Reset the sensors/actuator to the default settings.
+     */
+    public abstract void reset();
+    
         /**
      *
      * @param listener

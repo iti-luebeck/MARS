@@ -433,13 +433,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void registerPhysicalExchanger(String name, PhysicalExchanger pex) {
         pex.setName(name);
-        if (pex instanceof Sensor) {
-            sensors.put(name, (Sensor) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + name + " added...", "");
-        } else if (pex instanceof Actuator) {
-            actuators.put(name, (Actuator) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + name + " added...", "");
-        }
+        registerPhysicalExchanger(pex);
     }
 
     /**
@@ -447,15 +441,23 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param pex
      */
     @Override
-    public void registerPhysicalExchanger(PhysicalExchanger pex) {
-        pex.setName(pex.getName());
-        if (pex instanceof Sensor) {
-            sensors.put(pex.getName(), (Sensor) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
-        } else if (pex instanceof Actuator) {
-            actuators.put(pex.getName(), (Actuator) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
-        }
+    public void registerPhysicalExchanger(final PhysicalExchanger pex) {
+        mars.enqueue(new Callable<Void>() {
+            public Void call() throws Exception {
+                pex.setName(pex.getName());
+                if (pex instanceof Sensor) {
+                    sensors.put(pex.getName(), (Sensor) pex);
+                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
+                } else if (pex instanceof Actuator) {
+                    actuators.put(pex.getName(), (Actuator) pex);
+                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
+                }
+                //init
+                initPhysicalExchangers();
+                //content.add(new NodeRefreshEvent());
+                return null;
+            }
+        });
     }
 
     /**
@@ -474,7 +476,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
@@ -701,15 +703,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.updateGeometricState();
     }
 
-    ;
-
     private void initPhysicalExchangers() {
         //init sensors
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setMARS_settings(mars_settings);
                 element.setPhysical_environment(physical_environment);
@@ -735,9 +735,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 if (element instanceof PingDetector) {
                     ((PingDetector) element).setSimObjectManager(simstate.getSimob_manager());
                 }
-                if (element instanceof AmpereMeter) {
-                    ((AmpereMeter) element).setAuv(this);
-                }
                 if (element instanceof FlowMeter) {
                     ((FlowMeter) element).setIniter(initer);//is needed for filters
                 }
@@ -749,6 +746,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                     Keys elementKeys = (Keys) element;
                     elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
                 }
+                element.setInitialized(true);
             }
         }
         //init actuators
@@ -756,7 +754,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             Actuator element = actuators.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
@@ -774,6 +772,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                     Keys elementKeys = (Keys) element;
                     elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
                 }
+                element.setInitialized(true);
             }
         }
         //init special actuators like manipulating ones(servos)

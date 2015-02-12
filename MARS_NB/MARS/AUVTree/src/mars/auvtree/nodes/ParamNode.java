@@ -1,13 +1,25 @@
 package mars.auvtree.nodes;
 
 import java.awt.Image;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import mars.PhysicalExchange.PhysicalExchanger;
+import mars.auv.AUV;
 import mars.auvtree.TreeUtil;
+import org.openide.actions.PasteAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
+import org.openide.nodes.NodeTransfer;
+import org.openide.util.Exceptions;
+import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.Lookups;
 
 /**
@@ -140,6 +152,46 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
     @Override
     public String getDisplayName() {
         return nodeName;
+    }
+
+    @Override
+    protected SystemAction[] createActions() {
+        return new SystemAction[] {
+            SystemAction.get (PasteAction.class)
+        };
+    }
+
+    @Override
+    protected void createPasteTypes(Transferable t, List ls) {
+        final Transferable tt = t;
+        if(t.isDataFlavorSupported(PhysicalExchangerFlavor.CUSTOMER_FLAVOR)){
+            final Node[] ns = NodeTransfer.nodes (t, NodeTransfer.COPY);
+            if (ns != null) {
+              ls.add (new PasteType () {
+                public Transferable paste () throws IOException {
+                    try {
+                        PhysicalExchanger pe = (PhysicalExchanger)tt.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR);
+                        PhysicalExchanger copy = pe.copy();
+                        AUV auv = pe.getAuv();
+                        copy.setName(copy.getName() + System.nanoTime());
+                        Node parentNode = getParentNode();
+                        auv.registerPhysicalExchanger(copy);
+                        AUV auv2 = getLookup().lookup(AUV.class);
+                        System.out.println("aaa");
+                    } catch (UnsupportedFlavorException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                  /*Node[] nue = new Node[ns.length];
+                  for (int i = 0; i < nue.length; i++)
+                    nue[i] = ns[i].cloneNode ();
+                  getChildren ().add (nue);*/
+                  return null;
+                }
+              });
+            }
+        }
+        // Also try superclass, but give it lower priority:
+        super.createPasteTypes(t, ls);
     }
 
     /**

@@ -55,6 +55,8 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
     
     private EventListenerList evtlisteners = new EventListenerList();
+    
+    private boolean initialized = false;
 
     /**
      *
@@ -274,11 +276,24 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     public String getName() {
         return (String) variables.get("name");
     }
-
+    
     /**
-     * Reset the sensors/actuator to the default settings.
+     * 
+     * @return 
      */
-    public abstract void reset();
+    @Override
+    public boolean isInitialized(){
+        return initialized;
+    }
+    
+    /**
+     * 
+     * @param initialized
+     */
+    @Override
+    public void setInitialized(boolean initialized){
+        this.initialized = initialized;
+    }
 
     /**
      *

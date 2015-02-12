@@ -36,6 +36,8 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
 
     private EventListenerList evtlisteners = new EventListenerList();
     
+    private boolean initialized = false;
+    
     /**
      *
      * @param pcl
@@ -106,6 +108,7 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
     /**
      *
      */
+    @Override
     public void reset() {
         setActualCurrent(new Double(getCapacity()));
     }
@@ -116,6 +119,24 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
      */
     public void updateState(TreePath path) {
 
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public boolean isInitialized(){
+        return initialized;
+    }
+    
+    /**
+     * 
+     * @param initialized
+     */
+    @Override
+    public void setInitialized(boolean initialized){
+        this.initialized = initialized;
     }
 
     /**

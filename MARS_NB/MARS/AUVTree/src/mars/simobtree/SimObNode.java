@@ -360,7 +360,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
     public Transferable clipboardCopy() throws IOException {
         Transferable deflt = super.clipboardCopy();
         ExTransferable added = ExTransferable.create(deflt);
-        added.put(new ExTransferable.Single(CustomerFlavor.CUSTOMER_FLAVOR) {
+        added.put(new ExTransferable.Single(AUVFlavor.CUSTOMER_FLAVOR) {
             @Override
             protected SimObject getData() {
 

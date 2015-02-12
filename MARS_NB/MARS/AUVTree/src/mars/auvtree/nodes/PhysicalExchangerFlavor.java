@@ -6,23 +6,23 @@
 package mars.auvtree.nodes;
 
 import java.awt.datatransfer.DataFlavor;
-import mars.auv.AUV;
+import mars.PhysicalExchange.PhysicalExchanger;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class CustomerFlavor extends DataFlavor {
+public class PhysicalExchangerFlavor extends DataFlavor {
 
     /**
      *
      */
-    public static final DataFlavor CUSTOMER_FLAVOR = new CustomerFlavor();
+    public static final DataFlavor CUSTOMER_FLAVOR = new PhysicalExchangerFlavor();
 
     /**
      *
      */
-    public CustomerFlavor() {
-        super(AUV.class, "AUV");
+    public PhysicalExchangerFlavor() {
+        super(PhysicalExchanger.class, "PhysicalExchanger");
     }
 }

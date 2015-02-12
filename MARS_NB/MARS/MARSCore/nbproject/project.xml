@@ -353,19 +353,17 @@
                 <package>mars.auv.example</package>
                 <package>mars.control</package>
                 <package>mars.core</package>
+                <package>mars.events</package>
                 <package>mars.filter</package>
                 <package>mars.geodesy</package>
                 <package>mars.gui</package>
                 <package>mars.gui.PropertyEditors</package>
                 <package>mars.gui.dnd</package>
                 <package>mars.gui.options</package>
-                <package>mars.gui.plot</package>
                 <package>mars.gui.sonarview</package>
-                <package>mars.gui.tree</package>
                 <package>mars.hardware</package>
                 <package>mars.misc</package>
                 <package>mars.object</package>
-                <package>mars.recorder</package>
                 <package>mars.ros</package>
                 <package>mars.sensors</package>
                 <package>mars.sensors.sonar</package>
