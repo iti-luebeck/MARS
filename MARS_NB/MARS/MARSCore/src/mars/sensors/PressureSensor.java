@@ -12,15 +12,16 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
-import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.states.SimState;
+import mars.events.AUVObjectEvent;
+import mars.misc.ChartValue;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
+import mars.states.SimState;
 import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * This class provides a basic pressure sensor. You can get exact depth or exact
@@ -231,6 +232,8 @@ public class PressureSensor extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPressureMbar(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getPressureMbar(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 
     /**

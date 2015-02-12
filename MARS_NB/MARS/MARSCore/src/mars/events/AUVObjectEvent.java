@@ -6,37 +6,15 @@
 
 package mars.events;
 
-import java.util.EventObject;
 import mars.PhysicalExchange.AUVObject;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class AUVObjectEvent extends EventObject{
-
-    private Object msg = "";
-    private long time = 0;
+public class AUVObjectEvent extends MARSEvent{
     
     public AUVObjectEvent(AUVObject auvObject, Object msg, long time) {
-        super(auvObject);
-        this.msg = msg;
-        this.time = time;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public Object getMsg() {
-        return msg;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public long getTime() {
-        return time;
+        super(auvObject, msg, time);
     }
 }
