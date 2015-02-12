@@ -106,6 +106,9 @@ import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  * The basic BasicAUV class. When you want to make own auv's or enchance them
@@ -118,7 +121,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor {
+public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -202,6 +205,10 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     //LOD
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
+    
+    //lookup stuff
+    protected InstanceContent content = new InstanceContent();
+    protected Lookup lookup = new AbstractLookup(content);
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble.
@@ -276,6 +283,11 @@ public class BasicAUV implements AUV, SceneProcessor {
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
+    }
+      
+    @Override
+    public Lookup getLookup() {
+        return lookup;
     }
 
     /**
@@ -442,8 +454,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void registerPhysicalExchanger(final PhysicalExchanger pex) {
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
+        //mars.enqueue(new Callable<Void>() {
+        //    public Void call() throws Exception {
                 pex.setName(pex.getName());
                 if (pex instanceof Sensor) {
                     sensors.put(pex.getName(), (Sensor) pex);
@@ -453,11 +465,11 @@ public class BasicAUV implements AUV, SceneProcessor {
                     Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
                 }
                 //init
-                initPhysicalExchangers();
+                //initPhysicalExchangers();
                 //content.add(new NodeRefreshEvent());
-                return null;
-            }
-        });
+        //        return null;
+        //    }
+        //});
     }
 
     /**

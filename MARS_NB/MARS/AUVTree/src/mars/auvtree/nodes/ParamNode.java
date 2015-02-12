@@ -176,8 +176,6 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                         copy.setName(copy.getName() + System.nanoTime());
                         Node parentNode = getParentNode();
                         auv.registerPhysicalExchanger(copy);
-                        AUV auv2 = getLookup().lookup(AUV.class);
-                        System.out.println("aaa");
                     } catch (UnsupportedFlavorException ex) {
                         Exceptions.printStackTrace(ex);
                     }
