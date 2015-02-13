@@ -46,8 +46,7 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
     protected boolean createKeys(List toPopulate) {
         //sorted output
         SortedSet<String> sortedset = new TreeSet<String>(params.keySet());
-        for (Iterator<String> it2 = sortedset.iterator(); it2.hasNext();) {
-            String string = it2.next();
+        for (String string : sortedset) {
             toPopulate.add(string);
         }
         return true;
@@ -72,6 +71,14 @@ public class PhysicalExchangerChildNodeFactory extends ChildFactory<String> impl
      */
     @Override
     public void childrenAdded(NodeMemberEvent nme) {
+        refresh(true);
+    }
+    
+    /**
+     *
+     */
+    public void refresh(){
+        refresh(true);
     }
 
     /**

@@ -94,7 +94,6 @@ import mars.object.BuoyancyType;
 import mars.object.CollisionType;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
-import mars.sensors.AmpereMeter;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
@@ -106,9 +105,6 @@ import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.AbstractLookup;
-import org.openide.util.lookup.InstanceContent;
 
 /**
  * The basic BasicAUV class. When you want to make own auv's or enchance them
@@ -121,7 +117,7 @@ import org.openide.util.lookup.InstanceContent;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
+public class BasicAUV implements AUV, SceneProcessor{
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -205,10 +201,6 @@ public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
 
     //LOD
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
-    
-    //lookup stuff
-    protected InstanceContent content = new InstanceContent();
-    protected Lookup lookup = new AbstractLookup(content);
 
     /**
      * This is the main auv class. This is where the auv will be made vivisble.
@@ -283,11 +275,6 @@ public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
-    }
-      
-    @Override
-    public Lookup getLookup() {
-        return lookup;
     }
 
     /**
@@ -454,22 +441,29 @@ public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
      */
     @Override
     public void registerPhysicalExchanger(final PhysicalExchanger pex) {
-        //mars.enqueue(new Callable<Void>() {
-        //    public Void call() throws Exception {
-                pex.setName(pex.getName());
-                if (pex instanceof Sensor) {
-                    sensors.put(pex.getName(), (Sensor) pex);
-                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
-                } else if (pex instanceof Actuator) {
-                    actuators.put(pex.getName(), (Actuator) pex);
-                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
-                }
+        pex.setName(pex.getName());
+        if (pex instanceof Sensor) {
+            sensors.put(pex.getName(), (Sensor) pex);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + pex.getName() + " added...", "");
+        } else if (pex instanceof Actuator) {
+            actuators.put(pex.getName(), (Actuator) pex);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
+        }
+    }
+    
+    /**
+     * Init the PE in a safe way. Means that first a mars instance is available
+     * and second enqueue the register.
+     */
+    @Override
+    public void initPhysicalExchangerFuture() {
+        mars.enqueue(new Callable<Void>() {
+            public Void call() throws Exception {
                 //init
-                //initPhysicalExchangers();
-                //content.add(new NodeRefreshEvent());
-        //        return null;
-        //    }
-        //});
+                initPhysicalExchangers();
+                return null;
+            }
+        });
     }
 
     /**
@@ -2278,7 +2272,7 @@ public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
     public void publishSensorsOfAUV() {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && element.isInitialized()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }
@@ -2292,7 +2286,7 @@ public class BasicAUV implements AUV, SceneProcessor, Lookup.Provider {
     public void publishActuatorsOfAUV() {
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && element.isInitialized()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }

@@ -440,6 +440,11 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
      * @param pex
      */
     public void registerPhysicalExchanger(final PhysicalExchanger pex);
+    
+    /**
+     *
+     */
+    public void initPhysicalExchangerFuture();
 
     /**
      *

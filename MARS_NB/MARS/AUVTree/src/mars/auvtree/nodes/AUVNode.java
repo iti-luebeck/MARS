@@ -318,7 +318,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public void destroy() throws IOException {
-        Future simStateFuture = mars.enqueue(new Callable() {
+        mars.enqueue(new Callable() {
             public Void call() throws Exception {
                 if (mars.getStateManager().getState(SimState.class) != null) {
                     auvManager.deregisterAUVNoFuture(auv);
