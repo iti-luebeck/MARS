@@ -410,7 +410,12 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         if (auv.getAuv_param().isEnabled()) {
             return TreeUtil.getImage(iconName);
         } else {
-            return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
+            Image image = TreeUtil.getImage(iconName);
+            if(image != null){//check if icon could be loaded
+                return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
+            }else{
+                return GrayFilter.createDisabledImage(TreeUtil.getImage("yellow_submarine.png"));
+            }
         }
     }
 
