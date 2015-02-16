@@ -430,11 +430,26 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Image getIcon(int type) {
-        if (simob.isEnabled()) {
-            return TreeUtil.getImage(iconName);
-        } else {
-            return GrayFilter.createDisabledImage(TreeUtil.getImage(iconName));
+        Image image = null;
+        String iconNameTmp = iconName;
+        
+        if(iconName.isEmpty()){
+            iconNameTmp = "box_closed.png";
         }
+        
+        image = TreeUtil.getImage(iconNameTmp);
+        
+        if(image == null){
+            image = TreeUtil.getImage("box_closed.png");
+        }
+        
+        if (!simob.isEnabled()) {
+            if(image != null){//check if icon could be loaded
+                return GrayFilter.createDisabledImage(image);
+            }
+        }
+        
+        return image;
     }
 
     /**
