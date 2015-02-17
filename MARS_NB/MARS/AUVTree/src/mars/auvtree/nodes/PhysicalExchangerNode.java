@@ -33,7 +33,6 @@ import mars.auv.AUV_Parameters;
 import mars.auvtree.TreeUtil;
 import mars.core.CentralLookup;
 import mars.core.MARSChartTopComponent;
-import mars.core.MARSCompassTopComponent;
 import mars.core.MARSUnderwaterModemTopComponent;
 import mars.core.MARSVideoCameraTopComponent;
 import mars.core.RayBasedSensorTopComponent;
@@ -505,9 +504,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     @Override
     public Action[] getActions(boolean popup) {
-        if (obj instanceof Compass) {
-            return new Action[]{new DataChartAction(), new ViewCompassAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
-        } else if (obj instanceof VideoCamera) {
+        if (obj instanceof VideoCamera) {
             return new Action[]{new ViewCameraAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof RayBasedSensor) {
             return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
@@ -711,33 +708,6 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 video.requestActive();
 
                 video.repaint();
-            }
-        }
-
-    }
-
-    /**
-     * Inner class for the actions on right click. Provides action to enable and
-     * disable an auv.
-     */
-    private class ViewCompassAction extends AbstractAction {
-
-        public ViewCompassAction() {
-            putValue(NAME, "View Compass Data");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            Compass lookup = getLookup().lookup(Compass.class);
-            if (lookup != null) {
-                MARSCompassTopComponent comp = new MARSCompassTopComponent(lookup);
-
-                comp.setName("Video of: " + lookup.getName());
-                comp.open();
-                comp.requestActive();
-
-                comp.repaint();
             }
         }
 
