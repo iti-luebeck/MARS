@@ -168,8 +168,8 @@ MaterialDef Grass {
 
         LightMode MultiPass
 
-        VertexShader GLSL120:   Common/MatDefs/Grass/Grass.vert
-        FragmentShader GLSL120: Common/MatDefs/Grass/Grass.frag
+        VertexShader GLSL120:   MatDefs/Grass/Grass.vert
+        FragmentShader GLSL120: MatDefs/Grass/Grass.frag
 
         WorldParameters {
             WorldViewProjectionMatrix
