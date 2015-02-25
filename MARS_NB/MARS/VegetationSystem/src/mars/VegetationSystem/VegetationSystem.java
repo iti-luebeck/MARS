@@ -226,7 +226,7 @@ public class VegetationSystem extends Node{
     public Geometry createGenuineGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius, float rHeight, Vector3f scale){
         Geometry grassModel = new Geometry("Grass", new GrassTuft());
         grassModel.scale(scale.x, scale.y, scale.z);
-        Material grassMaterial = new Material(am, "Common/MatDefs/Grass/Grass.j3md");
+        Material grassMaterial = new Material(am, "MatDefs/Grass/Grass.j3md");
         Texture grass = am.loadTexture(texturePath);
         
         grassMaterial.setTexture("DiffuseMap", grass);
@@ -264,7 +264,7 @@ public class VegetationSystem extends Node{
     public Geometry createImposterGrass(String texturePath, float alphaDT, boolean sway, boolean response, boolean fade, Vector2f wind, float swayFreq, float radius, float rHeight, Vector3f scale){
         Geometry grassModel = new Geometry("Grass", new GrassQuad());
         grassModel.scale(scale.x, scale.y, scale.z);
-        Material grassMaterial = new Material(am, "Common/MatDefs/Grass/Grass.j3md");
+        Material grassMaterial = new Material(am, "MatDefs/Grass/Grass.j3md");
         Texture grass = am.loadTexture(texturePath);
         
         grassMaterial.setTexture("DiffuseMap", grass);
