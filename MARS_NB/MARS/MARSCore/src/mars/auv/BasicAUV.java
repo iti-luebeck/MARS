@@ -86,6 +86,7 @@ import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
+import mars.control.SedimentEmitterControl;
 import mars.events.MARSObjectEvent;
 import mars.events.MARSObjectListener;
 import mars.misc.DebugHint;
@@ -680,6 +681,7 @@ public class BasicAUV implements AUV, SceneProcessor{
 
         initCenters();
         initWaypoints();
+        initControls();
         //the offscreen for area calculating(drag) must be set
         setupDragOffscreenView();//<-- buggy when deleting/deregister etc
         if (auv_param.isDebugDrag()) {
@@ -1319,6 +1321,17 @@ public class BasicAUV implements AUV, SceneProcessor{
             }
         });
         //}
+    }
+    
+    /*
+    *
+    */
+    private void initControls(){
+        SedimentEmitterControl sediment = new SedimentEmitterControl(initer.getTerrainNode(), assetManager);
+        auv_node.addControl(sediment);
+        if(!getAuv_param().getEnabled()){
+            sediment.setEnabled(false);
+        }
     }
 
     /**
@@ -2088,7 +2101,7 @@ public class BasicAUV implements AUV, SceneProcessor{
          }
          });*/
         arr_ret[0] = volume;
-        //System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
+        System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
         if (volume > completeVolume + 0.1f) {
             System.out.println("too much volume!!!!!!!");
         }

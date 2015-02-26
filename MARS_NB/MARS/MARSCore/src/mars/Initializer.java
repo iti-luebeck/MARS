@@ -1438,20 +1438,20 @@ public class Initializer {
         
         File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_3_am.png", "mars.core", false);
         DensityMap dm = new DensityMap(file4.getAbsolutePath());
-        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 1);
-        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/grassTest.png", 0.3f, true, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ);
-        Geometry createImposterGrass = vs.createImposterGrass("Grass/grassTest.png", 0.3f, true, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ);
+        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 4);
+        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        Geometry createImposterGrass = vs.createImposterGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         vs.setGenuineRed(createGenuineGrass);
         vs.setImposterRed(createImposterGrass);
-        vs.setGenuineBlue(createGenuineGrass);
+        /*vs.setGenuineBlue(createGenuineGrass);
         vs.setImposterBlue(createImposterGrass);
         vs.setGenuineGreen(createGenuineGrass);
-        vs.setImposterGreen(createImposterGrass);
-        vs.setMaxView(100f, 100f);
-        vs.setMinDist(0.1f, 0.1f, 0.1f);
+        vs.setImposterGreen(createImposterGrass);*/
+        vs.setMaxView(30f, 50f);
+        vs.setMinDist(0.15f, 0.15f, 0.15f);
         vs.setShadowModes(ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
         vs.plant(0f, 0f, 0f, 0f, 0f, 0f);
-        sceneReflectionNode.attachChild(vs);
+        //sceneReflectionNode.attachChild(vs);
     }
 
     /**
