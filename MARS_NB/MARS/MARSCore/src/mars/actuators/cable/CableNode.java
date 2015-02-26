@@ -176,7 +176,7 @@ public class CableNode extends Node {
     
     /**
      * Creat a node object. All nodes belong to COLLISION_GROUP_02.
-     * All nodes can cllide with objects from COLLISIONGROUP_01 to
+     * All nodes can collide with objects from COLLISIONGROUP_01 to
      * COLLISIONGROUP_04.
      * 
      * @param name      the name of the node    
@@ -188,11 +188,13 @@ public class CableNode extends Node {
         Node node = new Node(name);
         RigidBodyControl control = new RigidBodyControl(shape,mass);
         node.addControl(control);
-        control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+        /*control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
         control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_01);
         control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_02);
         control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_03);
-        control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);
+        control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_04);*/
+        control.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_08);
+        control.setCollideWithGroups(PhysicsCollisionObject.COLLISION_GROUP_09);;
         
         //control is never deactivated, nodes are always moveable
         control.setSleepingThresholds(0f, 0f);

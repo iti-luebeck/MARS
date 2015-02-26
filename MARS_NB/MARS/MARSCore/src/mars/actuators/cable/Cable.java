@@ -96,7 +96,7 @@ public class Cable extends Actuator{
      *
      * @param length
      */
-    public void setLength(float length){
+    public void setLength(Float length){
         variables.put("Length", length);
     }
     
@@ -112,7 +112,7 @@ public class Cable extends Actuator{
      *
      * @param Detailedlength
      */
-    public void setDetailedLength(float Detailedlength){
+    public void setDetailedLength(Float Detailedlength){
         variables.put("Length", Detailedlength);
     }
     
@@ -128,7 +128,7 @@ public class Cable extends Actuator{
      *
      * @param sections
      */
-    public void setSections(int sections){
+    public void setSections(Integer sections){
         variables.put("Sections", sections);
     }
     
@@ -160,7 +160,7 @@ public class Cable extends Actuator{
      *
      * @param diameter
      */
-    public void setDiameter(float diameter){
+    public void setDiameter(Float diameter){
         variables.put("Diameter", diameter);
     }
     
@@ -176,7 +176,7 @@ public class Cable extends Actuator{
      *
      * @param mass
      */
-    public void setMass(float mass){
+    public void setMass(Float mass){
         variables.put("Mass", mass);
     }
     
