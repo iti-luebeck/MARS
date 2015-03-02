@@ -26,8 +26,12 @@ public class AmbientNoiseHelper {
         nS = nS<0?0:nS;
         nW = nW<0?0:nW;
         nTH = nTH<0?0:nTH;
+        float nTa   = (float) Math.pow(10, nT/10);
+        float nSa   = (float) Math.pow(10, nS/10);
+        float nWa   = (float) Math.pow(10,nW/10);
+        float nTHa  = (float) Math.pow(10,nTH/10);
         
-        return nT + nS + nW + nTH;
+        return  10f * (float)Math.log10(nTa + nSa + nWa + nTHa);
     }
     
 }
