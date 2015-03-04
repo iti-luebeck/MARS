@@ -76,7 +76,7 @@ public class CommunicationDataChunk {
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
            messageTemp = gen.noisifyByDistance(messageTemp,triggerDistances.peek().getDistance(),frequence,signalStrength,0.05f);
         }
-        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageDataChunk, triggerDistances.poll().getAUVName());
+        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, triggerDistances.poll().getAUVName());
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }

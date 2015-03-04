@@ -83,10 +83,10 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
         float ambientNoise = AmbientNoiseHelper.calculateAmbientNoise(frequence, 1, 3);
         float currentSignalStrength =  (float) (10f * Math.log10( Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)) );
        //System.out.println("Stärke: "+Math.pow(10,signalStrength/10)+ " schwäche: "+ Math.pow(10,attenuation/10) + " diff: " + (Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)));
-        float SNR = (float) (10f *( Math.log10(Math.pow(10,currentSignalStrength/10) - Math.pow(10,ambientNoise/10))));
+        float SNR = (float) (10f *( Math.log10(Math.pow(10,currentSignalStrength/10) / Math.pow(10,ambientNoise/10))));
        //System.out.println("Signal Strength: " + signalStrength + " Attenunation: " +attenuation + " Ambient noise: "+ ambientNoise +" currentSignalStrength "+ currentSignalStrength +" SNR: " + SNR);
-        standardDeviation = (float) (4f - Math.log10(SNR));
-        System.out.println("New standardDeviation: " + standardDeviation);
+        standardDeviation = (float) (1.7f - Math.log10(SNR));
+        //System.out.println("New standardDeviation: " + standardDeviation);
         return noisify(message);
         
     }
