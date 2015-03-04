@@ -8,11 +8,13 @@ package mars.uwCommManager.noiseGenerators;
 import java.util.Random;
 import mars.core.CentralLookup;
 import mars.states.SimState;
+import mars.uwCommManager.helpers.AmbientNoiseHelper;
 import mars.uwCommManager.helpers.AttenuationHelper;
 import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 
 /**
- * @version 1.0
+ * This class is a basic implementation of underwater noise
+ * @version 1.1
  * @author Jasper Schwinghammer
  */
 public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
@@ -65,12 +67,26 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
         return xORNoises(msg,res);
     }
 
+    /**
+     * Calculates the SNR of a message and determines reasonable parameters for the noise function.
+     * @param message the message as byte array
+     * @param distance the distance it has traveled in meters
+     * @param frequence the frequence in khz
+     * @param signalStrength the signal strength at start in dB
+     * @param waterDepth the water depth in meters
+     * @return the noisified message
+     */
     @Override
     public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength, float waterDepth) {
-        float temp = standardDeviation;
         AttenuationHelper attHelper = new AttenuationHelper(((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment());
-        float attentuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
-        standardDeviation = 3.4f;
+        float attenuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
+        float ambientNoise = AmbientNoiseHelper.calculateAmbientNoise(frequence, 1, 3);
+        float currentSignalStrength =  (float) (10f * Math.log10( Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)) );
+       //System.out.println("Stärke: "+Math.pow(10,signalStrength/10)+ " schwäche: "+ Math.pow(10,attenuation/10) + " diff: " + (Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)));
+        float SNR = (float) (10f *( Math.log10(Math.pow(10,currentSignalStrength/10) - Math.pow(10,ambientNoise/10))));
+       //System.out.println("Signal Strength: " + signalStrength + " Attenunation: " +attenuation + " Ambient noise: "+ ambientNoise +" currentSignalStrength "+ currentSignalStrength +" SNR: " + SNR);
+        standardDeviation = (float) (4f - Math.log10(SNR));
+        System.out.println("New standardDeviation: " + standardDeviation);
         return noisify(message);
         
     }

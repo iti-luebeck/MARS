@@ -6,7 +6,7 @@
 package mars.uwCommManager.noiseGenerators;
 
 /**
- *
+ * @version 0.1
  * @author Jasper Schwinghammer
  */
 public abstract class ANoiseByDistanceGenerator extends ANoiseGenerator implements IDistanceNoiseGenerator{

@@ -34,7 +34,7 @@ public class ModemMessageRunnable implements Runnable{
      */
     public static final float MODEM_SIGNAL_STRENGTH = 80;
     public static final float MODEM_REACH = 100;
-    public static final float MODEM_FREQUENCE = 100000;
+    public static final float MODEM_FREQUENCE = 1;
     
     /**
      * The bandwidth of the modem this AUV is using

@@ -6,7 +6,7 @@
 package mars.uwCommManager.helpers;
 
 /**
- *
+ * @version 1.0
  * @author Jasper Schwinghammer
  */
 public class AmbientNoiseHelper {

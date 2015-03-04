@@ -79,7 +79,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * How many ticks per secound should the runnables have
      */
-    public static final int RESOLUTION = 1000;
+    public static final int RESOLUTION = 60;
     
     /**
      * The visualization class for the minimap
@@ -179,6 +179,7 @@ public class CommunicationState extends AbstractAppState {
             }
         multiPathModule = new MultiMessageMerger();
         multiPathModule.init(auvManager, this);
+        //THE MULTIPATH MODULE NEEDS REVISION
         executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
         distanceTraceModule = new DistanceTriggerCalculator();
         distanceTraceModule.init(auvManager);
@@ -366,7 +367,7 @@ public class CommunicationState extends AbstractAppState {
                 i.addANoiseByDistanceGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
             
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tryed to create not existing noise: {0}", name);
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tried to create not existing noise: {0}", name);
                 break;
             }
         }

@@ -16,7 +16,7 @@ public class AttenuationHelper {
     //SPREADING FACTORS
     public static final float SPHERICAL_SPREADING = 2;
     public static final float CYLINDRICAL_SPREADING = 1;
-    public static final float PRACTICAL_SPREADKING = 0.5f;
+    public static final float PRACTICAL_SPREADKING = 1.5f;
     
     private PhysicalEnvironment environment;
     
@@ -73,10 +73,10 @@ public class AttenuationHelper {
     
     /**
      * Calculate the attentuation of a signal. Takes absorption by molecules and attenuation by geometrical spreading into account
-     * @param distance
-     * @param frequence
-     * @param spreadingModel
-     * @param depth
+     * @param distance the distance in meters
+     * @param frequence the frequence in khz
+     * @param spreadingModel the spreading model, SPHERICAL_SPREADING for short distances, CYLDRICAL_SPREADING for longer distances
+     * @param depth the depth in meters
      * @return 
      */
     public float carculateAttenuationInDB(float distance, float frequence,float spreadingModel,float depth) {
