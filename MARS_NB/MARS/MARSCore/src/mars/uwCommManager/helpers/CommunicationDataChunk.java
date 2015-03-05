@@ -156,18 +156,36 @@ public class CommunicationDataChunk {
     }
     
     
+    /**
+     * get the message as UTF-8 Byte array
+     * @since 0.2.0
+     * @return 
+     */
     public byte[] getMessageAsByte() {
         return messageDataChunk;
     }
     
+    /**
+     * Set the message to a new value
+     * @since 0.1.0
+     * @param msg 
+     */
     public void updateMessageFromByte(byte[] msg) {
         messageDataChunk = msg;
     }
     
+    /**
+     * @since 0.2.1
+     * @return the frequence of the message
+     */
     public float getFrequence() {
         return frequence;
     }
     
+    /**
+     * @since 0.2.1
+     * @return  the strength of the signal in dB
+     */
     public float getSignalStrength() { 
         return signalStrength;
     }

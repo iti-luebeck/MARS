@@ -72,6 +72,7 @@ public class CommunicationComputedDataChunk {
     }
     
     /**
+     * Get the identifier consisting of: The Source AUV the system time at start; the Identifier of the Array; the array position;the number of ocean-floor bounces;the number of ocean-surface bounces
      * @since 0.1.2
      * @return the identifier
      */
