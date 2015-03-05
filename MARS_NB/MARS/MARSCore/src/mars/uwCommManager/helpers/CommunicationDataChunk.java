@@ -16,7 +16,7 @@ import org.openide.util.Exceptions;
 /**
  * This class contains a chunk of a message that was send by a modem.
  * While traveling the message will be altered by noise and other sources
- * @version 0.2.0
+ * @version 0.2.1
  * @author Jasper Schwinghammer
  */
 public class CommunicationDataChunk {
@@ -78,12 +78,12 @@ public class CommunicationDataChunk {
      */
     public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
         if(!hasNextTrigger()) return null;
-        DistanceTrigger trigger = triggerDistances.peek();
+        DistanceTrigger trigger = triggerDistances.poll();
         byte[] messageTemp = messageDataChunk.clone();
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
            messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequence,signalStrength,0.05f);
         }
-        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, triggerDistances.poll().getAUVName(),trigger,"");
+        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces());
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }
@@ -170,5 +170,14 @@ public class CommunicationDataChunk {
     
     public float getSignalStrength() { 
         return signalStrength;
+    }
+    
+    /**
+     * get the identifier consisting of all information about the chunk
+     * @since 0.2.1
+     * @return the Identifier
+     */
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
 }

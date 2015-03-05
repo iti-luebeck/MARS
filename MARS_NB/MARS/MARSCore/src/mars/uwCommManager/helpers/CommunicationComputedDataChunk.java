@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import org.openide.util.Exceptions;
 
 /**
- * @version 0.1.1
+ * @version 0.1.2
  * @author Jasper Schwinghammer
  */
 public class CommunicationComputedDataChunk {
@@ -69,5 +69,13 @@ public class CommunicationComputedDataChunk {
            Exceptions.printStackTrace(ex);
         }
         return null;
+    }
+    
+    /**
+     * @since 0.1.2
+     * @return the identifier
+     */
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
 }
