@@ -6,7 +6,7 @@
 package mars.uwCommManager.helpers;
 
 /**
- * @version 0.1
+ * @version 0.2
  * @author Jasper Schwinghammer
  */
 public final class DistanceTrigger implements Comparable<DistanceTrigger>{
@@ -20,6 +20,10 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      */
     private final String AUV_NAME;
     
+    private final int surfaceBounces;
+    
+    private final int floorBounces;
+    
     /**
      * 
      * Create a new distanceTrigger with a given distance and a AUV that is found at that distance
@@ -30,8 +34,25 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
     public DistanceTrigger(final float distance, final String auvName) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
+        this.surfaceBounces = 0;
+        this. floorBounces = 0;
     }
     
+    
+    
+    /**
+     * @since 0.2
+     * @param distance the distance to the AUV
+     * @param auvName the name of the AUV
+     * @param surfaceBounces count of collisions with the ocean surface
+     * @param floorBounces count of collisions with the ocean floor
+     */
+    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces) {
+        this.AUV_NAME = auvName;
+        this.DISTANCE = distance;
+        this.surfaceBounces = surfaceBounces;
+        this.floorBounces = floorBounces;
+    }
     /**
      * @since 0.1
      * @return the distance from the start position to the AUV
@@ -46,6 +67,26 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      */
     public String getAUVName() {
         return AUV_NAME;
+    }
+    
+    /**
+     * get the count of surface bounces
+     * @return how often the signal collides with the ocean surface
+     */
+    public int getSurfaceBounces() {
+        return surfaceBounces;
+    }
+    
+    /**
+     * get the count of ocean floor bounces
+     * @return how often the signal collides with the ocean floor
+     */
+    public int getFloorBounces() {
+        return floorBounces;
+    }
+    
+    public int getTotalBounces() {
+        return surfaceBounces + floorBounces;
     }
 
     /**

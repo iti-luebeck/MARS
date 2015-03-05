@@ -14,6 +14,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -30,6 +32,7 @@ import mars.misc.CommunicationDeviceEventType;
 import mars.misc.CommunicationType;
 import mars.ros.MARSNodeMain;
 import mars.uwCommManager.CommunicationState;
+import org.openide.util.Exceptions;
 import org.ros.node.topic.Subscriber;
 
 /**
@@ -39,6 +42,9 @@ import org.ros.node.topic.Subscriber;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class UnderwaterModem extends CommunicationDevice {
+    
+    private byte[] messagebytes = new byte[10];
+    int pointer = 0;
 
     private Geometry UnderwaterModemStart;
     private Geometry UnderwaterModemEnd;
@@ -324,9 +330,34 @@ public class UnderwaterModem extends CommunicationDevice {
         }
         */
         //System.out.println("here is "+ auv.getName() +" Got a Message " + msg);
-        notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
+       // notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
     }
+ ////////////////////TESTCODE
 
+    public synchronized void addByteMessage(byte[] msg) {
+        //System.out.println(this.auv.getName() + " :Stacksize: " + pointer+ "  " + System.currentTimeMillis() + " message: " + msg.length + " " + Arrays.toString(msg));
+        for(int i = 0; i<msg.length;i++) {
+        //System.out.println("increasing pointer: " + pointer + " " +Thread.currentThread().getName() + " "+this.auv.getName());
+        messagebytes[pointer] = msg[i];
+        pointer++;
+            
+        
+        
+            if(pointer==messagebytes.length-1) {
+                pointer = 0;
+                try {
+                    System.out.println(Arrays.toString(messagebytes));
+                    System.out.println(new String(messagebytes,"UTF-8"));
+                    String message = new String(messagebytes,"UTF-8");
+                    notifyAdvertisement(new CommunicationDeviceEvent(this,message,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
+                } catch (UnsupportedEncodingException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+
+        }
+    }
+//////////////////////TESTCODE END
     /**
      *
      * @return

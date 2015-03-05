@@ -8,6 +8,7 @@ package mars.uwCommManager.threading;
 import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
+import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.CommunicationState;
 import org.openide.util.Exceptions;
 
@@ -40,8 +42,6 @@ public class MultiMessageMerger implements Runnable {
         this.chunks = new HashMap();
         this.messages = new HashMap();
         queue = new ConcurrentLinkedQueue<CommunicationComputedDataChunk>();
-        
-        
     }
      /**
      * @since 0.1
@@ -81,25 +81,36 @@ public class MultiMessageMerger implements Runnable {
      * @since 0.1
      */
     private void computeMessages() {
+        
+        //For each AUV
         for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
             String name = e.getKey();
-            
-
-            
-            
-            
+            //Take all the mesages since the last tick
             List<CommunicationComputedDataChunk> msgs = e.getValue();
+            //if there are any
             if(!msgs.isEmpty()) {
+                //get the first
                 byte[] byteArray = msgs.get(0).getMessage();
                 //System.out.println("Computing: " + msgs.get(0).getMessageAsString()+" Chunkname: "+ msgs.get(0)+ " with "+ msgs.get(0).getAUVName() );               
+                //remove it
                 msgs.remove(0);
+                //take all other messages
                 for(CommunicationComputedDataChunk chunk : msgs) {
+                    // and merge them
                     byte[] nextArray = chunk.getMessage();
                     for(int i = 0; i<byteArray.length; i++) {
                         if( (nextArray.length>i))  byteArray[i] = (byte) (nextArray[i] | byteArray[i]);
                     }
                 }
                 try {
+                    AUV auv = auvManager.getAUV(name);
+                    ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+                    Iterator it = uwmo.iterator();
+                    while(it.hasNext()){
+                        UnderwaterModem mod = (UnderwaterModem)it.next();
+                        mod.addByteMessage(byteArray);
+                        
+                    }
                     String message = new String(byteArray,"UTF-8");
                     messages.put(name, message);
                 } catch (UnsupportedEncodingException ex) {
@@ -116,6 +127,7 @@ public class MultiMessageMerger implements Runnable {
      */
     private void returnMessages(){
         for(Map.Entry<String,String> e : messages.entrySet()) {
+            System.out.println("returning message");
             String name = e.getKey();
             AUV auv = auvManager.getAUV(name);
             ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());

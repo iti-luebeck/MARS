@@ -7,6 +7,7 @@ package mars.uwCommManager.helpers;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
@@ -19,6 +20,9 @@ import org.openide.util.Exceptions;
  * @author Jasper Schwinghammer
  */
 public class CommunicationDataChunk {
+    
+    
+    private final String IDENTIFIER;
     
     private float frequence;
     
@@ -41,7 +45,8 @@ public class CommunicationDataChunk {
      * @param signalStrength The initial strength of the soundsignal
      * @param frequence The frequence of the message
      */
-    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence) {
+    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence,String identifier) {
+        this.IDENTIFIER = identifier;
         this.MAX_DISTANCE = maxDistance;
         this.messageDataChunk = messageDataChunk;
         this.distanceTraveled = 0f;
@@ -49,6 +54,7 @@ public class CommunicationDataChunk {
         this.signalStrength = signalStrength;
         this.frequence = frequence;
         if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
+        //System.out.println("Data: " + Arrays.toString(messageDataChunk) );
     }
     
     /**
@@ -72,11 +78,12 @@ public class CommunicationDataChunk {
      */
     public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
         if(!hasNextTrigger()) return null;
+        DistanceTrigger trigger = triggerDistances.peek();
         byte[] messageTemp = messageDataChunk.clone();
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
-           messageTemp = gen.noisifyByDistance(messageTemp,triggerDistances.peek().getDistance(),frequence,signalStrength,0.05f);
+           messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequence,signalStrength,0.05f);
         }
-        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, triggerDistances.poll().getAUVName());
+        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, triggerDistances.poll().getAUVName(),trigger,"");
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }

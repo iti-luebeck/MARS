@@ -80,7 +80,7 @@ public class DistanceTriggerCalculator implements Runnable {
     }
 
     private void calculatePathDistances() {
-        System.out.println("updating distances");
+        //System.out.println("updating distances");
          //We calculate every AUV to every AUV O(n^2)
         HashMap<String,AUV> auvs = auvManager.getAUVs();
         HashMap<String,AUV> targets = auvManager.getAUVs();

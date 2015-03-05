@@ -23,14 +23,21 @@ public class CommunicationComputedDataChunk {
      */
     private final String AUV_NAME;
     
+    
+    private final String IDENTIFIER;
+    
+    private final DistanceTrigger DISTANCE_TRIGGER;
+    
     /**
      * @since 0.1
      * @param message the message  encoded as UTF-8
      * @param auvName the AUV that shall recieve this message
      */
-    public CommunicationComputedDataChunk(final byte[] message, final String auvName) {
+    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier) {
         this.MESSAGE = message;
         this.AUV_NAME = auvName;
+        this.DISTANCE_TRIGGER = distanceTigger;
+        this.IDENTIFIER = identifier;
     }
     
     /**
