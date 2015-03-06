@@ -15,7 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import mars.core.CentralLookup;
 import mars.sensors.CommunicationMessage;
+import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
 import mars.uwCommManager.noiseGenerators.ANoiseGenerator;
@@ -152,12 +154,6 @@ public class ModemMessageRunnable implements Runnable{
         
             for(CommunicationDataChunk chunk : sentChunks) {
                 chunk.addDistance(distanceSinceLastTick);
-//                synchronized(this) {
-//                    for (ANoiseGenerator noise : noiseGenerators) {
-//                        chunk.updateMessageFromByte(noise.noisify(chunk.getMessageAsByte()));
-//                    }
-//                }
-
                 while(chunk.hasNextTrigger()) {
                     CommunicationComputedDataChunk cChunk = chunk.evalNextTrigger(noiseGenerators);
                     synchronized(this) {

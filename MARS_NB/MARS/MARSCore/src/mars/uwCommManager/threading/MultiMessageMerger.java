@@ -5,6 +5,7 @@
  */
 package mars.uwCommManager.threading;
 
+import com.sun.media.jfxmedia.logging.Logger;
 import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -14,7 +15,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
@@ -87,59 +91,98 @@ public class MultiMessageMerger implements Runnable {
             String name = e.getKey();
             //Take all the mesages since the last tick
             List<CommunicationComputedDataChunk> msgs = e.getValue();
-            //if there are any
-            if(!msgs.isEmpty()) {
-                //get the first
-                byte[] byteArray = msgs.get(0).getMessage();
-                //System.out.println("Computing: " + msgs.get(0).getMessageAsString()+" Chunkname: "+ msgs.get(0)+ " with "+ msgs.get(0).getAUVName() );               
-                //remove it
-                msgs.remove(0);
-                //take all other messages
-                for(CommunicationComputedDataChunk chunk : msgs) {
-                    // and merge them
-                    byte[] nextArray = chunk.getMessage();
-                    for(int i = 0; i<byteArray.length; i++) {
-                        if( (nextArray.length>i))  byteArray[i] = (byte) (nextArray[i] | byteArray[i]);
+            TreeMap<Integer,CommunicationComputedDataChunk> sortedChunks = new TreeMap<Integer, CommunicationComputedDataChunk>();
+            //Sort them by the time of arrival
+            for(CommunicationComputedDataChunk i : msgs) sortedChunks.put(i.getStartTime()+i.getDistanceTrigger().getTraveTimel(), i);
+            msgs.clear();
+            CommunicationComputedDataChunk baseChunk = sortedChunks.firstEntry().getValue();
+            if(baseChunk != null) {
+                sortedChunks.remove(sortedChunks.firstEntry().getKey());
+                
+                int baseTime = baseChunk.getDistanceTrigger().getTraveTimel()+baseChunk.getStartTime();
+                byte[] byteArray = baseChunk.getMessage();
+                
+                while(!sortedChunks.isEmpty()) {
+                    Map.Entry<Integer,CommunicationComputedDataChunk> entry = sortedChunks.firstEntry();
+                    boolean testResult = compareChunks(baseChunk.getIdentifier().split(";"),entry.getValue().getIdentifier().split(";"));
+                    if((entry.getKey() > baseTime+50) || testResult ) {
+                        returnMessage(name, byteArray);
+                        baseChunk =entry.getValue();
+                        baseTime = entry.getKey();
+                        byteArray = baseChunk.getMessage();
+                        sortedChunks.remove(sortedChunks.firstEntry().getKey());
+                    } else if (entry.getKey()<baseTime+50) {
+                        java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "There is an error with the sorting of the messages");
+                    } else {
+                        byte[] nextArray = entry.getValue().getMessage();
+                        for(int i = 0; i<byteArray.length; i++) {
+                            if( (nextArray.length>i))  byteArray[i] = (byte) (nextArray[i] | byteArray[i]);
+                        }    
                     }
                 }
-                try {
-                    AUV auv = auvManager.getAUV(name);
-                    ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
-                    Iterator it = uwmo.iterator();
-                    while(it.hasNext()){
-                        UnderwaterModem mod = (UnderwaterModem)it.next();
-                        mod.addByteMessage(byteArray);
-                        
-                    }
-                    String message = new String(byteArray,"UTF-8");
-                    messages.put(name, message);
-                } catch (UnsupportedEncodingException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
+                returnMessage(name, byteArray);
             }
+            
         }
         chunks.clear();
     }
     
     /**
-     * call publish on all modems that recieve a message
-     * @since 0.1
+     * returns if two identifiers prohibit that the messages are merged
+     * true = do not merge
+     * false = merge
+     * @param identifierOne
+     * @param identifierTwo
+     * @return 
      */
-    private void returnMessages(){
-        for(Map.Entry<String,String> e : messages.entrySet()) {
-            System.out.println("returning message");
-            String name = e.getKey();
-            AUV auv = auvManager.getAUV(name);
-            ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
-            Iterator it = uwmo.iterator();
-            while(it.hasNext()){
-                CommunicationDevice mod = (CommunicationDevice)it.next();
-                mod.publish(e.getValue());
-            }
-                
-        }
-        messages.clear();
+    private boolean compareChunks(String[] identifierOne, String[] identifierTwo) {
+        boolean[] results = new boolean[6];
+        
+        results[0] = identifierOne[0].equals(identifierTwo[0]);
+        results[1] = identifierOne[1].equals(identifierTwo[1]);
+        results[2] = identifierOne[2].equals(identifierTwo[2]);
+        results[3] = identifierOne[3].equals(identifierTwo[3]);
+        results[4] = identifierOne[4].equals(identifierTwo[4]);
+        results[5] = identifierOne[5].equals(identifierTwo[5]);
+        return (results[0] && (results[4] && results[5]));
     }
+    
+    
+    private void returnMessage(String name, byte[] message) {
+        try {
+            AUV auv = auvManager.getAUV(name);
+                ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+                    Iterator it = uwmo.iterator();
+                    while(it.hasNext()){
+                        UnderwaterModem mod = (UnderwaterModem)it.next();
+                        mod.addByteMessage(message);
+                        }
+                    String msg = new String(message,"UTF-8");
+                    messages.put(name, msg);
+                    } catch (UnsupportedEncodingException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+    }
+    
+//    /**
+//     * call publish on all modems that recieve a message
+//     * @since 0.1
+//     */
+//    private void returnMessages(){
+//        for(Map.Entry<String,String> e : messages.entrySet()) {
+//            System.out.println("returning message");
+//            String name = e.getKey();
+//            AUV auv = auvManager.getAUV(name);
+//            ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+//            Iterator it = uwmo.iterator();
+//            while(it.hasNext()){
+//                CommunicationDevice mod = (CommunicationDevice)it.next();
+//                mod.publish(e.getValue());
+//            }
+//                
+//        }
+//        messages.clear();
+//    }
     
 
     /**
@@ -154,7 +197,7 @@ public class MultiMessageMerger implements Runnable {
         try {
             addNewMessages();
             computeMessages();
-            returnMessages();
+//            returnMessages();
         } catch (Exception e) {
             Exceptions.printStackTrace(e);
         }

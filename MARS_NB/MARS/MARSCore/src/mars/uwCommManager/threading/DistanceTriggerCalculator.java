@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Map;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.UnderwaterModem;
+import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import org.openide.util.Exceptions;
 
@@ -80,6 +82,7 @@ public class DistanceTriggerCalculator implements Runnable {
     }
 
     private void calculatePathDistances() {
+        float temperature = ((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment().getFluid_temp();
         //System.out.println("updating distances");
          //We calculate every AUV to every AUV O(n^2)
         HashMap<String,AUV> auvs = auvManager.getAUVs();
@@ -123,7 +126,7 @@ public class DistanceTriggerCalculator implements Runnable {
                                         
                                         //Check distance, if close enough add to the triggermap
                                         if(Math.abs(distance.length())<=mod.getPropagationDistance()) {
-                                            newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName));
+                                            newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName,temperature));
                                         }
                                     }
 

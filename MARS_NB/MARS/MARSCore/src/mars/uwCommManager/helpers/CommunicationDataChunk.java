@@ -6,6 +6,7 @@
 package mars.uwCommManager.helpers;
 
 
+import hanse_msgs.temperature;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
@@ -16,26 +17,21 @@ import org.openide.util.Exceptions;
 /**
  * This class contains a chunk of a message that was send by a modem.
  * While traveling the message will be altered by noise and other sources
- * @version 0.2.1
+ * @version 0.2.2
  * @author Jasper Schwinghammer
  */
 public class CommunicationDataChunk {
     
     
     private final String IDENTIFIER;
-    
+    private final float MAX_DISTANCE;
     private float frequence;
-    
     private float signalStrength;
-    
     private byte[] messageDataChunk;
     private float distanceTraveled;
     private PriorityQueue<DistanceTrigger> triggerDistances;
-    
-    
-    private final float MAX_DISTANCE;
     private boolean dead = false;
-    
+    private int startTime;
     /**
      * Create a new CommunicationDataChunk that will live as long as the distance traveled does not exceed the maximum propagation distance of the modem
      * @since 0.1
@@ -54,6 +50,7 @@ public class CommunicationDataChunk {
         this.signalStrength = signalStrength;
         this.frequence = frequence;
         if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
+        startTime = Integer.MAX_VALUE;
         //System.out.println("Data: " + Arrays.toString(messageDataChunk) );
     }
     
@@ -83,7 +80,8 @@ public class CommunicationDataChunk {
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
            messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequence,signalStrength,0.05f);
         }
-        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces());
+        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,
+                IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces(),startTime);
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }
@@ -118,9 +116,9 @@ public class CommunicationDataChunk {
      * @since 0.1
      * @param triggerDistance the distance to the AUV
      */
-    public synchronized void addtriggerDistance(float triggerDistance, String AUV) {
+    public synchronized void addtriggerDistance(float triggerDistance, String AUV, float temperature) {
         if(triggerDistance>=distanceTraveled) {
-            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV));
+            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV, temperature));
         }
     }
     
@@ -197,5 +195,22 @@ public class CommunicationDataChunk {
      */
     public String getIdentifier() {
         return IDENTIFIER;
+    }
+    
+    
+    /**
+     * @since 0.2.2
+     * @param startTime 
+     */
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+    
+    /**
+     * @since 0.2.2
+     * @return 
+     */
+    public int getStartTime() {
+        return startTime;
     }
 }

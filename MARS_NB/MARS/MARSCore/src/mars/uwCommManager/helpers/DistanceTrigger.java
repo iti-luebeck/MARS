@@ -5,6 +5,8 @@
  */
 package mars.uwCommManager.helpers;
 
+import mars.Helper.SoundHelper;
+
 /**
  * @version 0.2
  * @author Jasper Schwinghammer
@@ -20,9 +22,11 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      */
     private final String AUV_NAME;
     
-    private final int surfaceBounces;
+    private final int SURFACE_BOUNCES;
     
-    private final int floorBounces;
+    private final int FLOOR_BOUNCES;
+    
+    private final int TRAVEL_TIME;
     
     /**
      * 
@@ -31,11 +35,12 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @param distance the distance to the AUV
      * @param auvName the name of the AUV
      */
-    public DistanceTrigger(final float distance, final String auvName) {
+    public DistanceTrigger(final float distance, final String auvName, final float temperature) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
-        this.surfaceBounces = 0;
-        this. floorBounces = 0;
+        this.SURFACE_BOUNCES = 0;
+        this.FLOOR_BOUNCES = 0;
+        TRAVEL_TIME = (int)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     
     
@@ -47,11 +52,12 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @param surfaceBounces count of collisions with the ocean surface
      * @param floorBounces count of collisions with the ocean floor
      */
-    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces) {
+    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces, final float temperature) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
-        this.surfaceBounces = surfaceBounces;
-        this.floorBounces = floorBounces;
+        this.SURFACE_BOUNCES = surfaceBounces;
+        this.FLOOR_BOUNCES = floorBounces;
+        TRAVEL_TIME = (int)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     /**
      * @since 0.1
@@ -74,7 +80,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @return how often the signal collides with the ocean surface
      */
     public int getSurfaceBounces() {
-        return surfaceBounces;
+        return SURFACE_BOUNCES;
     }
     
     /**
@@ -82,11 +88,11 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @return how often the signal collides with the ocean floor
      */
     public int getFloorBounces() {
-        return floorBounces;
+        return FLOOR_BOUNCES;
     }
     
     public int getTotalBounces() {
-        return surfaceBounces + floorBounces;
+        return SURFACE_BOUNCES + FLOOR_BOUNCES;
     }
 
     /**
@@ -97,5 +103,13 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
     @Override
     public int compareTo(DistanceTrigger o) {
         return Float.compare(DISTANCE, o.getDistance());
+    }
+    
+    /**
+     * @since 0.2
+     * @return the time the message will take to it's reciever
+     */
+    public int getTraveTimel() {
+        return TRAVEL_TIME;
     }
 }
