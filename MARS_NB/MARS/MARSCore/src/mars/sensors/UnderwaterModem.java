@@ -156,12 +156,12 @@ public class UnderwaterModem extends CommunicationDevice {
     public void update(float tpf){
         
         /// TEST CODE Jasper Schwinghammer 03.11.2014
-        CommunicationState comState = CentralLookup.getDefault().lookup(CommunicationState.class);
-        if (comState != null){
-            String msg = "Hello here is " + getAuv().getName() + " who can hear me? ";
-            notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.IN));
-            comState.putMsg(new CommunicationMessage(this.getAuv().getName(), msg, CommunicationType.UNDERWATERSOUND));
-        }
+//        CommunicationState comState = CentralLookup.getDefault().lookup(CommunicationState.class);
+//        if (comState != null){
+//            String msg = "Hello here is " + getAuv().getName() + " who can hear me? ";
+//            notifyAdvertisement(new CommunicationDeviceEvent(this,msg,System.currentTimeMillis(),CommunicationDeviceEventType.IN));
+//            comState.putMsg(new CommunicationMessage(this.getAuv().getName(), msg, CommunicationType.UNDERWATERSOUND));
+//        }
     }
 
     @Override
@@ -343,7 +343,7 @@ public class UnderwaterModem extends CommunicationDevice {
             
         
         
-            if(pointer==messagebytes.length-1) {
+            if(pointer==messagebytes.length) {
                 pointer = 0;
                 try {
                     System.out.println(Arrays.toString(messagebytes));

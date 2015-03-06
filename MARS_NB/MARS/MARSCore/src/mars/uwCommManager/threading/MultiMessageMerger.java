@@ -68,7 +68,7 @@ public class MultiMessageMerger implements Runnable {
     private void addNewMessages() {
         while(queue.peek() != null) {
             CommunicationComputedDataChunk e = queue.poll();
-
+            System.out.println(Arrays.toString(e.getMessage()));
             if(chunks.containsKey(e.getAUVName())) {
                 chunks.get(e.getAUVName()).add(e);
             } else {
@@ -78,6 +78,7 @@ public class MultiMessageMerger implements Runnable {
             }
             queue.remove(e);
         }
+
     }
     
     /**
@@ -85,47 +86,59 @@ public class MultiMessageMerger implements Runnable {
      * @since 0.1
      */
     private void computeMessages() {
-        
+        for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()) {
+        }
         //For each AUV
         for(Map.Entry<String,List<CommunicationComputedDataChunk>> e : chunks.entrySet()){
             String name = e.getKey();
             //Take all the mesages since the last tick
             List<CommunicationComputedDataChunk> msgs = e.getValue();
-            TreeMap<Long,CommunicationComputedDataChunk> sortedChunks = new TreeMap<Long, CommunicationComputedDataChunk>();
+            TreeMap<Long,List<CommunicationComputedDataChunk>> sortedChunks = new TreeMap<Long, List<CommunicationComputedDataChunk>>();
             //Sort them by the time of arrival
-            for(CommunicationComputedDataChunk i : msgs) sortedChunks.put(i.getStartTime()+i.getDistanceTrigger().getTraveTimel(), i);
+            for(CommunicationComputedDataChunk i : msgs) {
+                if(sortedChunks.get(i.getStartTime()+i.getDistanceTrigger().getTraveTimel()) == null ) {
+                    sortedChunks.put(i.getStartTime()+i.getDistanceTrigger().getTraveTimel(), new LinkedList<CommunicationComputedDataChunk>());
+                }
+                sortedChunks.get(i.getStartTime()+i.getDistanceTrigger().getTraveTimel()).add(i);
+                
+            }
             msgs.clear();
             //Set the base chunk
-            CommunicationComputedDataChunk baseChunk = sortedChunks.firstEntry().getValue();
+            CommunicationComputedDataChunk baseChunk = sortedChunks.firstEntry().getValue().get(0);
+            sortedChunks.firstEntry().getValue().remove(0);
             if(baseChunk != null) {
-                sortedChunks.remove(sortedChunks.firstEntry().getKey());
                 //get parameters from base chunk
                 long baseTime = baseChunk.getDistanceTrigger().getTraveTimel()+baseChunk.getStartTime();
                 byte[] byteArray = baseChunk.getMessage();
                 
                 while(!sortedChunks.isEmpty()) {
                     //get the next entry
-                    Map.Entry<Long,CommunicationComputedDataChunk> entry = sortedChunks.firstEntry();
+                    Map.Entry<Long,List<CommunicationComputedDataChunk>> entry = sortedChunks.firstEntry();
                     sortedChunks.remove(entry.getKey());
-                    //test if the chunk is from the same auv and came on the same way - these should not be merged into one message
-                    boolean testResult = compareChunks(baseChunk.getIdentifier().split(";"),entry.getValue().getIdentifier().split(";"));
-                    //if there are no more messages in this interval
-                    if((entry.getKey() > baseTime+50) || testResult ) {
-                        //return the message to the AUV and set the base chunk to the next chunk
-                        returnMessage(name, byteArray);
-                        baseChunk =entry.getValue();
-                        baseTime = entry.getKey();
-                        byteArray = baseChunk.getMessage();
-                        
-                    } else if (entry.getKey()<baseTime+50) {
-                        java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "There is an error with the sorting of the messages");
-                        //merge two chunks
-                    } else {
-                        byte[] nextArray = entry.getValue().getMessage();
-                        for(int i = 0; i<byteArray.length; i++) {
-                            if( (nextArray.length>i))  byteArray[i] = (byte) (nextArray[i] | byteArray[i]);
-                        }    
+                    
+                    for(CommunicationComputedDataChunk chunk : entry.getValue()) {
+                        //test if the chunk is from the same auv and came on the same way - these should not be merged into one message
+                        boolean testResult = compareChunks(baseChunk.getIdentifier().split(";"),chunk.getIdentifier().split(";"));
+                        //if there are no more messages in this interval
+                        if((entry.getKey() > baseTime+50) || testResult ) {
+                            //return the message to the AUV and set the base chunk to the next chunk
+                            returnMessage(name, byteArray);
+                            baseChunk =chunk;
+                            baseTime = entry.getKey();
+                            byteArray = baseChunk.getMessage();
+
+                        } else if (entry.getKey()<baseTime) {
+                            java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "There is an error with the sorting of the messages");
+                            //merge two chunks
+                        } else {
+                            byte[] nextArray = chunk.getMessage();
+                            for(int i = 0; i<byteArray.length; i++) {
+                                if( (nextArray.length>i))  byteArray[i] = (byte) (nextArray[i] | byteArray[i]);
+                            }    
+                        }                        
                     }
+
+
                 }
                 returnMessage(name, byteArray);
             }

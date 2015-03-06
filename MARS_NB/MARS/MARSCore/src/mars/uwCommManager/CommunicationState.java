@@ -173,17 +173,17 @@ public class CommunicationState extends AbstractAppState {
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
                     ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName());
                     auvProcessMap.put(auv.getName(), runnable);
-                    executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
+                    executor.scheduleAtFixedRate(runnable, 2000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
                 
             }
         multiPathModule = new MultiMessageMerger();
         multiPathModule.init(auvManager, this);
         //THE MULTIPATH MODULE NEEDS REVISION
-        executor.scheduleAtFixedRate(multiPathModule, 1500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
+        executor.scheduleAtFixedRate(multiPathModule, 2500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
         distanceTraceModule = new DistanceTriggerCalculator();
         distanceTraceModule.init(auvManager);
-        executor.scheduleAtFixedRate(distanceTraceModule, 500000, 100000, TimeUnit.MICROSECONDS);
+        executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
         
 
         return true;
@@ -248,15 +248,11 @@ public class CommunicationState extends AbstractAppState {
         Preferences pref2 = Preferences.userNodeForPackage(mars.uwCommManager.options.NoiseOptionsOptionsPanelController.class);
         if (pref2 == null) return false;
         noiseAdditiveGaussianWhiteNoiseActive = pref2.getBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false);
-        noiseRandomByteActive = pref2.getBoolean(OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX, false);
         pref2.addPreferenceChangeListener(new PreferenceChangeListener() {
             @Override
             public void preferenceChange(PreferenceChangeEvent e) {
                 
-                if(e.getKey().equals(OPTIONS_NOISE_RANDOM_BYTE_CHECKBOX)) {
-                    if(decide(noiseRandomByteActive,Boolean.parseBoolean(e.getNewValue()),RANDOM_BYTE_NOISE)) noiseRandomByteActive = Boolean.parseBoolean(e.getNewValue());
-                }
-                else if(e.getKey().equals(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
+            if(e.getKey().equals(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
                   if(decide(noiseAdditiveGaussianWhiteNoiseActive,Boolean.parseBoolean(e.getNewValue()),GAUSSIAN_WHITE_NOISE)) noiseAdditiveGaussianWhiteNoiseActive = Boolean.parseBoolean(e.getNewValue());
                 }
             }

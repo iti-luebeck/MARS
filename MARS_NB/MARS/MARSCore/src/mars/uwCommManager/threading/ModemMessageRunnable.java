@@ -181,6 +181,7 @@ public class ModemMessageRunnable implements Runnable{
             CommunicationMessage msg = newMessages.poll();
             try {
                 byte[] msgByte = msg.getMsg().getBytes("UTF-8");
+                System.out.println("Message in UFT-8"+ Arrays.toString(msgByte));
                 int chunkCount = (int) Math.ceil(((double)msgByte.length) / (BANDWIDTH_PER_TICK*1000));
                 String identifier = AUV_NAME + ";"+ System.currentTimeMillis() +";"+ msgByte.toString();
                 //System.out.println("Deviding message into Chunks: "+ chunkCount + " Message length was: " +msgByte.length);
