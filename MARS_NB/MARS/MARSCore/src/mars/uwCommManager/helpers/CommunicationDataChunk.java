@@ -31,7 +31,7 @@ public class CommunicationDataChunk {
     private float distanceTraveled;
     private PriorityQueue<DistanceTrigger> triggerDistances;
     private boolean dead = false;
-    private int startTime;
+    private long startTime;
     /**
      * Create a new CommunicationDataChunk that will live as long as the distance traveled does not exceed the maximum propagation distance of the modem
      * @since 0.1
@@ -50,7 +50,7 @@ public class CommunicationDataChunk {
         this.signalStrength = signalStrength;
         this.frequence = frequence;
         if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
-        startTime = Integer.MAX_VALUE;
+        startTime = Long.MAX_VALUE;
         //System.out.println("Data: " + Arrays.toString(messageDataChunk) );
     }
     
@@ -202,7 +202,7 @@ public class CommunicationDataChunk {
      * @since 0.2.2
      * @param startTime 
      */
-    public void setStartTime(int startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
     
@@ -210,7 +210,7 @@ public class CommunicationDataChunk {
      * @since 0.2.2
      * @return 
      */
-    public int getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 }

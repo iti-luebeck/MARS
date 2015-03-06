@@ -28,14 +28,14 @@ public class CommunicationComputedDataChunk {
     
     private final DistanceTrigger DISTANCE_TRIGGER;
     
-    private final int START_TIME;
+    private final long START_TIME;
     
     /**
      * @since 0.1
      * @param message the message  encoded as UTF-8
      * @param auvName the AUV that shall recieve this message
      */
-    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier, final int startTime) {
+    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier, final long startTime) {
         this.MESSAGE = message;
         this.AUV_NAME = auvName;
         this.DISTANCE_TRIGGER = distanceTigger;
@@ -76,7 +76,8 @@ public class CommunicationComputedDataChunk {
     
     /**
      * Get the identifier consisting of: 
-     * The Source AUV the system time at start; 
+     * The Source AUV;
+     * the system time at start; 
      * the Identifier of the Array; 
      * the array position;
      * the number of ocean-floor bounces;
@@ -101,7 +102,7 @@ public class CommunicationComputedDataChunk {
      * @since 0.1.3
      * @return the start time in millisecounds
      */
-    public int getStartTime() {
+    public long getStartTime() {
         return START_TIME;
     }
 }

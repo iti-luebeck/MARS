@@ -26,7 +26,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
     
     private final int FLOOR_BOUNCES;
     
-    private final int TRAVEL_TIME;
+    private final long TRAVEL_TIME;
     
     /**
      * 
@@ -40,7 +40,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = 0;
         this.FLOOR_BOUNCES = 0;
-        TRAVEL_TIME = (int)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
+        TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     
     
@@ -57,7 +57,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = surfaceBounces;
         this.FLOOR_BOUNCES = floorBounces;
-        TRAVEL_TIME = (int)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
+        TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     /**
      * @since 0.1
@@ -109,7 +109,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @since 0.2
      * @return the time the message will take to it's reciever
      */
-    public int getTraveTimel() {
+    public long getTraveTimel() {
         return TRAVEL_TIME;
     }
 }

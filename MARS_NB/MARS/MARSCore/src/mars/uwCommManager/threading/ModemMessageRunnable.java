@@ -124,6 +124,7 @@ public class ModemMessageRunnable implements Runnable{
                 CommunicationDataChunk chunk = waitingChunks.poll(); 
                 if(!distanceTriggers.isEmpty()) {
                     chunk.addDistanceTriggers(distanceTriggers);
+                    chunk.setStartTime(System.currentTimeMillis());
                     sentChunks.add(chunk);
                 }
             }

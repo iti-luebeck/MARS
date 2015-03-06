@@ -91,28 +91,35 @@ public class MultiMessageMerger implements Runnable {
             String name = e.getKey();
             //Take all the mesages since the last tick
             List<CommunicationComputedDataChunk> msgs = e.getValue();
-            TreeMap<Integer,CommunicationComputedDataChunk> sortedChunks = new TreeMap<Integer, CommunicationComputedDataChunk>();
+            TreeMap<Long,CommunicationComputedDataChunk> sortedChunks = new TreeMap<Long, CommunicationComputedDataChunk>();
             //Sort them by the time of arrival
             for(CommunicationComputedDataChunk i : msgs) sortedChunks.put(i.getStartTime()+i.getDistanceTrigger().getTraveTimel(), i);
             msgs.clear();
+            //Set the base chunk
             CommunicationComputedDataChunk baseChunk = sortedChunks.firstEntry().getValue();
             if(baseChunk != null) {
                 sortedChunks.remove(sortedChunks.firstEntry().getKey());
-                
-                int baseTime = baseChunk.getDistanceTrigger().getTraveTimel()+baseChunk.getStartTime();
+                //get parameters from base chunk
+                long baseTime = baseChunk.getDistanceTrigger().getTraveTimel()+baseChunk.getStartTime();
                 byte[] byteArray = baseChunk.getMessage();
                 
                 while(!sortedChunks.isEmpty()) {
-                    Map.Entry<Integer,CommunicationComputedDataChunk> entry = sortedChunks.firstEntry();
+                    //get the next entry
+                    Map.Entry<Long,CommunicationComputedDataChunk> entry = sortedChunks.firstEntry();
+                    sortedChunks.remove(entry.getKey());
+                    //test if the chunk is from the same auv and came on the same way - these should not be merged into one message
                     boolean testResult = compareChunks(baseChunk.getIdentifier().split(";"),entry.getValue().getIdentifier().split(";"));
+                    //if there are no more messages in this interval
                     if((entry.getKey() > baseTime+50) || testResult ) {
+                        //return the message to the AUV and set the base chunk to the next chunk
                         returnMessage(name, byteArray);
                         baseChunk =entry.getValue();
                         baseTime = entry.getKey();
                         byteArray = baseChunk.getMessage();
-                        sortedChunks.remove(sortedChunks.firstEntry().getKey());
+                        
                     } else if (entry.getKey()<baseTime+50) {
                         java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "There is an error with the sorting of the messages");
+                        //merge two chunks
                     } else {
                         byte[] nextArray = entry.getValue().getMessage();
                         for(int i = 0; i<byteArray.length; i++) {
@@ -137,13 +144,20 @@ public class MultiMessageMerger implements Runnable {
      */
     private boolean compareChunks(String[] identifierOne, String[] identifierTwo) {
         boolean[] results = new boolean[6];
-        
+        //Is the message sent by the same AUV
         results[0] = identifierOne[0].equals(identifierTwo[0]);
+        //is the start time the same
         results[1] = identifierOne[1].equals(identifierTwo[1]);
+        //Are the chunks part of the same message
         results[2] = identifierOne[2].equals(identifierTwo[2]);
+        //Are the chunks the same part of a message
         results[3] = identifierOne[3].equals(identifierTwo[3]);
+        //Have the chunks bounced the same times from the ocean floor
         results[4] = identifierOne[4].equals(identifierTwo[4]);
+        //Have the chunks bounced the same times from the ocean surface
         results[5] = identifierOne[5].equals(identifierTwo[5]);
+        
+        //return if the messages have the same source and came on the same way - should not be merged
         return (results[0] && (results[4] && results[5]));
     }
     
