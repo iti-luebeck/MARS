@@ -32,10 +32,7 @@ import mars.states.MapState;
 import mars.states.SimState;
 import mars.uwCommManager.graphics.CommOnMap;
 import mars.uwCommManager.helpers.DistanceTrigger;
-import mars.uwCommManager.noiseGenerators.ANoiseGenerator;
 import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
-import mars.uwCommManager.noiseGenerators.NoiseNameConstants;
-import mars.uwCommManager.noiseGenerators.RandomByteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
@@ -318,9 +315,17 @@ public class CommunicationState extends AbstractAppState {
         Timer timer = new LwjglSmoothingTimer();
         float time = 0f;
         //int counter = 0;
+        
+        for(Map.Entry<String, ModemMessageRunnable> entr: auvProcessMap.entrySet()) {
+                List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
+                if(!chunks.isEmpty()) {
+                    multiPathModule.enqueueMsges(chunks);
+                }
+            }
         while(true) {
             time += timer.getTimePerFrame();
             if(time >= 1f/60f) break;
+            //Get the messages from the runnables and merge them in the multiPathModule
             CommunicationMessage msg = msgQueue.poll();
             if(msg == null) break;
 
@@ -341,13 +346,7 @@ public class CommunicationState extends AbstractAppState {
             if(e2 != null) e1.setDistanceTriggers(e2);
             e1.assignMessage(msg);
             
-            //Get the messages from the runnables and merge them in the multiPathModule
-            for(Map.Entry<String, ModemMessageRunnable> entr: auvProcessMap.entrySet()) {
-                List<CommunicationComputedDataChunk> chunks = entr.getValue().getComputedMessages();
-                if(!chunks.isEmpty()) {
-                    multiPathModule.enqueueMsges(chunks);
-                }
-            }
+
         }
     }
     

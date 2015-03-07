@@ -68,7 +68,6 @@ public class MultiMessageMerger implements Runnable {
     private void addNewMessages() {
         while(queue.peek() != null) {
             CommunicationComputedDataChunk e = queue.poll();
-            System.out.println(Arrays.toString(e.getMessage()));
             if(chunks.containsKey(e.getAUVName())) {
                 chunks.get(e.getAUVName()).add(e);
             } else {

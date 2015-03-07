@@ -8,19 +8,14 @@ package mars.uwCommManager.threading;
 import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import mars.uwCommManager.helpers.CommunicationDataChunk;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import mars.core.CentralLookup;
 import mars.sensors.CommunicationMessage;
-import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
-import mars.uwCommManager.noiseGenerators.ANoiseGenerator;
 import org.openide.util.Exceptions;
 
 /**
@@ -249,7 +244,7 @@ public class ModemMessageRunnable implements Runnable{
      * @since 0.2
      * @param noiseGen
      */
-    public synchronized void removeANoiseGenerator(ANoiseGenerator noiseGen) {
+    public synchronized void removeANoiseGenerator(ANoiseByDistanceGenerator noiseGen) {
         noiseGenerators.remove(noiseGen);
     }
     
@@ -259,9 +254,9 @@ public class ModemMessageRunnable implements Runnable{
      * @param name the name of the noiseGen that should be removed
     */
     public synchronized void removeANoiseGeneratorByName(String name) {
-        ANoiseGenerator toBeRemoved = null;
+        ANoiseByDistanceGenerator toBeRemoved = null;
         
-        for(ANoiseGenerator i : noiseGenerators) {
+        for(ANoiseByDistanceGenerator i : noiseGenerators) {
             if (i.getName().equals(name)) {
                 toBeRemoved = i;
                 break;
