@@ -99,10 +99,6 @@ public class CommunicationState extends AbstractAppState {
     private boolean commOnMapShowCommLinks = false;
     
     /**
-     * indicates the status of the random byte noise
-     */
-    private boolean noiseRandomByteActive = false;
-    /**
      * indicates the status of the gaussian white noise
      */
     private boolean noiseAdditiveGaussianWhiteNoiseActive = false;
@@ -140,7 +136,6 @@ public class CommunicationState extends AbstractAppState {
         
         //Load up noises if they were activated on startup this should be done dynamicly in future
         if(noiseAdditiveGaussianWhiteNoiseActive) addNoise(GAUSSIAN_WHITE_NOISE);
-        if(noiseRandomByteActive) addNoise(RANDOM_BYTE_NOISE);
         
         
         commOnMap = new CommOnMap(commOnMapActive,commOnMapBorders,commOnMapShowCommLinks);
@@ -355,10 +350,7 @@ public class CommunicationState extends AbstractAppState {
     
     private void addNoise(String name) {
         for(ModemMessageRunnable i : auvProcessMap.values()) {
-            if(name.equals(RANDOM_BYTE_NOISE)) {
-                //i.addANoiseByDistanceGenerator(new RandomByteNoise(1));
-                //NOT YET UPDATED
-            } else if(name.equals(GAUSSIAN_WHITE_NOISE)) {
+            if(name.equals(GAUSSIAN_WHITE_NOISE)) {
                 i.addANoiseByDistanceGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
             
             } else {

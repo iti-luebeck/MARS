@@ -10,7 +10,6 @@ package mars.uwCommManager.noiseGenerators;
  * @author Jasper Schwinghammer
  */
 public class NoiseNameConstants {
-    public static final String RANDOM_BYTE_NOISE = "Schlechtes Rauschen";
     public static final String GAUSSIAN_WHITE_NOISE = "Gaussches Rauschen";
     
 }
