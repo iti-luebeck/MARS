@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import org.openide.util.Exceptions;
 
 /**
- * @version 0.1.3
+ * @version 0.1.4
  * @author Jasper Schwinghammer
  */
 public class CommunicationComputedDataChunk {
@@ -23,6 +23,7 @@ public class CommunicationComputedDataChunk {
      */
     private final String AUV_NAME;
     
+    private final float FREQUENCY;
     
     private final String IDENTIFIER;
     
@@ -35,12 +36,13 @@ public class CommunicationComputedDataChunk {
      * @param message the message  encoded as UTF-8
      * @param auvName the AUV that shall recieve this message
      */
-    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier, final long startTime) {
+    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier, final long startTime, final float frequence) {
         this.MESSAGE = message;
         this.AUV_NAME = auvName;
         this.DISTANCE_TRIGGER = distanceTigger;
         this.IDENTIFIER = identifier;
         this.START_TIME = startTime;
+        this.FREQUENCY = frequence;
     }
     
     /**
@@ -104,5 +106,9 @@ public class CommunicationComputedDataChunk {
      */
     public long getStartTime() {
         return START_TIME;
+    }
+    
+    public float getFrequency() {
+        return FREQUENCY;
     }
 }

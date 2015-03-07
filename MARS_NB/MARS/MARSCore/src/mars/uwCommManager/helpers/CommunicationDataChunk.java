@@ -81,7 +81,7 @@ public class CommunicationDataChunk {
            messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequence,signalStrength,0.05f);
         }
         CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,
-                IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces(),startTime);
+                IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces(),startTime,frequence);
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }
