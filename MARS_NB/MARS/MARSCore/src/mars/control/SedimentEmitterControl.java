@@ -32,13 +32,13 @@ public class SedimentEmitterControl extends AbstractControl{
     private Node terrain;
     private AssetManager assetManager;
     private ParticleEmitter emitter;
-    private int number = 1000;
+    private int number = 500;
     private float numberAtt = 1;
     private float up = 2;
     private float upAtt = 1000;
-    private float velocity = 4;
+    private float velocity = 2;
     private float velocityAtt = 100;
-    private float size = .05f;
+    private float size = .025f;
     private ColorRGBA color = new ColorRGBA(.4f, .34f, .23f, 1f);
     
     /**
@@ -76,7 +76,7 @@ public class SedimentEmitterControl extends AbstractControl{
         emitter.setEndColor(color);
         emitter.setParticlesPerSec(number);
         emitter.setLowLife(0.5f);
-        emitter.setHighLife(2f);
+        emitter.setHighLife(1f);
         emitter.setRandomAngle(true);
         emitter.setShape(new EmitterSphereShape(Vector3f.ZERO, .2f));
         emitter.setGravity(new Vector3f(0, -up, 0));
@@ -120,9 +120,11 @@ public class SedimentEmitterControl extends AbstractControl{
                 Vector3f gravity = emitter.getGravity();
                 gravity.y = dist/upAtt - up;
                 emitter.setLocalTranslation(point);
+                System.out.println("Number: " + (number - dist/numberAtt));
                 emitter.setParticlesPerSec(number - dist/numberAtt);
                 emitter.setGravity(gravity);
                 ((RadialParticleInfluencer) emitter.getParticleInfluencer()).setRadialVelocity(velocity - dist/velocityAtt);
+                System.out.println("Velocity: " + (velocity - dist/velocityAtt));
             }
             
             emitter.setStartColor(color);
