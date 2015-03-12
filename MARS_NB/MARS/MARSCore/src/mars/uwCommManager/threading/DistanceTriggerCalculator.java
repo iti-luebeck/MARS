@@ -6,6 +6,7 @@
 package mars.uwCommManager.threading;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,12 +39,16 @@ public class DistanceTriggerCalculator implements Runnable {
      */
     private Map<String,List<DistanceTrigger>> distanceMap;
     
+    
+    private final SimState simState;
+    
     /**
      * Does nothing but initialize variables
      * @since 0.1 
      */
     public DistanceTriggerCalculator() {
         distanceMap = new HashMap();
+        simState = null;
     }
     
     /**
@@ -67,6 +72,7 @@ public class DistanceTriggerCalculator implements Runnable {
         
         try {
             calculatePathDistances();
+            
         } catch(Exception e) {
             Exceptions.printStackTrace(e);
         }
@@ -144,4 +150,17 @@ public class DistanceTriggerCalculator implements Runnable {
             }
         }
     }
+    
+    public void rayTraceConnections(Map<String,List<DistanceTrigger>> distanceTriggers) {
+        Node rootNode = simState.getRootNode();
+        
+        HashMap<String,AUV> auvs = auvManager.getAUVs();
+        HashMap<String,AUV> targets = auvManager.getAUVs();
+        
+        for(Map.Entry<String,List<DistanceTrigger>> entry : distanceTriggers.entrySet()) {
+            
+        }
+    }
+    
+    
 }
