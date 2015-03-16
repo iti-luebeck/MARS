@@ -94,8 +94,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Collider RayDetectable = new Collider();
-    private Node AUVsNode = new Node("AUVNode");
-    private Node SimObNode = new Node("SimObNode");
+    private Node AUVNodes = new Node("AUVNodes");
+    private Node SimObNodes = new Node("SimObNodes");
     //warter currents
     private Node currents = new Node("currents");
 
@@ -262,8 +262,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
              mark8.updateGeometricState();
              rootNode.attachChild(mark8);*/
             progr.progress("Adding Nodes");
-            sceneReflectionNode.attachChild(AUVsNode);
-            sceneReflectionNode.attachChild(SimObNode);
+            sceneReflectionNode.attachChild(AUVNodes);
+            sceneReflectionNode.attachChild(SimObNodes);
             rootNode.attachChild(sceneReflectionNode);
             rootNode.attachChild(currents);
 
@@ -305,6 +305,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
 
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, initer);
+            
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
@@ -332,8 +333,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setAuvManager(auvManager);
             guiState.setSimobManager(simobManager);
             guiState.setIniter(initer);
-            guiState.setAUVsNode(AUVsNode);
-            guiState.setSimObNode(SimObNode);
+            guiState.setAUVsNode(AUVNodes);
+            guiState.setSimObNode(SimObNodes);
             guiState.setMars_settings(mars_settings);
             final AppStateManager stateManagerFin = stateManager;
             
@@ -669,8 +670,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      * @return
      */
-    public Node getAUVsNode() {
-        return AUVsNode;
+    public Node getAUVNodes() {
+        return AUVNodes;
     }
 
     /**
@@ -685,8 +686,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      * @return
      */
-    public Node getSimObNode() {
-        return SimObNode;
+    public Node getSimObNodes() {
+        return SimObNodes;
     }
 
     /**
