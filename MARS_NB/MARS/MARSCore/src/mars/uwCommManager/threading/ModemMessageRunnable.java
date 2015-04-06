@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import mars.sensors.CommunicationMessage;
+import mars.uwCommManager.helpers.DataChunkIdentifier;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
 import org.openide.util.Exceptions;
@@ -178,18 +179,27 @@ public class ModemMessageRunnable implements Runnable{
                 byte[] msgByte = msg.getMsg().getBytes("UTF-8");
                 System.out.println("Message in UFT-8"+ Arrays.toString(msgByte));
                 int chunkCount = (int) Math.ceil(((double)msgByte.length) / (BANDWIDTH_PER_TICK*1000));
-                String identifier = AUV_NAME + ";"+ System.currentTimeMillis() +";"+ msgByte.toString();
+                
+                /**
+                 * build a chunk identifier
+                 */
+                long time = System.currentTimeMillis();
+                String arrayIdentifier = msgByte.toString();
+                DataChunkIdentifier chunkIdentifier = new DataChunkIdentifier(AUV_NAME, time, arrayIdentifier);
+                
                 //System.out.println("Deviding message into Chunks: "+ chunkCount + " Message length was: " +msgByte.length);
                 for(int i = 0; i<chunkCount; i++) {
                     CommunicationDataChunk chunk = null;
+                    DataChunkIdentifier tempIdentifier = chunkIdentifier.cloneThis();
+                    tempIdentifier.setChunkNumber(i);
                     if(i != chunkCount - 1) {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), (int)((i+1)*(BANDWIDTH_PER_TICK*1000))),
-                                new PriorityQueue<DistanceTrigger>() , MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE,identifier + ";" + i);
+                                new PriorityQueue<DistanceTrigger>() , MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE,tempIdentifier);
                     } else {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i*(BANDWIDTH_PER_TICK*1000)), msgByte.length),
-                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE,identifier + ";" + i);
+                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE,tempIdentifier);
                     }
                     //to emphasize that we will use the list as queue I use the queue methods instead of LinkedList.add
                     waitingChunks.offer(chunk);

@@ -7,12 +7,12 @@ package mars.uwCommManager.helpers;
 
 /**
  * This class holds pure information about a certain data chunk
- * @version 1.0
+ * @version 1.01
  * @author Jasper Schwinghammer
  */
 public class DataChunkIdentifier {
     
-    private int floorBounces, surfaceBounces;
+    private int floorBounces, surfaceBounces, chunkNumber;
     private float frequence;
     private long startTime;
     private String AUV_Name, messageIdentifier;
@@ -24,6 +24,7 @@ public class DataChunkIdentifier {
         startTime = 0;
         AUV_Name = "";
         messageIdentifier = "";
+        chunkNumber = 0;
     }
     
     public DataChunkIdentifier(String AUV_Name, long startTime, String messageIdentifier) {
@@ -33,6 +34,17 @@ public class DataChunkIdentifier {
         floorBounces = 0;
         surfaceBounces = 0;
         frequence = 0;
+        chunkNumber = 0;
+    }
+    
+    private DataChunkIdentifier(final String AUV_Name,final long startTime,final String messageIdentifier,final int floorBounces,final float frequence,final int surfaceBounces,final int chunkNumber) {
+        this.AUV_Name = AUV_Name;
+        this.startTime = startTime;
+        this.messageIdentifier = messageIdentifier;
+        this.floorBounces = floorBounces;
+        this.surfaceBounces = surfaceBounces;
+        this.frequence = frequence;
+        this.chunkNumber = chunkNumber;
     }
 
     /**
@@ -117,5 +129,24 @@ public class DataChunkIdentifier {
      */
     public void setMessageIdentifier(String messageIdentifier) {
         this.messageIdentifier = messageIdentifier;
+    }
+    
+    
+    public DataChunkIdentifier cloneThis(){
+        return new DataChunkIdentifier(AUV_Name, startTime, messageIdentifier, floorBounces, frequence, surfaceBounces, getChunkNumber());
+    }
+
+    /**
+     * @return the chunkNumber
+     */
+    public int getChunkNumber() {
+        return chunkNumber;
+    }
+
+    /**
+     * @param chunkNumber the chunkNumber to set
+     */
+    public void setChunkNumber(int chunkNumber) {
+        this.chunkNumber = chunkNumber;
     }
 }

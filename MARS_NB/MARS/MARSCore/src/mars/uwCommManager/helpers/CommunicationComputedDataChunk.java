@@ -25,7 +25,7 @@ public class CommunicationComputedDataChunk {
     
     private final float FREQUENCY;
     
-    private final String IDENTIFIER;
+    private final DataChunkIdentifier IDENTIFIER;
     
     private final DistanceTrigger DISTANCE_TRIGGER;
     
@@ -36,7 +36,7 @@ public class CommunicationComputedDataChunk {
      * @param message the message  encoded as UTF-8
      * @param auvName the AUV that shall recieve this message
      */
-    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final String identifier, final long startTime, final float frequence) {
+    public CommunicationComputedDataChunk(final byte[] message, final String auvName, final DistanceTrigger distanceTigger, final DataChunkIdentifier identifier, final long startTime, final float frequence) {
         this.MESSAGE = message;
         this.AUV_NAME = auvName;
         this.DISTANCE_TRIGGER = distanceTigger;
@@ -87,7 +87,7 @@ public class CommunicationComputedDataChunk {
      * @since 0.1.2
      * @return the identifier
      */
-    public String getIdentifier() {
+    public DataChunkIdentifier getIdentifier() {
         return IDENTIFIER;
     }
     

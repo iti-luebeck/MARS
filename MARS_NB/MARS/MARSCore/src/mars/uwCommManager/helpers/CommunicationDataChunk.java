@@ -21,7 +21,7 @@ import org.openide.util.Exceptions;
 public class CommunicationDataChunk {
     
     
-    private final String IDENTIFIER;
+    private final DataChunkIdentifier IDENTIFIER;
     private final float MAX_DISTANCE;
     private float frequency;
     private float signalStrength;
@@ -39,7 +39,7 @@ public class CommunicationDataChunk {
      * @param signalStrength The initial strength of the soundsignal
      * @param frequence The frequence of the message
      */
-    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence,String identifier) {
+    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence,DataChunkIdentifier identifier) {
         this.IDENTIFIER = identifier;
         this.MAX_DISTANCE = maxDistance;
         this.messageDataChunk = messageDataChunk;
@@ -78,8 +78,10 @@ public class CommunicationDataChunk {
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
            messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequency,signalStrength,0.05f);
         }
+        IDENTIFIER.setSurfaceBounces(trigger.getSurfaceBounces());
+        IDENTIFIER.setFloorBounces(trigger.getSurfaceBounces());
         CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,
-                IDENTIFIER+";"+trigger.getFloorBounces()+";"+trigger.getSurfaceBounces(),startTime,frequency);
+                IDENTIFIER,startTime,frequency);
         if(triggerDistances.isEmpty()) dead = true;
         return returnValue;
     }
@@ -191,7 +193,7 @@ public class CommunicationDataChunk {
      * @since 0.2.1
      * @return the Identifier
      */
-    public String getIdentifier() {
+    public DataChunkIdentifier getIdentifier() {
         return IDENTIFIER;
     }
     
