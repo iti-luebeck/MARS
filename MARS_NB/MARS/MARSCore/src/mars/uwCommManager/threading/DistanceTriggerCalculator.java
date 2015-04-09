@@ -5,6 +5,8 @@
  */
 package mars.uwCommManager.threading;
 
+import com.jme3.collision.CollisionResults;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
@@ -158,7 +160,41 @@ public class DistanceTriggerCalculator implements Runnable {
         HashMap<String,AUV> targets = auvManager.getAUVs();
         
         for(Map.Entry<String,List<DistanceTrigger>> entry : distanceTriggers.entrySet()) {
+           //First step:
+           //Start a ray directly to each of the AUV's find out what it hits.
+            String rootAUVName = entry.getKey();
+            AUV rootAUV = auvs.get(rootAUVName);
             
+            for(DistanceTrigger trigger : entry.getValue()) {
+                String targetAUVName = trigger.getAUVName();
+                AUV targetAUV = auvs.get(targetAUVName);
+                
+                ArrayList uwmo = rootAUV.getSensorsOfClass(CommunicationDevice.class.getName());
+                ArrayList uwmoTarget = targetAUV.getSensorsOfClass(CommunicationDevice.class.getName());
+                Iterator it = uwmo.iterator();
+                
+                while(it.hasNext()){
+                    CommunicationDevice mod = (CommunicationDevice)it.next();
+                    Vector3f modPos = mod.getWorldPosition();
+                                
+                    Iterator itTargetMo = uwmoTarget.iterator();
+                    
+                    while (itTargetMo.hasNext()) {
+                        CommunicationDevice targetMod = (CommunicationDevice)itTargetMo.next();
+                        Vector3f targetModPos = targetMod.getWorldPosition();
+                        Vector3f direction = targetModPos.subtract(modPos);
+                        
+                        
+                        Ray ray = new Ray(modPos,direction);
+                        
+                        CollisionResults results = new CollisionResults();
+                        
+                        
+                        
+                    }
+                }
+                
+            }
         }
     }
     
