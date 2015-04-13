@@ -122,14 +122,17 @@ public class TemperatureSensor extends Sensor implements ChartValue {
     }
 
     /**
-     *
+     * This formula is used: http://residualanalysis.blogspot.de/2010/02/temperature-of-ocean-water-at-given.html
      * @param noise The boundary for the random generator starting always from 0
      * to noise value
      * @return The Temperature of the current auv enviroment with a random noise
      * from 0 to noise value in C°
      */
     private float getTemperatureRaw() {
-        return pe.getFluid_temp();
+        float depth = Math.abs(TemperatureSensorStart.getWorldTranslation().y + Math.abs(pe.getWater_height()));
+        float fd = 1f + (float)Math.exp(-0.016f*depth+1.244f);
+        float td = -0.338f+((pe.getFluid_temp()*fd)/((0.0001485f*pe.getFluid_temp()*depth)+fd));
+        return td;
     }
 
     /**
@@ -180,7 +183,7 @@ public class TemperatureSensor extends Sensor implements ChartValue {
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        fl.setData((short) (getTemperature() * 10));
+        fl.setData((short) (getTemperature() * 10));//*10 because of ros temp data format
         if (publisher != null) {
             publisher.publish(fl);
         }
@@ -189,7 +192,7 @@ public class TemperatureSensor extends Sensor implements ChartValue {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getTemperature() * 10, System.currentTimeMillis());
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getTemperature(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 
