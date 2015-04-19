@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
@@ -26,7 +27,7 @@ import org.openide.util.Exceptions;
 
 /**
  * This class is used to calculate distances between AUVS, right now it only calculates the direct way between two AUVs. Reflections are ignored and not implemented
- * @version 0.1
+ * @version 1.1
  * @author Jasper Schwinghammer
  */
 public class DistanceTriggerCalculator implements Runnable {
@@ -41,6 +42,7 @@ public class DistanceTriggerCalculator implements Runnable {
      */
     private Map<String,List<DistanceTrigger>> distanceMap;
     
+    private ScheduledThreadPoolExecutor executor;
     
     private final SimState simState;
     
@@ -48,9 +50,10 @@ public class DistanceTriggerCalculator implements Runnable {
      * Does nothing but initialize variables
      * @since 0.1 
      */
-    public DistanceTriggerCalculator() {
+    public DistanceTriggerCalculator(SimState simState,ScheduledThreadPoolExecutor executor) {
         distanceMap = new HashMap();
-        simState = null;
+        this.simState = simState;
+        this.executor = executor;
     }
     
     /**
@@ -151,48 +154,71 @@ public class DistanceTriggerCalculator implements Runnable {
                 }
             }
         }
+        rayTraceConnections(distanceMap);
     }
     
-    public void rayTraceConnections(Map<String,List<DistanceTrigger>> distanceTriggers) {
-        Node rootNode = simState.getRootNode();
+    /**
+     * Calculate all possible paths connected by the ocean floor or the surface of the water by rayracing it
+     * @since 1.1
+     * @param distanceTriggers the DistanceTriggers calculated by the calculatePathDistance method
+     */
+    private void rayTraceConnections(Map<String,List<DistanceTrigger>> distanceTriggers) {
+        //The node holding all simulation objects
+        if(simState == null) return;
+        Node rootNode = simState.getSceneReflectionNode();
         
+        //get all auvs to retrieve their position later on
         HashMap<String,AUV> auvs = auvManager.getAUVs();
-        HashMap<String,AUV> targets = auvManager.getAUVs();
-        
+        //For every AUV that has any other auvs in range
         for(Map.Entry<String,List<DistanceTrigger>> entry : distanceTriggers.entrySet()) {
            //First step:
            //Start a ray directly to each of the AUV's find out what it hits.
             String rootAUVName = entry.getKey();
             AUV rootAUV = auvs.get(rootAUVName);
-            
+            List<DistanceTrigger> removedTriggers = new LinkedList<DistanceTrigger>();
+            //For every auv in range
             for(DistanceTrigger trigger : entry.getValue()) {
+                //retrieve the AUV object
                 String targetAUVName = trigger.getAUVName();
                 AUV targetAUV = auvs.get(targetAUVName);
                 
+                //Get the CommunicationSensors
                 ArrayList uwmo = rootAUV.getSensorsOfClass(CommunicationDevice.class.getName());
                 ArrayList uwmoTarget = targetAUV.getSensorsOfClass(CommunicationDevice.class.getName());
                 Iterator it = uwmo.iterator();
-                
+                //For each sensor of the sending AUV
                 while(it.hasNext()){
+                    //get its position
                     CommunicationDevice mod = (CommunicationDevice)it.next();
                     Vector3f modPos = mod.getWorldPosition();
-                                
+                    //for each sensor of the recieving auv
                     Iterator itTargetMo = uwmoTarget.iterator();
                     
                     while (itTargetMo.hasNext()) {
+                        //get its position
                         CommunicationDevice targetMod = (CommunicationDevice)itTargetMo.next();
                         Vector3f targetModPos = targetMod.getWorldPosition();
+                        
+                        //calculate the vector between the two modems
                         Vector3f direction = targetModPos.subtract(modPos);
                         
-                        
-                        Ray ray = new Ray(modPos,direction);
+                        //raytrace the connection
+                        Ray ray = new Ray(modPos.add(direction.normalize()),direction);
                         
                         CollisionResults results = new CollisionResults();
                         
-                        
-                        
+                        rootNode.collideWith(ray, results);
+                        if (results.size() != 0) {
+                            if(results.getClosestCollision().getDistance() < direction.mult(0.9f).length()-1) {
+                                removedTriggers.add(trigger);
+                            }
+                            
+                            System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
+                        }
                     }
                 }
+                System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
+                entry.getValue().removeAll(removedTriggers);
                 
             }
         }

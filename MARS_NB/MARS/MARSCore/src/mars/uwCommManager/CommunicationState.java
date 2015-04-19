@@ -36,6 +36,7 @@ import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
+import test_ros.Simple;
 
 /**
  * Entrypoint of the communications module.
@@ -173,7 +174,7 @@ public class CommunicationState extends AbstractAppState {
         multiPathModule.init(auvManager, this);
         //THE MULTIPATH MODULE NEEDS REVISION
         executor.scheduleAtFixedRate(multiPathModule, 2500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
-        distanceTraceModule = new DistanceTriggerCalculator();
+        distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
         distanceTraceModule.init(auvManager);
         executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
         
