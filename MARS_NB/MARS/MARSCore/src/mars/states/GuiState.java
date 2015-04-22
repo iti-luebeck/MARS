@@ -310,8 +310,10 @@ public class GuiState extends AbstractAppState {
             } else if (name.equals("context_menue") && !keyPressed) {
                 pickRightClick();
             } else if (name.equals("context_menue_off") && !keyPressed) {
-                guiControlState.setSelect_auv(false);
-                pickHover();
+                if(!guiControlState.isMove_auv()){//do it only if we are not moving currently a selected auv
+                    guiControlState.setSelect_auv(false);
+                    pickHover();
+                }
             } else if (name.equals("depth_auv_down") && keyPressed) {
                 if (guiControlState.isMove_auv()) {
                     AUV selected_auv = auvManager.getSelectedAUV();
