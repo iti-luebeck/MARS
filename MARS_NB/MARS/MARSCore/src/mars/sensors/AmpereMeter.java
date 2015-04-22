@@ -14,6 +14,7 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -223,5 +224,7 @@ public class AmpereMeter extends Sensor{
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAmpere(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getAmpere(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

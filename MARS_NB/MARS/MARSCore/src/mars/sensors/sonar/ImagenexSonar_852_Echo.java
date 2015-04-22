@@ -8,8 +8,10 @@ import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
+import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -147,5 +149,14 @@ public class ImagenexSonar_852_Echo extends Sonar {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getRawData(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getRawData(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -21,6 +21,7 @@ import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
@@ -28,6 +29,7 @@ import mars.events.CommunicationDeviceEvent;
 import mars.events.CommunicationDeviceEventType;
 import mars.events.CommunicationType;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import org.ros.node.topic.Subscriber;
 
 /**

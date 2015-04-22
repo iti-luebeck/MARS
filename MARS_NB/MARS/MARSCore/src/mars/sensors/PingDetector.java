@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -316,5 +317,7 @@ public class PingDetector extends Sensor{
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPingerAngleRadiant("pingpong"), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getPingerAngleRadiant("pingpong"), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

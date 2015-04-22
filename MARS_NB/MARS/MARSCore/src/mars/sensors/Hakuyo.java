@@ -7,7 +7,9 @@ package mars.sensors;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
@@ -93,5 +95,14 @@ public class Hakuyo extends LaserScanner {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getInstantData(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getInstantData(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

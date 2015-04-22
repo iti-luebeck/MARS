@@ -48,7 +48,6 @@
         <folder name="Components">
             <file name="LookupTopComponent.settings_hidden"/>
             <file name="MARSChartTopComponent.settings_hidden"/>
-            <file name="MARSCompassTopComponent.settings_hidden"/>
             <file name="MARSLogTopComponent.settings_hidden"/>
             <file name="MARSMapTopComponent.settings" url="MARSMapTopComponentSettings.xml"/>
             <file name="MARSUnderwaterModemTopComponent.settings_hidden"/>

@@ -6,6 +6,7 @@ package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
@@ -19,6 +20,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
+import mars.server.MARSClientEvent;
 import org.ros.message.Time;
 
 /**
@@ -232,6 +235,11 @@ public class IMU extends Sensor {
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
+    
+    public Matrix4f getIMU(){
+        Matrix4f mat = new Matrix4f();
+        return mat;
+    }
 
     /**
      *
@@ -282,5 +290,14 @@ public class IMU extends Sensor {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getIMU(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getIMU(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -32,7 +32,9 @@ import mars.Helper.Pyramid;
 import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -511,6 +513,16 @@ public class VideoCamera extends Sensor implements Moveable{
         if( publisher != null ){
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        ChannelBuffer channelBufferImage = this.getChannelBufferImage();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, channelBufferImage, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, channelBufferImage, System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
     
     /**

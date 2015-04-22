@@ -43,7 +43,6 @@ import mars.gui.sonarview.PolarView;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.sensors.AmpereMeter;
 import mars.sensors.CommunicationDevice;
-import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -155,8 +154,6 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         if (icon == null) {
             if (obj instanceof Sonar) {
                 icon = "radar.png";
-            } else if (obj instanceof Compass) {
-                icon = "compass.png";
             } else if (obj instanceof VideoCamera) {
                 icon = "cctv_camera.png";
             } else if (obj instanceof PingDetector) {

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -193,5 +194,7 @@ public class Orientationmeter extends Sensor{
         float[] bla = getOrientation().toAngles(null);
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, new Vector3f(bla[0], bla[1], bla[2]), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, new Vector3f(bla[0], bla[1], bla[2]), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }
