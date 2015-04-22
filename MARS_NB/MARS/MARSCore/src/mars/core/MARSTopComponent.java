@@ -253,16 +253,16 @@ public final class MARSTopComponent extends TopComponent {
         auv_move_vector_dialog_y = new javax.swing.JTextField();
         auv_move_vector_dialog_z = new javax.swing.JTextField();
         auv_rotate_vector_dialog = new javax.swing.JDialog();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        auv_rotate_vector_dialog_r = new javax.swing.JCheckBox();
         auv_rotate_vector_dialog_x = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
         auv_rotate_vector_dialog_y = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
         auv_rotate_vector_dialog_z = new javax.swing.JTextField();
+        jButton10 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        auv_rotate_vector_dialog_r = new javax.swing.JCheckBox();
         auv_name = new javax.swing.JDialog();
         jButton13 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
@@ -954,7 +954,9 @@ public final class MARSTopComponent extends TopComponent {
         });
         jme3_auv.add(jme3_delete_auv);
 
-        auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(166, 193));
+        auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(180, 235));
+        auv_move_vector_dialog.setPreferredSize(new java.awt.Dimension(180, 235));
+        auv_move_vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton7, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton7.text")); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -962,6 +964,7 @@ public final class MARSTopComponent extends TopComponent {
                 jButton7ActionPerformed(evt);
             }
         });
+        auv_move_vector_dialog.getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton8, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton8.text")); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -969,6 +972,7 @@ public final class MARSTopComponent extends TopComponent {
                 jButton8ActionPerformed(evt);
             }
         });
+        auv_move_vector_dialog.getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 130, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton9, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton9.text")); // NOI18N
         jButton9.addActionListener(new java.awt.event.ActionListener() {
@@ -976,14 +980,19 @@ public final class MARSTopComponent extends TopComponent {
                 jButton9ActionPerformed(evt);
             }
         });
+        auv_move_vector_dialog.getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 159, 146, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel13.text")); // NOI18N
+        auv_move_vector_dialog.getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel14.text")); // NOI18N
+        auv_move_vector_dialog.getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel15.text")); // NOI18N
+        auv_move_vector_dialog.getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(auv_move_vector_dialog_r, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_move_vector_dialog_r.text")); // NOI18N
+        auv_move_vector_dialog.getContentPane().add(auv_move_vector_dialog_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
         auv_move_vector_dialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_move_vector_dialog_x.text")); // NOI18N
         auv_move_vector_dialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
@@ -992,103 +1001,22 @@ public final class MARSTopComponent extends TopComponent {
                 auv_move_vector_dialog_xActionPerformed(evt);
             }
         });
+        auv_move_vector_dialog.getContentPane().add(auv_move_vector_dialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 11, 126, -1));
 
         auv_move_vector_dialog_y.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_move_vector_dialog_y.text")); // NOI18N
         auv_move_vector_dialog_y.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        auv_move_vector_dialog.getContentPane().add(auv_move_vector_dialog_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 42, 126, -1));
 
         auv_move_vector_dialog_z.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_move_vector_dialog_z.text")); // NOI18N
         auv_move_vector_dialog_z.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        auv_move_vector_dialog.getContentPane().add(auv_move_vector_dialog_z, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 73, 126, -1));
 
-        javax.swing.GroupLayout auv_move_vector_dialogLayout = new javax.swing.GroupLayout(auv_move_vector_dialog.getContentPane());
-        auv_move_vector_dialog.getContentPane().setLayout(auv_move_vector_dialogLayout);
-        auv_move_vector_dialogLayout.setHorizontalGroup(
-            auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                        .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jButton7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton8)))
-                        .addGap(0, 10, Short.MAX_VALUE))
-                    .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                        .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_move_vector_dialog_z))
-                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(auv_move_vector_dialog_r)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_move_vector_dialog_x))
-                            .addGroup(auv_move_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_move_vector_dialog_y)))
-                        .addContainerGap())))
-        );
-        auv_move_vector_dialogLayout.setVerticalGroup(
-            auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, auv_move_vector_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(auv_move_vector_dialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(auv_move_vector_dialog_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(auv_move_vector_dialog_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(auv_move_vector_dialog_r)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_move_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton9)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(166, 193));
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton10.text")); // NOI18N
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton11, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton11.text")); // NOI18N
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
-            }
-        });
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton12, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton12.text")); // NOI18N
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
-            }
-        });
+        auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(180, 235));
+        auv_rotate_vector_dialog.setPreferredSize(new java.awt.Dimension(180, 235));
+        auv_rotate_vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel16.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel17.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel18.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(auv_rotate_vector_dialog_r, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_rotate_vector_dialog_r.text")); // NOI18N
+        auv_rotate_vector_dialog.getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         auv_rotate_vector_dialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_rotate_vector_dialog_x.text")); // NOI18N
         auv_rotate_vector_dialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
@@ -1097,72 +1025,48 @@ public final class MARSTopComponent extends TopComponent {
                 auv_rotate_vector_dialog_xActionPerformed(evt);
             }
         });
+        auv_rotate_vector_dialog.getContentPane().add(auv_rotate_vector_dialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 130, 20));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel17.text")); // NOI18N
+        auv_rotate_vector_dialog.getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 30, 20));
 
         auv_rotate_vector_dialog_y.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_rotate_vector_dialog_y.text")); // NOI18N
         auv_rotate_vector_dialog_y.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        auv_rotate_vector_dialog.getContentPane().add(auv_rotate_vector_dialog_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 130, -1));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel18.text")); // NOI18N
+        auv_rotate_vector_dialog.getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 40, 20));
 
         auv_rotate_vector_dialog_z.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_rotate_vector_dialog_z.text")); // NOI18N
         auv_rotate_vector_dialog_z.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        auv_rotate_vector_dialog.getContentPane().add(auv_rotate_vector_dialog_z, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 130, 20));
 
-        javax.swing.GroupLayout auv_rotate_vector_dialogLayout = new javax.swing.GroupLayout(auv_rotate_vector_dialog.getContentPane());
-        auv_rotate_vector_dialog.getContentPane().setLayout(auv_rotate_vector_dialogLayout);
-        auv_rotate_vector_dialogLayout.setHorizontalGroup(
-            auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jButton10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton11)))
-                        .addGap(0, 10, Short.MAX_VALUE))
-                    .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                        .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_rotate_vector_dialog_z))
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(auv_rotate_vector_dialog_r)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_rotate_vector_dialog_x))
-                            .addGroup(auv_rotate_vector_dialogLayout.createSequentialGroup()
-                                .addComponent(jLabel17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(auv_rotate_vector_dialog_y)))
-                        .addContainerGap())))
-        );
-        auv_rotate_vector_dialogLayout.setVerticalGroup(
-            auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, auv_rotate_vector_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(auv_rotate_vector_dialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(auv_rotate_vector_dialog_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(auv_rotate_vector_dialog_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(auv_rotate_vector_dialog_r)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(auv_rotate_vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
-                    .addComponent(jButton11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton12)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton10.text")); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        auv_rotate_vector_dialog.getContentPane().add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 20));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton12, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton12.text")); // NOI18N
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        auv_rotate_vector_dialog.getContentPane().add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 150, 20));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton11, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton11.text")); // NOI18N
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        auv_rotate_vector_dialog.getContentPane().add(jButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 70, 20));
+
+        org.openide.awt.Mnemonics.setLocalizedText(auv_rotate_vector_dialog_r, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.auv_rotate_vector_dialog_r.text")); // NOI18N
+        auv_rotate_vector_dialog.getContentPane().add(auv_rotate_vector_dialog_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 160, 40));
 
         auv_name.setMinimumSize(new java.awt.Dimension(200, 110));
         auv_name.setModal(true);
@@ -1401,13 +1305,13 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jme3_move_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_move_auvActionPerformed
         auv_move_vector_dialog.setTitle("Change position of AUV");
-        //auv_move_vector_dialog.setLocationRelativeTo(JMEPanel1);
+        auv_move_vector_dialog.setLocationRelativeTo(this);
         auv_move_vector_dialog.setVisible(true);
     }//GEN-LAST:event_jme3_move_auvActionPerformed
 
     private void jme3_rotate_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_rotate_auvActionPerformed
         auv_rotate_vector_dialog.setTitle("Change rotation of AUV");
-        //auv_rotate_vector_dialog.setLocationRelativeTo(JMEPanel1);
+        auv_rotate_vector_dialog.setLocationRelativeTo(this);
         auv_rotate_vector_dialog.setVisible(true);
     }//GEN-LAST:event_jme3_rotate_auvActionPerformed
 
