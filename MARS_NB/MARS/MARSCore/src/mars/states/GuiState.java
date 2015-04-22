@@ -355,7 +355,10 @@ public class GuiState extends AbstractAppState {
                 mars.getFlyByCamera().setEnabled(true);
                 if (selected_auv != null) {
                     selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
-                    guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+                    Spatial ghostObject = guiControlState.getGhostObject();
+                    if(ghostObject !=null){
+                       ghostObject.setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+                    }
                     selected_auv.hideGhostAUV(true);
                 }
 
