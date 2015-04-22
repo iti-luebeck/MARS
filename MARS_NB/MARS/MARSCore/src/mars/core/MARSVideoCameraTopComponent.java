@@ -28,7 +28,7 @@ import org.openide.util.NbBundle.Messages;
 @TopComponent.Description(
         preferredID = "MARSVideoCameraTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSVideoCameraTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)

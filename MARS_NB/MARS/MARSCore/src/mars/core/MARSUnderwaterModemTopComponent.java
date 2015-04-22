@@ -27,7 +27,7 @@ import org.openide.windows.TopComponent;
 @TopComponent.Description(
         preferredID = "MARSUnderwaterModemTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "mars.core.MARSUnderwaterModemTopComponent")
 //@ActionReference(path = "Menu/Window" /*, position = 333 */)
