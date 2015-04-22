@@ -2674,24 +2674,6 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     /**
      *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return 1f;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return 1000;
-    }
-
-    /**
-     *
      * @param listener
      */
     @Override

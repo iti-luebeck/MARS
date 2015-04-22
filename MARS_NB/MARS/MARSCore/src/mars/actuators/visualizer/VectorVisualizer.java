@@ -17,10 +17,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Subscriber;
@@ -33,7 +33,7 @@ import org.ros.node.topic.Subscriber;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class VectorVisualizer extends Actuator implements ChartValue {
+public class VectorVisualizer extends Actuator{
 
     //motor
     private Geometry VectorVisualizerStart;
@@ -199,21 +199,10 @@ public class VectorVisualizer extends Actuator implements ChartValue {
         }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
-    public Object getChartValue() {
-        return vector;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, vector, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

@@ -714,7 +714,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
         } else {
             oldtime = curtime;
-            publishData();
+            //only publish if someone is listening
+            AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
+            if(listeners1.length != 0){
+                publishData();
+            }
         }
     }
     

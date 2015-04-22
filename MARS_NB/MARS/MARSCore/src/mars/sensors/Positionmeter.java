@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
@@ -24,7 +23,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Positionmeter extends Sensor implements ChartValue {
+public class Positionmeter extends Sensor{
 
     private Vector3f old_position = new Vector3f(0f, 0f, 0f);
     private Vector3f new_position = new Vector3f(0f, 0f, 0f);
@@ -196,23 +195,5 @@ public class Positionmeter extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPosition(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getPosition();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
     }
 }

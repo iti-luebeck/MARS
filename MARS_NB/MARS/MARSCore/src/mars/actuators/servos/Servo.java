@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.misc.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.PhysicalExchange.Manipulating;
@@ -40,6 +39,7 @@ import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
+import mars.server.MARSClientEvent;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -52,7 +52,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Dynamixel_AX12PLUS.class, Modelcraft_ES07.class})
-public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
+public class Servo extends Actuator implements Manipulating, Keys {
 
     //servo
     private Geometry ServoStart;
@@ -528,22 +528,11 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
             }
         }
     }
-
-    /**
-     *
-     * @return
-     */
+    
     @Override
-    public Object getChartValue() {
-        return (float) desired_angle;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, desired_angle, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

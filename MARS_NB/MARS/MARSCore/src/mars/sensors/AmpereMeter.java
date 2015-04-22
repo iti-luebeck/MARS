@@ -10,7 +10,6 @@ import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
@@ -28,7 +27,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class AmpereMeter extends Sensor implements ChartValue {
+public class AmpereMeter extends Sensor{
 
     ///ROS stuff
     private Publisher<hanse_msgs.Ampere> publisher = null;
@@ -224,23 +223,5 @@ public class AmpereMeter extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAmpere(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return (float) getAmpere();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
     }
 }

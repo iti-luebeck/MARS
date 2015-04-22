@@ -16,7 +16,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.misc.ChartValue;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -30,7 +29,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class PressureSensor extends Sensor implements ChartValue {
+public class PressureSensor extends Sensor{
 
     private Geometry PressureSensorStart;
 
@@ -234,23 +233,5 @@ public class PressureSensor extends Sensor implements ChartValue {
         simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getPressureMbar(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getDepth();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
     }
 }

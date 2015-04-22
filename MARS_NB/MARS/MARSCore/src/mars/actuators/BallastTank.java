@@ -20,10 +20,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.misc.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -34,7 +34,7 @@ import mars.xml.HashMapAdapter;
  * @author Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class BallastTank extends Actuator implements Keys, ChartValue {
+public class BallastTank extends Actuator implements Keys {
 
     //motor
     private Geometry BallastStart;
@@ -275,22 +275,11 @@ public class BallastTank extends Actuator implements Keys, ChartValue {
             }
         }
     }
-
-    /**
-     *
-     * @return
-     */
+    
     @Override
-    public Object getChartValue() {
-        return getCurrentVolume();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getCurrentVolume(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

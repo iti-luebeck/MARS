@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
@@ -22,7 +21,7 @@ import mars.server.MARSClientEvent;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Velocimeter extends Sensor implements ChartValue {
+public class Velocimeter extends Sensor{
 
     ///ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
@@ -163,23 +162,5 @@ public class Velocimeter extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getLinearVelocity().length(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getLinearVelocity().length();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
     }
 }

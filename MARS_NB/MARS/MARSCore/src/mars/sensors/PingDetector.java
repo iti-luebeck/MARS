@@ -16,7 +16,6 @@ import com.jme3.scene.shape.Sphere;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.ros.MARSNodeMain;
@@ -33,7 +32,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class PingDetector extends Sensor implements ChartValue {
+public class PingDetector extends Sensor{
 
     private Geometry PingStart;
     private Geometry PingDirection;
@@ -317,23 +316,5 @@ public class PingDetector extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPingerAngleRadiant("pingpong"), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getPingerAngleRadiant("pingpong");
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
     }
 }

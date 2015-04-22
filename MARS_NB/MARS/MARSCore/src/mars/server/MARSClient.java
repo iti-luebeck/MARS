@@ -15,6 +15,7 @@ import mars.auv.AUV_Manager;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public interface MARSClient extends EventListener {
 
     /**

@@ -12,9 +12,11 @@ import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import java.awt.Color;
 import java.util.ArrayList;
 import mars.auv.AUV;
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
 import mars.events.MARSObjectEvent;
 import mars.events.MARSObjectListener;
-import mars.misc.ChartValue;
+import mars.sensors.Sensor;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -57,8 +59,8 @@ public final class MARSChartTopComponent extends TopComponent {
     private static long m_starttime = System.currentTimeMillis();
     private Chart2D charts;
     
-    private ChartValue chartValue;
     private AUV auv;
+    private Sensor sens;
 
     /**
      *
@@ -71,18 +73,16 @@ public final class MARSChartTopComponent extends TopComponent {
     
     /**
      *
-     * @param chartValue
+     * @param sens
      */
-    public MARSChartTopComponent(ChartValue chartValue) {
-        this.chartValue = chartValue;
+    public MARSChartTopComponent(Sensor sens) {
+        this.sens = sens;
         
         initComponents();
         setName(Bundle.CTL_MARSChartTopComponent());
         setToolTipText(Bundle.HINT_MARSChartTopComponent());
 
         createChart();
-
-        new ChartGenerator(traces,chartValue).start();
     }
     
     /**
@@ -140,48 +140,13 @@ public final class MARSChartTopComponent extends TopComponent {
         // TODO read your settings according to their version
     }
     
-    private void createChart(){
-           
+    private void createChart(){  
          // Create a chart:  
         charts = new Chart2D();
-        
-        // Create an ITrace: 
-        if(chartValue.getChartValue() instanceof Float){
-            ITrace2D trace = new Trace2DLtd(200);
-            trace.setColor(Color.RED);
-            charts.addTrace(trace);
-            traces.add(trace);
-        }else if(chartValue.getChartValue() instanceof Vector3f){
-            ITrace2D trace = new Trace2DLtd(200);
-            trace.setColor(Color.RED);
-            charts.addTrace(trace);
-            traces.add(trace);
-            ITrace2D trace2 = new Trace2DLtd(200);
-            trace2.setColor(Color.BLUE);
-            charts.addTrace(trace2);
-            traces.add(trace2);
-            ITrace2D trace3 = new Trace2DLtd(200);
-            trace3.setColor(Color.GREEN);
-            charts.addTrace(trace3);
-            traces.add(trace3);
-        }
-        //trace.setColor(Color.RED);
-        //trace2.setColor(Color.BLUE);
-                
-        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-        //charts.addTrace(trace);
-        //charts.addTrace(trace2);
-                
-        LayoutFactory factory = LayoutFactory.getInstance();
-        info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
-        
-        add(chartpanel);
-	addPropertyChangeListener(chartpanel);
-        validate();
+        initListenerAUVObject();
     }
     
     private void createChartAUV(){
-           
          // Create a chart:  
         charts = new Chart2D();
         
@@ -198,44 +163,10 @@ public final class MARSChartTopComponent extends TopComponent {
 	addPropertyChangeListener(chartpanel);
         validate();
         
-        initListener();
+        initListenerMARSObject();
     }
     
-    private static class ChartGenerator extends Thread {
- 
-        private ArrayList<ITrace2D> traces;
-        private ChartValue chartValue;
-
-        public void run() {
-            while (true) {
-                try {
-                    if(chartValue.getChartValue() instanceof Float){
-                        for (ITrace2D trace : traces) {
-                            trace.addPoint(((double) System.currentTimeMillis() - m_starttime), (Float)chartValue.getChartValue());
-                        }
-                    }else if(chartValue.getChartValue() instanceof Vector3f){
-                        Vector3f vec = (Vector3f)chartValue.getChartValue();
-                        ITrace2D x = traces.get(0);
-                        x.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getX());
-                        ITrace2D y = traces.get(1);
-                        y.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getY());
-                        ITrace2D z = traces.get(2);
-                        z.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getZ());
-                    }
-                    Thread.sleep(chartValue.getSleepTime());
-                } catch (Exception e) {
-                    e.printStackTrace(System.err);
-                }
-            }
-        }
-
-        private ChartGenerator(ArrayList<ITrace2D> traces, ChartValue chartValue) {
-            this.traces = traces;
-            this.chartValue = chartValue;
-        }
-    }
-    
-    void initListener(){
+    void initListenerMARSObject(){
         class ComplainingAdListener implements MARSObjectListener{
             @Override public void onNewData( MARSObjectEvent e ) {
                 if(e.getMsg() instanceof Float){
@@ -255,5 +186,60 @@ public final class MARSChartTopComponent extends TopComponent {
         }
 
         auv.addMARSObjectListener( new ComplainingAdListener() );
+    }
+    
+    void initListenerAUVObject(){
+        class ComplainingAdListener implements AUVObjectListener{
+            private boolean init = false;
+            @Override public void onNewData( AUVObjectEvent e ) {
+                
+                //we have to init the traces here because we dont know of which type the data is till the first publish
+                if(!init){
+                    if(e.getMsg() instanceof Float){
+                        ITrace2D trace = new Trace2DLtd(200);
+                        trace.setColor(Color.RED);
+                        charts.addTrace(trace);
+                        traces.add(trace);
+                    }else if(e.getMsg() instanceof Vector3f){
+                        ITrace2D trace = new Trace2DLtd(200);
+                        trace.setColor(Color.RED);
+                        charts.addTrace(trace);
+                        traces.add(trace);
+                        ITrace2D trace2 = new Trace2DLtd(200);
+                        trace2.setColor(Color.BLUE);
+                        charts.addTrace(trace2);
+                        traces.add(trace2);
+                        ITrace2D trace3 = new Trace2DLtd(200);
+                        trace3.setColor(Color.GREEN);
+                        charts.addTrace(trace3);
+                        traces.add(trace3);
+                    }
+                    
+                    LayoutFactory factory = LayoutFactory.getInstance();
+                    info.monitorenter.gui.chart.views.ChartPanel chartpanel = new info.monitorenter.gui.chart.views.ChartPanel(charts);
+
+                    add(chartpanel);
+                    addPropertyChangeListener(chartpanel);
+                    validate();
+                    init = true;
+                }
+                
+                if(e.getMsg() instanceof Float){
+                    for (ITrace2D trace : traces) {
+                        trace.addPoint(((double) System.currentTimeMillis() - m_starttime), (Float)e.getMsg());
+                    }
+                }else if(e.getMsg() instanceof Vector3f){
+                    Vector3f vec = (Vector3f)e.getMsg();
+                    ITrace2D x = traces.get(0);
+                    x.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getX());
+                    ITrace2D y = traces.get(1);
+                    y.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getY());
+                    ITrace2D z = traces.get(2);
+                    z.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getZ());
+                }
+            }
+        }
+
+        sens.addAUVObjectListener( new ComplainingAdListener() );
     }
 }
