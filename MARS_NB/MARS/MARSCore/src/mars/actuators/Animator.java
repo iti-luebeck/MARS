@@ -89,7 +89,7 @@ public class Animator extends Actuator {
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
     }
 
     /**

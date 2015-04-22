@@ -145,7 +145,7 @@ public class VectorVisualizer extends Actuator implements ChartValue {
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
-    public void update() {
+    public void updateForces() {
 
     }
 

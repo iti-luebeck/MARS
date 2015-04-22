@@ -211,9 +211,9 @@ public class BallastTank extends Actuator implements Keys, ChartValue {
     }
 
     /*
-     * See update(float tpf)
+     * See updateForces(float tpf)
      */
-    public void update() {
+    public void updateForces() {
     }
 
     /**

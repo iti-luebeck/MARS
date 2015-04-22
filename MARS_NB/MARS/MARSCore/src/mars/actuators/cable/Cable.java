@@ -66,7 +66,7 @@ public class Cable extends Actuator{
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
     }
 
     @Override

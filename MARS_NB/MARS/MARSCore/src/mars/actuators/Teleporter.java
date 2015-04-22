@@ -83,7 +83,7 @@ public class Teleporter extends Actuator {
         super.init(auv_node);
     }
 
-    public void update() {
+    public void updateForces() {
     }
 
     /**

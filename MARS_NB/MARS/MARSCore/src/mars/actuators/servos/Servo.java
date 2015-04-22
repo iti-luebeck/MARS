@@ -281,7 +281,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
     }
 
     @Override
@@ -323,7 +323,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
                         }
                     });
                 }
-                //since we will rotate we have to update our current angle
+                //since we will rotate we have to updateForces our current angle
                 current_angle_iteration += do_it_iterations;
 
             }

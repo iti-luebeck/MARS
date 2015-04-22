@@ -137,7 +137,7 @@ public class PointVisualizer extends Actuator implements ChartValue {
         rootNode.attachChild(PhysicalExchanger_Node);
     }
 
-    public void update() {
+    public void updateForces() {
 
     }
 
