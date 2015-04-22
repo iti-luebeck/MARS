@@ -23,7 +23,6 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
-import mars.gui.dnd.AUVTransferHandler;
 import mars.states.GuiState;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.util.Lookup;
@@ -133,9 +132,6 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         
         result2 = Utilities.actionsGlobalContext().lookupResult(AUV.class);
         result2.addLookupListener (this);
-        
-
-        this.setTransferHandler(new AUVTransferHandler());
     }
 
     @Override
