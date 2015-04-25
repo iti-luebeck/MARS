@@ -30,7 +30,7 @@ import org.openide.util.Lookup;
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:
 @ActionID(category = "...", id = "mars.module.auvEditor.LoadAUVWizardAction")
-@ActionRegistration(displayName = "Open LoadAUV Wizard")
+@ActionRegistration(displayName = "Create AUV")
 @ActionReference(path = "Menu/Tools", position = 1)
 public final class LoadAUVWizardAction implements ActionListener {
 
