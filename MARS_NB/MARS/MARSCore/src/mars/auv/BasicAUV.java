@@ -1503,7 +1503,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         ghost_auv_spatial.updateGeometricState();
         ghost_auv_spatial.updateModelBound();
         ghost_auv_spatial.setName(auv_param.getModelName() + "_ghost");
-        ghost_auv_spatial.setUserData("auv_name", getName());
+        Helper.setNodeUserData(ghost_auv_spatial, "auv_name", getName());
         ghost_auv_spatial.setCullHint(CullHint.Always);
         Helper.setNodePickUserData(ghost_auv_spatial, PickHint.NoPick);
         auv_node.attachChild(ghost_auv_spatial);
