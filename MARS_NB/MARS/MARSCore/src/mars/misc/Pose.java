@@ -14,10 +14,11 @@ import com.jme3.math.Vector3f;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class Pose {
-    private Vector3f position = new Vector3f();
-    private Quaternion orientation = new Quaternion();
+    final private Vector3f position;
+    final private Quaternion orientation;
 
     public Pose() {
+        this(new Vector3f(), new Quaternion());
     }
     
     public Pose(Vector3f position, Quaternion orientation) {
@@ -31,13 +32,5 @@ public class Pose {
 
     public Quaternion getOrientation() {
         return orientation;
-    }
-
-    public void setPosition(Vector3f position) {
-        this.position = position;
-    }
-
-    public void setOrientation(Quaternion orientation) {
-        this.orientation = orientation;
-    }    
+    } 
 }
