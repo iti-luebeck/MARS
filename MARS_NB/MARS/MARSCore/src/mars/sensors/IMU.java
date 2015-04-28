@@ -12,17 +12,18 @@ import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import geometry_msgs.Quaternion;
 import geometry_msgs.Vector3;
-import org.ros.node.topic.Publisher;
-import mars.PhysicalEnvironment;
-import mars.states.SimState;
-import mars.ros.MARSNodeMain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
+import mars.misc.IMUData;
+import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
+import mars.states.SimState;
 import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * An inertial measurment unit class. Basically it consist of the Accelerometer,
@@ -236,8 +237,8 @@ public class IMU extends Sensor {
         this.rosinit = true;
     }
     
-    public Matrix4f getIMU(){
-        Matrix4f mat = new Matrix4f();
+    public IMUData getIMU(){
+        IMUData mat = new IMUData(acc.getAcceleration(),gyro.getAngularVelocity(),oro.getOrientation());
         return mat;
     }
 
