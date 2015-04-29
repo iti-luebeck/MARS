@@ -40,10 +40,10 @@
     </folder>
     <folder name="Toolbars">
         <file name="Clipboard_hidden"/>
+        <folder name="File">
+            <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
+        </folder>
         <file name="Memory_hidden"/>
-        <file name="MyToolbar.xml" url="MyToolbar.xml">
-            <attr name="position" intvalue="100"/>
-       </file>
         <file name="Standard.xml" url="Standard.xml"/>
         <file name="UndoRedo_hidden"/>
     </folder>
