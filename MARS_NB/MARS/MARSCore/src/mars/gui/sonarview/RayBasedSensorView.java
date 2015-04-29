@@ -51,4 +51,9 @@ public interface RayBasedSensorView {
      *
      */
     public void repaintAll();
+    
+    /**
+     *
+     */
+    public void cleanUp();
 }
