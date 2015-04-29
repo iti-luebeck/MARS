@@ -709,7 +709,9 @@ public class AUV_Manager extends MARSObjectManager{
     /**
      *
      */
+    @Override
     public void cleanup() {
+        super.cleanup();
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             auv.cleanupAUV();
