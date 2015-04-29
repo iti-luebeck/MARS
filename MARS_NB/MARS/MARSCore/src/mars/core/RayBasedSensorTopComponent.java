@@ -46,6 +46,12 @@ public class RayBasedSensorTopComponent extends TopComponent {
         }
     }
 
+    @Override
+    protected void componentClosed() {
+        super.componentClosed();
+        imgP.cleanUp();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
