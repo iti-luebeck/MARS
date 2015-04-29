@@ -27,4 +27,7 @@ public class MARSObjectManager implements Lookup.Provider{
         return lookup;
     }
     
+    public void cleanup(){
+        
+    };
 }
