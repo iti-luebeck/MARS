@@ -347,6 +347,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         boolean old = getEnabled();
         variables.put("enabled", enabled);
         fire("enabled", old, enabled);
+        if(getAuv().getAuv_param().isDebugPhysicalExchanger() && enabled){
+            setNodeVisibility(true);
+        }else{
+            setNodeVisibility(false);
+        }
     }
 
     /**
