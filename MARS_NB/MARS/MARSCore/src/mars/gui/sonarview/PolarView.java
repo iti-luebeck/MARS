@@ -110,7 +110,7 @@ public class PolarView extends JPanel implements RayBasedSensorView {
             }
             imageGraphics.drawLine(252, 252 - i, 252, 252 - i - 1);
         }
-        drawRadarLine(data.length, lastHeadPosition, resolution);
+        //drawRadarLine(data.length, lastHeadPosition, resolution);
         this.repaint();
     }
 

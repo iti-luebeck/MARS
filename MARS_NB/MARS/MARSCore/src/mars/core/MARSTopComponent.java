@@ -1012,7 +1012,6 @@ public final class MARSTopComponent extends TopComponent {
         auv_move_vector_dialog.getContentPane().add(auv_move_vector_dialog_z, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 73, 126, -1));
 
         auv_rotate_vector_dialog.setMinimumSize(new java.awt.Dimension(180, 235));
-        auv_rotate_vector_dialog.setPreferredSize(new java.awt.Dimension(180, 235));
         auv_rotate_vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel16.text")); // NOI18N
