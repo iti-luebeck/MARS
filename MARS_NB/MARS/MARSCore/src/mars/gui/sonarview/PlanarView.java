@@ -64,6 +64,9 @@ public class PlanarView extends JPanel implements RayBasedSensorView {
                 if(e.getMsg() instanceof SonarData){
                     SonarData sondat = (SonarData)e.getMsg();
                     updateData(sondat.getData(), sondat.getAngle(), sens.getScanning_resolution());
+                }else if(e.getMsg() instanceof float[]){
+                    float[] dat = (float[])e.getMsg();
+                    updateInstantData(dat, 0f, 0f);
                 }
             }
         };
@@ -115,17 +118,23 @@ public class PlanarView extends JPanel implements RayBasedSensorView {
 
     @Override
     public void updateInstantData(float[] data, float lastHeadPosition, float resolution) {
-
+        
         Arrays.fill(fPixels, (bgcolor.getAlpha() << 24) | (bgcolor.getRed() << 16) | (bgcolor.getGreen() << 8) | bgcolor.getBlue());//clr array
-
-        for (int i = 0; i < data.length; i++) {
-            int position = (int) ((data[i] / 4f) * fHeight);
-            if (i < fWidth) {
+        for (int j = 0; j < data.length; j++) {
+            if(data[j] == -1){//no data from the laserscanner, nothing seen
+                //reset the whole line
+                
+            }else{
+                int positon = (int)((data[j]/sens.getMaxRange())*fHeight);
                 Color newC = Helper.combineColors(bgcolor, hitColor, 255);
-                fPixels[position * fWidth + i] = (newC.getAlpha() << 24) | (newC.getRed() << 16) | (newC.getGreen() << 8) | newC.getBlue();
+                fPixels[positon * fWidth + counter] = (newC.getAlpha() << 24) | (newC.getRed() << 16) | (newC.getGreen() << 8) | newC.getBlue();
+            }
+            mis.newPixels(counter, 0, 1, fHeight);
+            counter++;
+            if (counter > 399) {
+                counter = 0;
             }
         }
-        mis.newPixels(0, 0, fWidth, fHeight);
 
         this.repaint();
     }

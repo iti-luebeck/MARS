@@ -14,7 +14,7 @@ import java.awt.Color;
 public interface RayBasedSensorView {
 
     /**
-     *
+     * Updates only one ray of data
      * @param data
      * @param lastHeadPosition
      * @param resolution
@@ -22,7 +22,7 @@ public interface RayBasedSensorView {
     public void updateData(byte[] data, float lastHeadPosition, float resolution);
 
     /**
-     *
+     * Updates all the data (kind of like the drivers of laser scanners are working, very fast)
      * @param data
      * @param lastHeadPosition
      * @param resolution
