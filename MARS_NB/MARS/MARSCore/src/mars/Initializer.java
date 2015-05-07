@@ -678,9 +678,11 @@ public class Initializer {
      * @param tpf
      */
     public void updateWavesWater(float tpf) {
-        waves_time += tpf;
-        float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
-        water.setWaterHeight(water_height + waterHeight);
+        if(water != null){
+            waves_time += tpf;
+            float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
+            water.setWaterHeight(water_height + waterHeight);
+        }
     }
 
     /*
