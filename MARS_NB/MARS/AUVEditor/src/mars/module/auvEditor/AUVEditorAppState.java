@@ -8,6 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -68,7 +69,15 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     /**
      * rootNode of parent SimpleApplication
      */
-    private AssetManager assetManager;
+    public AssetManager assetManager;
+    /**
+     * camera for free movement and orientation
+     */
+    private AdvancedFlyByCamera advFlyCamState;
+    /**
+     * Chase camera for rotation/translation with respect the origin.
+     */
+    private ChaseCamera chaseCam;
     /**
      * inputManager of parent SimpleApplication
      */
@@ -128,10 +137,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * is released.
      */
     private boolean save = false;
-    
+
     /*
-    * 
-    */
+     * 
+     */
     private EventListenerList listeners = new EventListenerList();
 
     /**
@@ -152,7 +161,10 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             this.assetManager = this.app.getAssetManager();
             initAssetsPaths();
 
-            initFlyCam();
+            initCam();
+            //initFlyCam();
+            initChaseCam();
+            
 
             //assetManager.registerLocator("./assets", FileLocator.class);
             // set key mapping
@@ -187,30 +199,24 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
             //tell other components that we are initialized
             notifyAdvertisement(new Event(this, 1, null));
-            
-            /*if (auv != null) {
-                addAUVSpatial();
-                cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_Y);
-            }*/
         }
         super.initialize(stateManager, app);
     }
-    
+
     /**
      *
      * @param auv
      */
-    public void loadAUV(BasicAUV auv){
-        if(isInitialized()){
+    public void loadAUV(BasicAUV auv) {
+        if (isInitialized()) {
             deleteAllAUVs();
             setAUV(auv);
             addAUVSpatial();
-            cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_Y);
         }
     }
-    
-    private void deleteAllAUVs(){
-        if(auvNode!=null){
+
+    private void deleteAllAUVs() {
+        if (auvNode != null) {
             auvNode.detachAllChildren();
             rootNode.detachChild(auvNode);
         }
@@ -313,12 +319,22 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
      * Initializes the flycam.
      */
     public void initFlyCam() {
-        AdvancedFlyByCamera advFlyCamState = new AdvancedFlyByCamera(getCamera());
-        advFlyCamState.setDragToRotate(true);
-        advFlyCamState.setEnabled(true);
-        getCamera().setLocation(new Vector3f(3f, 1f, 0f));
-        cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+        advFlyCamState = new AdvancedFlyByCamera(cam);
         advFlyCamState.registerWithInput(inputManager);
+        advFlyCamState.setEnabled(true);
+    }
+
+    private void initChaseCam() {
+        chaseCam = new ChaseCamera(cam, rootNode, inputManager);
+        chaseCam.setDefaultVerticalRotation(0);
+        chaseCam.setDefaultHorizontalRotation(0);
+        chaseCam.setUpVector(Vector3f.UNIT_Y);
+        chaseCam.setEnabled(true);
+    }
+
+    private void initCam() {
+        cam.setLocation(new Vector3f(1f, 1f, 1f));
+        cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
     }
 
     /**
@@ -349,9 +365,6 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
     public void setCamera(Camera cam) {
         this.cam = cam;
         cam.setAxes(Vector3f.UNIT_Z, Vector3f.UNIT_Y, Vector3f.UNIT_X);
-        //cam.setRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI, -3 * FastMath.QUARTER_PI, 0));
-        //cam.setLocation(new Vector3f(1, 1.5f, 1));
-        //cam.lookAt(auvNode.getWorldTranslation(), Vector3f.UNIT_X);
     }
 
     /**
@@ -533,12 +546,12 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
         CollisionResult closestCollision = null;
 
         // Trace click for deugging
-        //Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        //mat.setColor("Color", ColorRGBA.White);
-        //line = new Line(click3d, click3d.add(dir.mult(100f)));
-        //Geometry geometry = new Geometry("line", line);
-        //geometry.setMaterial(mat);
-        //rootNode.attachChild(geometry);
+//        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//        mat.setColor("Color", ColorRGBA.White);
+//        line = new Line(click3d, click3d.add(dir.mult(100f)));
+//        Geometry geometry = new Geometry("line", line);
+//        geometry.setMaterial(mat);
+//        rootNode.attachChild(geometry);
         for (Node target : allowedTargets) {
             CollisionResults results = new CollisionResults();
             Ray ray = new Ray(click3d, dir);
@@ -556,7 +569,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
     /**
      * Setter
-     * 
+     *
      * @param enabled
      */
     @Override
@@ -589,7 +602,7 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
 
     /**
      * Setter
-     * 
+     *
      * @param auv
      */
     public void setAUV(BasicAUV auv) {
@@ -696,33 +709,31 @@ public class AUVEditorAppState extends AbstractAppState implements AppStateExten
             coordinateAxesNode.setLocalScale(newScale);
         }
     }
-    
+
     /**
      *
      * @param listener
      */
-    public void addAdListener( AppStateListener listener )
-    {
-      listeners.add( AppStateListener.class, listener );
+    public void addAdListener(AppStateListener listener) {
+        listeners.add(AppStateListener.class, listener);
     }
 
     /**
      *
      * @param listener
      */
-    public void removeAdListener( AppStateListener listener )
-    {
-      listeners.remove( AppStateListener.class, listener );
+    public void removeAdListener(AppStateListener listener) {
+        listeners.remove(AppStateListener.class, listener);
     }
 
     /**
      *
      * @param event
      */
-    protected synchronized void notifyAdvertisement( Event event )
-    {
-      for ( AppStateListener l : listeners.getListeners( AppStateListener.class ) )
-        l.advertisement( event );
+    protected synchronized void notifyAdvertisement(Event event) {
+        for (AppStateListener l : listeners.getListeners(AppStateListener.class)) {
+            l.advertisement(event);
+        }
     }
 
 }

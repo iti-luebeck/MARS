@@ -4,6 +4,8 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -11,9 +13,11 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import com.jme3.scene.shape.Line;
 
 /**
  * Control class for Objects that should be moved by "ijklum"-keys with a
@@ -44,7 +48,7 @@ public class CoordinateAxesControl extends AbstractControl {
     /**
      * position of the mouse projected on the axis
      */
-    Vector3f mouseOnAxisPosition;
+    Vector3f prevLineDirection;
     /**
      * parent appstate
      */
@@ -53,63 +57,6 @@ public class CoordinateAxesControl extends AbstractControl {
     private Node currentlySelectedOrb;
     private Vector3f rotationVector;
 
-    /**
-     *
-     */
-    public CoordinateAxesControl() {
-        super();
-    }
-
-    /**
-     * use only this constructor. The CoordinateAxesControl is disabled after
-     * construction.
-     *
-     * @param coordinateAxesNode node containing a coordinate system
-     * @param rotationOrbNode node containing a rotion orb
-     * @param speed movement speed
-     * @param inputManager the application's input manager
-     * @param spatial the spatial the controller will be attached to
-     * @param appState Appstate of the AUVEditor
-     */
-    public CoordinateAxesControl(Node coordinateAxesNode, Node rotationOrbNode, float speed, InputManager inputManager, Spatial spatial, AUVEditorAppState appState) {
-        super();
-        setSpatial(spatial);
-        this.coordinateAxesNode = coordinateAxesNode;
-        this.rotationOrbNode = rotationOrbNode;
-        this.speed = speed;
-        this.inputManager = inputManager;
-        this.appState = appState;
-        initKeys();
-        super.setEnabled(false);
-
-    }
-
-    private void initKeys() {
-        inputManager.addListener(analogListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
-        inputManager.addListener(actionListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
-    }
-
-    /**
-     *
-     * @param enabled
-     */
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        if (enabled) {
-            // move the coordinate axes and rotation orb to the selected AUV
-            coordinateAxesNode.setLocalTranslation(spatial.getWorldTranslation());
-            rotationOrbNode.setLocalTranslation(spatial.getWorldTranslation());
-
-            // show them
-            coordinateAxesNode.setCullHint(Spatial.CullHint.Inherit);
-            rotationOrbNode.setCullHint(Spatial.CullHint.Inherit);
-        } else {
-            // hide them
-            coordinateAxesNode.setCullHint(Spatial.CullHint.Always);
-            rotationOrbNode.setCullHint(Spatial.CullHint.Always);
-        }
-    }
     /**
      * starts and stops the draging by coordinate axes
      */
@@ -136,7 +83,7 @@ public class CoordinateAxesControl extends AbstractControl {
                         }
                     }
                 }
-                
+
                 /*
                  * check if draging was finished
                  */
@@ -144,7 +91,7 @@ public class CoordinateAxesControl extends AbstractControl {
                     // deselect the current object
                     currentlySelectedAxis = null;
                     currentlySelectedOrb = null;
-                    mouseOnAxisPosition = null;
+                    prevLineDirection = null;
                     rotationVector = null;
                     rotationOrbNode.setLocalRotation(Matrix3f.ZERO);
                     appState.save();
@@ -179,133 +126,13 @@ public class CoordinateAxesControl extends AbstractControl {
         @Override
         public void onAnalog(String name, float value, float tpf) {
             if (isEnabled()) {
-                Vector3f moveVector = new Vector3f(0, 0, 0);
+                Vector3f moveVector = Vector3f.ZERO;
                 Quaternion rotationQuaternion = new Quaternion();
-                /*
-                 * scale
-                 */
-                if (name.equals("Scale Up")) {
-                    if (spatial.getName().equals("AUV")) {
-                        spatial.getParent().scale(1.1f, 1.1f, 1.1f);
-                    } else {
-                        // else it's a attachemnt. Scale only the attachment
-                        spatial.scale(1.1f, 1.1f, 1.1f);
-                    }
+                scaleMouseBtn(name);
+                orientationDragAndDrop(name, rotationQuaternion);
+                moveVector = translationDragAndDrop(name, moveVector);
+                moveVector = translationKeyboard(name, moveVector, value);
 
-                }
-                if (name.equals("Scale Down")) {
-                    if (spatial.getName().equals("AUV")) {
-                        spatial.getParent().scale(10f / 11);
-                    } else {
-                        // else it's a attachemnt. Scale only the attachment
-                        spatial.scale(10f / 11);
-                    }
-                }
-
-                /*
-                 * rotate by drag'n'drop
-                 */
-                if (name.equals("SelectManipulator") && currentlySelectedOrb != null) {
-                    // get plain
-                    Vector3f plainBasis = currentlySelectedOrb.getWorldTranslation();
-                    Vector3f plainNormal;
-                    switch (currentlySelectedOrb.getName()) {
-                        case "x Torus":
-                            plainNormal = Vector3f.UNIT_X;
-                            break;
-                        case "y Torus":
-                            plainNormal = Vector3f.UNIT_Y;
-                            break;
-                        default:
-                        case "z Torus":
-                            plainNormal = Vector3f.UNIT_Z;
-                            break;
-                    }
-
-                    // get line
-                    Vector2f click2d = inputManager.getCursorPosition();
-                    Vector3f lineBasis = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-                    Vector3f lineDirection = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(lineBasis).normalizeLocal();
-
-                    // get new plain projected mouse position
-                    Vector3f currentValue = getIntersectionWithPlane(plainBasis, plainNormal, lineBasis, lineDirection, "");
-
-                    Vector3f v_ = currentValue.subtract(plainBasis);
-                    // current value projected on the unit circle
-                    Vector3f v_n = v_.divide(v_.length());
-                    if (rotationVector != null) {
-                        // last value projected on the unit circle
-                        Vector3f k_n = rotationVector;
-                        // rotate k_n back 45° to avoid the negativ angles (angleBetween() return only positiv values
-                        Matrix3f rotateMinusQuarterPi = new Matrix3f();
-                        rotateMinusQuarterPi.fromAngleAxis(-FastMath.QUARTER_PI, plainNormal);
-                        Vector3f k_n_MinusQuarterPi = rotateMinusQuarterPi.mult(k_n);
-
-                        rotationQuaternion.fromAngleAxis(k_n_MinusQuarterPi.angleBetween(v_n) - FastMath.QUARTER_PI, plainNormal);
-                    }
-                    rotationVector = v_n;
-                }
-
-                /*
-                 * move by drag'n'drop
-                 */
-                if (name.equals("SelectManipulator") && currentlySelectedAxis != null) {
-                    // get plain
-                    Vector3f plainBasis = coordinateAxesNode.getWorldTranslation();
-                    Vector3f plainNormal;
-                    switch (currentlySelectedAxis.getName()) {
-                        case "x Axis":
-                            plainNormal = Vector3f.UNIT_Y;
-                            break;
-                        case "y Axis":
-                            plainNormal = Vector3f.UNIT_Z;
-                            break;
-                        default:
-                        case "z Axis":
-                            plainNormal = Vector3f.UNIT_X;
-                            break;
-                    }
-
-                    // get line
-                    Vector2f click2d = inputManager.getCursorPosition();
-                    Vector3f lineBasis = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-                    Vector3f lineDirection = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(lineBasis).normalizeLocal();
-
-                    // get new axis projected mouse position
-                    Vector3f currentValue = getIntersectionWithPlane(plainBasis, plainNormal, lineBasis, lineDirection, currentlySelectedAxis.getName());
-
-                    // move by diffrence to previous value
-                    if (mouseOnAxisPosition != null) {
-                        moveVector = currentValue.subtract(mouseOnAxisPosition);
-                    }
-
-                    // save current value for next call
-                    mouseOnAxisPosition = currentValue;
-                }
-
-                /*
-                 * move by keys
-                 */
-                switch (name) {
-                    case "Up":
-                        moveVector = new Vector3f(0, speed * value, 0);
-                        break;
-                    case "Down":
-                        moveVector = new Vector3f(0, speed * value * (-1), 0);
-                        break;
-                    case "Left":
-                        moveVector = new Vector3f(speed * value * (-1), 0, 0);
-                        break;
-                    case "Right":
-                        moveVector = new Vector3f(speed * value, 0, 0);
-                        break;
-                    case "Forward":
-                        moveVector = new Vector3f(0, 0, speed * value * (-1));
-                        break;
-                    case "Backward":
-                        moveVector = new Vector3f(0, 0, speed * value);
-                        break;
-                }
                 coordinateAxesNode.move(moveVector);
                 rotationOrbNode.move(moveVector);
                 // if the spatial is the auv spatial rotate the parent "AUV Node" so that all attachments get rotated as well
@@ -338,7 +165,265 @@ public class CoordinateAxesControl extends AbstractControl {
                 rotationOrbNode.rotate(rotationQuaternion);
             }
         }
+
     };
+
+    /**
+     *
+     */
+    public CoordinateAxesControl() {
+        super();
+    }
+
+    /**
+     * use only this constructor. The CoordinateAxesControl is disabled after
+     * construction.
+     *
+     * @param coordinateAxesNode node containing a coordinate system
+     * @param rotationOrbNode node containing a rotion orb
+     * @param speed movement speed
+     * @param inputManager the application's input manager
+     * @param spatial the spatial the controller will be attached to
+     * @param appState Appstate of the AUVEditor
+     */
+    public CoordinateAxesControl(Node coordinateAxesNode, Node rotationOrbNode, float speed, InputManager inputManager, Spatial spatial, AUVEditorAppState appState) {
+        super();
+        setSpatial(spatial);
+        this.coordinateAxesNode = coordinateAxesNode;
+        this.rotationOrbNode = rotationOrbNode;
+        this.speed = speed;
+        this.inputManager = inputManager;
+        this.appState = appState;
+        initKeys();
+        super.setEnabled(false);
+
+    }
+
+    /**
+     * Calculates the intersection of the plane with basis vector planeStart and
+     * orthogonal vector planeNormal with the straight line with basis vector
+     * rayStart and direction vector rayDirection. Mathematically a
+     * paralellprojection is used.
+     *
+     * @param planeStart plain basis vector
+     * @param planeNormal plan normal vector
+     * @param rayStart straight line basis vector
+     * @param rayDirection straight line direction vector
+     * @return
+     */
+    private Vector3f getIntersectionWithPlane(Vector3f planeStart, Vector3f planeNormal, Vector3f rayStart, Vector3f rayDirection) {
+        float t = ((planeStart.subtract(rayStart)).dot(planeNormal) / rayDirection.dot(planeNormal));
+        Vector3f intersect = rayStart.add(rayDirection.mult(t));
+        return intersect;
+    }
+
+    private void initKeys() {
+        inputManager.addListener(analogListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
+        inputManager.addListener(actionListener, "Up", "Down", "Left", "Right", "Forward", "Backward", "SelectManipulator", "Scale Up", "Scale Down");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (enabled) {
+            // move the coordinate axes and rotation orb to the selected AUV
+            coordinateAxesNode.setLocalTranslation(spatial.getWorldTranslation());
+            rotationOrbNode.setLocalTranslation(spatial.getWorldTranslation());
+
+            // show them
+            coordinateAxesNode.setCullHint(Spatial.CullHint.Inherit);
+            rotationOrbNode.setCullHint(Spatial.CullHint.Inherit);
+        } else {
+            // hide them
+            coordinateAxesNode.setCullHint(Spatial.CullHint.Always);
+            rotationOrbNode.setCullHint(Spatial.CullHint.Always);
+        }
+    }
+
+    /**
+     * This method handles scaling by mouse
+     * @param name 
+     */
+    private void scaleMouseBtn(String name) {
+        /*
+         * scale
+         */
+        if (name.equals("Scale Up")) {
+            if (spatial.getName().equals("AUV")) {
+                spatial.getParent().scale(1.1f, 1.1f, 1.1f);
+            } else {
+                // else it's a attachemnt. Scale only the attachment
+                spatial.scale(1.1f, 1.1f, 1.1f);
+            }
+
+        }
+        if (name.equals("Scale Down")) {
+            if (spatial.getName().equals("AUV")) {
+                spatial.getParent().scale(10f / 11);
+            } else {
+                // else it's a attachemnt. Scale only the attachment
+                spatial.scale(10f / 11);
+            }
+        }
+    }
+
+    /**
+     * Handles translation by keyboard.
+     * @param name
+     * @param moveVector
+     * @param value
+     * @return 
+     */
+    private Vector3f translationKeyboard(String name, Vector3f moveVector, float value) {
+        /*
+         * move by keys
+         */
+        switch (name) {
+            case "Up":
+                moveVector = new Vector3f(0, speed * value, 0);
+                break;
+            case "Down":
+                moveVector = new Vector3f(0, speed * value * (-1), 0);
+                break;
+            case "Left":
+                moveVector = new Vector3f(speed * value * (-1), 0, 0);
+                break;
+            case "Right":
+                moveVector = new Vector3f(speed * value, 0, 0);
+                break;
+            case "Forward":
+                moveVector = new Vector3f(0, 0, speed * value * (-1));
+                break;
+            case "Backward":
+                moveVector = new Vector3f(0, 0, speed * value);
+                break;
+        }
+        return moveVector;
+    }
+
+    /**
+     * This method handles drag and drop rotations by mouse
+     * 
+     * @param name
+     * @param rotationQuaternion 
+     */
+    private void orientationDragAndDrop(String name, Quaternion rotationQuaternion) {
+        /*
+         * rotate by drag'n'drop
+         */
+        if (name.equals("SelectManipulator") && currentlySelectedOrb != null) {
+            // get plain
+            Vector3f plainBasis = currentlySelectedOrb.getWorldTranslation();
+            Vector3f plainNormal;
+            switch (currentlySelectedOrb.getName()) {
+                case "x Torus":
+                    plainNormal = Vector3f.UNIT_X;
+                    break;
+                case "y Torus":
+                    plainNormal = Vector3f.UNIT_Y;
+                    break;
+                default:
+                case "z Torus":
+                    plainNormal = Vector3f.UNIT_Z;
+                    break;
+            }
+
+            // get line
+            Vector2f click2d = inputManager.getCursorPosition();
+            Vector3f lineBasis = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+            Vector3f lineDirection = appState.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(lineBasis).normalizeLocal();
+
+            // get new plain projected mouse position
+            Vector3f currentValue = getIntersectionWithPlane(plainBasis, plainNormal, lineBasis, lineDirection);
+
+            Vector3f v_ = currentValue.subtract(plainBasis);
+            // current value projected on the unit circle
+            Vector3f v_n = v_.divide(v_.length());
+            if (rotationVector != null) {
+                // last value projected on the unit circle
+                Vector3f k_n = rotationVector;
+                // rotate k_n back 45° to avoid the negativ angles (angleBetween() return only positiv values
+                Matrix3f rotateMinusQuarterPi = new Matrix3f();
+                rotateMinusQuarterPi.fromAngleAxis(-FastMath.QUARTER_PI, plainNormal);
+                Vector3f k_n_MinusQuarterPi = rotateMinusQuarterPi.mult(k_n);
+
+                rotationQuaternion.fromAngleAxis(k_n_MinusQuarterPi.angleBetween(v_n) - FastMath.QUARTER_PI, plainNormal);
+            }
+            rotationVector = v_n;
+        }
+    }
+
+    /**
+     * Handles drag and drop translation by mouse.
+     * @param name
+     * @param moveVector
+     * @return 
+     */
+    private Vector3f translationDragAndDrop(String name, Vector3f moveVector) {
+        /*
+         * move by drag'n'drop
+         */
+        if (name.equals("SelectManipulator") && currentlySelectedAxis != null) {
+            // get plain
+            Vector3f plainBasis = coordinateAxesNode.getWorldTranslation();
+            Vector3f plainNormal;
+            Vector3f unitDirectionVector;
+            switch (currentlySelectedAxis.getName()) {
+                case "x Axis":
+                    plainNormal = Vector3f.UNIT_Y;
+                    unitDirectionVector = Vector3f.UNIT_X;
+                    break;
+                case "y Axis":
+                    plainNormal = Vector3f.UNIT_Z;
+                    unitDirectionVector = Vector3f.UNIT_Y;
+                    break;
+                default:
+                case "z Axis":
+                    plainNormal = Vector3f.UNIT_X;
+                    unitDirectionVector = Vector3f.UNIT_Z;
+                    break;
+            }
+
+            // get line
+            Vector2f click2d = inputManager.getCursorPosition();
+            Vector2f click2dVector = new Vector2f(click2d.x, click2d.y);
+            Vector3f lineBasis = appState.getCamera().getWorldCoordinates(click2dVector, 0f).clone();
+            Vector3f lineDirection = appState.getCamera().getWorldCoordinates(click2dVector, 1f).subtractLocal(lineBasis).normalizeLocal();
+
+            // get new axis projected mouse position
+            Vector3f currentValue;
+
+            if (prevLineDirection != null) {
+                // get new axis projected mouse position
+                currentValue = getIntersectionWithPlane(plainBasis, plainNormal, lineBasis, lineDirection);
+                // move by diffrence to previous value
+                moveVector = currentValue.subtract(prevLineDirection);
+                // filter to one direction
+                moveVector = moveVector.mult(unitDirectionVector);
+                if (!moveVector.equals(Vector3f.ZERO)) {
+                    prevLineDirection = currentValue;
+                }
+            } else {
+                // get new axis projected mouse position
+                currentValue = getIntersectionWithPlane(plainBasis, plainNormal, lineBasis, lineDirection);
+                // save current value for next call
+                prevLineDirection = currentValue;
+            }
+
+            // draw ray
+            Material mat = new Material(appState.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setColor("Color", ColorRGBA.White);
+            Line line = new Line(lineBasis, lineBasis.add(lineDirection.mult(100f)));
+            Geometry geometry = new Geometry("line", line);
+            geometry.setMaterial(mat);
+            appState.getRootNode().attachChild(geometry);
+        }
+        return moveVector;
+    }
 
     /**
      *
@@ -355,42 +440,5 @@ public class CoordinateAxesControl extends AbstractControl {
      */
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
-    }
-
-    /**
-     * Calculates the intersection of the plain with basis vector planeStart and
-     * normal vector planeNormal with the straight line with basis vector
-     * rayStart and direction vector rayDirection. For "Axis x" only the x-value
-     * is set in the vector, equivalent for y and z.
-     *
-     * @param planeStart plain basis vector
-     * @param planeNormal plan normal vector
-     * @param rayStart straight line basis vector
-     * @param rayDirection straight line direction vector
-     * @param axis "x Axsis", "y Axsis", "z Axsis" for only one axis value in
-     * the returned vector. For other values all three dimensions are set.
-     * @return
-     */
-    public static Vector3f getIntersectionWithPlane(Vector3f planeStart, Vector3f planeNormal, Vector3f rayStart, Vector3f rayDirection, String axis) {
-        float t = ((planeStart.subtract(rayStart)).dot(planeNormal) / rayDirection.dot(planeNormal));
-        Vector3f intersect = rayStart.add(rayDirection.mult(t));
-        if (axis == null) {
-            axis = "";
-        }
-        switch (axis) {
-            case "x Axis":
-                intersect.setY(0);
-                intersect.setZ(0);
-                break;
-            case "y Axis":
-                intersect.setX(0);
-                intersect.setZ(0);
-                break;
-            case "z Axis":
-                intersect.setX(0);
-                intersect.setY(0);
-                break;
-        }
-        return intersect;
     }
 }
