@@ -44,6 +44,11 @@ public class DistanceTriggerCalculator implements Runnable {
      */
     private Map<String,List<DistanceTrigger>> distanceMap;
     
+    /**
+     * the same as distanceMap, but has all triggers that are unavailable due to blocked connections removed
+     */
+    private Map<String,List<DistanceTrigger>> distanceMapWithTraces;
+    
     private ScheduledThreadPoolExecutor executor;
     
     private final SimState simState;
@@ -54,6 +59,7 @@ public class DistanceTriggerCalculator implements Runnable {
      */
     public DistanceTriggerCalculator(SimState simState,ScheduledThreadPoolExecutor executor) {
         distanceMap = new HashMap();
+        distanceMapWithTraces = new HashMap();
         this.simState = simState;
         this.executor = executor;
     }
@@ -91,7 +97,7 @@ public class DistanceTriggerCalculator implements Runnable {
      * @return the distances from all AUVs with modems to other AUVs with modems
      */
     public synchronized Map<String,List<DistanceTrigger>> getDistanceTriggerMap() {
-        return distanceMap;
+        return distanceMapWithTraces;
     }
 
     private void calculatePathDistances() {
@@ -157,17 +163,20 @@ public class DistanceTriggerCalculator implements Runnable {
             }
         }
         for(Map.Entry<String,List<DistanceTrigger>> e : distanceMap.entrySet()) {
-            DirectTrace trace = new DirectTrace();
+            DirectTrace trace = new DirectTrace(this);
             trace.init(simState, auvManager, e.getKey(), e.getValue());
             executor.schedule(trace, 0, TimeUnit.MICROSECONDS);
         }
     }
     
-    /**
-     * Calculate all possible paths connected by the ocean floor or the surface of the water by rayracing it
-     * @since 1.1
-     * @param distanceTriggers the DistanceTriggers calculated by the calculatePathDistance method
-     */
+    public void updateTraceMap(String auvName, List<DistanceTrigger> triggers) {
+        if(distanceMapWithTraces.containsKey(auvName)) {
+            distanceMapWithTraces.remove(auvName);
+            distanceMapWithTraces.put(auvName, triggers);
+        } else {
+            distanceMapWithTraces.put(auvName, triggers);
+        }
+    }
    
     
     

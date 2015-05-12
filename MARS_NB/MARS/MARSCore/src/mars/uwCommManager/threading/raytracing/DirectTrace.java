@@ -20,6 +20,7 @@ import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
 import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
  *
@@ -31,12 +32,14 @@ public class DirectTrace implements Runnable{
     private AUV_Manager auvManager;
     private String auvName;
     private List<DistanceTrigger> distanceTriggers;
+    private DistanceTriggerCalculator triggerCalc;
     
-    public DirectTrace() {
+    public DirectTrace(DistanceTriggerCalculator triggerCalc) {
         simState = null;
         auvManager = null;
         distanceTriggers = null;
         auvName = null;
+        this.triggerCalc = triggerCalc;
     }
     
     public boolean init(SimState simState, AUV_Manager auvManager,String auvName, List<DistanceTrigger> distanceTriggers ) {
@@ -111,6 +114,7 @@ public class DirectTrace implements Runnable{
             }
             //System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
             distanceTriggers.removeAll(removedTriggers);
+            triggerCalc.updateTraceMap(auvName, distanceTriggers);
 
         }
     }

@@ -8,7 +8,6 @@ package mars.uwCommManager.threading.raytracing;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mars.auv.AUV;
-import mars.core.CentralLookup;
 import mars.uwCommManager.helpers.DistanceTrigger;
 
 /**
