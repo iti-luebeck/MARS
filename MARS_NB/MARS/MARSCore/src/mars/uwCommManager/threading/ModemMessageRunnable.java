@@ -8,21 +8,35 @@ package mars.uwCommManager.threading;
 import mars.uwCommManager.helpers.CommunicationComputedDataChunk;
 import mars.uwCommManager.helpers.CommunicationDataChunk;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 import mars.sensors.CommunicationMessage;
 import mars.uwCommManager.helpers.DataChunkIdentifier;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
+import mars.uwCommManager.options.CommOptionsConstants;
+import mars.uwCommManager.options.NoiseOptionsOptionsPanelController;
 import org.openide.util.Exceptions;
+import static mars.Helper.SoundHelper.*;
+import mars.PhysicalEnvironment;
+import mars.auv.AUV;
+import mars.core.CentralLookup;
+import mars.sensors.CommunicationDevice;
+import mars.states.SimState;
+import org.jboss.netty.handler.codec.http.HttpMethod;
 
 /**
  * The new runnable is to be used with the Executer class from java.util.concurrent
  * There should be one instance of this for each AUV with a modem
- * @version 0.2
+ * @version 0.3
  * @author Jasper Schwinghammer
  */
 public class ModemMessageRunnable implements Runnable{
@@ -47,10 +61,19 @@ public class ModemMessageRunnable implements Runnable{
      */
     private final float BANDWIDTH_PER_TICK;
     
+
+    
     /**
      * the AUV this runnable represents;
      */
     private final String AUV_NAME;
+    
+    
+    private final AUV auv;
+    /**
+     * The speed of sound determined with the current method
+     */
+    private float speedOfSound;
     
     /**
      * chunks that could not yet be sent due to bandwidthlimitation
@@ -62,6 +85,8 @@ public class ModemMessageRunnable implements Runnable{
      */
     private LinkedList<CommunicationDataChunk> sentChunks;
     
+    private PhysicalEnvironment env;
+    volatile private float depth;
     
     /**
      * interface to the CommuncationState
@@ -87,10 +112,11 @@ public class ModemMessageRunnable implements Runnable{
      * @param modem_bandwidth the maximum bandwidth the modem has in kilobyte per secound
      * @param resolution the ticks per secound
      */
-    public ModemMessageRunnable(float modem_bandwidth, int resolution, String auvName) {
+    public ModemMessageRunnable(float modem_bandwidth, int resolution, String auvName, AUV auv) {
         this.AUV_NAME = auvName;
         MODEM_BANDWIDTH = modem_bandwidth;
         RESOLUTION = resolution;
+        this.auv = auv;
         BANDWIDTH_PER_TICK = MODEM_BANDWIDTH/RESOLUTION;
         newMessages = new ConcurrentLinkedQueue<CommunicationMessage>();
         computedMessages = new LinkedList<CommunicationComputedDataChunk>();
@@ -99,9 +125,70 @@ public class ModemMessageRunnable implements Runnable{
         sentChunks = new LinkedList();
         distanceTriggers = new LinkedList();
         noiseGenerators = new LinkedList();
+        speedOfSound = 1f;
+        env = null;
+        depth = 0;
+        
+        init();
     }
     
+    /**
+     * @since 0.3
+     * All non-trivial initialization
+     * @return if everything was set up properly
+     */
+    public boolean init() {
+        Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.NoiseOptionsOptionsPanelController.class);
+        if (pref == null) return false;
+        env = ((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment();
+        if(env == null) return false;
+        ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+        depth = ((CommunicationDevice)uwmo.get(0)).getPosition().z;
+        
+        
+        int currentMethod = pref.getInt(CommOptionsConstants.OPTIONS_SPEED_OF_SOUND_METHOD, 0);
+        
+        determineSpeedOfSoundMethod(currentMethod, env);
+
+        
+        pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            @Override
+            public void preferenceChange(PreferenceChangeEvent e) {
+                if(e.getKey().equals(CommOptionsConstants.OPTIONS_SPEED_OF_SOUND_METHOD)) {
+                    determineSpeedOfSoundMethod(Integer.parseInt(e.getNewValue()),env);
+                }
+            }
+        }) ;
+        
+        return true;
+    }
     
+    /**
+     * Determine the corresponding function to the optionsValue and calculate the current speed of sound with the right method
+     * @param optionsValue The value of the selected Item in the NoiseOptionsPanel
+     * @param env the Physical environment
+     */
+    protected void determineSpeedOfSoundMethod(int optionsValue,PhysicalEnvironment env) {
+        ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+        depth = ((CommunicationDevice)uwmo.get(0)).getPosition().z;
+        switch(optionsValue) {
+            case 1: speedOfSound = getUnderWaterSoundSpeedLubberGraaffB(env.getFluid_temp());
+                break;
+            case 2: speedOfSound = getUnderWaterSoundSpeedMarczak(env.getFluid_temp());
+                break;
+            case 3: speedOfSound = getUnderWaterSoundSpeedCoppens(env.getFluid_temp(),env.getFluid_salinity(),depth);
+                break;
+            case 4: speedOfSound = getUnderWaterSoundSpeedMackenzie(env.getFluid_temp(),env.getFluid_salinity(),depth);
+                break;
+            case 5: speedOfSound = getUnderWaterSoundSpeedDelGrosso(env.getFluid_temp(),env.getFluid_salinity(),depth);
+                break;
+            case 6: speedOfSound = getUnderWaterSoundSpeedChenMillero(env.getFluid_temp(),env.getFluid_salinity(),depth);
+                break;
+            default: speedOfSound = getUnderWaterSoundSpeedLubberGraaffA(env.getFluid_temp());
+                break;
+        }
+    }
 
     /**
      * three steps:
@@ -145,7 +232,7 @@ public class ModemMessageRunnable implements Runnable{
         
         try {
             //DISTANCE PER TICK DUMMY, SHOULD BE REPLACED WITH PROPER SPEED OF SOUND
-            float distanceSinceLastTick = 1f;
+            float distanceSinceLastTick = speedOfSound/RESOLUTION;
             List<CommunicationDataChunk> deadChunks = new LinkedList();
             
         

@@ -164,7 +164,7 @@ public class CommunicationState extends AbstractAppState {
             for ( AUV auv : auvs.values()){
             //Check if the AUV is enabled and has a modem
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
-                    ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName());
+                    ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName(),auv);
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 2000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
@@ -332,7 +332,7 @@ public class CommunicationState extends AbstractAppState {
             ModemMessageRunnable e1 = auvProcessMap.get(msg.getAuvName());
             if(e1 ==null ) {
                 //if not create a new one
-                ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION,msg.getAuvName());
+                ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION,msg.getAuvName(),auvManager.getAUV(msg.getAuvName()));
                 auvProcessMap.put(msg.getAuvName(), runnable);
                 executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 e1 = runnable;

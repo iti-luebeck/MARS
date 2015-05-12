@@ -26,12 +26,16 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jCheckBox2 = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel4.text")); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel1.text")); // NOI18N
@@ -47,6 +51,8 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "LubberGraaffA", "LubberGraaffB", "Marczak", "Coppens", "Mackenzie", "DelGrosso", "ChenMillero" }));
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel5.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -60,20 +66,21 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jCheckBox2)
-                                .addGap(0, 376, Short.MAX_VALUE)))
+                                    .addComponent(jLabel2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jCheckBox2)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel5))
                             .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 337, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,17 +96,22 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addContainerGap(225, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     void load() {
         jCheckBox2.setSelected(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false));
+        jComboBox1.setSelectedIndex(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getInt(OPTIONS_SPEED_OF_SOUND_METHOD, 1));
+        
     }
 
     void store() {
         Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).putBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, jCheckBox2.isSelected());
+        Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).putInt(OPTIONS_SPEED_OF_SOUND_METHOD, jComboBox1.getSelectedIndex());
     }
 
     boolean valid() {
@@ -113,6 +125,8 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

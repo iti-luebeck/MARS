@@ -105,11 +105,11 @@ public class DirectTrace implements Runnable{
                             removedTriggers.add(trigger);
                         }
 
-                        System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
+                       //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                     }
                 }
             }
-            System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
+            //System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
             distanceTriggers.removeAll(removedTriggers);
 
         }
