@@ -31,6 +31,7 @@ import mars.sensors.CommunicationMessage;
 import mars.states.MapState;
 import mars.states.SimState;
 import mars.uwCommManager.graphics.CommOnMap;
+import mars.uwCommManager.graphics.CommunicationVisualizer;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
@@ -104,6 +105,12 @@ public class CommunicationState extends AbstractAppState {
      */
     private boolean noiseAdditiveGaussianWhiteNoiseActive = false;
     
+    
+    /**
+     * The mainclass of the visualization functionalities of the commodule
+     */
+    private CommunicationVisualizer communicationGraphics = null;
+    
 
 //------------------------------- INIT -----------------------------------------
     /**
@@ -145,6 +152,8 @@ public class CommunicationState extends AbstractAppState {
             app.getAssetManager(),this.app)) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Something went wrong while initializing the communications minimap visualization{0} {1} {2}", new Object[]{app.getStateManager().getState(MapState.class), CentralLookup.getDefault().lookup(AUV_Manager.class), CentralLookup.getDefault().lookup(SimState.class).getMARSSettings()});
         }
+        
+        communicationGraphics = new CommunicationVisualizer(this.app, this,CentralLookup.getDefault().lookup(SimState.class).getAuvManager(),distanceTraceModule) ;
         
         //Init done, add to centrallookup
         CentralLookup.getDefault().add(this);

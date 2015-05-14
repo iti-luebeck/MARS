@@ -22,8 +22,8 @@ import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
- *
- * @author jaspe_000
+ * @version 0.1
+ * @author Jasper Schwinghammer
  */
 public class DirectTrace implements Runnable{
     

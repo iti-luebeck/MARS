@@ -11,6 +11,7 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.CommunicationState;
+import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
  * @version 0.1
@@ -24,12 +25,14 @@ public class CommunicationVisualizer {
     
     Map<String, AUVVisualizationNode> nodeMap = null;
     
+    private DistanceTriggerCalculator triggerCalc;
     
-    public CommunicationVisualizer(MARS_Main app, CommunicationState comState,AUV_Manager auvMngr) {
+    
+    public CommunicationVisualizer(MARS_Main app, CommunicationState comState,AUV_Manager auvMngr,DistanceTriggerCalculator triggerCalc) {
         this.app = app;
         this.comState= comState;
         this.auvMngr = auvMngr;
-        
+        this.triggerCalc = triggerCalc;
         nodeMap = new HashMap();
     }
     
@@ -45,6 +48,7 @@ public class CommunicationVisualizer {
                 AUVVisualizationNode modemVisNode = new AUVVisualizationNode(auv, modemNode);
                 modemVisNode.init();
                 nodeMap.put(uw.getAuv().getName(), modemVisNode);
+                triggerCalc.getEventGenerator().addListener(modemVisNode);
                 //1. Erstelle AUVVisualisationNode
                 //2. Füttere sie mit allen Informationen
                 //3. adde sie zur Map
