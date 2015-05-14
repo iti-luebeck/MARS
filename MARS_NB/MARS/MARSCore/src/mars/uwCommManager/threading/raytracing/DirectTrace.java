@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.CommunicationDevice;
@@ -90,6 +89,8 @@ public class DirectTrace implements Runnable{
                 Iterator itTargetMo = uwmoTarget.iterator();
 
                 while (itTargetMo.hasNext()) {
+                    List<Vector3f> traceList = new LinkedList<Vector3f>();
+                    traceList.add(modPos);
                     //get its position
                     CommunicationDevice targetMod = (CommunicationDevice)itTargetMo.next();
                     Vector3f targetModPos = targetMod.getWorldPosition();
@@ -106,6 +107,9 @@ public class DirectTrace implements Runnable{
                     if (results.size() != 0) {
                         if(results.getClosestCollision().getDistance() < direction.mult(0.9f).length()-1) {
                             removedTriggers.add(trigger);
+                        } else {
+                            traceList.add(targetModPos);
+                            triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName,traceList);
                         }
 
                        //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());

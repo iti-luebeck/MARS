@@ -24,6 +24,7 @@ import mars.sensors.CommunicationDevice;
 import mars.sensors.UnderwaterModem;
 import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import mars.uwCommManager.threading.events.TriggerEventGenerator;
 import mars.uwCommManager.threading.raytracing.DirectTrace;
 import org.openide.util.Exceptions;
 
@@ -53,6 +54,8 @@ public class DistanceTriggerCalculator implements Runnable {
     
     private final SimState simState;
     
+    private TriggerEventGenerator eventGen;
+    
     /**
      * Does nothing but initialize variables
      * @since 0.1 
@@ -62,6 +65,7 @@ public class DistanceTriggerCalculator implements Runnable {
         distanceMapWithTraces = new HashMap();
         this.simState = simState;
         this.executor = executor;
+        eventGen = new TriggerEventGenerator();
     }
     
     /**
@@ -176,6 +180,11 @@ public class DistanceTriggerCalculator implements Runnable {
         } else {
             distanceMapWithTraces.put(auvName, triggers);
         }
+    }
+    
+    
+    public TriggerEventGenerator getEventGenerator() {
+        return eventGen;
     }
    
     

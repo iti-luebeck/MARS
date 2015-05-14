@@ -1,15 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mars.uwCommManager.threading.events;
 
+import java.util.EventObject;
+
 /**
- *
+ * @version 0.1
  * @author Jasper Schwinghammer
  */
-public abstract class ATriggerEvent {
+public abstract class ATriggerEvent extends EventObject {
+    
+    private final int EVENT_ID;
+
+    public ATriggerEvent(Object source,final int EVENT_ID) {
+        super(source);
+        this.EVENT_ID = EVENT_ID;
+    }
+    
+    
+    public int getEventID() {
+        return EVENT_ID;
+    }
+    
+
     
     
     

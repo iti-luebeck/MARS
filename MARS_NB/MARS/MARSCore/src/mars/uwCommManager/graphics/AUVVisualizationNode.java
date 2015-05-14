@@ -6,19 +6,27 @@
 package mars.uwCommManager.graphics;
 
 import com.jme3.scene.Node;
+import java.util.LinkedList;
+import java.util.List;
 import mars.auv.AUV;
+import mars.uwCommManager.threading.events.ATriggerEvent;
+import mars.uwCommManager.threading.events.CommunicationEventConstants;
+import mars.uwCommManager.threading.events.TraceHitAUVEvent;
+import mars.uwCommManager.threading.events.TriggerEventListener;
 
 /**
  * @version 0.1
  * @author Jasper Schwinghammer
  */
-public class AUVVisualizationNode {
+public class AUVVisualizationNode implements TriggerEventListener{
     
     
     String name = null;
     AUV auv = null;
     Node visRootNode = null;
     Node auvNode = null;
+    
+    List<TraceHitAUVEvent> eventList;
     
     /**
      * @since 0.1
@@ -28,6 +36,7 @@ public class AUVVisualizationNode {
     public AUVVisualizationNode(AUV auv, Node auvNode) {
         this.auv = auv;
         this.auvNode = auvNode;
+        this.eventList = new LinkedList();
     }
     
     public boolean init() {
@@ -40,6 +49,16 @@ public class AUVVisualizationNode {
     
     public void update(float tpf) {
         
+    }
+
+    @Override
+    public void triggerEventHappened(ATriggerEvent e) {
+        if(e.getEventID() == CommunicationEventConstants.TRACE_HIT_AUV_EVENT) {
+            TraceHitAUVEvent evt = (TraceHitAUVEvent)e;
+            if(evt.getSourceAUVName().equals(auv.getName())) {
+                eventList.add(evt);
+            }
+        }
     }
     
 }

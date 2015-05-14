@@ -1,6 +1,7 @@
 
 package mars.uwCommManager.graphics;
 
+import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -8,7 +9,6 @@ import java.util.Iterator;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.CommunicationState;
 
@@ -41,6 +41,10 @@ public class CommunicationVisualizer {
             Iterator it = uws.iterator();
             while (it.hasNext()) {
                 UnderwaterModem uw = (UnderwaterModem) it.next();
+                Node modemNode = (Node)uw.getAuv().getAUVNode().getChild("modem");
+                AUVVisualizationNode modemVisNode = new AUVVisualizationNode(auv, modemNode);
+                modemVisNode.init();
+                nodeMap.put(uw.getAuv().getName(), modemVisNode);
                 //1. Erstelle AUVVisualisationNode
                 //2. Füttere sie mit allen Informationen
                 //3. adde sie zur Map
@@ -51,6 +55,10 @@ public class CommunicationVisualizer {
     
     public void update(float tpf) {
         
+        
+        for(Map.Entry<String, AUVVisualizationNode> e : nodeMap.entrySet()) {
+            e.getValue().update(tpf);
+        }
     }
     
 }
