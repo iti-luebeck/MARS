@@ -11,7 +11,7 @@ package mars.uwCommManager.options;
  */
 public interface CommOptionsConstants {
     
-    public static final String OPTIONS_DISTANCE_CHECKUP_CHECKBOX = "distanceCheckupCheckbox";
+    public static final String OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX = "Hausfrauenmagazingewinnspiel";
     public static final String OPTIONS_THREADCOUNT_SLIDER = "optionsThreadcountSlider";
     public static final String OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX = "optionsShowMiniMapRange";
     public static final String OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON = "optionsMinimapCircleBorders";

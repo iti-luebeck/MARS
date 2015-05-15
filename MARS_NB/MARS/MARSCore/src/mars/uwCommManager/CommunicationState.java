@@ -213,12 +213,7 @@ public class CommunicationState extends AbstractAppState {
         pref.addPreferenceChangeListener(new PreferenceChangeListener() {
             @Override
             public void preferenceChange(PreferenceChangeEvent e) {
-                //Distance Checkup Event
-                if(e.getKey().equals(OPTIONS_DISTANCE_CHECKUP_CHECKBOX)) {
-                    //DO WE STILL USE THIS? NEED TO BE SETUP AGAIN FOR NEW SYSTEM
-                    return;
-                }//Distance Checkup Event closed
-                
+           
                 //Thread Slider Event
                 if(e.getKey().equals(OPTIONS_THREADCOUNT_SLIDER)) {
                     threadCount = Integer.parseInt(e.getNewValue());
