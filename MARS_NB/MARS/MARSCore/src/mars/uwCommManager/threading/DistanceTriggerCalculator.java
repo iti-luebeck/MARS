@@ -150,6 +150,8 @@ public class DistanceTriggerCalculator implements Runnable {
                                         //Check distance, if close enough add to the triggermap
                                         if(Math.abs(distance.length())<=mod.getPropagationDistance()) {
                                             newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName,temperature));
+                                        } else {
+                                            //FIRE NEW EVENT THAT THEY ARE OUT OF RANGE
                                         }
                                     }
 

@@ -12,8 +12,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Line;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
 import mars.auv.AUV;
@@ -34,6 +36,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
     private Node visRootNode = null;
     private Node auvNode = null;
     private MARS_Main app = null;
+    Map<String,Node> connectionMap;
     
     
     List<TraceHitAUVEvent> eventList;
@@ -48,6 +51,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.auvNode = auvNode;
         this.app = app;
         this.eventList = new LinkedList();
+        this.connectionMap = new HashMap();
     }
     
     public boolean init() {
@@ -66,10 +70,18 @@ public class AUVVisualizationNode implements TriggerEventListener{
                     attachVisualisationNode(auvNode, name);
                     return;
                 }
+                if(connectionMap.get(e.getTargetAUVName())==null) {
+                    String connectionNodeName = name+"-"+e.getTargetAUVName();
+                    Node connectionNode = new Node(connectionNodeName);
+                    attachNode(auvNode, connectionNode);
+                }
                 String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
                 Geometry traceStartGeom = (Geometry)visRootNode.getChild(traceName+"-0");
                 if(traceStartGeom == null){
-                    attachTrace(name, visRootNode, e.getTraces());
+                    attachTrace(traceName, visRootNode, e.getTraces());
+                } else {
+                    Line line = (Line) traceStartGeom.getMesh();
+                    line.updatePoints(e.getTraces().get(0), e.getTraces().get(1));
                 }
             }
             eventList.clear();
@@ -126,6 +138,16 @@ public class AUVVisualizationNode implements TriggerEventListener{
             public Object call() {
                 visRootNode = new Node(name);
                 node.attachChild(visRootNode);
+                return null;
+            }  
+        });
+    }
+    
+    private void attachNode(final Node rootNode, final Node node) {
+        app.enqueue(new Callable<Object>(){
+            @Override
+            public Object call() {
+                rootNode.attachChild(node);
                 return null;
             }  
         });
