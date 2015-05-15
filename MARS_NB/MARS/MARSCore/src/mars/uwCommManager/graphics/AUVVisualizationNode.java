@@ -55,7 +55,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.name = auv.getName() + "-visualisation-Node";
         this.visRootNode = new Node(name);
         auvNode.attachChild(visRootNode);
-        visRootNode.setCullHint(Spatial.CullHint.Always);
+        visRootNode.setCullHint(Spatial.CullHint.Never);
         return true;
     }
     
@@ -108,12 +108,12 @@ public class AUVVisualizationNode implements TriggerEventListener{
             @Override
             public Object call() {
                 Line line = new Line(start, end);
-                line.setLineWidth(0.1f);
+                line.setLineWidth(2f);
                 Geometry uwgeom = new Geometry(name,line);
                 Material lineMat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-                lineMat.setColor("Color", ColorRGBA.Blue);
+                lineMat.setColor("Color", ColorRGBA.Yellow);
                 uwgeom.setMaterial(lineMat);
-                uwgeom.setCullHint(Spatial.CullHint.Inherit);
+                uwgeom.setCullHint(Spatial.CullHint.Never);
                 visualizationNode.attachChild(uwgeom);
                 return null;
             }
