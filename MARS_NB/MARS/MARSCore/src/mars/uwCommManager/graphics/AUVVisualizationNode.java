@@ -78,13 +78,14 @@ public class AUVVisualizationNode implements TriggerEventListener{
             copyList = new LinkedList(traceHitEventQueue);
             traceHitEventQueue.clear();
         }
+        // if there were never a connection from this auv before, create a Fathernode for all connections from this auv
+        if(auvNode.getChild(name) == null) {
+            attachVisualisationNode(auvNode, name);
+            return;
+        }
         //for every trace that was computed in the last cycle
         for(TraceHitAUVEvent e : copyList) {
-            // if there were never a connection from this auv before, create a Fathernode for all connections from this auv
-            if(auvNode.getChild(name) == null) {
-                attachVisualisationNode(auvNode, name);
-                return;
-            }
+
             //The name of the Node containing all connections to the target AUV
             String connectionNodeName = name+"-"+e.getTargetAUVName();
             //If there was never a connection to the other AUV before
@@ -104,12 +105,15 @@ public class AUVVisualizationNode implements TriggerEventListener{
             //Create the identifier for the trace
             String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
             
+            /*
+             * Has this connection already a Fathernode?
+             */
             Node traceNode = (Node) connectionNode.getChild(traceName);
             if(traceNode == null ) {
                 attachNode(connectionNode, new Node(traceName));
                 return;
             }
-            
+            traceNode.setCullHint(Spatial.CullHint.Inherit);
             //check if the trace is already existent
             Geometry traceStartGeom = (Geometry)traceNode.getChild(traceName+"-0");
             //if not, create it
@@ -138,6 +142,22 @@ public class AUVVisualizationNode implements TriggerEventListener{
                 connectionMap.get(outOfRangeAUV).setCullHint(Spatial.CullHint.Always);
             }
                 
+        }
+        
+        List<TraceBlockedEvent> blockedTraceQueueCopy;
+        synchronized(this) {
+            blockedTraceQueueCopy = new LinkedList(traceBlockedEventQueue);
+            traceBlockedEventQueue.clear();
+        }
+        
+        for(TraceBlockedEvent e : blockedTraceQueueCopy) {
+            if(!(connectionMap.get(e.getTargetAUVName())==null)) {
+                String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
+                Node traceNode = (Node)connectionMap.get(e.getTargetAUVName()).getChild(traceName);
+                traceNode.setCullHint(Spatial.CullHint.Always);
+            }
+            
+            
         }
 
 
