@@ -43,6 +43,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
     List<TraceBlockedEvent> traceBlockedEventQueue;
     List<String> outOfRangeAUVs;
     
+    private boolean showCommunicationLinks;
+    
     
     /**
      * @since 0.1
@@ -57,6 +59,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.connectionMap = new HashMap();
         this.outOfRangeAUVs = new LinkedList();
         this.traceBlockedEventQueue = new LinkedList();
+        showCommunicationLinks = false;
     }
     
     /**
@@ -80,6 +83,19 @@ public class AUVVisualizationNode implements TriggerEventListener{
      * @param tpf 
      */
     public void update(float tpf) {
+        
+        if(!showCommunicationLinks) {
+            synchronized(this) {
+                traceHitEventQueue.clear();
+                traceBlockedEventQueue.clear();
+                outOfRangeAUVs.clear();
+            }
+            if(!(auvNode.getChild(name) == null)) {
+                visRootNode.setCullHint(Spatial.CullHint.Always);
+            }
+            return;
+        }
+        visRootNode.setCullHint(Spatial.CullHint.Never);
         List<TraceHitAUVEvent> copyList = null;
         synchronized(this) {
             copyList = new LinkedList(traceHitEventQueue);
@@ -90,20 +106,21 @@ public class AUVVisualizationNode implements TriggerEventListener{
             attachVisualisationNode(auvNode, name);
             return;
         }
+        
         //for every trace that was computed in the last cycle
         for(TraceHitAUVEvent e : copyList) {
 
             //The name of the Node containing all connections to the target AUV
             String connectionNodeName = name+"-"+e.getTargetAUVName();
             //If there was never a connection to the other AUV before
-            if(auvNode.getChild(connectionNodeName) == null) {
+            if(visRootNode.getChild(connectionNodeName) == null) {
                 //if the Node is already created but not yet added to the rootNode, just wait for it to be handled
                 if(connectionMap.containsKey(e.getTargetAUVName())) {
                     return;
                 }
                 //Create the connectionNode
                 Node connectionNode = new Node(connectionNodeName);
-                attachNode(auvNode, connectionNode);
+                attachNode(visRootNode, connectionNode);
                 connectionMap.put(e.getTargetAUVName(), connectionNode);
                 return;
             }
@@ -181,6 +198,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
      */
     @Override
     public void triggerEventHappened(ATriggerEvent e) {
+        //If visualization is disabled we don't need to process any events
+        if(!showCommunicationLinks) return;
         switch(e.getEventID()) {
             case CommunicationEventConstants.TRACE_HIT_AUV_EVENT:
             {
@@ -250,7 +269,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
                 Material lineMat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
                 lineMat.setColor("Color", ColorRGBA.Yellow);
                 uwgeom.setMaterial(lineMat);
-                uwgeom.setCullHint(Spatial.CullHint.Never);
+                uwgeom.setCullHint(Spatial.CullHint.Inherit);
                 visualizationNode.attachChild(uwgeom);
                 return null;
             }
@@ -286,6 +305,14 @@ public class AUVVisualizationNode implements TriggerEventListener{
                 return null;
             }  
         });
+    }
+    
+    public void showCommunicationLinks() {
+        showCommunicationLinks = true;
+    }
+    
+    public void deactivateCommunicationLinks() {
+        showCommunicationLinks = false;
     }
     
 }

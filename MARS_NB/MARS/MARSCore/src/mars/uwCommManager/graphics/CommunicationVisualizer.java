@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.sensors.UnderwaterModem;
 import mars.uwCommManager.CommunicationState;
+import mars.uwCommManager.options.CommOptionsConstants;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
@@ -66,6 +70,43 @@ public class CommunicationVisualizer {
                 //3. adde sie zur Map
             }
         }
+        loadAndInitPreferenceListeners();
+        return true;
+    }
+    
+    private boolean loadAndInitPreferenceListeners() {
+        Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
+        if(pref == null) return false;
+        
+        if(pref.getBoolean(CommOptionsConstants.OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX, false)) {
+            for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                entry.getValue().showCommunicationLinks();
+            }
+        } else {
+            for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                entry.getValue().deactivateCommunicationLinks();
+            }
+        }
+        
+        pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+            @Override
+            public void preferenceChange(PreferenceChangeEvent e) {
+                if(e.getKey().equals(CommOptionsConstants.OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX)) {
+                    if(Boolean.parseBoolean(e.getNewValue())) {
+                        for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                            entry.getValue().showCommunicationLinks();
+                        }
+                    } else {
+                        for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                            entry.getValue().deactivateCommunicationLinks();
+                        }
+                    }
+                }
+            }
+        });
+        
+        
+        
         return true;
     }
     
