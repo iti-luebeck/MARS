@@ -18,14 +18,14 @@ public class TriggerEventGenerator {
     /**
      * The listeners to the TriggerEvents
      */
-    private List<TriggerEventListener> listeners;
+    private final List<TriggerEventListener> listeners;
     
     /**
      * Basic constructor does nothing special at all
      * @since 0.1
      */
     public TriggerEventGenerator() {
-        this.listeners = new LinkedList<TriggerEventListener>();
+        listeners = new LinkedList<TriggerEventListener>();
     }
     
     /**

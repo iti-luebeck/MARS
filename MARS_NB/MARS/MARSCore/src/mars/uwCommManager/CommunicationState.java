@@ -154,7 +154,7 @@ public class CommunicationState extends AbstractAppState {
         }
         
         communicationGraphics = new CommunicationVisualizer(this.app, this,CentralLookup.getDefault().lookup(SimState.class).getAuvManager(),distanceTraceModule) ;
-        
+        communicationGraphics.init();
         //Init done, add to centrallookup
         CentralLookup.getDefault().add(this);
     }
@@ -172,20 +172,24 @@ public class CommunicationState extends AbstractAppState {
         HashMap<String,AUV> auvs = auvManager.getAUVs();
             for ( AUV auv : auvs.values()){
             //Check if the AUV is enabled and has a modem
-                if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) {
+                if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())&&!auvProcessMap.containsKey(auv.getName())) {
                     ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName(),auv);
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 2000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
                 
             }
-        multiPathModule = new MultiMessageMerger();
-        multiPathModule.init(auvManager, this);
-        //THE MULTIPATH MODULE NEEDS REVISION
-        executor.scheduleAtFixedRate(multiPathModule, 2500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
-        distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
-        distanceTraceModule.init(auvManager);
-        executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
+        if(multiPathModule == null) {
+            multiPathModule = new MultiMessageMerger();
+            multiPathModule.init(auvManager, this);
+            executor.scheduleAtFixedRate(multiPathModule, 2500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
+        }
+        if(distanceTraceModule == null) {
+            distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
+            distanceTraceModule.init(auvManager);
+            executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
+        }
+
         
 
         return true;

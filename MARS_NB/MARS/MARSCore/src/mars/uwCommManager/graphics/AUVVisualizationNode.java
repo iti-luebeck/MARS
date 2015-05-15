@@ -55,6 +55,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.name = auv.getName() + "-visualisation-Node";
         this.visRootNode = new Node(name);
         auvNode.attachChild(visRootNode);
+        visRootNode.setCullHint(Spatial.CullHint.Always);
         return true;
     }
     
@@ -68,7 +69,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
                 String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
                 Geometry traceStartGeom = (Geometry)visRootNode.getChild(traceName+"-0");
                 if(traceStartGeom == null){
-                    
+                    attachTrace(name, visRootNode, e.getTraces());
                 }
             }
             eventList.clear();
