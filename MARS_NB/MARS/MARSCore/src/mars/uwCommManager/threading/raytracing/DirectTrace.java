@@ -76,7 +76,7 @@ public class DirectTrace implements Runnable{
     
     /**
      * This method will trace all direct connections between the current AUV and all other AUVs that posses a modem and are in range.
-     * If a connection is found, a event is triggered and the graphics system notified, if the path is blocked another event is triggered that notifies the graphicssystem.
+     * If a connection is found, a event is triggered and the graphics system notified, if the path is blocked another event is triggered that notifies the graphics system.
      * @since 0.1
      */
      private void rayTraceConnections() {

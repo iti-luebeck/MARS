@@ -33,7 +33,6 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         buttonGroup3 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
         jLabel3 = new javax.swing.JLabel();
@@ -47,9 +46,6 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jLabel1.text")); // NOI18N
-
-        jCheckBox1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jCheckBox1.text")); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jLabel2.text")); // NOI18N
@@ -89,28 +85,20 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox2)
+                            .addComponent(jCheckBox3)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3))))
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox2)
-                                .addContainerGap(161, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jRadioButton2)
-                                            .addComponent(jRadioButton1))))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jRadioButton2)
+                                    .addComponent(jRadioButton1))))
+                        .addContainerGap(161, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1)
@@ -136,9 +124,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2))
+                .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -163,7 +149,6 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // someCheckBox.setSelected(NbPreferences.forModule(CommunicationConfigurationPanel.class).getBoolean("someFlag", false));
         // or:
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
-        jCheckBox1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, false));
         jSlider1.setValue(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getInt(OPTIONS_THREADCOUNT_SLIDER, 3));
         jCheckBox2.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false));
         jRadioButton1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON, true));
@@ -181,12 +166,10 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // NbPreferences.forModule(CommunicationConfigurationPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
         // or:
         // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
-        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, jCheckBox1.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putInt(OPTIONS_THREADCOUNT_SLIDER, jSlider1.getValue());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, jCheckBox2.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON, jRadioButton1.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_OPAQUE_CIRCLE, jRadioButton2.isSelected());
-        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_DISTANCE_CHECKUP_CHECKBOX, jCheckBox1.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, jCheckBox3.isSelected());
         
     }
@@ -211,7 +194,6 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup3;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
