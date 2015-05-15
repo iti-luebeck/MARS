@@ -5,29 +5,20 @@
  */
 package mars.uwCommManager.threading.events;
 
-import com.jme3.math.Vector3f;
-import java.util.List;
-
 /**
  *
- * @author jaspe_000
+ * @author Jasper Schwinghammer
  */
-public class TraceHitAUVEvent extends ATriggerEvent{
-    
+public class TriggerOutOfRangeEvent extends ATriggerEvent {
     
     private final String sourceAUVName;
     private final String targetAUVName;
-    private final boolean surfaceFirst;
-    private final List<Vector3f> traces;
 
-    public TraceHitAUVEvent(Object source,final int EVENT_ID, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst) {
+    public TriggerOutOfRangeEvent(Object source, int EVENT_ID, final String sourceAUVName,final String targetAUVName) {
         super(source, EVENT_ID);
         this.sourceAUVName = sourceAUVName;
         this.targetAUVName = targetAUVName;
-        this.traces = traces;
-        this.surfaceFirst = surfaceFirst;
     }
-    
     
     public String getSourceAUVName() {
         return sourceAUVName;
@@ -36,15 +27,5 @@ public class TraceHitAUVEvent extends ATriggerEvent{
     public String getTargetAUVName() {
         return targetAUVName;
     }
-    
-    public List<Vector3f> getTraces() {
-        return traces;
-    }
-    
-    public boolean surfaceFirst() {
-        return surfaceFirst;
-    }
-    
-    
     
 }

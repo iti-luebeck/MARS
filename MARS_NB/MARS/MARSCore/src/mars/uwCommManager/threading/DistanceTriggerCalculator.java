@@ -151,7 +151,7 @@ public class DistanceTriggerCalculator implements Runnable {
                                         if(Math.abs(distance.length())<=mod.getPropagationDistance()) {
                                             newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName,temperature));
                                         } else {
-                                            eventGen.fireNewTriggerOutOfDistanceEvent(this, elem, targetName);
+                                            eventGen.fireNewTriggerOutOfRangeEvent(this, elem, targetName);
                                         }
                                     }
 

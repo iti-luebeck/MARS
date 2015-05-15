@@ -107,6 +107,8 @@ public class DirectTrace implements Runnable{
                     if (results.size() != 0) {
                         if(results.getClosestCollision().getDistance() < direction.mult(0.9f).length()-1) {
                             removedTriggers.add(trigger);
+                            traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                            triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
                         } else {
                             traceList.add(direction);
                             triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName,traceList,true);

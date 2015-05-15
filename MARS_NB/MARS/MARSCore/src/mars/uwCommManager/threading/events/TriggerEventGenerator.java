@@ -58,8 +58,13 @@ public class TriggerEventGenerator {
         fireEvent(e);
     }
     
-    public void fireNewTriggerOutOfDistanceEvent(Object source, String sourceAUVName, String targetAUVName) {
-        ATriggerEvent e = new TriggerOutOfDistanceEvent(source,CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT,sourceAUVName,targetAUVName);
+    public void fireNewTriggerOutOfRangeEvent(Object source, String sourceAUVName, String targetAUVName) {
+        ATriggerEvent e = new TriggerOutOfRangeEvent(source,CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT,sourceAUVName,targetAUVName);
+        fireEvent(e);
+    }
+    
+    public void fireNewTraBlockedEvent(Object source, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst) {
+        ATriggerEvent e = new TraceBlockedEvent(source, CommunicationEventConstants.TRACE_BLOCKED_EVENT, sourceAUVName, targetAUVName, traces, surfaceFirst);
         fireEvent(e);
     }
 }

@@ -21,9 +21,10 @@ import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.uwCommManager.threading.events.ATriggerEvent;
 import mars.uwCommManager.threading.events.CommunicationEventConstants;
+import mars.uwCommManager.threading.events.TraceBlockedEvent;
 import mars.uwCommManager.threading.events.TraceHitAUVEvent;
 import mars.uwCommManager.threading.events.TriggerEventListener;
-import mars.uwCommManager.threading.events.TriggerOutOfDistanceEvent;
+import mars.uwCommManager.threading.events.TriggerOutOfRangeEvent;
 
 /**
  * @version 0.1
@@ -38,7 +39,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
     private Node auvNode = null;
     private MARS_Main app = null;
     Map<String,Node> connectionMap;
-    List<TraceHitAUVEvent> eventList;
+    List<TraceHitAUVEvent> traceHitEventQueue;
+    List<TraceBlockedEvent> traceBlockedEventQueue;
     List<String> outOfRangeAUVs;
     
     
@@ -51,9 +53,10 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.auv = auv;
         this.auvNode = auvNode;
         this.app = app;
-        this.eventList = new LinkedList();
+        this.traceHitEventQueue = new LinkedList();
         this.connectionMap = new HashMap();
         this.outOfRangeAUVs = new LinkedList();
+        this.traceBlockedEventQueue = new LinkedList();
     }
     
     public boolean init() {
@@ -72,8 +75,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
     public void update(float tpf) {
         List<TraceHitAUVEvent> copyList = null;
         synchronized(this) {
-            copyList = new LinkedList(eventList);
-            eventList.clear();
+            copyList = new LinkedList(traceHitEventQueue);
+            traceHitEventQueue.clear();
         }
         //for every trace that was computed in the last cycle
         for(TraceHitAUVEvent e : copyList) {
@@ -114,8 +117,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
             line.updatePoints(e.getTraces().get(0), e.getTraces().get(1));
             connectionNode.setCullHint(Spatial.CullHint.Inherit);
         }
-        //all events done? remove them
-        List<String> outOfRangeCopy = null;
+        //Now we take the connections that are broken because out of range and hide every line that belongs to them
+        List<String> outOfRangeCopy;
         synchronized(this) {
             outOfRangeCopy = new LinkedList(outOfRangeAUVs);
             outOfRangeAUVs.clear();
@@ -136,22 +139,38 @@ public class AUVVisualizationNode implements TriggerEventListener{
 
     @Override
     public void triggerEventHappened(ATriggerEvent e) {
-        if(e.getEventID() == CommunicationEventConstants.TRACE_HIT_AUV_EVENT) {
-            TraceHitAUVEvent evt = (TraceHitAUVEvent)e;
-            if(evt.getSourceAUVName().equals(auv.getName())) {
-                synchronized(this) {
-                    eventList.add(evt);
+        switch(e.getEventID()) {
+            case CommunicationEventConstants.TRACE_HIT_AUV_EVENT:
+            {
+                TraceHitAUVEvent evt = (TraceHitAUVEvent)e;
+                if(evt.getSourceAUVName().equals(auv.getName())) {
+                    synchronized(this) {
+                        traceHitEventQueue.add(evt);
+                    }
                 }
-                
             }
-        } else if(e.getEventID()==CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT) {
-            TriggerOutOfDistanceEvent evt = (TriggerOutOfDistanceEvent) e;
-            if(evt.getSourceAUVName().equals(auv.getName())) {
-                synchronized(this) {
-                    outOfRangeAUVs.add(evt.getTargetAUVName());
+                
+            break;
+            case CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT:
+            {
+                TriggerOutOfRangeEvent evt = (TriggerOutOfRangeEvent) e;
+                if(evt.getSourceAUVName().equals(auv.getName())) {
+                    synchronized(this) {
+                        outOfRangeAUVs.add(evt.getTargetAUVName());
+                    }
+                } 
+            }
+            
+            break;
+            case CommunicationEventConstants.TRACE_BLOCKED_EVENT:
+            {
+                TraceBlockedEvent evt = (TraceBlockedEvent) e;
+                if(evt.getSourceAUVName().equals(auv.getName())) {
+                    traceBlockedEventQueue.add(evt);
                 }
             }
         }
+
     }
     
     private void attachTrace(final String name, final Node visualizationNode, final List<Vector3f> trace) {
