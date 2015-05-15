@@ -27,7 +27,7 @@ import mars.uwCommManager.threading.events.TriggerEventListener;
 import mars.uwCommManager.threading.events.TriggerOutOfRangeEvent;
 
 /**
- * @version 0.1
+ * @version 0.2
  * @author Jasper Schwinghammer
  */
 public class AUVVisualizationNode implements TriggerEventListener{
@@ -59,6 +59,11 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.traceBlockedEventQueue = new LinkedList();
     }
     
+    /**
+     * initialize all non trivial stuff, check if everything is set up properly 
+     * @return if everything is ready to go
+     * @since 0.1
+     */
     public boolean init() {
         if(auv==null || auvNode == null) return false;
         this.name = auv.getName() + "-visualisation-Node";
@@ -70,6 +75,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
     
     /**
      * Connection to the JME3 mainloop
+     * Will steadily create all the relevant nodes or add them when they are needed. Will take more then one loop to make every node visible
+     * @since 0.1
      * @param tpf 
      */
     public void update(float tpf) {
@@ -134,25 +141,26 @@ public class AUVVisualizationNode implements TriggerEventListener{
             outOfRangeCopy = new LinkedList(outOfRangeAUVs);
             outOfRangeAUVs.clear();
         }
-        
+        //For every connection that is out of range
         for(String outOfRangeAUV : outOfRangeCopy) {
-            if(connectionMap.get(outOfRangeAUV) == null) {
-                
-            } else {
+            //If it even exisits
+            if(!(connectionMap.get(outOfRangeAUV) == null)) {
+                //hide ALL connections between these nodes
                 connectionMap.get(outOfRangeAUV).setCullHint(Spatial.CullHint.Always);
-            }
-                
+            }     
         }
-        
+        //Next: the blocked traces
         List<TraceBlockedEvent> blockedTraceQueueCopy;
         synchronized(this) {
             blockedTraceQueueCopy = new LinkedList(traceBlockedEventQueue);
             traceBlockedEventQueue.clear();
         }
-        
+        //for all blocked traces
         for(TraceBlockedEvent e : blockedTraceQueueCopy) {
-            if(!(connectionMap.get(e.getTargetAUVName())==null)) {
-                String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
+            String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
+            //if the trace existed before
+            if(!(connectionMap.get(e.getTargetAUVName())==null) && !(connectionMap.get(e.getTargetAUVName()).getChild(traceName)== null)) {
+                //get the trace and make it invisible with culling
                 Node traceNode = (Node)connectionMap.get(e.getTargetAUVName()).getChild(traceName);
                 traceNode.setCullHint(Spatial.CullHint.Always);
             }
@@ -164,6 +172,13 @@ public class AUVVisualizationNode implements TriggerEventListener{
 
     }
 
+    /**
+     * recieve a TriggerEvent
+     * triggerEvents are checked if relevant and then copied into lists that are computed during
+     * main loop
+     * @since 0.2
+     * @param e
+     */
     @Override
     public void triggerEventHappened(ATriggerEvent e) {
         switch(e.getEventID()) {
@@ -200,6 +215,12 @@ public class AUVVisualizationNode implements TriggerEventListener{
 
     }
     
+    /**
+     * @since 0.2
+     * @param name
+     * @param visualizationNode
+     * @param trace 
+     */
     private void attachTrace(final String name, final Node visualizationNode, final List<Vector3f> trace) {
         Vector3f start = trace.get(0);
         Vector3f end = trace.get(1);
@@ -212,7 +233,13 @@ public class AUVVisualizationNode implements TriggerEventListener{
         }
     }
     
-    
+    /**
+     * @since 0.2
+     * @param name
+     * @param visualizationNode
+     * @param start
+     * @param end 
+     */
     private void attachLine(final String name, final Node visualizationNode, final Vector3f start, final Vector3f end) {
         app.enqueue(new Callable<Object>(){
             @Override
@@ -230,6 +257,11 @@ public class AUVVisualizationNode implements TriggerEventListener{
         });
     }
     
+    /**
+     * @since 0.2
+     * @param node
+     * @param name 
+     */
     private void attachVisualisationNode(final Node node, final String name) {
         app.enqueue(new Callable<Object>(){
             @Override
@@ -241,6 +273,11 @@ public class AUVVisualizationNode implements TriggerEventListener{
         });
     }
     
+    /**
+     * @since 0.2
+     * @param rootNode
+     * @param node 
+     */
     private void attachNode(final Node rootNode, final Node node) {
         app.enqueue(new Callable<Object>(){
             @Override

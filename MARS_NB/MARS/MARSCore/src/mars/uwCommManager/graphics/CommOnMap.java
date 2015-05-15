@@ -52,7 +52,7 @@ public class CommOnMap {
     private List<Spatial> inactivePaths;
     
     /**
-     * @since 0.1
+     * @since 0.2.1
      * @param active if this class starts active or not
      */
     public CommOnMap(boolean active, boolean borders,boolean showLinks) {
@@ -211,7 +211,7 @@ public class CommOnMap {
         }
     }
     /**
-     * TODO DOCUMENTATION
+     * @since 0.2
      * @param node
      * @param name 
      */
@@ -226,7 +226,7 @@ public class CommOnMap {
         });
     }
     /**
-     * TODO DOCUMENTATION
+     * @since 0.2
      * @param name
      * @param distanceNode
      * @param start

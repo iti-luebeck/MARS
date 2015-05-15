@@ -22,6 +22,7 @@ import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
+ * This class traces the direction connections between two AUVs
  * @version 0.1
  * @author Jasper Schwinghammer
  */
@@ -33,6 +34,11 @@ public class DirectTrace implements Runnable{
     private List<DistanceTrigger> distanceTriggers;
     private DistanceTriggerCalculator triggerCalc;
     
+    /**
+     * Initialize the basic stuff
+     * @since 0.1
+     * @param triggerCalc 
+     */
     public DirectTrace(DistanceTriggerCalculator triggerCalc) {
         simState = null;
         auvManager = null;
@@ -40,7 +46,15 @@ public class DirectTrace implements Runnable{
         auvName = null;
         this.triggerCalc = triggerCalc;
     }
-    
+    /**
+     * Initialize everything that is not trivial and check if nothing has gone wrong during initialization.
+     * @since 0.1
+     * @param simState
+     * @param auvManager
+     * @param auvName
+     * @param distanceTriggers
+     * @return 
+     */
     public boolean init(SimState simState, AUV_Manager auvManager,String auvName, List<DistanceTrigger> distanceTriggers ) {
         if(simState == null || auvManager == null || auvName == null || distanceTriggers == null) return false;
         this.simState = simState;
@@ -50,13 +64,21 @@ public class DirectTrace implements Runnable{
         this.distanceTriggers = distanceTriggers;
         return true;
     }
-
+    
+    /**
+     * Run the ray-trace
+     * @since 0.1
+     */
     @Override
     public void run() {
         rayTraceConnections();
     }
     
-    
+    /**
+     * This method will trace all direct connections between the current AUV and all other AUVs that posses a modem and are in range.
+     * If a connection is found, a event is triggered and the graphics system notified, if the path is blocked another event is triggered that notifies the graphicssystem.
+     * @since 0.1
+     */
      private void rayTraceConnections() {
         //The node holding all simulation objects
         if(simState == null) return;

@@ -14,6 +14,7 @@ import mars.uwCommManager.CommunicationState;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
 
 /**
+ * This class pure purpose is to manage the visualization system. Each AUV gets its own sub nodes for visualization purpose
  * @version 0.1
  * @author Jasper Schwinghammer
  */
@@ -27,7 +28,14 @@ public class CommunicationVisualizer {
     
     private DistanceTriggerCalculator triggerCalc;
     
-    
+    /**
+     * @since 0.1
+     * just init basic stuff
+     * @param app
+     * @param comState
+     * @param auvMngr
+     * @param triggerCalc 
+     */
     public CommunicationVisualizer(MARS_Main app, CommunicationState comState,AUV_Manager auvMngr,DistanceTriggerCalculator triggerCalc) {
         this.app = app;
         this.comState= comState;
@@ -36,8 +44,12 @@ public class CommunicationVisualizer {
         nodeMap = new HashMap();
     }
     
+    /**
+     * Check if everything is set up properly and set up nontrivial stuff
+     * @return if everyhting is set up properly
+     */
     public boolean init() {
-        
+        if(app == null || comState == null ||auvMngr == null ||triggerCalc == null) return false; 
         for(Map.Entry<String, AUV> entry : auvMngr.getAUVs().entrySet()) {
             AUV auv = entry.getValue();
             ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
@@ -57,6 +69,10 @@ public class CommunicationVisualizer {
         return true;
     }
     
+    /**
+     * call update in all AUVNodes
+     * @param tpf 
+     */
     public void update(float tpf) {
         
         
