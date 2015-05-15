@@ -101,7 +101,7 @@ public class DistanceTriggerCalculator implements Runnable {
      * @return the distances from all AUVs with modems to other AUVs with modems
      */
     public synchronized Map<String,List<DistanceTrigger>> getDistanceTriggerMap() {
-        return distanceMapWithTraces;
+        return new HashMap<String,List<DistanceTrigger>>(distanceMapWithTraces);
     }
 
     private void calculatePathDistances() {
@@ -174,12 +174,16 @@ public class DistanceTriggerCalculator implements Runnable {
     }
     
     public void updateTraceMap(String auvName, List<DistanceTrigger> triggers) {
-        if(distanceMapWithTraces.containsKey(auvName)) {
-            distanceMapWithTraces.remove(auvName);
-            distanceMapWithTraces.put(auvName, triggers);
-        } else {
-            distanceMapWithTraces.put(auvName, triggers);
+        
+        synchronized(this) {
+            if(distanceMapWithTraces.containsKey(auvName)) {
+                distanceMapWithTraces.remove(auvName);
+                distanceMapWithTraces.put(auvName, triggers);
+            } else {
+                distanceMapWithTraces.put(auvName, triggers);
+            }
         }
+
     }
     
     

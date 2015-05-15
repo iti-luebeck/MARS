@@ -45,7 +45,7 @@ public class CommunicationVisualizer {
             while (it.hasNext()) {
                 UnderwaterModem uw = (UnderwaterModem) it.next();
                 Node modemNode = (Node)uw.getAuv().getAUVNode().getChild("modem");
-                AUVVisualizationNode modemVisNode = new AUVVisualizationNode(auv, modemNode);
+                AUVVisualizationNode modemVisNode = new AUVVisualizationNode(auv, modemNode,app);
                 modemVisNode.init();
                 nodeMap.put(uw.getAuv().getName(), modemVisNode);
                 triggerCalc.getEventGenerator().addListener(modemVisNode);

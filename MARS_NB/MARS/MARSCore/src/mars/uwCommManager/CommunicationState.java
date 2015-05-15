@@ -288,6 +288,8 @@ public class CommunicationState extends AbstractAppState {
         
         commOnMap.setDistances(distanceTraceModule.getDistanceTriggerMap());
         commOnMap.update(tpf);
+        
+        communicationGraphics.update(tpf);
 
         
         

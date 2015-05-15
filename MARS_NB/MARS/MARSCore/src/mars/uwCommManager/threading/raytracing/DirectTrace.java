@@ -90,7 +90,7 @@ public class DirectTrace implements Runnable{
 
                 while (itTargetMo.hasNext()) {
                     List<Vector3f> traceList = new LinkedList<Vector3f>();
-                    traceList.add(modPos);
+                    traceList.add(new Vector3f(0,0,0));
                     //get its position
                     CommunicationDevice targetMod = (CommunicationDevice)itTargetMo.next();
                     Vector3f targetModPos = targetMod.getWorldPosition();
@@ -108,8 +108,8 @@ public class DirectTrace implements Runnable{
                         if(results.getClosestCollision().getDistance() < direction.mult(0.9f).length()-1) {
                             removedTriggers.add(trigger);
                         } else {
-                            traceList.add(targetModPos);
-                            triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName,traceList);
+                            traceList.add(direction);
+                            triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName,traceList,true);
                         }
 
                        //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
