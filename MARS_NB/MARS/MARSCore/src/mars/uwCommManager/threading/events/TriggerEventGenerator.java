@@ -58,4 +58,8 @@ public class TriggerEventGenerator {
         fireEvent(e);
     }
     
+    public void fireNewTriggerOutOfDistanceEvent(Object source, String sourceAUVName, String targetAUVName) {
+        ATriggerEvent e = new TriggerOutOfDistanceEvent(source,CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT,sourceAUVName,targetAUVName);
+        fireEvent(e);
+    }
 }

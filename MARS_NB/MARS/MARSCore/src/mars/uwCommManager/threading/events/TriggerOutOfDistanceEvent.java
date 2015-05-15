@@ -11,21 +11,21 @@ package mars.uwCommManager.threading.events;
  */
 public class TriggerOutOfDistanceEvent extends ATriggerEvent {
     
-    private final String sourceAUV;
-    private final String targetAUV;
+    private final String sourceAUVName;
+    private final String targetAUVName;
 
-    public TriggerOutOfDistanceEvent(Object source, int EVENT_ID, final String sourceAUV,final String targetAUV) {
+    public TriggerOutOfDistanceEvent(Object source, int EVENT_ID, final String sourceAUVName,final String targetAUVName) {
         super(source, EVENT_ID);
-        this.sourceAUV = sourceAUV;
-        this.targetAUV = targetAUV;
+        this.sourceAUVName = sourceAUVName;
+        this.targetAUVName = targetAUVName;
     }
     
-    public String getSourceAUV() {
-        return sourceAUV;
+    public String getSourceAUVName() {
+        return sourceAUVName;
     }
     
-    public String getTargetAUV() {
-        return targetAUV;
+    public String getTargetAUVName() {
+        return targetAUVName;
     }
     
 }
