@@ -103,11 +103,18 @@ public class AUVVisualizationNode implements TriggerEventListener{
             Node connectionNode = connectionMap.get(e.getTargetAUVName());
             //Create the identifier for the trace
             String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
+            
+            Node traceNode = (Node) connectionNode.getChild(traceName);
+            if(traceNode == null ) {
+                attachNode(connectionNode, new Node(traceName));
+                return;
+            }
+            
             //check if the trace is already existent
-            Geometry traceStartGeom = (Geometry)connectionNode.getChild(traceName+"-0");
+            Geometry traceStartGeom = (Geometry)traceNode.getChild(traceName+"-0");
             //if not, create it
             if(traceStartGeom == null){
-                attachTrace(traceName, connectionNode, e.getTraces());
+                attachTrace(traceName, traceNode, e.getTraces());
                 //since it takes multible loops to create all nodes and we don't
                 //want to create multible notes for the same connection break the loop
                 return;
