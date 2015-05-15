@@ -63,27 +63,54 @@ public class AUVVisualizationNode implements TriggerEventListener{
         return true;
     }
     
+    /**
+     * Connection to the JME3 mainloop
+     * @param tpf 
+     */
     public void update(float tpf) {
         synchronized(this) {
+            //for every trace that was computed in the last cycle
             for(TraceHitAUVEvent e : eventList) {
+                // if there were never a connection from this auv before, create a Fathernode for all connections from this auv
                 if(auvNode.getChild(name) == null) {
                     attachVisualisationNode(auvNode, name);
                     return;
                 }
-                if(connectionMap.get(e.getTargetAUVName())==null) {
-                    String connectionNodeName = name+"-"+e.getTargetAUVName();
+                //The name of the Node containing all connections to the target AUV
+                String connectionNodeName = name+"-"+e.getTargetAUVName();
+                //If there was never a connection to the other AUV before
+                if(auvNode.getChild(connectionNodeName) == null) {
+                    //if the Node is already created but not yet added to the rootNode, just wait for it to be handled
+                    if(connectionMap.containsKey(e.getTargetAUVName())) {
+                        return;
+                    }
+                    //Create the connectionNode
                     Node connectionNode = new Node(connectionNodeName);
                     attachNode(auvNode, connectionNode);
+                    connectionMap.put(e.getTargetAUVName(), connectionNode);
+                    return;
                 }
+                
+                Node connectionNode = connectionMap.get(e.getTargetAUVName());
+                //Create the identifier for the trace
                 String traceName = name + "-" +e.getTargetAUVName() +"-"+e.getTraces().size()+"-"+e.surfaceFirst();
-                Geometry traceStartGeom = (Geometry)visRootNode.getChild(traceName+"-0");
+                //check if the trace is already existent
+                Geometry traceStartGeom = (Geometry)connectionNode.getChild(traceName+"-0");
+                //if not, create it
                 if(traceStartGeom == null){
-                    attachTrace(traceName, visRootNode, e.getTraces());
-                } else {
+                    System.out.println("Huch I am called" + traceName + " " + this.toString());
+                    attachTrace(traceName, connectionNode, e.getTraces());
+                    //since it takes multible loops to create all nodes and we don't
+                    //want to create multible notes for the same connection break the loop
+                    return;
+                } 
+                //else update it
+                else {
                     Line line = (Line) traceStartGeom.getMesh();
                     line.updatePoints(e.getTraces().get(0), e.getTraces().get(1));
                 }
             }
+            //all events done? remove them
             eventList.clear();
         }
 
