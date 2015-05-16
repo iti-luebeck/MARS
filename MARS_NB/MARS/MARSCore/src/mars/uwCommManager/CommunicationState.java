@@ -33,11 +33,8 @@ import mars.states.SimState;
 import mars.uwCommManager.graphics.CommOnMap;
 import mars.uwCommManager.graphics.CommunicationVisualizer;
 import mars.uwCommManager.helpers.DistanceTrigger;
-import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
-import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
-import test_ros.Simple;
 
 /**
  * Entrypoint of the communications module.

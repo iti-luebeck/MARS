@@ -7,6 +7,7 @@ package mars.uwCommManager.graphics;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -97,6 +98,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         }
         
         //make root of the visualisation visible
+        if(!(visRootNode.getWorldRotation().equals(Quaternion.IDENTITY)))visRootNode.rotate(visRootNode.getWorldRotation().inverse());
         visRootNode.setCullHint(Spatial.CullHint.Never);
         List<TraceHitAUVEvent> copyList = null;
         synchronized(this) {
