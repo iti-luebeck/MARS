@@ -100,11 +100,6 @@ public class CommunicationState extends AbstractAppState {
      */
     private boolean commOnMapShowCommLinks = false;
     
-    /**
-     * indicates the status of the gaussian white noise
-     */
-    private boolean noiseAdditiveGaussianWhiteNoiseActive = false;
-    
     
     /**
      * The mainclass of the visualization functionalities of the commodule
@@ -142,8 +137,6 @@ public class CommunicationState extends AbstractAppState {
         }
         
         
-        //Load up noises if they were activated on startup this should be done dynamicly in future
-        if(noiseAdditiveGaussianWhiteNoiseActive) addNoise(GAUSSIAN_WHITE_NOISE);
         
         
         commOnMap = new CommOnMap(commOnMapActive,commOnMapBorders,commOnMapShowCommLinks);
@@ -174,6 +167,7 @@ public class CommunicationState extends AbstractAppState {
             //Check if the AUV is enabled and has a modem
                 if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())&&!auvProcessMap.containsKey(auv.getName())) {
                     ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName(),auv);
+                    runnable.init();
                     auvProcessMap.put(auv.getName(), runnable);
                     executor.scheduleAtFixedRate(runnable, 2000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
@@ -245,32 +239,6 @@ public class CommunicationState extends AbstractAppState {
                 }
             }
         });
-        
-        Preferences pref2 = Preferences.userNodeForPackage(mars.uwCommManager.options.NoiseOptionsOptionsPanelController.class);
-        if (pref2 == null) return false;
-        noiseAdditiveGaussianWhiteNoiseActive = pref2.getBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false);
-        pref2.addPreferenceChangeListener(new PreferenceChangeListener() {
-            @Override
-            public void preferenceChange(PreferenceChangeEvent e) {
-                
-            if(e.getKey().equals(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
-                  if(decide(noiseAdditiveGaussianWhiteNoiseActive,Boolean.parseBoolean(e.getNewValue()),GAUSSIAN_WHITE_NOISE)) noiseAdditiveGaussianWhiteNoiseActive = Boolean.parseBoolean(e.getNewValue());
-                }
-            }
-            
-            private boolean decide(boolean oldvalue, boolean newvalue, String noise) {
-            if(oldvalue && !newvalue) {
-                removeNoise(noise);
-                return true;
-            } else if (!oldvalue && newvalue) {
-                addNoise(noise);
-                return true;
-            } else return false;
-            }
-            
-        });
-        
-        
         return true;
     }
 
@@ -358,18 +326,7 @@ public class CommunicationState extends AbstractAppState {
     
     
 //----------------------------END MAINLOOP BEGIN HELPERS SETTER GETTERS------------------------------
-    
-    private void addNoise(String name) {
-        for(ModemMessageRunnable i : auvProcessMap.values()) {
-            if(name.equals(GAUSSIAN_WHITE_NOISE)) {
-                i.addANoiseByDistanceGenerator(new AdditiveGaussianWhiteNoise(1, 1/4f));
-            
-            } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Tried to create not existing noise: {0}", name);
-                break;
-            }
-        }
-    }
+
     
     private void removeNoise(String name) {
         for(ModemMessageRunnable i : auvProcessMap.values()) {

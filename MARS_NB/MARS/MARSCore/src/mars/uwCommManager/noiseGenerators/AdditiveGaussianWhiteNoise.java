@@ -14,7 +14,7 @@ import static mars.uwCommManager.noiseGenerators.NoiseNameConstants.*;
 
 /**
  * This class is a basic implementation of underwater noise
- * @version 1.1
+ * @version 1.2
  * @author Jasper Schwinghammer
  */
 public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
@@ -27,13 +27,15 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
      */
     private float standardDeviation;
     
+
+    
     /**
      * Init without a seed, seed is generated random by java.util.Random standards
      * @since 0.5 
      * @param standardDeviation the deviation should be less then 0.5 to be usefull
      */
-    public AdditiveGaussianWhiteNoise(float standardDeviation) {
-        super(GAUSSIAN_WHITE_NOISE);
+    public AdditiveGaussianWhiteNoise(float standardDeviation,float shippingFactor, float windspeed) {
+        super(GAUSSIAN_WHITE_NOISE,shippingFactor,windspeed);
         random = new Random();
         this.standardDeviation = standardDeviation;
     }
@@ -44,8 +46,8 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
      * @param seed the seed for the java.util.Random
      * @param standardDeviation the deviation should be less then 0.5 to be usefull
      */
-    public AdditiveGaussianWhiteNoise(long seed, float standardDeviation) {
-        super(GAUSSIAN_WHITE_NOISE);
+    public AdditiveGaussianWhiteNoise(long seed, float standardDeviation,float shippingFactor, float windspeed) {
+        super(GAUSSIAN_WHITE_NOISE,shippingFactor,windspeed);
         random = new Random(seed);
         this.standardDeviation = standardDeviation;
     }
@@ -80,7 +82,7 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
     public byte[] noisifyByDistance(byte[] message, float distance, float frequence, float signalStrength, float waterDepth) {
         AttenuationHelper attHelper = new AttenuationHelper(((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment());
         float attenuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
-        float ambientNoise = AmbientNoiseHelper.calculateAmbientNoise(frequence, 1, 3);
+        float ambientNoise = AmbientNoiseHelper.calculateAmbientNoise(frequence, shippingFactor, windspeed);
         float currentSignalStrength =  (float) (10f * Math.log10( Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)) );
        //System.out.println("Stärke: "+Math.pow(10,signalStrength/10)+ " schwäche: "+ Math.pow(10,attenuation/10) + " diff: " + (Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)));
         float SNR = (float) (10f *( Math.log10(Math.pow(10,currentSignalStrength/10) / Math.pow(10,ambientNoise/10))));
@@ -90,6 +92,8 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
         return noisify(message);
         
     }
+    
+
     
     
 }

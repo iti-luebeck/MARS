@@ -5,7 +5,13 @@
  */
 package mars.uwCommManager.options;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.prefs.Preferences;
+import javax.swing.JFormattedTextField;
+import javax.swing.event.DocumentListener;
 import static mars.uwCommManager.options.CommOptionsConstants.*;
 
 final class NoiseOptionsPanel extends javax.swing.JPanel {
@@ -16,6 +22,7 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
         this.controller = controller;
         initComponents();
         // TODO listen to changes in form fields and call controller.changed()
+        addListener();
     }
 
     /**
@@ -34,6 +41,11 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel4.text")); // NOI18N
 
@@ -52,6 +64,19 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "LubberGraaffA", "LubberGraaffB", "Marczak", "Coppens", "Mackenzie", "DelGrosso", "ChenMillero" }));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel5.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jCheckBox1.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel6.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel7.text")); // NOI18N
+        jLabel7.setToolTipText(org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jLabel7.toolTipText")); // NOI18N
+
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jTextField1.text")); // NOI18N
+        jTextField1.setToolTipText(org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jTextField1.toolTipText")); // NOI18N
+
+        jTextField2.setText(org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jTextField2.text")); // NOI18N
+        jTextField2.setToolTipText(org.openide.util.NbBundle.getMessage(NoiseOptionsPanel.class, "NoiseOptionsPanel.jTextField2.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -74,12 +99,24 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel5))
-                            .addComponent(jLabel3))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox1)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel5))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(21, 21, 21)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                                            .addComponent(jTextField2))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel7))))))
                         .addGap(0, 337, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -99,27 +136,93 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     void load() {
+        jCheckBox1.setSelected(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getBoolean(OPTIONS_NOISE_USE_STATIC_PARAMETERS_CHECKBOX, false));
         jCheckBox2.setSelected(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false));
         jComboBox1.setSelectedIndex(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getInt(OPTIONS_SPEED_OF_SOUND_METHOD, 1));
+        jCheckBox1.setSelected(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).getBoolean(OPTIONS_NOISE_USE_STATIC_PARAMETERS_CHECKBOX, false));
+        jTextField1.setText(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).get(OPTIONS_NOISE_WINDSPEED_TEXTFIELD, "0"));
+        jTextField2.setText(Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).get(OPTIONS_NOISE_SHIPPING_FACTOR_TEXTFIELD, "0"));
+        jTextField1.setEnabled(jCheckBox1.isSelected());
+        jTextField2.setEnabled(jCheckBox1.isSelected());
+
+        
         
     }
 
     void store() {
+        Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).putBoolean(OPTIONS_NOISE_USE_STATIC_PARAMETERS_CHECKBOX, jCheckBox1.isSelected());
         Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).putBoolean(OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, jCheckBox2.isSelected());
         Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).putInt(OPTIONS_SPEED_OF_SOUND_METHOD, jComboBox1.getSelectedIndex());
+        Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).put(OPTIONS_NOISE_WINDSPEED_TEXTFIELD, jTextField1.getText());
+        Preferences.userNodeForPackage(NoiseOptionsOptionsPanelController.class).put(OPTIONS_NOISE_SHIPPING_FACTOR_TEXTFIELD, jTextField2.getText());
     }
+    
+    
+    private void addListener() {
+        jCheckBox1.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(jCheckBox1)) {
+                    jTextField1.setEnabled(jCheckBox1.isSelected());
+                    jTextField2.setEnabled(jCheckBox1.isSelected());
+                }
+            }
+        });
+        
+        jTextField1.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                String content = jTextField1.getText();
+                if(!content.matches("^\\d+\\.?\\d*$")) {
+                    jTextField1.setText("0");
+                } 
+            }
+        });
+        jTextField2.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                String content = jTextField2.getText();
+                if(!content.matches("^?\\d+\\.?\\d*$")) {
+                    jTextField2.setText("0");
+                }else if(Float.parseFloat(content) <0) {
+                    jTextField2.setText("0");
+                } else if(Float.parseFloat(content)>1) {
+                    jTextField2.setText("1");
+                }
+            }
+        });
+    }
+    
     boolean valid() {
         // TODO check whether form is consistent and complete
         return true;
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -127,6 +230,10 @@ final class NoiseOptionsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

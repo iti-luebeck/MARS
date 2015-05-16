@@ -83,7 +83,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
      * @param tpf 
      */
     public void update(float tpf) {
-        
+        // If module is deactivated we don't need to process anything
         if(!showCommunicationLinks) {
             synchronized(this) {
                 traceHitEventQueue.clear();
@@ -95,6 +95,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
             }
             return;
         }
+        
+        //make root of the visualisation visible
         visRootNode.setCullHint(Spatial.CullHint.Never);
         List<TraceHitAUVEvent> copyList = null;
         synchronized(this) {
@@ -102,6 +104,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
             traceHitEventQueue.clear();
         }
         // if there were never a connection from this auv before, create a Fathernode for all connections from this auv
+        // Since it is done  in init() it should never happen unless a AUV is added during runtime;
         if(auvNode.getChild(name) == null) {
             attachVisualisationNode(auvNode, name);
             return;

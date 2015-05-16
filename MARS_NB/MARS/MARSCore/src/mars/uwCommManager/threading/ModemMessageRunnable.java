@@ -31,6 +31,8 @@ import mars.auv.AUV;
 import mars.core.CentralLookup;
 import mars.sensors.CommunicationDevice;
 import mars.states.SimState;
+import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
+import mars.uwCommManager.noiseGenerators.NoiseNameConstants;
 import org.jboss.netty.handler.codec.http.HttpMethod;
 
 /**
@@ -104,6 +106,8 @@ public class ModemMessageRunnable implements Runnable{
     
     
     private volatile List<ANoiseByDistanceGenerator> noiseGenerators = null;
+    float windspeed;
+    float shippingFactor;
     
     
     /**
@@ -128,8 +132,6 @@ public class ModemMessageRunnable implements Runnable{
         speedOfSound = 1f;
         env = null;
         depth = 0;
-        
-        init();
     }
     
     /**
@@ -149,6 +151,13 @@ public class ModemMessageRunnable implements Runnable{
         int currentMethod = pref.getInt(CommOptionsConstants.OPTIONS_SPEED_OF_SOUND_METHOD, 0);
         
         determineSpeedOfSoundMethod(currentMethod, env);
+        
+        windspeed = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_WINDSPEED_TEXTFIELD, 3);
+        shippingFactor = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_SHIPPING_FACTOR_TEXTFIELD, 0);
+        
+        if(pref.getBoolean(CommOptionsConstants.OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false)) {
+            noiseGenerators.add(new AdditiveGaussianWhiteNoise(1, 1/4f,shippingFactor,windspeed));
+        }
 
         
         pref.addPreferenceChangeListener(new PreferenceChangeListener() {
@@ -157,6 +166,23 @@ public class ModemMessageRunnable implements Runnable{
             public void preferenceChange(PreferenceChangeEvent e) {
                 if(e.getKey().equals(CommOptionsConstants.OPTIONS_SPEED_OF_SOUND_METHOD)) {
                     determineSpeedOfSoundMethod(Integer.parseInt(e.getNewValue()),env);
+                } else if (e.getKey().equals(CommOptionsConstants.OPTIONS_NOISE_SHIPPING_FACTOR_TEXTFIELD)) {
+                    shippingFactor  = (Float.parseFloat(e.getNewValue()));
+                    for(ANoiseByDistanceGenerator gen : noiseGenerators) {
+                        gen.setShippingFactor(shippingFactor);
+                    }
+                } else if (e.getKey().equals(CommOptionsConstants.OPTIONS_NOISE_WINDSPEED_TEXTFIELD)) {
+                    windspeed = (Float.parseFloat(e.getNewValue()));
+                    for(ANoiseByDistanceGenerator gen : noiseGenerators) {
+                        gen.setWindSpeed(windspeed);
+                    }
+                } else if(e.getKey().equals(CommOptionsConstants.OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE)) {
+                    if(Boolean.parseBoolean(e.getNewValue())) {
+                        for(ANoiseByDistanceGenerator a : noiseGenerators) {
+                            if(a.getName().equals(NoiseNameConstants.GAUSSIAN_WHITE_NOISE)) return;
+                        }
+                        noiseGenerators.add(new AdditiveGaussianWhiteNoise(1, 1/4f,shippingFactor,windspeed));
+                    } else removeANoiseGeneratorByName(NoiseNameConstants.GAUSSIAN_WHITE_NOISE);
                 }
             }
         }) ;
@@ -332,6 +358,7 @@ public class ModemMessageRunnable implements Runnable{
     /**
      * @since 0.2
      * @param noiseGen 
+     * @deprecated 
      */
     public synchronized void addANoiseByDistanceGenerator(ANoiseByDistanceGenerator noiseGen) {
         noiseGenerators.add(noiseGen);
@@ -340,6 +367,7 @@ public class ModemMessageRunnable implements Runnable{
     /**
      * @since 0.2
      * @param noiseGen
+     * @deprecated 
      */
     public synchronized void removeANoiseGenerator(ANoiseByDistanceGenerator noiseGen) {
         noiseGenerators.remove(noiseGen);
@@ -349,6 +377,7 @@ public class ModemMessageRunnable implements Runnable{
      * Search for a NoiseGenerator by its name and remove it from the processing
      * @since 0.2
      * @param name the name of the noiseGen that should be removed
+     * 
     */
     public synchronized void removeANoiseGeneratorByName(String name) {
         ANoiseByDistanceGenerator toBeRemoved = null;
