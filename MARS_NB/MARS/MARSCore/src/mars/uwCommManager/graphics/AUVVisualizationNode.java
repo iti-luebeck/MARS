@@ -6,20 +6,28 @@
 package mars.uwCommManager.graphics;
 
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Line;
+import com.jme3.scene.shape.Sphere;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
 import mars.auv.AUV;
+import mars.sensors.CommunicationDevice;
 import mars.uwCommManager.threading.events.ATriggerEvent;
 import mars.uwCommManager.threading.events.CommunicationEventConstants;
 import mars.uwCommManager.threading.events.TraceBlockedEvent;
@@ -74,7 +82,31 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.visRootNode = new Node(name);
         auvNode.attachChild(visRootNode);
         visRootNode.setCullHint(Spatial.CullHint.Never);
+        initSphere();
         return true;
+    }
+    
+    
+    private void initSphere() {
+        ArrayList uwmo = auv.getSensorsOfClass(CommunicationDevice.class.getName());
+         Iterator it = uwmo.iterator();
+         float range = 0;
+         while(it.hasNext()){
+             CommunicationDevice mod = (CommunicationDevice)it.next();
+             range = (range<=mod.getPropagationDistance())?mod.getPropagationDistance():range;
+         }
+        
+        Sphere mesh = new Sphere(32, 32, range,false, true);
+        mesh.setMode(Mesh.Mode.Lines);
+        Geometry geom = new Geometry("sphere", mesh);
+        
+        Material mat = new Material(app.getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", new ColorRGBA(0, 1, 0, 0.1f));
+        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        geom.setMaterial(mat);
+        geom.setQueueBucket(Bucket.Transparent);
+        geom.setLocalRotation(new Quaternion(0.5f,0.5f,-0.5f,0.5f));
+        visRootNode.attachChild(geom);
     }
     
     /**
@@ -98,7 +130,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         }
         
         //make root of the visualisation visible
-        if(!(visRootNode.getWorldRotation().equals(Quaternion.IDENTITY)))visRootNode.rotate(visRootNode.getWorldRotation().inverse());
+        visRootNode.rotate(visRootNode.getWorldRotation().inverse());
         visRootNode.setCullHint(Spatial.CullHint.Never);
         List<TraceHitAUVEvent> copyList = null;
         synchronized(this) {
@@ -185,13 +217,8 @@ public class AUVVisualizationNode implements TriggerEventListener{
                 //get the trace and make it invisible with culling
                 Node traceNode = (Node)connectionMap.get(e.getTargetAUVName()).getChild(traceName);
                 traceNode.setCullHint(Spatial.CullHint.Always);
-            }
-            
-            
+            } 
         }
-
-
-
     }
 
     /**
