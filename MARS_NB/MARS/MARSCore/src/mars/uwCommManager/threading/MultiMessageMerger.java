@@ -144,14 +144,10 @@ public class MultiMessageMerger implements Runnable {
                                 }    
                             }                        
                         }
-
-
                     }
                     returnMessage(name, byteArray);
                 } 
             }
-
-            
         }
         chunks.clear();
     }

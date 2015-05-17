@@ -82,7 +82,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.visRootNode = new Node(name);
         auvNode.attachChild(visRootNode);
         visRootNode.setCullHint(Spatial.CullHint.Never);
-        initSphere();
+        //initSphere();
         return true;
     }
     

@@ -280,7 +280,7 @@ public class CommOnMap {
      * @param distances 
      */
     public void setDistances(Map<String,List<DistanceTrigger>> distances) {
-        this.distances = distances;
+        this.distances = new HashMap(distances);
     }
     
     /**
