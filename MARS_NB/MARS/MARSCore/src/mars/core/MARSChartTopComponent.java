@@ -4,8 +4,6 @@
  */
 package mars.core;
 
-import mars.gui.plot.AUVListener;
-import mars.gui.plot.ChartEvent;
 import com.jme3.math.Vector3f;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
@@ -13,13 +11,15 @@ import info.monitorenter.gui.chart.controls.LayoutFactory;
 import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import java.awt.Color;
 import java.util.ArrayList;
-import mars.misc.ChartValue;
 import mars.auv.AUV;
+import mars.events.MARSObjectEvent;
+import mars.events.MARSObjectListener;
+import mars.misc.ChartValue;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays charts/lots of data from auvs/sensors.
@@ -236,14 +236,14 @@ public final class MARSChartTopComponent extends TopComponent {
     }
     
     void initListener(){
-        class ComplainingAdListener implements AUVListener{
-            @Override public void onNewData( ChartEvent e ) {
-                if(e.getObject() instanceof Float){
+        class ComplainingAdListener implements MARSObjectListener{
+            @Override public void onNewData( MARSObjectEvent e ) {
+                if(e.getMsg() instanceof Float){
                     for (ITrace2D trace : traces) {
-                        trace.addPoint(((double) System.currentTimeMillis() - m_starttime), (Float)e.getObject());
+                        trace.addPoint(((double) System.currentTimeMillis() - m_starttime), (Float)e.getMsg());
                     }
-                }else if(e.getObject() instanceof Vector3f){
-                    Vector3f vec = (Vector3f)e.getObject();
+                }else if(e.getMsg() instanceof Vector3f){
+                    Vector3f vec = (Vector3f)e.getMsg();
                     ITrace2D x = traces.get(0);
                     x.addPoint(((double) System.currentTimeMillis() - m_starttime), vec.getX());
                     ITrace2D y = traces.get(1);
@@ -254,6 +254,6 @@ public final class MARSChartTopComponent extends TopComponent {
             }
         }
 
-        auv.addAdListener( new ComplainingAdListener() );
+        auv.addMARSObjectListener( new ComplainingAdListener() );
     }
 }

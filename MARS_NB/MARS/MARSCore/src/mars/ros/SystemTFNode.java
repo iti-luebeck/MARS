@@ -102,6 +102,7 @@ public class SystemTFNode implements RosNodeListener {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void initSystemTF(MARSNodeMain ros_node) {
         publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
         fl = ros_node.getMessageFactory().newFromType(tf.tfMessage._TYPE);

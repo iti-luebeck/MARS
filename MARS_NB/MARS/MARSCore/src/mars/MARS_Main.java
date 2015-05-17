@@ -34,6 +34,7 @@ import mars.core.CentralLookup;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.states.AppStateExtension;
+import mars.states.MARSAppState;
 import mars.states.MapState;
 import mars.states.NiftyState;
 import mars.xml.ConfigManager;
@@ -67,6 +68,8 @@ public class MARS_Main extends SimpleApplication {
     ConfigManager configManager;
 
     AdvancedFlyByCamera advFlyCam;
+    
+    MARSAppState activeInputState = null;
 
     //nifty(gui) stuff
     private boolean load = false;
@@ -157,6 +160,7 @@ public class MARS_Main extends SimpleApplication {
             simstate.setMapState(mapstate);
             stateManager.attach(simstate);
             CentralLookup.getDefault().add(simstate);
+            setActiveInputState(simstate);
         } else {
             configManager.setConfigName("default");
         }
@@ -610,6 +614,23 @@ public class MARS_Main extends SimpleApplication {
      */
     public Camera getMapCamera() {
         return map_cam;
+    }
+
+    /**
+     * Returns which state is the active one in terms of inputmanager. Since the
+     * inputmanager exists only once. Needed for mutiple window/input check.
+     * @return
+     */
+    public MARSAppState getActiveInputState() {
+        return activeInputState;
+    }
+
+    /**
+     *
+     * @param activeInputState
+     */
+    public void setActiveInputState(MARSAppState activeInputState) {
+        this.activeInputState = activeInputState;
     }
 
     /**

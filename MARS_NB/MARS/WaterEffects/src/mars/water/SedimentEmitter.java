@@ -23,7 +23,9 @@ import java.util.List;
 /**
  *
  * @author Bud
+ * @deprecated in favor of new SedimentEmitterControl
  */
+@Deprecated
 public class SedimentEmitter {
     private Material material;
     private Node root;

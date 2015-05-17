@@ -8,7 +8,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.rits.cloning.Cloner;
 import java.util.HashMap;
-import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -134,6 +133,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher 
     /**
      *
      */
+    @Override
     public void publish() {
         if (tf_pub != null) {
             tf_pub.publishTF();
@@ -143,6 +143,7 @@ public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher 
     /**
      *
      */
+    @Override
     public void publishUpdate() {
         if (tf_pub != null) {
             tf_pub.publishTFUpdate();

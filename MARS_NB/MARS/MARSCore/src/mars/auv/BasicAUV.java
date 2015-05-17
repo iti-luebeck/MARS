@@ -4,11 +4,6 @@
  */
 package mars.auv;
 
-import com.jme3.renderer.queue.RenderQueue;
-import mars.object.CollisionType;
-import mars.actuators.thruster.Thruster;
-import mars.actuators.Actuator;
-import mars.sensors.Sensor;
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
@@ -33,6 +28,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -40,22 +36,22 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
-import com.jme3.texture.Image.Format;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import com.rits.cloning.Cloner;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -64,47 +60,51 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import jme3tools.optimize.LodGenerator;
-import mars.object.BuoyancyType;
-import mars.misc.DebugHint;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.Keys;
-import mars.PhysicalEnvironment;
-import mars.PhysicalExchange.PhysicalExchanger;
-import mars.MARS_Settings;
 import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.Manipulating;
 import mars.PhysicalExchange.Moveable;
-import mars.control.MyCustomGhostControl;
-import mars.misc.PickHint;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
+import mars.actuators.Actuator;
 import mars.actuators.BallastTank;
+import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
-import mars.states.SimState;
-import mars.auv.example.Hanse;
 import mars.auv.example.ASV;
-import mars.auv.example.Monsun2;
-import mars.auv.example.SMARTE;
-import mars.gui.plot.AUVListener;
-import mars.gui.plot.ChartEvent;
-import mars.control.LimitedRigidBodyControl;
 import mars.auv.example.Buoy;
+import mars.auv.example.Hanse;
 import mars.auv.example.Manta;
+import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
+import mars.auv.example.SMARTE;
+import mars.control.LimitedRigidBodyControl;
+import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
+import mars.control.SedimentEmitterControl;
+import mars.events.MARSObjectEvent;
+import mars.events.MARSObjectListener;
+import mars.misc.DebugHint;
+import mars.misc.PickHint;
+import mars.object.BuoyancyType;
+import mars.object.CollisionType;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
-import mars.sensors.AmpereMeter;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.PingDetector;
 import mars.sensors.PollutionMeter;
 import mars.sensors.RayBasedSensor;
+import mars.sensors.Sensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
+import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -118,7 +118,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor {
+public class BasicAUV implements AUV, SceneProcessor{
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -414,13 +414,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void registerPhysicalExchanger(String name, PhysicalExchanger pex) {
         pex.setName(name);
-        if (pex instanceof Sensor) {
-            sensors.put(name, (Sensor) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Sensor " + name + " added...", "");
-        } else if (pex instanceof Actuator) {
-            actuators.put(name, (Actuator) pex);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + name + " added...", "");
-        }
+        registerPhysicalExchanger(pex);
     }
 
     /**
@@ -428,7 +422,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param pex
      */
     @Override
-    public void registerPhysicalExchanger(PhysicalExchanger pex) {
+    public void registerPhysicalExchanger(final PhysicalExchanger pex) {
         pex.setName(pex.getName());
         if (pex instanceof Sensor) {
             sensors.put(pex.getName(), (Sensor) pex);
@@ -437,6 +431,21 @@ public class BasicAUV implements AUV, SceneProcessor {
             actuators.put(pex.getName(), (Actuator) pex);
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
         }
+    }
+    
+    /**
+     * Init the PE in a safe way. Means that first a mars instance is available
+     * and second enqueue the register.
+     */
+    @Override
+    public void initPhysicalExchangerFuture() {
+        mars.enqueue(new Callable<Void>() {
+            public Void call() throws Exception {
+                //init
+                initPhysicalExchangers();
+                return null;
+            }
+        });
     }
 
     /**
@@ -455,7 +464,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void deregisterPhysicalExchanger(final PhysicalExchanger pex) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + getName() + " is deleting PhysicalExchanger: " + pex.getName(), "");
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
@@ -653,6 +662,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         initCenters();
         initWaypoints();
+        initControls();
         //the offscreen for area calculating(drag) must be set
         setupDragOffscreenView();//<-- buggy when deleting/deregister etc
         if (auv_param.isDebugDrag()) {
@@ -682,15 +692,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         auv_node.updateGeometricState();
     }
 
-    ;
-
     private void initPhysicalExchangers() {
         //init sensors
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setMARS_settings(mars_settings);
                 element.setPhysical_environment(physical_environment);
@@ -713,9 +721,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 if (element instanceof PingDetector) {
                     ((PingDetector) element).setSimObjectManager(simstate.getSimob_manager());
                 }
-                if (element instanceof AmpereMeter) {
-                    ((AmpereMeter) element).setAuv(this);
-                }
                 if (element instanceof FlowMeter) {
                     ((FlowMeter) element).setIniter(initer);//is needed for filters
                 }
@@ -727,6 +732,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                     Keys elementKeys = (Keys) element;
                     elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
                 }
+                element.setInitialized(true);
             }
         }
         //init actuators
@@ -734,7 +740,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             Actuator element = actuators.get(elem);
             element.setName(element.getName());
             element.setAuv(this);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setPhysical_environment(physical_environment);
                 element.setPhysicsControl(physics_control);
@@ -752,6 +758,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                     Keys elementKeys = (Keys) element;
                     elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
                 }
+                element.setInitialized(true);
             }
         }
         //init special actuators like manipulating ones(servos)
@@ -946,7 +953,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         //Vector3f buoyancy_force_vec = new Vector3f(0.0f,buoyancy_force,0.0f);
         Vector3f buoyancy_force_vec = new Vector3f(0.0f, buoyancy_force / ((float) mars_settings.getPhysicsFramerate()), 0.0f);
         //notifySafeAdvertisement(new ChartEvent(this, OldCenterGeom.getWorldTranslation().y + Math.abs(physical_environment.getWater_height()), 0));
-        notifySafeAdvertisement(new ChartEvent(this, actual_vol, 0));
+        notifySafeAdvertisementMARSObject(new MARSObjectEvent(this, actual_vol, 0));
         //notifySafeAdvertisement(new ChartEvent(this,VolumeCenterGeom.getWorldTranslation().subtract(MassCenterGeom.getWorldTranslation()).length(), 0));
 
         //physics_control.applyCentralForce(buoyancy_force_vec);
@@ -1292,6 +1299,17 @@ public class BasicAUV implements AUV, SceneProcessor {
             }
         });
         //}
+    }
+    
+    /*
+    *
+    */
+    private void initControls(){
+        SedimentEmitterControl sediment = new SedimentEmitterControl(initer.getTerrainNode(), assetManager);
+        auv_node.addControl(sediment);
+        if(!getAuv_param().getEnabled()){
+            sediment.setEnabled(false);
+        }
     }
 
     /**
@@ -2061,7 +2079,7 @@ public class BasicAUV implements AUV, SceneProcessor {
          }
          });*/
         arr_ret[0] = volume;
-        //System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
+        System.out.println("volume: " + volume + " completeVolume: " + completeVolume + " polySize: " + polyline.size());
         if (volume > completeVolume + 0.1f) {
             System.out.println("too much volume!!!!!!!");
         }
@@ -2245,7 +2263,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishSensorsOfAUV() {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && element.isInitialized()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }
@@ -2259,7 +2277,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public void publishActuatorsOfAUV() {
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
-            if (element.isEnabled()) {
+            if (element.isEnabled() && element.isInitialized()) {
                 element.publishUpdate();
                 element.publishDataUpdate();
             }
@@ -2658,8 +2676,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param listener
      */
     @Override
-    public void addAdListener(AUVListener listener) {
-        listeners.add(AUVListener.class, listener);
+    public void addMARSObjectListener(MARSObjectListener listener) {
+        listeners.add(MARSObjectListener.class, listener);
     }
 
     /**
@@ -2667,16 +2685,16 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param listener
      */
     @Override
-    public void removeAdListener(AUVListener listener) {
-        listeners.remove(AUVListener.class, listener);
+    public void removeMARSObjectListener(MARSObjectListener listener) {
+        listeners.remove(MARSObjectListener.class, listener);
     }
 
     /**
      *
      */
     @Override
-    public void removeAllListener() {
-        //listeners.
+    public void removeAllMARSObjectListener() {
+        //listeners.remove(MARSObjectListener.class, null);
     }
 
     /**
@@ -2684,8 +2702,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param event
      */
     @Override
-    public void notifyAdvertisement(ChartEvent event) {
-        for (AUVListener l : listeners.getListeners(AUVListener.class)) {
+    public void notifyAdvertisementMARSObject(MARSObjectEvent event) {
+        for (MARSObjectListener l : listeners.getListeners(MARSObjectListener.class)) {
             l.onNewData(event);
         }
     }
@@ -2694,7 +2712,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      * @param event
      */
-    protected synchronized void notifySafeAdvertisement(ChartEvent event) {
-        notifyAdvertisement(event);
+    protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
+        notifyAdvertisementMARSObject(event);
     }
 }

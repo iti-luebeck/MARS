@@ -8,14 +8,15 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
-import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.states.SimState;
+import mars.events.AUVObjectEvent;
+import mars.misc.ChartValue;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
+import mars.states.SimState;
+import org.ros.node.topic.Publisher;
 
 /**
  * An basic Acclerometer class. Measures the accleration for all 3 axis.
@@ -89,6 +90,7 @@ public class Accelerometer extends Sensor implements ChartValue {
      *
      * @param tpf
      */
+    @Override
     public void update(float tpf) {
         new_velocity = physics_control.getLinearVelocity();//get the new velocity
         Vector3f difference_velocity = new_velocity.subtract(old_velocity);
@@ -164,9 +166,10 @@ public class Accelerometer extends Sensor implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
+        publisher = (Publisher<std_msgs.Float32>)ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
         this.rosinit = true;
     }
@@ -187,6 +190,8 @@ public class Accelerometer extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAcceleration().length(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getAcceleration().length(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 
     /**

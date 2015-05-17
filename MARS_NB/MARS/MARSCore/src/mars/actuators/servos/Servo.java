@@ -171,7 +171,7 @@ public class Servo extends Actuator implements Manipulating, Keys, ChartValue {
     }
 
     private void computeAngleIterations() {
-        max_angle_iteration = (int) (Math.round(((getOperatingAngle() / 2) / getResolution())));
+        max_angle_iteration = (Math.round(((getOperatingAngle() / 2) / getResolution())));
         SpeedPerIteration = (getResolution()) * ((getSpeedPerDegree()) / ((float) (Math.PI * 2) / 360f));
     }
 

@@ -10,12 +10,10 @@ import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import mars.misc.CommunicationDeviceEvent;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.core.CentralLookup;
-import mars.gui.plot.PhysicalExchangerListener;
 import mars.states.SimState;
 import mars.uwCommManager.CommunicationState;
 
@@ -110,37 +108,4 @@ public abstract class CommunicationDevice extends Sensor {
      * @param msg
      */
     public abstract void publish(String msg);
-
-    /**
-     *
-     * @param listener
-     */
-    public void addAdListener(PhysicalExchangerListener listener) {
-        listeners.add(PhysicalExchangerListener.class, listener);
-    }
-
-    /**
-     *
-     * @param listener
-     */
-    public void removeAdListener(PhysicalExchangerListener listener) {
-        listeners.remove(PhysicalExchangerListener.class, listener);
-    }
-
-    /**
-     *
-     */
-    public void removeAllListener() {
-        //listeners.
-    }
-
-    /**
-     *
-     * @param event
-     */
-    protected synchronized void notifyAdvertisement(CommunicationDeviceEvent event) {
-        for (PhysicalExchangerListener l : listeners.getListeners(PhysicalExchangerListener.class)) {
-            l.onNewData(event);
-        }
-    }
 }

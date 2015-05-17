@@ -34,6 +34,7 @@ package mars.waves;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.HttpZipLocator;
 import com.jme3.asset.plugins.ZipLocator;
+import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
@@ -84,9 +85,9 @@ public class TestPostWaterLake extends SimpleApplication {
         // create the geometry and attach it
         // load the level from zip or http zip
         if (useHttp) {
-            assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/wildhouse.zip", HttpZipLocator.class.getName());
+            assetManager.registerLocator("http://jmonkeyengine.googlecode.com/files/wildhouse.zip", HttpZipLocator.class);
         } else {
-            assetManager.registerLocator("wildhouse.zip", ZipLocator.class.getName());
+            assetManager.registerLocator("wildhouse.zip", ZipLocator.class);
         }
         Spatial scene = assetManager.loadModel("main.scene");
         rootNode.attachChild(scene);
@@ -129,6 +130,6 @@ public class TestPostWaterLake extends SimpleApplication {
             }
         }, "HQ");
 
-        inputManager.addMapping("HQ", new KeyTrigger(keyInput.KEY_SPACE));
+        inputManager.addMapping("HQ", new KeyTrigger(KeyInput.KEY_SPACE));
     }
 }

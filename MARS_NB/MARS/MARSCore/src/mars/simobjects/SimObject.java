@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.event.EventListenerList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,6 +42,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.events.MARSObjectEvent;
+import mars.events.MARSObjectListener;
 import mars.misc.PickHint;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.object.MARSObject;
@@ -64,6 +67,8 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
     @XmlElement(name = "")
     protected HashMap<String, Object> simob_variables;
     private HashMap<String, Object> collision;
+    
+    private EventListenerList eventlisteners = new EventListenerList();
 
     //selection stuff aka highlightening
     private boolean selected = false;
@@ -570,6 +575,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @return
      */
+    @Override
     public String getName() {
         return (String) simob_variables.get("name");
     }
@@ -578,6 +584,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param name
      */
+    @Override
     public void setName(String name) {
         simob_variables.put("name", name);
     }
@@ -789,5 +796,50 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
     @Override
     public String toString() {
         return getName();
+    }
+    
+        /**
+     *
+     * @param listener
+     */
+    @Override
+    public void addMARSObjectListener(MARSObjectListener listener) {
+        eventlisteners.add(MARSObjectListener.class, listener);
+    }
+
+    /**
+     *
+     * @param listener
+     */
+    @Override
+    public void removeMARSObjectListener(MARSObjectListener listener) {
+        eventlisteners.remove(MARSObjectListener.class, listener);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void removeAllMARSObjectListener() {
+        //eventlisteners.remove(MARSObjectListener.class, null);
+    }
+
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void notifyAdvertisementMARSObject(MARSObjectEvent event) {
+        for (MARSObjectListener l : eventlisteners.getListeners(MARSObjectListener.class)) {
+            l.onNewData(event);
+        }
+    }
+
+    /**
+     *
+     * @param event
+     */
+    protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
+        notifyAdvertisementMARSObject(event);
     }
 }

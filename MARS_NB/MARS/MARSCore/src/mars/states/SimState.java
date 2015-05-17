@@ -58,7 +58,7 @@ import org.openide.util.Lookup;
  *
  * @author Thomas Tosik
  */
-public class SimState extends AbstractAppState implements PhysicsTickListener, AppStateExtension {
+public class SimState extends MARSAppState implements PhysicsTickListener, AppStateExtension{
 
     private Node rootNode = new Node("SimState Root Node");
     private AssetManager assetManager;
@@ -305,6 +305,7 @@ public class SimState extends AbstractAppState implements PhysicsTickListener, A
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
+                    CentralLookup.getDefault().add(physical_environment);
                     return null;
                 }
             });

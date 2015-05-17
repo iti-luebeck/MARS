@@ -175,6 +175,7 @@ public class PointVisualizer extends Actuator implements ChartValue {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final PointVisualizer self = this;

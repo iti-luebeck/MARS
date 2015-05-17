@@ -39,6 +39,7 @@ public class MyHashMapEntryTypeArrayList extends MyHashMapEntryType{
      * 
      * @param e
      */
+    @SuppressWarnings("unchecked")
     public MyHashMapEntryTypeArrayList(Map.Entry<String,Object> e) {
        key = e.getKey();
        if(e.getValue() instanceof List){

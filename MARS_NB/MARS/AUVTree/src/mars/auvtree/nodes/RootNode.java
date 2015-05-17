@@ -143,13 +143,13 @@ public class RootNode extends AbstractNode implements NodeListener, LookupListen
      */
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
-        if (t.isDataFlavorSupported(CustomerFlavor.CUSTOMER_FLAVOR)) {
+        if (t.isDataFlavorSupported(AUVFlavor.CUSTOMER_FLAVOR)) {
             return new PasteType() {
                 @Override
                 public Transferable paste() throws IOException {
                     try {
-                        //model.add((AUV) t.getTransferData(CustomerFlavor.CUSTOMER_FLAVOR));
-                        AUV auv = (AUV) t.getTransferData(CustomerFlavor.CUSTOMER_FLAVOR);
+                        //model.add((AUV) t.getTransferData(AUVFlavor.CUSTOMER_FLAVOR));
+                        AUV auv = (AUV) t.getTransferData(AUVFlavor.CUSTOMER_FLAVOR);
                         final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
                         if (node != null) {
                             node.destroy();

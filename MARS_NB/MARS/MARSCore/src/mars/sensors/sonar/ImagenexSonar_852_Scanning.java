@@ -110,12 +110,12 @@ public class ImagenexSonar_852_Scanning extends Sonar {
 
     @Override
     protected float calculateAverageNoiseFunction(float x) {
-        return 14.22898616f * ((float) Math.pow(1.03339750f, (float) Math.abs(x)));
+        return 14.22898616f * ((float) Math.pow(1.03339750f, Math.abs(x)));
     }
 
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x) {
-        return 7.50837174f * ((float) Math.pow(1.02266704f, (float) Math.abs(x)));
+        return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
     }
 
     /**
@@ -124,9 +124,10 @@ public class ImagenexSonar_852_Scanning extends Sonar {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.ScanningSonar._TYPE);
+        publisher = (Publisher<hanse_msgs.ScanningSonar>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.ScanningSonar._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

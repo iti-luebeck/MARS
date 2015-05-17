@@ -106,6 +106,7 @@ public class SeaBotixThruster extends Thruster {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, final String auv_name) {
         super.initROS(ros_node, auv_name);
         final SeaBotixThruster self = this;

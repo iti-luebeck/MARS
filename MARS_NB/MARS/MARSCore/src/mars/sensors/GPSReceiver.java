@@ -242,9 +242,10 @@ public class GPSReceiver extends Sensor {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.NavSatFix._TYPE);
+        publisher = (Publisher<sensor_msgs.NavSatFix>)ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.NavSatFix._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatFix._TYPE);
         NavSatStatus = this.mars_node.getMessageFactory().newFromType(sensor_msgs.NavSatStatus._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);

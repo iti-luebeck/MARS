@@ -73,6 +73,7 @@ import forester.grass.GrassLayer.MeshType;
 import forester.grass.GrassLoader;
 import forester.grass.datagrids.MapGrid;
 import forester.image.DensityMap.Channel;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Set;
@@ -82,6 +83,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
+import mars.VegetationSystem.DensityMap;
+import mars.VegetationSystem.VegetationSystem;
 import mars.server.MARSClient;
 import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
@@ -90,6 +93,7 @@ import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
@@ -1413,6 +1417,23 @@ public class Initializer {
         RayDetectable.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain);
         //bulletAppState.getPhysicsSpace().add(terrain_physics_control);
+        
+        File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_3_am.png", "mars.core", false);
+        DensityMap dm = new DensityMap(file4.getAbsolutePath());
+        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 4);
+        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        Geometry createImposterGrass = vs.createImposterGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        vs.setGenuineRed(createGenuineGrass);
+        vs.setImposterRed(createImposterGrass);
+        /*vs.setGenuineBlue(createGenuineGrass);
+        vs.setImposterBlue(createImposterGrass);
+        vs.setGenuineGreen(createGenuineGrass);
+        vs.setImposterGreen(createImposterGrass);*/
+        vs.setMaxView(30f, 50f);
+        vs.setMinDist(0.15f, 0.15f, 0.15f);
+        vs.setShadowModes(ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
+        vs.plant(0f, 0f, 0f, 0f, 0f, 0f);
+        //sceneReflectionNode.attachChild(vs);
     }
 
     /**

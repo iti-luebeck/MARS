@@ -456,9 +456,10 @@ public class VideoCamera extends Sensor implements Moveable{
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) { 
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(),sensor_msgs.Image._TYPE);  
+        publisher = (Publisher<sensor_msgs.Image>)ros_node.newPublisher(auv_name + "/" + this.getName(),sensor_msgs.Image._TYPE);  
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;

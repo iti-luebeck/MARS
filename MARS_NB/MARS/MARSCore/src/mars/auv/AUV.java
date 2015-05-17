@@ -22,8 +22,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.control.MyCustomGhostControl;
-import mars.gui.plot.AUVListener;
-import mars.gui.plot.ChartEvent;
 import mars.misc.ChartValue;
 import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
@@ -90,19 +88,6 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
      *
      */
     public void reset();
-
-    /**
-     *
-     * @return Unique name of the AUV.
-     */
-    public String getName();
-
-    /**
-     * Unique name of the AUV.
-     * 
-     * @param auv_name
-     */
-    public void setName(String auv_name);
 
     /**
      *
@@ -320,7 +305,6 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
      *
      * @param visible
      */
-    public void debugView( boolean visible );
     /**
      *
      * @param mars_node
@@ -426,29 +410,6 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
 
     /**
      *
-     * @param listener
-     */
-    public void addAdListener(AUVListener listener);
-
-    /**
-     *
-     * @param listener
-     */
-    public void removeAdListener(AUVListener listener);
-
-    /**
-     *
-     */
-    public void removeAllListener();
-
-    /**
-     *
-     * @param event
-     */
-    public void notifyAdvertisement(ChartEvent event);
-
-    /**
-     *
      * @param name
      * @param pex
      */
@@ -458,7 +419,12 @@ public interface AUV extends RosNodeListener, ChartValue, MARSObject {
      *
      * @param pex
      */
-    public void registerPhysicalExchanger(PhysicalExchanger pex);
+    public void registerPhysicalExchanger(final PhysicalExchanger pex);
+    
+    /**
+     *
+     */
+    public void initPhysicalExchangerFuture();
 
     /**
      *

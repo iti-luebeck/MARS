@@ -98,6 +98,7 @@ public class GeomarThruster extends Thruster {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         final GeomarThruster self = this;

@@ -24,9 +24,9 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
 import mars.states.SimState;
-import mars.misc.CommunicationDeviceEvent;
-import mars.misc.CommunicationDeviceEventType;
-import mars.misc.CommunicationType;
+import mars.events.CommunicationDeviceEvent;
+import mars.events.CommunicationDeviceEventType;
+import mars.events.CommunicationType;
 import mars.ros.MARSNodeMain;
 import org.ros.node.topic.Subscriber;
 
@@ -236,7 +236,7 @@ public class WiFi extends CommunicationDevice {
         });
         final Vector3f modPos = this.getWorldPosition();
         for (String elem : uws.keySet()) {
-            final WiFi uw = (WiFi) uws.get(elem);
+            final WiFi uw = uws.get(elem);
             if (uw != this) {//ignore myself
                 Vector3f distance = modPos.subtract(uw.getWorldPosition());
                 final float proDist = this.getPropagationDistance();
@@ -271,6 +271,7 @@ public class WiFi extends CommunicationDevice {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
         publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE);
@@ -282,10 +283,10 @@ public class WiFi extends CommunicationDevice {
         final WiFi fin_this = this;
         Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE);
         subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
-                @Override
-                public void onNewMessage(std_msgs.String message) {
-                    System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
-                    notifyAdvertisement(new CommunicationDeviceEvent(fin_this,message.getData(),System.currentTimeMillis(),CommunicationDeviceEventType.IN));
+            @Override
+            public void onNewMessage(std_msgs.String message) {
+                System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
+                notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN));
                 }
         },( simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
         this.rosinit = true;
@@ -308,7 +309,7 @@ public class WiFi extends CommunicationDevice {
         fl.setData(msg);
         if (publisher != null) {
             //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisement(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
+            notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
     }

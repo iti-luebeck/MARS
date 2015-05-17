@@ -142,9 +142,10 @@ public class Gyroscope extends Sensor {
      * @param auv_name
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
+        publisher = (Publisher<std_msgs.Float32>)ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
         this.rosinit = true;
     }

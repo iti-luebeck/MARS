@@ -16,10 +16,11 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
-import mars.misc.Collider;
 import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.misc.Collider;
+import mars.object.MARSObjectManager;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
@@ -28,9 +29,6 @@ import mars.states.SimState;
 import mars.uwCommManager.CommunicationState;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.AbstractLookup;
-import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -40,7 +38,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager implements Lookup.Provider {
+public class AUV_Manager extends MARSObjectManager{
 
     //auv HashMap to store and load auv's
     private HashMap<String, AUV> auvs = new HashMap<String, AUV>();
@@ -55,10 +53,6 @@ public class AUV_Manager implements Lookup.Provider {
     private SimState simstate;
     private HashMap<String, MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
-
-    //lookup stuff
-    private InstanceContent content = new InstanceContent();
-    private Lookup lookup = new AbstractLookup(content);
 
     /**
      *
@@ -99,15 +93,6 @@ public class AUV_Manager implements Lookup.Provider {
      *
      */
     public AUV_Manager() {
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Lookup getLookup() {
-        return lookup;
     }
 
     /**
@@ -453,7 +438,7 @@ public class AUV_Manager implements Lookup.Provider {
     public void registerAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
         final AUV fin_auv = auv;
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 final ProgressHandle progr = ProgressHandleFactory.createHandle("AUVManager: " + fin_auv.getName());
                 progr.start();
