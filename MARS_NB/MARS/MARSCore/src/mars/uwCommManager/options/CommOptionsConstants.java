@@ -16,8 +16,7 @@ public interface CommOptionsConstants {
 //Operator: We get signal. 
 //Captain: What !
 //Operator: Main screen turn on. 
-//Captain: It’s you !! 
-    
+    public static final String OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE = "It’s you !! ";
     public static final String OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX = "How are you gentlemen !!";
     public static final String OPTIONS_THREADCOUNT_SLIDER = "All your base are belong to us";
     public static final String OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX = "You are on the way to destruction";

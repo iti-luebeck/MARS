@@ -53,6 +53,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
     List<String> outOfRangeAUVs;
     
     private boolean showCommunicationLinks;
+    private boolean showMaximumPropagationSphere;
     
     
     /**
@@ -82,7 +83,7 @@ public class AUVVisualizationNode implements TriggerEventListener{
         this.visRootNode = new Node(name);
         auvNode.attachChild(visRootNode);
         visRootNode.setCullHint(Spatial.CullHint.Never);
-        //initSphere();
+        initSphere();
         return true;
     }
     
@@ -117,6 +118,12 @@ public class AUVVisualizationNode implements TriggerEventListener{
      */
     public void update(float tpf) {
         // If module is deactivated we don't need to process anything
+        
+        if(!showMaximumPropagationSphere) {
+            visRootNode.getChild("sphere").setCullHint(Spatial.CullHint.Always);
+        } else {
+            visRootNode.getChild("sphere").setCullHint(Spatial.CullHint.Inherit);
+        }
         if(!showCommunicationLinks) {
             synchronized(this) {
                 traceHitEventQueue.clear();
@@ -347,4 +354,12 @@ public class AUVVisualizationNode implements TriggerEventListener{
         showCommunicationLinks = false;
     }
     
+    
+    public void activatePopagationSphere() {
+        showMaximumPropagationSphere = true;
+    }
+    
+    public void deactivatePropagationSphere() {
+        showMaximumPropagationSphere = false;
+    }
 }

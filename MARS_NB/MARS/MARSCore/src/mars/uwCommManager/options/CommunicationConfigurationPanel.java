@@ -44,6 +44,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jLabel4.text")); // NOI18N
 
@@ -88,6 +89,8 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jCheckBox1.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jCheckBox4.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -124,7 +127,8 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                                                             .addComponent(jRadioButton2)
                                                             .addComponent(jRadioButton1)))
                                                     .addComponent(jLabel7)
-                                                    .addComponent(jCheckBox1))))))
+                                                    .addComponent(jCheckBox1)
+                                                    .addComponent(jCheckBox4))))))
                                 .addGap(0, 140, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
@@ -153,7 +157,9 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,6 +185,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         jRadioButton1.setEnabled(jCheckBox2.isSelected());
         jRadioButton2.setEnabled(jCheckBox2.isSelected());
         jCheckBox3.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, false));
+        jCheckBox4.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE, false));
     }
 
     void store() {
@@ -195,6 +202,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_OPAQUE_CIRCLE, jRadioButton2.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, jCheckBox3.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX, jCheckBox1.isSelected());
+        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE, jCheckBox4.isSelected());
     }
     
     private void addListener() {
@@ -220,6 +228,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -87,6 +87,15 @@ public class CommunicationVisualizer {
                 entry.getValue().deactivateCommunicationLinks();
             }
         }
+        if(pref.getBoolean(CommOptionsConstants.OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE, false)) {
+            for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                entry.getValue().activatePopagationSphere();
+            }
+        } else {
+            for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                entry.getValue().deactivatePropagationSphere();
+            }
+        }
         
         pref.addPreferenceChangeListener(new PreferenceChangeListener() {
             @Override
@@ -99,6 +108,17 @@ public class CommunicationVisualizer {
                     } else {
                         for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
                             entry.getValue().deactivateCommunicationLinks();
+                        }
+                    }
+                } else if(e.getKey().equals(CommOptionsConstants.OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE)) {
+                    if(Boolean.parseBoolean(e.getNewValue())) {
+                        for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                            entry.getValue().activatePopagationSphere();
+                        } 
+                    }
+                    else {
+                        for(Map.Entry<String,AUVVisualizationNode> entry : nodeMap.entrySet()) {
+                            entry.getValue().deactivatePropagationSphere();
                         }
                     }
                 }
