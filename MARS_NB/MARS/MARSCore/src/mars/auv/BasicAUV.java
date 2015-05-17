@@ -520,7 +520,6 @@ public class BasicAUV implements AUV, SceneProcessor{
      *
      * @param visible
      */
-    @Override
     public void debugView(boolean visible) {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);

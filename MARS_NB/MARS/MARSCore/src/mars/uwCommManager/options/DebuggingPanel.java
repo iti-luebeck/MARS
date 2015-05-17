@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import mars.core.CentralLookup;
-import mars.misc.CommunicationType;
+import mars.events.CommunicationType;
 import mars.sensors.CommunicationMessage;
 import mars.uwCommManager.CommunicationState;
 

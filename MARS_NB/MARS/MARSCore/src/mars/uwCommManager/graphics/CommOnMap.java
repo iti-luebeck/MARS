@@ -190,6 +190,7 @@ public class CommOnMap {
                             List<DistanceTrigger> targets = distances.get(auv.getName());
                             for(DistanceTrigger i : targets) {
                                 String connectionName = auv.getName()+"->"+i.getAUVName();
+                                if(auvNodes.get(i.getAUVName())==null) return;
                                 Geometry uwgeom = (Geometry) distanceNode.getChild(connectionName);
                                 if(uwgeom == null) {
                                     attachLine(connectionName, distanceNode, new Vector3f(0,0,0), auvNodes.get(i.getAUVName()).getWorldTranslation().subtract(node.getWorldTranslation()));
