@@ -22,7 +22,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.control.MyCustomGhostControl;
-import mars.misc.ChartValue;
 import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeListener;
@@ -37,7 +36,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, ChartValue, MARSObject {
+public interface AUV extends RosNodeListener, MARSObject {
 
     /**
      *

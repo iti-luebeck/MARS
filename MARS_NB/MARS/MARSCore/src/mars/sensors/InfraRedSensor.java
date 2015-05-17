@@ -5,17 +5,16 @@
 package mars.sensors;
 
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.misc.Collider;
 import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
@@ -26,7 +25,7 @@ import mars.server.MARSClientEvent;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class InfraRedSensor extends RayBasedSensor implements ChartValue {
+public class InfraRedSensor extends RayBasedSensor{
 
     private Collider RayDetectable;
 
@@ -138,23 +137,7 @@ public class InfraRedSensor extends RayBasedSensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getDistance(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getDistance();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getDistance(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -1,9 +1,0 @@
-<!DOCTYPE Configuration PUBLIC "-//NetBeans IDE//DTD toolbar//EN" "http://www.netbeans.org/dtds/toolbar.dtd">
-<Configuration>
-    <Row>
-        <Toolbar name="Simulation"/>
-        <Toolbar name="Speed"/>
-        <Toolbar name="ROS"/>
-        <Toolbar name="File"/>
-    </Row>
-</Configuration>

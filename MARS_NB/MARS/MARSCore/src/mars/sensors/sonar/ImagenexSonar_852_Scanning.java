@@ -9,8 +9,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
+import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
+import mars.misc.SonarData;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -107,6 +110,10 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     public byte[] getRawData() {
         return super.getData();
     }
+    
+    public SonarData getSonarData(){
+        return new SonarData(getLastHeadPosition(), getRawData());
+    }
 
     @Override
     protected float calculateAverageNoiseFunction(float x) {
@@ -146,7 +153,6 @@ public class ImagenexSonar_852_Scanning extends Sonar {
 
         byte[] sonData = getRawData();
         float lastHeadPosition = getLastHeadPosition();
-        //this.mars.getTreeTopComp().initRayBasedData(sonData, lastHeadPosition, this);
         fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
         fl.setHeadPosition(lastHeadPosition);
         fl.setStartGain((byte) getScanningGain().shortValue());
@@ -155,5 +161,14 @@ public class ImagenexSonar_852_Scanning extends Sonar {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getSonarData(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getSonarData(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

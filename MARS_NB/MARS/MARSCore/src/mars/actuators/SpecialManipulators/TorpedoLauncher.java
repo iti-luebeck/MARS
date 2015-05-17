@@ -99,7 +99,7 @@ public class TorpedoLauncher extends Actuator {
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
 
     }
 

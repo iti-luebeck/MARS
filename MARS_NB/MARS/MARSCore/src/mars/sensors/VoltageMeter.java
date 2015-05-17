@@ -7,10 +7,10 @@ package mars.sensors;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -23,7 +23,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class VoltageMeter extends Sensor implements ChartValue {
+public class VoltageMeter extends Sensor{
 
     ///ROS stuff
     private Publisher<std_msgs.Float32> publisher = null;
@@ -170,23 +170,7 @@ public class VoltageMeter extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getVoltage(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getVoltage();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getVoltage(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

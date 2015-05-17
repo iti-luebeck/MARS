@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mars.sensors;
+package mars.ros;
 
 /**
  * Used by the camera together with ROS.

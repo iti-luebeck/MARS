@@ -15,6 +15,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @ServiceProvider(service = MARSClient.class)
+@Deprecated
 public class MARSClientTest implements MARSClient {
 
     AUV_Manager auvManager;

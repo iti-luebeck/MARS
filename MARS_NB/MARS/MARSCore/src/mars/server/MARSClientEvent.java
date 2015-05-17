@@ -14,6 +14,7 @@ import mars.auv.AUV;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class MARSClientEvent extends EventObject {
 
     private PhysicalExchanger pe = null;

@@ -93,8 +93,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     //water
     private Node sceneReflectionNode = new Node("sceneReflectionNode");
     private Collider RayDetectable = new Collider();
-    private Node AUVsNode = new Node("AUVNode");
-    private Node SimObNode = new Node("SimObNode");
+    private Node AUVNodes = new Node("AUVNodes");
+    private Node SimObNodes = new Node("SimObNodes");
     //warter currents
     private Node currents = new Node("currents");
 
@@ -174,6 +174,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
 
         //clean up all auvs (offscreen view from drag for example)
         auvManager.cleanup();
+        simobManager.cleanup();
 
         //cleanup gui state
         //clean the cameras
@@ -181,8 +182,25 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         chaseCam = null;
 
         //deattach the state root node from the main 
-        mars.getRootNode().detachChild(getRootNode());
+        getRootNode().removeFromParent();
         getRootNode().detachAllChildren();
+        
+        //clear cntralLookup
+        CentralLookup.getDefault().remove(auvManager);
+        CentralLookup.getDefault().remove(physical_environment);
+        CentralLookup.getDefault().remove(simobManager);
+        
+        //cleanup other related states
+        //bulletAppState.setEnabled(false);
+        //mars.getStateManager().detach(bulletAppState);
+        //bulletAppState = null;
+
+        /*if (mars.getStateManager().getState(GuiState.class) != null) {
+            GuiState guistate = mars.getStateManager().getState(GuiState.class);
+            guistate.setEnabled(false);
+            mars.getStateManager().detach(guistate);
+            guistate = null;
+        }*/
     }
 
     /**
@@ -207,62 +225,9 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 throw new RuntimeException("The passed application is not of type \"MARS_Main\"");
             }
 
-            /*   Matrix4f matrix = new Matrix4f(0.099684946f, 0.003476259f, 0.007129367f, -0.05035142f, -0.0035146326f, 0.099937364f, 4.1346974E-4f, -0.021245062f, -0.0071105273f, -6.6273817E-4f, 0.09974468f, -0.023290642f, 0.0f, 0.0f, 0.0f, 1.0f);
-             Vector3f start = new Vector3f(1.9252679f, -49.951576f, -2.914092f); 
-             Vector3f dir = new Vector3f(-0.035146322f, 0.9993737f, 0.0041346983f);
-             Ray test = new Ray(start, dir);
-             Vector3f v1 = new Vector3f(2.154625f, -0.832799f, -2.879551f);
-             Vector3f v2 = new Vector3f(2.154625f, -0.832799f, -2.534256f);
-             Vector3f v3 =  new Vector3f(-1.67098f, -0.832798f, -2.879551f);
-             Vector3f v4 = Vector3f.ZERO;
-             Vector3f v5 = Vector3f.ZERO;
-             Vector3f v6 = Vector3f.ZERO;
-             float t_world = 0f;
-             float t = test.intersects(v1, v2, v3);
-             if (!Float.isInfinite(t)) {
-             matrix.mult(v1, v4);
-             matrix.mult(v2, v5);
-             matrix.mult(v3, v6);
-             t_world = test.intersects(v4, v5, v6);
-             }*/
-            /*  Vector3f start = new Vector3f(0.2182425f, -5.027495f, 0.12827098f); 
-             Vector3f dir = new Vector3f(0f, 1f, 0f);    
-             Vector3f v1 = new Vector3f(0.19529787f, -0.10055651f, 0.12947007f);
-             Vector3f v2 = new Vector3f(0.22324294f, -0.13183054f, 0.12800966f);
-             Vector3f v3 =  new Vector3f(0.21205825f, -0.13176638f, 0.12909873f);
-             mars.Ray test = new mars.Ray(start, dir);
-             float testt = test.intersects(v1, v2, v3);
-            
-             Geometry mark5 = new Geometry("VideoCamera_Arrow_2", new Arrow(test.getDirection().mult(10f)));
-             Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-             mark_mat4.setColor("Color", ColorRGBA.Green);
-             mark5.setMaterial(mark_mat4);
-             mark5.setLocalTranslation(test.getOrigin());
-             mark5.updateGeometricState();
-             rootNode.attachChild(mark5);
-
-             Material mark_mat5 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-             mark_mat5.setColor("Color", ColorRGBA.Red);
-             Geometry mark6 = new Geometry("VideoCamera_Arrow_3", new Arrow(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f).subtract(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f)).mult(1f)));
-             mark6.setMaterial(mark_mat5);
-             mark6.setLocalTranslation(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f));
-             mark6.updateGeometricState();
-             rootNode.attachChild(mark6);
-
-             Geometry mark7 = new Geometry("VideoCamera_Arrow_4", new Arrow(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f).subtract(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f)).mult(1f)));
-             mark7.setMaterial(mark_mat5);
-             mark7.setLocalTranslation(new Vector3f(0.22324294f, -0.13183054f, 0.12800966f));
-             mark7.updateGeometricState();
-             rootNode.attachChild(mark7);
-
-             Geometry mark8 = new Geometry("VideoCamera_Arrow_5", new Arrow(new Vector3f(0.19529787f, -0.10055651f, 0.12947007f).subtract(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f)).mult(1f)));
-             mark8.setMaterial(mark_mat5);
-             mark8.setLocalTranslation(new Vector3f(0.21205825f, -0.13176638f, 0.12909873f));
-             mark8.updateGeometricState();
-             rootNode.attachChild(mark8);*/
             progr.progress("Adding Nodes");
-            sceneReflectionNode.attachChild(AUVsNode);
-            sceneReflectionNode.attachChild(SimObNode);
+            sceneReflectionNode.attachChild(AUVNodes);
+            sceneReflectionNode.attachChild(SimObNodes);
             rootNode.attachChild(sceneReflectionNode);
             rootNode.attachChild(currents);
 
@@ -302,6 +267,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
 
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, initer);
+            
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
@@ -329,8 +295,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setAuvManager(auvManager);
             guiState.setSimobManager(simobManager);
             guiState.setIniter(initer);
-            guiState.setAUVsNode(AUVsNode);
-            guiState.setSimObNode(SimObNode);
+            guiState.setAUVsNode(AUVNodes);
+            guiState.setSimObNode(SimObNodes);
             guiState.setMars_settings(mars_settings);
             final AppStateManager stateManagerFin = stateManager;
             
@@ -673,8 +639,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      * @return
      */
-    public Node getAUVsNode() {
-        return AUVsNode;
+    public Node getAUVNodes() {
+        return AUVNodes;
     }
 
     /**
@@ -689,8 +655,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      * @return
      */
-    public Node getSimObNode() {
-        return SimObNode;
+    public Node getSimObNodes() {
+        return SimObNodes;
     }
 
     /**

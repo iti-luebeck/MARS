@@ -74,7 +74,7 @@ public class SimObjectManager extends MARSObjectManager{
         this.assetManager = simstate.getAssetManager();
         this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
-        this.SimObNode = simstate.getSimObNode();
+        this.SimObNode = simstate.getSimObNodes();
         this.bulletAppState = simstate.getBulletAppState();
         this.mars_settings = simstate.getMARSSettings();
     }

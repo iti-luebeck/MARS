@@ -218,7 +218,7 @@ public class Canon extends Actuator implements Moveable, Keys {
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
 
     }
 

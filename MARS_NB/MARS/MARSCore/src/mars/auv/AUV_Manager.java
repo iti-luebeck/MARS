@@ -85,7 +85,7 @@ public class AUV_Manager extends MARSObjectManager{
         this.rootNode = simstate.getRootNode();
         this.RayDetectable = simstate.getCollider();
         this.sceneReflectionNode = simstate.getSceneReflectionNode();
-        this.AUVsNode = simstate.getAUVsNode();
+        this.AUVsNode = simstate.getAUVNodes();
         this.bulletAppState = simstate.getBulletAppState();
     }
 
@@ -697,7 +697,9 @@ public class AUV_Manager extends MARSObjectManager{
     /**
      *
      */
+    @Override
     public void cleanup() {
+        super.cleanup();
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             auv.cleanupAUV();

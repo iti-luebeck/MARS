@@ -115,7 +115,7 @@ public class Lamp extends Actuator {
     }
 
     @Override
-    public void update() {
+    public void updateForces() {
     }
 
     @Override

@@ -661,7 +661,7 @@ public class BasicAUV implements AUV, SceneProcessor{
 
         initCenters();
         initWaypoints();
-        initControls();
+        //initControls();
         //the offscreen for area calculating(drag) must be set
         setupDragOffscreenView();//<-- buggy when deleting/deregister etc
         if (auv_param.isDebugDrag()) {
@@ -819,9 +819,9 @@ public class BasicAUV implements AUV, SceneProcessor{
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
             if (element instanceof Thruster) {
-                element.update();
+                element.updateForces();
             } else if (element instanceof BallastTank) {
-                element.update();
+                element.updateForces();
             }
         }
     }
@@ -833,7 +833,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         } else if (drag_updaterate == 1) {
             drag_updaterate = auv_param.getDrag_updaterate();
             float new_drag_area = calculateArea();
-            if (!((physics_control.getLinearVelocity().length() != 0) && (new_drag_area == 0.0f))) {//we move so there must be drag area != 0, if no we have an update bug/problem, use the old one stored
+            if (!((physics_control.getLinearVelocity().length() != 0) && (new_drag_area == 0.0f))) {//we move so there must be drag area != 0, if no we have an updateForces bug/problem, use the old one stored
                 drag_area = new_drag_area;
             }
         } else {
@@ -1480,7 +1480,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         ghost_auv_spatial.updateGeometricState();
         ghost_auv_spatial.updateModelBound();
         ghost_auv_spatial.setName(auv_param.getModelName() + "_ghost");
-        ghost_auv_spatial.setUserData("auv_name", getName());
+        Helper.setNodeUserData(ghost_auv_spatial, "auv_name", getName());
         ghost_auv_spatial.setCullHint(CullHint.Always);
         Helper.setNodePickUserData(ghost_auv_spatial, PickHint.NoPick);
         auv_node.attachChild(ghost_auv_spatial);
@@ -1696,7 +1696,7 @@ public class BasicAUV implements AUV, SceneProcessor{
             onCamera.lookAt(centerBB, Vector3f.UNIT_Y);
         }
 
-        if (physics_control.getLinearVelocity().length() != 0f) {//when we have no velocity then we have no water resistance than we dont need an update
+        if (physics_control.getLinearVelocity().length() != 0f) {//when we have no velocity then we have no water resistance than we dont need an updateForces
             return drag_area_temp;//updateImageContents();
         } else {
             return 0.0f;
@@ -2191,7 +2191,7 @@ public class BasicAUV implements AUV, SceneProcessor{
          Future fut = mars.enqueue(new Callable() {
          public Void call() throws Exception {
          Vector3f volume_center_local = new Vector3f(0f,0f,0f);
-         auv_node.worldToLocal(volume_center_fin, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+         auv_node.worldToLocal(volume_center_fin, volume_center_local);//NPE!!!!!!!!????????, when updateForces rate = 2
 
          final Vector3f in = volume_center_local.clone();
          VolumeCenterGeom.setLocalTranslation(in);
@@ -2210,11 +2210,11 @@ public class BasicAUV implements AUV, SceneProcessor{
          });*/
         Vector3f volume_center_local = new Vector3f(0f, 0f, 0f);
         try {
-            auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+            auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when updateForces rate = 2
         } catch (Exception e) {
             System.out.println("NPE");
         }
-        //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when update rate = 2
+        //auv_node.worldToLocal(volume_center, volume_center_local);//NPE!!!!!!!!????????, when updateForces rate = 2
 
         final Vector3f in = volume_center_local.clone();
         Future<Void> fut = mars.enqueue(new Callable<Void>() {
@@ -2437,8 +2437,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         if (spatial instanceof Node) {
             Node node = (Node) spatial;
             List<Spatial> children = node.getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                Spatial spatial1 = children.get(i);
+            for (Spatial spatial1 : children) {
                 if (spatial1 instanceof Geometry) {
                     Geometry geom = (Geometry) spatial1;
                     Material material = geom.getMaterial();
@@ -2583,16 +2582,14 @@ public class BasicAUV implements AUV, SceneProcessor{
             children.add(auv_spatial);
         }
         if (visible) {
-            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
-                Spatial spatial = it.next();
+            for (Spatial spatial : children) {
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(true);
                 }
             }
         } else {
-            for (Iterator<Spatial> it = children.iterator(); it.hasNext();) {
-                Spatial spatial = it.next();
+            for (Spatial spatial : children) {
                 if (spatial instanceof Geometry) {
                     Geometry geom = (Geometry) spatial;
                     geom.getMaterial().getAdditionalRenderState().setWireframe(false);
@@ -2650,24 +2647,6 @@ public class BasicAUV implements AUV, SceneProcessor{
             setROS_Node((MARSNodeMain) e.getSource());
             initROS();
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return 1f;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return 1000;
     }
 
     /**

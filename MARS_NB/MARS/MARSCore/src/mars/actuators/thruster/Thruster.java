@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import mars.misc.ChartValue;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.PhysicalExchange.Moveable;
@@ -35,6 +34,7 @@ import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.annotations.MARSPublicKeyBindingMethod;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -46,7 +46,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BrushlessThruster.class, SeaBotixThruster.class, GeomarThruster.class})
-public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
+public class Thruster extends Actuator implements Moveable, Keys{
 
     //motor
     private Geometry MotorStart;
@@ -159,7 +159,6 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         MotorEnd.updateGeometricState();
         Rotation_Node.attachChild(MotorEnd);
 
-        Vector3f ray_start = Vector3f.ZERO;
         Vector3f ray_direction = Vector3f.UNIT_X;
         Geometry mark4 = new Geometry("Thruster_Arrow", new Arrow(ray_direction.mult(1f)));
         Material mark_mat4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -176,10 +175,11 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
-    public void update() {
+    @Override
+    public void updateForces() {
         Vector3f left = (MotorEnd.getWorldTranslation().subtract(MotorStart.getWorldTranslation())).normalize();
+        
         //check if thruster is under or over water, because we get different forces depending on the density of the fluid.
-
         if (MotorStart.getWorldTranslation().y <= this.getIniter().getCurrentWaterHeight(MotorStart.getWorldTranslation().x, MotorStart.getWorldTranslation().z)) {
             physics_control.applyImpulse(left.mult(MotorForce / ((float) mars_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(MotorStart.getWorldTranslation()));
         }
@@ -368,21 +368,10 @@ public class Thruster extends Actuator implements Moveable, Keys, ChartValue {
         }
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
-    public Object getChartValue() {
-        return motor_speed;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, motor_speed, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

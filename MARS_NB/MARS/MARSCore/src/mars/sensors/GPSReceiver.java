@@ -16,10 +16,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.geodesy.Ellipsoid;
 import mars.geodesy.GeodeticCalculator;
 import mars.geodesy.GlobalPosition;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -235,6 +237,29 @@ public class GPSReceiver extends Sensor {
         super.setEnabled(enabled);
         pos.setEnabled(enabled);
     }
+    
+    public Vector3f getGPS(){
+        GlobalPosition pointA = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x, 0.0); // Point A
+
+        GlobalPosition userPos = new GlobalPosition(getReferencePointGPS().z + 0.01f, getReferencePointGPS().x, 0.0); // Point B
+        GlobalPosition userPos2 = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x + 0.01f, 0.0); // Point B
+
+        double distanceLat = geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
+        double distanceLon = geoCalc.calculateGeodeticCurve(reference, userPos2, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
+
+        Vector3f diffPosition = pos.getWorldPosition().subtract(getReferencePointWorld());
+        double metLat = (1d / distanceLat) * (Math.abs(pointA.getLatitude() - userPos.getLatitude()));
+        double latitude = diffPosition.z * metLat;
+
+        double metLon = (1d / distanceLon) * (Math.abs(pointA.getLongitude() - userPos2.getLongitude()));
+        double longitude = diffPosition.x * metLon;
+        
+        float altitudeRet = pos.getPositionY();
+        float latitudeRet = ((getReferencePointGPS().z) - (float)latitude);
+        float longitudeRet = ((getReferencePointGPS().x) + (float)longitude);
+        
+        return new Vector3f(altitudeRet, latitudeRet, longitudeRet);
+    }
 
     /**
      *
@@ -266,24 +291,12 @@ public class GPSReceiver extends Sensor {
         NavSatStatus.setStatus((byte) 0);
         fl.setStatus(NavSatStatus);
 
-        GlobalPosition pointA = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x, 0.0); // Point A
+        
+        Vector3f gps = getGPS();
 
-        GlobalPosition userPos = new GlobalPosition(getReferencePointGPS().z + 0.01f, getReferencePointGPS().x, 0.0); // Point B
-        GlobalPosition userPos2 = new GlobalPosition(getReferencePointGPS().z, getReferencePointGPS().x + 0.01f, 0.0); // Point B
-
-        double distanceLat = geoCalc.calculateGeodeticCurve(reference, userPos, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
-        double distanceLon = geoCalc.calculateGeodeticCurve(reference, userPos2, pointA).getEllipsoidalDistance(); // Distance between Point A and Point B
-
-        Vector3f diffPosition = pos.getWorldPosition().subtract(getReferencePointWorld());
-        double metLat = (1d / distanceLat) * (Math.abs(pointA.getLatitude() - userPos.getLatitude()));
-        double latitude = diffPosition.z * metLat;
-
-        double metLon = (1d / distanceLon) * (Math.abs(pointA.getLongitude() - userPos2.getLongitude()));
-        double longitude = diffPosition.x * metLon;
-
-        fl.setAltitude((double) pos.getPositionY());
-        fl.setLatitude(((double) getReferencePointGPS().z) - latitude);
-        fl.setLongitude(((double) getReferencePointGPS().x) + longitude);
+        fl.setAltitude((double) gps.getX());
+        fl.setLatitude((double) gps.getY());
+        fl.setLongitude((double) gps.getZ());
 
         //old style
         /*double longitudeFactor = (double)getLatitudeFactor() * (double)Math.cos(((double)getReferencePointGPS().y)*(Math.PI/180d));
@@ -297,5 +310,14 @@ public class GPSReceiver extends Sensor {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getGPS(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getGPS(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

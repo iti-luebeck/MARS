@@ -396,6 +396,13 @@ public class GuiControlState {
     public void decrementDepthIteration() {
         depth_iteration = depth_iteration - 1;
     }
+    
+    /**
+     *
+     */
+    public void resetDepthIteration() {
+        depth_iteration = 0;
+    }
 
     /**
      *

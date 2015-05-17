@@ -347,6 +347,18 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         boolean old = getEnabled();
         variables.put("enabled", enabled);
         fire("enabled", old, enabled);
+        
+        //init pe properly
+        if(enabled){
+            getAuv().initPhysicalExchangerFuture();
+        }
+        
+        //make debug stuff
+        if(getAuv().getAuv_param().isDebugPhysicalExchanger() && enabled){
+            setNodeVisibility(true);
+        }else{
+            setNodeVisibility(false);
+        }
     }
 
     /**
@@ -714,7 +726,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
         } else {
             oldtime = curtime;
-            publishData();
+            //only publish if someone is listening
+            AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
+            if(listeners1.length != 0){
+                publishData();
+            }
         }
     }
     

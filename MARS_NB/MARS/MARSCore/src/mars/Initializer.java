@@ -234,10 +234,7 @@ public class Initializer {
         if (mars_settings.isFogEnabled()) {
             setupFog();
         }
-        if (mars_settings.isTerrainEnabled() && !mars_settings.isTerrainAdvanced()) {
-            setupTerrain();
-        }
-        if (mars_settings.isTerrainEnabled() && mars_settings.isTerrainAdvanced()) {
+        if (mars_settings.isTerrainEnabled()) {
             setupTerrain();
         }
         if (mars_settings.isGrassEnabled()) {
@@ -663,9 +660,11 @@ public class Initializer {
      * @param tpf
      */
     public void updateWavesWater(float tpf) {
-        waves_time += tpf;
-        float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
-        water.setWaterHeight(water_height + waterHeight);
+        if(water != null){
+            waves_time += tpf;
+            float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
+            water.setWaterHeight(water_height + waterHeight);
+        }
     }
 
     /*
@@ -717,7 +716,7 @@ public class Initializer {
      */
     public void setupPlaneWater() {
         // A translucent/transparent texture, similar to a window frame.
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (water_plane != null) {
                     water_plane.removeFromParent();
@@ -783,23 +782,22 @@ public class Initializer {
      *
      */
     public void setupLight() {
-        final Node rootNodeMars = mars.getRootNode();
-        Future<Void> fut = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                rootNodeMars.removeLight(sun);//remove all old stuff before
-                rootNodeMars.removeLight(ambLight);
+                rootNode.removeLight(sun);//remove all old stuff before
+                rootNode.removeLight(ambLight);
                 sun.setColor(mars_settings.getLightColor());
                 //sun.setDirection(mars_settings.getLightDirection().normalize());
                 ambLight.setColor(mars_settings.getLightAmbientColor());
                 if (mars_settings.isLightEnabled()) {
-                    rootNodeMars.addLight(sun);
+                    rootNode.addLight(sun);
                 } else {
-                    rootNodeMars.removeLight(sun);
+                    rootNode.removeLight(sun);
                 }
                 if (mars_settings.getLightAmbient()) {
-                    rootNodeMars.addLight(ambLight);
+                    rootNode.addLight(ambLight);
                 } else {
-                    rootNodeMars.removeLight(ambLight);
+                    rootNode.removeLight(ambLight);
                 }
                 return null;
             }
@@ -1359,7 +1357,6 @@ public class Initializer {
         rots[2] = mars_settings.getTerrainRotation().getZ();
         Quaternion rot = new Quaternion(rots);
         terrain.setLocalRotation(rot);
-        //rootNode.attachChild(terrain);
 
         /**
          * 5. The LOD (level of detail) depends on were the camera is:
@@ -1370,15 +1367,6 @@ public class Initializer {
         control.setEnabled(mars_settings.getTerrainLod());
 
         terrain_node = new Node("terrain");
-        /*terrain_node.setLocalTranslation(mars_settings.getTerrainPosition());
-         float[] rots = new float[3];
-         rots[0] = mars_settings.getTerrainRotation().getX();
-         rots[1] = mars_settings.getTerrainRotation().getY();
-         rots[2] = mars_settings.getTerrainRotation().getZ();
-         Quaternion rot = new Quaternion(rots);
-         terrain_node.setLocalRotation(rot);
-         terrain_node.setLocalScale(mars_settings.getTerrainScale());
-         terrain_node.updateGeometricState();*/
 
         /**
          * 6. Add physics:
@@ -1386,12 +1374,8 @@ public class Initializer {
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass zero.*/
         //Making a terrain Physics
-        //terrain_node = new Node("terrain");
         CollisionShape terrainShape = CollisionShapeFactory.createMeshShape(terrain);
-
-        //terrain_node = new Node("terrain");
         terrain_physics_control = new RigidBodyControl(terrainShape, 0);
-        //terrain_physics_control = new RigidBodyControl(0);
 
         /*Material debug_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
          debug_mat.setColor("Color", ColorRGBA.Red);
@@ -1416,24 +1400,23 @@ public class Initializer {
         sceneReflectionNode.attachChild(terrain_node);
         RayDetectable.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain);
-        //bulletAppState.getPhysicsSpace().add(terrain_physics_control);
         
-        File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_3_am.png", "mars.core", false);
+        /*File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_3_am.png", "mars.core", false);
         DensityMap dm = new DensityMap(file4.getAbsolutePath());
         VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 4);
         Geometry createGenuineGrass = vs.createGenuineGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         Geometry createImposterGrass = vs.createImposterGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         vs.setGenuineRed(createGenuineGrass);
         vs.setImposterRed(createImposterGrass);
-        /*vs.setGenuineBlue(createGenuineGrass);
-        vs.setImposterBlue(createImposterGrass);
-        vs.setGenuineGreen(createGenuineGrass);
-        vs.setImposterGreen(createImposterGrass);*/
+        //vs.setGenuineBlue(createGenuineGrass);
+        //vs.setImposterBlue(createImposterGrass);
+        //vs.setGenuineGreen(createGenuineGrass);
+        //vs.setImposterGreen(createImposterGrass);
         vs.setMaxView(30f, 50f);
         vs.setMinDist(0.15f, 0.15f, 0.15f);
         vs.setShadowModes(ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
         vs.plant(0f, 0f, 0f, 0f, 0f, 0f);
-        //sceneReflectionNode.attachChild(vs);
+        //sceneReflectionNode.attachChild(vs);*/
     }
 
     /**

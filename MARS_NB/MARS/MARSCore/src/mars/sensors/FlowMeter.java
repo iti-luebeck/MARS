@@ -13,12 +13,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.Initializer;
 import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
@@ -30,7 +30,7 @@ import org.ros.message.Time;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class FlowMeter extends Sensor implements ChartValue {
+public class FlowMeter extends Sensor{
 
     private Geometry FlowMeterStart;
 
@@ -218,23 +218,7 @@ public class FlowMeter extends Sensor implements ChartValue {
         super.publishData();
         MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getFlowForce(), System.currentTimeMillis());
         simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
-        return getFlowForce();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getFlowForce(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -12,10 +12,12 @@ import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import mars.misc.ChartValue;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
+import mars.misc.Pose;
 import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -26,7 +28,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Posemeter extends Sensor implements ChartValue {
+public class Posemeter extends Sensor{
 
     @XmlElement(name = "Positionmeter")
     Positionmeter pos = new Positionmeter();
@@ -205,6 +207,10 @@ public class Posemeter extends Sensor implements ChartValue {
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
+    
+    public Pose getPose(){
+        return new Pose(pos.getWorldPosition(), oro.getOrientation());
+    }
 
     /**
      *
@@ -215,18 +221,20 @@ public class Posemeter extends Sensor implements ChartValue {
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
+        
+        Pose pose = getPose();
 
         geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
-        point.setX(pos.getWorldPosition().x);
-        point.setY(pos.getWorldPosition().z);//dont forget to switch y and z!!!!
-        point.setZ(pos.getWorldPosition().y);
+        point.setX(pose.getPosition().x);
+        point.setY(pose.getPosition().z);//dont forget to switch y and z!!!!
+        point.setZ(pose.getPosition().y);
 
         geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
         Quaternion ter_orientation = new Quaternion();
         Quaternion ter_orientation_rueck = new Quaternion();
         ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
         ter_orientation_rueck = ter_orientation.inverse();
-        float[] bla = oro.getOrientation().toAngles(null);
+        float[] bla = pose.getOrientation().toAngles(null);
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
         jme3_quat.fromAngles(-bla[0], bla[1], -bla[2]);
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
@@ -236,32 +244,23 @@ public class Posemeter extends Sensor implements ChartValue {
         orientation.setZ((ter_orientation).getZ());
         orientation.setW((ter_orientation).getW());
 
-        geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
-        pose.setPosition(point);
-        pose.setOrientation(orientation);
-        fl.setPose(pose);
+        geometry_msgs.Pose rospose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
+        rospose.setPosition(point);
+        rospose.setOrientation(orientation);
+        fl.setPose(rospose);
 
         if (publisher != null) {
             publisher.publish(fl);
         }
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
-    public Object getChartValue() {
-        float[] bla = oro.getOrientation().toAngles(null);
-        return new Vector3f(bla[0], bla[1], bla[2]);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+    public void publishData() {
+        super.publishData();
+        Pose pose = getPose();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, pose, System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, pose, System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

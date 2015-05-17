@@ -152,7 +152,7 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
     /**
      * This method updates the forces for the physicsNode so the auv moves
      */
-    public abstract void update();
+    public abstract void updateForces();
 
     /**
      *

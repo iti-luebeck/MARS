@@ -6,20 +6,24 @@ package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 import geometry_msgs.Quaternion;
 import geometry_msgs.Vector3;
-import org.ros.node.topic.Publisher;
-import mars.PhysicalEnvironment;
-import mars.states.SimState;
-import mars.ros.MARSNodeMain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
+import mars.misc.IMUData;
+import mars.ros.MARSNodeMain;
+import mars.server.MARSClientEvent;
+import mars.states.SimState;
 import org.ros.message.Time;
+import org.ros.node.topic.Publisher;
 
 /**
  * An inertial measurment unit class. Basically it consist of the Accelerometer,
@@ -232,6 +236,11 @@ public class IMU extends Sensor {
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
+    
+    public IMUData getIMU(){
+        IMUData mat = new IMUData(acc.getAcceleration(),gyro.getAngularVelocity(),oro.getOrientation());
+        return mat;
+    }
 
     /**
      *
@@ -282,5 +291,14 @@ public class IMU extends Sensor {
         if (publisher != null) {
             publisher.publish(fl);
         }
+    }
+    
+    @Override
+    public void publishData() {
+        super.publishData();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getIMU(), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getIMU(), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

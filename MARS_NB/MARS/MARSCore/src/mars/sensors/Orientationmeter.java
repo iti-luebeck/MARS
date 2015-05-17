@@ -9,10 +9,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.misc.ChartValue;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
@@ -25,7 +25,7 @@ import org.ros.node.topic.Publisher;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Orientationmeter extends Sensor implements ChartValue {
+public class Orientationmeter extends Sensor{
 
     Quaternion new_orientation = new Quaternion();
     Quaternion old_orientation = new Quaternion();
@@ -191,26 +191,10 @@ public class Orientationmeter extends Sensor implements ChartValue {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getOrientation(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public Object getChartValue() {
         float[] bla = getOrientation().toAngles(null);
-        return new Vector3f(bla[0], bla[1], bla[2]);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public long getSleepTime() {
-        return getRos_publish_rate();
+        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, new Vector3f(bla[0], bla[1], bla[2]), System.currentTimeMillis());
+        simState.getAuvManager().notifyAdvertisement(clEvent);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, new Vector3f(bla[0], bla[1], bla[2]), System.currentTimeMillis());
+        notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -15,6 +15,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.MemoryImageSource;
 import javax.swing.JPanel;
 import mars.Helper.Helper;
+import mars.events.AUVObjectEvent;
+import mars.events.AUVObjectListener;
+import mars.misc.SonarData;
+import mars.sensors.RayBasedSensor;
 
 /**
  * This class is used to visualize SonarData (or any Data provided as an byte
@@ -24,17 +28,19 @@ import mars.Helper.Helper;
  */
 public class PolarView extends JPanel implements RayBasedSensorView {
 
-    BufferedImage offImgage;
-    Graphics2D imageGraphics;
-    Image fImage;
-    MemoryImageSource mis;
-    int fWidth;
-    int fHeight;
-    int[] fPixels;
-    int h = 504, b = 504;
+    private BufferedImage offImgage;
+    private Graphics2D imageGraphics;
+    private Image fImage;
+    private MemoryImageSource mis;
+    private int fWidth;
+    private int fHeight;
+    private int[] fPixels;
+    private int h = 504, b = 504;
     private Color bgcolor = Color.BLACK;
     private Color radarColor = Color.BLUE;
     private Color hitColor = Color.GREEN;
+    private RayBasedSensor sens;
+    private AUVObjectListener auvlistener;
 
     /**
      *
@@ -44,6 +50,31 @@ public class PolarView extends JPanel implements RayBasedSensorView {
         imageGraphics = offImgage.createGraphics();
         imageGraphics.setBackground(bgcolor);
         imageGraphics.clearRect(0, 0, b, h);
+    }
+    
+    /**
+     *
+     * @param sens
+     */
+    public PolarView(final RayBasedSensor sens) {
+        this();
+        this.sens = sens;
+        auvlistener = new AUVObjectListener() {
+
+            @Override
+            public void onNewData(AUVObjectEvent e) {
+                if(e.getMsg() instanceof SonarData){
+                    SonarData sondat = (SonarData)e.getMsg();
+                    updateData(sondat.getData(), sondat.getAngle(), sens.getScanning_resolution());
+                }
+            }
+        };
+        sens.addAUVObjectListener(auvlistener);
+    }
+
+    @Override
+    public void cleanUp() {
+        sens.removeAUVObjectListener(auvlistener);
     }
 
     /**
@@ -60,6 +91,7 @@ public class PolarView extends JPanel implements RayBasedSensorView {
      * @param lastHeadPosition
      * @param resolution
      */
+    @Override
     public void updateData(byte[] data, float lastHeadPosition, float resolution) {
         float umfangCount = 2f * (float) Math.PI / resolution;
         AffineTransform trans = new AffineTransform();
@@ -78,7 +110,7 @@ public class PolarView extends JPanel implements RayBasedSensorView {
             }
             imageGraphics.drawLine(252, 252 - i, 252, 252 - i - 1);
         }
-        drawRadarLine(data.length, lastHeadPosition, resolution);
+        //drawRadarLine(data.length, lastHeadPosition, resolution);
         this.repaint();
     }
 

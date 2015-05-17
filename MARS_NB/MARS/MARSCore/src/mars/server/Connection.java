@@ -18,7 +18,6 @@ import mars.auv.BasicAUV;
 import mars.MARS_Main;
 import mars.actuators.thruster.Thruster;
 import mars.sensors.Accelerometer;
-import mars.sensors.Compass;
 import mars.sensors.Gyroscope;
 import mars.sensors.sonar.ImagenexSonar_852_Echo;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
@@ -284,16 +283,6 @@ public class Connection extends Thread {
              }else{
              Logger.getLogger(Connection.class.getName()).log(Level.SEVERE,"Comm doesnt exist!", "");
              }*/
-        } else if (input_from_client.startsWith("Angles")) {
-            String[] input = input_from_client.split(" ");
-            String comp_name = input[1];
-            Compass comp = (Compass) auv.getSensor(comp_name);
-            if (comp != null) {
-                String ret = " " + comp.getYawDegree() + " " + comp.getPitchDegree() + " " + comp.getRollDegree();
-                sendString(cmd_angles, comp_name, ret);
-            } else {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, "Compass doesnt exist!", "");
-            }
         } else if (input_from_client.startsWith("Pinger")) {
             String[] input = input_from_client.split(" ");
             String ping_name = input[1];

@@ -310,14 +310,16 @@ public class GuiState extends AbstractAppState {
             } else if (name.equals("context_menue") && !keyPressed) {
                 pickRightClick();
             } else if (name.equals("context_menue_off") && !keyPressed) {
-                guiControlState.setSelect_auv(false);
-                pickHover();
+                if(!guiControlState.isMove_auv()){//do it only if we are not moving currently a selected auv
+                    guiControlState.setSelect_auv(false);
+                    pickHover();
+                }
             } else if (name.equals("depth_auv_down") && keyPressed) {
                 if (guiControlState.isMove_auv()) {
                     AUV selected_auv = auvManager.getSelectedAUV();
                     if (selected_auv != null) {
                         guiControlState.decrementDepthIteration();
-                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));
+                        moveSelectedGhostAUV(selected_auv);
                     }
                 }
             } else if (name.equals("depth_auv_up") && keyPressed) {
@@ -325,13 +327,14 @@ public class GuiState extends AbstractAppState {
                     AUV selected_auv = auvManager.getSelectedAUV();
                     if (selected_auv != null) {
                         guiControlState.incrementDepthIteration();
-                        guiControlState.getGhostObject().setLocalTranslation(selected_auv.getGhostAUV().getLocalTranslation().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));
+                        moveSelectedGhostAUV(selected_auv);
                     }
                 }
             } else if (name.equals("moveauv") && keyPressed) {
                 mars.getFlyByCamera().setEnabled(false);
                 AUV selected_auv = auvManager.getSelectedAUV();
                 if (selected_auv != null) {
+                    //guiControlState.resetDepthIteration();
                     guiControlState.setMove_auv(true);
                     guiControlState.setGhostObject(selected_auv.getGhostAUV());
                     //guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
@@ -352,7 +355,10 @@ public class GuiState extends AbstractAppState {
                 mars.getFlyByCamera().setEnabled(true);
                 if (selected_auv != null) {
                     selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
-                    guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+                    Spatial ghostObject = guiControlState.getGhostObject();
+                    if(ghostObject !=null){
+                       ghostObject.setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+                    }
                     selected_auv.hideGhostAUV(true);
                 }
 
@@ -551,7 +557,7 @@ public class GuiState extends AbstractAppState {
         Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
         guiControlState.setIntersection(intersection);
         if (guiControlState.getGhostObject() != null) {
-            guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null));
+            guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));
             guiControlState.getGhostObject().setLocalRotation(auv.getAUVSpatial().getLocalRotation());
         }
     }

@@ -43,7 +43,6 @@ import mars.gui.sonarview.PolarView;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.sensors.AmpereMeter;
 import mars.sensors.CommunicationDevice;
-import mars.sensors.Compass;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -155,8 +154,6 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         if (icon == null) {
             if (obj instanceof Sonar) {
                 icon = "radar.png";
-            } else if (obj instanceof Compass) {
-                icon = "compass.png";
             } else if (obj instanceof VideoCamera) {
                 icon = "cctv_camera.png";
             } else if (obj instanceof PingDetector) {
@@ -510,7 +507,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof CommunicationDevice) {
             return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
-        } else if (obj instanceof mars.misc.ChartValue) {
+        } else if (obj instanceof Sensor) {
             return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else {
             return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
@@ -670,9 +667,9 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            mars.misc.ChartValue lookup = getLookup().lookup(mars.misc.ChartValue.class);
-            if (lookup != null) {
-                MARSChartTopComponent chart = new MARSChartTopComponent(lookup);
+            Sensor sens = getLookup().lookup(Sensor.class);
+            if (sens != null) {
+                MARSChartTopComponent chart = new MARSChartTopComponent(sens);
 
                 chart.setName("Chart of: " + "...");
                 chart.open();
