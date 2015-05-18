@@ -187,7 +187,7 @@ public class CommOnMap {
                     else {
                         inactivePaths = new LinkedList(distanceNode.getChildren());
                         if(showLinks) {
-                            List<DistanceTrigger> targets = distances.get(auv.getName());
+                            List<DistanceTrigger> targets = new LinkedList(distances.get(auv.getName()));
                             for(DistanceTrigger i : targets) {
                                 String connectionName = auv.getName()+"->"+i.getAUVName();
                                 if(auvNodes.get(i.getAUVName())==null) return;

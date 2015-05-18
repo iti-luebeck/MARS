@@ -5,11 +5,13 @@
  */
 package mars.uwCommManager.threading.events;
 
+import java.util.EventListener;
+
 /**
  *
  * @author Jasper Schwinghammer
  */
-public interface TriggerEventListener {
+public interface TriggerEventListener  extends EventListener{
     
     public void triggerEventHappened(ATriggerEvent e);
     

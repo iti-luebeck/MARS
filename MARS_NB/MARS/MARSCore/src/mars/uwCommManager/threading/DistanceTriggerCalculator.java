@@ -9,14 +9,19 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
@@ -24,13 +29,14 @@ import mars.sensors.CommunicationDevice;
 import mars.sensors.UnderwaterModem;
 import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
+import mars.uwCommManager.options.CommOptionsConstants;
 import mars.uwCommManager.threading.events.TriggerEventGenerator;
 import mars.uwCommManager.threading.raytracing.DirectTrace;
 import org.openide.util.Exceptions;
 
 /**
  * This class is used to calculate distances between AUVS, right now it only calculates the direct way between two AUVs. Reflections are ignored and not implemented
- * @version 1.1
+ * @version 1.2
  * @author Jasper Schwinghammer
  */
 public class DistanceTriggerCalculator implements Runnable {
@@ -56,6 +62,11 @@ public class DistanceTriggerCalculator implements Runnable {
     
     private TriggerEventGenerator eventGen;
     
+        
+    private boolean debug;
+    private Node debugNode;
+    private List<String> debugStringList;
+    
     /**
      * Does nothing but initialize variables
      * @since 0.1 
@@ -77,9 +88,11 @@ public class DistanceTriggerCalculator implements Runnable {
     public boolean init(final AUV_Manager auvManager) {
         if (auvManager == null) return false;
         this.auvManager = auvManager;
+        initDebug();
+        initAndLoadPrefs();
         return true;
     }
-
+    
     /**
      * calculate all ways to other AUVs
      * @since 0.1
@@ -170,11 +183,17 @@ public class DistanceTriggerCalculator implements Runnable {
         }
         for(Map.Entry<String,List<DistanceTrigger>> e : distanceMap.entrySet()) {
             DirectTrace trace = new DirectTrace(this);
-            trace.init(simState, auvManager, e.getKey(), e.getValue());
+            if(debug) trace.init(simState, auvManager, e.getKey(), e.getValue(),true,debugNode);
+            else trace.init(simState, auvManager, e.getKey(), e.getValue(),true,null);
             executor.schedule(trace, 0, TimeUnit.MICROSECONDS);
         }
     }
     
+    /**
+     * 
+     * @param auvName
+     * @param triggers 
+     */
     public void updateTraceMap(String auvName, List<DistanceTrigger> triggers) {
         
         synchronized(this) {
@@ -188,11 +207,75 @@ public class DistanceTriggerCalculator implements Runnable {
 
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     public TriggerEventGenerator getEventGenerator() {
         return eventGen;
     }
-   
+    
+//////////////////////////////////////////BELOW IS ONLY DEBUGGING RELATED STUFF
+    
+    public void setDebugAUVRoute(String identifier) {
+        debugStringList.add(identifier);
+    }
+    
+    public boolean debugAUVRouteInInit(String identifier) {
+        return debugStringList.contains(identifier);
+    }
+    
+    /**
+     * @since 1.2
+     * @return if the debugging values are initialized properly
+     */
+    private boolean initDebug() {
+        debugNode = new Node("uw-multipathcomm-debug-node");
+        simState.getSceneReflectionNode().attachChild(debugNode);
+        debugStringList = new LinkedList();
+        return true;
+    }
+    
+    /**
+     * For debugging purpose preferences for the debug check-box are used
+     * @since 1.2
+     * @return if the preferences are initialized properly
+     */
+    private boolean initAndLoadPrefs() {
+        Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.DebuggingOptionsPanelController.class);
+        if(pref == null) return false;
+        debug = pref.getBoolean(CommOptionsConstants.OPTIONS_DEBUG_SHOW_DEBUG_GRAPHICS, false);
+        
+        pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            @Override
+            public void preferenceChange(PreferenceChangeEvent e) {
+                if(e.getKey().equals(CommOptionsConstants.OPTIONS_DEBUG_SHOW_DEBUG_GRAPHICS)) {
+                    debug = Boolean.parseBoolean(e.getNewValue());
+                    if(!debug) {
+                        simState.getMARS().enqueue(new Callable<Object>(){
+
+                            @Override
+                            public Object call() throws Exception {
+                                debugNode.setCullHint(Spatial.CullHint.Always);
+                                return null;
+                            }
+                        });
+                    } else {
+                         simState.getMARS().enqueue(new Callable<Object>(){
+
+                            @Override
+                            public Object call() throws Exception {
+                                debugNode.setCullHint(Spatial.CullHint.Inherit);
+                                return null;
+                            }
+                        });                       
+                    }
+                }
+            }
+        });
+        return true;
+    }
     
     
 }
