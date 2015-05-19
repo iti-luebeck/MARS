@@ -142,18 +142,18 @@ public class DirectTrace implements Runnable {
                     Vector3f targetModPos = targetMod.getWorldPosition();
 
                     //calculate the vector between the two modems
-                    Vector3f direction = targetModPos.subtract(modPos);
+                    Vector3f direction = targetModPos.subtract(modPos).normalizeLocal();
                     /////////////////////////////START DEBUG CODE
                     if (debug) {
-                        debugTrace(rootAUVName, targetAUVName, direction, modPos);
+                        //debugTrace(rootAUVName, targetAUVName, direction, modPos);
                     }
                     ///////////////////////////////END DEBUG CODE
                     //raytrace the connection
-                    Ray ray = new Ray(modPos.add(direction.normalize()), direction);
-
+                    Ray ray = new Ray(modPos, direction);
                     CollisionResults results = new CollisionResults();
 
-                    rootNode.collideWith(ray, results);
+                    //rootNode.collideWith(ray, results);
+                    simState.getCollider().collideWith(ray, results);
                     if (results.size() != 0) {
                         if (results.getClosestCollision().getDistance() < direction.mult(0.9f).length() - 1) {
                             removedTriggers.add(trigger);
