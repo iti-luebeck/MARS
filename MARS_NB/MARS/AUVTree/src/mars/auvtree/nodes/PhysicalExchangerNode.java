@@ -565,20 +565,21 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
-
-            //sonarFrame.setSize(2*252+300, 2*252);
-            final PolarView imgP = new PolarView();
-            win.addRayBasedView(imgP);
-
-            win.setName("Polar View");
-            win.open();
-            win.requestActive();
-
-            win.repaint();
+            
             RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
             if (lookup != null) {
+                //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+                RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
+
+                //sonarFrame.setSize(2*252+300, 2*252);
+                final PolarView imgP = new PolarView(lookup);
+                win.addRayBasedView(imgP);
+
+                win.setName("Polar View");
+                win.open();
+                win.requestActive();
+
+                win.repaint();
                 //rayBasedSensorList.put(lookup.getName(), imgP);
                 win.setName("Polar View of: " + lookup.getName());
             }
@@ -599,60 +600,24 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-
-            RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
-
-            //sonarFrame.setSize(400+300, 252);
-            final PlanarView imgP = new PlanarView();
-            win.addRayBasedView(imgP);
-
-            win.setName("Planar View");
-            win.open();
-            win.requestActive();
-
-            win.repaint();
-
             RayBasedSensor lookup = getLookup().lookup(RayBasedSensor.class);
             if (lookup != null) {
+                //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+
+                RayBasedSensorTopComponent win = new RayBasedSensorTopComponent();
+
+                //sonarFrame.setSize(400+300, 252);
+                final PlanarView imgP = new PlanarView(lookup);
+                win.addRayBasedView(imgP);
+
+                win.setName("Planar View");
+                win.open();
+                win.requestActive();
+
+                win.repaint();
                 //rayBasedSensorList.put(lookup.getName(), imgP);
                 win.setName("Planar View of: " + lookup.getName());
             }
-
-            /*
-             //add Jpane for otherSTuff
-             JPanel optionsOther = new JPanel();
-             optionsOther.setMaximumSize(new Dimension(300, 100));
-             GridLayout gl2 = new GridLayout(1,1);
-             optionsOther.setLayout(gl2);
-             optionsOther.setBorder(new EmptyBorder(5, 5, 5, 5));
-             options.add(optionsOther);
-
-
-             JLabel jlDataPoints = new JLabel("Data Points:");
-             optionsOther.add(jlDataPoints);
-             final JTextField jbDataPoints = new JTextField("400");
-             jbDataPoints.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
-             jbDataPoints.setMaximumSize(new Dimension(100, 30));
-
-             KeyListener kl = new KeyListener() {
-
-             public void keyTyped(KeyEvent e) {
-             }
-
-             public void keyPressed(KeyEvent e) {
-             if(e.getKeyCode() == KeyEvent.VK_ENTER){
-             imgP.setDataPoints(500);
-             }
-             }
-
-             public void keyReleased(KeyEvent e) {
-             }
-
-             };
-             jbDataPoints.addKeyListener(kl);
-             optionsOther.add(jbDataPoints);
-             */
         }
 
     }
