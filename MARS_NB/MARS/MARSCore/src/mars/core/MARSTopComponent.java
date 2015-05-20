@@ -276,7 +276,9 @@ public final class MARSTopComponent extends TopComponent {
         JMEPanel = new javax.swing.JPanel();
 
         vector_dialog.setTitle(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vector_dialog.title")); // NOI18N
-        vector_dialog.setMinimumSize(new java.awt.Dimension(163, 146));
+        vector_dialog.setMinimumSize(new java.awt.Dimension(180, 180));
+        vector_dialog.setPreferredSize(new java.awt.Dimension(180, 180));
+        vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(vectorDialog_Confirm, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vectorDialog_Confirm.text")); // NOI18N
         vectorDialog_Confirm.addActionListener(new java.awt.event.ActionListener() {
@@ -284,6 +286,7 @@ public final class MARSTopComponent extends TopComponent {
                 vectorDialog_ConfirmActionPerformed(evt);
             }
         });
+        vector_dialog.getContentPane().add(vectorDialog_Confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 112, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(Cancel2, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.Cancel2.text")); // NOI18N
         Cancel2.addActionListener(new java.awt.event.ActionListener() {
@@ -291,6 +294,7 @@ public final class MARSTopComponent extends TopComponent {
                 Cancel2ActionPerformed(evt);
             }
         });
+        vector_dialog.getContentPane().add(Cancel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(87, 112, -1, -1));
 
         vectorDialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vectorDialog_x.text")); // NOI18N
         vectorDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
@@ -299,73 +303,34 @@ public final class MARSTopComponent extends TopComponent {
                 vectorDialog_xActionPerformed(evt);
             }
         });
+        vector_dialog.getContentPane().add(vectorDialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 9, 115, -1));
 
         vectorDialog_y.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vectorDialog_y.text")); // NOI18N
         vectorDialog_y.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        vector_dialog.getContentPane().add(vectorDialog_y, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 43, 115, -1));
 
         vectorDialog_z.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vectorDialog_z.text")); // NOI18N
         vectorDialog_z.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        vector_dialog.getContentPane().add(vectorDialog_z, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 74, 115, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel1.text")); // NOI18N
+        vector_dialog.getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 12, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel2.text")); // NOI18N
+        vector_dialog.getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 46, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel3.text")); // NOI18N
+        vector_dialog.getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 74, -1, -1));
 
-        javax.swing.GroupLayout vector_dialogLayout = new javax.swing.GroupLayout(vector_dialog.getContentPane());
-        vector_dialog.getContentPane().setLayout(vector_dialogLayout);
-        vector_dialogLayout.setHorizontalGroup(
-            vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(vector_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(vector_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(vectorDialog_y))
-                    .addGroup(vector_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(vectorDialog_z))
-                    .addGroup(vector_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(vectorDialog_x)))
-                .addContainerGap())
-            .addGroup(vector_dialogLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(vectorDialog_Confirm)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Cancel2)
-                .addGap(0, 11, Short.MAX_VALUE))
-        );
-        vector_dialogLayout.setVerticalGroup(
-            vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, vector_dialogLayout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addGroup(vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(vectorDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(vectorDialog_y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(vectorDialog_z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(vector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(vectorDialog_Confirm)
-                    .addComponent(Cancel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        float_dialog.setMinimumSize(new java.awt.Dimension(172, 97));
+        float_dialog.setMinimumSize(new java.awt.Dimension(190, 140));
+        float_dialog.setPreferredSize(new java.awt.Dimension(190, 140));
+        float_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel4.text")); // NOI18N
+        float_dialog.getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 40, 20));
 
         org.openide.awt.Mnemonics.setLocalizedText(floatDialog_Confirm, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.floatDialog_Confirm.text")); // NOI18N
+        float_dialog.getContentPane().add(floatDialog_Confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 80, 30));
 
         org.openide.awt.Mnemonics.setLocalizedText(Cancel3, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.Cancel3.text")); // NOI18N
         Cancel3.addActionListener(new java.awt.event.ActionListener() {
@@ -373,45 +338,24 @@ public final class MARSTopComponent extends TopComponent {
                 Cancel3ActionPerformed(evt);
             }
         });
+        float_dialog.getContentPane().add(Cancel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 70, 30));
 
         floatDialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.floatDialog_x.text")); // NOI18N
         floatDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
+        floatDialog_x.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                floatDialog_xActionPerformed(evt);
+            }
+        });
+        float_dialog.getContentPane().add(floatDialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 90, -1));
 
-        javax.swing.GroupLayout float_dialogLayout = new javax.swing.GroupLayout(float_dialog.getContentPane());
-        float_dialog.getContentPane().setLayout(float_dialogLayout);
-        float_dialogLayout.setHorizontalGroup(
-            float_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(float_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(float_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(float_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(floatDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(float_dialogLayout.createSequentialGroup()
-                        .addComponent(floatDialog_Confirm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Cancel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        float_dialogLayout.setVerticalGroup(
-            float_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(float_dialogLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(float_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(floatDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(float_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(floatDialog_Confirm)
-                    .addComponent(Cancel3))
-                .addContainerGap())
-        );
-
-        int_dialog.setMinimumSize(new java.awt.Dimension(172, 97));
+        int_dialog.setMinimumSize(new java.awt.Dimension(190, 130));
+        int_dialog.setPreferredSize(new java.awt.Dimension(190, 130));
+        int_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         intDialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.intDialog_x.text")); // NOI18N
         intDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
+        int_dialog.getContentPane().add(intDialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 11, 108, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(Cancel4, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.Cancel4.text")); // NOI18N
         Cancel4.addActionListener(new java.awt.event.ActionListener() {
@@ -419,45 +363,20 @@ public final class MARSTopComponent extends TopComponent {
                 Cancel4ActionPerformed(evt);
             }
         });
+        int_dialog.getContentPane().add(Cancel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 63, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(intDialog_Confirm, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.intDialog_Confirm.text")); // NOI18N
+        int_dialog.getContentPane().add(intDialog_Confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 63, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel5.text")); // NOI18N
+        int_dialog.getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
 
-        javax.swing.GroupLayout int_dialogLayout = new javax.swing.GroupLayout(int_dialog.getContentPane());
-        int_dialog.getContentPane().setLayout(int_dialogLayout);
-        int_dialogLayout.setHorizontalGroup(
-            int_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(int_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(int_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(int_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(intDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(int_dialogLayout.createSequentialGroup()
-                        .addComponent(intDialog_Confirm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Cancel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-        int_dialogLayout.setVerticalGroup(
-            int_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(int_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(int_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(intDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(int_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(intDialog_Confirm)
-                    .addComponent(Cancel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        string_dialog.setMinimumSize(new java.awt.Dimension(178, 97));
+        string_dialog.setMinimumSize(new java.awt.Dimension(190, 130));
+        string_dialog.setPreferredSize(new java.awt.Dimension(190, 130));
+        string_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel6.text")); // NOI18N
+        string_dialog.getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(Cancel5, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.Cancel5.text")); // NOI18N
         Cancel5.addActionListener(new java.awt.event.ActionListener() {
@@ -465,42 +384,14 @@ public final class MARSTopComponent extends TopComponent {
                 Cancel5ActionPerformed(evt);
             }
         });
+        string_dialog.getContentPane().add(Cancel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 63, 79, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(stringDialog_Confirm, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.stringDialog_Confirm.text")); // NOI18N
+        string_dialog.getContentPane().add(stringDialog_Confirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 63, -1, -1));
 
         stringDialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.stringDialog_x.text")); // NOI18N
         stringDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
-
-        javax.swing.GroupLayout string_dialogLayout = new javax.swing.GroupLayout(string_dialog.getContentPane());
-        string_dialog.getContentPane().setLayout(string_dialogLayout);
-        string_dialogLayout.setHorizontalGroup(
-            string_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(string_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(string_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(string_dialogLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(stringDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(string_dialogLayout.createSequentialGroup()
-                        .addComponent(stringDialog_Confirm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Cancel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        string_dialogLayout.setVerticalGroup(
-            string_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(string_dialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(string_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(stringDialog_x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(string_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(stringDialog_Confirm)
-                    .addComponent(Cancel5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        string_dialog.getContentPane().add(stringDialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 11, 108, -1));
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_view, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_view.text")); // NOI18N
 
@@ -955,7 +846,6 @@ public final class MARSTopComponent extends TopComponent {
         jme3_auv.add(jme3_delete_auv);
 
         auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(180, 235));
-        auv_move_vector_dialog.setPreferredSize(new java.awt.Dimension(180, 235));
         auv_move_vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton7, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jButton7.text")); // NOI18N
@@ -1688,6 +1578,10 @@ public final class MARSTopComponent extends TopComponent {
         });
         toggleJMenuCheckbox(jme3_debug_auv_bounding_volume);
     }//GEN-LAST:event_jme3_debug_auv_bounding_volumeActionPerformed
+
+    private void floatDialog_xActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_floatDialog_xActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_floatDialog_xActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancel2;
