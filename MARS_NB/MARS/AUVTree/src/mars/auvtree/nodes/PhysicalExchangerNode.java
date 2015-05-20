@@ -502,7 +502,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Action[] getActions(boolean popup) {
         if (obj instanceof VideoCamera) {
-            return new Action[]{new ViewCameraAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{new ViewCameraAction(this), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof RayBasedSensor) {
             return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
         } else if (obj instanceof CommunicationDevice) {
@@ -530,6 +530,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
+            super();
             if (obj instanceof AUVObject) {
                 AUVObject auvObject = (AUVObject) obj;
                 if (auvObject.getEnabled()) {
@@ -558,6 +559,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class SonarPolarAction extends AbstractAction {
 
         public SonarPolarAction() {
+            super();
             putValue(NAME, "View Sonar Data [Polar]");
         }
 
@@ -591,6 +593,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class SonarPlanarAction extends AbstractAction {
 
         public SonarPlanarAction() {
+            super();
             putValue(NAME, "View Sonar Data [Planar]");
         }
 
@@ -661,6 +664,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class DataChartAction extends AbstractAction {
 
         public DataChartAction() {
+            super();
             putValue(NAME, "Add Data to Chart");
         }
 
@@ -687,7 +691,11 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
      */
     private class ViewCameraAction extends AbstractAction {
 
-        public ViewCameraAction() {
+        private PhysicalExchangerNode pen;
+        
+        public ViewCameraAction(PhysicalExchangerNode pen) {
+            super();
+            this.pen = pen;
             putValue(NAME, "View Camera Data");
         }
 
@@ -699,7 +707,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
             MARS_Main mars = cl.lookup(MARS_Main.class);
             if (lookup != null) {
                 MARSVideoCameraTopComponent video = new MARSVideoCameraTopComponent(lookup, mars);
-
+                pen.addNodeListener(video);
                 video.setName("Video of: " + lookup.getName());
                 video.open();
                 video.requestActive();
@@ -717,6 +725,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     private class ViewCommunicationAction extends AbstractAction {
 
         public ViewCommunicationAction() {
+            super();
             putValue(NAME, "View Communication Device");
         }
 

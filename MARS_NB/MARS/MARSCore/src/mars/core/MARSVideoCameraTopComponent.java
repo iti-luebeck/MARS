@@ -8,14 +8,19 @@ import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import java.util.concurrent.Callable;
 import mars.MARS_Main;
 import mars.sensors.VideoCamera;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays the camera view of an AUV.
@@ -40,7 +45,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_MARSVideoCameraTopComponent=MARSVideoCamera Window",
     "HINT_MARSVideoCameraTopComponent=This is a MARSVideoCamera window"
 })
-public final class MARSVideoCameraTopComponent extends TopComponent {
+public final class MARSVideoCameraTopComponent extends TopComponent implements NodeListener{
 
     private static AwtPanel vid_panel;
     private VideoCamera lastSelectedVideoCamera;
@@ -151,5 +156,26 @@ public final class MARSVideoCameraTopComponent extends TopComponent {
             }
         });
         VideoPanel.removeAll();
+    }
+
+    @Override
+    public void nodeDestroyed(NodeEvent ne) {
+        this.close();
+    }
+
+    @Override
+    public void childrenReordered(NodeReorderEvent nre) {
+    }
+
+    @Override
+    public void childrenRemoved(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void childrenAdded(NodeMemberEvent nme) {
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
     }
 }
