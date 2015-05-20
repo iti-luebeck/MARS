@@ -349,20 +349,22 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
     @Override
     public void setName(final String s) {
-        final String oldName = this.name;
-        this.name = s;
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                if (mars.getStateManager().getState(SimState.class) != null) {
-                                //AUV auv = auvManager.getAUV(oldName);
-                    //auv.setName(s);
-                    auvManager.updateAUVName(oldName, s);
+        if(!s.isEmpty()){
+            final String oldName = this.name;
+            this.name = s;
+            mars.enqueue(new Callable<Void>() {
+                public Void call() throws Exception {
+                    if (mars.getStateManager().getState(SimState.class) != null) {
+                                    //AUV auv = auvManager.getAUV(oldName);
+                        //auv.setName(s);
+                        auvManager.updateAUVName(oldName, s);
+                    }
+                    return null;
                 }
-                return null;
-            }
-        });
-        fireDisplayNameChange(oldName, s);
-        fireNameChange(oldName, s);
+            });
+            fireDisplayNameChange(oldName, s);
+            fireNameChange(oldName, s);
+        }
     }
 
     /**

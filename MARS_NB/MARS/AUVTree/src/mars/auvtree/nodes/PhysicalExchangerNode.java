@@ -284,12 +284,14 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
 
     @Override
     public void setName(String s) {
-        final String oldName = this.nodeName;
-        this.nodeName = s;
-        PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
-        pe.getAuv().updatePhysicalExchangerName(oldName, s);
-        fireDisplayNameChange(oldName, s);
-        fireNameChange(oldName, s);
+        if(!s.isEmpty()){
+            final String oldName = this.nodeName;
+            this.nodeName = s;
+            PhysicalExchanger pe = getLookup().lookup(PhysicalExchanger.class);
+            pe.getAuv().updatePhysicalExchangerName(oldName, s);
+            fireDisplayNameChange(oldName, s);
+            fireNameChange(oldName, s);
+        }
     }
 
     /**
