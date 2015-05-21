@@ -186,6 +186,8 @@ public class DirectTrace implements Runnable {
                             }
                         }
                     }
+                    BouncingTrace bTrace = new BouncingTrace(1, SPEED_OF_SOUND, MAX_DISTANCE);
+                    bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
                     //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                 }
             }

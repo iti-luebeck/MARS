@@ -5,6 +5,9 @@
  */
 package mars.uwCommManager.threading.raytracing;
 
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mars.auv.AUV;
@@ -31,15 +34,17 @@ public class BouncingTrace {
     private AUV targetAUV;
     
     Collider collider;
-
     
+    private boolean oceanFloorFlat;
+    
+
     public BouncingTrace(final int MAX_BOUNCES, float speedOfSound, float maxRange) {
         this.MAX_BOUNCES = MAX_BOUNCES;
         this.SPEED_OF_SOUND = speedOfSound;
         this.MAX_RANGE = maxRange;
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
-        
+        oceanFloorFlat = true;
     }
     
     
@@ -54,9 +59,30 @@ public class BouncingTrace {
     }
     
     
+    public float calculateWaterDepth(Vector3f position) {
+        Vector3f vector = new Vector3f(0f,-1f,0f);
+        
+        Ray ray = new Ray(position, vector);
+        CollisionResults colRes = new CollisionResults();
+        collider.collideWith(ray, colRes);
+        for(CollisionResult col : colRes) {
+            if(col.getGeometry().getUserData("auv_name")==null) {
+                //System.out.println("Position of my AUV " +rootAUVPosition+ " Name of my AUV " +rootAUV.getName() + " The water is "+ depthAtRootPos + " meters deep" );
+                return col.getDistance();
+            }
+        }
+        return 0f;
+    }
+    
+    
     public synchronized DistanceTrigger nextBouncingRayTrace() {
         
         float distance = 0;
+        float depthAtRoot = calculateWaterDepth(rootAUVPosition);
+        float depthAtTarget = 0f;
+        if(oceanFloorFlat) depthAtTarget = depthAtRoot;
+        else depthAtTarget = calculateWaterDepth(targetAUVPosition);
+        
         
         int bounces = 1;
         boolean down = false;
