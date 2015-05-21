@@ -148,13 +148,14 @@ public class AUVVisualizationNode implements TriggerEventListener {
         //Next: the blocked traces
         computeBlockedEvents();
     }
-    
+
     /**
      * compute and visualize all hit events since last mainloop
+     *
      * @since 0.3
      */
     public void computeHitEvents() {
-                
+
         List<TraceHitAUVEvent> copyList;
         synchronized (this) {
             copyList = new LinkedList(traceHitEventQueue);
@@ -199,22 +200,37 @@ public class AUVVisualizationNode implements TriggerEventListener {
             }
             traceNode.setCullHint(Spatial.CullHint.Inherit);
             //check if the trace is already existent
-            Geometry traceStartGeom = (Geometry) traceNode.getChild(traceName + "-0");
+            Geometry traceGeom = (Geometry) traceNode.getChild(traceName + "-0");
             //if not, create it
-            if (traceStartGeom == null) {
+            if (traceGeom == null) {
                 attachTrace(traceName, traceNode, e.getTraces());
                 //since it takes multible loops to create all nodes and we don't
                 //want to create multible notes for the same connection break the loop
                 return;
+            } else {
+
+                connectionNode.setCullHint(Spatial.CullHint.Inherit);
+                Vector3f start = e.getTraces().get(0);
+                Vector3f end = e.getTraces().get(1);
+                for (int i = 0; i < e.getTraces().size() - 1; i++) {
+                    String traceGeomName = traceName+"-"+i;
+                    traceGeom = (Geometry) traceNode.getChild(traceGeomName);                        
+                    Line line = (Line) traceGeom.getMesh();
+                    line.updatePoints(start, end);
+                    start = new Vector3f(end);
+                    if (i < e.getTraces().size() - 2) {
+                        end = new Vector3f(e.getTraces().get(i + 2));
+                    } else break;
+                }
             }
             //update the Note
-            Line line = (Line) traceStartGeom.getMesh();
-            line.updatePoints(e.getTraces().get(0), e.getTraces().get(1));
-            connectionNode.setCullHint(Spatial.CullHint.Inherit);
+
         }
     }
+
     /**
      * compute all out of range Events, make all invisible traces cull
+     *
      * @since 0.3
      */
     public void computeOOREvents() {
@@ -232,9 +248,10 @@ public class AUVVisualizationNode implements TriggerEventListener {
             }
         }
     }
-    
+
     /**
      * Compute all blocked paths and set their culling to always
+     *
      * @since 0.3
      */
     public void computeBlockedEvents() {
