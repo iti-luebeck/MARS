@@ -395,6 +395,7 @@ public class ModemMessageRunnable implements Runnable{
     
     public void setDistanceTriggerCalculator(DistanceTriggerCalculator triggerCalc) {
         this.triggerCalculator = triggerCalc;
+        triggerCalc.setSpeedOfSound(AUV_NAME, speedOfSound);
     }
     
 }

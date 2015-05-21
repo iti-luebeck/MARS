@@ -31,6 +31,7 @@ import mars.sensors.UnderwaterModem;
 import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.options.CommOptionsConstants;
+import mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController;
 import mars.uwCommManager.threading.events.TriggerEventGenerator;
 import mars.uwCommManager.threading.raytracing.DirectTrace;
 import org.openide.util.Exceptions;
@@ -70,6 +71,8 @@ public class DistanceTriggerCalculator implements Runnable {
     private Node debugNode;
     private List<String> debugStringList;
     
+    private int maxReflectionCount;
+    
     /**
      * Does nothing but initialize variables
      * @since 0.1 
@@ -81,6 +84,7 @@ public class DistanceTriggerCalculator implements Runnable {
         this.executor = executor;
         eventGen = new TriggerEventGenerator();
         speedOfSoundMap = new HashMap();
+        maxReflectionCount = 0;
     }
     
     /**
@@ -189,7 +193,8 @@ public class DistanceTriggerCalculator implements Runnable {
             }
         }
         for(Map.Entry<String,List<DistanceTrigger>> e : distanceMap.entrySet()) {
-            DirectTrace trace = new DirectTrace(this);
+            if(speedOfSoundMap.get(e.getKey())== null) speedOfSoundMap.put(e.getKey(), 1500f);
+            DirectTrace trace = new DirectTrace(this, maxReflectionCount, speedOfSoundMap.get(e.getKey()));
             if(debug) trace.init(simState, auvManager, e.getKey(), e.getValue(),true,debugNode);
             else trace.init(simState, auvManager, e.getKey(), e.getValue(),false,null);
             executor.schedule(trace, 0, TimeUnit.MICROSECONDS);
@@ -281,6 +286,21 @@ public class DistanceTriggerCalculator implements Runnable {
                 }
             }
         });
+        pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
+        if(pref == null) return false;
+        
+        maxReflectionCount = pref.getInt(CommOptionsConstants.OPTIONS_REFLECTION_COUNT_SLIDER, 0);
+        
+        pref.addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            @Override
+            public void preferenceChange(PreferenceChangeEvent e) {
+                if(e.getKey().equals(CommOptionsConstants.OPTIONS_REFLECTION_COUNT_SLIDER)) {
+                    maxReflectionCount = Integer.parseInt(e.getNewValue());
+                }
+            }
+        });
+        
         return true;
     }
     

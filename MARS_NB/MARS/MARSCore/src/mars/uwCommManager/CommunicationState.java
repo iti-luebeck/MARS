@@ -177,10 +177,10 @@ public class CommunicationState extends AbstractAppState {
         if(distanceTraceModule == null) {
             distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
             distanceTraceModule.init(auvManager);
-            executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
             for(Map.Entry<String,ModemMessageRunnable> entry : auvProcessMap.entrySet()) {
                 entry.getValue().setDistanceTriggerCalculator(distanceTraceModule);
             }
+            executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
         }
 
         
@@ -310,6 +310,8 @@ public class CommunicationState extends AbstractAppState {
             if(e1 ==null ) {
                 //if not create a new one
                 ModemMessageRunnable runnable = new ModemMessageRunnable(5.6f,RESOLUTION,msg.getAuvName(),auvManager.getAUV(msg.getAuvName()));
+                runnable.init();
+                runnable.setDistanceTriggerCalculator(distanceTraceModule);
                 auvProcessMap.put(msg.getAuvName(), runnable);
                 executor.scheduleAtFixedRate(runnable, 1000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 e1 = runnable;

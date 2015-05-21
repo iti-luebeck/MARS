@@ -8,6 +8,7 @@ package mars.uwCommManager.threading.raytracing;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mars.auv.AUV;
+import mars.misc.Collider;
 import mars.uwCommManager.helpers.DistanceTrigger;
 
 /**
@@ -19,7 +20,7 @@ public class BouncingTrace {
     private final int MAX_BOUNCES;
     private int floorBounceCounter;
     private int surfaceBounceCounter;
-    private float temperature;
+    private float speedOfSound;
     
     private Vector3f rootAUVPosition = null;
     private Vector3f targetAUVPosition = null;
@@ -27,23 +28,25 @@ public class BouncingTrace {
     private AUV rootAUV;
     private AUV targetAUV;
     
-    Node sceneRootNode = null;
+    Collider collider;
+
     
     public BouncingTrace(final int MAX_BOUNCES) {
         this.MAX_BOUNCES = MAX_BOUNCES;
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
+        
     }
     
     
-    public boolean init(AUV rootAUV, AUV targetAUV, Vector3f rootAUVPosition, Vector3f targetAUVPosition, Node sceneRootNode, float temperature) {
+    public boolean init(AUV rootAUV, AUV targetAUV, Vector3f rootAUVPosition, Vector3f targetAUVPosition, Collider collider, float speedOfSound) {
         if(rootAUV == null || targetAUV == null || rootAUVPosition == null || targetAUVPosition == null) return false;
         this.rootAUV = rootAUV; 
         this.targetAUV = targetAUV;
         this.rootAUVPosition = rootAUVPosition;
         this.targetAUVPosition = targetAUVPosition;
-        this.sceneRootNode = sceneRootNode;
-        this.temperature = temperature;
+        this.collider = collider;
+        this.speedOfSound = speedOfSound;
         return true;
     }
     
@@ -75,7 +78,7 @@ public class BouncingTrace {
         direction = direction.normalize();
         direction.setZ(direction.getZ()*(-1f));
         //create a distanceTrigger;
-        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,temperature,false);
+        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,speedOfSound,false);
         
         
         

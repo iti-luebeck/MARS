@@ -43,6 +43,8 @@ public class DirectTrace implements Runnable {
 
     private boolean debug;
     private Node debugNode;
+    final int MAX_REFLECTION;
+    final private float SPEED_OF_SOUND;
 
     /**
      * Initialize the basic stuff
@@ -50,12 +52,14 @@ public class DirectTrace implements Runnable {
      * @since 0.1
      * @param triggerCalc
      */
-    public DirectTrace(DistanceTriggerCalculator triggerCalc) {
+    public DirectTrace(DistanceTriggerCalculator triggerCalc, int maxReflectionCount,float speedOfSound) {
         simState = null;
         auvManager = null;
         distanceTriggers = null;
         auvName = null;
         this.triggerCalc = triggerCalc;
+        this.MAX_REFLECTION = maxReflectionCount;
+        this.SPEED_OF_SOUND = speedOfSound;
     }
 
     /**

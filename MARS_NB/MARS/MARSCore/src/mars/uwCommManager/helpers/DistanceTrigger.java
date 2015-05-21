@@ -55,13 +55,13 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @param surfaceBounces count of collisions with the ocean surface
      * @param floorBounces count of collisions with the ocean floor
      */
-    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces, final float temperature, final boolean hitAUV) {
+    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces, final float speedOfSound, final boolean hitAUV) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = surfaceBounces;
         this.FLOOR_BOUNCES = floorBounces;
         this.hitAUV = hitAUV;
-        TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
+        TRAVEL_TIME = (long)(distance / speedOfSound*1000);
     }
     /**
      * @since 0.1

@@ -45,6 +45,8 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
+        jSlider2 = new javax.swing.JSlider();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jLabel4.text")); // NOI18N
 
@@ -91,6 +93,14 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jCheckBox4.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(CommunicationConfigurationPanel.class, "CommunicationConfigurationPanel.jLabel8.text")); // NOI18N
+
+        jSlider2.setMajorTickSpacing(1);
+        jSlider2.setMaximum(5);
+        jSlider2.setPaintLabels(true);
+        jSlider2.setPaintTicks(true);
+        jSlider2.setSnapToTicks(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,8 +121,14 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(195, 195, 195)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel8)
+                                                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGap(53, 53, 53)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5)
                                             .addGroup(layout.createSequentialGroup()
@@ -129,7 +145,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                                                     .addComponent(jLabel7)
                                                     .addComponent(jCheckBox1)
                                                     .addComponent(jCheckBox4))))))
-                                .addGap(0, 140, Short.MAX_VALUE)))
+                                .addGap(0, 117, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -144,11 +160,17 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox2)
+                        .addGap(10, 10, 10)
+                        .addComponent(jRadioButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -159,7 +181,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
                 .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -178,6 +200,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // or:
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
         jSlider1.setValue(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getInt(OPTIONS_THREADCOUNT_SLIDER, 3));
+        jSlider2.setValue(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getInt(OPTIONS_REFLECTION_COUNT_SLIDER , 1));
         jCheckBox1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MAIN_SHOW_ACTIVE_LINKS_CHECKBOX, false));
         jCheckBox2.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false));
         jRadioButton1.setSelected(Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON, true));
@@ -197,6 +220,7 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
         // or:
         // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putInt(OPTIONS_THREADCOUNT_SLIDER, jSlider1.getValue());
+        Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putInt(OPTIONS_REFLECTION_COUNT_SLIDER, jSlider2.getValue());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, jCheckBox2.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON, jRadioButton1.isSelected());
         Preferences.userNodeForPackage(CommunicationConfigurationOptionsPanelController.class).putBoolean(OPTIONS_MINIMAP_OPAQUE_CIRCLE, jRadioButton2.isSelected());
@@ -236,9 +260,11 @@ final class CommunicationConfigurationPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSlider jSlider1;
+    private javax.swing.JSlider jSlider2;
     // End of variables declaration//GEN-END:variables
 }
