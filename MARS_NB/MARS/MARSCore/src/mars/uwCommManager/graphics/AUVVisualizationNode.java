@@ -141,6 +141,20 @@ public class AUVVisualizationNode implements TriggerEventListener {
         //make root of the visualisation visible
         visRootNode.rotate(visRootNode.getWorldRotation().inverse());
         visRootNode.setCullHint(Spatial.CullHint.Never);
+        //First off: show all traces that are in action
+        computeHitEvents();
+        //Now we take the connections that are broken because out of range and hide every line that belongs to them
+        computeOOREvents();
+        //Next: the blocked traces
+        computeBlockedEvents();
+    }
+    
+    /**
+     * compute and visualize all hit events since last mainloop
+     * @since 0.3
+     */
+    public void computeHitEvents() {
+                
         List<TraceHitAUVEvent> copyList;
         synchronized (this) {
             copyList = new LinkedList(traceHitEventQueue);
@@ -155,7 +169,6 @@ public class AUVVisualizationNode implements TriggerEventListener {
 
         //for every trace that was computed in the last cycle
         for (TraceHitAUVEvent e : copyList) {
-
 
             //The name of the Node containing all connections to the target AUV
             String connectionNodeName = name + "-" + e.getTargetAUVName();
@@ -199,7 +212,12 @@ public class AUVVisualizationNode implements TriggerEventListener {
             line.updatePoints(e.getTraces().get(0), e.getTraces().get(1));
             connectionNode.setCullHint(Spatial.CullHint.Inherit);
         }
-        //Now we take the connections that are broken because out of range and hide every line that belongs to them
+    }
+    /**
+     * compute all out of range Events, make all invisible traces cull
+     * @since 0.3
+     */
+    public void computeOOREvents() {
         List<String> outOfRangeCopy;
         synchronized (this) {
             outOfRangeCopy = new LinkedList(outOfRangeAUVs);
@@ -213,7 +231,13 @@ public class AUVVisualizationNode implements TriggerEventListener {
                 connectionMap.get(outOfRangeAUV).setCullHint(Spatial.CullHint.Always);
             }
         }
-        //Next: the blocked traces
+    }
+    
+    /**
+     * Compute all blocked paths and set their culling to always
+     * @since 0.3
+     */
+    public void computeBlockedEvents() {
         List<TraceBlockedEvent> blockedTraceQueueCopy;
         synchronized (this) {
             blockedTraceQueueCopy = new LinkedList(traceBlockedEventQueue);

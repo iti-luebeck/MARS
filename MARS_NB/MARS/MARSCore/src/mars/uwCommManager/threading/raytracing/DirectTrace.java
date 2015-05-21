@@ -5,6 +5,7 @@
  */
 package mars.uwCommManager.threading.raytracing;
 
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.Ray;
@@ -119,7 +120,7 @@ public class DirectTrace implements Runnable {
             //retrieve the AUV object
             String targetAUVName = trigger.getAUVName();
             AUV targetAUV = auvs.get(targetAUVName);
-            
+
             //Get the CommunicationSensors
             ArrayList uwmo = rootAUV.getSensorsOfClass(CommunicationDevice.class.getName());
             ArrayList uwmoTarget = targetAUV.getSensorsOfClass(CommunicationDevice.class.getName());
@@ -152,18 +153,32 @@ public class DirectTrace implements Runnable {
 
                     //rootNode.collideWith(ray, results);
                     simState.getCollider().collideWith(ray, results);
-                    if (results.size() == 0 || results.getClosestCollision().getDistance() >= direction.mult(0.9f).length() - 1) {
+                    if (results.size() == 0) {
                         traceList.add(direction);
                         //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
                         triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
                     } else {
-                        removedTriggers.add(trigger);
-                        traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
-                        //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                        triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
-
+                        for (CollisionResult res : results) {
+                            if (res.getDistance() > direction.length()) {
+                                traceList.add(direction);
+                                //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
+                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
+                                break;
+                            } else if (res.getGeometry().getUserData("auv_name") == null) {
+                                removedTriggers.add(trigger);
+                                traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                                //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
+                                triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
+                                break;
+                            } else {
+                                removedTriggers.add(trigger);
+                                traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                                //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
+                                triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
+                                break;
+                            }
+                        }
                     }
-
                     //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                 }
             }
