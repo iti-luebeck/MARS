@@ -32,19 +32,23 @@ public class BouncingTrace {
     
     private AUV rootAUV;
     private AUV targetAUV;
+    private final DirectTrace father;
     
     Collider collider;
     
     private boolean oceanFloorFlat;
+    private boolean debug;
     
 
-    public BouncingTrace(final int MAX_BOUNCES, float speedOfSound, float maxRange) {
+    public BouncingTrace(DirectTrace father, final int MAX_BOUNCES, float speedOfSound, float maxRange) {
         this.MAX_BOUNCES = MAX_BOUNCES;
         this.SPEED_OF_SOUND = speedOfSound;
         this.MAX_RANGE = maxRange;
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
         oceanFloorFlat = true;
+        this.father = father;
+        debug = true;
     }
     
     
@@ -75,42 +79,63 @@ public class BouncingTrace {
     }
     
     
-    public synchronized DistanceTrigger nextBouncingRayTrace() {
+    public synchronized DistanceTrigger nextBouncingRayTrace(final boolean startDown) {
         
+        if(!startDown&&rootAUVPosition.y == 0f) return null;
         float distance = 0;
         float depthAtRoot = calculateWaterDepth(rootAUVPosition);
         float depthAtTarget = 0f;
         if(oceanFloorFlat) depthAtTarget = depthAtRoot;
         else depthAtTarget = calculateWaterDepth(targetAUVPosition);
         
+        float waterDepth = depthAtRoot+rootAUVPosition.y;
+        
         
         int bounces = 1;
-        boolean down = false;
+        boolean directionDown = startDown;
         float virtualHeight = 0f;
-        if(surfaceBounceCounter<=floorBounceCounter) {
-            //set virtualHeight to the distance of the surface
-        } else {
-            down = true;
-            //set virtualHeight to the distance of the ocean floor
+        if(directionDown) {
+            virtualHeight = waterDepth;
+            if(virtualHeight == 0f) return null;
         }
+        
+        
+        directionDown = !directionDown;
         while(bounces < MAX_BOUNCES) {
-            //add the distance between the surface and the floor MAX_BOUNCES -1 times
-            // to virtualHeight
+            virtualHeight += waterDepth;
+            bounces++;
+            directionDown = !directionDown;
         }
+        
+        if(directionDown) {
+            if(targetAUVPosition.y == 0f) return null;
+            virtualHeight -=targetAUVPosition.y;
+            
+        } else virtualHeight +=depthAtTarget;
+        
         //create a vector with our virtual position to get the direction of the vector.
         Vector3f virtualPosition = rootAUVPosition.clone();
-        virtualPosition.setX(virtualHeight);
+        virtualPosition.setY(virtualHeight);
         //obtain the direction vector
         Vector3f direction = targetAUVPosition.subtract(virtualPosition);
         distance = direction.length();
-        // flip the direction vector on the xy-plane and normalize it
-        direction = direction.normalize();
-        direction.setZ(direction.getZ()*(-1f));
+        
+        if(debug) {
+            if(distance >MAX_RANGE)
+            father.debugTrace(rootAUV.getName(), targetAUV.getName(),MAX_BOUNCES + "-" +startDown, direction.normalize(), virtualPosition);
+            else father.debugTrace(rootAUV.getName(), targetAUV.getName(),MAX_BOUNCES + "-" +startDown, direction, virtualPosition);
+        }
+        if(distance >MAX_RANGE) return null;
+
         //create a distanceTrigger;
         DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,SPEED_OF_SOUND,false);
         
         
         
         return returnTrigger;
+    }
+    
+    public void toggleDebug() {
+        debug = !debug;
     }
 }

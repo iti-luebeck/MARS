@@ -150,7 +150,7 @@ public class DirectTrace implements Runnable {
                     Vector3f direction = targetModPos.subtract(modPos);;
                     /////////////////////////////START DEBUG CODE
                     if (debug) {
-                        debugTrace(rootAUVName, targetAUVName, direction, modPos);
+                        debugTrace(rootAUVName, targetAUVName,"direct", direction, modPos);
                     }
                     ///////////////////////////////END DEBUG CODE
                     //raytrace the connection
@@ -186,8 +186,9 @@ public class DirectTrace implements Runnable {
                             }
                         }
                     }
-                    BouncingTrace bTrace = new BouncingTrace(1, SPEED_OF_SOUND, MAX_DISTANCE);
+                    BouncingTrace bTrace = new BouncingTrace(this,5, SPEED_OF_SOUND, MAX_DISTANCE);
                     bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
+                    bTrace.nextBouncingRayTrace(false);
                     //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                 }
             }
@@ -205,8 +206,8 @@ public class DirectTrace implements Runnable {
      * @param direction
      * @param modPos
      */
-    private void debugTrace(String rootAUVName, String targetAUVName, final Vector3f direction, final Vector3f modPos) {
-        String debugName = rootAUVName + "-" + targetAUVName;
+    void debugTrace(String rootAUVName, String targetAUVName, String suffix, final Vector3f direction, final Vector3f modPos) {
+        String debugName = rootAUVName + "-" + targetAUVName+ "-"+suffix;
         if (debugNode.getChild(debugName) == null && !triggerCalc.debugAUVRouteInInit(debugName)) {
             triggerCalc.setDebugAUVRoute(debugName);
             Arrow arrow = new Arrow(direction);
