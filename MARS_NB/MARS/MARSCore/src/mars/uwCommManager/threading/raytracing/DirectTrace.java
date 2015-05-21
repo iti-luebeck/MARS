@@ -152,20 +152,19 @@ public class DirectTrace implements Runnable {
 
                     //rootNode.collideWith(ray, results);
                     simState.getCollider().collideWith(ray, results);
-                    if (results.size() != 0) {
-                        if (results.getClosestCollision().getDistance() < direction.mult(0.9f).length() - 1) {
-                            removedTriggers.add(trigger);
-                            traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
-                            //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                            triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
-                        } else {
-                            traceList.add(direction);
-                            //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                            triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
-                        }
+                    if (results.size() == 0 || results.getClosestCollision().getDistance() >= direction.mult(0.9f).length() - 1) {
+                        traceList.add(direction);
+                        //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
+                        triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
+                    } else {
+                        removedTriggers.add(trigger);
+                        traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                        //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
+                        triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
 
-                        //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                     }
+
+                    //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                 }
             }
             //System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());

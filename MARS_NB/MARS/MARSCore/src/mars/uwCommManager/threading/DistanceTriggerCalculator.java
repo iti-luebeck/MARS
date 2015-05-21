@@ -184,7 +184,7 @@ public class DistanceTriggerCalculator implements Runnable {
         for(Map.Entry<String,List<DistanceTrigger>> e : distanceMap.entrySet()) {
             DirectTrace trace = new DirectTrace(this);
             if(debug) trace.init(simState, auvManager, e.getKey(), e.getValue(),true,debugNode);
-            else trace.init(simState, auvManager, e.getKey(), e.getValue(),true,null);
+            else trace.init(simState, auvManager, e.getKey(), e.getValue(),false,null);
             executor.schedule(trace, 0, TimeUnit.MICROSECONDS);
         }
     }
