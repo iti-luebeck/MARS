@@ -119,7 +119,7 @@ public class DirectTrace implements Runnable {
             //retrieve the AUV object
             String targetAUVName = trigger.getAUVName();
             AUV targetAUV = auvs.get(targetAUVName);
-
+            
             //Get the CommunicationSensors
             ArrayList uwmo = rootAUV.getSensorsOfClass(CommunicationDevice.class.getName());
             ArrayList uwmoTarget = targetAUV.getSensorsOfClass(CommunicationDevice.class.getName());
@@ -168,10 +168,9 @@ public class DirectTrace implements Runnable {
                 }
             }
             //System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
-            distanceTriggers.removeAll(removedTriggers);
-            triggerCalc.updateTraceMap(auvName, distanceTriggers);
-
         }
+        distanceTriggers.removeAll(removedTriggers);
+        triggerCalc.updateTraceMap(auvName, distanceTriggers);
     }
 
     /**
