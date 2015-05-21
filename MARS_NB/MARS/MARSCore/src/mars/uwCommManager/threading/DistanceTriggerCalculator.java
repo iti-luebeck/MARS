@@ -65,6 +65,7 @@ public class DistanceTriggerCalculator implements Runnable {
     private final TriggerEventGenerator eventGen;
     
     private Map<String,Float> speedOfSoundMap;
+    private Map<String,Float> maxRangeMap;
 
     
     private boolean debug;
@@ -85,6 +86,7 @@ public class DistanceTriggerCalculator implements Runnable {
         eventGen = new TriggerEventGenerator();
         speedOfSoundMap = new HashMap();
         maxReflectionCount = 0;
+        maxRangeMap = new HashMap();
     }
     
     /**
@@ -152,6 +154,7 @@ public class DistanceTriggerCalculator implements Runnable {
                         //For every commucation device in #1
                         while(it.hasNext()){
                         CommunicationDevice mod = (CommunicationDevice)it.next();
+                        maxRangeMap.put(elem, mod.getPropagationDistance());
                         
                             //Check if it is a modem
                             if(mod instanceof UnderwaterModem) {
@@ -193,8 +196,7 @@ public class DistanceTriggerCalculator implements Runnable {
             }
         }
         for(Map.Entry<String,List<DistanceTrigger>> e : distanceMap.entrySet()) {
-            if(speedOfSoundMap.get(e.getKey())== null) speedOfSoundMap.put(e.getKey(), 1500f);
-            DirectTrace trace = new DirectTrace(this, maxReflectionCount, speedOfSoundMap.get(e.getKey()));
+            DirectTrace trace = new DirectTrace(this, maxReflectionCount, speedOfSoundMap.getOrDefault(e.getKey(),1500f),maxRangeMap.getOrDefault(e.getKey(), 10f));
             if(debug) trace.init(simState, auvManager, e.getKey(), e.getValue(),true,debugNode);
             else trace.init(simState, auvManager, e.getKey(), e.getValue(),false,null);
             executor.schedule(trace, 0, TimeUnit.MICROSECONDS);

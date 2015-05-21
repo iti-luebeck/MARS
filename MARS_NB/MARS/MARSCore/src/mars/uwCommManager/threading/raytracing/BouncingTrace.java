@@ -18,9 +18,11 @@ import mars.uwCommManager.helpers.DistanceTrigger;
 public class BouncingTrace {
     
     private final int MAX_BOUNCES;
+    private final float MAX_RANGE;
+    private final float SPEED_OF_SOUND;
     private int floorBounceCounter;
     private int surfaceBounceCounter;
-    private float speedOfSound;
+
     
     private Vector3f rootAUVPosition = null;
     private Vector3f targetAUVPosition = null;
@@ -31,22 +33,23 @@ public class BouncingTrace {
     Collider collider;
 
     
-    public BouncingTrace(final int MAX_BOUNCES) {
+    public BouncingTrace(final int MAX_BOUNCES, float speedOfSound, float maxRange) {
         this.MAX_BOUNCES = MAX_BOUNCES;
+        this.SPEED_OF_SOUND = speedOfSound;
+        this.MAX_RANGE = maxRange;
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
         
     }
     
     
-    public boolean init(AUV rootAUV, AUV targetAUV, Vector3f rootAUVPosition, Vector3f targetAUVPosition, Collider collider, float speedOfSound) {
+    public boolean init(AUV rootAUV, AUV targetAUV, Vector3f rootAUVPosition, Vector3f targetAUVPosition, Collider collider) {
         if(rootAUV == null || targetAUV == null || rootAUVPosition == null || targetAUVPosition == null) return false;
         this.rootAUV = rootAUV; 
         this.targetAUV = targetAUV;
         this.rootAUVPosition = rootAUVPosition;
         this.targetAUVPosition = targetAUVPosition;
         this.collider = collider;
-        this.speedOfSound = speedOfSound;
         return true;
     }
     
@@ -78,7 +81,7 @@ public class BouncingTrace {
         direction = direction.normalize();
         direction.setZ(direction.getZ()*(-1f));
         //create a distanceTrigger;
-        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,speedOfSound,false);
+        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,SPEED_OF_SOUND,false);
         
         
         
