@@ -106,8 +106,9 @@ public class DirectTrace implements Runnable {
         if (simState == null) {
             return;
         }
-        final Node rootNode = simState.getSceneReflectionNode();
-
+        if(auvName.equals("jasper")) {
+            System.out.println("Ich bin jetzt laura");
+        }
         //get all auvs to retrieve their position later on
         HashMap<String, AUV> auvs = auvManager.getAUVs();
         //For every AUV that has any other auvs in range
@@ -142,14 +143,14 @@ public class DirectTrace implements Runnable {
                     Vector3f targetModPos = targetMod.getWorldPosition();
 
                     //calculate the vector between the two modems
-                    Vector3f direction = targetModPos.subtract(modPos).normalizeLocal();
+                    Vector3f direction = targetModPos.subtract(modPos);;
                     /////////////////////////////START DEBUG CODE
                     if (debug) {
-                        //debugTrace(rootAUVName, targetAUVName, direction, modPos);
+                        debugTrace(rootAUVName, targetAUVName, direction, modPos);
                     }
                     ///////////////////////////////END DEBUG CODE
                     //raytrace the connection
-                    Ray ray = new Ray(modPos, direction);
+                    Ray ray = new Ray(modPos, direction.normalize());
                     CollisionResults results = new CollisionResults();
 
                     //rootNode.collideWith(ray, results);
@@ -158,9 +159,11 @@ public class DirectTrace implements Runnable {
                         if (results.getClosestCollision().getDistance() < direction.mult(0.9f).length() - 1) {
                             removedTriggers.add(trigger);
                             traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                            System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
                             triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
                         } else {
                             traceList.add(direction);
+                            System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
                             triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
                         }
 
