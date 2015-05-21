@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
+import mars.Helper.SoundHelper;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
@@ -60,9 +61,11 @@ public class DistanceTriggerCalculator implements Runnable {
     
     private final SimState simState;
     
-    private TriggerEventGenerator eventGen;
+    private final TriggerEventGenerator eventGen;
     
-        
+    private Map<String,Float> speedOfSoundMap;
+
+    
     private boolean debug;
     private Node debugNode;
     private List<String> debugStringList;
@@ -77,6 +80,7 @@ public class DistanceTriggerCalculator implements Runnable {
         this.simState = simState;
         this.executor = executor;
         eventGen = new TriggerEventGenerator();
+        speedOfSoundMap = new HashMap();
     }
     
     /**
@@ -162,7 +166,10 @@ public class DistanceTriggerCalculator implements Runnable {
                                         
                                         //Check distance, if close enough add to the triggermap
                                         if(Math.abs(distance.length())<=mod.getPropagationDistance()) {
-                                            newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName,temperature));
+                                            float speedOfSound;
+                                            if(speedOfSoundMap.containsKey(elem)) speedOfSound = speedOfSoundMap.get(elem);
+                                            else speedOfSound = SoundHelper.getUnderWaterSoundSpeedMarczak(temperature);
+                                            newDistanceTriggers.add(new DistanceTrigger(Math.abs(distance.length()), targetName,temperature,speedOfSound));
                                         } else {
                                             eventGen.fireNewTriggerOutOfRangeEvent(this, elem, targetName);
                                         }
@@ -277,5 +284,7 @@ public class DistanceTriggerCalculator implements Runnable {
         return true;
     }
     
-    
+    public void setSpeedOfSound(String auv, float speed) {
+        this.speedOfSoundMap.put(auv, speed);
+    }
 }

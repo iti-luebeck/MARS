@@ -115,10 +115,11 @@ public class CommunicationDataChunk {
      * Only distances are longer then the already traveled distance will be added.
      * @since 0.1
      * @param triggerDistance the distance to the AUV
+     * @deprecated
      */
-    public synchronized void addtriggerDistance(float triggerDistance, String AUV, float temperature) {
+    public synchronized void addtriggerDistance(float triggerDistance, String AUV, float temperature,float speedOfSound) {
         if(triggerDistance>=distanceTraveled) {
-            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV, temperature));
+            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV, temperature,speedOfSound));
         }
     }
     

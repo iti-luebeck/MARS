@@ -117,7 +117,6 @@ public class CommunicationState extends AbstractAppState {
         super.initialize(stateManager, app); 
         if(app instanceof MARS_Main){
             this.app = (MARS_Main)app;
-           
         }
         
         
@@ -179,6 +178,9 @@ public class CommunicationState extends AbstractAppState {
             distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
             distanceTraceModule.init(auvManager);
             executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
+            for(Map.Entry<String,ModemMessageRunnable> entry : auvProcessMap.entrySet()) {
+                entry.getValue().setDistanceTriggerCalculator(distanceTraceModule);
+            }
         }
 
         

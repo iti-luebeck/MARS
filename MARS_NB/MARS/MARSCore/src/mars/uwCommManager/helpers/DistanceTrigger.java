@@ -37,13 +37,13 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @param distance the distance to the AUV
      * @param auvName the name of the AUV
      */
-    public DistanceTrigger(final float distance, final String auvName, final float temperature) {
+    public DistanceTrigger(final float distance, final String auvName, final float temperature,final float speedOfSound) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = 0;
         this.FLOOR_BOUNCES = 0;
         this.hitAUV = false;
-        TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
+        TRAVEL_TIME = (long)(distance / speedOfSound*1000);
     }
     
     

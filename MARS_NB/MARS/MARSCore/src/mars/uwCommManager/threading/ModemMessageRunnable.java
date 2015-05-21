@@ -23,7 +23,6 @@ import mars.uwCommManager.helpers.DataChunkIdentifier;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
 import mars.uwCommManager.options.CommOptionsConstants;
-import mars.uwCommManager.options.NoiseOptionsOptionsPanelController;
 import org.openide.util.Exceptions;
 import static mars.Helper.SoundHelper.*;
 import mars.PhysicalEnvironment;
@@ -33,7 +32,6 @@ import mars.sensors.CommunicationDevice;
 import mars.states.SimState;
 import mars.uwCommManager.noiseGenerators.AdditiveGaussianWhiteNoise;
 import mars.uwCommManager.noiseGenerators.NoiseNameConstants;
-import org.jboss.netty.handler.codec.http.HttpMethod;
 
 /**
  * The new runnable is to be used with the Executer class from java.util.concurrent
@@ -78,7 +76,7 @@ public class ModemMessageRunnable implements Runnable{
     private float speedOfSound;
     
     /**
-     * chunks that could not yet be sent due to bandwidthlimitation
+     * chunks that could not yet be sent due to bandwidth-limitation
      */
     private LinkedList<CommunicationDataChunk> waitingChunks;
     
@@ -106,9 +104,10 @@ public class ModemMessageRunnable implements Runnable{
     
     
     private volatile List<ANoiseByDistanceGenerator> noiseGenerators = null;
-    float windspeed;
-    float shippingFactor;
+    private float windspeed;
+    private float shippingFactor;
     
+    private DistanceTriggerCalculator triggerCalculator;
     
     /**
      * Construct a new CommuncationExecutorRunnable for a AUV
@@ -213,6 +212,9 @@ public class ModemMessageRunnable implements Runnable{
                 break;
             default: speedOfSound = getUnderWaterSoundSpeedLubberGraaffA(env.getFluid_temp());
                 break;
+        }
+        if(triggerCalculator != null) {
+            triggerCalculator.setSpeedOfSound(AUV_NAME, speedOfSound);
         }
     }
 
@@ -389,6 +391,10 @@ public class ModemMessageRunnable implements Runnable{
             }
         }
         if(toBeRemoved != null) noiseGenerators.remove(toBeRemoved);
+    }
+    
+    public void setDistanceTriggerCalculator(DistanceTriggerCalculator triggerCalc) {
+        this.triggerCalculator = triggerCalc;
     }
     
 }
