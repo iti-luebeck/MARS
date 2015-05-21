@@ -217,6 +217,8 @@ public class AUVVisualizationNode implements TriggerEventListener {
                     traceGeom = (Geometry) traceNode.getChild(traceGeomName);                        
                     Line line = (Line) traceGeom.getMesh();
                     line.updatePoints(start, end);
+                    if(e.getHitAUV()) traceGeom.getMaterial().setColor("Color", ColorRGBA.Pink);
+                    else traceGeom.getMaterial().setColor("Color", ColorRGBA.Yellow);
                     start = new Vector3f(end);
                     if (i < e.getTraces().size() - 2) {
                         end = new Vector3f(e.getTraces().get(i + 2));

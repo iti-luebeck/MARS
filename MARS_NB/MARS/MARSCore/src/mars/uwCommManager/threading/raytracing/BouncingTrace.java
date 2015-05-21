@@ -75,7 +75,7 @@ public class BouncingTrace {
         direction = direction.normalize();
         direction.setZ(direction.getZ()*(-1f));
         //create a distanceTrigger;
-        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,temperature);
+        DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter,temperature,false);
         
         
         

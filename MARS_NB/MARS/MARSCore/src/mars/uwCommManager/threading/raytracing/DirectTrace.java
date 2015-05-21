@@ -156,13 +156,13 @@ public class DirectTrace implements Runnable {
                     if (results.size() == 0) {
                         traceList.add(direction);
                         //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                        triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
+                        triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,false);
                     } else {
                         for (CollisionResult res : results) {
                             if (res.getDistance() > direction.length()) {
                                 traceList.add(direction);
                                 //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true);
+                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,false);
                                 break;
                             } else if (res.getGeometry().getUserData("auv_name") == null) {
                                 removedTriggers.add(trigger);
@@ -171,10 +171,11 @@ public class DirectTrace implements Runnable {
                                 triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
                                 break;
                             } else {
+                                trigger.hitAUV();
                                 removedTriggers.add(trigger);
-                                traceList.add(direction.normalize().mult(results.getClosestCollision().getDistance()));
+                                traceList.add(direction);
                                 //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                                triggerCalc.getEventGenerator().fireNewTraBlockedEvent(this, rootAUVName, targetAUVName, traceList, true);
+                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,true);
                                 break;
                             }
                         }

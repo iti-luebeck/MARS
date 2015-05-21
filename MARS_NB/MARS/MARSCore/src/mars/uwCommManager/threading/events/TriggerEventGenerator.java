@@ -53,8 +53,8 @@ public class TriggerEventGenerator {
     }
     
     
-    public void fireNewTraceHitAUVEvent(Object source, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst) {
-        ATriggerEvent e = new TraceHitAUVEvent(source, CommunicationEventConstants.TRACE_HIT_AUV_EVENT, sourceAUVName, targetAUVName, traces,surfaceFirst);
+    public void fireNewTraceHitAUVEvent(Object source, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst,boolean hitAUV) {
+        ATriggerEvent e = new TraceHitAUVEvent(source, CommunicationEventConstants.TRACE_HIT_AUV_EVENT, sourceAUVName, targetAUVName, traces,surfaceFirst,hitAUV);
         fireEvent(e);
     }
     

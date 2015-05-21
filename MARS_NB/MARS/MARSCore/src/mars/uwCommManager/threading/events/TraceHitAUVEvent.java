@@ -19,13 +19,15 @@ public class TraceHitAUVEvent extends ATriggerEvent{
     private final String targetAUVName;
     private final boolean surfaceFirst;
     private final List<Vector3f> traces;
+    private final boolean hitAUV;
 
-    public TraceHitAUVEvent(Object source,final int EVENT_ID, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst) {
+    public TraceHitAUVEvent(Object source,final int EVENT_ID, String sourceAUVName, String targetAUVName, List<Vector3f> traces,boolean surfaceFirst,boolean hitAUV) {
         super(source, EVENT_ID);
         this.sourceAUVName = sourceAUVName;
         this.targetAUVName = targetAUVName;
         this.traces = traces;
         this.surfaceFirst = surfaceFirst;
+        this.hitAUV = hitAUV;
     }
     
     
@@ -45,6 +47,9 @@ public class TraceHitAUVEvent extends ATriggerEvent{
         return surfaceFirst;
     }
     
+    public boolean getHitAUV() {
+        return hitAUV;
+    }
     
     
 }

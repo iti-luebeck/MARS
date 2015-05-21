@@ -28,6 +28,8 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
     
     private final long TRAVEL_TIME;
     
+    private boolean hitAUV;
+    
     /**
      * 
      * Create a new distanceTrigger with a given distance and a AUV that is found at that distance
@@ -40,6 +42,7 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = 0;
         this.FLOOR_BOUNCES = 0;
+        this.hitAUV = false;
         TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     
@@ -52,11 +55,12 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      * @param surfaceBounces count of collisions with the ocean surface
      * @param floorBounces count of collisions with the ocean floor
      */
-    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces, final float temperature) {
+    public DistanceTrigger(final float distance, final String auvName, final int surfaceBounces, final int floorBounces, final float temperature, final boolean hitAUV) {
         this.AUV_NAME = auvName;
         this.DISTANCE = distance;
         this.SURFACE_BOUNCES = surfaceBounces;
         this.FLOOR_BOUNCES = floorBounces;
+        this.hitAUV = hitAUV;
         TRAVEL_TIME = (long)(distance / SoundHelper.getUnderWaterSoundSpeedMarczak(temperature))*1000;
     }
     /**
@@ -111,5 +115,22 @@ public final class DistanceTrigger implements Comparable<DistanceTrigger>{
      */
     public long getTraveTimel() {
         return TRAVEL_TIME;
+    }
+    
+    /**
+     * 
+     * @since 0.2
+     * @return If this trace hit an AUV different from its target
+     */
+    public boolean gethitAUV() {
+        return hitAUV;
+    }
+    
+    /**
+     * Warning you can not undo this
+     * @since 0.3
+     */
+    public void hitAUV() {
+        hitAUV = true;
     }
 }
