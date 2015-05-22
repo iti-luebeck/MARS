@@ -670,6 +670,8 @@ public class MARS_Main extends SimpleApplication {
                 if (stateManager.getState(SimState.class) != null) {
                     SimState simState = stateManager.getState(SimState.class);
                     simState.setEnabled(false);
+                    CentralLookup.getDefault().remove(simState.getAuvManager());
+                    CentralLookup.getDefault().remove(simState.getSimob_manager());
                     CentralLookup.getDefault().remove(simState);
                     stateManager.detach(simState);
                     simState = null;
