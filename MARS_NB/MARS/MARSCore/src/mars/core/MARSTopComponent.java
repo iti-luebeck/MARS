@@ -1713,6 +1713,7 @@ public final class MARSTopComponent extends TopComponent {
 
         //set the toolbar positions
         ToolbarPool.getDefault().setConfiguration("MyToolbar");
+        ToolbarPool.getDefault().setPreferredIconSize(24);
         
         //redirect sysout to output window
         redirectSystemStreams();

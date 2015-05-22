@@ -69,6 +69,28 @@ public class AdvancedFlyByCamera extends FlyByCamera {
             cam.setAxes(q);
         }
     }
+    
+    /**
+     * 
+     * @param value
+     */
+    @Override
+    protected void zoomCamera(float value){
+        Vector3f vel = new Vector3f();
+        Vector3f pos = cam.getLocation().clone();
+        
+        cam.getDirection(vel);
+
+        vel.multLocal(value * zoomSpeed);
+
+        if (motionAllowed != null)
+            motionAllowed.checkMotionAllowed(pos, vel);
+        else
+            pos.addLocal(vel);
+
+        cam.setLocation(pos);
+    }
+
 
     /**
      *
@@ -92,4 +114,43 @@ public class AdvancedFlyByCamera extends FlyByCamera {
             }
         }
     }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     * @param tpf 
+     */
+    @Override
+    public void onAnalog(String name, float value, float tpf) {
+        if (!enabled)
+            return;
+
+        if (name.equals("FLYCAM_Left")){
+            rotateCamera(value, initialUpVec);
+        }else if (name.equals("FLYCAM_Right")){
+            rotateCamera(-value, initialUpVec);
+        }else if (name.equals("FLYCAM_Up")){
+            rotateCamera(-value, cam.getLeft());
+        }else if (name.equals("FLYCAM_Down")){
+            rotateCamera(value, cam.getLeft());
+        }else if (name.equals("FLYCAM_Forward")){
+            moveCamera(value, false);
+        }else if (name.equals("FLYCAM_Backward")){
+            moveCamera(-value, false);
+        }else if (name.equals("FLYCAM_StrafeLeft")){
+            moveCamera(value, true);
+        }else if (name.equals("FLYCAM_StrafeRight")){
+            moveCamera(-value, true);
+        }else if (name.equals("FLYCAM_Rise")){
+            riseCamera(value);
+        }else if (name.equals("FLYCAM_Lower")){
+            riseCamera(-value);
+        }else if (name.equals("FLYCAM_ZoomIn")){
+            zoomCamera(value);
+        }else if (name.equals("FLYCAM_ZoomOut")){
+            zoomCamera(-value);
+        }
+    }
+
 }

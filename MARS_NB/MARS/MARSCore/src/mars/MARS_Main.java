@@ -152,7 +152,7 @@ public class MARS_Main extends SimpleApplication {
         advFlyCam = new AdvancedFlyByCamera(cam);
         advFlyCam.setDragToRotate(true);
         advFlyCam.setEnabled(false);
-        advFlyCam.setZoomSpeed(5f);
+        advFlyCam.setZoomSpeed(2f);
         advFlyCam.registerWithInput(inputManager);
 
         if (configManager.isAutoEnabled()) {

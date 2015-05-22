@@ -125,7 +125,11 @@ public final class MARSChartTopComponent extends TopComponent {
      */
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        cleanup();
+    }
+    
+    private void cleanup(){
+        
     }
 
     void writeProperties(java.util.Properties p) {
