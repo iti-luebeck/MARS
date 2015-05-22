@@ -351,25 +351,7 @@ public class GuiState extends AbstractAppState {
                     selected_simob.hideGhostSpatial(false);
                 }
             } else if (name.equals("moveauv") && !keyPressed) {
-                AUV selected_auv = auvManager.getSelectedAUV();
-                mars.getFlyByCamera().setEnabled(true);
-                if (selected_auv != null) {
-                    selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
-                    Spatial ghostObject = guiControlState.getGhostObject();
-                    if(ghostObject !=null){
-                       ghostObject.setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
-                    }
-                    selected_auv.hideGhostAUV(true);
-                }
-
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if (selected_simob != null) {
-                    selected_simob.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
-                    selected_simob.hideGhostSpatial(true);
-                }
-                guiControlState.setDepth_iteration(0);
-                guiControlState.setMove_auv(false);
-                guiControlState.setMove_simob(false);
+                moveauvOff();
             } else if (name.equals("rotateauv") && keyPressed) {
                 AUV selected_auv = auvManager.getSelectedAUV();
                 mars.getFlyByCamera().setEnabled(false);
@@ -391,26 +373,52 @@ public class GuiState extends AbstractAppState {
                 }
 
             } else if (name.equals("rotateauv") && !keyPressed) {
-                AUV selected_auv = auvManager.getSelectedAUV();
-                mars.getFlyByCamera().setEnabled(true);
-                if (selected_auv != null) {
-                    selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-                    selected_auv.hideGhostAUV(true);
-                    guiControlState.setRotateArrowVisible(false);
-                }
-
-                SimObject selected_simob = simobManager.getSelectedSimObject();
-                if (selected_simob != null) {
-                    selected_simob.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-                    selected_simob.hideGhostSpatial(true);
-                    guiControlState.setRotateArrowVisible(false);
-                }
-
-                guiControlState.setRotate_auv(false);
-                guiControlState.setRotate_simob(false);
+                rotateauvOff();
             }
         }
     };
+    
+    private void moveauvOff(){
+        AUV selected_auv = auvManager.getSelectedAUV();
+        mars.getFlyByCamera().setEnabled(true);
+        if (selected_auv != null) {
+            selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
+            Spatial ghostObject = guiControlState.getGhostObject();
+            if(ghostObject !=null){
+               ghostObject.setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+            }
+            selected_auv.hideGhostAUV(true);
+        }
+
+        SimObject selected_simob = simobManager.getSelectedSimObject();
+        if (selected_simob != null) {
+            selected_simob.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
+            selected_simob.hideGhostSpatial(true);
+        }
+        guiControlState.setDepth_iteration(0);
+        guiControlState.setMove_auv(false);
+        guiControlState.setMove_simob(false);
+    }
+    
+    private void rotateauvOff(){
+        AUV selected_auv = auvManager.getSelectedAUV();
+        mars.getFlyByCamera().setEnabled(true);
+        if (selected_auv != null) {
+            selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
+            selected_auv.hideGhostAUV(true);
+            guiControlState.setRotateArrowVisible(false);
+        }
+
+        SimObject selected_simob = simobManager.getSelectedSimObject();
+        if (selected_simob != null) {
+            selected_simob.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
+            selected_simob.hideGhostSpatial(true);
+            guiControlState.setRotateArrowVisible(false);
+        }
+
+        guiControlState.setRotate_auv(false);
+        guiControlState.setRotate_simob(false);
+    }
 
     private void initPublicKeys() {
 
@@ -478,18 +486,23 @@ public class GuiState extends AbstractAppState {
 
     private RawInputListener mouseMotionListener = new RawInputListener() {
 
+        @Override
         public void beginInput() {
         }
 
+        @Override
         public void endInput() {
         }
 
+        @Override
         public void onJoyAxisEvent(JoyAxisEvent evt) {
         }
 
+        @Override
         public void onJoyButtonEvent(JoyButtonEvent evt) {
         }
 
+        @Override
         public void onMouseMotionEvent(MouseMotionEvent evt) {
             if (guiControlState.isMove_auv()) {
                 AUV selected_auv = auvManager.getSelectedAUV();
@@ -521,12 +534,22 @@ public class GuiState extends AbstractAppState {
             }
         }
 
+        @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if(evt.isPressed() && evt.getButtonIndex() == 0) {//clean up stuff if aborted due to mouse clicks
+                if (guiControlState.isRotate_auv()){
+                    rotateauvOff();
+                }else if(guiControlState.isMove_auv()){
+                    moveauvOff();
+                }
+            }
         }
 
+        @Override
         public void onKeyEvent(KeyInputEvent evt) {
         }
 
+        @Override
         public void onTouchEvent(TouchEvent evt) {
         }
     };
