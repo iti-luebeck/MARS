@@ -1812,6 +1812,7 @@ public final class MARSTopComponent extends TopComponent {
                                     sim_panel.setMinimumSize(new Dimension(640, 480));
                                     //sim_panel.setPreferredSize(new Dimension(1280, 800));
                                     //sim_panel.setMinimumSize(new Dimension(1280, 800));
+                                    sim_panel.requestFocusInWindow();
                                     sim_panel.transferFocus();
                                     ctx.setInputSource(sim_panel);
                                     sim_panel.addFocusListener(new FocusListener() {
@@ -1901,9 +1902,10 @@ public final class MARSTopComponent extends TopComponent {
      */
     @Override
     protected void componentShowing() {
-        super.componentShowing(); //To change body of generated methods, choose Tools | Templates.
+        super.componentShowing();
         System.out.println(getName() + " showing");
         if(ctx != null){
+            sim_panel.requestFocusInWindow();
             sim_panel.transferFocus();
             ctx.setInputSource(sim_panel);
         }
@@ -1914,7 +1916,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     @Override
     protected void componentHidden() {
-        super.componentHidden(); //To change body of generated methods, choose Tools | Templates.
+        super.componentHidden();
     }
  
     /**
