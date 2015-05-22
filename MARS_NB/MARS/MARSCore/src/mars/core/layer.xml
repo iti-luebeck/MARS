@@ -42,9 +42,7 @@
     </folder>
     <folder name="Toolbars">
         <file name="Clipboard_hidden"/>
-        <folder name="File">
-            <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
-        </folder>
+        <file name="File_hidden"/>
         <file name="Memory_hidden"/>
         <file name="Standard.xml" url="Standard.xml"/>
         <file name="UndoRedo_hidden"/>
