@@ -92,13 +92,15 @@ public class BouncingTrace {
         //calculate the overall waterDepth at the root
         float waterDepth = depthAtRoot - rootAUVPosition.y;
         boolean directionDown = !surfaceFirst;
-
+        
+        //we trace from the target to the rootAUV, check if last bounce is from surface or from ground
         if (MAX_BOUNCES % 2 == 1) {
             directionDown = surfaceFirst;
         } else {
             directionDown = !surfaceFirst;
         }
 
+        //get the y-distance of the path
         float virtualHeight = calculateVirtualHeight(directionDown, depthAtRoot, depthAtTarget, waterDepth);
         if (virtualHeight == Float.MAX_VALUE) {
             return null;
@@ -111,11 +113,13 @@ public class BouncingTrace {
         Vector3f direction = targetAUVPosition.subtract(virtualPosition);
         distance = direction.length();
 
+        //reset direction value
         if (MAX_BOUNCES % 2 == 1) {
             directionDown = surfaceFirst;
         } else {
             directionDown = !surfaceFirst;
         }
+        //Debug: main triangle
         if (debug) {
             if (distance > MAX_RANGE) {
                 father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst, direction.normalize(), virtualPosition);
@@ -130,6 +134,7 @@ public class BouncingTrace {
         //--------------------------------------------------------------------------//
         //starting at the target start tracing the route
         int bounces = 0;
+        //Setup the temporary targetposition for the trace Starting with targetAUVPosition, from there its always the last reflection point
         Vector3f virtualTarget = targetAUVPosition.clone();
         Vector3f normalizedDirection = direction.negate().normalize();
 
@@ -169,6 +174,7 @@ public class BouncingTrace {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
             }
+            rayTraceConnection(virtualTarget, normalizedDirection, trace.length());
             normalizedDirection.multLocal(1f, -1f, 1f);
             directionDown = !directionDown;
             virtualTarget.addLocal(trace);
