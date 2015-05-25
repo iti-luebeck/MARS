@@ -53,7 +53,7 @@ public class DirectTrace implements Runnable {
      * @since 0.1
      * @param triggerCalc
      */
-    public DirectTrace(DistanceTriggerCalculator triggerCalc, int maxReflectionCount,float speedOfSound,float MAX_DISTANCE) {
+    public DirectTrace(DistanceTriggerCalculator triggerCalc, int maxReflectionCount, float speedOfSound, float MAX_DISTANCE) {
         simState = null;
         auvManager = null;
         distanceTriggers = null;
@@ -150,7 +150,7 @@ public class DirectTrace implements Runnable {
                     Vector3f direction = targetModPos.subtract(modPos);;
                     /////////////////////////////START DEBUG CODE
                     if (debug) {
-                        debugTrace(rootAUVName, targetAUVName,"direct", direction, modPos);
+                        debugTrace(rootAUVName, targetAUVName, "direct", direction, modPos);
                     }
                     ///////////////////////////////END DEBUG CODE
                     //raytrace the connection
@@ -162,13 +162,13 @@ public class DirectTrace implements Runnable {
                     if (results.size() == 0) {
                         traceList.add(direction);
                         //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                        triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,false);
+                        triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true, false);
                     } else {
                         for (CollisionResult res : results) {
                             if (res.getDistance() > direction.length()) {
                                 traceList.add(direction);
                                 //System.out.println("Trigger hit!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,false);
+                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true, false);
                                 break;
                             } else if (res.getGeometry().getUserData("auv_name") == null) {
                                 removedTriggers.add(trigger);
@@ -181,16 +181,21 @@ public class DirectTrace implements Runnable {
                                 removedTriggers.add(trigger);
                                 traceList.add(direction);
                                 //System.out.println("Trigger failed!" + rootAUVName + " to " + targetAUVName + " distance: " +results.getClosestCollision().getDistance()+ " direction:" + direction);
-                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true,true);
+                                triggerCalc.getEventGenerator().fireNewTraceHitAUVEvent(this, rootAUVName, targetAUVName, traceList, true, true);
                                 break;
                             }
                         }
                     }
-                    BouncingTrace bTrace = new BouncingTrace(this,1, SPEED_OF_SOUND, MAX_DISTANCE);
-                    bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
-                    boolean surfaceFirst = true;
-                    DistanceTrigger tempTrigger = bTrace.nextBouncingRayTrace(surfaceFirst);
-                    DistanceTrigger tempTrigger2 = bTrace.nextBouncingRayTrace(!surfaceFirst);
+                    //if(auvName.equals("laura")) {
+                    for (int i = 1; i < 10; i++) {
+                        BouncingTrace bTrace = new BouncingTrace(this, i, SPEED_OF_SOUND, MAX_DISTANCE);
+                        bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
+                        boolean surfaceFirst = true;
+                        DistanceTrigger tempTrigger = bTrace.nextBouncingRayTrace(surfaceFirst);
+                        DistanceTrigger tempTrigger2 = bTrace.nextBouncingRayTrace(!surfaceFirst);
+                    }
+
+                    //}
                     //System.out.println(rootAUVName + ": " +results.getClosestCollision().getDistance() + " ;; " + (direction.length()-1) + " " + results.getClosestCollision().getGeometry().getName());
                 }
             }
@@ -209,7 +214,7 @@ public class DirectTrace implements Runnable {
      * @param modPos
      */
     void debugTrace(String rootAUVName, String targetAUVName, String suffix, final Vector3f direction, final Vector3f modPos) {
-        String debugName = rootAUVName + "-" + targetAUVName+ "-"+suffix;
+        String debugName = rootAUVName + "-" + targetAUVName + "-" + suffix;
         if (debugNode.getChild(debugName) == null && !triggerCalc.debugAUVRouteInInit(debugName)) {
             triggerCalc.setDebugAUVRoute(debugName);
             Arrow arrow = new Arrow(direction);
