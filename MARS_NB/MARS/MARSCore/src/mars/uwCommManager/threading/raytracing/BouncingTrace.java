@@ -128,6 +128,10 @@ public class BouncingTrace {
             }
         }
         if (distance > MAX_RANGE) {
+            for(int i = 0; i<= MAX_BOUNCES;i++) {
+                traceList.add(new Vector3f());
+            }
+            father.getTriggerEventGenerator().fireNewTraBlockedEvent(this, rootAUV.getName(), targetAUV.getName(), traceList, surfaceFirst);
             return null;
         }
         //--------------------------------------------------------------------------//
