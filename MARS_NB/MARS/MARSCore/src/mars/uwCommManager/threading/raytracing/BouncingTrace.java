@@ -211,6 +211,7 @@ public class BouncingTrace {
             }
         }
         traceList.add(virtualTarget.clone());
+        father.getTriggerEventGenerator().fireNewTraceHitAUVEvent(this, targetAUV.getName(), rootAUV.getName(), traceList, surfaceFirst, hitAUV);
 
         //create a distanceTrigger;
         DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter, SPEED_OF_SOUND, hitAUV);

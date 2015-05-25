@@ -26,6 +26,7 @@ import mars.sensors.CommunicationDevice;
 import mars.states.SimState;
 import mars.uwCommManager.helpers.DistanceTrigger;
 import mars.uwCommManager.threading.DistanceTriggerCalculator;
+import mars.uwCommManager.threading.events.TriggerEventGenerator;
 
 /**
  * This class traces the direction connections between two AUVs
@@ -203,6 +204,11 @@ public class DirectTrace implements Runnable {
         }
         distanceTriggers.removeAll(removedTriggers);
         triggerCalc.updateTraceMap(auvName, distanceTriggers);
+    }
+    
+    
+    public TriggerEventGenerator getTriggerEventGenerator() {
+        return triggerCalc.getEventGenerator();
     }
 
     /**
