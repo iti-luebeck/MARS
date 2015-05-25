@@ -10,6 +10,8 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.LinkedList;
+import java.util.List;
 import mars.auv.AUV;
 import mars.misc.Collider;
 import mars.uwCommManager.helpers.DistanceTrigger;
@@ -76,9 +78,12 @@ public class BouncingTrace {
         return 0f;
     }
 
-    public synchronized DistanceTrigger nextBouncingRayTrace(final boolean startDown) {
+    public synchronized DistanceTrigger nextBouncingRayTrace(final boolean surfaceFirst) {
 
-        if (!startDown && rootAUVPosition.y == 0f) {
+        List<Vector3f> traceList = new LinkedList();
+        traceList.add(targetAUVPosition);
+
+        if (surfaceFirst && rootAUVPosition.y == 0f) {
             return null;
         }
         float distance = 0;
@@ -88,14 +93,14 @@ public class BouncingTrace {
         float waterDepth = depthAtRoot - rootAUVPosition.y;
 
         int bounces = 1;
-        boolean directionDown = startDown;
+        boolean directionDown = !surfaceFirst;
         float virtualHeight = 0f;
         if (directionDown) {
             virtualHeight = waterDepth;
             if (virtualHeight == 0f) {
                 return null;
             }
-        }
+        } 
 
         directionDown = !directionDown;
         while (bounces < MAX_BOUNCES) {
@@ -108,7 +113,7 @@ public class BouncingTrace {
             if (targetAUVPosition.y == 0f) {
                 return null;
             }
-            virtualHeight -= targetAUVPosition.y;
+            virtualHeight -= rootAUVPosition.getY();
         } else {
             virtualHeight = -(virtualHeight + depthAtRoot);
         }
@@ -122,9 +127,9 @@ public class BouncingTrace {
 
         if (debug) {
             if (distance > MAX_RANGE) {
-                father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + startDown, direction.normalize(), virtualPosition);
+                father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst, direction.normalize(), virtualPosition);
             } else {
-                father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + startDown, direction, virtualPosition);
+                father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst, direction, virtualPosition);
             }
         }
         if (distance > MAX_RANGE) {
@@ -132,40 +137,42 @@ public class BouncingTrace {
         }
         Vector3f virtualtarget = targetAUVPosition.clone();
         Vector3f normalizedDirection = direction.negate().normalize();
-        Ray ray = new Ray(virtualtarget, normalizedDirection);
+
         if (directionDown) {
-            float distanceToSurface = virtualtarget.getY();
-            float coeffizient = -distanceToSurface / normalizedDirection.getY();
+            float coeffizient = -virtualtarget.getY()/ normalizedDirection.getY();
             Vector3f trace = normalizedDirection.mult(coeffizient);
             if (debug) {
                 if (distance > MAX_RANGE) {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-"+surfaceFirst +"-" + directionDown + "-0", trace, virtualtarget.clone());
                 } else {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-"+surfaceFirst +"-" + directionDown + "-0", trace, virtualtarget.clone());
                 }
             }
+            rayTraceConnection(virtualtarget, normalizedDirection, trace.length());
             virtualtarget.addLocal(trace);
-            virtualPosition.addLocal(0, distanceToSurface-waterDepth, 0);
+            virtualPosition.addLocal(0, virtualtarget.getY() - waterDepth, 0);
         } else {
             float coeffizient = -depthAtTarget / normalizedDirection.getY();
             Vector3f trace = normalizedDirection.mult(coeffizient);
             if (debug) {
                 if (distance > MAX_RANGE) {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-"+surfaceFirst +"-" + directionDown + "-0", trace, virtualtarget.clone());
                 } else {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" +surfaceFirst +"-"+ directionDown + "-0", trace, virtualtarget.clone());
                 }
+                rayTraceConnection(virtualtarget, normalizedDirection, trace.length());
             }
             virtualtarget.addLocal(trace);
-            virtualPosition.addLocal(0f, depthAtTarget+waterDepth, 0f);
+            virtualPosition.addLocal(0f, depthAtTarget + waterDepth, 0f);
         }
+        traceList.add(virtualtarget.clone());
 
-        //virtualPosition.multLocal(1f, -1f, 1f);
         normalizedDirection.multLocal(1f, -1f, 1f);
         directionDown = !directionDown;
 
         while (Math.abs(virtualPosition.getY()) > waterDepth) {
             System.out.println("wups" + virtualPosition);
+            //TODO RAYTRACE IT
             break;
         }
 
@@ -174,10 +181,24 @@ public class BouncingTrace {
             Vector3f trace = normalizedDirection.mult(coeffizient);
             if (debug) {
                 if (distance > MAX_RANGE) {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" +surfaceFirst +"-"+ directionDown + "-0", trace, virtualtarget.clone());
                 } else {
-                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + directionDown + "-0", trace, virtualtarget.clone());
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" +surfaceFirst +"-"+ directionDown + "-0", trace, virtualtarget.clone());
                 }
+                rayTraceConnection(virtualtarget, normalizedDirection, trace.length());
+            }
+        } else {
+            float coeffizient = rootAUVPosition.getY() / normalizedDirection.getY();
+            Vector3f trace = normalizedDirection.mult(coeffizient);
+            if (debug) {
+                if (distance > MAX_RANGE) {
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" +surfaceFirst +"-"+ directionDown + "-0", trace, virtualtarget.clone());
+                } else {
+                    father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" +surfaceFirst +"-"+ directionDown + "-0", trace, virtualtarget.clone());
+                }
+                rayTraceConnection(virtualtarget, normalizedDirection, trace.length());
+            virtualtarget.addLocal(trace);
+            virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
             }
         }
 
@@ -190,4 +211,22 @@ public class BouncingTrace {
     public void toggleDebug() {
         debug = !debug;
     }
+
+    private boolean rayTraceConnection(Vector3f position, Vector3f direction, float range) {
+        Ray ray = new Ray(position, direction);
+        CollisionResults results = new CollisionResults();
+        collider.collideWith(ray, results);
+
+        if (results.size() > 0) {
+            for (CollisionResult res : results) {
+                if (res.getDistance() < range) {
+                    if (res.getGeometry().getUserData("auv_name") != null) {
+                        System.out.println("Hit an AUV!");
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 }
