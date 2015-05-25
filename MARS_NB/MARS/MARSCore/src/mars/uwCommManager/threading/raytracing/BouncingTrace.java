@@ -9,7 +9,6 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import java.util.LinkedList;
 import java.util.List;
 import mars.auv.AUV;
@@ -37,7 +36,6 @@ public class BouncingTrace {
 
     Collider collider;
 
-    private boolean oceanFloorFlat;
     private boolean debug;
 
     public BouncingTrace(DirectTrace father, final int MAX_BOUNCES, float speedOfSound, float maxRange) {
@@ -46,7 +44,6 @@ public class BouncingTrace {
         this.MAX_RANGE = maxRange;
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
-        oceanFloorFlat = true;
         this.father = father;
         debug = false;
     }
@@ -79,6 +76,9 @@ public class BouncingTrace {
     }
 
     public synchronized DistanceTrigger nextBouncingRayTrace(final boolean surfaceFirst) {
+        List<Vector3f> traceList = new LinkedList();
+        traceList.add(targetAUVPosition);
+        
         //If we are at the surface there is no direct surface reflection
         if (surfaceFirst && rootAUVPosition.y == 0f) {
             return null;
@@ -165,6 +165,7 @@ public class BouncingTrace {
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0f, -depthAtTarget, 0f);
         }
+        traceList.add(virtualTarget.clone());
 
         normalizedDirection.multLocal(1f, -1f, 1f);
         directionDown = !directionDown;
@@ -184,6 +185,7 @@ public class BouncingTrace {
             directionDown = !directionDown;
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0f, -waterDepth, 0f);
+            traceList.add(virtualTarget.clone());
             bounces++;
         }
         if (directionDown) {
@@ -208,6 +210,7 @@ public class BouncingTrace {
                 virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
             }
         }
+        traceList.add(virtualTarget.clone());
 
         //create a distanceTrigger;
         DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter, SPEED_OF_SOUND, hitAUV);
