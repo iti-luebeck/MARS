@@ -77,8 +77,8 @@ public class BouncingTrace {
 
     public synchronized DistanceTrigger nextBouncingRayTrace(final boolean surfaceFirst) {
         List<Vector3f> traceList = new LinkedList();
-        traceList.add(targetAUVPosition);
-        
+        traceList.add(targetAUVPosition.subtract(rootAUVPosition));
+
         //If we are at the surface there is no direct surface reflection
         if (surfaceFirst && rootAUVPosition.y == 0f) {
             return null;
@@ -92,7 +92,7 @@ public class BouncingTrace {
         //calculate the overall waterDepth at the root
         float waterDepth = depthAtRoot - rootAUVPosition.y;
         boolean directionDown = !surfaceFirst;
-        
+
         //we trace from the target to the rootAUV, check if last bounce is from surface or from ground
         if (MAX_BOUNCES % 2 == 1) {
             directionDown = surfaceFirst;
@@ -148,7 +148,9 @@ public class BouncingTrace {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
             }
-            if(rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) hitAUV = true;
+            if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                hitAUV = true;
+            }
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0, targetAUVPosition.getY(), 0);
         } else {
@@ -160,19 +162,24 @@ public class BouncingTrace {
                 if (distance < MAX_RANGE) {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
-                if(rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) hitAUV = true;
+                if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                    hitAUV = true;
+                }
             }
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0f, -depthAtTarget, 0f);
         }
-        traceList.add(virtualTarget.clone());
+        traceList.add((virtualTarget.clone()).subtract(rootAUVPosition));
 
         normalizedDirection.multLocal(1f, -1f, 1f);
         directionDown = !directionDown;
         bounces++;
         while (bounces < MAX_BOUNCES) {
-            if(directionDown) surfaceBounceCounter++; 
-            else floorBounceCounter++;
+            if (directionDown) {
+                surfaceBounceCounter++;
+            } else {
+                floorBounceCounter++;
+            }
             float coeffizient = Math.abs(waterDepth / normalizedDirection.getY());
             Vector3f trace = normalizedDirection.mult(coeffizient);
             if (debug) {
@@ -180,12 +187,14 @@ public class BouncingTrace {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
             }
-            if(rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) hitAUV = true;
+            if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                hitAUV = true;
+            }
             normalizedDirection.multLocal(1f, -1f, 1f);
             directionDown = !directionDown;
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0f, -waterDepth, 0f);
-            traceList.add(virtualTarget.clone());
+            traceList.add((virtualTarget.clone()).subtract(rootAUVPosition));
             bounces++;
         }
         if (directionDown) {
@@ -196,8 +205,12 @@ public class BouncingTrace {
                 if (distance < MAX_RANGE) {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
-                if(rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) hitAUV = true;
             }
+            if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                hitAUV = true;
+            }
+            virtualTarget.addLocal(trace);
+            virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
         } else {
             float coeffizient = rootAUVPosition.getY() / normalizedDirection.getY();
             Vector3f trace = normalizedDirection.mult(coeffizient);
@@ -205,13 +218,15 @@ public class BouncingTrace {
                 if (distance < MAX_RANGE) {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
-                if(rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) hitAUV = true;
-                virtualTarget.addLocal(trace);
-                virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
             }
+            if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                hitAUV = true;
+            }
+            virtualTarget.addLocal(trace);
+            virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
         }
-        traceList.add(virtualTarget.clone());
-        father.getTriggerEventGenerator().fireNewTraceHitAUVEvent(this, targetAUV.getName(), rootAUV.getName(), traceList, surfaceFirst, hitAUV);
+        traceList.add((virtualTarget.clone()).subtract(rootAUVPosition));
+        father.getTriggerEventGenerator().fireNewTraceHitAUVEvent(this, rootAUV.getName(),targetAUV.getName() , traceList, surfaceFirst, hitAUV);
 
         //create a distanceTrigger;
         DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter, SPEED_OF_SOUND, hitAUV);
@@ -246,26 +261,28 @@ public class BouncingTrace {
 
         //the height, used with rootAUVPosition to calculate the angle and the distance
         float virtualHeight = 0f;
-        
+
         if (directionDown) {
             if (targetAUVPosition.y == 0f) {
                 return Float.MAX_VALUE;
             }
         } else {
-            virtualHeight += depthAtTarget+targetAUVPosition.getY();
+            virtualHeight += depthAtTarget + targetAUVPosition.getY();
         }
-                //For all further bounces until the last just add the waterdepth
+        //For all further bounces until the last just add the waterdepth
         directionDown = !directionDown;
         while (bounces < MAX_BOUNCES) {
             virtualHeight += waterDepth;
             bounces++;
             directionDown = !directionDown;
         }
-        
+
         //If we are starting with a downwards trace check if we are on the floor otherwise setup the height to the waterDepth
         if (directionDown) {
             virtualHeight += depthAtRoot;
-        } else virtualHeight -= rootAUVPosition.getY();
+        } else {
+            virtualHeight -= rootAUVPosition.getY();
+        }
         return virtualHeight;
     }
 
