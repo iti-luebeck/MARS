@@ -48,7 +48,7 @@ public class AUVVisualizationNode implements TriggerEventListener {
     private MARS_Main app = null;
     Map<String, Node> connectionMap;
     List<TraceHitAUVEvent> traceHitEventQueue;
-    List<TraceBlockedEvent> traceBlockedEventQueue;
+    volatile List<TraceBlockedEvent> traceBlockedEventQueue;
     List<String> outOfRangeAUVs;
 
     private boolean showCommunicationLinks;
@@ -262,6 +262,7 @@ public class AUVVisualizationNode implements TriggerEventListener {
             blockedTraceQueueCopy = new LinkedList(traceBlockedEventQueue);
             traceBlockedEventQueue.clear();
         }
+
         //for all blocked traces
         for (TraceBlockedEvent e : blockedTraceQueueCopy) {
             String traceName = name + "-" + e.getTargetAUVName() + "-" + e.getTraces().size() + "-" + e.surfaceFirst();
@@ -311,7 +312,9 @@ public class AUVVisualizationNode implements TriggerEventListener {
             case CommunicationEventConstants.TRACE_BLOCKED_EVENT: {
                 TraceBlockedEvent evt = (TraceBlockedEvent) e;
                 if (evt.getSourceAUVName().equals(auv.getName())) {
+                    synchronized (this) {
                     traceBlockedEventQueue.add(evt);
+                    }
                 }
             }
         }

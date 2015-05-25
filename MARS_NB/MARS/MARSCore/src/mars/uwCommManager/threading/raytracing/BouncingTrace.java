@@ -38,7 +38,7 @@ public class BouncingTrace {
 
     private boolean debug;
 
-    public BouncingTrace(DirectTrace father, final int MAX_BOUNCES, float speedOfSound, float maxRange) {
+    public BouncingTrace(DirectTrace father, final int MAX_BOUNCES, float speedOfSound, float maxRange, boolean debug) {
         this.MAX_BOUNCES = MAX_BOUNCES;
         this.SPEED_OF_SOUND = speedOfSound;
         this.MAX_RANGE = maxRange;
@@ -128,7 +128,7 @@ public class BouncingTrace {
             }
         }
         if (distance > MAX_RANGE) {
-            for(int i = 0; i<= MAX_BOUNCES;i++) {
+            for (int i = 0; i <= MAX_BOUNCES; i++) {
                 traceList.add(new Vector3f());
             }
             father.getTriggerEventGenerator().fireNewTraBlockedEvent(this, rootAUV.getName(), targetAUV.getName(), traceList, surfaceFirst);
@@ -166,9 +166,10 @@ public class BouncingTrace {
                 if (distance < MAX_RANGE) {
                     father.debugTrace(rootAUV.getName(), targetAUV.getName(), MAX_BOUNCES + "-" + surfaceFirst + "-" + directionDown + "-" + bounces, trace, virtualTarget.clone());
                 }
-                if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
-                    hitAUV = true;
-                }
+
+            }
+            if (rayTraceConnection(virtualTarget, normalizedDirection, trace.length())) {
+                hitAUV = true;
             }
             virtualTarget.addLocal(trace);
             virtualPosition.addLocal(0f, -depthAtTarget, 0f);
@@ -230,7 +231,7 @@ public class BouncingTrace {
             virtualPosition.addLocal(0f, rootAUVPosition.getY(), 0f);
         }
         traceList.add((virtualTarget.clone()).subtract(rootAUVPosition));
-        father.getTriggerEventGenerator().fireNewTraceHitAUVEvent(this, rootAUV.getName(),targetAUV.getName() , traceList, surfaceFirst, hitAUV);
+        father.getTriggerEventGenerator().fireNewTraceHitAUVEvent(this, rootAUV.getName(), targetAUV.getName(), traceList, surfaceFirst, hitAUV);
 
         //create a distanceTrigger;
         DistanceTrigger returnTrigger = new DistanceTrigger(distance, targetAUV.getName(), surfaceBounceCounter, floorBounceCounter, SPEED_OF_SOUND, hitAUV);

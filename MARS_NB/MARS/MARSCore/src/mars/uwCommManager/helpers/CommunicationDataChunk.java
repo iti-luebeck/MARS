@@ -76,7 +76,9 @@ public class CommunicationDataChunk {
         DistanceTrigger trigger = triggerDistances.poll();
         byte[] messageTemp = messageDataChunk.clone();
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
-           messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequency,signalStrength,0.05f);
+           float tempSignalStrength =signalStrength;
+           if(trigger.getFloorBounces()>0) tempSignalStrength= (float) (10f * (Math.log10(Math.pow(10, signalStrength/10)-Math.pow(10, trigger.getFloorBounces()))));
+           messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequency,tempSignalStrength,0.05f);
         }
         IDENTIFIER.setSurfaceBounces(trigger.getSurfaceBounces());
         IDENTIFIER.setFloorBounces(trigger.getSurfaceBounces());

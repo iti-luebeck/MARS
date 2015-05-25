@@ -116,6 +116,7 @@ public class DirectTrace implements Runnable {
         }
         //get all auvs to retrieve their position later on
         HashMap<String, AUV> auvs = auvManager.getAUVs();
+        List<DistanceTrigger> tracedTriggers = new LinkedList();
         //For every AUV that has any other auvs in range
         //First step:
         //Start a ray directly to each of the AUV's find out what it hits.
@@ -189,11 +190,13 @@ public class DirectTrace implements Runnable {
                     }
                     //if(auvName.equals("laura")) {
                     for (int i = 1; i < 10; i++) {
-                        BouncingTrace bTrace = new BouncingTrace(this, i, SPEED_OF_SOUND, MAX_DISTANCE);
+                        BouncingTrace bTrace = new BouncingTrace(this, i, SPEED_OF_SOUND, MAX_DISTANCE,debug);
                         bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
                         boolean surfaceFirst = true;
                         DistanceTrigger tempTrigger = bTrace.nextBouncingRayTrace(surfaceFirst);
                         DistanceTrigger tempTrigger2 = bTrace.nextBouncingRayTrace(!surfaceFirst);
+                        if(tempTrigger != null) tracedTriggers.add(tempTrigger);
+                        if(tempTrigger2 != null) tracedTriggers.add(tempTrigger2);
                     }
 
                     //}
@@ -203,6 +206,7 @@ public class DirectTrace implements Runnable {
             //System.out.println(rootAUVName+ ": To be removed Triggers; " + removedTriggers.toString());
         }
         distanceTriggers.removeAll(removedTriggers);
+        distanceTriggers.addAll(tracedTriggers);
         triggerCalc.updateTraceMap(auvName, distanceTriggers);
     }
     
