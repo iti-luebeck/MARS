@@ -329,11 +329,6 @@ public class CommunicationState extends AbstractAppState {
 //----------------------------END MAINLOOP BEGIN HELPERS SETTER GETTERS------------------------------
 
     
-    private void removeNoise(String name) {
-        for(ModemMessageRunnable i : auvProcessMap.values()) {
-            i.removeANoiseGeneratorByName(name);
-        }
-    }
     /**
      * Add a message to the queue
      * @since 0.1
