@@ -125,7 +125,7 @@ public class CommunicationState extends AbstractAppState {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,"Failed to load communications config");
         }
         //Init the threadpool
-        executor = new ScheduledThreadPoolExecutor(threadCount);
+        executor = new ScheduledThreadPoolExecutor(1);
         //prepare and start the runnables for multithreading
         auvProcessMap = new HashMap();
         if (!initRunnables(CentralLookup.getDefault().lookup(SimState.class).getAuvManager())) {
@@ -182,6 +182,14 @@ public class CommunicationState extends AbstractAppState {
             }
             executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
         }
+        
+        executor.schedule(new Runnable() {
+
+            @Override
+            public void run() {
+                executor.setCorePoolSize(threadCount);
+            }
+        }, 3, TimeUnit.SECONDS);
 
         
 

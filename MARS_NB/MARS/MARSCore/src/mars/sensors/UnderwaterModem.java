@@ -30,10 +30,7 @@ import org.ros.node.topic.Publisher;
 import mars.states.SimState;
 import mars.events.CommunicationDeviceEvent;
 import mars.events.CommunicationDeviceEventType;
-import mars.events.CommunicationType;
 import mars.ros.MARSNodeMain;
-import mars.uwCommManager.CommunicationState;
-import mars.server.MARSClientEvent;
 import org.openide.util.Exceptions;
 import org.ros.node.topic.Subscriber;
 

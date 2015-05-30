@@ -45,7 +45,7 @@ public class BouncingTrace {
         floorBounceCounter = 0;
         surfaceBounceCounter = 0;
         this.father = father;
-        debug = false;
+        this.debug = debug;
     }
 
     public boolean init(AUV rootAUV, AUV targetAUV, Vector3f rootAUVPosition, Vector3f targetAUVPosition, Collider collider) {

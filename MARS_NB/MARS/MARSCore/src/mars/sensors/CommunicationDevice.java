@@ -13,9 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.core.CentralLookup;
 import mars.states.SimState;
-import mars.uwCommManager.CommunicationState;
 
 /**
  * The base class for all communicating sensors like underwater modems.
