@@ -144,6 +144,7 @@ public class CommunicationState extends AbstractAppState {
         
         communicationGraphics = new CommunicationVisualizer(this.app, this,CentralLookup.getDefault().lookup(SimState.class).getAuvManager(),distanceTraceModule) ;
         communicationGraphics.init();
+        distanceTraceModule.getEventGenerator().addListener(commOnMap);
         //Init done, add to centrallookup
         CentralLookup.getDefault().add(this);
     }
@@ -260,7 +261,7 @@ public class CommunicationState extends AbstractAppState {
     @Override
     public void update(final float tpf) {
         
-        commOnMap.setDistances(distanceTraceModule.getDistanceTriggerMap());
+        //commOnMap.setDistances(distanceTraceModule.getDistanceTriggerMap());
         commOnMap.update(tpf);
         
         communicationGraphics.update(tpf);

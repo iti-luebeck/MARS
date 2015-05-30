@@ -48,7 +48,7 @@ public class AUVVisualizationNode implements TriggerEventListener {
     private MARS_Main app = null;
     Map<String, Node> connectionMap;
     List<TraceHitAUVEvent> traceHitEventQueue;
-    volatile List<TraceBlockedEvent> traceBlockedEventQueue;
+    List<TraceBlockedEvent> traceBlockedEventQueue;
     List<String> outOfRangeAUVs;
 
     private boolean showCommunicationLinks;
@@ -61,7 +61,7 @@ public class AUVVisualizationNode implements TriggerEventListener {
      */
     public AUVVisualizationNode(AUV auv, Node auvNode, MARS_Main app) {
         this.auv = auv;
-        this.auvNode = auvNode;
+        this.auvNode = auvNode.getParent();
         this.app = app;
         this.traceHitEventQueue = new LinkedList();
         this.connectionMap = new HashMap();

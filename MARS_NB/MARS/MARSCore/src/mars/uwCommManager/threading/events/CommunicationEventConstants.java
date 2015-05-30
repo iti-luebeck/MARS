@@ -12,7 +12,6 @@ package mars.uwCommManager.threading.events;
 public interface CommunicationEventConstants {
     
     
-    public final int TRIGGER_UPDATE_EVENT = 100000;
     
     public final int TRACE_HIT_AUV_EVENT = 200000;
     public final int TRACE_BLOCKED_EVENT = 210000;
