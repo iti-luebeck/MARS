@@ -132,8 +132,13 @@ public class CommunicationDataChunk {
             List<DistanceTrigger> trigs = triggers;
             triggerDistances.clear();
             for(int i = 0; i<trigs.size();i++) {
-                DistanceTrigger trig = trigs.get(i);
-                if(trig!= null) triggerDistances.add(trig);
+                try{
+                    DistanceTrigger trig = trigs.get(i);
+                    if(trig!= null) triggerDistances.add(trig);
+                } catch(NullPointerException e) {
+                    System.out.println("Nullpointer exception");
+                }
+
             }
         }
     }
