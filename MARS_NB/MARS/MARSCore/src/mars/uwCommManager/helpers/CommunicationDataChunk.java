@@ -73,7 +73,10 @@ public class CommunicationDataChunk {
      */
     public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
         if(!hasNextTrigger()) return null;
-        DistanceTrigger trigger = triggerDistances.poll();
+        DistanceTrigger trigger;
+        synchronized(this) {
+            trigger = triggerDistances.poll();
+        }
         byte[] messageTemp = messageDataChunk.clone();
         for(ANoiseByDistanceGenerator gen: noiseGenerators) {
            float tempSignalStrength =signalStrength;

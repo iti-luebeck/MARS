@@ -30,6 +30,7 @@ import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
 import mars.states.MapState;
 import mars.states.SimState;
+import mars.uwCommManager.benchmarking.CommunicationBenchmark;
 import mars.uwCommManager.graphics.CommOnMap;
 import mars.uwCommManager.graphics.CommunicationVisualizer;
 import mars.uwCommManager.helpers.DistanceTrigger;
@@ -102,6 +103,10 @@ public class CommunicationState extends AbstractAppState {
      * The mainclass of the visualization functionalities of the commodule
      */
     private CommunicationVisualizer communicationGraphics = null;
+    
+    
+    private boolean benchmark = true;
+    private CommunicationBenchmark commBenchmark;
     
 
 //------------------------------- INIT -----------------------------------------
@@ -192,6 +197,10 @@ public class CommunicationState extends AbstractAppState {
             }
         }, 3, TimeUnit.SECONDS);
 
+        if(benchmark&&commBenchmark==null) {
+            commBenchmark = new CommunicationBenchmark(this, executor);
+            commBenchmark.init();
+        }
         
 
         return true;
@@ -260,10 +269,12 @@ public class CommunicationState extends AbstractAppState {
      */
     @Override
     public void update(final float tpf) {
+        if(benchmark) commBenchmark.update(tpf);
         
-        //commOnMap.setDistances(distanceTraceModule.getDistanceTriggerMap());
+        
+        
+        
         commOnMap.update(tpf);
-        
         communicationGraphics.update(tpf);
 
         
@@ -329,8 +340,6 @@ public class CommunicationState extends AbstractAppState {
             List<DistanceTrigger> e2 = distanceTraceModule.getDistanceTriggerMap().get(msg.getAuvName());
             if(e2 != null) e1.setDistanceTriggers(e2);
             e1.assignMessage(msg);
-            
-
         }
     }
     
