@@ -49,7 +49,7 @@ public class CommunicationBenchmark {
     public boolean init() {
         Properties systemProps = System.getProperties();
         try {
-            logger = SLogger.getNewLogger(systemProps.getProperty("user.name") + "-benchmarkLog", false, ISLogger.LOG_ONLY, ISLogger.LOG_LEVEL_INFO);
+            logger = SLogger.getNewLogger(systemProps.getProperty("user.name") + "-benchmarkLog", false, ISLogger.LOG_AND_CONSOLE, ISLogger.LOG_LEVEL_INFO);
             tablePrinter = new TablePrinter(systemProps.getProperty("user.name") + "-benchmarkResults.csv");
         } catch (Exception e) {
             return false;
