@@ -293,6 +293,7 @@ public class CommOnMap implements TriggerEventListener {
             String distanceNodeName = e.getSourceAUVName() + "distances";
             String connectionName = e.getSourceAUVName() + "->" + e.getTargetAUVName();
             Node node = (Node) auvNodes.get(e.getSourceAUVName());
+            if(node == null) return;
             Node distanceNode = (Node) node.getChild(distanceNodeName);
             if (distanceNode == null) {
                 attachDistanceNode(node, distanceNodeName);
