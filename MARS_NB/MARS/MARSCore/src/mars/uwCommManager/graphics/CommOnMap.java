@@ -228,7 +228,6 @@ public class CommOnMap implements TriggerEventListener {
 //                }
             }
         }
-        
 
         List<TraceHitAUVEvent> copyList;
         synchronized (this) {
@@ -238,12 +237,14 @@ public class CommOnMap implements TriggerEventListener {
         for (TraceHitAUVEvent e : copyList) {
             String distanceNodeName = e.getSourceAUVName() + "distances";
             Node node = (Node) auvNodes.get(e.getSourceAUVName());
+            if(node==null) return;
             Node distanceNode = (Node) node.getChild(distanceNodeName);
-
             if (distanceNode == null) {
                 attachDistanceNode(node, distanceNodeName);
                 return;
-            } else if(!showLinks) {
+            }
+
+            if (!showLinks) {
                 distanceNode.setCullHint(Spatial.CullHint.Always);
             } else if (showLinks && e.getTraces().size() == 2) {
                 distanceNode.setCullHint(Spatial.CullHint.Inherit);
@@ -303,11 +304,12 @@ public class CommOnMap implements TriggerEventListener {
             distanceNode.getChild(connectionName).setCullHint(Spatial.CullHint.Always);
         }
     }
-        /**
-         * @since 0.2
-         * @param node
-         * @param name
-         */
+
+    /**
+     * @since 0.2
+     * @param node
+     * @param name
+     */
     private void attachDistanceNode(final Node node, final String name) {
         app.enqueue(new Callable<Object>() {
             @Override
@@ -396,7 +398,7 @@ public class CommOnMap implements TriggerEventListener {
             } else if (e.getEventID() == CommunicationEventConstants.TRACE_BLOCKED_EVENT) {
                 traceBlockedEventQueue.add((TraceBlockedEvent) e);
             } else if (e.getEventID() == CommunicationEventConstants.TRIGGER_OUT_OF_DISTANCE_EVENT) {
-                triggerOOREventQueue.add((TriggerOutOfRangeEvent)e);
+                triggerOOREventQueue.add((TriggerOutOfRangeEvent) e);
 
             }
         }

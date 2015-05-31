@@ -189,7 +189,7 @@ public class DirectTrace implements Runnable {
                         }
                     }
                     //if(auvName.equals("laura")) {
-                    for (int i = 1; i < 10; i++) {
+                    for (int i = 1; i < 2; i++) {
                         BouncingTrace bTrace = new BouncingTrace(this, i, SPEED_OF_SOUND, MAX_DISTANCE,debug);
                         bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
                         boolean surfaceFirst = true;
