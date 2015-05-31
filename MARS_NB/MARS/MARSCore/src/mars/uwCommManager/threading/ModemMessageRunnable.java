@@ -250,8 +250,11 @@ public class ModemMessageRunnable implements Runnable {
             if (!waitingChunks.isEmpty()) {
                 CommunicationDataChunk chunk = waitingChunks.poll();
                 if (!distanceTriggers.isEmpty()) {
-                    chunk.addDistanceTriggers(distanceTriggers);
-                    chunk.setStartTime(System.currentTimeMillis());
+                    synchronized (this) {
+                        List<DistanceTrigger> tempTriggers = distanceTriggers;
+                        chunk.addDistanceTriggers(tempTriggers);
+                        chunk.setStartTime(System.currentTimeMillis());
+                    }
                     sentChunks.add(chunk);
                 }
             }
@@ -375,7 +378,9 @@ public class ModemMessageRunnable implements Runnable {
      * @param triggers
      */
     public void setDistanceTriggers(List<DistanceTrigger> triggers) {
-        this.distanceTriggers = triggers;
+        synchronized (this) {
+            this.distanceTriggers = triggers;
+        }
     }
 
     /**

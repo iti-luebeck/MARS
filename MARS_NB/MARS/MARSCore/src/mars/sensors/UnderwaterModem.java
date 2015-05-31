@@ -345,8 +345,9 @@ public class UnderwaterModem extends CommunicationDevice {
             if(pointer==messagebytes.length) {
                 pointer = 0;
                 try {
-                    System.out.println(Arrays.toString(messagebytes));
-                    System.out.println(new String(messagebytes,"UTF-8"));
+                    //System.out.println(Arrays.toString(messagebytes));
+                    //System.out.println(new String(messagebytes,"UTF-8"));
+                    System.out.println("message recieved");
                     String message = new String(messagebytes,"UTF-8");
                     notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this,message,System.currentTimeMillis(),CommunicationDeviceEventType.OUT));
                 } catch (UnsupportedEncodingException ex) {

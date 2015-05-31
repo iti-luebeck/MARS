@@ -105,7 +105,7 @@ public class CommunicationState extends AbstractAppState {
     private CommunicationVisualizer communicationGraphics = null;
     
     
-    private boolean benchmark = true;
+    private final boolean benchmark = true;
     private CommunicationBenchmark commBenchmark;
     
 
@@ -305,8 +305,6 @@ public class CommunicationState extends AbstractAppState {
         
         //should not take too much time to dispatch all messages, we use
         // this timer to stop in case of too many messages
-        Timer timer = new LwjglSmoothingTimer();
-        float time = 0f;
         //int counter = 0;
         
         for(Map.Entry<String, ModemMessageRunnable> entr: auvProcessMap.entrySet()) {
@@ -316,8 +314,6 @@ public class CommunicationState extends AbstractAppState {
                 }
             }
         while(true) {
-            time += timer.getTimePerFrame();
-            if(time >= 1f/60f) break;
             //Get the messages from the runnables and merge them in the multiPathModule
             CommunicationMessage msg = msgQueue.poll();
             if(msg == null) break;

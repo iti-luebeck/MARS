@@ -5,7 +5,6 @@
  */
 package mars.uwCommManager.helpers;
 
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -13,14 +12,14 @@ import mars.uwCommManager.noiseGenerators.ANoiseByDistanceGenerator;
 import org.openide.util.Exceptions;
 
 /**
- * This class contains a chunk of a message that was send by a modem.
- * While traveling the message will be altered by noise and other sources
+ * This class contains a chunk of a message that was send by a modem. While
+ * traveling the message will be altered by noise and other sources
+ *
  * @version 0.2.2
  * @author Jasper Schwinghammer
  */
 public class CommunicationDataChunk {
-    
-    
+
     private final DataChunkIdentifier IDENTIFIER;
     private final float MAX_DISTANCE;
     private float frequency;
@@ -30,8 +29,12 @@ public class CommunicationDataChunk {
     private PriorityQueue<DistanceTrigger> triggerDistances;
     private boolean dead = false;
     private long startTime;
+
     /**
-     * Create a new CommunicationDataChunk that will live as long as the distance traveled does not exceed the maximum propagation distance of the modem
+     * Create a new CommunicationDataChunk that will live as long as the
+     * distance traveled does not exceed the maximum propagation distance of the
+     * modem
+     *
      * @since 0.1
      * @param messageDataChunk The chunk of data
      * @param triggerDistances The distances of all the paths between our AUVs
@@ -39,7 +42,7 @@ public class CommunicationDataChunk {
      * @param signalStrength The initial strength of the soundsignal
      * @param frequence The frequence of the message
      */
-    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence,DataChunkIdentifier identifier) {
+    public CommunicationDataChunk(byte[] messageDataChunk, PriorityQueue<DistanceTrigger> triggerDistances, float maxDistance, float signalStrength, float frequence, DataChunkIdentifier identifier) {
         this.IDENTIFIER = identifier;
         this.MAX_DISTANCE = maxDistance;
         this.messageDataChunk = messageDataChunk;
@@ -47,137 +50,163 @@ public class CommunicationDataChunk {
         this.triggerDistances = triggerDistances;
         this.signalStrength = signalStrength;
         this.frequency = frequence;
-        if(this.triggerDistances == null) this.triggerDistances = new PriorityQueue<DistanceTrigger>();
+        if (this.triggerDistances == null) {
+            this.triggerDistances = new PriorityQueue<DistanceTrigger>();
+        }
         startTime = Long.MAX_VALUE;
         //System.out.println("Data: " + Arrays.toString(messageDataChunk) );
     }
-    
+
     /**
-     * Check the current head of the triggerqueue if it is within the travled distance.
+     * Check the current head of the triggerqueue if it is within the travled
+     * distance.
+     *
      * @since 0.1
      * @return if there is a trigger within traveled distance
      */
     public boolean hasNextTrigger() {
-        if(triggerDistances.peek() == null) {
+        if (triggerDistances.peek() == null) {
             dead = true;
             return false;
         }
-        return triggerDistances.peek().getDistance()<distanceTraveled;
+        return triggerDistances.peek().getDistance() < distanceTraveled;
     }
-    
+
     /**
      * if there is a trigger within distance return it. Otherwise return null
-     * hasNextTrigger should always be used first to reduce the chance of a nullpointer exception
+     * hasNextTrigger should always be used first to reduce the chance of a
+     * nullpointer exception
+     *
      * @since 0.1
      * @return the next trigger within distance, or null if there is none
      */
     public CommunicationComputedDataChunk evalNextTrigger(final List<ANoiseByDistanceGenerator> noiseGenerators) {
-        if(!hasNextTrigger()) return null;
+        if (!hasNextTrigger()) {
+            return null;
+        }
         DistanceTrigger trigger;
-        synchronized(this) {
+        synchronized (this) {
             trigger = triggerDistances.poll();
         }
         byte[] messageTemp = messageDataChunk.clone();
-        for(ANoiseByDistanceGenerator gen: noiseGenerators) {
-           float tempSignalStrength =signalStrength;
-           if(trigger.getFloorBounces()>0) tempSignalStrength= (float) (10f * (Math.log10(Math.pow(10, signalStrength/10)-Math.pow(10, trigger.getFloorBounces()))));
-           messageTemp = gen.noisifyByDistance(messageTemp,trigger.getDistance(),frequency,tempSignalStrength,0.05f);
+        for (ANoiseByDistanceGenerator gen : noiseGenerators) {
+            float tempSignalStrength = signalStrength;
+            if (trigger.getFloorBounces() > 0) {
+                tempSignalStrength = (float) (10f * (Math.log10(Math.pow(10, signalStrength / 10) - Math.pow(10, trigger.getFloorBounces()))));
+            }
+            messageTemp = gen.noisifyByDistance(messageTemp, trigger.getDistance(), frequency, tempSignalStrength, 0.05f);
         }
         IDENTIFIER.setSurfaceBounces(trigger.getSurfaceBounces());
         IDENTIFIER.setFloorBounces(trigger.getSurfaceBounces());
-        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(),trigger,
-                IDENTIFIER,startTime,frequency);
-        if(triggerDistances.isEmpty()) dead = true;
+        CommunicationComputedDataChunk returnValue = new CommunicationComputedDataChunk(messageTemp, trigger.getAUVName(), trigger,
+                IDENTIFIER, startTime, frequency);
+        if (triggerDistances.isEmpty()) {
+            dead = true;
+        }
         return returnValue;
     }
-    
-    
-    
-    
-    
+
     /**
-     * Should be called each tick, adds the traveled distance and checks if the maximum range is exceeded
+     * Should be called each tick, adds the traveled distance and checks if the
+     * maximum range is exceeded
+     *
      * @since 0.1
      * @param distance the distance since last tick
      */
     public synchronized void addDistance(float distance) {
-        distanceTraveled +=distance;
-        if(distanceTraveled > MAX_DISTANCE) dead = true;
+        distanceTraveled += distance;
+        if (distanceTraveled > MAX_DISTANCE) {
+            dead = true;
+        }
     }
-    
+
     /**
      * Add new triggers to the trigger Distances
+     *
      * @since 0.1
      * @param triggers the triggers that should be added
      */
-    public synchronized void addDistanceTriggers(List<DistanceTrigger> triggers) {
-        triggerDistances.clear();
-        triggerDistances.addAll(triggers);
+    public void addDistanceTriggers(List<DistanceTrigger> triggers) {
+        if(triggers.isEmpty()) return;
+        synchronized (this) {
+            List<DistanceTrigger> trigs = triggers;
+            triggerDistances.clear();
+            for(int i = 0; i<trigs.size();i++) {
+                DistanceTrigger trig = trigs.get(i);
+                if(trig!= null) triggerDistances.add(trig);
+            }
+        }
     }
-    
+
     /**
-     * If we find a new path between two AUV's that our already sent message should care about we can add it.
-     * Only distances are longer then the already traveled distance will be added.
+     * If we find a new path between two AUV's that our already sent message
+     * should care about we can add it. Only distances are longer then the
+     * already traveled distance will be added.
+     *
      * @since 0.1
      * @param triggerDistance the distance to the AUV
      * @deprecated
      */
-    public synchronized void addtriggerDistance(float triggerDistance, String AUV, float temperature,float speedOfSound) {
-        if(triggerDistance>=distanceTraveled) {
-            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV, temperature,speedOfSound));
+    public synchronized void addtriggerDistance(float triggerDistance, String AUV, float temperature, float speedOfSound) {
+        if (triggerDistance >= distanceTraveled) {
+            triggerDistances.add(new DistanceTrigger(triggerDistance, AUV, temperature, speedOfSound));
         }
     }
-    
+
     /**
      * Get the traveled distance
+     *
      * @since 0.1
      * @return the traveled distance
      */
     public synchronized float getDistanceTravled() {
         return distanceTraveled;
     }
-    
+
     /**
-     * Check if the message already exceeded its lifetime. Should be used to remove it from the processingQueue.
+     * Check if the message already exceeded its lifetime. Should be used to
+     * remove it from the processingQueue.
+     *
      * @since 0.1
      * @return if the message already exceeded its lifetime
      */
-    public synchronized boolean isDead(){
+    public synchronized boolean isDead() {
         return dead;
     }
-    
+
     /**
      * @since 0.1.1
      * @return the message as String (debug only method)
      */
     public String getMessageAsString() {
         try {
-            return new String(messageDataChunk,"UTF-8");
+            return new String(messageDataChunk, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-           Exceptions.printStackTrace(ex);
+            Exceptions.printStackTrace(ex);
         }
         return null;
     }
-    
-    
+
     /**
      * get the message as UTF-8 Byte array
+     *
      * @since 0.2.0
-     * @return 
+     * @return
      */
     public byte[] getMessageAsByte() {
         return messageDataChunk;
     }
-    
+
     /**
      * Set the message to a new value
+     *
      * @since 0.1.0
-     * @param msg 
+     * @param msg
      */
     public void updateMessageFromByte(byte[] msg) {
         messageDataChunk = msg;
     }
-    
+
     /**
      * @since 0.2.1
      * @return the frequence of the message
@@ -185,36 +214,36 @@ public class CommunicationDataChunk {
     public float getFrequence() {
         return frequency;
     }
-    
+
     /**
      * @since 0.2.1
-     * @return  the strength of the signal in dB
+     * @return the strength of the signal in dB
      */
-    public float getSignalStrength() { 
+    public float getSignalStrength() {
         return signalStrength;
     }
-    
+
     /**
      * get the identifier consisting of all information about the chunk
+     *
      * @since 0.2.1
      * @return the Identifier
      */
     public DataChunkIdentifier getIdentifier() {
         return IDENTIFIER;
     }
-    
-    
+
     /**
      * @since 0.2.2
-     * @param startTime 
+     * @param startTime
      */
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
-    
+
     /**
      * @since 0.2.2
-     * @return 
+     * @return
      */
     public long getStartTime() {
         return startTime;
