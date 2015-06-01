@@ -105,7 +105,7 @@ public class CommunicationState extends AbstractAppState {
     private CommunicationVisualizer communicationGraphics = null;
     
     
-    private final boolean benchmark = true;
+    private final boolean benchmark = false;
     private CommunicationBenchmark commBenchmark;
     
 
