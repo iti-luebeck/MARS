@@ -195,7 +195,7 @@ public class CommunicationState extends AbstractAppState {
             public void run() {
                 executor.setCorePoolSize(threadCount);
             }
-        }, 3, TimeUnit.SECONDS);
+        }, 6, TimeUnit.SECONDS);
 
         if(benchmark&&commBenchmark==null) {
             commBenchmark = new CommunicationBenchmark(this, executor);
