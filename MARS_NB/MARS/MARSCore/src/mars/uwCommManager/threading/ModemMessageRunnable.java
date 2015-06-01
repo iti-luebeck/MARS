@@ -46,9 +46,8 @@ public class ModemMessageRunnable implements Runnable {
     /*
      * DEBUG VALUES
      */
-    public static final float MODEM_SIGNAL_STRENGTH = 80;
     public static final float MODEM_REACH = 100;
-    public static final float MODEM_FREQUENCE = 1;
+    
 
     /**
      * The bandwidth of the modem this AUV is using
@@ -105,6 +104,8 @@ public class ModemMessageRunnable implements Runnable {
     private volatile List<ANoiseByDistanceGenerator> noiseGenerators = null;
     private float windspeed;
     private float shippingFactor;
+    private float modemFrequency;
+    private float modemSignalStrength;
 
     private DistanceTriggerCalculator triggerCalculator;
 
@@ -156,6 +157,8 @@ public class ModemMessageRunnable implements Runnable {
 
         windspeed = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_WINDSPEED_TEXTFIELD, 3);
         shippingFactor = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_SHIPPING_FACTOR_TEXTFIELD, 0);
+        modemFrequency = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_FREQUENCY, 1);
+        modemSignalStrength = pref.getFloat(CommOptionsConstants.OPTIONS_NOISE_SIGNAL_STRENGTH, 80);
 
         if (pref.getBoolean(CommOptionsConstants.OPTIONS_NOISE_ADDITIVE_GAUSSIAN_WHITE_NOISE, false)) {
             noiseGenerators.add(new AdditiveGaussianWhiteNoise(1, 1 / 4f, shippingFactor, windspeed));
@@ -188,6 +191,11 @@ public class ModemMessageRunnable implements Runnable {
                     } else {
                         removeANoiseGeneratorByName(NoiseNameConstants.GAUSSIAN_WHITE_NOISE);
                     }
+                } else if(e.getKey().equals(CommOptionsConstants.OPTIONS_NOISE_FREQUENCY)) {
+                    modemFrequency = Float.parseFloat(e.getNewValue());
+                }
+                else if(e.getKey().equals(CommOptionsConstants.OPTIONS_NOISE_SIGNAL_STRENGTH)) {
+                    modemSignalStrength = Float.parseFloat(e.getNewValue());
                 }
             }
         });
@@ -331,11 +339,11 @@ public class ModemMessageRunnable implements Runnable {
                     if (i != chunkCount - 1) {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i * (BANDWIDTH_PER_TICK * 1000)), (int) ((i + 1) * (BANDWIDTH_PER_TICK * 1000))),
-                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE, tempIdentifier);
+                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, modemSignalStrength, modemFrequency, tempIdentifier);
                     } else {
                         chunk = new CommunicationDataChunk(
                                 Arrays.copyOfRange(msgByte, (int) (i * (BANDWIDTH_PER_TICK * 1000)), msgByte.length),
-                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, MODEM_SIGNAL_STRENGTH, MODEM_FREQUENCE, tempIdentifier);
+                                new PriorityQueue<DistanceTrigger>(), MODEM_REACH, modemSignalStrength, modemFrequency, tempIdentifier);
                     }
                     //to emphasize that we will use the list as queue I use the queue methods instead of LinkedList.add
                     waitingChunks.offer(chunk);

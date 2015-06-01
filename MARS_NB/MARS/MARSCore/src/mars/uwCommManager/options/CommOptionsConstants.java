@@ -12,8 +12,8 @@ package mars.uwCommManager.options;
 public interface CommOptionsConstants {
     
 //Captain: What happen ? 
-//Mechanic: Somebody set up us the bomb. 
-//Operator: We get signal. 
+    public static final String OPTIONS_NOISE_SIGNAL_STRENGTH = "Somebody set up us the bomb. ";
+    public static final String OPTIONS_NOISE_FREQUENCY = "We get signal.";
     public static final String OPTIONS_REFLECTION_COUNT_SLIDER = "What !";
     public static final String OPTIONS_DEBUG_SHOW_DEBUG_GRAPHICS = "Main screen turn on.";
     public static final String OPTIONS_MAIN_SHOW_MAXIMUM_PROPAGATIONDISTANCE = "It’s you !! ";
