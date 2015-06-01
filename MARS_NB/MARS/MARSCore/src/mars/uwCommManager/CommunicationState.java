@@ -76,7 +76,7 @@ public class CommunicationState extends AbstractAppState {
     /**
      * How many ticks per secound should the runnables have
      */
-    public static final int RESOLUTION = 1000;
+    public static final int RESOLUTION = 800;
     
     /**
      * The visualization class for the minimap
@@ -171,14 +171,14 @@ public class CommunicationState extends AbstractAppState {
                     ModemMessageRunnable runnable = new ModemMessageRunnable(1f,RESOLUTION,auv.getName(),auv);
                     runnable.init();
                     auvProcessMap.put(auv.getName(), runnable);
-                    executor.scheduleAtFixedRate(runnable, 2000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
+                    executor.scheduleAtFixedRate(runnable, 6000000, 1000000/RESOLUTION, TimeUnit.MICROSECONDS);
                 }
                 
             }
         if(multiPathModule == null) {
             multiPathModule = new MultiMessageMerger();
             multiPathModule.init(auvManager, this);
-            executor.scheduleAtFixedRate(multiPathModule, 2500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
+            executor.scheduleAtFixedRate(multiPathModule, 500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
         }
         if(distanceTraceModule == null) {
             distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
@@ -186,7 +186,7 @@ public class CommunicationState extends AbstractAppState {
             for(Map.Entry<String,ModemMessageRunnable> entry : auvProcessMap.entrySet()) {
                 entry.getValue().setDistanceTriggerCalculator(distanceTraceModule);
             }
-            executor.scheduleAtFixedRate(distanceTraceModule, 1500000, 100000, TimeUnit.MICROSECONDS);
+            executor.scheduleAtFixedRate(distanceTraceModule, 3500000, 100000, TimeUnit.MICROSECONDS);
         }
         
         executor.schedule(new Runnable() {
@@ -195,7 +195,7 @@ public class CommunicationState extends AbstractAppState {
             public void run() {
                 executor.setCorePoolSize(threadCount);
             }
-        }, 6, TimeUnit.SECONDS);
+        }, 10, TimeUnit.SECONDS);
 
         if(benchmark&&commBenchmark==null) {
             commBenchmark = new CommunicationBenchmark(this, executor);

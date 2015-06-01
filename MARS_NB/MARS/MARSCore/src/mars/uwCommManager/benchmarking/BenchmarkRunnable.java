@@ -30,8 +30,8 @@ public class BenchmarkRunnable implements Runnable {
         auvList.add("kat");
         auvList.add("raphael");
         auvList.add("monsun");
-        auvList.add("thomas");
-        auvList.add("ina");
+        //auvList.add("thomas");
+        //auvList.add("ina");
         log.info(this.toString(), "Done initializing the runnable");
 
     }

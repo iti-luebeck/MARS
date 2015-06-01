@@ -23,14 +23,14 @@ public class CommunicationBenchmark {
     private TablePrinter tablePrinter;
     private BenchmarkRunnable runnable;
     private ScheduledThreadPoolExecutor executor;
-    float initialDelay = 5;
+    float initialDelay = 10;
     final float TICKSIZE = 0.25f;
     final float MAXTICKCOUNTER;
     final float DELAY_AFTER;
     float tickCounter;
     float currentTick = 0;
     float counter = 0;
-    int runnableDelay = 10000;
+    int runnableDelay = 5000;
     int runnablePeriod = 591;
     ScheduledFuture<?> f1;
 
@@ -61,7 +61,7 @@ public class CommunicationBenchmark {
         logger.info(this.toString(), "Initializing the BenchmarkRunnable");
         runnable = new BenchmarkRunnable(this, comState, logger);
         TimeUnit unit = TimeUnit.MILLISECONDS;
-        logger.info(this.toString(), "Scheduling the runnable with: delay: " + runnableDelay + " period: " + runnablePeriod + " timeUnit: " + unit.toString());
+        logger.info(this.toString(), "Scheduling the runnable with: delay: " + (runnableDelay+1000*initialDelay) + " period: " + runnablePeriod + " timeUnit: " + unit.toString());
         f1 =executor.scheduleAtFixedRate(runnable, runnableDelay, runnablePeriod, unit);
         logger.info(this.toString(), "This Benchmark will run: " + MAXTICKCOUNTER + " ticks á " +TICKSIZE+ " millisecounds ");
         logger.info(this.toString(), " Schedule: initialdelay: " +initialDelay + " secounds. runnableDelay: "+runnableDelay/1000*1/TICKSIZE+ " ticks. delay after: " + DELAY_AFTER + " ticks." );
