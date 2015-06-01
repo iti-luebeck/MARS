@@ -73,6 +73,8 @@ public class CommunicationState extends AbstractAppState {
      * Used to determine how many threads the executor should use
      */
     private static int threadCount;
+    
+    private int reflectionCount;
     /**
      * How many ticks per secound should the runnables have
      */
@@ -104,7 +106,7 @@ public class CommunicationState extends AbstractAppState {
      */
     private CommunicationVisualizer communicationGraphics = null;
     
-    
+    //Benchmark related stuff
     private final boolean benchmark = false;
     private CommunicationBenchmark commBenchmark;
     
@@ -181,7 +183,7 @@ public class CommunicationState extends AbstractAppState {
             executor.scheduleAtFixedRate(multiPathModule, 500000, 1000000/RESOLUTION/10, TimeUnit.MICROSECONDS);
         }
         if(distanceTraceModule == null) {
-            distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor);
+            distanceTraceModule = new DistanceTriggerCalculator(CentralLookup.getDefault().lookup(SimState.class),executor,reflectionCount);
             distanceTraceModule.init(auvManager);
             for(Map.Entry<String,ModemMessageRunnable> entry : auvProcessMap.entrySet()) {
                 entry.getValue().setDistanceTriggerCalculator(distanceTraceModule);
@@ -217,6 +219,7 @@ public class CommunicationState extends AbstractAppState {
         Preferences pref = Preferences.userNodeForPackage(mars.uwCommManager.options.CommunicationConfigurationOptionsPanelController.class);
         if(pref == null) return false;
         threadCount = pref.getInt(OPTIONS_THREADCOUNT_SLIDER, 5);
+        reflectionCount = pref.getInt(OPTIONS_REFLECTION_COUNT_SLIDER, 1);
         commOnMapActive = pref.getBoolean(OPTIONS_SHOW_MINIMAP_RANGE_CHECKBOX, false);
         commOnMapBorders = pref.getBoolean(OPTIONS_MINIMAP_CIRCLE_BORDER_RADIOBUTTON,false);
         commOnMapShowCommLinks = pref.getBoolean(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX, false);
@@ -253,6 +256,10 @@ public class CommunicationState extends AbstractAppState {
                 if(e.getKey().equals(OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX)) {
                     commOnMapShowCommLinks = Boolean.parseBoolean(e.getNewValue());
                     if(!(commOnMap == null)) commOnMap.setShowLinks(commOnMapShowCommLinks);
+                }
+                if(e.getKey().equals(OPTIONS_REFLECTION_COUNT_SLIDER)) {
+                    reflectionCount = Integer.parseInt(e.getNewValue());
+                    if(distanceTraceModule!=null) distanceTraceModule.setNumberOfReflections(reflectionCount);
                 }
             }
         });

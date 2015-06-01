@@ -78,14 +78,14 @@ public class DistanceTriggerCalculator implements Runnable {
      * Does nothing but initialize variables
      * @since 0.1 
      */
-    public DistanceTriggerCalculator(SimState simState,ScheduledThreadPoolExecutor executor) {
+    public DistanceTriggerCalculator(SimState simState,ScheduledThreadPoolExecutor executor,int maxReflectionCount) {
         distanceMap = new HashMap();
         distanceMapWithTraces = new HashMap();
         this.simState = simState;
         this.executor = executor;
         eventGen = new TriggerEventGenerator();
         speedOfSoundMap = new HashMap();
-        maxReflectionCount = 0;
+        this.maxReflectionCount = maxReflectionCount>0?maxReflectionCount:1;
         maxRangeMap = new HashMap();
     }
     
@@ -308,5 +308,9 @@ public class DistanceTriggerCalculator implements Runnable {
     
     public void setSpeedOfSound(String auv, float speed) {
         this.speedOfSoundMap.put(auv, speed);
+    }
+    
+    public void setNumberOfReflections(int refCount) {
+        this.maxReflectionCount = refCount;
     }
 }

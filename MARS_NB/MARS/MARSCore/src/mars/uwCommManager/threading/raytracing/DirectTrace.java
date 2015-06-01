@@ -63,6 +63,7 @@ public class DirectTrace implements Runnable {
         this.MAX_REFLECTION = maxReflectionCount;
         this.SPEED_OF_SOUND = speedOfSound;
         this.MAX_DISTANCE = MAX_DISTANCE;
+ 
     }
 
     /**
@@ -189,7 +190,7 @@ public class DirectTrace implements Runnable {
                         }
                     }
                     //if(auvName.equals("laura")) {
-                    for (int i = 1; i < 2; i++) {
+                    for (int i = 1; i < MAX_REFLECTION; i++) {
                         BouncingTrace bTrace = new BouncingTrace(this, i, SPEED_OF_SOUND, MAX_DISTANCE,debug);
                         bTrace.init(rootAUV, targetAUV, modPos, targetModPos, simState.getCollider());
                         boolean surfaceFirst = true;
