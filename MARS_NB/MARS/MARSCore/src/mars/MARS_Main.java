@@ -14,6 +14,9 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -32,6 +35,7 @@ import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
 import mars.misc.MyOBJLoader;
 import mars.states.AdvancedFlyByCamera;
+import mars.states.AdvancedStatsAppState;
 import mars.states.AppStateExtension;
 import mars.states.GuiState;
 import mars.states.MARSAppState;
@@ -82,6 +86,9 @@ public class MARS_Main extends SimpleApplication {
 
     //progress bar (nbp)
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("MARS_Main");
+    
+    //for the AdvancedStatsAppState
+    private AdvancedStatsAppStateActionListener actionListenerAdvancedStatsAppState = new AdvancedStatsAppStateActionListener();
 
     /**
      *
@@ -154,6 +161,22 @@ public class MARS_Main extends SimpleApplication {
         advFlyCam.setEnabled(false);
         advFlyCam.setZoomSpeed(2f);
         advFlyCam.registerWithInput(inputManager);
+        
+        //override jme statsappstate with own implemneation
+        if (stateManager.getState(StatsAppState.class) != null) {
+            StatsAppState state = stateManager.getState(StatsAppState.class);
+            stateManager.detach(state);
+            
+            AdvancedStatsAppState advnState = new AdvancedStatsAppState();
+            stateManager.attach(advnState);
+            //stateManager.getState(StatsAppState.class).setFont(guiFont);
+            //fpsText = stateManager.getState(StatsAppState.class).getFpsText();
+            inputManager.addMapping("statsMeasureSave", new KeyTrigger(KeyInput.KEY_F11));
+            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureSave");  
+            inputManager.addMapping("statsMeasureStart", new KeyTrigger(KeyInput.KEY_F9));
+            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureStart"); 
+        }
+        
 
         if (configManager.isAutoEnabled()) {
             //SimState simstate = new SimState(view,configManager);
@@ -178,6 +201,27 @@ public class MARS_Main extends SimpleApplication {
             }
         });
     }
+    
+    private class AdvancedStatsAppStateActionListener implements ActionListener {
+
+        @Override
+        public void onAction(String name, boolean value, float tpf) {
+            if (!value) {
+                return;
+            }
+
+            if (name.equals("statsMeasureSave")){
+                if (stateManager.getState(AdvancedStatsAppState.class) != null) {
+                    stateManager.getState(AdvancedStatsAppState.class).saveFPSToCSV();
+                }
+            }else if (name.equals("statsMeasureStart")){
+                if (stateManager.getState(AdvancedStatsAppState.class) != null) {
+                    stateManager.getState(AdvancedStatsAppState.class).setstatsSaveStart(true);
+                }
+            }
+        }
+    }
+
 
     /*
      * Used to map the folders correctly with NetBeans Platform

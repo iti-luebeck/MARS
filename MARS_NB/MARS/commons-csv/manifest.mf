@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.commonscsv
+OpenIDE-Module-Localizing-Bundle: mars/libs/commonscsv/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.1
+
