@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mars.core;
 
 import org.openide.util.lookup.AbstractLookup;

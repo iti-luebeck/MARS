@@ -1,10 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package mars.misc;
-
-/*
  * Copyright (c) 2009-2010 jMonkeyEngine
  * All rights reserved.
  *
@@ -35,6 +29,8 @@ package mars.misc;
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package mars.misc;
+
 import com.jme3.asset.*;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialList;
