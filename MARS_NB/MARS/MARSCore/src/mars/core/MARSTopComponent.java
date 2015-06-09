@@ -1739,6 +1739,7 @@ public final class MARSTopComponent extends TopComponent {
         //set the toolbar positions
         ToolbarPool.getDefault().setConfiguration("MyToolbar");
         ToolbarPool.getDefault().setPreferredIconSize(24);
+        ToolbarPool.getDefault().waitFinished();
         
         //redirect sysout to output window
         redirectSystemStreams();
@@ -1775,7 +1776,7 @@ public final class MARSTopComponent extends TopComponent {
                         //view.setCanvasPanel(settings.getWidth(),settings.getHeight());
 
                         //JmeSystem.setLowPermissions(true);
-                        mars = new MARS_Main();      
+                        mars = new MARS_Main(); 
                         
                         Runnable runt = new Runnable() {
                                     public void run() {
