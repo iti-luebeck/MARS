@@ -33,6 +33,7 @@ import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.ros.MARSNodeMain;
@@ -72,6 +73,14 @@ public class ImagenexSonar_852_Echo extends Sonar {
      */
     public ImagenexSonar_852_Echo() {
         super();
+    }
+    
+    /**
+     *
+     * @param sonar
+     */
+    public ImagenexSonar_852_Echo(ImagenexSonar_852_Echo sonar) {
+        super(sonar);
     }
 
     /**
@@ -137,6 +146,17 @@ public class ImagenexSonar_852_Echo extends Sonar {
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x) {
         return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public PhysicalExchanger copy() {
+        ImagenexSonar_852_Echo sensor = new ImagenexSonar_852_Echo(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

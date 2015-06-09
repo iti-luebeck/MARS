@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.hardware.Imaginex;
 
 /**
@@ -51,6 +52,24 @@ public class TriTech extends Sonar {
      */
     public TriTech() {
         super();
+    }
+    
+    /**
+     *
+     */
+    public TriTech(TriTech sonar) {
+        super(sonar);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public PhysicalExchanger copy() {
+        TriTech sensor = new TriTech(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

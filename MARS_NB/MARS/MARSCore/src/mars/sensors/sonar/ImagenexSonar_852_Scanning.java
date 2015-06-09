@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.Helper.Helper;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.misc.SonarData;
@@ -75,6 +76,14 @@ public class ImagenexSonar_852_Scanning extends Sonar {
      */
     public ImagenexSonar_852_Scanning() {
         super();
+    }
+    
+    /**
+     *
+     * @param sonar
+     */
+    public ImagenexSonar_852_Scanning(ImagenexSonar_852_Scanning sonar) {
+        super(sonar);
     }
 
     /**
@@ -148,6 +157,17 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     @Override
     protected float calculateStandardDeviationNoiseFunction(float x) {
         return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public PhysicalExchanger copy() {
+        ImagenexSonar_852_Scanning sensor = new ImagenexSonar_852_Scanning(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**

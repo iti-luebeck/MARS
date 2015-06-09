@@ -32,6 +32,7 @@ package mars.sensors;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
@@ -67,6 +68,14 @@ public class Hakuyo extends LaserScanner {
     public Hakuyo() {
         super();
     }
+    
+    /**
+     *
+     */
+    public Hakuyo(Hakuyo sensor) {
+        super(sensor);
+    }
+
 
     @Override
     protected float calculateAverageNoiseFunction(float x) {
@@ -91,6 +100,17 @@ public class Hakuyo extends LaserScanner {
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.LaserScan._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public PhysicalExchanger copy() {
+        Hakuyo sensor = new Hakuyo(this);
+        sensor.initAfterJAXB();
+        return sensor;
     }
 
     /**
