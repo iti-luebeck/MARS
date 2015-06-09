@@ -56,6 +56,7 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
+import mars.auv.AUV_Parameters;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
@@ -378,7 +379,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             getAuv().initPhysicalExchangerFuture();
         }
         
-        //make debug stuff
+        //make debug stuff later
         if(getAuv().getAuv_param().isDebugPhysicalExchanger() && enabled){
             setNodeVisibility(true);
         }else{

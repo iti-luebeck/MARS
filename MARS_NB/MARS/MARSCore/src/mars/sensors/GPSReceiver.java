@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.geodesy.Ellipsoid;
 import mars.geodesy.GeodeticCalculator;
@@ -261,6 +262,12 @@ public class GPSReceiver extends Sensor {
     public void setEnabled(Boolean enabled) {
         super.setEnabled(enabled);
         pos.setEnabled(enabled);
+    }
+    
+    @Override
+    public void setAuv(AUV auv) {
+        super.setAuv(auv);
+        pos.setAuv(auv);
     }
     
     public Vector3f getGPS(){

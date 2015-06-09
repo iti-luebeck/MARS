@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.IMUData;
 import mars.ros.MARSNodeMain;
@@ -220,6 +221,14 @@ public class IMU extends Sensor {
         acc.setEnabled(enabled);
         gyro.setEnabled(enabled);
         oro.setEnabled(enabled);
+    }
+    
+    @Override
+    public void setAuv(AUV auv) {
+        super.setAuv(auv);
+        acc.setAuv(auv);
+        gyro.setAuv(auv);
+        oro.setAuv(auv);
     }
 
     /**
