@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyConfig>
+    <keys>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#49 N" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#2 1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#29 Left Ctrl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#10 9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#38 L" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#79 Numpad 1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#3 2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#69 Num Lock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#28 Enter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#48 B" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#103 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#39 ;" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#188 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#0 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#117 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#136 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#40 '" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#219 Left Option" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#148 Kanji" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#88 F12" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#216 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#158 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#202 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#118 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#30 A" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#44 Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#193 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#45 X" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#208 Down" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_right_back</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#24 O" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#204 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#34 G" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">servoDec</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#109 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#168 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#41 `" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#134 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#60 F2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#7 6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#178 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#139 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#63 F5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#153 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#107 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#14 Backspace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#214 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#181 Numpad /" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#86 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#20 T" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#85 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#27 ]" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#130 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#129 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#179 Numpad ." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#97 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#132 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#116 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#180 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#207 End" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_down_net</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#155 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#197 Pause" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#82 Numpad 0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#171 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#187 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#80 Numpad 2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_back</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#61 F3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#205 Right" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_left_forward</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#94 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#18 E" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#185 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#74 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#215 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#146 :" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#105 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#96 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#206 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#101 F14" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#145 @" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#159 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#163 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#128 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#192 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#84 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#173 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#6 5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#23 I" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#13 =" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#25 P" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#87 F11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#50 M" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#142 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#75 Numpad 4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">setspeed</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#54 Right Shift" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#8 7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#213 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#199 Home" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_up_net</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#194 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#91 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#114 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#166 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#112 Kana" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#104 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#53 /" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#95 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#55 *" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#170 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#52 ." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#21 Y" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#184 Right Alt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#51 ," xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#113 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#120 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#144 Circumflex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#12 -" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#93 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#11 0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#71 Numpad 7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_down</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#169 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#68 F10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#157 Right Ctrl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#190 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#137 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#210 Insert" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#119 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#124 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#19 R" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#201 Page Up" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_forward_net</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#70 Scroll Lock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#15 Tab" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#81 Numpad 3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#56 Left Alt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#203 Left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_left_back</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#217 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#46 C" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#174 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#126 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#47 V" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#211 Delete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#175 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#5 4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#4 3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#191 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#125 Yen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#100 F13" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#141 Numpad =" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#43 \" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#67 F9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#131 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#22 U" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#156 Numpad Enter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#32 D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#209 Page Down" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_back_net</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#151 Unlabeled" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#183 SysEq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#72 Numpad 8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_forward</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#189 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#122 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#177 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#123 No Convert" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#218 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#57 Space" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">canon_shoot</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#167 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#135 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#36 J" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#121 Convert" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#62 F4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#90 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#66 F8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#127 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#42 Left Shift" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#64 F6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#73 Numpad 9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_both_up</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#140 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#196 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#133 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#26 [" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#212 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#195 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#83 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#78 +" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#99 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#164 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#92 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#9 8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#162 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#89 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#59 F1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#1 Esc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#147 _" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#172 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#16 Q" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#176 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#182 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#150 Ax" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#76 Numpad 5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">servo</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#77 Numpad 6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#108 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#98 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#17 W" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#165 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#102 F15" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#106 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#152 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#115 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#221 Apps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#31 S" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#143 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#33 F" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">servoInc</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#111 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#160 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#149 Stop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#200 Up" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">thruster_right_forward</value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#58 Caps Lock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#161 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#110 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#186 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#35 H" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#154 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#37 K" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#220 Right Option" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#138 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#222 Power" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#198 null" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+        <entry xsi:type="myHashMapEntryTypeObject" key="#65 F7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"></value>
+        </entry>
+    </keys>
+    <auv_key_focus>hanse2</auv_key_focus>
+</KeyConfig>

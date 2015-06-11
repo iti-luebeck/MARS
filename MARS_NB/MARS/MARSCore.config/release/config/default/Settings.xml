@@ -255,7 +255,7 @@
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">water_2.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                     </value>
                 </entry>
@@ -362,7 +362,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="FPS">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                     </value>
                 </entry>
@@ -461,9 +461,9 @@
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="direction">
                             <value>
-                                <x>0.0</x>
+                                <x>1.0</x>
                                 <y>-1.0</y>
-                                <z>0.0</z>
+                                <z>1.0</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="ambient">
@@ -481,7 +481,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="WavesWater">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
                     </value>
                 </entry>
@@ -489,16 +489,16 @@
                     <value>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                             <value>
-                                <x>-7.0</x>
-                                <y>-2.0</y>
-                                <z>0.0</z>
+                                <x>30.0</x>
+                                <y>-2.5</y>
+                                <z>40.0</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
                             <value>
-                                <x>0.15625</x>
+                                <x>1.08</x>
                                 <y>0.01176</y>
-                                <z>0.15625</z>
+                                <z>1.08</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
@@ -511,26 +511,20 @@
                                 <z>0.0</z>
                             </value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="advanced">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
-                        </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="lod">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="tileLength">
-                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.15625</value>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="LodMultiplier">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">2.7</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="HeightMap">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_2_hm.png</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_hm.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="ColorMap">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_2_cm.jpg</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_cm.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="AlphaMap">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_2_am.png</value>
-                        </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="tileHeigth">
-                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">85.0</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_am.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="patchSize">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">32</value>
