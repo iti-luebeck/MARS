@@ -769,4 +769,20 @@ public class MARS_Main extends SimpleApplication {
     public void setConfigName(String configName) {
         configManager.setConfigName(configName);
     }
+
+    @Override
+    public void setDisplayFps(boolean show) {
+        if (stateManager.getState(AdvancedStatsAppState.class) != null) {
+            AdvancedStatsAppState advnState = stateManager.getState(AdvancedStatsAppState.class);
+            advnState.setDisplayFps(show);
+        }
+    }
+
+    @Override
+    public void setDisplayStatView(boolean show) {
+        if (stateManager.getState(AdvancedStatsAppState.class) != null) {
+            AdvancedStatsAppState advnState = stateManager.getState(AdvancedStatsAppState.class);
+            advnState.setDisplayStatView(show);
+        }
+    }
 }
