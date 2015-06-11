@@ -255,7 +255,7 @@
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">water_2.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
                     </value>
                 </entry>
@@ -481,7 +481,7 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="WavesWater">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                     </value>
                 </entry>
