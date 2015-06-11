@@ -183,18 +183,13 @@ public class TerrainSender extends Sensor {
         info.setResolution(mars_settings.getTerrainScale().getX());
 
         geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
-        if (mars_settings.isTerrainAdvanced()) {
-            float terScaleX = (mars_settings.getTerrainScale().x * initer.getTerrain_image_width()) / 2f;
-            float terScaleZ = (mars_settings.getTerrainScale().z * initer.getTerrain_image_width()) / 2f;
-            //float terScaleY = (mars_settings.getTerrainScale().y*initer.getTerrain_image_width())/2f;
-            point.setX(mars_settings.getTerrainPosition().x - terScaleX);
-            point.setY(mars_settings.getTerrainPosition().z - terScaleZ);
-            point.setZ(mars_settings.getTerrainPosition().y);
-        } else {
-            point.setX(mars_settings.getTerrainPosition().x);
-            point.setY(mars_settings.getTerrainPosition().z);
-            point.setZ(mars_settings.getTerrainPosition().y);
-        }
+        
+        float terScaleX = (mars_settings.getTerrainScale().x * initer.getTerrain_image_width()) / 2f;
+        float terScaleZ = (mars_settings.getTerrainScale().z * initer.getTerrain_image_width()) / 2f;
+        //float terScaleY = (mars_settings.getTerrainScale().y*initer.getTerrain_image_width())/2f;
+        point.setX(mars_settings.getTerrainPosition().x - terScaleX);
+        point.setY(mars_settings.getTerrainPosition().z - terScaleZ);
+        point.setZ(mars_settings.getTerrainPosition().y);
 
         Quaternion ter_orientation = new Quaternion();
         Quaternion ter_orientation_rueck = new Quaternion();
@@ -202,9 +197,7 @@ public class TerrainSender extends Sensor {
         ter_orientation_rueck = ter_orientation.inverse();
 
         com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        if (mars_settings.isTerrainAdvanced()) {
-            jme3_quat.fromAngles(FastMath.PI, FastMath.PI, -FastMath.PI);//we have to rotate it correctly because teramonkey is a little bit different in storing
-        }
+        jme3_quat.fromAngles(FastMath.PI, FastMath.PI, -FastMath.PI);//we have to rotate it correctly because teramonkey is a little bit different in storing
         ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
 
         geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);

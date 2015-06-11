@@ -1305,11 +1305,11 @@ public class Initializer {
          "Textures/Terrain/splat/alphamap.png"));*/
         //assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
         //assetManager.registerLocator("Assets/Forester", FileLocator.class);
-        Texture alphaMapImage = assetManager.loadTexture(
-                mars_settings.getTerrainAlphaMap());
+        //Texture alphaMapImage = assetManager.loadTexture(
+         //       mars_settings.getTerrainAlphaMap());
         //alphaMapImage.getImage().setFormat(Format.RGBA8);
         //mat_terrain.setTexture("Alpha", alphaMapImage);
-        mat_terrain.setTexture("AlphaMap", alphaMapImage);
+        //mat_terrain.setTexture("AlphaMap", alphaMapImage);
 
         /**
          * 1.2) Add GRASS texture into the red layer (Tex1).
@@ -1405,7 +1405,7 @@ public class Initializer {
          * 5. The LOD (level of detail) depends on were the camera is:
          */
         TerrainLodControl control = new TerrainLodControl(terrain, mars.getCamera());
-        control.setLodCalculator(new DistanceLodCalculator(65, 2.7f));
+        control.setLodCalculator(new DistanceLodCalculator(patchSize, mars_settings.getTerrainLodMultiplier()));
         terrain.addControl(control);
         control.setEnabled(mars_settings.getTerrainLod());
 
@@ -1444,21 +1444,23 @@ public class Initializer {
         RayDetectable.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain);
         
-        /*File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_3_am.png", "mars.core", false);
+        /*File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_am.png", "mars.core", false);
         DensityMap dm = new DensityMap(file4.getAbsolutePath());
-        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 4);
-        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
-        Geometry createImposterGrass = vs.createImposterGrass("Grass/grassTest.png", 0.3f, false, true, true, Vector2f.UNIT_XY, 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 5);
+        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/kelp_green.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        Geometry createImposterGrass = vs.createImposterGrass("Grass/kelp_green.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        Geometry createGenuineGrass2 = vs.createGenuineGrass("Grass/stalk.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+        Geometry createImposterGrass2 = vs.createImposterGrass("Grass/stalk.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         vs.setGenuineRed(createGenuineGrass);
         vs.setImposterRed(createImposterGrass);
-        //vs.setGenuineBlue(createGenuineGrass);
-        //vs.setImposterBlue(createImposterGrass);
-        //vs.setGenuineGreen(createGenuineGrass);
-        //vs.setImposterGreen(createImposterGrass);
-        vs.setMaxView(30f, 50f);
-        vs.setMinDist(0.15f, 0.15f, 0.15f);
-        vs.setShadowModes(ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
-        vs.plant(0f, 0f, 0f, 0f, 0f, 0f);
+        vs.setGenuineBlue(createGenuineGrass2);
+        vs.setImposterBlue(createImposterGrass2);
+        //vs.setGenuineGreen(createGenuineGrass2);
+        //vs.setImposterGreen(createImposterGrass2);
+        vs.setMaxView(500f, 700f);
+        vs.setMinDist(0.6f, 0.6f, 0.6f);
+        vs.setShadowModes(ShadowMode.Cast, ShadowMode.Cast, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
+        vs.plant(0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f);
         //sceneReflectionNode.attachChild(vs);*/
     }
 

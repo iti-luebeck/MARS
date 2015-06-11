@@ -1750,30 +1750,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean isTerrainAdvanced() {
-        return (Boolean) Terrain.get("advanced");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Boolean getTerrainAdvanced() {
-        return (Boolean) Terrain.get("advanced");
-    }
-
-    /**
-     *
-     * @param advanced
-     */
-    public void setTerrainAdvanced(Boolean advanced) {
-        Terrain.put("advanced", advanced);
-    }
-
-    /**
-     *
-     * @return
-     */
     public Boolean getTerrainLod() {
         return (Boolean) Terrain.get("lod");
     }
@@ -1784,25 +1760,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      */
     public void setTerrainLod(Boolean lod) {
         Terrain.put("lod", lod);
-    }
-
-    /**
-     *
-     * @return @deprecated
-     */
-    @Deprecated
-    public Float getTerrainTileHeigth() {
-        return (Float) Terrain.get("tileHeigth");
-    }
-
-    /**
-     *
-     * @param tileHeigth
-     * @deprecated
-     */
-    @Deprecated
-    public void setTerrainTileHeigth(Float tileHeigth) {
-        Terrain.put("tileHeigth", tileHeigth);
     }
 
     /**
@@ -1867,6 +1824,22 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      */
     public void setTerrainPatchSize(Integer patchSize) {
         Terrain.put("patchSize", patchSize);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getTerrainLodMultiplier() {
+        return (Float) Terrain.get("LodMultiplier");
+    }
+
+    /**
+     *
+     * @param lod
+     */
+    public void setTerrainLodMultiplier(Float lod) {
+        Terrain.put("LodMultiplier", lod);
     }
 
     /**
