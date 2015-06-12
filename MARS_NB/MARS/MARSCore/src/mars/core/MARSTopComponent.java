@@ -245,7 +245,7 @@ public final class MARSTopComponent extends TopComponent {
         jme3_move_auv = new javax.swing.JMenuItem();
         jme3_rotate_auv = new javax.swing.JMenuItem();
         jme3_poke = new javax.swing.JMenuItem();
-        jme3_params_auv = new javax.swing.JMenu();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jme3_debug_auv = new javax.swing.JMenu();
         jme3_debug_auv_pe = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_visualizers = new javax.swing.JCheckBoxMenuItem();
@@ -256,15 +256,17 @@ public final class MARSTopComponent extends TopComponent {
         jme3_debug_auv_wireframe = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_bounding = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_bounding_volume = new javax.swing.JCheckBoxMenuItem();
+        jme3_params_auv = new javax.swing.JMenu();
         jme3_waypoints_auv = new javax.swing.JMenu();
         jme3_waypoints_auv_enable = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_gradient = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_reset = new javax.swing.JMenuItem();
         jme3_waypoints_color = new javax.swing.JMenuItem();
-        jme3_reset_auv = new javax.swing.JMenuItem();
-        jme3_enable_auv = new javax.swing.JCheckBoxMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jme3_delete_auv = new javax.swing.JMenuItem();
+        jme3_enable_auv = new javax.swing.JCheckBoxMenuItem();
+        jme3_reset_auv = new javax.swing.JMenuItem();
         jColorChooser1 = new javax.swing.JColorChooser();
         auv_move_vector_dialog = new javax.swing.JDialog();
         jButton7 = new javax.swing.JButton();
@@ -302,7 +304,6 @@ public final class MARSTopComponent extends TopComponent {
 
         vector_dialog.setTitle(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vector_dialog.title")); // NOI18N
         vector_dialog.setMinimumSize(new java.awt.Dimension(180, 180));
-        vector_dialog.setPreferredSize(new java.awt.Dimension(180, 180));
         vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(vectorDialog_Confirm, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.vectorDialog_Confirm.text")); // NOI18N
@@ -348,7 +349,6 @@ public final class MARSTopComponent extends TopComponent {
         vector_dialog.getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 74, -1, -1));
 
         float_dialog.setMinimumSize(new java.awt.Dimension(190, 140));
-        float_dialog.setPreferredSize(new java.awt.Dimension(190, 140));
         float_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel4.text")); // NOI18N
@@ -375,7 +375,6 @@ public final class MARSTopComponent extends TopComponent {
         float_dialog.getContentPane().add(floatDialog_x, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 90, -1));
 
         int_dialog.setMinimumSize(new java.awt.Dimension(190, 130));
-        int_dialog.setPreferredSize(new java.awt.Dimension(190, 130));
         int_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         intDialog_x.setText(org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.intDialog_x.text")); // NOI18N
@@ -397,7 +396,6 @@ public final class MARSTopComponent extends TopComponent {
         int_dialog.getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
 
         string_dialog.setMinimumSize(new java.awt.Dimension(190, 130));
-        string_dialog.setPreferredSize(new java.awt.Dimension(190, 130));
         string_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jLabel6.text")); // NOI18N
@@ -709,9 +707,7 @@ public final class MARSTopComponent extends TopComponent {
             }
         });
         jme3_auv.add(jme3_poke);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_params_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_params_auv.text")); // NOI18N
-        jme3_auv.add(jme3_params_auv);
+        jme3_auv.add(jSeparator1);
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv.text")); // NOI18N
 
@@ -798,6 +794,9 @@ public final class MARSTopComponent extends TopComponent {
 
         jme3_auv.add(jme3_debug_auv);
 
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_params_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_params_auv.text")); // NOI18N
+        jme3_auv.add(jme3_params_auv);
+
         org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv.text")); // NOI18N
 
         jme3_waypoints_auv_enable.setSelected(true);
@@ -844,14 +843,15 @@ public final class MARSTopComponent extends TopComponent {
         jme3_waypoints_auv.add(jme3_waypoints_color);
 
         jme3_auv.add(jme3_waypoints_auv);
+        jme3_auv.add(jSeparator2);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_reset_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_reset_auv.text")); // NOI18N
-        jme3_reset_auv.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_delete_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_delete_auv.text")); // NOI18N
+        jme3_delete_auv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_reset_auvActionPerformed(evt);
+                jme3_delete_auvActionPerformed(evt);
             }
         });
-        jme3_auv.add(jme3_reset_auv);
+        jme3_auv.add(jme3_delete_auv);
 
         jme3_enable_auv.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jme3_enable_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_enable_auv.text")); // NOI18N
@@ -862,13 +862,13 @@ public final class MARSTopComponent extends TopComponent {
         });
         jme3_auv.add(jme3_enable_auv);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_delete_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_delete_auv.text")); // NOI18N
-        jme3_delete_auv.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_reset_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_reset_auv.text")); // NOI18N
+        jme3_reset_auv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_delete_auvActionPerformed(evt);
+                jme3_reset_auvActionPerformed(evt);
             }
         });
-        jme3_auv.add(jme3_delete_auv);
+        jme3_auv.add(jme3_reset_auv);
 
         auv_move_vector_dialog.setMinimumSize(new java.awt.Dimension(180, 235));
         auv_move_vector_dialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1670,6 +1670,8 @@ public final class MARSTopComponent extends TopComponent {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JMenu jme3_debug_auv;
