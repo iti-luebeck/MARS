@@ -249,20 +249,21 @@ public final class MARSTopComponent extends TopComponent {
         jme3_debug_auv = new javax.swing.JMenu();
         jme3_debug_auv_pe = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_visualizers = new javax.swing.JCheckBoxMenuItem();
-        jme3_debug_auv_centers = new javax.swing.JCheckBoxMenuItem();
-        jme3_debug_auv_buoy = new javax.swing.JCheckBoxMenuItem();
-        jme3_debug_auv_collision = new javax.swing.JCheckBoxMenuItem();
-        jme3_debug_auv_drag = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_wireframe = new javax.swing.JCheckBoxMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jme3_debug_auv_buoy = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_bounding = new javax.swing.JCheckBoxMenuItem();
         jme3_debug_auv_bounding_volume = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_centers = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_collision = new javax.swing.JCheckBoxMenuItem();
+        jme3_debug_auv_drag = new javax.swing.JCheckBoxMenuItem();
         jme3_params_auv = new javax.swing.JMenu();
         jme3_waypoints_auv = new javax.swing.JMenu();
+        jme3_waypoints_color = new javax.swing.JMenuItem();
         jme3_waypoints_auv_enable = new javax.swing.JCheckBoxMenuItem();
-        jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_gradient = new javax.swing.JCheckBoxMenuItem();
         jme3_waypoints_auv_reset = new javax.swing.JMenuItem();
-        jme3_waypoints_color = new javax.swing.JMenuItem();
+        jme3_waypoints_auv_visible = new javax.swing.JCheckBoxMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jme3_delete_auv = new javax.swing.JMenuItem();
         jme3_enable_auv = new javax.swing.JCheckBoxMenuItem();
@@ -729,14 +730,15 @@ public final class MARSTopComponent extends TopComponent {
         });
         jme3_debug_auv.add(jme3_debug_auv_visualizers);
 
-        jme3_debug_auv_centers.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_centers, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_centers.text")); // NOI18N
-        jme3_debug_auv_centers.addActionListener(new java.awt.event.ActionListener() {
+        jme3_debug_auv_wireframe.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_wireframe, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_wireframe.text")); // NOI18N
+        jme3_debug_auv_wireframe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_debug_auv_centersActionPerformed(evt);
+                jme3_debug_auv_wireframeActionPerformed(evt);
             }
         });
-        jme3_debug_auv.add(jme3_debug_auv_centers);
+        jme3_debug_auv.add(jme3_debug_auv_wireframe);
+        jme3_debug_auv.add(jSeparator3);
 
         jme3_debug_auv_buoy.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_buoy, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_buoy.text")); // NOI18N
@@ -746,33 +748,6 @@ public final class MARSTopComponent extends TopComponent {
             }
         });
         jme3_debug_auv.add(jme3_debug_auv_buoy);
-
-        jme3_debug_auv_collision.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_collision, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_collision.text")); // NOI18N
-        jme3_debug_auv_collision.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_debug_auv_collisionActionPerformed(evt);
-            }
-        });
-        jme3_debug_auv.add(jme3_debug_auv_collision);
-
-        jme3_debug_auv_drag.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_drag, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_drag.text")); // NOI18N
-        jme3_debug_auv_drag.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_debug_auv_dragActionPerformed(evt);
-            }
-        });
-        jme3_debug_auv.add(jme3_debug_auv_drag);
-
-        jme3_debug_auv_wireframe.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_wireframe, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_wireframe.text")); // NOI18N
-        jme3_debug_auv_wireframe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_debug_auv_wireframeActionPerformed(evt);
-            }
-        });
-        jme3_debug_auv.add(jme3_debug_auv_wireframe);
 
         jme3_debug_auv_bounding.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_bounding, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_bounding.text")); // NOI18N
@@ -792,12 +767,47 @@ public final class MARSTopComponent extends TopComponent {
         });
         jme3_debug_auv.add(jme3_debug_auv_bounding_volume);
 
+        jme3_debug_auv_centers.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_centers, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_centers.text")); // NOI18N
+        jme3_debug_auv_centers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_centersActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_centers);
+
+        jme3_debug_auv_collision.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_collision, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_collision.text")); // NOI18N
+        jme3_debug_auv_collision.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_collisionActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_collision);
+
+        jme3_debug_auv_drag.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_debug_auv_drag, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_debug_auv_drag.text")); // NOI18N
+        jme3_debug_auv_drag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_debug_auv_dragActionPerformed(evt);
+            }
+        });
+        jme3_debug_auv.add(jme3_debug_auv_drag);
+
         jme3_auv.add(jme3_debug_auv);
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_params_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_params_auv.text")); // NOI18N
         jme3_auv.add(jme3_params_auv);
 
         org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_color, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_color.text")); // NOI18N
+        jme3_waypoints_color.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jme3_waypoints_colorActionPerformed(evt);
+            }
+        });
+        jme3_waypoints_auv.add(jme3_waypoints_color);
 
         jme3_waypoints_auv_enable.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv_enable, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv_enable.text")); // NOI18N
@@ -807,15 +817,6 @@ public final class MARSTopComponent extends TopComponent {
             }
         });
         jme3_waypoints_auv.add(jme3_waypoints_auv_enable);
-
-        jme3_waypoints_auv_visible.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv_visible, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv_visible.text")); // NOI18N
-        jme3_waypoints_auv_visible.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_waypoints_auv_visibleActionPerformed(evt);
-            }
-        });
-        jme3_waypoints_auv.add(jme3_waypoints_auv_visible);
 
         jme3_waypoints_auv_gradient.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv_gradient, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv_gradient.text")); // NOI18N
@@ -834,13 +835,14 @@ public final class MARSTopComponent extends TopComponent {
         });
         jme3_waypoints_auv.add(jme3_waypoints_auv_reset);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_color, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_color.text")); // NOI18N
-        jme3_waypoints_color.addActionListener(new java.awt.event.ActionListener() {
+        jme3_waypoints_auv_visible.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jme3_waypoints_auv_visible, org.openide.util.NbBundle.getMessage(MARSTopComponent.class, "MARSTopComponent.jme3_waypoints_auv_visible.text")); // NOI18N
+        jme3_waypoints_auv_visible.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jme3_waypoints_colorActionPerformed(evt);
+                jme3_waypoints_auv_visibleActionPerformed(evt);
             }
         });
-        jme3_waypoints_auv.add(jme3_waypoints_color);
+        jme3_waypoints_auv.add(jme3_waypoints_auv_visible);
 
         jme3_auv.add(jme3_waypoints_auv);
         jme3_auv.add(jSeparator2);
@@ -1672,6 +1674,7 @@ public final class MARSTopComponent extends TopComponent {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu jme3_auv;
     private javax.swing.JMenuItem jme3_chase_auv;
     private javax.swing.JMenu jme3_debug_auv;
