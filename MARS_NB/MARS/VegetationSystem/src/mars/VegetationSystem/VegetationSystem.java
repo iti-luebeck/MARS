@@ -84,6 +84,7 @@ public class VegetationSystem extends Node{
         BoundingBox vol = (BoundingBox) terrain.getWorldBound();
         terrainWidth = vol.getXExtent();
         terrainHeight = vol.getZExtent();
+        setLocalTranslation(terrain.getLocalTranslation());
         pixelWidth = terrainWidth*2/(float)densityMap.getWidth();
         pixelHeight = terrainHeight*2/(float)densityMap.getHeight();
         patchLength = (float) Math.sqrt(Math.pow(Math.abs(pixelWidth*patchSize), 2)+Math.pow(Math.abs(pixelHeight*patchSize), 2));
@@ -450,7 +451,8 @@ public class VegetationSystem extends Node{
         //posRed.optimize();
         //posGreen.optimize();
         //posBlue.optimize();
-        this.setShadowMode(ShadowMode.CastAndReceive);
+        //this.setShadowMode(ShadowMode.CastAndReceive);
+        this.setShadowMode(ShadowMode.Off);
         
         info += "Total Objects: Red: " + countRed + " " + "Green: " + countGreen + " " + "Blue: " + countBlue;
     }
