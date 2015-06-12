@@ -504,15 +504,15 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     @Override
     public Action[] getActions(boolean popup) {
         if (obj instanceof VideoCamera) {
-            return new Action[]{new ViewCameraAction(this), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{new ViewCameraAction(this), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), new EnableAction(), SystemAction.get(RenameAction.class)};
         } else if (obj instanceof RayBasedSensor) {
-            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{new SonarPlanarAction(), new SonarPolarAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), new EnableAction(), SystemAction.get(RenameAction.class)};
         } else if (obj instanceof CommunicationDevice) {
-            return new Action[]{new ViewCommunicationAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{new ViewCommunicationAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), new EnableAction(), SystemAction.get(RenameAction.class)};
         } else if (obj instanceof Sensor) {
-            return new Action[]{new DataChartAction(), new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{new DataChartAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), new EnableAction(), SystemAction.get(RenameAction.class)};
         } else {
-            return new Action[]{new EnableAction(), SystemAction.get(RenameAction.class), SystemAction.get(DeleteAction.class),SystemAction.get(CopyAction.class)};
+            return new Action[]{SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), new EnableAction(), SystemAction.get(RenameAction.class)};
         }
     }
 

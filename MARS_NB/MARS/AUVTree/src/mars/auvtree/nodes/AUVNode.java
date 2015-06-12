@@ -110,7 +110,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(), new ResetAction(), new EnableAction(), SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class), new DebugAction()};
+        return new Action[]{new ChaseAction(), new EnableAction(), new ResetAction(), null, new DebugAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class)};
     }
 
     /**
