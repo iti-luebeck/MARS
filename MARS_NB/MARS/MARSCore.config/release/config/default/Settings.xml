@@ -118,16 +118,16 @@
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="position">
                             <value>
-                                <x>-7.0</x>
-                                <y>-2.0</y>
-                                <z>0.0</z>
+                                <x>30.0</x>
+                                <y>-2.5</y>
+                                <z>40.0</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeVector3F" key="scale">
                             <value>
-                                <x>0.15625</x>
+                                <x>1.08</x>
                                 <y>0.01176</y>
-                                <z>0.15625</z>
+                                <z>1.08</z>
                             </value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
