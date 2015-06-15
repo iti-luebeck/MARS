@@ -73,7 +73,7 @@ public class ObjectPatches{
             Material cube1Mat = new Material(am, 
             "Common/MatDefs/Misc/Unshaded.j3md");
             Texture cube1Tex = am.loadTexture(
-            "Textures/road_normal.png");
+            "Textures/Terrain/italy_am2.png");
             cube1Mat.setTexture("ColorMap", cube1Tex);
             cube1Geo.setMaterial(cube1Mat);
             child.attachChild(cube1Geo);
@@ -98,7 +98,7 @@ public class ObjectPatches{
             Material cube1Mat = new Material(am, 
             "Common/MatDefs/Misc/Unshaded.j3md");
             Texture cube1Tex = am.loadTexture(
-            "Textures/road_normal.png");
+            "Textures/Terrain/italy_am2.png");
             cube1Mat.setTexture("ColorMap", cube1Tex);
             cube1Geo.setMaterial(cube1Mat);
             child.attachChild(cube1Geo);

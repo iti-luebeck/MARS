@@ -84,7 +84,6 @@ public class VegetationSystem extends Node{
         BoundingBox vol = (BoundingBox) terrain.getWorldBound();
         terrainWidth = vol.getXExtent();
         terrainHeight = vol.getZExtent();
-        setLocalTranslation(terrain.getLocalTranslation());
         pixelWidth = terrainWidth*2/(float)densityMap.getWidth();
         pixelHeight = terrainHeight*2/(float)densityMap.getHeight();
         patchLength = (float) Math.sqrt(Math.pow(Math.abs(pixelWidth*patchSize), 2)+Math.pow(Math.abs(pixelHeight*patchSize), 2));
@@ -308,7 +307,7 @@ public class VegetationSystem extends Node{
         posGreen.debug(debug);
         posBlue.debug(debug);
             
-        float posX = -terrainWidth;
+        float posX = -terrainWidth + terrain.getLocalTranslation().x;
         float posZ;
 
         Spatial grassGenuine;
@@ -326,85 +325,8 @@ public class VegetationSystem extends Node{
         int countBlue = 0;
         
         for (int i = 0; i < densityMap.getWidth(); i++){
-            posZ = -terrainHeight;     
+            posZ = -terrainHeight + terrain.getLocalTranslation().z;     
             for (int j = 0; j < densityMap.getHeight(); j++){
-                if(genuineRed != null && imposterRed != null){
-                    numWidth = (int)(pixelWidth/minDistRed)*densRed[i][j]/255;
-                    numHeight = (int)(pixelHeight/minDistRed)*densRed[i][j]/255;
-                
-                    if(i%patchSize == 0 && j%patchSize == 0){
-                        posRed.createGenuineNode(i/patchSize, j/patchSize);
-                        posRed.createImposterNode(i/patchSize, j/patchSize);
-                        tempX = posX+pixelWidth*patchSize/2;
-                        tempZ = posZ+pixelHeight*patchSize/2;
-                        posRed.setLocalTranslation(i/patchSize, j/patchSize, tempX, terrain.getHeight(new Vector2f(tempX, tempZ))+terrain.getLocalTranslation().y, tempZ);
-                    }
-                
-                    for(int k = 0; k < numWidth; k++){
-                        for(int l = 0; l < numHeight; l++){
-                            countRed ++;
-                            grassGenuine = genuineRed.clone(false);
-                            grassImposter = imposterRed.clone(false);
-                            transX = (float)(posX + k*(pixelWidth/numWidth)+(float)Math.random()*randPR*(1+pixelWidth/numWidth));
-                            transZ = (float)(posZ + l*(pixelHeight/numHeight)+(float)Math.random()*randPR*(1+pixelWidth/numHeight));
-                            grassGenuine.setLocalTranslation(transX, terrain.getHeight(new Vector2f(transX, transZ)), transZ);
-                            grassGenuine.getLocalTranslation().subtractLocal(posRed.getGenuine(i/patchSize, j/patchSize).getLocalTranslation().subtract(0, terrain.getLocalTranslation().y, 0));
-                            grassImposter.setLocalTranslation(grassGenuine.getLocalTranslation());
-                            temp = (float)Math.random();
-                            grassGenuine.rotate(0, temp, 0);
-                            grassImposter.rotate(0, temp, 0);
-                            scaleMult = (float) (1 + (Math.random()-Math.random())*0.5f*randSR);
-                            grassGenuine.setLocalScale(grassGenuine.getLocalScale().mult(scaleMult));
-                            grassImposter.setLocalScale(grassImposter.getLocalScale().mult(scaleMult));
-                        
-                            posRed.addGenuine(i/patchSize, j/patchSize, grassGenuine);
-                            posRed.addImposter(i/patchSize, j/patchSize, grassImposter);
-                        }
-                    }
-
-                    if((i+1)%patchSize == 0 && (j+1)%patchSize == 0){
-                            posRed.optimizePatch(i/patchSize, j/patchSize);
-                    }
-                }
-                
-                if(genuineGreen != null && imposterBlue != null){
-                    numWidth = (int)(pixelWidth/minDistGreen)*densGreen[i][j]/255;
-                    numHeight = (int)(pixelHeight/minDistGreen)*densGreen[i][j]/255;
-                
-                    if(i%patchSize == 0 && j%patchSize == 0){
-                        posGreen.createGenuineNode(i/patchSize, j/patchSize);
-                        posGreen.createImposterNode(i/patchSize, j/patchSize);
-                        tempX = posX+pixelWidth*patchSize/2;
-                        tempZ = posZ+pixelHeight*patchSize/2;
-                        posGreen.setLocalTranslation(i/patchSize, j/patchSize, tempX, terrain.getHeight(new Vector2f(tempX, tempZ))+terrain.getLocalTranslation().y, tempZ);
-                    }
-                
-                    for(int k = 0; k < numWidth; k++){
-                        for(int l = 0; l < numHeight; l++){
-                            countGreen ++;
-                            grassGenuine = genuineGreen.clone(false);
-                            grassImposter = imposterGreen.clone(false);
-                            transX = (float)(posX + k*(pixelWidth/numWidth)+(float)Math.random()*randPG*(1+pixelWidth/numWidth));
-                            transZ = (float)(posZ + l*(pixelHeight/numHeight)+(float)Math.random()*randPG*(1+pixelWidth/numHeight));
-                            grassGenuine.setLocalTranslation(transX, terrain.getHeight(new Vector2f(transX, transZ)), transZ);
-                            grassGenuine.getLocalTranslation().subtractLocal(posGreen.getGenuine(i/patchSize, j/patchSize).getLocalTranslation().subtract(0, terrain.getLocalTranslation().y, 0));
-                            grassImposter.setLocalTranslation(grassGenuine.getLocalTranslation());
-                            temp = (float)Math.random();
-                            grassGenuine.rotate(0, temp, 0);
-                            grassImposter.rotate(0, temp, 0);
-                            scaleMult = (float) (1 + (Math.random()-Math.random())*0.5f*randSG);
-                            grassGenuine.setLocalScale(grassGenuine.getLocalScale().mult(scaleMult));
-                            grassImposter.setLocalScale(grassImposter.getLocalScale().mult(scaleMult));
-                        
-                            posGreen.addGenuine(i/patchSize, j/patchSize, grassGenuine);
-                            posGreen.addImposter(i/patchSize, j/patchSize, grassImposter);
-                        }
-                    }
-                    
-                    if((i+1)%patchSize == 0 && (j+1)%patchSize == 0){
-                            posGreen.optimizePatch(i/patchSize, j/patchSize);
-                    }                  
-                }
                 
                 if(genuineBlue != null && imposterBlue != null){
                     numWidth = (int)(pixelWidth/minDistBlue)*densBlue[i][j]/255;
@@ -444,13 +366,90 @@ public class VegetationSystem extends Node{
                             posBlue.optimizePatch(i/patchSize, j/patchSize);
                     }
                 }
+                
+                
+                if(genuineRed != null && imposterRed != null){
+                    numWidth = (int)(pixelWidth/minDistRed)*densRed[i][j]/255;
+                    numHeight = (int)(pixelHeight/minDistRed)*densRed[i][j]/255;
+                
+                    if(i%patchSize == 0 && j%patchSize == 0){
+                        posRed.createGenuineNode(i/patchSize, j/patchSize);
+                        posRed.createImposterNode(i/patchSize, j/patchSize);
+                        tempX = posX+pixelWidth*patchSize/2;
+                        tempZ = posZ+pixelHeight*patchSize/2;
+                        posRed.setLocalTranslation(i/patchSize, j/patchSize, tempX, terrain.getHeight(new Vector2f(tempX, tempZ))+terrain.getLocalTranslation().y, tempZ);
+                    }
+                
+                    for(int k = 0; k < numWidth; k++){
+                        for(int l = 0; l < numHeight; l++){
+                            countRed ++;
+                            grassGenuine = genuineRed.clone(false);
+                            grassImposter = imposterRed.clone(false);
+                            transX = (float)(posX + k*(pixelWidth/numWidth)+(float)Math.random()*randPR*(1+pixelWidth/numWidth));
+                            transZ = (float)(posZ + l*(pixelHeight/numHeight)+(float)Math.random()*randPR*(1+pixelWidth/numHeight));
+                            grassGenuine.setLocalTranslation(transX, terrain.getHeight(new Vector2f(transX, transZ)), transZ);
+                            grassGenuine.getLocalTranslation().subtractLocal(posRed.getGenuine(i/patchSize, j/patchSize).getLocalTranslation().subtract(0, terrain.getLocalTranslation().y, 0));
+                            grassImposter.setLocalTranslation(grassGenuine.getLocalTranslation());
+                            temp = (float)Math.random();
+                            grassGenuine.rotate(0, temp, 0);
+                            grassImposter.rotate(0, temp, 0);
+                            scaleMult = (float) (1 + (Math.random()-Math.random())*0.5f*randSR);
+                            grassGenuine.setLocalScale(grassGenuine.getLocalScale().mult(scaleMult));
+                            grassImposter.setLocalScale(grassImposter.getLocalScale().mult(scaleMult));
+                        
+                            posRed.addGenuine(i/patchSize, j/patchSize, grassGenuine);
+                            posRed.addImposter(i/patchSize, j/patchSize, grassImposter);
+                        }
+                    }
+
+                    if((i+1)%patchSize == 0 && (j+1)%patchSize == 0){
+                            posRed.optimizePatch(i/patchSize, j/patchSize);
+                    }
+                }
+                
+                if(genuineGreen != null && imposterGreen != null){
+                    numWidth = (int)(pixelWidth/minDistGreen)*densGreen[i][j]/255;
+                    numHeight = (int)(pixelHeight/minDistGreen)*densGreen[i][j]/255;
+                
+                    if(i%patchSize == 0 && j%patchSize == 0){
+                        posGreen.createGenuineNode(i/patchSize, j/patchSize);
+                        posGreen.createImposterNode(i/patchSize, j/patchSize);
+                        tempX = posX+pixelWidth*patchSize/2;
+                        tempZ = posZ+pixelHeight*patchSize/2;
+                        posGreen.setLocalTranslation(i/patchSize, j/patchSize, tempX, terrain.getHeight(new Vector2f(tempX, tempZ))+terrain.getLocalTranslation().y, tempZ);
+                    }
+                
+                    for(int k = 0; k < numWidth; k++){
+                        for(int l = 0; l < numHeight; l++){
+                            countGreen ++;
+                            grassGenuine = genuineGreen.clone(false);
+                            grassImposter = imposterGreen.clone(false);
+                            transX = (float)(posX + k*(pixelWidth/numWidth)+(float)Math.random()*randPG*(1+pixelWidth/numWidth));
+                            transZ = (float)(posZ + l*(pixelHeight/numHeight)+(float)Math.random()*randPG*(1+pixelWidth/numHeight));
+                            grassGenuine.setLocalTranslation(transX, terrain.getHeight(new Vector2f(transX, transZ)), transZ);
+                            grassGenuine.getLocalTranslation().subtractLocal(posGreen.getGenuine(i/patchSize, j/patchSize).getLocalTranslation().subtract(0, terrain.getLocalTranslation().y, 0));
+                            grassImposter.setLocalTranslation(grassGenuine.getLocalTranslation());
+                            temp = (float)Math.random();
+                            grassGenuine.rotate(0, temp, 0);
+                            grassImposter.rotate(0, temp, 0);
+                            scaleMult = (float) (1 + (Math.random()-Math.random())*0.5f*randSG);
+                            grassGenuine.setLocalScale(grassGenuine.getLocalScale().mult(scaleMult));
+                            grassImposter.setLocalScale(grassImposter.getLocalScale().mult(scaleMult));
+                        
+                            posGreen.addGenuine(i/patchSize, j/patchSize, grassGenuine);
+                            posGreen.addImposter(i/patchSize, j/patchSize, grassImposter);
+                        }
+                    }
+                    
+                    if((i+1)%patchSize == 0 && (j+1)%patchSize == 0){
+                            posGreen.optimizePatch(i/patchSize, j/patchSize);
+                    }                  
+                }
+
                 posZ += pixelHeight;
             }
             posX += pixelWidth;
         }
-        //posRed.optimize();
-        //posGreen.optimize();
-        //posBlue.optimize();
         //this.setShadowMode(ShadowMode.CastAndReceive);
         this.setShadowMode(ShadowMode.Off);
         
@@ -493,7 +492,7 @@ public class VegetationSystem extends Node{
     @Override
     public void updateGeometricState(){
         
-        Vector3f location = cam.getLocation().add(terrainWidth,0,terrainHeight);
+        Vector3f location = cam.getLocation().add(terrainWidth,0,terrainHeight).subtract(terrain.getLocalTranslation().x, 0, terrain.getLocalTranslation().z);
         
         int width = (int)(location.x*densityMap.getWidth()/(2*terrainWidth*patchSize));
         int height = (int)(location.z*densityMap.getHeight()/(2*terrainHeight*patchSize));
