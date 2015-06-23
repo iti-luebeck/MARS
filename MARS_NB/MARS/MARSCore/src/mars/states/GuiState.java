@@ -358,7 +358,6 @@ public class GuiState extends AbstractAppState {
                 mars.getFlyByCamera().setEnabled(false);
                 AUV selected_auv = auvManager.getSelectedAUV();
                 if (selected_auv != null) {
-                    //guiControlState.resetDepthIteration();
                     guiControlState.setMove_auv(true);
                     guiControlState.setGhostObject(selected_auv.getGhostAUV());
                     //guiControlState.getGhostObject().setLocalTranslation(selected_auv.getAUVNode().worldToLocal(selected_auv.getAUVNode().getWorldTranslation(),null));//initial location set
