@@ -107,6 +107,8 @@ import mars.auv.example.Manta;
 import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
+import mars.communication.AUVConnection;
+import mars.communication.AUVConnectionFactory;
 import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
@@ -143,7 +145,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor{
+public class BasicAUV implements AUV, SceneProcessor {
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -206,6 +208,18 @@ public class BasicAUV implements AUV, SceneProcessor{
     private Vector3f drag_force_vec = new Vector3f(0f, 0f, 0f);
     private Node rootNode;
 
+    // ROS/TCP Connector --------
+    private AUVConnection auvConnection;
+
+    public void setAuvConnection(AUVConnection connection) {
+        auvConnection = connection;
+    }
+
+    public AUVConnection getAuvConnection() {
+        return auvConnection;
+    }
+    // --------------------------
+
     //PhysicalExchanger HashMaps to store and load sensors and actuators
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Sensors")
@@ -240,7 +254,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
 
-            if(simstate.getMARSSettings().getLoggingFileWrite()){
+            if (simstate.getMARSSettings().getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -249,8 +263,8 @@ public class BasicAUV implements AUV, SceneProcessor{
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!simstate.getMARSSettings().getLoggingEnabled()){
+
+            if (!simstate.getMARSSettings().getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
@@ -264,12 +278,15 @@ public class BasicAUV implements AUV, SceneProcessor{
         this.rootNode = simstate.getRootNode();
         this.initer = simstate.getIniter();
         selectionNode.attachChild(auv_node);
+
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
      *
      */
     public BasicAUV() {
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
@@ -301,6 +318,8 @@ public class BasicAUV implements AUV, SceneProcessor{
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
+
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
@@ -476,7 +495,7 @@ public class BasicAUV implements AUV, SceneProcessor{
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
         }
     }
-    
+
     /**
      * Init the PE in a safe way. Means that first a mars instance is available
      * and second enqueue the register.
@@ -498,7 +517,7 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     @Override
     public void registerPhysicalExchangers(ArrayList<PhysicalExchanger> arrlist) {
-        Iterator<PhysicalExchanger>  iter = arrlist.iterator();
+        Iterator<PhysicalExchanger> iter = arrlist.iterator();
         while (iter.hasNext()) {
             PhysicalExchanger pex = iter.next();
             registerPhysicalExchanger(pex);
@@ -669,14 +688,14 @@ public class BasicAUV implements AUV, SceneProcessor{
         }
         return false;
     }
-    
+
     @Override
-    public void setupLogger(){
+    public void setupLogger() {
         //set the logging
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
 
-            if(simstate.getMARSSettings().getLoggingFileWrite()){
+            if (simstate.getMARSSettings().getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -685,12 +704,12 @@ public class BasicAUV implements AUV, SceneProcessor{
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!simstate.getMARSSettings().getLoggingEnabled()){
+
+            if (!simstate.getMARSSettings().getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
-        }  
+        }
     }
 
     /**
@@ -1347,14 +1366,14 @@ public class BasicAUV implements AUV, SceneProcessor{
         });
         //}
     }
-    
+
     /*
-    *
-    */
-    private void initControls(){
+     *
+     */
+    private void initControls() {
         SedimentEmitterControl sediment = new SedimentEmitterControl(initer.getTerrainNode(), assetManager);
         auv_node.addControl(sediment);
-        if(!getAuv_param().getEnabled()){
+        if (!getAuv_param().getEnabled()) {
             sediment.setEnabled(false);
         }
     }

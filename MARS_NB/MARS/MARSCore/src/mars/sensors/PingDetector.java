@@ -326,7 +326,7 @@ public class PingDetector extends Sensor{
      */
     @Override
     public void publish() {
-        header.setSeq(rosSequenceNumber++);
+        header.setSeq(sequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
 

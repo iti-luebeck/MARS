@@ -281,7 +281,7 @@ public class IMU extends Sensor {
     @Override
     public void publish() {
         super.publish();
-        header.setSeq(rosSequenceNumber++);
+        header.setSeq(sequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);

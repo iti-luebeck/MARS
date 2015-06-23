@@ -175,7 +175,7 @@ public class Transformer extends Sensor {
      */
     @Override
     public void publish() {
-        header.setSeq(rosSequenceNumber++);
+        header.setSeq(sequenceNumber++);
         header.setFrameId("jme3");
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         tfs.setHeader(header);
