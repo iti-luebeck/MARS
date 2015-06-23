@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.PhysicalExchange;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -56,7 +56,6 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
-import mars.auv.AUV_Parameters;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
@@ -79,9 +78,9 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
     @SuppressWarnings("FieldMayBeFinal")
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
-    
+
     private EventListenerList evtlisteners = new EventListenerList();
-    
+
     private boolean initialized = false;
 
     /**
@@ -123,12 +122,12 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         this.physics_control = physics_control;
         this.pe = pe;
         this.mars_settings = mars_settings;
-        
+
         //setup logging
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
 
-            if(mars_settings.getLoggingFileWrite()){
+            if (mars_settings.getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -137,15 +136,13 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!mars_settings.getLoggingEnabled()){
+
+            if (!mars_settings.getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
         }
     }
-    
-    
 
     /**
      *
@@ -221,7 +218,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     /**
      *
      */
-    protected int rosSequenceNumber = 0;
+    protected int sequenceNumber = 0;
+
+    public int getNextSequenceNumber() {
+        return sequenceNumber++;
+    }
 
     /*
      * 
@@ -283,7 +284,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
 
     /**
      * Set the unique name.
-     * 
+     *
      * @param name
      */
     @Override
@@ -302,22 +303,22 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     public String getName() {
         return (String) variables.get("name");
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
-    public boolean isInitialized(){
+    public boolean isInitialized() {
         return initialized;
     }
-    
+
     /**
-     * 
+     *
      * @param initialized
      */
     @Override
-    public void setInitialized(boolean initialized){
+    public void setInitialized(boolean initialized) {
         this.initialized = initialized;
     }
 
@@ -373,16 +374,16 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         boolean old = getEnabled();
         variables.put("enabled", enabled);
         fire("enabled", old, enabled);
-        
+
         //init pe properly
-        if(enabled){
+        if (enabled) {
             getAuv().initPhysicalExchangerFuture();
         }
-        
+
         //make debug stuff later
-        if(getAuv().getAuv_param().isDebugPhysicalExchanger() && enabled){
+        if (getAuv().getAuv_param().isDebugPhysicalExchanger() && enabled) {
             setNodeVisibility(true);
-        }else{
+        } else {
             setNodeVisibility(false);
         }
     }
@@ -534,8 +535,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     * The update method that will be called by the auvManager, hence by the
-     * main mars update loop. Should be node safe
+     * The update method that will be called by the auvManager, hence by the main mars update loop. Should be node safe
      *
      * @param tpf
      */
@@ -754,12 +754,12 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
-            if(listeners1.length != 0){
+            if (listeners1.length != 0) {
                 publishData();
             }
         }
     }
-    
+
     /**
      *
      * @param mars_settings
@@ -767,13 +767,13 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     public void setMARS_settings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }
-    
-    public void setupLogger(){
+
+    public void setupLogger() {
         //set the logging
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
 
-            if(mars_settings.getLoggingFileWrite()){
+            if (mars_settings.getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -782,14 +782,14 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!mars_settings.getLoggingEnabled()){
+
+            if (!mars_settings.getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
-        }  
+        }
     }
-    
+
     /**
      *
      * @param listener
