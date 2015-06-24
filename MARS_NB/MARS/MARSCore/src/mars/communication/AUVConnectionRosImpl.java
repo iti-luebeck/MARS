@@ -96,11 +96,9 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
 
     @Override
     public void fireEvent(RosNodeEvent e) {
-        //TODOFAB marsnode initialized!
 
+        // MARSNodeMain has been started for this connection!
         marsNodeMain = (MARSNodeMain) e.getSource();
-
-        System.out.println("################# MARSNodeMain initialized for connection of auv " + auv.getName());
 
         initializePublishersForSensors(marsNodeMain);
         initializeSubscribersForActuators(marsNodeMain);

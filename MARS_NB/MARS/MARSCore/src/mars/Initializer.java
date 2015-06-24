@@ -366,9 +366,8 @@ public class Initializer {
      * setting up the raw_server for communication with the auv
      */
     public void setupAuvConnections() {
-        //TODOFAB
 
-        // initialize the connection objects, but not the connection itself
+        // initialize the connection objects, but not start the real connections
         for (String auvName : auv_manager.getAUVs().keySet()) {
             AUV auv = auv_manager.getAUV(auvName);
             auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv));

@@ -274,15 +274,13 @@ public class BasicAUV implements AUV, SceneProcessor {
         this.rootNode = simstate.getRootNode();
         this.initer = simstate.getIniter();
         selectionNode.attachChild(auv_node);
-
-        //auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
      *
      */
     public BasicAUV() {
-        //auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
+
     }
 
     /**
@@ -315,7 +313,6 @@ public class BasicAUV implements AUV, SceneProcessor {
             registerPhysicalExchanger(copy);
         }
 
-        //auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
