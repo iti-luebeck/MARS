@@ -49,6 +49,7 @@ import mars.sensors.InfraRedSensor;
 import mars.sensors.Orientationmeter;
 import mars.sensors.PingDetector;
 import mars.sensors.PollutionMeter;
+import mars.sensors.Posemeter;
 import mars.sensors.Positionmeter;
 import mars.sensors.PressureSensor;
 import mars.sensors.SalinitySensor;
@@ -92,22 +93,42 @@ public class RosMessageFactory {
         if (sensor instanceof FlowMeter || sensor instanceof PollutionMeter) {
             Vector3Stamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
-            message.setVector((Vector3) sensorData);
+
+            try {
+                message.setVector((Vector3) sensorData);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
             return message;
         }
 
-        //TODOFAB: Posemeter has no publishData()
-        if (sensor instanceof Orientationmeter /*|| sensor instanceof Posemeter*/) {
+        if (sensor instanceof Orientationmeter || sensor instanceof Posemeter) {
             PoseStamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
-            message.setPose((Pose) sensorData);
+
+            try {
+                message.setPose((Pose) sensorData);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
             return message;
         }
 
         if (sensor instanceof Positionmeter) {
             PointStamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.PointStamped._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
-            message.setPoint((Point) sensorData);
+
+            try {
+                message.setPoint((Point) sensorData);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
             return message;
         }
 
@@ -137,10 +158,6 @@ public class RosMessageFactory {
             return message;
         }
 
-        //TODOFAB: GPSReceiver has no publishData()
-        //TODOFAB: Hakuyo has no publishData()
-        //TODOFAB: TerrainSender has no publishData()
-        //TODOFAB: VideoCamera has no publishData()
         Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");
 
         return null;
