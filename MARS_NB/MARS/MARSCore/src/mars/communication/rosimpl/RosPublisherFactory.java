@@ -73,11 +73,11 @@ public class RosPublisherFactory {
         }
 
         if (sensor instanceof PressureSensor) {
-            return (Publisher<hanse_msgs.pressure>) rosNode.newPublisher(auvName + "/" + sensor.getName(), hanse_msgs.pressure._TYPE);
+            return (Publisher<sensor_msgs.FluidPressure>) rosNode.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.FluidPressure._TYPE);
         }
 
         if (sensor instanceof TemperatureSensor) {
-            return (Publisher<hanse_msgs.temperature>) rosNode.newPublisher(auvName + "/" + sensor.getName(), hanse_msgs.temperature._TYPE);
+            return (Publisher<sensor_msgs.Temperature>) rosNode.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Temperature._TYPE);
         }
 
         if (sensor instanceof TerrainSender) {

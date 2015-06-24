@@ -7,8 +7,6 @@ import geometry_msgs.PoseStamped;
 import geometry_msgs.Vector3;
 import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
-import hanse_msgs.pressure;
-import hanse_msgs.temperature;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
@@ -81,16 +79,18 @@ public class RosMessageFactory {
         }
 
         if (sensor instanceof PressureSensor) {
-            pressure message = rosNode.getMessageFactory().newFromType(pressure._TYPE);
+            sensor_msgs.FluidPressure message = rosNode.getMessageFactory().newFromType(sensor_msgs.FluidPressure._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
-            message.setData((short) Float.parseFloat(sensorData + ""));
+            message.setFluidPressure(Float.parseFloat(sensorData + "") * 1.0);
+            message.setVariance(0f);
             return message;
         }
 
         if (sensor instanceof TemperatureSensor) {
-            temperature message = rosNode.getMessageFactory().newFromType(temperature._TYPE);
+            sensor_msgs.Temperature message = rosNode.getMessageFactory().newFromType(sensor_msgs.Temperature._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
-            message.setData((short) (Short.parseShort(sensorData + "") * 10)); //*10 because of ros temp data format
+            message.setVariance(0f);
+            message.setTemperature(Float.parseFloat(sensorData + "") * 10.0); //*10 because of ros temp data format
             return message;
         }
 
