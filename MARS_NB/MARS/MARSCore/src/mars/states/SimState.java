@@ -378,8 +378,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     public void connectToServer() {
         mars_settings.setROSEnabled(true);
-        initer.setupServer();
-        initer.setupAuvConnections(); //TODOFAB
+        initer.setupAuvConnections();
         if (initer.checkROSServer()) {
             MARSTopComp.allowServerInteraction(true);
         } else {

@@ -298,7 +298,6 @@ public class Initializer {
         setupPlaneWater();
         setupProjectedWavesWater();
         setupCrossHairs();
-        setupServer();
         setupAuvConnections();
         setupAdvServer();
         //setupGlow();
@@ -364,7 +363,7 @@ public class Initializer {
     }
 
     /**
-     *
+     * setting up the raw_server for communication with the auv
      */
     public void setupAuvConnections() {
         //TODOFAB
@@ -387,40 +386,8 @@ public class Initializer {
             ros_server.setMaster_port(mars_settings.getROSMasterport());
             ros_server.setMaster_ip(mars_settings.getROSMasterip());
             ros_server.setLocal_ip(mars_settings.getROSLocalip());
-            ros_server.init2();
-
-            ros_server_thread = new Thread(ros_server);
-            ros_server_thread.start();
-
-            com_server = new CommunicationManagerRunnable(com_manager);
-            com_server_thread = new Thread(com_server);
-            com_server_thread.start();
-        }
-
-    }
-
-    /**
-     * setting up the raw_server for communication with the auv
-     */
-    public void setupServer() {
-
-        if (true) {
-            return; //TODOFAB: never executed on purpose!
-        }
-
-        if (mars_settings.getRAWEnabled()) {
-            raw_server = new MARS_Server(mars, auv_manager, com_manager);
-            raw_server.setServerPort(mars_settings.getRAWPort());
-            raw_server_thread = new Thread(raw_server);
-            raw_server_thread.start();
-        }
-        if (mars_settings.getROSEnabled()) {
-
-            ros_server = new ROS_Node(mars, auv_manager, mars_settings);
-            ros_server.setMaster_port(mars_settings.getROSMasterport());
-            ros_server.setMaster_ip(mars_settings.getROSMasterip());
-            ros_server.setLocal_ip(mars_settings.getROSLocalip());
             ros_server.init();
+
             ros_server_thread = new Thread(ros_server);
             ros_server_thread.start();
 
@@ -428,6 +395,7 @@ public class Initializer {
             com_server_thread = new Thread(com_server);
             com_server_thread.start();
         }
+
     }
 
     /**

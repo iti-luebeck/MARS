@@ -225,43 +225,7 @@ public class ROS_Node implements Runnable {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS Server Nodes running.", "");
     }
 
-    /**
-     *
-     */
     public void init() {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Starting ROS Server...", "");
-
-        InetAddress ownIP = null;
-        try {
-            ownIP = InetAddress.getLocalHost();
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS MARS Node IP: " + ownIP.getHostAddress(), "");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(ROS_Node.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        System.out.println("ROS Master IP: " + getMaster_uri());
-        java.net.URI muri = java.net.URI.create(getMaster_uri());
-
-        String own_ip_string = "127.0.0.1";
-        if (getLocal_ip().equals("auto")) {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUTO IP Detection activated. Using: " + ownIP.getHostAddress(), "");
-            own_ip_string = ownIP.getHostAddress();
-        } else {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Local IP Settings activated. Using: " + getLocal_ip(), "");
-            own_ip_string = getLocal_ip();
-        }
-
-        nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
-        createSystemNode(own_ip_string, muri);
-        HashMap<String, AUV> auvs = auv_manager.getAUVs();
-        for (String elem : auvs.keySet()) {
-            AUV auv = auvs.get(elem);
-            createNode(auv, own_ip_string, muri);
-        }
-    }
-
-    public void init2() {
-        //TODOFAB
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Starting ROS Server 2...", "");
 
         InetAddress ownIP = null;
@@ -290,7 +254,7 @@ public class ROS_Node implements Runnable {
         for (String auvName : auv_manager.getAUVs().keySet()) {
             AUV auv = auv_manager.getAUV(auvName);
             if (auv.getAuvConnectionType() == AUVConnectionType.ROS) {
-                createNode2(auv, own_ip_string, muri);
+                createNode(auv, own_ip_string, muri);
             }
         }
     }
@@ -310,18 +274,6 @@ public class ROS_Node implements Runnable {
     }
 
     private void createNode(AUV auv, String own_ip_string, java.net.URI muri) {
-        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
-        nodeConf.setNodeName("MARS" + "/" + auv.getName());
-        MARSNodeMain marsnode;
-        Preconditions.checkNotNull(nodeConf);
-        marsnode = new MARSNodeMain(nodeConf);
-        marsnode.addRosNodeListener(auv);
-        nodes.put(auv.getName(), marsnode);
-        nodeMainExecutor.execute(marsnode, nodeConf);
-    }
-
-    //TODOFAB
-    private void createNode2(AUV auv, String own_ip_string, java.net.URI muri) {
         NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
         nodeConf.setNodeName("MARS" + "/" + auv.getName());
         MARSNodeMain marsnode;

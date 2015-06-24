@@ -41,10 +41,8 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * Returns the temperature of the surrounding fluid. Not really functional. Should be mapping sensor (?).
@@ -55,11 +53,6 @@ import org.ros.node.topic.Publisher;
 public class TemperatureSensor extends Sensor {
 
     private Geometry TemperatureSensorStart;
-
-    ///ROS stuff
-    private Publisher<sensor_msgs.Temperature> publisher = null;
-    private sensor_msgs.Temperature fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -179,37 +172,6 @@ public class TemperatureSensor extends Sensor {
     @Override
     public void reset() {
 
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = (Publisher<sensor_msgs.Temperature>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Temperature._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Temperature._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void publish() {
-        /* header.setSeq(sequenceNumber++);
-         header.setFrameId(this.getRos_frame_id());
-         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-         fl.setHeader(header);
-         fl.setTemperature((getTemperature() * 10f));//*10 because of ros temp data format
-         fl.setVariance(0f);
-         if (publisher != null) {
-         publisher.publish(fl);
-         }*/
     }
 
     @Override
