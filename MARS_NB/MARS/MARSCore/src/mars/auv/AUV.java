@@ -47,10 +47,8 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.communication.AUVConnection;
-import mars.communication.AUVConnectionType;
 import mars.control.MyCustomGhostControl;
 import mars.object.MARSObject;
-import mars.ros.MARSNodeMain;
 import mars.sensors.Sensor;
 import mars.states.SimState;
 
@@ -345,13 +343,6 @@ public interface AUV extends MARSObject {
 
     /**
      *
-     * @param mars_node
-     */
-    @Deprecated
-    public void setROS_Node(MARSNodeMain mars_node);
-
-    /**
-     *
      * @param selected
      */
     public void setSelected(boolean selected);
@@ -492,8 +483,4 @@ public interface AUV extends MARSObject {
     void setAuvConnection(AUVConnection auvConnection);
 
     AUVConnection getAuvConnection();
-
-    void setAuvConnectionType(AUVConnectionType type);
-
-    AUVConnectionType getAuvConnectionType();
 }

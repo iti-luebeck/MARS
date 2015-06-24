@@ -41,4 +41,6 @@ public interface AUVConnection extends mars.events.AUVObjectListener {
     void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp);
 
     void receiveActuatorData();
+
+    AUVConnectionType getConnectionType();
 }

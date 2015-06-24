@@ -108,7 +108,6 @@ import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
 import mars.communication.AUVConnection;
-import mars.communication.AUVConnectionType;
 import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
@@ -120,7 +119,6 @@ import mars.misc.DebugHint;
 import mars.misc.PickHint;
 import mars.object.BuoyancyType;
 import mars.object.CollisionType;
-import mars.ros.MARSNodeMain;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
@@ -231,7 +229,7 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     private EventListenerList listeners = new EventListenerList();
     private CommunicationManager com_manager;
-    private MARSNodeMain mars_node;
+
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
@@ -423,15 +421,6 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void setCommunicationManager(CommunicationManager com_manager) {
         this.com_manager = com_manager;
-    }
-
-    /**
-     *
-     * @param mars_node
-     */
-    @Override
-    public void setROS_Node(MARSNodeMain mars_node) {
-        this.mars_node = mars_node;
     }
 
     /**
@@ -2716,17 +2705,5 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
         notifyAdvertisementMARSObject(event);
-    }
-
-    protected AUVConnectionType auvConnectionType = AUVConnectionType.UNDEFINED;
-
-    @Override
-    public void setAuvConnectionType(AUVConnectionType type) {
-        auvConnectionType = type;
-    }
-
-    @Override
-    public AUVConnectionType getAuvConnectionType() {
-        return auvConnectionType;
     }
 }

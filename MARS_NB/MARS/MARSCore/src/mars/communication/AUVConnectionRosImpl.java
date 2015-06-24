@@ -104,4 +104,9 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
         initializeSubscribersForActuators(marsNodeMain);
     }
 
+    @Override
+    public AUVConnectionType getConnectionType() {
+        return AUVConnectionType.ROS;
+    }
+
 }

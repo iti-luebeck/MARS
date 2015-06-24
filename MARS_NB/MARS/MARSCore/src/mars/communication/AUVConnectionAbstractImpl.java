@@ -56,4 +56,9 @@ public abstract class AUVConnectionAbstractImpl implements AUVConnection {
         }
 
     }
+
+    @Override
+    public AUVConnectionType getConnectionType() {
+        return AUVConnectionType.UNDEFINED;
+    }
 }

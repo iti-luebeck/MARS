@@ -578,7 +578,6 @@ public class AUV_Manager extends MARSObjectManager {
         auv.setMARS_Settings(mars_settings);
         auv.setPhysical_environment(physical_environment);
         auv.setCommunicationManager(com_manager);
-        auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
         initAUV(auv);
         if (auv.getAuv_param().isEnabled()) {
             //initAUV(auv);

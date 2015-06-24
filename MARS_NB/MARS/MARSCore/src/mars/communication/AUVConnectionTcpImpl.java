@@ -32,10 +32,6 @@ package mars.communication;
 import mars.auv.AUV;
 import mars.sensors.Sensor;
 
-/**
- *
- * @author fab
- */
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl {
 
     public AUVConnectionTcpImpl(AUV auv) {
@@ -52,4 +48,8 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public AUVConnectionType getConnectionType() {
+        return AUVConnectionType.TCP;
+    }
 }

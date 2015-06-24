@@ -38,7 +38,6 @@ public class AUVConnectionFactory {
 
         //TODOFAB mapping when more than ros is implemented!
         AUVConnection conn = new AUVConnectionRosImpl(auv);
-        auv.setAuvConnectionType(AUVConnectionType.ROS);
 
         // Add event listeners for the AUVObjectEvent from the sensors
         for (String sensorName : auv.getSensors().keySet()) {

@@ -253,7 +253,7 @@ public class ROS_Node implements Runnable {
 
         for (String auvName : auv_manager.getAUVs().keySet()) {
             AUV auv = auv_manager.getAUV(auvName);
-            if (auv.getAuvConnectionType() == AUVConnectionType.ROS) {
+            if (auv.getAuvConnection().getConnectionType() == AUVConnectionType.ROS) {
                 createNode(auv, own_ip_string, muri);
             }
         }
