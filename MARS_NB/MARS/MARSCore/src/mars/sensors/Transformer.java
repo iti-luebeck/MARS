@@ -31,15 +31,12 @@ package mars.sensors;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
-import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
@@ -153,67 +150,25 @@ public class Transformer extends Sensor {
 
     /**
      *
+     *
+     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId("jme3"); header.setStamp(Time.fromMillis(System.currentTimeMillis())); tfs.setHeader(header);
+     *
+     * geometry_msgs.Transform transform = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Transform._TYPE);
+     *
+     * geometry_msgs.Vector3 position = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); position.setX(physics_control.getPhysicsLocation().getX()); position.setY(physics_control.getPhysicsLocation().getY()); position.setZ(physics_control.getPhysicsLocation().getZ()); transform.setTranslation(position);
+     *
+     * geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); quat.setX(auv_node.getLocalRotation().getX()); quat.setY(auv_node.getLocalRotation().getY()); quat.setZ(auv_node.getLocalRotation().getZ()); quat.setW(auv_node.getLocalRotation().getW()); transform.setRotation(quat);
+     *
+     * tfs.setTransform(transform);
+     *
+     * tfs.setChildFrameId(getAuv().getName());
+     *
+     *
+     * List<geometry_msgs.TransformStamped> tfl = new ArrayList<geometry_msgs.TransformStamped>(); tfl.add(tfs);
+     *
+     *
+     * fl.setTransforms(tfl);
+     *
+     * if (publisher != null) { publisher.publish(fl); } }
      */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId("jme3");
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        tfs.setHeader(header);
-
-        geometry_msgs.Transform transform = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Transform._TYPE);
-
-        geometry_msgs.Vector3 position = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
-        position.setX(physics_control.getPhysicsLocation().getX());
-        position.setY(physics_control.getPhysicsLocation().getY());
-        position.setZ(physics_control.getPhysicsLocation().getZ());
-        transform.setTranslation(position);
-
-        geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
-        quat.setX(auv_node.getLocalRotation().getX());
-        quat.setY(auv_node.getLocalRotation().getY());
-        quat.setZ(auv_node.getLocalRotation().getZ());
-        quat.setW(auv_node.getLocalRotation().getW());
-        transform.setRotation(quat);
-
-        tfs.setTransform(transform);
-
-        tfs.setChildFrameId(getAuv().getName());
-
-        //root
-        /*header2.setSeq(rosSequenceNumber++);
-         header2.setFrameId("ros");
-         header2.setStamp(Time.fromMillis(System.currentTimeMillis()));
-         tfs2.setHeader(header2);
-        
-         geometry_msgs.Transform transform2 = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Transform._TYPE);
-        
-         geometry_msgs.Vector3 position2 = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
-         position2.setX(0f);
-         position2.setY(0f);
-         position2.setZ(0f);
-         transform2.setTranslation(position2);
-        
-         geometry_msgs.Quaternion quat2 = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
-         Quaternion quat_jme = new Quaternion();
-         quat_jme.fromAngles(0f,FastMath.HALF_PI,FastMath.HALF_PI);
-         quat2.setX(quat_jme.getX());
-         quat2.setY(quat_jme.getY());
-         quat2.setZ(quat_jme.getZ());
-         quat2.setW(quat_jme.getW());
-         transform2.setRotation(quat2);
-                
-         tfs2.setTransform(transform2);  
-        
-         tfs2.setChildFrameId("jme3");*/
-        List<geometry_msgs.TransformStamped> tfl = new ArrayList<geometry_msgs.TransformStamped>();
-        tfl.add(tfs);
-        //tfl.add(tfs2);
-
-        fl.setTransforms(tfl);
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
-    }
 }

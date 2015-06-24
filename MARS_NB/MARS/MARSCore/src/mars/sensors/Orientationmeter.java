@@ -38,10 +38,8 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
-import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
@@ -177,41 +175,22 @@ public class Orientationmeter extends Sensor {
      *
      * @param ros_node
      * @param auv_name
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        publisher = (Publisher<geometry_msgs.PoseStamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<geometry_msgs.PoseStamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE); fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
     }
-
+     */
     /**
      *
+     *
+     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
+     *
+     * geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); quat.setX(getOrientation().getX()); quat.setY(getOrientation().getY()); quat.setZ(getOrientation().getZ()); quat.setW(getOrientation().getW());
+     *
+     * geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE); pose.setOrientation(quat); fl.setPose(pose);
+     *
+     * if (publisher != null) { publisher.publish(fl); } }
      */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
-        quat.setX(getOrientation().getX());
-        quat.setY(getOrientation().getY());
-        quat.setZ(getOrientation().getZ());
-        quat.setW(getOrientation().getW());
-
-        geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE);
-        pose.setOrientation(quat);
-        fl.setPose(pose);
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
-    }
-
     @Override
     public void publishData() {
         super.publishData();

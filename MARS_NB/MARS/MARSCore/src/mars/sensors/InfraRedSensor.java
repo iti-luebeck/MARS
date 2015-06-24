@@ -39,7 +39,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.misc.Collider;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
@@ -136,16 +135,13 @@ public class InfraRedSensor extends RayBasedSensor {
      *
      * @param ros_node
      * @param auv_name
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-
-        publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
-        this.rosinit = true;
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) {
+     *
+     * publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE); this.rosinit = true;
     }
-
+     */
     /**
      *
      */

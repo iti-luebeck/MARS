@@ -47,7 +47,6 @@ import mars.actuators.servos.Servo;
 import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
-import mars.ros.ROS_Publisher;
 import mars.states.SimState;
 
 /**
@@ -58,7 +57,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Thruster.class, Servo.class, Canon.class, VectorVisualizer.class, PointVisualizer.class, BallastTank.class, Lamp.class, Teleporter.class, Animator.class, Cable.class})
-public abstract class Actuator extends PhysicalExchanger implements ROS_Publisher {
+public abstract class Actuator extends PhysicalExchanger {
 
     /**
      *
@@ -213,30 +212,11 @@ public abstract class Actuator extends PhysicalExchanger implements ROS_Publishe
 
     /**
      *
-     */
-    @Override
-    public void publish() {
-        if (tf_pub != null) {
-            tf_pub.publishTF();
-        }
-    }
-
-    /**
      *
+     * @Override public void publish() { if (tf_pub != null) { tf_pub.publishTF(); } }
+     *
+     * @Override public void publishUpdate() { if (tf_pub != null) { tf_pub.publishTFUpdate(); } long curtime = System.currentTimeMillis(); if (((curtime - time) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
+     *
+     * } else { time = curtime; if (mars_node != null && mars_node.isExisting()) { publish(); } } }
      */
-    @Override
-    public void publishUpdate() {
-        if (tf_pub != null) {
-            tf_pub.publishTFUpdate();
-        }
-        long curtime = System.currentTimeMillis();
-        if (((curtime - time) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
-
-        } else {
-            time = curtime;
-            if (mars_node != null && mars_node.isExisting()) {
-                publish();
-            }
-        }
-    }
 }

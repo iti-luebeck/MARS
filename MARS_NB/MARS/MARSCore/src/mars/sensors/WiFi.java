@@ -47,12 +47,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.CommunicationDeviceEvent;
 import mars.events.CommunicationDeviceEventType;
-import mars.events.CommunicationType;
-import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscriber;
 
 /**
  * Basically an underwater modem class but only for the surface.
@@ -293,29 +289,14 @@ public class WiFi extends CommunicationDevice {
      *
      * @param ros_node
      * @param auv_name
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE);
-        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal", std_msgs.Int8._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
-        flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
-
-        final String fin_auv_name = auv_name;
-        final WiFi fin_this = this;
-        Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE);
-        subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
-            @Override
-            public void onNewMessage(std_msgs.String message) {
-                System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
-                notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN));
-                com_manager.putMsg(fin_auv_name, message.getData(), CommunicationType.WIFI);
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-        this.rosinit = true;
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE); publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal", std_msgs.Int8._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE); flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
+     *
+     * final String fin_auv_name = auv_name; final WiFi fin_this = this; Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE); subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
+     * @Override public void onNewMessage(std_msgs.String message) { System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\""); notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN)); com_manager.putMsg(fin_auv_name, message.getData(), CommunicationType.WIFI); } }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size()); this.rosinit = true;
     }
-
+     */
     /**
      *
      * @param msg

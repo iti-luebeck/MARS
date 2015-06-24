@@ -2301,7 +2301,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
+                // element.publishUpdate(); //TODOFAB what is this for?
                 element.publishDataUpdate();
             }
         }

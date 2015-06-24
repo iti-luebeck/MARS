@@ -44,7 +44,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -310,16 +309,10 @@ public class PingDetector extends Sensor {
      *
      * @param ros_node
      * @param auv_name
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true; }
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
-    }
-
     /**
      *
      */

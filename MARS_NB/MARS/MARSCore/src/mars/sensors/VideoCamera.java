@@ -55,7 +55,6 @@ import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -474,16 +473,11 @@ public class VideoCamera extends Sensor implements Moveable {
      *
      * @param ros_node
      * @param auv_name
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        publisher = (Publisher<sensor_msgs.Image>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Image._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<sensor_msgs.Image>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Image._TYPE); fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
     }
-
+     */
     /**
      *
      */

@@ -59,8 +59,6 @@ import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
-import mars.ros.MARSNodeMain;
-import mars.ros.TF_ROS_Publisher;
 import mars.sensors.Sensor;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -209,10 +207,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
     /*
      * 
      */
-    /**
-     *
-     */
-    protected MARSNodeMain mars_node = null;
 
     /**
      *
@@ -223,13 +217,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
         return sequenceNumber++;
     }
 
-    /*
-     * 
-     */
-    /**
-     *
-     */
-    public TF_ROS_Publisher tf_pub = null;
     /**
      *
      */
@@ -521,7 +508,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
      *
      */
     public void initAfterJAXB() {
-        tf_pub = new TF_ROS_Publisher(this);
+        //tf_pub = new TF_ROS_Publisher(this);
         /* variables.put("noise_type", getNoiseType());
          variables.put("noise_value", getNoiseValue());
          variables.put("name",getName());

@@ -30,12 +30,8 @@
 package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
-import geometry_msgs.Quaternion;
-import geometry_msgs.Vector3;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,10 +40,8 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.IMUData;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
-import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
@@ -258,16 +252,11 @@ public class IMU extends Sensor {
      *
      * @param ros_node
      * @param auv_name
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        publisher = (Publisher<sensor_msgs.Imu>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Imu._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
+     *
+     * @Deprecated
+     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<sensor_msgs.Imu>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Imu._TYPE); fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
     }
-
+     */
     public IMUData getIMU() {
         IMUData mat = new IMUData(acc.getAcceleration(), gyro.getAngularVelocity(), oro.getOrientation());
         return mat;
@@ -275,54 +264,28 @@ public class IMU extends Sensor {
 
     /**
      *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        Vector3 ang_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
-        ang_vec.setX(gyro.getAngularVelocityXAxis());
-        ang_vec.setY(gyro.getAngularVelocityZAxis());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
-        ang_vec.setZ(gyro.getAngularVelocityYAxis());
-        fl.setAngularVelocity(ang_vec);
-
-        Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);;
-
-        com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion();
-        com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion();
-        ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f);
-        ter_orientation_rueck = ter_orientation.inverse();
-        float[] bla = oro.getOrientation().toAngles(null);
-
-        com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion();
-        jme3_quat.fromAngles(-bla[0], bla[1], -bla[2]);
-
-        ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
-
-        quat.setX(ter_orientation.getX());// switching x and z!!!!
-        quat.setY(ter_orientation.getY());
-        quat.setZ(ter_orientation.getZ());
-        quat.setW(ter_orientation.getW());
-
-        Vector3f acc_jme3_vec = acc.getAcceleration();
-        Vector3 acc_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
-        com.jme3.math.Quaternion acc_quat = oro.getOrientation().inverse();
-        Vector3f acc_jme3_vec2 = acc_quat.mult(acc_jme3_vec);
-        acc_vec.setX(acc_jme3_vec2.getX());
-        acc_vec.setY(-acc_jme3_vec2.getZ());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z!
-        acc_vec.setZ(acc_jme3_vec2.getY());
-        fl.setLinearAcceleration(acc_vec);
-
-        fl.setOrientation(quat);
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
+     *
+     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
+     *
+     * Vector3 ang_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); ang_vec.setX(gyro.getAngularVelocityXAxis()); ang_vec.setY(gyro.getAngularVelocityZAxis());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z! ang_vec.setZ(gyro.getAngularVelocityYAxis()); fl.setAngularVelocity(ang_vec);
+     *
+     * Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);;
+     *
+     * com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion(); com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion(); ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f); ter_orientation_rueck = ter_orientation.inverse(); float[] bla = oro.getOrientation().toAngles(null);
+     *
+     * com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion(); jme3_quat.fromAngles(-bla[0], bla[1], -bla[2]);
+     *
+     * ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
+     *
+     * quat.setX(ter_orientation.getX());// switching x and z!!!! quat.setY(ter_orientation.getY()); quat.setZ(ter_orientation.getZ()); quat.setW(ter_orientation.getW());
+     *
+     * Vector3f acc_jme3_vec = acc.getAcceleration(); Vector3 acc_vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); com.jme3.math.Quaternion acc_quat = oro.getOrientation().inverse(); Vector3f acc_jme3_vec2 = acc_quat.mult(acc_jme3_vec); acc_vec.setX(acc_jme3_vec2.getX()); acc_vec.setY(-acc_jme3_vec2.getZ());// y<-->z because in opengl/lwjgl/jme3 up vector is y not z! acc_vec.setZ(acc_jme3_vec2.getY()); fl.setLinearAcceleration(acc_vec);
+     *
+     * fl.setOrientation(quat);
+     *
+     * if (publisher != null) { publisher.publish(fl); }
     }
-
+     */
     @Override
     public void publishData() {
         super.publishData();
