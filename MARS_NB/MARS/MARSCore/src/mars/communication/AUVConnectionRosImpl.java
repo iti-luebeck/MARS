@@ -104,10 +104,6 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
 
         initializePublishersForSensors(marsNodeMain);
         initializeSubscribersForActuators(marsNodeMain);
-
-        //TODOFAB: temporary until the new system works
-        auv.setROS_Node(marsNodeMain);
-        auv.initROS();
     }
 
 }

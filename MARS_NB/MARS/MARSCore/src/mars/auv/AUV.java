@@ -51,7 +51,6 @@ import mars.communication.AUVConnectionType;
 import mars.control.MyCustomGhostControl;
 import mars.object.MARSObject;
 import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
 import mars.states.SimState;
 
@@ -63,7 +62,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, MARSObject {
+public interface AUV extends MARSObject {
 
     /**
      *
@@ -168,13 +167,6 @@ public interface AUV extends RosNodeListener, MARSObject {
      *
      */
     public void createDefault();
-
-    /**
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void initROS();
 
     /**
      *

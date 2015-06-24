@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.sensors.sonar;
 
 import java.nio.ByteOrder;
@@ -38,16 +38,13 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.misc.SonarData;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
- * This is the Imaginex Sonar class. It is the sonar used in the AUV HANSE. Since
- * the Imaginex sonars need some header information to be sent we put them in
- * front of the basic sonar data.
+ * This is the Imaginex Sonar class. It is the sonar used in the AUV HANSE. Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
  *
  * @author Thomas Tosik
  */
@@ -77,7 +74,7 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     public ImagenexSonar_852_Scanning() {
         super();
     }
-    
+
     /**
      *
      * @param sonar
@@ -144,8 +141,8 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     public byte[] getRawData() {
         return super.getData();
     }
-    
-    public SonarData getSonarData(){
+
+    public SonarData getSonarData() {
         return new SonarData(getLastHeadPosition(), getRawData());
     }
 
@@ -158,7 +155,7 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     protected float calculateStandardDeviationNoiseFunction(float x) {
         return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
     }
-    
+
     /**
      *
      * @return
@@ -172,25 +169,9 @@ public class ImagenexSonar_852_Scanning extends Sonar {
 
     /**
      *
-     * @param ros_node
-     * @param auv_name
      */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = (Publisher<hanse_msgs.ScanningSonar>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.ScanningSonar._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
-    }
-
-    /**
-     *
-     */
-    @Override
+    @Deprecated
     public void publish() {
-        super.publish();
         header.setSeq(sequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
@@ -207,7 +188,7 @@ public class ImagenexSonar_852_Scanning extends Sonar {
             publisher.publish(fl);
         }
     }
-    
+
     @Override
     public void publishData() {
         super.publishData();

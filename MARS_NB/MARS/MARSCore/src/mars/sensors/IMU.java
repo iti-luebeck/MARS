@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.sensors;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -51,8 +51,7 @@ import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
- * An inertial measurment unit class. Basically it consist of the Accelerometer,
- * Gyroscope and Compass class as an Mixin class.
+ * An inertial measurment unit class. Basically it consist of the Accelerometer, Gyroscope and Compass class as an Mixin class.
  *
  * @author Thomas Tosik
  */
@@ -222,7 +221,7 @@ public class IMU extends Sensor {
         gyro.setEnabled(enabled);
         oro.setEnabled(enabled);
     }
-    
+
     @Override
     public void setAuv(AUV auv) {
         super.setAuv(auv);
@@ -260,27 +259,25 @@ public class IMU extends Sensor {
      * @param ros_node
      * @param auv_name
      */
-    @Override
+    @Deprecated
     @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = (Publisher<sensor_msgs.Imu>)ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Imu._TYPE);
+        publisher = (Publisher<sensor_msgs.Imu>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Imu._TYPE);
         fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
-    
-    public IMUData getIMU(){
-        IMUData mat = new IMUData(acc.getAcceleration(),gyro.getAngularVelocity(),oro.getOrientation());
+
+    public IMUData getIMU() {
+        IMUData mat = new IMUData(acc.getAcceleration(), gyro.getAngularVelocity(), oro.getOrientation());
         return mat;
     }
 
     /**
      *
      */
-    @Override
+    @Deprecated
     public void publish() {
-        super.publish();
         header.setSeq(sequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
@@ -325,7 +322,7 @@ public class IMU extends Sensor {
             publisher.publish(fl);
         }
     }
-    
+
     @Override
     public void publishData() {
         super.publishData();

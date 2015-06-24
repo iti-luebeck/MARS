@@ -38,11 +38,13 @@ import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.misc.IMUData;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
 import mars.sensors.Gyroscope;
+import mars.sensors.IMU;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Orientationmeter;
 import mars.sensors.PingDetector;
@@ -125,9 +127,18 @@ public class RosMessageFactory {
             return message;
         }
 
+        if (sensor instanceof IMU) {
+            sensor_msgs.Imu message = rosNode.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
+            message.setHeader(createHeader(rosNode, sensor));
+            IMUData imuData = (IMUData) sensorData;
+            /*message.setAngularVelocity(imuData.getAngularVelocity());
+             message.setOrientation(imuData.getOrientation());
+             message.setLinearAcceleration(imuData.getLinearAcceleration());*/ //TODO Thomas sieh dir das bitte mal an! Die Datentypen sind nicht kompatibel.
+            return message;
+        }
+
         //TODOFAB: GPSReceiver has no publishData()
         //TODOFAB: Hakuyo has no publishData()
-        //TODOFAB: IMU has no publishData()
         //TODOFAB: TerrainSender has no publishData()
         //TODOFAB: VideoCamera has no publishData()
         Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");

@@ -60,7 +60,6 @@ import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
 import mars.ros.MARSNodeMain;
-import mars.ros.ROS;
 import mars.ros.TF_ROS_Publisher;
 import mars.sensors.Sensor;
 import mars.states.SimState;
@@ -74,7 +73,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Actuator.class, Sensor.class})
-public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS, PropertyChangeListenerSupport {
+public abstract class PhysicalExchanger extends Noise implements AUVObject, PropertyChangeListenerSupport {
 
     @SuppressWarnings("FieldMayBeFinal")
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
@@ -394,61 +393,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     @Override
     public String toString() {
         return getName();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String getROS_MSG_Type() {
-        return ros_msg_type;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void initROS() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        setROS_Node(ros_node);
-        tf_pub.initROS(ros_node, auv_name);
-    }
-
-    /**
-     *
-     * @param ros_msg_type
-     */
-    @Override
-    public void setROS_MSG_Type(String ros_msg_type) {
-        this.ros_msg_type = ros_msg_type;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public MARSNodeMain getMARS_Node() {
-        return mars_node;
-    }
-
-    /**
-     *
-     * @param ros_node
-     */
-    @Override
-    public void setROS_Node(MARSNodeMain ros_node) {
-        this.mars_node = ros_node;
     }
 
     /**

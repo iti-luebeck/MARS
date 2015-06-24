@@ -121,7 +121,6 @@ import mars.misc.PickHint;
 import mars.object.BuoyancyType;
 import mars.object.CollisionType;
 import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeEvent;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
@@ -852,28 +851,6 @@ public class BasicAUV implements AUV, SceneProcessor {
             }
         }
         return null;
-    }
-
-    /*
-     * 
-     */
-    /**
-     *
-     */
-    @Override
-    public void initROS() {
-        for (String elem : sensors.keySet()) {
-            Sensor element = sensors.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
-        for (String elem : actuators.keySet()) {
-            Actuator element = actuators.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
     }
 
     private void updateActuatorForces() {
@@ -2324,7 +2301,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
+                //element.publishUpdate(); //TODOFAB what is this for?
                 element.publishDataUpdate();
             }
         }
@@ -2696,18 +2673,6 @@ public class BasicAUV implements AUV, SceneProcessor {
             }
         } else {//its a spatial or geom, we dont care because it cant go deeper
             spatial.setUserData(PickHint.PickName, PickHint.NoPick);
-        }
-    }
-
-    /**
-     *
-     * @param e
-     */
-    @Override
-    public void fireEvent(RosNodeEvent e) {
-        if (getAuv_param().isEnabled()) {
-            setROS_Node((MARSNodeMain) e.getSource());
-            initROS();
         }
     }
 

@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.bullet.BulletAppState;
@@ -56,13 +56,12 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Creates an AUV_Manger. You register your auv's here. The complete life cycle
- * of an AUV is managed here.
+ * Creates an AUV_Manger. You register your auv's here. The complete life cycle of an AUV is managed here.
  *
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager extends MARSObjectManager{
+public class AUV_Manager extends MARSObjectManager {
 
     //auv HashMap to store and load auv's
     private HashMap<String, AUV> auvs = new HashMap<String, AUV>();
@@ -88,7 +87,7 @@ public class AUV_Manager extends MARSObjectManager{
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
 
-            if(simstate.getMARSSettings().getLoggingFileWrite()){
+            if (simstate.getMARSSettings().getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -97,8 +96,8 @@ public class AUV_Manager extends MARSObjectManager{
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!simstate.getMARSSettings().getLoggingEnabled()){
+
+            if (!simstate.getMARSSettings().getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
@@ -295,13 +294,14 @@ public class AUV_Manager extends MARSObjectManager{
      *
      */
     public void updateMARSNode() {
-        for (String elem : auvs.keySet()) {
-            AUV auv = auvs.get(elem);
-            if (auv.getAuv_param().isEnabled()) {
-                auv.setROS_Node(getMARSNodeForAUV(elem));
-                auv.initROS();
-            }
-        }
+        throw new UnsupportedOperationException("not yet available (refactoring)"); //TODOFAB
+       /* for (String elem : auvs.keySet()) {
+         AUV auv = auvs.get(elem);
+         if (auv.getAuv_param().isEnabled()) {
+         auv.setROS_Node(getMARSNodeForAUV(elem));
+         auv.initROS();
+         }
+         }*/
     }
 
     /**
@@ -356,8 +356,7 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /**
-     * The camera view direction/location will be updated here. Normaly in a
-     * SimpleUpdate method in the Main_Loop.
+     * The camera view direction/location will be updated here. Normaly in a SimpleUpdate method in the Main_Loop.
      *
      * @param tpf
      */
@@ -383,8 +382,7 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /**
-     * In this method the communication between the auv's through underwater
-     * modems should be done
+     * In this method the communication between the auv's through underwater modems should be done
      *
      * @param tpf
      */
@@ -399,8 +397,7 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /**
-     * The forces of the auv's will be updated here. Normaly in a SimpleUpdate
-     * method in the Main_Loop.
+     * The forces of the auv's will be updated here. Normaly in a SimpleUpdate method in the Main_Loop.
      *
      * @param tpf
      */
@@ -593,8 +590,7 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /**
-     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the
-     * update cycle(future/get).
+     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the update cycle(future/get).
      *
      * @param auv
      * @param enable
@@ -613,8 +609,8 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /*
-    * Adds the AUV node to the scengraph(rootNode).
-    */
+     * Adds the AUV node to the scengraph(rootNode).
+     */
     private void addAUVToScene(AUV auv) {
         auv.addDragOffscreenView();
         addAUVToNode(auv, AUVsNode);
@@ -622,8 +618,8 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /*
-    * Removes the AUV node from the scengraph(rootNode).
-    */
+     * Removes the AUV node from the scengraph(rootNode).
+     */
     private void removeAUVFromScene(AUV auv) {
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
         if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
@@ -693,6 +689,7 @@ public class AUV_Manager extends MARSObjectManager{
 
     /**
      * Add the AUV to the mini-map state.
+     *
      * @param auv
      */
     public void addAUVtoMap(AUV auv) {
@@ -703,8 +700,8 @@ public class AUV_Manager extends MARSObjectManager{
     }
 
     /*
-    * Call the init method of all AUVs.
-    */
+     * Call the init method of all AUVs.
+     */
     private void initAUV(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
         auv.init();
@@ -723,7 +720,7 @@ public class AUV_Manager extends MARSObjectManager{
 
     /**
      * GUI stuff.
-     * 
+     *
      * @param auv
      */
     public void deselectAUV(AUV auv) {
@@ -746,7 +743,7 @@ public class AUV_Manager extends MARSObjectManager{
 
     /**
      * GUI stuff.
-     * 
+     *
      * @return
      */
     public AUV getSelectedAUV() {
