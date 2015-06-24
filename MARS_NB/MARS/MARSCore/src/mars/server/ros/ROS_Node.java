@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.server.ros;
 
 import com.google.common.base.Preconditions;
@@ -39,19 +39,21 @@ import java.util.concurrent.Future;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.auv.AUV;
-import org.ros.node.NodeConfiguration;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.communication.AUVConnectionRosImpl;
+import mars.communication.AUVConnectionType;
 import mars.ros.MARSNodeMain;
 import mars.ros.SystemTFNode;
 import org.ros.node.DefaultNodeMainExecutor;
+import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 
 /**
  * The main publishing node from ROSJava for all AUVs.
- * 
+ *
  * @author Thomas Tosik
  */
 public class ROS_Node implements Runnable {
@@ -87,7 +89,7 @@ public class ROS_Node implements Runnable {
         try {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(marsSettings.getLoggingLevel()));
 
-            if(marsSettings.getLoggingFileWrite()){
+            if (marsSettings.getLoggingFileWrite()) {
                 // Create an appending file handler
                 boolean append = true;
                 FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
@@ -96,8 +98,8 @@ public class ROS_Node implements Runnable {
                 Logger logger = Logger.getLogger(this.getClass().getName());
                 logger.addHandler(handler);
             }
-            
-            if(!marsSettings.getLoggingEnabled()){
+
+            if (!marsSettings.getLoggingEnabled()) {
                 Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
             }
         } catch (IOException e) {
@@ -258,6 +260,41 @@ public class ROS_Node implements Runnable {
         }
     }
 
+    public void init2() {
+        //TODOFAB
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Starting ROS Server 2...", "");
+
+        InetAddress ownIP = null;
+        try {
+            ownIP = InetAddress.getLocalHost();
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "ROS MARS Node IP: " + ownIP.getHostAddress(), "");
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ROS_Node.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("ROS Master IP: " + getMaster_uri());
+        java.net.URI muri = java.net.URI.create(getMaster_uri());
+
+        String own_ip_string = "127.0.0.1";
+        if (getLocal_ip().equals("auto")) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUTO IP Detection activated. Using: " + ownIP.getHostAddress(), "");
+            own_ip_string = ownIP.getHostAddress();
+        } else {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Local IP Settings activated. Using: " + getLocal_ip(), "");
+            own_ip_string = getLocal_ip();
+        }
+
+        nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
+        createSystemNode(own_ip_string, muri);
+
+        for (String auvName : auv_manager.getAUVs().keySet()) {
+            AUV auv = auv_manager.getAUV(auvName);
+            if (auv.getAuvConnectionType() == AUVConnectionType.ROS) {
+                createNode2(auv, own_ip_string, muri);
+            }
+        }
+    }
+
     /*
      * Used for ros->jme tf (doesn't fit into auvs, doenst make sense)
      */
@@ -279,6 +316,18 @@ public class ROS_Node implements Runnable {
         Preconditions.checkNotNull(nodeConf);
         marsnode = new MARSNodeMain(nodeConf);
         marsnode.addRosNodeListener(auv);
+        nodes.put(auv.getName(), marsnode);
+        nodeMainExecutor.execute(marsnode, nodeConf);
+    }
+
+    //TODOFAB
+    private void createNode2(AUV auv, String own_ip_string, java.net.URI muri) {
+        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
+        nodeConf.setNodeName("MARS" + "/" + auv.getName());
+        MARSNodeMain marsnode;
+        Preconditions.checkNotNull(nodeConf);
+        marsnode = new MARSNodeMain(nodeConf);
+        marsnode.addRosNodeListener((AUVConnectionRosImpl) auv.getAuvConnection());
         nodes.put(auv.getName(), marsnode);
         nodeMainExecutor.execute(marsnode, nodeConf);
     }

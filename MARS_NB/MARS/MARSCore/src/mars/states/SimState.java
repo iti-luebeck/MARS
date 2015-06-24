@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.states;
 
 import com.jme3.app.Application;
@@ -54,6 +54,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.TransferHandler;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.KeyConfig;
@@ -64,16 +65,15 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.auv.CommunicationManager;
-import mars.simobjects.SimObject;
-import mars.simobjects.SimObjectManager;
-import mars.xml.XML_JAXB_ConfigReaderWriter;
-import javax.swing.TransferHandler;
-import mars.misc.Collider;
-import mars.misc.MyDebugAppStateFilter;
 import mars.core.CentralLookup;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
+import mars.misc.Collider;
+import mars.misc.MyDebugAppStateFilter;
+import mars.simobjects.SimObject;
+import mars.simobjects.SimObjectManager;
 import mars.xml.ConfigManager;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Lookup;
@@ -83,7 +83,7 @@ import org.openide.util.Lookup;
  *
  * @author Thomas Tosik
  */
-public class SimState extends MARSAppState implements PhysicsTickListener, AppStateExtension{
+public class SimState extends MARSAppState implements PhysicsTickListener, AppStateExtension {
 
     private Node rootNode = new Node("SimState Root Node");
     private AssetManager assetManager;
@@ -153,19 +153,19 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         this.MARSMapComp = MARSMapComp;
         this.configManager = configManager;
     }
-    
-    private void setupLogger(){
+
+    private void setupLogger() {
         //setup logging
         Handler[] handlers = Logger.getLogger(this.getClass().getName()).getHandlers();
         for (Handler handler : handlers) {
             handler.setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
 
-            if(!getMARSSettings().getLoggingFileWrite()){
+            if (!getMARSSettings().getLoggingFileWrite()) {
                 handler.setLevel(Level.OFF);
             }
         }
-        if(!getMARSSettings().getLoggingEnabled()){
+        if (!getMARSSettings().getLoggingEnabled()) {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
         }
     }
@@ -210,23 +210,23 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         //deattach the state root node from the main 
         getRootNode().removeFromParent();
         getRootNode().detachAllChildren();
-        
+
         //clear cntralLookup
         CentralLookup.getDefault().remove(auvManager);
         CentralLookup.getDefault().remove(physical_environment);
         CentralLookup.getDefault().remove(simobManager);
-        
+
         //cleanup other related states
         //bulletAppState.setEnabled(false);
         //mars.getStateManager().detach(bulletAppState);
         //bulletAppState = null;
 
         /*if (mars.getStateManager().getState(GuiState.class) != null) {
-            GuiState guistate = mars.getStateManager().getState(GuiState.class);
-            guistate.setEnabled(false);
-            mars.getStateManager().detach(guistate);
-            guistate = null;
-        }*/
+         GuiState guistate = mars.getStateManager().getState(GuiState.class);
+         guistate.setEnabled(false);
+         mars.getStateManager().detach(guistate);
+         guistate = null;
+         }*/
     }
 
     /**
@@ -295,7 +295,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
 
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, initer);
-            
+
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
@@ -317,7 +317,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             initView();
 
             init = true;
-            
+
             progr.progress("Init GuiState");
             final GuiState guiState = new GuiState();
             guiState.setAuvManager(auvManager);
@@ -327,7 +327,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setSimObNode(SimObNodes);
             guiState.setMars_settings(mars_settings);
             final AppStateManager stateManagerFin = stateManager;
-            
+
             @SuppressWarnings("unchecked")
             Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
@@ -379,6 +379,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     public void connectToServer() {
         mars_settings.setROSEnabled(true);
         initer.setupServer();
+        initer.setupAuvConnections(); //TODOFAB
         if (initer.checkROSServer()) {
             MARSTopComp.allowServerInteraction(true);
         } else {
@@ -766,7 +767,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
          System.out.println("ghostControl.getOverlappingCount(): " + ghostControl.getOverlappingCount());
          }
          }*/
-
         //setting Filter in the DebugState so we can show specific collision boxes
         if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
             if (!debugFilter && init) {
@@ -905,8 +905,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change. The position is computed from he screen position.
+     * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      *
      * @param auvName
      * @param pos
@@ -941,8 +940,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change.
+     * Enables an AUV and sets it to the position. If already enabled then position change.
      *
      * @param auvName
      * @param pos
@@ -984,8 +982,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an SimObject and sets it to the position. If already enabled then
-     * position change.
+     * Enables an SimObject and sets it to the position. If already enabled then position change.
      *
      * @param simobName
      * @param pos
@@ -1016,8 +1013,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change. The position is computed from he screen position.
+     * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      *
      * @param simobName
      * @param pos

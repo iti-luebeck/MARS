@@ -44,7 +44,6 @@ import mars.events.AUVObjectEvent;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
-import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 /**
@@ -202,15 +201,15 @@ public class TemperatureSensor extends Sensor {
      */
     @Override
     public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-        fl.setTemperature((getTemperature() * 10f));//*10 because of ros temp data format
-        fl.setVariance(0f);
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
+        /* header.setSeq(sequenceNumber++);
+         header.setFrameId(this.getRos_frame_id());
+         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+         fl.setHeader(header);
+         fl.setTemperature((getTemperature() * 10f));//*10 because of ros temp data format
+         fl.setVariance(0f);
+         if (publisher != null) {
+         publisher.publish(fl);
+         }*/
     }
 
     @Override

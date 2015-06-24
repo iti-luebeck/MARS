@@ -7,6 +7,8 @@ import geometry_msgs.PoseStamped;
 import geometry_msgs.Vector3;
 import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.ros.MARSNodeMain;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
@@ -99,7 +101,9 @@ public class RosMessageFactory {
         //TODOFAB: IMU has no publishData()
         //TODOFAB: TerrainSender has no publishData()
         //TODOFAB: VideoCamera has no publishData()
-        throw new IllegalArgumentException("Unable to map sensor " + sensor + " to publisher!");
+        Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");
+
+        return null;
     }
 
     private static Header createHeader(MARSNodeMain rosNode, Sensor sensor) {

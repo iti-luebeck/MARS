@@ -14,7 +14,6 @@ public abstract class AUVConnectionAbstractImpl implements AUVConnection {
 
     public AUVConnectionAbstractImpl(AUV auv) {
         this.auv = auv;
-
     }
 
     @Override

@@ -1,38 +1,34 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars;
 
-import mars.misc.WireProcessor;
-import mars.misc.Collider;
-import java.nio.ShortBuffer;
-import mars.states.SimState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
@@ -40,7 +36,9 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -50,34 +48,26 @@ import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.FogFilter;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
-import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
-import com.jme3.water.SimpleWaterProcessor;
-import com.jme3.water.WaterFilter;
-import mars.auv.AUV_Manager;
-import mars.server.MARS_Server;
-import com.jme3.font.BitmapText;
-import com.jme3.light.AmbientLight;
 import com.jme3.post.Filter;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.debug.Grid;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
@@ -91,16 +81,20 @@ import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
+import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
+import com.jme3.util.SkyFactory;
+import com.jme3.water.SimpleWaterProcessor;
+import com.jme3.water.WaterFilter;
 import forester.Forester;
 import forester.grass.GrassLayer;
 import forester.grass.GrassLayer.MeshType;
 import forester.grass.GrassLoader;
 import forester.grass.datagrids.MapGrid;
 import forester.image.DensityMap.Channel;
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -108,26 +102,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
-import mars.VegetationSystem.DensityMap;
-import mars.VegetationSystem.VegetationSystem;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
+import mars.communication.AUVConnectionFactory;
+import mars.misc.Collider;
+import mars.misc.WireProcessor;
 import mars.server.MARSClient;
+import mars.server.MARS_Server;
 import mars.server.PhysicalExchangerPublisher;
 import mars.server.ros.ROS_Node;
+import mars.states.SimState;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
 import mars.waves.WaterHeightGenerator;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
-import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
- * With this class we initialize all the different things in the begining like
- * "Do we want to load the terrrain?". Uses the MARS_Settings to determine what
- * ist activated with what mars_settings.
+ * With this class we initialize all the different things in the begining like "Do we want to load the terrrain?". Uses the MARS_Settings to determine what ist activated with what mars_settings.
  *
  * @author Thomas Tosik
  */
@@ -247,11 +243,11 @@ public class Initializer {
         this.mars_settings.setInit(this);
         sun = new DirectionalLight();
         fpp = new FilterPostProcessor(assetManager);
-        
+
         //setup logging
-        if(!mars_settings.getLoggingEnabled()){
+        if (!mars_settings.getLoggingEnabled()) {
             Logger.getLogger(Initializer.class.getName()).setLevel(Level.OFF);
-        }else{
+        } else {
             Logger.getLogger(Initializer.class.getName()).setLevel(Level.parse(mars_settings.getLoggingLevel()));
         }
     }
@@ -294,7 +290,7 @@ public class Initializer {
         if (mars_settings.isSkyDomeEnabled()) {
             setupSkyDome();
         }
-        
+
         //always loaded
         setupAxis();
         setupGrid();
@@ -303,6 +299,7 @@ public class Initializer {
         setupProjectedWavesWater();
         setupCrossHairs();
         setupServer();
+        setupAuvConnections();
         setupAdvServer();
         //setupGlow();
         //setupFishEye();
@@ -316,7 +313,7 @@ public class Initializer {
     }
 
     /**
-     * 
+     *
      */
     public void cleanup() {
         if (fppS != null) {
@@ -367,9 +364,50 @@ public class Initializer {
     }
 
     /**
+     *
+     */
+    public void setupAuvConnections() {
+        //TODOFAB
+
+        // initialize the connection objects, but not the connection itself
+        for (String auvName : auv_manager.getAUVs().keySet()) {
+            AUV auv = auv_manager.getAUV(auvName);
+            auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv));
+        }
+
+        if (mars_settings.getRAWEnabled()) {
+            raw_server = new MARS_Server(mars, auv_manager, com_manager);
+            raw_server.setServerPort(mars_settings.getRAWPort());
+            raw_server_thread = new Thread(raw_server);
+            raw_server_thread.start();
+        }
+
+        if (mars_settings.getROSEnabled()) {
+            ros_server = new ROS_Node(mars, auv_manager, mars_settings);
+            ros_server.setMaster_port(mars_settings.getROSMasterport());
+            ros_server.setMaster_ip(mars_settings.getROSMasterip());
+            ros_server.setLocal_ip(mars_settings.getROSLocalip());
+            ros_server.init2();
+
+            ros_server_thread = new Thread(ros_server);
+            ros_server_thread.start();
+
+            com_server = new CommunicationManagerRunnable(com_manager);
+            com_server_thread = new Thread(com_server);
+            com_server_thread.start();
+        }
+
+    }
+
+    /**
      * setting up the raw_server for communication with the auv
      */
     public void setupServer() {
+
+        if (true) {
+            return; //TODOFAB: never executed on purpose!
+        }
+
         if (mars_settings.getRAWEnabled()) {
             raw_server = new MARS_Server(mars, auv_manager, com_manager);
             raw_server.setServerPort(mars_settings.getRAWPort());
@@ -377,6 +415,7 @@ public class Initializer {
             raw_server_thread.start();
         }
         if (mars_settings.getROSEnabled()) {
+
             ros_server = new ROS_Node(mars, auv_manager, mars_settings);
             ros_server.setMaster_port(mars_settings.getROSMasterport());
             ros_server.setMaster_ip(mars_settings.getROSMasterip());
@@ -394,7 +433,7 @@ public class Initializer {
     /**
      * Setup the generic publisher. Used to publish all sensor data.
      */
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void setupAdvServer() {
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
         Lookup bag = Lookup.getDefault();
@@ -703,7 +742,7 @@ public class Initializer {
      * @param tpf
      */
     public void updateWavesWater(float tpf) {
-        if(water != null){
+        if (water != null) {
             waves_time += tpf;
             float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
             water.setWaterHeight(water_height + waterHeight);
@@ -810,7 +849,7 @@ public class Initializer {
     }
 
     private void setupLensFlare() {
-        
+
     }
 
     /**
@@ -1253,7 +1292,7 @@ public class Initializer {
         layer2.setMaxWidth(0.8f);
 
         //((GPAUniform)layer2.getPlantingAlgorithm()).setThreshold(0.6f);
-         // Adding another grasslayer.
+        // Adding another grasslayer.
         Material grassMat3 = assetManager.loadMaterial("Materials/Grass/RedSeaweed.j3m");
 
         // Using billboards. Different material base but pretty much the same
@@ -1306,11 +1345,10 @@ public class Initializer {
         //assetManager.registerLocator("Assets/Textures/Terrain", FileLocator.class);
         //assetManager.registerLocator("Assets/Forester", FileLocator.class);
         //Texture alphaMapImage = assetManager.loadTexture(
-         //       mars_settings.getTerrainAlphaMap());
+        //       mars_settings.getTerrainAlphaMap());
         //alphaMapImage.getImage().setFormat(Format.RGBA8);
         //mat_terrain.setTexture("Alpha", alphaMapImage);
         //mat_terrain.setTexture("AlphaMap", alphaMapImage);
-
         /**
          * 1.2) Add GRASS texture into the red layer (Tex1).
          */
@@ -1377,19 +1415,13 @@ public class Initializer {
          ex.printStackTrace();
          }*/
         /**
-         * 3. We have prepared material and heightmap. Now we create the actual
-         * terrain: 3.1) Create a TerrainQuad and name it "my terrain". 3.2) A
-         * good value for terrain tiles is 64x64 -- so we supply 64+1=65. 3.3)
-         * We prepared a heightmap of size 512x512 -- so we supply 512+1=513.
-         * 3.4) As LOD step scale we supply Vector3f(1,1,1). 3.5) We supply the
-         * prepared heightmap itself.
+         * 3. We have prepared material and heightmap. Now we create the actual terrain: 3.1) Create a TerrainQuad and name it "my terrain". 3.2) A good value for terrain tiles is 64x64 -- so we supply 64+1=65. 3.3) We prepared a heightmap of size 512x512 -- so we supply 512+1=513. 3.4) As LOD step scale we supply Vector3f(1,1,1). 3.5) We supply the prepared heightmap itself.
          */
         int patchSize = mars_settings.getTerrainPatchSize() + 1;
         terrain = new TerrainQuad("advancedTerrain", patchSize, (heightmap.getSize()) + 1, heightmap.getHeightMap());
 
         /**
-         * 4. We give the terrain its material, position & scale it, and attach
-         * it.
+         * 4. We give the terrain its material, position & scale it, and attach it.
          */
         terrain.setMaterial(mat_terrain);
         terrain.setLocalTranslation(mars_settings.getTerrainPosition());
@@ -1443,25 +1475,25 @@ public class Initializer {
         sceneReflectionNode.attachChild(terrain_node);
         RayDetectable.attachChild(terrain_node);
         bulletAppState.getPhysicsSpace().add(terrain);
-        
+
         /*File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/wakenitz_am.png", "mars.core", false);
-        DensityMap dm = new DensityMap(file4.getAbsolutePath());
-        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 5);
-        Geometry createGenuineGrass = vs.createGenuineGrass("Grass/kelp_green.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
-        Geometry createImposterGrass = vs.createImposterGrass("Grass/kelp_green.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
-        Geometry createGenuineGrass2 = vs.createGenuineGrass("Grass/stalk.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
-        Geometry createImposterGrass2 = vs.createImposterGrass("Grass/stalk.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
-        vs.setGenuineRed(createGenuineGrass);
-        vs.setImposterRed(createImposterGrass);
-        vs.setGenuineBlue(createGenuineGrass2);
-        vs.setImposterBlue(createImposterGrass2);
-        //vs.setGenuineGreen(createGenuineGrass2);
-        //vs.setImposterGreen(createImposterGrass2);
-        vs.setMaxView(500f, 700f);
-        vs.setMinDist(0.6f, 0.6f, 0.6f);
-        vs.setShadowModes(ShadowMode.Cast, ShadowMode.Cast, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
-        vs.plant(0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f);
-        //sceneReflectionNode.attachChild(vs);*/
+         DensityMap dm = new DensityMap(file4.getAbsolutePath());
+         VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, 5);
+         Geometry createGenuineGrass = vs.createGenuineGrass("Grass/kelp_green.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+         Geometry createImposterGrass = vs.createImposterGrass("Grass/kelp_green.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+         Geometry createGenuineGrass2 = vs.createGenuineGrass("Grass/stalk.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+         Geometry createImposterGrass2 = vs.createImposterGrass("Grass/stalk.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
+         vs.setGenuineRed(createGenuineGrass);
+         vs.setImposterRed(createImposterGrass);
+         vs.setGenuineBlue(createGenuineGrass2);
+         vs.setImposterBlue(createImposterGrass2);
+         //vs.setGenuineGreen(createGenuineGrass2);
+         //vs.setImposterGreen(createImposterGrass2);
+         vs.setMaxView(500f, 700f);
+         vs.setMinDist(0.6f, 0.6f, 0.6f);
+         vs.setShadowModes(ShadowMode.Cast, ShadowMode.Cast, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off, ShadowMode.Off);
+         vs.plant(0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f);
+         //sceneReflectionNode.attachChild(vs);*/
     }
 
     /**
@@ -1479,7 +1511,7 @@ public class Initializer {
                     Quaternion rot = new Quaternion(rots);
                     terrain_node.setLocalRotation(rot);
                     terrain_node.setLocalScale(mars_settings.getTerrainScale());
-                            //terrain_physics_control.setPhysicsLocation(mars_settings.getTerrainPosition());
+                    //terrain_physics_control.setPhysicsLocation(mars_settings.getTerrainPosition());
                     //terrain_physics_control.setPhysicsRotation(rot);
                 }
                 return null;
@@ -1909,7 +1941,7 @@ public class Initializer {
 
     /**
      * SkyDome stuff.
-     * 
+     *
      * @return
      */
     public SkyControl getSkyControl() {
@@ -1918,7 +1950,7 @@ public class Initializer {
 
     /**
      * SkyDome stuff.
-     * 
+     *
      * @return
      */
     public TimeOfDay getTimeOfDay() {
@@ -1927,7 +1959,7 @@ public class Initializer {
 
     /**
      * SkyDome stuff.
-     * 
+     *
      * @param hour
      */
     public void resetTimeOfDay(final float hour) {

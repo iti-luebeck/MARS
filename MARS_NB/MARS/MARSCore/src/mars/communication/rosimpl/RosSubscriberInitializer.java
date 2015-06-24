@@ -1,5 +1,7 @@
 package mars.communication.rosimpl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.actuators.Actuator;
 import mars.actuators.thruster.Thruster;
 import mars.ros.MARSNodeMain;
@@ -22,6 +24,6 @@ public class RosSubscriberInitializer {
             return;
         }
 
-        throw new IllegalArgumentException("Unable to map actuator " + actuator + " to subscriber!");
+        Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "Unable to map actuator " + actuator + " to subscriber!", "");
     }
 }
