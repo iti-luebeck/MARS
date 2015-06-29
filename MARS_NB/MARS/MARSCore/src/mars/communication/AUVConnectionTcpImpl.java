@@ -29,10 +29,24 @@
  */
 package mars.communication;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.sensors.Sensor;
 
-public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl {
+public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
+
+    private ServerSocket serverSocket;
+    private Socket socket;
+    private BufferedReader input;
+    private BufferedWriter output;
 
     public AUVConnectionTcpImpl(AUV auv) {
         super(auv);
@@ -40,16 +54,69 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl {
 
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        String mySensorData = "asdf"; //TODOFAB -> xml
+
+        try {
+            output.write(mySensorData + "\r\n");
+            output.flush();
+
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing string", mySensorData);
+
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Exception while publishing!", ex);
+        }
+
     }
 
     @Override
-    public void receiveActuatorData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void receiveActuatorData(String actuatorData) {
+
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received String", actuatorData);
     }
 
     @Override
     public AUVConnectionType getConnectionType() {
         return AUVConnectionType.TCP;
+    }
+
+    public void start(int port) {
+
+        try {
+            this.serverSocket = new ServerSocket(port);
+            this.socket = serverSocket.accept();
+            output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            Thread t = new Thread(this);
+            t.start();
+
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Started ServerSocket on port " + port, "");
+
+        } catch (IOException ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Failed to start ServerSocket on port " + port, ex);
+        }
+    }
+
+    @Override
+    public void run() {
+
+        while (true) {
+
+            try {
+                String receivedString = input.readLine();
+
+                if (receivedString != null && receivedString.length() > 0) {
+
+                    receiveActuatorData(receivedString);
+
+                }
+
+            } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception in run()", e);
+            }
+        }
+
     }
 }

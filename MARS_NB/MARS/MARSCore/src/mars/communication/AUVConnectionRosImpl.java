@@ -66,7 +66,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
     }
 
     @Override
-    public void receiveActuatorData() {
+    public void receiveActuatorData(String actuatorData) {
         // nothing to do here. all actuator updates for ros are handled within the subscribers's events, declared in RosSubscriberFactory
     }
 
