@@ -29,6 +29,8 @@
  */
 package mars.communication;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -39,6 +41,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
+import mars.communication.socketimpl.SensorData;
 import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
@@ -55,13 +58,18 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
 
-        String mySensorData = "asdf"; //TODOFAB -> xml
+        if (sourceSensor == null || sensorData == null) {
+            return;
+        }
+
+        SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
+        String xml = new XStream(new DomDriver()).toXML(data);
 
         try {
-            output.write(mySensorData + "\r\n");
+            output.write(xml + "\r\n");
             output.flush();
 
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing string", mySensorData);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
 
         } catch (IOException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Exception while publishing!", ex);
