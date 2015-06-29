@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.misc.PropertyChangeListenerSupport;
+import mars.server.ConnectionType;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -65,6 +66,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     private HashMap<String, Object> collision;
     private HashMap<String, Object> buoyancy;
     private HashMap<String, Object> optimize;
+    private HashMap<String, Object> connection;
     private AUV auv;
 
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
@@ -125,6 +127,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         collision = (HashMap<String, Object>) params.get("Collision");
         buoyancy = (HashMap<String, Object>) params.get("Buoyancy");
         optimize = (HashMap<String, Object>) params.get("Optimize");
+        connection = (HashMap<String, Object>) params.get("Connection");
     }
 
     /**
@@ -192,6 +195,12 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         setWaypointsGradient(true);
         setWaypointsUpdaterate(1.0f);
         setWaypointsVisiblity(true);
+        setConnectionEnabled(false);
+        setConnectionGlobalQueueSize(10);
+        setConnectionLocalip("127.0.0.1");
+        setConnectionTargetip("127.0.0.1");
+        setConnectionPort(11311);
+        setConnectionType(ConnectionType.ROS);
     }
 
     /**
@@ -1396,6 +1405,102 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         Boolean old = getEnabled();
         params.put("enabled", enabled);
         fire("enabled", old, enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getConnectionEnabled() {
+        return (Boolean) connection.get("enabled");
+    }
+
+    /**
+     *
+     * @param enabled
+     */
+    public void setConnectionEnabled(Boolean enabled) {
+        connection.put("enabled", enabled);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getConnectionLocalip() {
+        return (String) connection.get("localip");
+    }
+
+    /**
+     *
+     * @param localip
+     */
+    public void setConnectionLocalip(String localip) {
+        connection.put("localip", localip);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getConnectionTargetip() {
+        return (String) connection.get("targetip");
+    }
+
+    /**
+     *
+     * @param targetip
+     */
+    public void setConnectionTargetip(String targetip) {
+        connection.put("targetip", targetip);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getConnectionPort() {
+        return (Integer) connection.get("port");
+    }
+
+    /**
+     *
+     * @param port
+     */
+    public void setConnectionPort(Integer port) {
+        connection.put("port", port);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getConnectionGlobalQueueSize() {
+        return (Integer) connection.get("GlobalQueueSize");
+    }
+
+    /**
+     *
+     * @param GlobalQueueSize
+     */
+    public void setConnectionGlobalQueueSize(Integer GlobalQueueSize) {
+        connection.put("GlobalQueueSize", GlobalQueueSize);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getConnectionType() {
+        return (String) connection.get("type");
+    }
+
+    /**
+     *
+     * @param type
+     */
+    public void setConnectionType(String type) {
+        connection.put("type", type);
     }
 
     /**
