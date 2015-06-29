@@ -97,10 +97,6 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                 nodeName = "Sensors";
                 icon = "eye.png";
                 break;
-            case ParamChildNodeFactory.PARAMETER:
-                nodeName = "Parameter";
-                icon = "gear_in.png";
-                break;
             default:
                 nodeName = "";
         }
