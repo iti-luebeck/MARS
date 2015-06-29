@@ -106,7 +106,7 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
     /**
      * Name of the image file on the harddisk.
      */
-    private String icon = "question-white.png";
+    private String icon;
 
     /**
      * Displayname of the node.
@@ -194,7 +194,9 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 icon = "transform_move.png";
             } else if (obj instanceof PollutionMeter) {
                 icon = "oil-barrel.png";
-            } else {//last resort
+            } else if (obj instanceof AUV_Parameters) {
+                icon = "gear_in.png";
+            }else {//last resort
                 icon = "question-white.png";
             }
         }
