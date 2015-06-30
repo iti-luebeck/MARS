@@ -370,7 +370,9 @@ public class Initializer {
         // initialize the connection objects, but not start the real connections
         for (String auvName : auv_manager.getAUVs().keySet()) {
             AUV auv = auv_manager.getAUV(auvName);
-            auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv));
+            if (auv.getAuvConnection() == null) {
+                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv)); //TODOFAB: possible problem for ros connections
+            }
         }
 
         if (mars_settings.getRAWEnabled()) {

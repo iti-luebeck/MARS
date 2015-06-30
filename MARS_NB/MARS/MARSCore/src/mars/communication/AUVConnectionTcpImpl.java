@@ -31,28 +31,33 @@ package mars.communication;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
+import mars.communication.socketimpl.ClientHandler;
 import mars.communication.socketimpl.SensorData;
 import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
 
+    private boolean started;
+    private boolean running;
     private ServerSocket serverSocket;
+    private Thread serverThread;
     private Socket socket;
-    private BufferedReader input;
     private BufferedWriter output;
+
+    private List<ClientHandler> clients = new ArrayList<ClientHandler>();
 
     public AUVConnectionTcpImpl(AUV auv) {
         super(auv);
+        started = false;
+        serverSocket = null;
     }
 
     @Override
@@ -62,17 +67,18 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             return;
         }
 
+        if (clients.isEmpty()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] No clients -> nothing to publish!", "");
+            return;
+        }
+
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
+
         SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
         String xml = new XStream(new DomDriver()).toXML(data);
 
-        try {
-            output.write(xml + "\r\n");
-            output.flush();
-
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
-
-        } catch (IOException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Exception while publishing!", ex);
+        for (ClientHandler client : clients) {
+            client.sendMessage(xml + "\r\n");
         }
 
     }
@@ -90,41 +96,55 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
     public void start(int port) {
 
-        try {
-            this.serverSocket = new ServerSocket(port);
-            this.socket = serverSocket.accept();
-            output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        if (!started) {
+            started = true;
 
-            Thread t = new Thread(this);
-            t.start();
+            try {
+                serverSocket = new ServerSocket(port);
+                running = true;
 
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Started ServerSocket on port " + port, "");
+                serverThread = new Thread(this);
+                serverThread.start();
 
-        } catch (IOException ex) {
-
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Failed to start ServerSocket on port " + port, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Server socket started on port " + port, "");
+            } catch (Exception e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
+            }
         }
     }
 
     @Override
     public void run() {
+        try {
+            while (running) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client socket connected!", "");
 
-        while (true) {
+                    ClientHandler client = new ClientHandler(clientSocket, this);
+                    clients.add(client);
+                    client.sendMessage("Connection accepted!");
 
-            try {
-                String receivedString = input.readLine();
-
-                if (receivedString != null && receivedString.length() > 0) {
-
-                    receiveActuatorData(receivedString);
-
+                } catch (Exception e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
                 }
-
-            } catch (IOException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception in run()", e);
             }
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
         }
+    }
 
+    public void stop() {
+        running = false;
+        started = false;
+
+        if (serverThread != null) {
+            serverThread.interrupt();
+        }
+        serverThread = null;
+    }
+
+    public void removeClient(ClientHandler client) {
+        clients.remove(client);
     }
 }
