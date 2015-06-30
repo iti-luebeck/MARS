@@ -745,7 +745,7 @@ public class BasicAUV implements AUV, SceneProcessor{
             if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setMARS_settings(mars_settings);
-                element.setPhysical_environment(physical_environment);
+                element.setPhysicalEnvironment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
                 element.setupLogger();
@@ -789,7 +789,7 @@ public class BasicAUV implements AUV, SceneProcessor{
             element.setAuv(this);
             if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
-                element.setPhysical_environment(physical_environment);
+                element.setPhysicalEnvironment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
                 element.setMARS_settings(mars_settings);

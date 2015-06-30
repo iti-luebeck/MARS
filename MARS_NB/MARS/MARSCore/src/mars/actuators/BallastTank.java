@@ -258,7 +258,7 @@ public class BallastTank extends Actuator implements Keys {
                 currentVolume = currentVolume + (Math.signum(diff) * VolumePerTPF);
             }
         }
-        float buoyancy_force = getPhysical_environment().getFluid_density() * getPhysical_environment().getGravitational_acceleration() * getCurrentVolume();
+        float buoyancy_force = getPhysicalEnvironment().getFluid_density() * getPhysicalEnvironment().getGravitational_acceleration() * getCurrentVolume();
         physics_control.applyImpulse(Vector3f.UNIT_Y.negate().mult(buoyancy_force / ((float) mars_settings.getPhysicsFramerate())), this.getMassCenterGeom().getWorldTranslation().subtract(BallastStart.getWorldTranslation()));
     }
 
