@@ -34,16 +34,28 @@ import mars.sensors.Sensor;
 
 public class AUVConnectionFactory {
 
-    private static int tcpPort = 8080;
+    private static int tcpPort = 8080; //TODOFAB -> properties
 
     public static AUVConnection createNewConnection(AUV auv) {
 
-        //TODOFAB mapping when more than ros is implemented!
-        //AUVConnection conn = new AUVConnectionRosImpl(auv);
-        AUVConnection conn = new AUVConnectionTcpImpl(auv);
-        ((AUVConnectionTcpImpl) conn).start(tcpPort++);
+        AUVConnection conn;
+
+        if (auv.getAuv_param().getConnectionType().equals(AUVConnectionType.ROS.toString())) {
+
+            conn = new AUVConnectionRosImpl(auv);
+
+        } else if (auv.getAuv_param().getConnectionType().equals(AUVConnectionType.TCP.toString())) {
+
+            conn = new AUVConnectionTcpImpl(auv);
+            ((AUVConnectionTcpImpl) conn).start(tcpPort++);
+
+        } else {
+
+            return null;
+        }
 
         // Add event listeners for the AUVObjectEvent from the sensors
+        // so they can publish via their new connection
         for (String sensorName : auv.getSensors().keySet()) {
 
             Sensor sensor = auv.getSensors().get(sensorName);
