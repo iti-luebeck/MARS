@@ -31,7 +31,6 @@ package mars.communication;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import java.io.BufferedWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -39,8 +38,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
-import mars.communication.socketimpl.ClientHandler;
-import mars.communication.socketimpl.SensorData;
+import mars.communication.tcpimpl.ClientHandler;
+import mars.communication.tcpimpl.SensorData;
 import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
@@ -49,10 +48,8 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     private boolean running;
     private ServerSocket serverSocket;
     private Thread serverThread;
-    private Socket socket;
-    private BufferedWriter output;
 
-    private List<ClientHandler> clients = new ArrayList<ClientHandler>();
+    private final List<ClientHandler> clients = new ArrayList<ClientHandler>();
 
     public AUVConnectionTcpImpl(AUV auv) {
         super(auv);
@@ -87,6 +84,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     public void receiveActuatorData(String actuatorData) {
 
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received String", actuatorData);
+        //TODOFAB route the data to the correct actuator!
     }
 
     @Override
@@ -108,7 +106,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Server socket started on port " + port, "");
             } catch (Exception e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Unable to start server socket!", e);
             }
         }
     }
@@ -119,11 +117,11 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             while (running) {
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client socket connected!", "");
+                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Incoming client socket connection from " + clientSocket.getRemoteSocketAddress().toString(), "");
 
                     ClientHandler client = new ClientHandler(clientSocket, this);
                     clients.add(client);
-                    client.sendMessage("Connection accepted!");
+                    client.sendMessage("Connection to communication of AUV " + auv.getName() + " accepted!");
 
                 } catch (Exception e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
