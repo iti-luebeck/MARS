@@ -187,6 +187,25 @@ public abstract class MARSObjectManager<T extends MARSObject> implements Lookup.
         }
     }
     
+    /**
+     *
+     * @param key Which unique registered auv do we want?
+     * @return The auv that we asked for
+     */
+    public T getMARSObject(String key) {
+        return marsObjects.get(key);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public HashMap<String, T> getMARSObjects() {
+        return marsObjects;
+    }
+    
+    protected abstract void init(T marsObj);
+    
     protected abstract void addToScene(T simob);
     
     /**
@@ -199,6 +218,23 @@ public abstract class MARSObjectManager<T extends MARSObject> implements Lookup.
             deregister(marsObj);
         }
     }
+    
+    /**
+     *
+     * @param arrlist
+     */
+    public void register(ArrayList<T> arrlist) {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding MARSObjects...", "");
+        Iterator<T> iter = arrlist.iterator();
+        while (iter.hasNext()) {
+            T auv = iter.next();
+            register(auv);
+        }
+    }
+    
+    public abstract void register(String name, T marsObj);
+    
+    public abstract void register(T marsObj);
     
     /**
      *

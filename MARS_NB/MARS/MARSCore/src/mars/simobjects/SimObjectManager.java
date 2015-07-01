@@ -81,7 +81,8 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
      * @param name
      * @param simob
      */
-    public void registerSimObject(String name, SimObject simob) {
+    @Override
+    public void register(String name, SimObject simob) {
         simob.setName(name);
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
@@ -98,7 +99,8 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
      *
      * @param simob
      */
-    public void registerSimObject(SimObject simob) {
+    @Override
+    public void register(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " added...", "");
         final SimObject fin_simob = simob;
         mars.enqueue(new Callable<Void>() {
@@ -108,19 +110,6 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
                 return null;
             }
         });
-    }
-
-    /**
-     *
-     * @param arrlist
-     */
-    public void registerSimObjects(ArrayList<SimObject> arrlist) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding Sim_Objects...", "");
-        Iterator<SimObject> iter = arrlist.iterator();
-        while (iter.hasNext()) {
-            SimObject simob = iter.next();
-            registerSimObject(simob);
-        }
     }
 
     /**
@@ -143,29 +132,12 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
         //}
     }
 
-    /**
-     *
-     * @param key Which unique registered auv do we want?
-     * @return The auv that we asked for
-     */
-    public SimObject getSimObject(String key) {
-        return (SimObject)marsObjects.get(key);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public HashMap<String, SimObject> getSimObjects() {
-        return marsObjects;
-    }
-
     @Override
     protected void addToScene(SimObject marsObj) {
         if(marsObj instanceof SimObject){
             SimObject simob = (SimObject)marsObj;
             if (simob.isEnabled()) {
-                initSimObject(simob);
+                init(simob);
                 addSimObjectToNode(simob, SimObNode);
                 //addSimObjectToPickingNode(simob,SimObPickingNode);
                 addSimObjectToBulletAppState(simob);
@@ -227,18 +199,12 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
         }
     }
 
-    private void initSimObject(SimObject simob) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising SimObject " + simob.getName() + "...", "");
-        if (simob.isEnabled()) {
-            simob.setSimauv(mars);
-            simob.setAssetManager(assetManager);
-            simob.setMARSSettings(mars_settings);
-            simob.init();
-        }
-    }
-
-    private void initSimObject(String simob_name) {
-        SimObject simob = getSimObject(simob_name);
+    /**
+     *
+     * @param simob
+     */
+    @Override
+    protected void init(SimObject simob) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising SimObject " + simob.getName() + "...", "");
         if (simob.isEnabled()) {
             simob.setSimauv(mars);

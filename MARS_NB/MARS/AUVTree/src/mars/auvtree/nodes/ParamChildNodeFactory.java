@@ -51,7 +51,7 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
     public ParamChildNodeFactory(String name) {
         CentralLookup cl = CentralLookup.getDefault();
         AUV_Manager auv_manager = cl.lookup(AUV_Manager.class);
-        auv = (BasicAUV) auv_manager.getAUV(name);
+        auv = (BasicAUV) auv_manager.getMARSObject(name);
     }
 
     /**

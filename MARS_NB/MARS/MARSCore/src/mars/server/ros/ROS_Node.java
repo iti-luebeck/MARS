@@ -251,7 +251,7 @@ public class ROS_Node implements Runnable {
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
         createSystemNode(own_ip_string, muri);
-        HashMap<String, AUV> auvs = auv_manager.getAUVs();
+        HashMap<String, AUV> auvs = auv_manager.getMARSObjects();
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             createNode(auv, own_ip_string, muri);

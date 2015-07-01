@@ -157,7 +157,7 @@ public final class SimObTreeTopComponentTopComponent extends TopComponent implem
         result = cl.lookup(template);
         if (simob_manager == null) {// try to get mars, else its the listener
             simob_manager = cl.lookup(SimObjectManager.class);
-            HashMap<String,SimObject> simobs = simob_manager.getSimObjects();
+            HashMap<String,SimObject> simobs = simob_manager.getMARSObjects();
             mgr.setRootContext(new RootNode(simobs,simob_manager));
         }
         if(mars == null){

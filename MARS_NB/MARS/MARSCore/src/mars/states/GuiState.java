@@ -729,7 +729,7 @@ public class GuiState extends AbstractAppState {
                 Geometry target = results.getCollision(i).getGeometry();
                 // Here comes the action:
                 if ((String) target.getUserData("auv_name") != null) {
-                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getUserData("auv_name"));
+                    BasicAUV auv = (BasicAUV) auvManager.getMARSObject((String) target.getUserData("auv_name"));
                     if (auv != null) {
                         auvManager.deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
                         auv.setSelected(true);
@@ -758,7 +758,7 @@ public class GuiState extends AbstractAppState {
                 if (((String) target.getUserData("simob_name") != null)) {
                     Integer pickType = (Integer) target.getUserData(PickHint.PickName);
                     if ((pickType == null) || (pickType == PickHint.Pick)) {//only pick spatials who are pickable
-                        SimObject simob = simobManager.getSimObject((String) target.getUserData("simob_name"));
+                        SimObject simob = simobManager.getMARSObject((String) target.getUserData("simob_name"));
                         if (simob != null) {
                             simobManager.deselectAll();
                             simob.setSelected(true);
@@ -799,7 +799,7 @@ public class GuiState extends AbstractAppState {
                 guiControlState.setSelect_auv(true);
                 // Here comes the action:
                 if ((String) target.getUserData("auv_name") != null) {
-                    BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getUserData("auv_name"));
+                    BasicAUV auv = (BasicAUV) auvManager.getMARSObject((String) target.getUserData("auv_name"));
                     if (auv != null) {
                         auv.setSelected(true);
                         guiControlState.setLatestSelectedAUV(auv);

@@ -92,23 +92,6 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
 
     /**
      *
-     * @param key Which unique registered auv do we want?
-     * @return The auv that we asked for
-     */
-    public AUV getAUV(String key) {
-        return (AUV)marsObjects.get(key);
-    }
-
-    /**
-     *
-     * @return All AUVs registered.
-     */
-    public HashMap<String, AUV> getAUVs() {
-        return marsObjects;
-    }
-
-    /**
-     *
      * @param oldName
      * @param newName
      */
@@ -396,7 +379,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      * @param name
      * @param auv
      */
-    public void registerAUV(String name, AUV auv) {
+    @Override
+    public void register(String name, AUV auv) {
         auv.setName(name);
         final AUV fin_auv = auv;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
@@ -413,7 +397,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      *
      * @param auv
      */
-    public void registerAUV(AUV auv) {
+    @Override
+    public void register(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " added...", "");
         final AUV fin_auv = auv;
         mars.enqueue(new Callable<Void>() {
@@ -432,25 +417,10 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
 
     /**
      *
-     * @param arrlist
-     */
-    public void registerAUVs(ArrayList<AUV> arrlist) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUVs...", "");
-        Iterator<AUV> iter = arrlist.iterator();
-        while (iter.hasNext()) {
-            AUV auv = iter.next();
-            registerAUV(auv);
-        }
-    }
-
-    /**
-     *
      * @param auv
      */
     @Override
     public void deregister(AUV auv) {
-        //if(marsObj instanceof AUV){
-            //AUV auv = (AUV)marsObj;
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
             final AUV fin_auv = auv;
             mars.enqueue(new Callable<Void>() {
@@ -460,7 +430,6 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
                     return null;
                 }
             });
-        //}
     }
 
     /**
@@ -484,7 +453,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
         auv.setPhysical_environment(physical_environment);
         auv.setCommunicationManager(com_manager);
         auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
-        initAUV(auv);
+        init(auv);
         if (auv.getAuv_param().isEnabled()) {
             //initAUV(auv);
             //addAUVToNode(auv,sceneReflectionNode);
@@ -575,7 +544,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     /*
     * Call the init method of all AUVs.
     */
-    private void initAUV(AUV auv) {
+    @Override
+    protected void init(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
         auv.init();
     }

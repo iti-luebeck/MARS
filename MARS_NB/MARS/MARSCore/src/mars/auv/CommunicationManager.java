@@ -104,7 +104,7 @@ public class CommunicationManager {
      * checks for distance and noise is also made here
      */
     private void updateCommunication(String auv_name, String msg, int communicationType) {
-        AUV sender = auv_manager.getAUV(auv_name);
+        AUV sender = auv_manager.getMARSObject(auv_name);
 
         CommunicationDevice senderUW;
         Vector3f senderUWPos;
@@ -120,7 +120,7 @@ public class CommunicationManager {
             return;
         }
 
-        HashMap<String, AUV> auvs = auv_manager.getAUVs();
+        HashMap<String, AUV> auvs = auv_manager.getMARSObjects();
 
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
@@ -151,7 +151,7 @@ public class CommunicationManager {
 
     private void updateComNet() {
         //update list of modems
-        HashMap<String, AUV> auvs = auv_manager.getAUVs();
+        HashMap<String, AUV> auvs = auv_manager.getMARSObjects();
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             if (auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(UnderwaterModem.class.getName())) {

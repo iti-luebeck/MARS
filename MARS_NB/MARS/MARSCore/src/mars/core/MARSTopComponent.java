@@ -2376,7 +2376,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     public void updateANAutoComplete(){
         auv_name_items.clear();
-        auv_name_items.addAll(auvManager.getAUVs().keySet());
+        auv_name_items.addAll(auvManager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(auv_name_text, auv_name_items, false);
     }
     
@@ -2393,7 +2393,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     public void updateSNAutoComplete(){
         simob_name_items.clear();
-        simob_name_items.addAll(simob_manager.getSimObjects().keySet());
+        simob_name_items.addAll(simob_manager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(simob_name_text, simob_name_items, false);
     }
     

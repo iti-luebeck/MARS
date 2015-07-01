@@ -655,22 +655,22 @@ public class XML_JAXB_ConfigReaderWriter {
         }
 
         //clear the old simobs
-        failure = clearSimObjects(simObjectManager.getSimObjects(), simobFile);
+        failure = clearSimObjects(simObjectManager.getMARSObjects(), simobFile);
         if (failure != null) {
             return failure;
         }
-        failure = saveSimObjects(simObjectManager.getSimObjects(), simobFile);
+        failure = saveSimObjects(simObjectManager.getMARSObjects(), simobFile);
         if (failure != null) {
             return failure;
         }
 
         //clear the old auvs
-        failure = clearAUVs(auvManager.getAUVs(), auvFile);
+        failure = clearAUVs(auvManager.getMARSObjects(), auvFile);
         if (failure != null) {
             return failure;
         }
         //save the auvs
-        failure = saveAUVs(auvManager.getAUVs(), auvFile);
+        failure = saveAUVs(auvManager.getMARSObjects(), auvFile);
         if (failure != null) {
             return failure;
         }

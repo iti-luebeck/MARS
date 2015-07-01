@@ -97,9 +97,9 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         Lookup.Template template = new Lookup.Template(AUV_Manager.class);
         CentralLookup cl = CentralLookup.getDefault();
         result = cl.lookup(template);
-        if (auv_manager == null || auv_manager.getAUVs().isEmpty()) {// try to get mars, else its the listener
+        if (auv_manager == null || auv_manager.getMARSObjects().isEmpty()) {// try to get mars, else its the listener
             auv_manager = cl.lookup(AUV_Manager.class);
-            HashMap<String,AUV> auvs = auv_manager.getAUVs();
+            HashMap<String,AUV> auvs = auv_manager.getMARSObjects();
             mgr.setRootContext(new RootNode(auvs,auv_manager));
         }
         if(mars == null){
