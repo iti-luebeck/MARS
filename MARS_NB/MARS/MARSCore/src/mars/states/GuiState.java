@@ -926,10 +926,10 @@ public class GuiState extends AbstractAppState {
         if (selected_auv != null) {
             if (!enable) {
                 selected_auv.getAuv_param().setEnabled(false);
-                auvManager.enableAUV(selected_auv, false);
+                auvManager.enableMARSObject(selected_auv, false);
             } else {
                 selected_auv.getAuv_param().setEnabled(true);
-                auvManager.enableAUV(selected_auv, true);
+                auvManager.enableMARSObject(selected_auv, true);
             }
         }
     }

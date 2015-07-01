@@ -934,7 +934,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     auv.getAuv_param().setPosition(intersection);
                     auv.getAuv_param().setEnabled(true);
-                    auvManager.enableAUV(auv, true);
+                    auvManager.enableMARSObject(auv, true);
                     auv.getPhysicsControl().setPhysicsLocation(intersection);
                 }
             }
@@ -977,7 +977,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     auv.getAuv_param().setPosition(pos);
                     auv.getAuv_param().setEnabled(true);
-                    auvManager.enableAUV(auv, true);
+                    auvManager.enableMARSObject(auv, true);
                     auv.getPhysicsControl().setPhysicsLocation(pos);
                 }
             }
@@ -1009,7 +1009,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     simob.setPosition(pos);
                     simob.setEnabled(true);
-                    simobManager.enableSimObject(simob, true);
+                    simobManager.enableMARSObject(simob, true);
                     simob.getPhysicsControl().setPhysicsLocation(pos);
                 }
             }
@@ -1052,7 +1052,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     simob.setPosition(intersection);
                     simob.setEnabled(true);
-                    simobManager.enableSimObject(simob, true);
+                    simobManager.enableMARSObject(simob, true);
                     simob.getPhysicsControl().setPhysicsLocation(intersection);
                 }
             }

@@ -167,6 +167,28 @@ public abstract class MARSObjectManager implements Lookup.Provider{
     }
     
     /**
+     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the
+     * update cycle(future/get).
+     *
+     * @param simob
+     * @param enable
+     */
+    public void enableMARSObject(MARSObject simob, boolean enable) {
+        enableMARSObject(simob.getName(), enable);
+    }
+
+    private void enableMARSObject(String name, boolean enable) {
+        MARSObject marsObj = marsObjects.get(name);
+        if (enable) {
+            addToScene(marsObj);
+        } else {
+            removeFromScene(marsObj);
+        }
+    }
+    
+    protected abstract void addToScene(MARSObject simob);
+    
+    /**
      *
      */
     public void deregisterAll(){

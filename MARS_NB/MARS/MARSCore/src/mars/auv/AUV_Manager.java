@@ -500,33 +500,17 @@ public class AUV_Manager extends MARSObjectManager{
         }
     }
 
-    /**
-     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the
-     * update cycle(future/get).
-     *
-     * @param auv
-     * @param enable
-     */
-    public void enableAUV(AUV auv, boolean enable) {
-        enableAUV(auv.getName(), enable);
-    }
-
-    private void enableAUV(String auv_name, boolean enable) {
-        AUV auv = (AUV)marsObjects.get(auv_name);
-        if (enable) {
-            addAUVToScene(auv);
-        } else {
-            removeFromScene(auv);
-        }
-    }
-
     /*
     * Adds the AUV node to the scengraph(rootNode).
     */
-    private void addAUVToScene(AUV auv) {
-        auv.addDragOffscreenView();
-        addAUVToNode(auv, AUVsNode);
-        addAUVToBulletAppState(auv, bulletAppState);
+    @Override
+    protected void addToScene(MARSObject marsObj) {
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            auv.addDragOffscreenView();
+            addAUVToNode(auv, AUVsNode);
+            addAUVToBulletAppState(auv, bulletAppState);
+        }
     }
 
     /*

@@ -87,7 +87,7 @@ public class SimObjectManager extends MARSObjectManager{
         final SimObject fin_simob = simob;
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                addSimObjectToScene(fin_simob);
+                addToScene(fin_simob);
                 marsObjects.put(fin_simob.getName(), fin_simob);
                 return null;
             }
@@ -103,7 +103,7 @@ public class SimObjectManager extends MARSObjectManager{
         final SimObject fin_simob = simob;
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                addSimObjectToScene(fin_simob);
+                addToScene(fin_simob);
                 marsObjects.put(fin_simob.getName(), fin_simob);
                 return null;
             }
@@ -166,12 +166,16 @@ public class SimObjectManager extends MARSObjectManager{
         return simobs;
     }
 
-    private void addSimObjectToScene(SimObject simob) {
-        if (simob.isEnabled()) {
-            initSimObject(simob);
-            addSimObjectToNode(simob, SimObNode);
-            //addSimObjectToPickingNode(simob,SimObPickingNode);
-            addSimObjectToBulletAppState(simob);
+    @Override
+    protected void addToScene(MARSObject marsObj) {
+        if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            if (simob.isEnabled()) {
+                initSimObject(simob);
+                addSimObjectToNode(simob, SimObNode);
+                //addSimObjectToPickingNode(simob,SimObPickingNode);
+                addSimObjectToBulletAppState(simob);
+            }
         }
     }
 
@@ -252,26 +256,6 @@ public class SimObjectManager extends MARSObjectManager{
      */
     public SimObject getSelectedSimObject() {
         return (SimObject)getSelected();
-    }
-
-    /**
-     * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the
-     * update cycle(future/get).
-     *
-     * @param simob
-     * @param enable
-     */
-    public void enableSimObject(SimObject simob, boolean enable) {
-        enableSimObject(simob.getName(), enable);
-    }
-
-    private void enableSimObject(String simob_name, boolean enable) {
-        SimObject simob = (SimObject)marsObjects.get(simob_name);
-        if (enable) {
-            addSimObjectToScene(simob);
-        } else {
-            removeFromScene(simob);
-        }
     }
 
     @Override
