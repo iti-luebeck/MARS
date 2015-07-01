@@ -41,7 +41,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.auv.AUV;
 import mars.misc.Collider;
 import mars.states.SimState;
 import org.openide.util.Lookup;

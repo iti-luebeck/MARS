@@ -30,23 +30,10 @@
 package mars.simobjects;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.misc.Collider;
-import mars.MARS_Main;
-import mars.MARS_Settings;
-import mars.object.MARSObject;
 import mars.object.MARSObjectManager;
 import mars.states.SimState;
 
