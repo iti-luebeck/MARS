@@ -343,7 +343,7 @@ public class SimObNode extends AbstractNode implements PropertyChangeListener {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 if (mars.getStateManager().getState(SimState.class) != null) {
-                    simobManager.deregisterSimObject(simob);
+                    simobManager.deregister(simob);
                 }
                 return null;
             }

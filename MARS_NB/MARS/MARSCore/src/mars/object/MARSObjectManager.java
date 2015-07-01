@@ -32,7 +32,10 @@ package mars.object;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.Callable;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -162,6 +165,50 @@ public abstract class MARSObjectManager implements Lookup.Provider{
         }
         return null;
     }
+    
+    /**
+     *
+     */
+    public void deregisterAll(){
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All MARSObjects...", "");
+        for (String elem : marsObjects.keySet()) {
+            MARSObject marsObj = marsObjects.get(elem);
+            deregister(marsObj);
+        }
+    }
+    
+    /**
+     *
+     * @param marsObjs
+     */
+    public void deregisterAUVs(ArrayList<MARSObject> marsObjs) {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting MARSObjects...", "");
+        Iterator<MARSObject> iter = marsObjs.iterator();
+        while (iter.hasNext()) {
+            MARSObject marsObj = iter.next();
+            deregister(marsObj);
+        }
+    }
+    
+    public abstract void deregister(MARSObject marsObj);
+    
+    /**
+     *
+     * @param name
+     */
+    public void deregister(String name) {
+        final String fin_name = name;
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "MarsObject " + name + " deleted...", "");
+        mars.enqueue(new Callable<Void>() {
+            public Void call() throws Exception {
+                MARSObject ret = (MARSObject)marsObjects.remove(fin_name);
+                removeFromScene(ret);
+                return null;
+            }
+        });
+    }
+    
+    protected abstract void removeFromScene(MARSObject marsObj);
 
     /**
      *

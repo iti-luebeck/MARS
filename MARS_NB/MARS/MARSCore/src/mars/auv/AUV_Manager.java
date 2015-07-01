@@ -451,34 +451,22 @@ public class AUV_Manager extends MARSObjectManager{
 
     /**
      *
-     * @param auv_name
+     * @param marsObj
      */
-    public void deregisterAUV(String auv_name) {
-        final String fin_auv_name = auv_name;
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv_name + " deleted...", "");
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                AUV ret = (AUV)marsObjects.remove(fin_auv_name);
-                removeAUVFromScene(ret);
-                return null;
-            }
-        });
-    }
-
-    /**
-     *
-     * @param auv
-     */
-    public void deregisterAUV(AUV auv) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
-        final AUV fin_auv = auv;
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                removeAUVFromScene(fin_auv);
-                marsObjects.remove(fin_auv.getName());
-                return null;
-            }
-        });
+    @Override
+    public void deregister(MARSObject marsObj) {
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
+            final AUV fin_auv = auv;
+            mars.enqueue(new Callable<Void>() {
+                public Void call() throws Exception {
+                    removeFromScene(fin_auv);
+                    marsObjects.remove(fin_auv.getName());
+                    return null;
+                }
+            });
+        }
     }
 
     /**
@@ -488,32 +476,8 @@ public class AUV_Manager extends MARSObjectManager{
     public void deregisterAUVNoFuture(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
         final AUV fin_auv = auv;
-        removeAUVFromScene(fin_auv);
+        removeFromScene(fin_auv);
         marsObjects.remove(fin_auv.getName());
-    }
-
-    /**
-     *
-     * @param auvs
-     */
-    public void deregisterAUVs(ArrayList<AUV> auvs) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting AUVs...", "");
-        Iterator<AUV> iter = auvs.iterator();
-        while (iter.hasNext()) {
-            AUV auv = iter.next();
-            deregisterAUV(auv);
-        }
-    }
-
-    /**
-     *
-     */
-    public void deregisterAllAUVs() {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All AUVs...", "");
-        for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
-            deregisterAUV(auv);
-        }
     }
 
     /*
@@ -552,7 +516,7 @@ public class AUV_Manager extends MARSObjectManager{
         if (enable) {
             addAUVToScene(auv);
         } else {
-            removeAUVFromScene(auv);
+            removeFromScene(auv);
         }
     }
 
@@ -568,14 +532,18 @@ public class AUV_Manager extends MARSObjectManager{
     /*
     * Removes the AUV node from the scengraph(rootNode).
     */
-    private void removeAUVFromScene(AUV auv) {
-        bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
-        if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
-            bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
+    @Override
+    protected void removeFromScene(MARSObject marsObj) {
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
+            if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
+                bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
+            }
+            RayDetectable.detachChild(auv.getSelectionNode());
+            auv.cleanupOffscreenView();
+            auv.getSelectionNode().removeFromParent();
         }
-        RayDetectable.detachChild(auv.getSelectionNode());
-        auv.cleanupOffscreenView();
-        auv.getSelectionNode().removeFromParent();
     }
 
     /**

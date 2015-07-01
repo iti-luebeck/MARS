@@ -125,57 +125,21 @@ public class SimObjectManager extends MARSObjectManager{
 
     /**
      *
-     * @param name
+     * @param marsObj
      */
-    public void deregisterSimObject(String name) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + name + " deleted...", "");
-        final String fin_name = name;
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                SimObject ret = (SimObject)marsObjects.remove(fin_name);
-                removeSimObjectFromScene(ret);
-                return null;
-            }
-        });
-    }
-
-    /**
-     *
-     * @param simob
-     */
-    public void deregisterSimObject(SimObject simob) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " deleted...", "");
-        final SimObject fin_simob = simob;
-        mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                removeSimObjectFromScene(fin_simob);
-                marsObjects.remove(fin_simob.getName());
-                return null;
-            }
-        });
-    }
-
-    /**
-     *
-     */
-    public void deregisterAllSimObjects() {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All Sim_Objects...", "");
-        for (String elem : marsObjects.keySet()) {
-            SimObject simob = (SimObject)marsObjects.get(elem);
-            deregisterSimObject(simob);
-        }
-    }
-
-    /**
-     *
-     * @param simobs
-     */
-    public void deregisterSimObjects(ArrayList<SimObject> simobs) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting Sim_Objects...", "");
-        Iterator<SimObject> iter = simobs.iterator();
-        while (iter.hasNext()) {
-            SimObject simob = iter.next();
-            deregisterSimObject(simob);
+    @Override
+    public void deregister(MARSObject marsObj) {
+        if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " deleted...", "");
+            final SimObject fin_simob = simob;
+            mars.enqueue(new Callable<Void>() {
+                public Void call() throws Exception {
+                    removeFromScene(fin_simob);
+                    marsObjects.remove(fin_simob.getName());
+                    return null;
+                }
+            });
         }
     }
 
@@ -211,10 +175,14 @@ public class SimObjectManager extends MARSObjectManager{
         }
     }
 
-    private void removeSimObjectFromScene(SimObject simob) {
-        bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
-        RayDetectable.detachChild(simob.getSpatial());
-        simob.getSimObNode().removeFromParent();
+    @Override
+    protected void removeFromScene(MARSObject marsObj) {
+        if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
+            RayDetectable.detachChild(simob.getSpatial());
+            simob.getSimObNode().removeFromParent();
+        }
     }
 
     /**
@@ -302,7 +270,7 @@ public class SimObjectManager extends MARSObjectManager{
         if (enable) {
             addSimObjectToScene(simob);
         } else {
-            removeSimObjectFromScene(simob);
+            removeFromScene(simob);
         }
     }
 
