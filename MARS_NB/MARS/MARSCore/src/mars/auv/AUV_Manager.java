@@ -64,7 +64,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager extends MARSObjectManager{
+public class AUV_Manager extends MARSObjectManager<AUV>{
 
     
     private Node AUVsNode;
@@ -104,13 +104,7 @@ public class AUV_Manager extends MARSObjectManager{
      * @return All AUVs registered.
      */
     public HashMap<String, AUV> getAUVs() {
-        HashMap<String, AUV> simobs = new HashMap<String, AUV>();
-        for (Map.Entry<String, MARSObject> entrySet : marsObjects.entrySet()) {
-            String key = entrySet.getKey();
-            AUV value = (AUV)entrySet.getValue();
-            simobs.put(key, value);
-        }
-        return simobs;
+        return marsObjects;
     }
 
     /**
@@ -451,12 +445,12 @@ public class AUV_Manager extends MARSObjectManager{
 
     /**
      *
-     * @param marsObj
+     * @param auv
      */
     @Override
-    public void deregister(MARSObject marsObj) {
-        if(marsObj instanceof AUV){
-            AUV auv = (AUV)marsObj;
+    public void deregister(AUV auv) {
+        //if(marsObj instanceof AUV){
+            //AUV auv = (AUV)marsObj;
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
             final AUV fin_auv = auv;
             mars.enqueue(new Callable<Void>() {
@@ -466,7 +460,7 @@ public class AUV_Manager extends MARSObjectManager{
                     return null;
                 }
             });
-        }
+        //}
     }
 
     /**
@@ -504,30 +498,24 @@ public class AUV_Manager extends MARSObjectManager{
     * Adds the AUV node to the scengraph(rootNode).
     */
     @Override
-    protected void addToScene(MARSObject marsObj) {
-        if(marsObj instanceof AUV){
-            AUV auv = (AUV)marsObj;
-            auv.addDragOffscreenView();
-            addAUVToNode(auv, AUVsNode);
-            addAUVToBulletAppState(auv, bulletAppState);
-        }
+    protected void addToScene(AUV auv) {
+        auv.addDragOffscreenView();
+        addAUVToNode(auv, AUVsNode);
+        addAUVToBulletAppState(auv, bulletAppState);
     }
 
     /*
     * Removes the AUV node from the scengraph(rootNode).
     */
     @Override
-    protected void removeFromScene(MARSObject marsObj) {
-        if(marsObj instanceof AUV){
-            AUV auv = (AUV)marsObj;
-            bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
-            if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
-                bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
-            }
-            RayDetectable.detachChild(auv.getSelectionNode());
-            auv.cleanupOffscreenView();
-            auv.getSelectionNode().removeFromParent();
+    protected void removeFromScene(AUV auv) {
+        bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
+        if (auv.getGhostControl() != null) {//only try too remove when ghost control exists
+            bulletAppState.getPhysicsSpace().remove(auv.getGhostAUV());
         }
+        RayDetectable.detachChild(auv.getSelectionNode());
+        auv.cleanupOffscreenView();
+        auv.getSelectionNode().removeFromParent();
     }
 
     /**
@@ -599,15 +587,6 @@ public class AUV_Manager extends MARSObjectManager{
      */
     public void deselectAUV(AUV auv) {
         auv.setSelected(false);
-    }
-
-    /**
-     * GUI stuff.
-     * 
-     * @return
-     */
-    public AUV getSelectedAUV() {
-        return (AUV)getSelected();
     }
 
     @Override

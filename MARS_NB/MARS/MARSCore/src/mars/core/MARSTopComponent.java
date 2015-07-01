@@ -1271,7 +1271,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jme3_delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_delete_auvActionPerformed
 
-        final AUV auv = auvManager.getSelectedAUV();
+        final AUV auv = auvManager.getSelected();
 
         //Custom button text
         Object[] options = {"Yes",

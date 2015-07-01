@@ -55,7 +55,7 @@ import mars.states.SimState;
  *
  * @author Thomas Tosik
  */
-public class SimObjectManager extends MARSObjectManager{
+public class SimObjectManager extends MARSObjectManager<SimObject>{
 
     private Node SimObNode;
     private AssetManager assetManager;
@@ -125,12 +125,12 @@ public class SimObjectManager extends MARSObjectManager{
 
     /**
      *
-     * @param marsObj
+     * @param simob
      */
     @Override
-    public void deregister(MARSObject marsObj) {
-        if(marsObj instanceof SimObject){
-            SimObject simob = (SimObject)marsObj;
+    public void deregister(SimObject simob) {
+        //if(marsObj instanceof SimObject){
+            //SimObject simob = (SimObject)marsObj;
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "SIM_OBJECT " + simob.getName() + " deleted...", "");
             final SimObject fin_simob = simob;
             mars.enqueue(new Callable<Void>() {
@@ -140,7 +140,7 @@ public class SimObjectManager extends MARSObjectManager{
                     return null;
                 }
             });
-        }
+        //}
     }
 
     /**
@@ -157,17 +157,11 @@ public class SimObjectManager extends MARSObjectManager{
      * @return
      */
     public HashMap<String, SimObject> getSimObjects() {
-        HashMap<String, SimObject> simobs = new HashMap<String, SimObject>();
-        for (Map.Entry<String, MARSObject> entrySet : marsObjects.entrySet()) {
-            String key = entrySet.getKey();
-            SimObject value = (SimObject)entrySet.getValue();
-            simobs.put(key, value);
-        }
-        return simobs;
+        return marsObjects;
     }
 
     @Override
-    protected void addToScene(MARSObject marsObj) {
+    protected void addToScene(SimObject marsObj) {
         if(marsObj instanceof SimObject){
             SimObject simob = (SimObject)marsObj;
             if (simob.isEnabled()) {
@@ -179,8 +173,12 @@ public class SimObjectManager extends MARSObjectManager{
         }
     }
 
+    /**
+     *
+     * @param marsObj
+     */
     @Override
-    protected void removeFromScene(MARSObject marsObj) {
+    protected void removeFromScene(SimObject marsObj) {
         if(marsObj instanceof SimObject){
             SimObject simob = (SimObject)marsObj;
             bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
@@ -248,14 +246,6 @@ public class SimObjectManager extends MARSObjectManager{
             simob.setMARSSettings(mars_settings);
             simob.init();
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public SimObject getSelectedSimObject() {
-        return (SimObject)getSelected();
     }
 
     @Override

@@ -53,11 +53,12 @@ import org.openide.util.lookup.InstanceContent;
  * is managed here.
  * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
+ * @param <T>
  */
-public abstract class MARSObjectManager implements Lookup.Provider{
+public abstract class MARSObjectManager<T extends MARSObject> implements Lookup.Provider{
 
     // HashMap to store and load MARSObjects
-    protected final HashMap<String, MARSObject> marsObjects = new HashMap<String, MARSObject>();
+    protected final HashMap<String, T> marsObjects = new HashMap<String, T>();
     
     protected MARS_Settings mars_settings;
     protected BulletAppState bulletAppState;
@@ -111,7 +112,7 @@ public abstract class MARSObjectManager implements Lookup.Provider{
     
     public void cleanup() {
         for (String elem : marsObjects.keySet()) {
-            MARSObject marsobj = marsObjects.get(elem);
+            T marsobj = marsObjects.get(elem);
             marsobj.cleanup();
         }
         marsObjects.clear();
@@ -146,7 +147,7 @@ public abstract class MARSObjectManager implements Lookup.Provider{
      */
     public void deselectAll() {
         for (String elem : marsObjects.keySet()) {
-            MARSObject marsObj = marsObjects.get(elem);
+            T marsObj = marsObjects.get(elem);
             marsObj.setSelected(false);
         }
     }
@@ -156,9 +157,9 @@ public abstract class MARSObjectManager implements Lookup.Provider{
      * 
      * @return
      */
-    public MARSObject getSelected() {
+    public T getSelected() {
         for (String elem : marsObjects.keySet()) {
-            MARSObject marsObj = marsObjects.get(elem);
+            T marsObj = marsObjects.get(elem);
             if (marsObj.isSelected()) {
                 return marsObj;
             }
@@ -170,15 +171,15 @@ public abstract class MARSObjectManager implements Lookup.Provider{
      * Enables/Disables a preloaded AUV. Be sure to enable an AUV only after the
      * update cycle(future/get).
      *
-     * @param simob
+     * @param marsObj
      * @param enable
      */
-    public void enableMARSObject(MARSObject simob, boolean enable) {
-        enableMARSObject(simob.getName(), enable);
+    public void enableMARSObject(T marsObj, boolean enable) {
+        enableMARSObject(marsObj.getName(), enable);
     }
 
     private void enableMARSObject(String name, boolean enable) {
-        MARSObject marsObj = marsObjects.get(name);
+        T marsObj = marsObjects.get(name);
         if (enable) {
             addToScene(marsObj);
         } else {
@@ -186,7 +187,7 @@ public abstract class MARSObjectManager implements Lookup.Provider{
         }
     }
     
-    protected abstract void addToScene(MARSObject simob);
+    protected abstract void addToScene(T simob);
     
     /**
      *
@@ -194,7 +195,7 @@ public abstract class MARSObjectManager implements Lookup.Provider{
     public void deregisterAll(){
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting All MARSObjects...", "");
         for (String elem : marsObjects.keySet()) {
-            MARSObject marsObj = marsObjects.get(elem);
+            T marsObj = marsObjects.get(elem);
             deregister(marsObj);
         }
     }
@@ -203,16 +204,16 @@ public abstract class MARSObjectManager implements Lookup.Provider{
      *
      * @param marsObjs
      */
-    public void deregisterAUVs(ArrayList<MARSObject> marsObjs) {
+    public void deregisterAUVs(ArrayList<T> marsObjs) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Deleting MARSObjects...", "");
-        Iterator<MARSObject> iter = marsObjs.iterator();
+        Iterator<T> iter = marsObjs.iterator();
         while (iter.hasNext()) {
-            MARSObject marsObj = iter.next();
+            T marsObj = iter.next();
             deregister(marsObj);
         }
     }
     
-    public abstract void deregister(MARSObject marsObj);
+    public abstract void deregister(T marsObj);
     
     /**
      *
@@ -223,14 +224,14 @@ public abstract class MARSObjectManager implements Lookup.Provider{
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "MarsObject " + name + " deleted...", "");
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                MARSObject ret = (MARSObject)marsObjects.remove(fin_name);
+                T ret = (T)marsObjects.remove(fin_name);
                 removeFromScene(ret);
                 return null;
             }
         });
     }
     
-    protected abstract void removeFromScene(MARSObject marsObj);
+    protected abstract void removeFromScene(T marsObj);
 
     /**
      *
