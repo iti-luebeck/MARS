@@ -438,7 +438,7 @@ public interface AUV extends RosNodeListener, MARSObject {
      *
      * @return
      */
-    public WayPoints getWaypoints();
+    public DistanceCoveredPath getDistanceCoveredPath();
 
     /**
      *

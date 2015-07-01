@@ -967,20 +967,20 @@ public class GuiState extends AbstractAppState {
         if (selected_auv != null) {
             switch (debug_mode) {
                 case 0:
-                    selected_auv.getAuv_param().setWaypointsEnabled(selected);
+                    selected_auv.getAuv_param().setDistanceCoveredPathEnabled(selected);
                     selected_auv.setWaypointsEnabled(selected);
                     break;
                 case 1:
-                    selected_auv.getAuv_param().setWaypointsVisiblity(selected);
+                    selected_auv.getAuv_param().setDistanceCoveredPathVisiblity(selected);
                     selected_auv.setWayPointsVisible(selected);
                     break;
                 case 2:
-                    selected_auv.getWaypoints().reset();
+                    selected_auv.getDistanceCoveredPath().reset();
                     break;
                 case 3:
-                    selected_auv.getAuv_param().setWaypointsGradient(selected);
+                    selected_auv.getAuv_param().setDistanceCoveredPathGradient(selected);
                     if (!selected) {
-                        selected_auv.getWaypoints().updateColor();
+                        selected_auv.getDistanceCoveredPath().updateColor();
                     }
                     break;
                 default:;
@@ -995,7 +995,7 @@ public class GuiState extends AbstractAppState {
     public void waypointsColorSelectedAUV(java.awt.Color newColor) {
         AUV selected_auv = guiControlState.getLatestSelectedAUV();
         if (selected_auv != null) {
-            selected_auv.getAuv_param().setWaypointsColor(new ColorRGBA(newColor.getRed() / 255f, newColor.getGreen() / 255f, newColor.getBlue() / 255f, 0f));
+            selected_auv.getAuv_param().setDistanceCoveredPathColor(new ColorRGBA(newColor.getRed() / 255f, newColor.getGreen() / 255f, newColor.getBlue() / 255f, 0f));
         }
     }
 
