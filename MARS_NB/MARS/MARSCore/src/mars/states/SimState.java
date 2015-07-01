@@ -326,6 +326,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setAUVsNode(AUVNodes);
             guiState.setSimObNode(SimObNodes);
             guiState.setMars_settings(mars_settings);
+            guiState.setSimState(this);
             final AppStateManager stateManagerFin = stateManager;
             
             @SuppressWarnings("unchecked")

@@ -58,6 +58,9 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.terrain.geomipmap.picking.TerrainPickData;
+import java.util.ArrayList;
+import java.util.List;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
@@ -180,7 +183,15 @@ public class GuiState extends AbstractAppState {
     public void setIniter(Initializer initer) {
         this.initer = initer;
     }
-
+    
+    /**
+     *
+     * @param simState
+     */
+    public void setSimState(SimState simState) {
+        this.simState = simState;
+    }
+ 
     /**
      *
      * @param mars_settings
@@ -692,14 +703,23 @@ public class GuiState extends AbstractAppState {
 
     private void pickHover() {
         CollisionResults results = new CollisionResults();
+        //List<TerrainPickData> results2 = new ArrayList<TerrainPickData>();
         // Convert screen click to 3d position
         Vector2f click2d = inputManager.getCursorPosition();
         Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtract(click3d);
 
         // Aim the ray from the clicked spot forwards.
-        Ray ray = new Ray(click3d, dir.normalizeLocal());
+        Ray ray = new Ray(click3d, dir.normalize());
         // Collect intersections between ray and all nodes in results list.
+        /*if(simState != null){
+            simState.getIniter().getTerrain().findPick(ray, results2);
+            System.out.println("results pick" + results2.size());
+            for (int i = 0; i < results2.size(); i++) {
+                 //System.out.println(results2.);
+            }
+            System.out.println("-----------------------");
+        }*/
         AUVsNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
@@ -711,7 +731,7 @@ public class GuiState extends AbstractAppState {
                 if ((String) target.getUserData("auv_name") != null) {
                     BasicAUV auv = (BasicAUV) auvManager.getAUV((String) target.getUserData("auv_name"));
                     if (auv != null) {
-                        auvManager.deselectAllAUVs();//deselect all auvs before (....seamless tansition through two auvs)
+                        auvManager.deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
                         auv.setSelected(true);
                         guiControlState.setLatestSelectedAUV(auv);
                         this.mars.setHoverMenuForAUV(auv, (int) inputManager.getCursorPosition().x, mars.getViewPort().getCamera().getHeight() - (int) inputManager.getCursorPosition().y);
@@ -721,10 +741,10 @@ public class GuiState extends AbstractAppState {
                 }
             }
             //run through and nothing found that is worth to pick
-            auvManager.deselectAllAUVs();
+            auvManager.deselectAll();
             this.mars.setHoverMenuForAUV(false);
         } else {//nothing to pickRightClick
-            auvManager.deselectAllAUVs();
+            auvManager.deselectAll();
             this.mars.setHoverMenuForAUV(false);
         }
 
@@ -740,7 +760,7 @@ public class GuiState extends AbstractAppState {
                     if ((pickType == null) || (pickType == PickHint.Pick)) {//only pick spatials who are pickable
                         SimObject simob = simobManager.getSimObject((String) target.getUserData("simob_name"));
                         if (simob != null) {
-                            simobManager.deselectAllSimObs();
+                            simobManager.deselectAll();
                             simob.setSelected(true);
                             guiControlState.setLatestSelectedSimOb(simob);
                             return;
@@ -750,9 +770,9 @@ public class GuiState extends AbstractAppState {
                 }
             }
             //run through and nothing found that is worth to pick
-            simobManager.deselectAllSimObs();
+            simobManager.deselectAll();
         } else {//nothing to pickRightClick
-            simobManager.deselectAllSimObs();
+            simobManager.deselectAll();
         }
     }
 
@@ -764,7 +784,7 @@ public class GuiState extends AbstractAppState {
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight() - click2d.y), 1f).subtractLocal(click3d);
 
         //cleanup everything before
-        auvManager.deselectAllAUVs();
+        auvManager.deselectAll();
 
         // Aim the ray from the clicked spot forwards.
         Ray ray = new Ray(click3d, dir);
@@ -1006,7 +1026,7 @@ public class GuiState extends AbstractAppState {
      *
      */
     public void deselectAllAUVs() {
-        auvManager.deselectAllAUVs();
+        auvManager.deselectAll();
     }
 
     /**
@@ -1035,6 +1055,6 @@ public class GuiState extends AbstractAppState {
      * @param simob
      */
     public void deselectSimObs(SimObject simob) {
-        simobManager.deselectAllSimObs();
+        simobManager.deselectAll();
     }
 }

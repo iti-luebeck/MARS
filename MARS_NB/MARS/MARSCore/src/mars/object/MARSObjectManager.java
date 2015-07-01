@@ -29,6 +29,18 @@
 */
 package mars.object;
 
+import com.jme3.bullet.BulletAppState;
+import com.jme3.scene.Node;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import mars.MARS_Main;
+import mars.MARS_Settings;
+import mars.auv.AUV;
+import mars.misc.Collider;
+import mars.states.SimState;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -39,18 +51,139 @@ import org.openide.util.lookup.InstanceContent;
  * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class MARSObjectManager implements Lookup.Provider{
+public abstract class MARSObjectManager implements Lookup.Provider{
 
+    // HashMap to store and load MARSObjects
+    protected final HashMap<String, MARSObject> marsObjects = new HashMap<String, MARSObject>();
+    
+    protected MARS_Settings mars_settings;
+    protected BulletAppState bulletAppState;
+    protected Node rootNode;
+    protected SimState simstate;
+    protected MARS_Main mars;
+    protected Collider RayDetectable;
+    protected Node sceneReflectionNode;
+    
     //lookup stuff
     protected InstanceContent content = new InstanceContent();
     protected Lookup lookup = new AbstractLookup(content);
+
+    public MARSObjectManager() {
+    }
+    
+    public MARSObjectManager(SimState simstate) {
+        //set the logging
+        try {
+            Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+
+            if(simstate.getMARSSettings().getLoggingFileWrite()){
+                // Create an appending file handler
+                boolean append = true;
+                FileHandler handler = new FileHandler(this.getClass().getName() + ".log", append);
+                handler.setLevel(Level.parse(simstate.getMARSSettings().getLoggingLevel()));
+                // Add to the desired logger
+                Logger logger = Logger.getLogger(this.getClass().getName());
+                logger.addHandler(handler);
+            }
+            
+            if(!simstate.getMARSSettings().getLoggingEnabled()){
+                Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
+            }
+        } catch (IOException e) {
+        }
+        
+        this.simstate = simstate;
+        this.mars = simstate.getMARS();
+        this.rootNode = simstate.getRootNode();
+        this.RayDetectable = simstate.getCollider();
+        this.sceneReflectionNode = simstate.getSceneReflectionNode();
+        this.bulletAppState = simstate.getBulletAppState();
+        this.mars_settings = simstate.getMARSSettings();
+    }
     
     @Override
     public Lookup getLookup() {
         return lookup;
     }
     
-    public void cleanup(){
-        
+    public void cleanup() {
+        for (String elem : marsObjects.keySet()) {
+            MARSObject marsobj = marsObjects.get(elem);
+            marsobj.cleanup();
+        }
+        marsObjects.clear();
     };
+    
+    /**
+     *
+     * @return
+     */
+    public MARS_Settings getMARSSettings() {
+        return mars_settings;
+    }
+
+    /**
+     *
+     * @param mars_settings
+     */
+    public void setMARSSettings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
+    }
+    
+    /**
+     *
+     * @return True if no Objects are registered.
+     */
+    public boolean isEmpty() {
+        return marsObjects.isEmpty();
+    }
+    
+    /**
+     * GUI stuff.
+     */
+    public void deselectAll() {
+        for (String elem : marsObjects.keySet()) {
+            MARSObject marsObj = marsObjects.get(elem);
+            marsObj.setSelected(false);
+        }
+    }
+    
+    /**
+     * GUI stuff.
+     * 
+     * @return
+     */
+    public MARSObject getSelected() {
+        for (String elem : marsObjects.keySet()) {
+            MARSObject marsObj = marsObjects.get(elem);
+            if (marsObj.isSelected()) {
+                return marsObj;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public MARS_Settings getMARS_settings() {
+        return mars_settings;
+    }
+
+    /**
+     *
+     * @param mars_settings
+     */
+    public void setMARS_settings(MARS_Settings mars_settings) {
+        this.mars_settings = mars_settings;
+    }
+
+    /**
+     *
+     * @param bulletAppState
+     */
+    public void setBulletAppState(BulletAppState bulletAppState) {
+        this.bulletAppState = bulletAppState;
+    }
 }

@@ -358,18 +358,6 @@ public interface AUV extends RosNodeListener, MARSObject {
 
     /**
      *
-     * @param selected
-     */
-    public void setSelected(boolean selected);
-
-    /**
-     *
-     * @return
-     */
-    public boolean isSelected();
-
-    /**
-     *
      * @return
      */
     public Spatial getGhostAUV();

@@ -141,7 +141,11 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
         Cloner cloner = new Cloner();
         simob_variables = cloner.deepClone(variablesOriginal);
     }
-    
+
+    @Override
+    public void cleanup() {
+    }
+
     /**
      *
      * @param pcl
@@ -328,6 +332,7 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
      *
      * @param selected
      */
+    @Override
     public void setSelected(boolean selected) {
         if (selected && this.selected == false) {
             ambient_light.setColor(mars_settings.getGuiSelectionColor());
