@@ -102,10 +102,10 @@ public final class LoadAUVWizardAction implements ActionListener {
                 //result.addLookupListener(this);
                 if (auv_manager == null) {// try to get mars, else its the listener
                     auv_manager = cl.lookup(AUV_Manager.class);
-                    auv_manager.registerAUV(basicAUV);
+                    auv_manager.register(basicAUV);
                     auvEditorTopComponent.setAUV(basicAUV);
                 }else{
-                    auv_manager.registerAUV(basicAUV);
+                    auv_manager.register(basicAUV);
                     auvEditorTopComponent.setAUV(basicAUV);
                 }
 
