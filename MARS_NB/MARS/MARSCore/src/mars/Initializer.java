@@ -270,9 +270,6 @@ public class Initializer {
         if (mars_settings.isGrassEnabled()) {
             setupGrass();
         }
-        if (mars_settings.isWaterEnabled()) {
-            setupWater();
-        }
         if (mars_settings.isWavesWaterEnabled()) {
             setupWavesWater();
         }
@@ -708,50 +705,6 @@ public class Initializer {
             float waterHeight = (float) Math.cos(((waves_time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
             water.setWaterHeight(water_height + waterHeight);
         }
-    }
-
-    /*
-     * This creates shader water. I never got the params right and it always look so unrealistic like in morrorwind. Fog also was never implemented.
-     * Onyl works form one side etc....
-     */
-    @Deprecated
-    private void setupWater() {
-        SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assetManager);
-        waterProcessor.setReflectionScene(sceneReflectionNode);
-        waterProcessor.setDebug(false);
-        waterProcessor.setLightPosition(mars_settings.getLightDirection().mult(-400f));
-
-        //setting the water plane
-        Vector3f waterLocation = new Vector3f(0, water_height, 0);
-        waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
-        waterProcessor.setWaterColor(ColorRGBA.Blue);
-        //lower render size for higher performance
-//        waterProcessor.setRenderSize(128,128);
-        //raise depth to see through water
-        waterProcessor.setWaterDepth(0.5f);
-        //lower the distortion scale if the waves appear too strong
-        //waterProcessor.setDistortionScale(0.1f);
-        //lower the speed of the waves if they are too fast
-        waterProcessor.setWaveSpeed(0.01f);
-        waterProcessor.setWaterTransparency(0.05f);
-        waterProcessor.setRefractionClippingOffset(2.0f);
-        waterProcessor.setReflectionClippingOffset(2.0f);
-
-        Quad quad = new Quad(1000, 1000);
-
-        //the texture coordinates define the general size of the waves
-        quad.scaleTextureCoordinates(new Vector2f(6f, 6f));
-
-        Geometry water_geom = new Geometry("water", quad);
-        // water.setShadowMode(ShadowMode.Recieve);
-        water_geom.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
-        water_geom.setMaterial(waterProcessor.getMaterial());
-        water_geom.setLocalTranslation(-500, water_height, 550);
-        water_geom.setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode.Receive);
-
-        rootNode.attachChild(water_geom);
-
-        viewPort.addProcessor(waterProcessor);
     }
 
     /**
