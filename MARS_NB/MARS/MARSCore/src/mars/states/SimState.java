@@ -29,6 +29,7 @@
 */
 package mars.states;
 
+import com.jme3.animation.LoopMode;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -37,6 +38,8 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.debug.BulletDebugAppState;
+import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
@@ -44,8 +47,10 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,6 +59,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.TransferHandler;
 import mars.Helper.Helper;
 import mars.Initializer;
 import mars.KeyConfig;
@@ -64,16 +70,15 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.auv.CommunicationManager;
-import mars.simobjects.SimObject;
-import mars.simobjects.SimObjectManager;
-import mars.xml.XML_JAXB_ConfigReaderWriter;
-import javax.swing.TransferHandler;
-import mars.misc.Collider;
-import mars.misc.MyDebugAppStateFilter;
 import mars.core.CentralLookup;
 import mars.core.MARSMapTopComponent;
 import mars.core.MARSTopComponent;
+import mars.misc.Collider;
+import mars.misc.MyDebugAppStateFilter;
+import mars.simobjects.SimObject;
+import mars.simobjects.SimObjectManager;
 import mars.xml.ConfigManager;
+import mars.xml.XML_JAXB_ConfigReaderWriter;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Lookup;
@@ -349,6 +354,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         super.initialize(stateManager, app);
 
         progr.finish();
+        
+        //initCamPath();
     }
 
     private void initView() {
@@ -1081,5 +1088,40 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
+    }
+    
+    private void initCamPath(){
+        CameraNode camNode = new CameraNode("Motion cam", mars.getCamera());
+        camNode.setControlDir(ControlDirection.SpatialToCamera);
+        camNode.setEnabled(true);
+        MotionPath path = new MotionPath();
+        path.setCycle(true);
+        /*path.addWayPoint(new Vector3f(20, 3, 0));
+        path.addWayPoint(new Vector3f(0, 3, 20));
+        path.addWayPoint(new Vector3f(-20, 3, 0));
+        path.addWayPoint(new Vector3f(0, 3, -20));*/
+        path.addWayPoint(new Vector3f(0, -1.5f, 0));
+        path.addWayPoint(new Vector3f(0, -1.5f, 30));
+        path.addWayPoint(new Vector3f(40, -1.5f, 30));
+        path.addWayPoint(new Vector3f(40, -1.5f, -20));
+        path.addWayPoint(new Vector3f(50, -1.0f, -90));
+        path.addWayPoint(new Vector3f(80, 3, -70));
+        path.addWayPoint(new Vector3f(-30, 2, -50));
+        path.addWayPoint(new Vector3f(-30, 2, -10));
+        path.addWayPoint(new Vector3f(-30, 2, 50));
+        path.addWayPoint(new Vector3f(-10, 2, 50));
+        path.addWayPoint(new Vector3f(-10, 2, 20));
+        path.setCurveTension(0.83f);
+        path.enableDebugShape(assetManager, rootNode);
+        
+        MotionEvent cameraMotionControl = new MotionEvent(camNode, path);
+        cameraMotionControl.setLoopMode(LoopMode.Loop);
+        //cameraMotionControl.setLookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+        cameraMotionControl.setDirectionType(MotionEvent.Direction.Path);
+        cameraMotionControl.setCurrentWayPoint(0);
+        cameraMotionControl.setSpeed(.15f);
+        cameraMotionControl.play();
+
+        rootNode.attachChild(camNode);
     }
 }
