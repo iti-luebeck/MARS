@@ -331,6 +331,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setAUVsNode(AUVNodes);
             guiState.setSimObNode(SimObNodes);
             guiState.setMars_settings(mars_settings);
+            guiState.setSimState(this);
             final AppStateManager stateManagerFin = stateManager;
             
             @SuppressWarnings("unchecked")
@@ -508,7 +509,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         if (mars_settings.getROSEnabled()) {
             auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
         }
-        auvManager.registerAUVs(auvs);
+        auvManager.register(auvs);
     }
 
     /*
@@ -516,7 +517,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     private void populateSim_Object_Manager(ArrayList<SimObject> simobs) {
         simobManager.setBulletAppState(bulletAppState);
-        simobManager.registerSimObjects(simobs);
+        simobManager.register(simobs);
     }
 
     /**
@@ -921,7 +922,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      * @param name
      */
     public void enableAUV(String auvName, Point pos, int dropAction, String name) {
-        AUV auv = auvManager.getAUV(auvName);
+        AUV auv = auvManager.getMARSObject(auvName);
         if (auv != null) {
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight() - pos.y), 0f).clone();
             Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight() - pos.y), 1f).subtractLocal(click3d);
@@ -932,7 +933,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
-                auvManager.registerAUV(auvCopy);
+                auvManager.register(auvCopy);
             } else {
                 if (auv.getAuv_param().isEnabled()) {//check if auf auv already enabled, then only new position
                     auv.getAuv_param().setPosition(intersection);
@@ -940,7 +941,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     auv.getAuv_param().setPosition(intersection);
                     auv.getAuv_param().setEnabled(true);
-                    auvManager.enableAUV(auv, true);
+                    auvManager.enableMARSObject(auv, true);
                     auv.getPhysicsControl().setPhysicsLocation(intersection);
                 }
             }
@@ -957,7 +958,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      * @param name
      */
     public void enableAUV(String auvName, Vector3f pos, int dropAction, String name) {
-        AUV auv = auvManager.getAUV(auvName);
+        AUV auv = auvManager.getMARSObject(auvName);
         pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight() - pos.y);
         if (auv != null) {
             if (dropAction == TransferHandler.COPY) {
@@ -966,7 +967,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(pos);
                 auvCopy.setState(this);
-                auvManager.registerAUV(auvCopy);
+                auvManager.register(auvCopy);
                 /*view.updateTrees();
                  Future simStateFutureView = mars.enqueue(new Callable() {
                  public Void call() throws Exception {
@@ -983,7 +984,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     auv.getAuv_param().setPosition(pos);
                     auv.getAuv_param().setEnabled(true);
-                    auvManager.enableAUV(auv, true);
+                    auvManager.enableMARSObject(auv, true);
                     auv.getPhysicsControl().setPhysicsLocation(pos);
                 }
             }
@@ -1000,14 +1001,14 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      * @param name
      */
     public void enableSIMOB(String simobName, Vector3f pos, int dropAction, String name) {
-        SimObject simob = simobManager.getSimObject(simobName);
+        SimObject simob = simobManager.getMARSObject(simobName);
         pos.y = initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight() - pos.y);
         if (simob != null) {
             if (dropAction == TransferHandler.COPY) {
                 SimObject simobCopy = simob.copy();
                 simobCopy.setName(name);
                 simobCopy.setPosition(pos);
-                simobManager.registerSimObject(simobCopy);
+                simobManager.register(simobCopy);
             } else {
                 if (simob.isEnabled()) {//check if auf simob already enabled, then only new position
                     simob.setPosition(pos);
@@ -1015,7 +1016,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     simob.setPosition(pos);
                     simob.setEnabled(true);
-                    simobManager.enableSimObject(simob, true);
+                    simobManager.enableMARSObject(simob, true);
                     simob.getPhysicsControl().setPhysicsLocation(pos);
                 }
             }
@@ -1032,7 +1033,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      * @param name
      */
     public void enableSIMOB(String simobName, Point pos, int dropAction, String name) {
-        SimObject simob = simobManager.getSimObject(simobName);
+        SimObject simob = simobManager.getMARSObject(simobName);
         if (simob != null) {
             Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight() - pos.y), 0f).clone();
             Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(pos.x, mars.getCamera().getHeight() - pos.y), 1f).subtractLocal(click3d);
@@ -1041,7 +1042,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 SimObject simobCopy = simob.copy();
                 simobCopy.setName(name);
                 simobCopy.setPosition(intersection);
-                simobManager.registerSimObject(simobCopy);
+                simobManager.register(simobCopy);
                 /*view.updateTrees();
                  Future simStateFutureView = mars.enqueue(new Callable() {
                  public Void call() throws Exception {
@@ -1058,7 +1059,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 } else {
                     simob.setPosition(intersection);
                     simob.setEnabled(true);
-                    simobManager.enableSimObject(simob, true);
+                    simobManager.enableMARSObject(simob, true);
                     simob.getPhysicsControl().setPhysicsLocation(intersection);
                 }
             }

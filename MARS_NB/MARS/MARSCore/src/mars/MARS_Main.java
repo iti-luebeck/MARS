@@ -62,7 +62,6 @@ import mars.misc.MyOBJLoader;
 import mars.states.AdvancedFlyByCamera;
 import mars.states.AdvancedStatsAppState;
 import mars.states.AppStateExtension;
-import mars.states.GuiState;
 import mars.states.MARSAppState;
 import mars.states.MapState;
 import mars.states.NiftyState;

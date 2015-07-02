@@ -51,7 +51,7 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
     public ParamChildNodeFactory(String name) {
         CentralLookup cl = CentralLookup.getDefault();
         AUV_Manager auv_manager = cl.lookup(AUV_Manager.class);
-        auv = (BasicAUV) auv_manager.getAUV(name);
+        auv = (BasicAUV) auv_manager.getMARSObject(name);
     }
 
     /**
@@ -89,9 +89,7 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
                 n = new ParamNode(ikey, auv.getSensors());
                 break;
             case PARAMETER:
-                HashMap hasher = new HashMap();
-                hasher.put("Parameter", auv.getAuv_param());
-                n = new ParamNode(ikey, hasher);
+                n = new PhysicalExchangerNode(auv.getAuv_param(), "Parameter");
                 break;
         }
         return n;

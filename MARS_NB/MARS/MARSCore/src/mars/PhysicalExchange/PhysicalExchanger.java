@@ -545,7 +545,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @return
      */
-    public PhysicalEnvironment getPhysical_environment() {
+    public PhysicalEnvironment getPhysicalEnvironment() {
         return pe;
     }
 
@@ -553,7 +553,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @param pe
      */
-    public void setPhysical_environment(PhysicalEnvironment pe) {
+    public void setPhysicalEnvironment(PhysicalEnvironment pe) {
         this.pe = pe;
     }
 
@@ -754,9 +754,9 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
             oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
-            if(listeners1.length != 0){
+            //if(listeners1.length != 0){
                 publishData();
-            }
+            //}
         }
     }
     

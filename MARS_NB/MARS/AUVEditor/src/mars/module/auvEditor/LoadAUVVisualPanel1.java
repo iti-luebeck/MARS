@@ -238,7 +238,7 @@ public final class LoadAUVVisualPanel1 extends JPanel {
         //result.addLookupListener(this);
         if (auv_manager == null) {// try to get mars, else its the listener
             auv_manager = cl.lookup(AUV_Manager.class);
-            Set<String> auvNames = auv_manager.getAUVs().keySet();
+            Set<String> auvNames = auv_manager.getMARSObjects().keySet();
             jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(auvNames.toArray()));
         }
     }

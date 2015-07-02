@@ -59,8 +59,8 @@ public class TemperatureSensor extends Sensor{
     private Geometry TemperatureSensorStart;
 
     ///ROS stuff
-    private Publisher<hanse_msgs.temperature> publisher = null;
-    private hanse_msgs.temperature fl;
+    private Publisher<sensor_msgs.Temperature> publisher = null;
+    private sensor_msgs.Temperature fl;
     private std_msgs.Header header;
 
     /**
@@ -193,8 +193,8 @@ public class TemperatureSensor extends Sensor{
     @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = (Publisher<hanse_msgs.temperature>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.temperature._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.temperature._TYPE);
+        publisher = (Publisher<sensor_msgs.Temperature>)ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Temperature._TYPE);
+        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Temperature._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
@@ -208,7 +208,8 @@ public class TemperatureSensor extends Sensor{
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        fl.setData((short) (getTemperature() * 10));//*10 because of ros temp data format
+        fl.setTemperature((getTemperature() * 10f));//*10 because of ros temp data format
+        fl.setVariance(0f);
         if (publisher != null) {
             publisher.publish(fl);
         }

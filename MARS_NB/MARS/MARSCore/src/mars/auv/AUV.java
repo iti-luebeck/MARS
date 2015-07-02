@@ -358,18 +358,6 @@ public interface AUV extends RosNodeListener, MARSObject {
 
     /**
      *
-     * @param selected
-     */
-    public void setSelected(boolean selected);
-
-    /**
-     *
-     * @return
-     */
-    public boolean isSelected();
-
-    /**
-     *
      * @return
      */
     public Spatial getGhostAUV();
@@ -450,7 +438,7 @@ public interface AUV extends RosNodeListener, MARSObject {
      *
      * @return
      */
-    public WayPoints getWaypoints();
+    public DistanceCoveredPath getDistanceCoveredPath();
 
     /**
      *

@@ -339,7 +339,7 @@ public class MyVerifier extends InputVerifier implements ActionListener {
             } else if (((MyVerifierType.AUV == type) || (MyVerifierType.ALL == type))) {
                 try {
                     String tmp = mytext.getText();
-                    AUV auv = auvManager.getAUV(tmp);
+                    AUV auv = auvManager.getMARSObject(tmp);
                     if (tmp.equals("")) {
                         return false;
                     } else if (auv == null) {
@@ -353,7 +353,7 @@ public class MyVerifier extends InputVerifier implements ActionListener {
             } else if (((MyVerifierType.SIMOB == type) || (MyVerifierType.ALL == type))) {
                 try {
                     String tmp = mytext.getText();
-                    SimObject simob = simobManager.getSimObject(tmp);
+                    SimObject simob = simobManager.getMARSObject(tmp);
                     if (tmp.equals("")) {
                         return false;
                     } else if (simob == null) {

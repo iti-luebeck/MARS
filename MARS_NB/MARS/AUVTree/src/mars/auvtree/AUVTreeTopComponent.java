@@ -5,8 +5,10 @@
  */
 package mars.auvtree;
 
+import com.jogamp.newt.event.KeyEvent;
 import mars.auvtree.nodes.RootNode;
 import java.awt.BorderLayout;
+import java.awt.event.KeyListener;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,11 +26,13 @@ import org.openide.windows.TopComponent;
 import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import mars.states.GuiState;
+import org.openide.actions.DeleteAction;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.openide.util.Utilities;
+import org.openide.util.actions.SystemAction;
 
 /**
  * Top component which displays something.
@@ -81,6 +85,8 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         bTV.setDropTarget(true);
         bTV.setDragSource(true);
         add(bTV, BorderLayout.CENTER);
+        bTV.getViewport().getView().addKeyListener(new AUVTreeKeyListener());
+        bTV.addKeyListener(new AUVTreeKeyListener());
     }
 
     /**
@@ -91,9 +97,9 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
         Lookup.Template template = new Lookup.Template(AUV_Manager.class);
         CentralLookup cl = CentralLookup.getDefault();
         result = cl.lookup(template);
-        if (auv_manager == null || auv_manager.getAUVs().isEmpty()) {// try to get mars, else its the listener
+        if (auv_manager == null || auv_manager.getMARSObjects().isEmpty()) {// try to get mars, else its the listener
             auv_manager = cl.lookup(AUV_Manager.class);
-            HashMap<String,AUV> auvs = auv_manager.getAUVs();
+            HashMap<String,AUV> auvs = auv_manager.getMARSObjects();
             mgr.setRootContext(new RootNode(auvs,auv_manager));
         }
         if(mars == null){
@@ -184,6 +190,26 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
             }
         } else {
             
+        }
+
+    }
+    
+    class AUVTreeKeyListener implements KeyListener {
+
+        @Override
+        public void keyTyped(java.awt.event.KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(java.awt.event.KeyEvent e) {
+        }
+
+        @Override
+        public void keyReleased(java.awt.event.KeyEvent e) {
+            if(e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) {
+                DeleteAction dA = SystemAction.get(DeleteAction.class);
+                dA.actionPerformed(null);
+            }
         }
 
     }

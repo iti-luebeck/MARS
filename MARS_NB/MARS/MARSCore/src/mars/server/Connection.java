@@ -393,7 +393,7 @@ public class Connection extends Thread {
 
         } else if (input_from_client.startsWith("AUV_ID")) {
             String[] ret = input_from_client.split(" ");
-            auv = (BasicAUV) auv_manager.getAUV(ret[1]);
+            auv = (BasicAUV) auv_manager.getMARSObject(ret[1]);
             if (auv != null) {
                 try {
                     byte[] send_string_length = Converter.convertIntToByteArray(cmd_auvid.length() * 2 + 4 + ret[1].getBytes().length * 2 + 4);

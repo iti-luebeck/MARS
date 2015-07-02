@@ -1271,7 +1271,7 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jme3_delete_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_delete_auvActionPerformed
 
-        final AUV auv = auvManager.getSelectedAUV();
+        final AUV auv = auvManager.getSelected();
 
         //Custom button text
         Object[] options = {"Yes",
@@ -2066,17 +2066,17 @@ public final class MARSTopComponent extends TopComponent {
                     }else{
                         jme3_debug_auv_bounding_volume.setSelected(false);
                     }
-                    if(auv_param.isWaypointsEnabled()){
+                    if(auv_param.isDistanceCoveredPathEnabled()){
                         jme3_waypoints_auv_enable.setSelected(true);
                     }else{
                         jme3_waypoints_auv_enable.setSelected(false);
                     }
-                    if(auv_param.isWaypointsVisiblity()){
+                    if(auv_param.isDistanceCoveredPathVisiblity()){
                         jme3_waypoints_auv_visible.setSelected(true);
                     }else{
                         jme3_waypoints_auv_visible.setSelected(false);
                     }
-                    if(auv_param.isWaypointsGradient()){
+                    if(auv_param.isDistanceCoveredPathGradient()){
                         jme3_waypoints_auv_gradient.setSelected(true);
                     }else{
                         jme3_waypoints_auv_gradient.setSelected(false);
@@ -2376,7 +2376,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     public void updateANAutoComplete(){
         auv_name_items.clear();
-        auv_name_items.addAll(auvManager.getAUVs().keySet());
+        auv_name_items.addAll(auvManager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(auv_name_text, auv_name_items, false);
     }
     
@@ -2393,7 +2393,7 @@ public final class MARSTopComponent extends TopComponent {
      */
     public void updateSNAutoComplete(){
         simob_name_items.clear();
-        simob_name_items.addAll(simob_manager.getSimObjects().keySet());
+        simob_name_items.addAll(simob_manager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(simob_name_text, simob_name_items, false);
     }
     

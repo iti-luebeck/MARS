@@ -38,7 +38,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.tree.TreePath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -72,7 +71,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     private HashMap<String, Object> DepthOfField;
     private HashMap<String, Object> WavesWater;
     private HashMap<String, Object> ProjectedWavesWater;
-    private HashMap<String, Object> Water;
     private HashMap<String, Object> PlaneWater;
     private HashMap<String, Object> SkyBox;
     private HashMap<String, Object> SkyDome;
@@ -159,7 +157,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
         DepthOfField = (HashMap<String, Object>) Graphics.get("DepthOfField");
         WavesWater = (HashMap<String, Object>) Graphics.get("WavesWater");
         ProjectedWavesWater = (HashMap<String, Object>) Graphics.get("ProjectedWavesWater");
-        Water = (HashMap<String, Object>) Graphics.get("Water");
         PlaneWater = (HashMap<String, Object>) Graphics.get("PlaneWater");
         SkyBox = (HashMap<String, Object>) Graphics.get("SkyBox");
         SkyDome = (HashMap<String, Object>) Graphics.get("SkyDome");
@@ -2176,30 +2173,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      */
     public void setPollutionRotation(Vector3f rotation) {
         Pollution.put("rotation", rotation);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Boolean isWaterEnabled() {
-        return (Boolean) Water.get("enabled");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Boolean getWaterEnabled() {
-        return (Boolean) Water.get("enabled");
-    }
-
-    /**
-     *
-     * @param enabled
-     */
-    public void setWaterEnabled(Boolean enabled) {
-        Water.put("enabled", enabled);
     }
 
     /**

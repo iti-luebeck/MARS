@@ -51,6 +51,23 @@ public interface MARSObject {
     public void setName(String name);
     
     /**
+     * 
+     */
+    public void cleanup();
+    
+    /**
+     * 
+     * @param selected
+     */
+    public void setSelected(boolean selected);
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isSelected();
+    
+    /**
      *
      * @param listener
      */

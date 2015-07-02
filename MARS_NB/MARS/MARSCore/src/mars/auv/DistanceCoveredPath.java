@@ -50,14 +50,14 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 
 /**
- * This class manages the visible waypoints of an AUV.
+ * This class manages the visible path that an AUV has taken.
  *
  * @author Thomas Tosik
  */
-public class WayPoints extends Node {
+public class DistanceCoveredPath extends Node {
 
-    private ArrayList<Vector3f> waypoints = new ArrayList<Vector3f>();
-    private ArrayList<Geometry> waypoints_geom = new ArrayList<Geometry>();
+    private ArrayList<Vector3f> path = new ArrayList<Vector3f>();
+    private ArrayList<Geometry> path_geom = new ArrayList<Geometry>();
     /**
      *
      */
@@ -70,7 +70,7 @@ public class WayPoints extends Node {
      *
      */
     private Node rootNode;
-    private final WayPoints self = this;
+    private final DistanceCoveredPath self = this;
     private float time = 0f;
     private AUV_Parameters auv_param;
 
@@ -81,7 +81,7 @@ public class WayPoints extends Node {
      * @param auv_param
      * @param settings
      */
-    public WayPoints(String name, MARS_Main simauv, AUV_Parameters auv_param, MARS_Settings settings) {
+    public DistanceCoveredPath(String name, MARS_Main simauv, AUV_Parameters auv_param, MARS_Settings settings) {
         super(name);
         this.simauv = simauv;
         this.assetManager = simauv.getAssetManager();
@@ -109,38 +109,38 @@ public class WayPoints extends Node {
 
     /**
      *
-     * @param waypoint
+     * @param pathPoint
      */
-    public void addWaypoint(Vector3f waypoint) {
-        if (waypoints.size() >= 1) {//add a line if we have minimum two points
-            if (auv_param.getWaypointsMaxWaypoints() == 0) {//unlimited waypoints
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
-            } else if (waypoints.size() >= auv_param.getWaypointsMaxWaypoints()) {//limited waypoints
-                waypoints.remove(0);
-                waypoints_geom.remove(0);
+    public void addPathPoint(Vector3f pathPoint) {
+        if (path.size() >= 1) {//add a line if we have minimum two points
+            if (auv_param.getDistanceCoveredPathMaxPoints() == 0) {//unlimited path
+                createLine("waypoint" + path.size() + 1, auv_param.getDistanceCoveredPathColor(), path.get(path.size() - 1), pathPoint);
+            } else if (path.size() >= auv_param.getDistanceCoveredPathMaxPoints()) {//limited path
+                path.remove(0);
+                path_geom.remove(0);
                 destroyLine();
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
+                createLine("waypoint" + path.size() + 1, auv_param.getDistanceCoveredPathColor(), path.get(path.size() - 1), pathPoint);
             } else {
-                createLine("waypoint" + waypoints.size() + 1, auv_param.getWaypointsColor(), waypoints.get(waypoints.size() - 1), waypoint);
+                createLine("waypoint" + path.size() + 1, auv_param.getDistanceCoveredPathColor(), path.get(path.size() - 1), pathPoint);
             }
         }
-        waypoints.add(waypoint);
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Added Waypoint at: " + waypoint.toString(), "");
+        path.add(pathPoint);
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Added Waypoint at: " + pathPoint.toString(), "");
     }
 
     /**
-     * Updates the gradient effect of all connected waypoints.
+     * Updates the gradient effect of all connected path.
      */
     public void updateGradient() {
-        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
+        simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                float ways = (float) waypoints_geom.size();
+                float ways = (float) path_geom.size();
                 int counter = 1;
-                Iterator iter = waypoints_geom.iterator();
+                Iterator iter = path_geom.iterator();
                 while (iter.hasNext()) {
                     Geometry waypoint_geom = (Geometry) iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    ColorRGBA way_color = new ColorRGBA(auv_param.getWaypointsColor());
+                    ColorRGBA way_color = new ColorRGBA(auv_param.getDistanceCoveredPathColor());
                     way_color.a = ((float) counter) / ways;
                     counter++;
                     auv_geom_mat.setColor("Color", way_color);
@@ -156,16 +156,16 @@ public class WayPoints extends Node {
     }
 
     /**
-     * Updates the color of all connected waypoints.
+     * Updates the color of all connected path.
      */
     public void updateColor() {
         Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                Iterator iter = waypoints_geom.iterator();
+                Iterator iter = path_geom.iterator();
                 while (iter.hasNext()) {
                     Geometry waypoint_geom = (Geometry) iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                    auv_geom_mat.setColor("Color", auv_param.getWaypointsColor());
+                    auv_geom_mat.setColor("Color", auv_param.getDistanceCoveredPathColor());
                     waypoint_geom.setMaterial(auv_geom_mat);
                 }
                 return null;
@@ -198,10 +198,10 @@ public class WayPoints extends Node {
 
     /**
      *
-     * @return A list of all waypoints.
+     * @return A list of all path.
      */
-    public ArrayList<Vector3f> getWaypoints() {
-        return waypoints;
+    public ArrayList<Vector3f> getPath() {
+        return path;
     }
 
     /**
@@ -209,15 +209,15 @@ public class WayPoints extends Node {
      * @param index
      * @return A specific waypoint at point index.
      */
-    public Vector3f getWaypoint(int index) {
-        return waypoints.get(index);
+    public Vector3f getPathPoint(int index) {
+        return path.get(index);
     }
 
     /**
      *
      * @param visible
      */
-    public void setWaypointVisibility(boolean visible) {
+    public void setPathVisibility(boolean visible) {
         if (visible) {
             this.setCullHint(CullHint.Never);
         } else {
@@ -226,25 +226,25 @@ public class WayPoints extends Node {
     }
 
     /**
-     * Clears all waypoints.
+     * Clears all path.
      */
     public void reset() {
-        waypoints.clear();
-        waypoints_geom.clear();
+        path.clear();
+        path_geom.clear();
         destroyLines();
     }
 
     private void createLine(String name, ColorRGBA color, Vector3f start, Vector3f end) {
         Line line = new Line(start, end);
-        if (auv_param.getWaypointsLineWidth() != null) {
-            line.setLineWidth(auv_param.getWaypointsLineWidth());
+        if (auv_param.getDistanceCoveredPathLineWidth() != null) {
+            line.setLineWidth(auv_param.getDistanceCoveredPathLineWidth());
         }
         final Geometry geom = new Geometry(name, line);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         geom.setMaterial(mat);
         geom.updateGeometricState();
-        waypoints_geom.add(geom);
+        path_geom.add(geom);
         Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.attachChild(geom);
@@ -254,7 +254,7 @@ public class WayPoints extends Node {
     }
 
     private void destroyLine() {
-        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
+        simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.detachChildAt(0);
                 return null;
@@ -263,7 +263,7 @@ public class WayPoints extends Node {
     }
 
     private void destroyLines() {
-        Future<Void> fut = simauv.enqueue(new Callable<Void>() {
+        simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 self.detachAllChildren();
                 return null;
