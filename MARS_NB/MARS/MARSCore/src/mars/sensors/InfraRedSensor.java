@@ -43,6 +43,7 @@ import mars.events.AUVObjectEvent;
 import mars.states.SimState;
 import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
+import org.ros.message.Time;
 
 /**
  * A simple Infrared sensor. Ray based.
@@ -55,8 +56,9 @@ public class InfraRedSensor extends RayBasedSensor{
     private Collider RayDetectable;
 
     //ROS stuff
-    private Publisher<std_msgs.Float32> publisher = null;
-    private std_msgs.Float32 fl;
+    private Publisher<sensor_msgs.Range> publisher = null;
+    private sensor_msgs.Range fl;
+    private std_msgs.Header header;
 
     /**
      *
@@ -141,8 +143,9 @@ public class InfraRedSensor extends RayBasedSensor{
     @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = (Publisher<std_msgs.Float32>)ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE);
+        publisher = (Publisher<sensor_msgs.Range>)ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Range._TYPE);
+        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Range._TYPE);
+        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
 
@@ -151,7 +154,16 @@ public class InfraRedSensor extends RayBasedSensor{
      */
     @Override
     public void publish() {
-        fl.setData(getDistance());
+        super.publish();
+        header.setSeq(rosSequenceNumber++);
+        header.setFrameId(this.getRos_frame_id());
+        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
+        fl.setHeader(header);
+        fl.setMinRange(getMinRange());
+        fl.setMaxRange(getMaxRange());
+        fl.setRange(getDistance());
+        fl.setFieldOfView(0f);
+        fl.setRadiationType(sensor_msgs.Range.INFRARED);
         if (publisher != null) {
             publisher.publish(fl);
         }
