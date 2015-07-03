@@ -195,17 +195,19 @@ public class GuiControl extends AbstractControl{
                     auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
                 }
             }
-        }else{
-            if(marsObj instanceof AUV){
-                AUV auv = (AUV)marsObj;
-                auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
-                Spatial ghostObject = auv.getGhostAUV();
-                if(ghostObject !=null){
-                   ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
-                }
-                auv.hideGhostAUV(true);
-                setDepth_iteration(0);
+        }
+    }
+    
+    public void drop(){
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
+            Spatial ghostObject = auv.getGhostAUV();
+            if(ghostObject !=null){
+               ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
             }
+            auv.hideGhostAUV(true);
+            setDepth_iteration(0);
         }
     }
     

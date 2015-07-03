@@ -397,7 +397,7 @@ public class GuiState extends AbstractAppState {
                     System.out.println("moveauv stopped");
                     mars.getFlyByCamera().setEnabled(true);
                     selectedControl.setMove(false);
-                    selectedControl.move(Vector3f.ZERO, Vector3f.ZERO);
+                    selectedControl.drop();
                 }
                 //moveauvOff();
             } /*else if (name.equals("rotateauv") && keyPressed) {
@@ -594,7 +594,13 @@ public class GuiState extends AbstractAppState {
                 if (guiControlState.isRotate_auv()){
                     rotateauvOff();
                 }else if(guiControlState.isMove_auv()){
-                    moveauvOff();
+                    //moveauvOff();
+                    GuiControl selectedControl = getSelectedControl();
+                    if(selectedControl != null){
+                        System.out.println("moveauv stopped");
+                        selectedControl.setMove(false);
+                        selectedControl.drop();
+                    }
                 }
             }
         }
@@ -755,7 +761,7 @@ public class GuiState extends AbstractAppState {
                     MARSObject marsObj = guiControl.getMarsObj();
                     if(marsObj instanceof AUV){
                         AUV auv = (AUV)marsObj;
-                        guiControlState.setLatestSelectedAUV(auv);
+                        //guiControlState.setLatestSelectedAUV(auv);
                         this.mars.setHoverMenuForAUV(auv, (int) inputManager.getCursorPosition().x, mars.getViewPort().getCamera().getHeight() - (int) inputManager.getCursorPosition().y);
                     }
                     return;
