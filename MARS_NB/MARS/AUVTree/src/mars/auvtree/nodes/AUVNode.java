@@ -137,7 +137,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(), new EnableAction(), new ResetAction(), null, new DebugAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class)};
+        return new Action[]{new ChaseAction(), new EnableAction(), new ResetAction(), new ManualAction(), null, new DebugAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class)};
     }
 
     /**
@@ -234,7 +234,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
-            if (auv.getAuv_param().isEnabled()) {
+            if (auv.getAuv_param().getEnabled()) {
                 putValue(NAME, "Disable");
             } else {
                 putValue(NAME, "Enable");
@@ -243,9 +243,9 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            final boolean auvEnabled = auv.getAuv_param().isEnabled();
+            final boolean auvEnabled = auv.getAuv_param().getEnabled();
             auv.getAuv_param().setEnabled(!auvEnabled);
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(SimState.class) != null) {
                         auvManager.enableMARSObject(auv, !auvEnabled);
@@ -254,6 +254,30 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
                 }
             });
             propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+            //JOptionPane.showMessageDialog(null, "Done!");
+        }
+
+    }
+    
+    /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable the manuel control of an auv.
+     */
+    private class ManualAction extends AbstractAction {
+
+        public ManualAction() {
+            if (auv.getAuv_param().getManualControl()) {
+                putValue(NAME, "Disable Manual Control");
+            } else {
+                putValue(NAME, "Enable Manual Control");
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            final boolean manEnabled = auv.getAuv_param().getManualControl();
+            auv.getAuv_param().setManualControl(!manEnabled);
+            propertyChange(new PropertyChangeEvent(this, "manualControl", !manEnabled, manEnabled));
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 

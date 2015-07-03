@@ -291,7 +291,7 @@ public class BallastTank extends Actuator implements Keys {
                 inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
                 ActionListener actionListener = new ActionListener() {
                     public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
+                        if (name.equals(mapping) && !keyPressed && self.getAuv().getAuv_param().getManualControl()) {
                             self.setDesiredVolumePrecent(1.0f);
                         }
                     }

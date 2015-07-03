@@ -363,6 +363,22 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setAngular_factor(Float angular_factor) {
         params.put("angular_factor", angular_factor);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getManualControl() {
+        return (Boolean) params.get("manualControl");
+    }
+
+    /**
+     *
+     * @param manualControl
+     */
+    public void setManualControl(Boolean manualControl) {
+        params.put("manualControl", manualControl);
+    }
 
     /**
      *
