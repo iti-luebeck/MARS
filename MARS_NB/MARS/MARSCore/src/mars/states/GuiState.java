@@ -368,7 +368,13 @@ public class GuiState extends AbstractAppState {
                 }
             } else if (name.equals("moveauv") && keyPressed) {
                 mars.getFlyByCamera().setEnabled(false);
-                AUV selected_auv = auvManager.getSelected();
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    System.out.println("moveauv");
+                    selectedControl.setMove(true);
+                }
+                
+                /*AUV selected_auv = auvManager.getSelected();
                 if (selected_auv != null) {
                     guiControlState.setMove_auv(true);
                     guiControlState.setGhostObject(selected_auv.getGhostAUV());
@@ -378,7 +384,7 @@ public class GuiState extends AbstractAppState {
                     } else {
                         selected_auv.hideGhostAUV(false);
                     }
-                }
+                }*/
                 SimObject selected_simob = simobManager.getSelected();
                 if (selected_simob != null) {
                     guiControlState.setMove_simob(true);
@@ -386,8 +392,15 @@ public class GuiState extends AbstractAppState {
                     selected_simob.hideGhostSpatial(false);
                 }
             } else if (name.equals("moveauv") && !keyPressed) {
-                moveauvOff();
-            } else if (name.equals("rotateauv") && keyPressed) {
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    System.out.println("moveauv stopped");
+                    mars.getFlyByCamera().setEnabled(true);
+                    selectedControl.setMove(false);
+                    selectedControl.move(Vector3f.ZERO, Vector3f.ZERO);
+                }
+                //moveauvOff();
+            } /*else if (name.equals("rotateauv") && keyPressed) {
                 AUV selected_auv = auvManager.getSelected();
                 mars.getFlyByCamera().setEnabled(false);
                 if (selected_auv != null) {
@@ -407,7 +420,7 @@ public class GuiState extends AbstractAppState {
                     guiControlState.setRotate_simob(true);
                 }
 
-            } else if (name.equals("rotateauv") && !keyPressed) {
+            } */else if (name.equals("rotateauv") && !keyPressed) {
                 rotateauvOff();
             }
         }
@@ -539,7 +552,15 @@ public class GuiState extends AbstractAppState {
 
         @Override
         public void onMouseMotionEvent(MouseMotionEvent evt) {
-            if (guiControlState.isMove_auv()) {
+            GuiControl selectedControl = getSelectedControl();
+            if(selectedControl != null){
+                System.out.println("moveing  auv");
+                Vector2f click2d = inputManager.getCursorPosition();
+                Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+                Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+                selectedControl.move(click3d,dir);
+            }
+            /*if (guiControlState.isMove_auv()) {
                 AUV selected_auv = auvManager.getSelected();
                 if (selected_auv != null) {
                     moveSelectedGhostAUV(selected_auv);
@@ -547,7 +568,7 @@ public class GuiState extends AbstractAppState {
                         selected_auv.getPhysicsControl().setPhysicsLocation(guiControlState.getIntersection().add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));//set end postion
                     }
                 }
-            } else if (guiControlState.isRotate_auv()) {
+            } else */if (guiControlState.isRotate_auv()) {
                 AUV selected_auv = auvManager.getSelected();
                 if (selected_auv != null) {
                     rotateSelectedGhostAUV(selected_auv);
@@ -730,6 +751,7 @@ public class GuiState extends AbstractAppState {
                 GuiControl guiControl = searchControl(target);
                 if(guiControl != null){//we found something to play with
                     guiControl.select();
+                    System.out.println("auv selected");
                     MARSObject marsObj = guiControl.getMarsObj();
                     if(marsObj instanceof AUV){
                         AUV auv = (AUV)marsObj;
@@ -740,9 +762,11 @@ public class GuiState extends AbstractAppState {
                 }
             }
             //run through and nothing found that is worth to pick
+            System.out.println("auv deselected");
             deselectAll();
             this.mars.setHoverMenuForAUV(false);
         } else {//nothing to pickRightClick
+            System.out.println("auv deselected");
             deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             this.mars.setHoverMenuForAUV(false);
         }
@@ -1022,19 +1046,6 @@ public class GuiState extends AbstractAppState {
             }
         }
     }
-
-    /**
-     *
-     * @param simob
-     */
-    public void selectSimObs(SimObject simob) {
-        if (simob != null) {
-            if (simob.isEnabled()) {
-                simob.setSelected(true);
-                guiControlState.setLatestSelectedSimOb(simob);
-            }
-        }
-    }
     
     private GuiControl searchControl(Spatial target){
         GuiControl guiControl = target.getControl(GuiControl.class);
@@ -1082,6 +1093,5 @@ public class GuiState extends AbstractAppState {
             }
         }
         return null;
-        
     }
 }

@@ -29,10 +29,13 @@
 */
 package mars.control;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import mars.Helper.Helper;
 import mars.auv.AUV;
 import mars.object.MARSObject;
 
@@ -46,6 +49,10 @@ public class GuiControl extends AbstractControl{
     private MARSObject marsObj;
     private Vector3f contact_point = Vector3f.ZERO;
     private Vector3f contact_direction = Vector3f.ZERO;
+    private boolean move = false;
+    private int depth_iteration = 0;
+    private float depth_factor = 0.25f;
+    private Vector3f intersection = Vector3f.ZERO;
     
     public GuiControl(MARSObject marsObj) {
         super();
@@ -103,6 +110,103 @@ public class GuiControl extends AbstractControl{
      */
     public Vector3f getContactDirection() {
         return contact_direction;
+    }
+    
+        /**
+     *
+     * @return
+     */
+    public int getDepth_iteration() {
+        return depth_iteration;
+    }
+
+    /**
+     *
+     * @param depth_iteration
+     */
+    public void setDepth_iteration(int depth_iteration) {
+        this.depth_iteration = depth_iteration;
+    }
+
+    /**
+     *
+     */
+    public void incrementDepthIteration() {
+        depth_iteration = depth_iteration + 1;
+    }
+
+    /**
+     *
+     */
+    public void decrementDepthIteration() {
+        depth_iteration = depth_iteration - 1;
+    }
+    
+    /**
+     *
+     */
+    public void resetDepthIteration() {
+        depth_iteration = 0;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getDepth_factor() {
+        return depth_factor;
+    }
+
+    /**
+     *
+     * @param depth_factor
+     */
+    public void setDepth_factor(float depth_factor) {
+        this.depth_factor = depth_factor;
+    }
+    
+    public boolean getMove(){
+        return move;
+    }
+    
+    public void setMove(boolean move){
+        this.move = move;
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
+                auv.hideGhostAUV(true);
+            } else {
+                auv.hideGhostAUV(false);
+            }
+        }
+    }
+    
+    public void move(Vector3f click3d, Vector3f dir){
+        if (getMove()) {
+            System.out.println("actual movwing");
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
+                if (auv.getGhostAUV() != null) {
+                    auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));
+                    auv.getGhostAUV().setLocalRotation(auv.getAUVSpatial().getLocalRotation());
+                }
+                if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
+                    auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
+                }
+            }
+        }else{
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
+                Spatial ghostObject = auv.getGhostAUV();
+                if(ghostObject !=null){
+                   ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+                }
+                auv.hideGhostAUV(true);
+                setDepth_iteration(0);
+            }
+        }
     }
     
     public void poke() {
