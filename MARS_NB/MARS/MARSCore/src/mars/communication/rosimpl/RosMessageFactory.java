@@ -72,7 +72,6 @@ public class RosMessageFactory {
 
         if (sensor instanceof Accelerometer
                 || sensor instanceof Gyroscope
-                || sensor instanceof InfraRedSensor
                 || sensor instanceof PingDetector
                 || sensor instanceof SalinitySensor
                 || sensor instanceof Velocimeter
@@ -131,7 +130,19 @@ public class RosMessageFactory {
 
             return message;
         }
-
+ 
+        if (sensor instanceof InfraRedSensor) {
+            InfraRedSensor infra = (InfraRedSensor) sensor;
+            sensor_msgs.Range message = rosNode.getMessageFactory().newFromType(sensor_msgs.Range._TYPE);
+            message.setHeader(createHeader(rosNode, sensor));
+            message.setMinRange(infra.getMinRange());
+            message.setMaxRange(infra.getMaxRange());
+            message.setRange(Float.parseFloat(sensorData + ""));
+            message.setFieldOfView(0f);
+            message.setRadiationType(sensor_msgs.Range.INFRARED);
+            return message;
+        }
+        
         if (sensor instanceof PressureSensor) {
             sensor_msgs.FluidPressure message = rosNode.getMessageFactory().newFromType(sensor_msgs.FluidPressure._TYPE);
             message.setHeader(createHeader(rosNode, sensor));

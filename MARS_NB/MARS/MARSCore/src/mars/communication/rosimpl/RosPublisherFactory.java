@@ -65,7 +65,6 @@ public class RosPublisherFactory {
 
         if (sensor instanceof Accelerometer
                 || sensor instanceof Gyroscope
-                || sensor instanceof InfraRedSensor
                 || sensor instanceof PingDetector
                 || sensor instanceof SalinitySensor
                 || sensor instanceof Velocimeter
@@ -103,6 +102,10 @@ public class RosPublisherFactory {
             return (Publisher<geometry_msgs.PointStamped>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PointStamped._TYPE);
         }
 
+        if (sensor instanceof InfraRedSensor) {
+            return (Publisher<sensor_msgs.Range>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Range._TYPE);
+        }
+        
         if (sensor instanceof PressureSensor) {
             return (Publisher<sensor_msgs.FluidPressure>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.FluidPressure._TYPE);
         }
