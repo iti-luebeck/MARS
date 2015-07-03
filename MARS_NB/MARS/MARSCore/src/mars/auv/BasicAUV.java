@@ -107,6 +107,7 @@ import mars.auv.example.Manta;
 import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
+import mars.control.GuiControl;
 import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
@@ -1401,6 +1402,10 @@ public class BasicAUV implements AUV, SceneProcessor{
         ppcontrol.setStateManager(mars.getStateManager());
         ppcontrol.setAuv(this);
         auv_spatial.addControl(ppcontrol);
+        
+        //a control for controling the auv from the gui
+        GuiControl guicontrol = new GuiControl(this);
+        selectionNode.addControl(guicontrol);
 
         WireBox wbx = new WireBox();
         BoundingBox bb = (BoundingBox) auv_spatial.getWorldBound();

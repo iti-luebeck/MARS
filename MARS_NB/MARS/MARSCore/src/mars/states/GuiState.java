@@ -65,11 +65,13 @@ import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.MARS_Settings;
-import mars.misc.PickHint;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
+import mars.control.GuiControl;
 import mars.core.MARSTopComponent;
+import mars.misc.PickHint;
+import mars.object.MARSObject;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import org.openide.windows.TopComponent;
@@ -725,26 +727,29 @@ public class GuiState extends AbstractAppState {
         if (results.size() > 0) {
           // The closest result is the target that the player picked:
             //Geometry target = results.getClosestCollision().getGeometry();
+            
+            deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
-                // Here comes the action:
-                if ((String) target.getUserData("auv_name") != null) {
-                    BasicAUV auv = (BasicAUV) auvManager.getMARSObject((String) target.getUserData("auv_name"));
-                    if (auv != null) {
-                        auvManager.deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
-                        auv.setSelected(true);
+                
+                //search for a control
+                GuiControl guiControl = searchControl(target);
+                if(guiControl != null){//we found something to play with
+                    guiControl.select();
+                    MARSObject marsObj = guiControl.getMarsObj();
+                    if(marsObj instanceof AUV){
+                        AUV auv = (AUV)marsObj;
                         guiControlState.setLatestSelectedAUV(auv);
                         this.mars.setHoverMenuForAUV(auv, (int) inputManager.getCursorPosition().x, mars.getViewPort().getCamera().getHeight() - (int) inputManager.getCursorPosition().y);
-                        return;
-                        //guiControlState.setFree(false);
                     }
+                    return;
                 }
             }
             //run through and nothing found that is worth to pick
-            auvManager.deselectAll();
+            deselectAll();
             this.mars.setHoverMenuForAUV(false);
         } else {//nothing to pickRightClick
-            auvManager.deselectAll();
+            deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             this.mars.setHoverMenuForAUV(false);
         }
 
@@ -1056,5 +1061,23 @@ public class GuiState extends AbstractAppState {
      */
     public void deselectSimObs(SimObject simob) {
         simobManager.deselectAll();
+    }
+    
+    private GuiControl searchControl(Spatial target){
+        GuiControl guiControl = target.getControl(GuiControl.class);
+        if(guiControl == null){//searchdeeper
+            guiControl = searchControl(target.getParent());
+        }
+        return guiControl;
+    }
+    
+    private void deselectAll(){
+        List<Spatial> children = AUVsNode.getChildren();
+        for (Spatial spatial : children) {
+            GuiControl guiControl = spatial.getControl(GuiControl.class);
+            if(guiControl != null){
+                guiControl.deselect();
+            }
+        }
     }
 }
