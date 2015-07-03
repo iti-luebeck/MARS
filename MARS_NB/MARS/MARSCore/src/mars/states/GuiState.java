@@ -757,27 +757,31 @@ public class GuiState extends AbstractAppState {
         SimObNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
+          // The closest result is the target that the player picked:
+            //Geometry target = results.getClosestCollision().getGeometry();
+            
+            deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
-                // Here comes the action:
-                if (((String) target.getUserData("simob_name") != null)) {
-                    Integer pickType = (Integer) target.getUserData(PickHint.PickName);
-                    if ((pickType == null) || (pickType == PickHint.Pick)) {//only pick spatials who are pickable
-                        SimObject simob = simobManager.getMARSObject((String) target.getUserData("simob_name"));
-                        if (simob != null) {
-                            simobManager.deselectAll();
-                            simob.setSelected(true);
-                            guiControlState.setLatestSelectedSimOb(simob);
-                            return;
-                            //guiControlState.setFree(false);
-                        }
+                
+                //search for a control
+                GuiControl guiControl = searchControl(target);
+                if(guiControl != null){//we found something to play with
+                    guiControl.select();
+                    MARSObject marsObj = guiControl.getMarsObj();
+                    if(marsObj instanceof SimObject){
+                        SimObject simob = (SimObject)marsObj;
+                        guiControlState.setLatestSelectedSimOb(simob);
                     }
+                    return;
                 }
             }
             //run through and nothing found that is worth to pick
-            simobManager.deselectAll();
+            deselectAll();
+            this.mars.setHoverMenuForAUV(false);
         } else {//nothing to pickRightClick
-            simobManager.deselectAll();
+            deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
+            this.mars.setHoverMenuForAUV(false);
         }
     }
 
@@ -1074,6 +1078,13 @@ public class GuiState extends AbstractAppState {
     private void deselectAll(){
         List<Spatial> children = AUVsNode.getChildren();
         for (Spatial spatial : children) {
+            GuiControl guiControl = spatial.getControl(GuiControl.class);
+            if(guiControl != null){
+                guiControl.deselect();
+            }
+        }
+        List<Spatial> children2 = SimObNode.getChildren();
+        for (Spatial spatial : children2) {
             GuiControl guiControl = spatial.getControl(GuiControl.class);
             if(guiControl != null){
                 guiControl.deselect();
