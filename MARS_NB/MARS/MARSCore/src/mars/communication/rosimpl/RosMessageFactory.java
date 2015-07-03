@@ -33,6 +33,7 @@ import geometry_msgs.Point;
 import geometry_msgs.PointStamped;
 import geometry_msgs.Pose;
 import geometry_msgs.PoseStamped;
+import geometry_msgs.Quaternion;
 import geometry_msgs.Vector3;
 import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
@@ -163,9 +164,26 @@ public class RosMessageFactory {
             sensor_msgs.Imu message = rosNode.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
             message.setHeader(createHeader(rosNode, sensor));
             IMUData imuData = (IMUData) sensorData;
-            /*message.setAngularVelocity(imuData.getAngularVelocity());
-             message.setOrientation(imuData.getOrientation());
-             message.setLinearAcceleration(imuData.getLinearAcceleration());*/ //TODO Thomas sieh dir das bitte mal an! Die Datentypen sind nicht kompatibel.
+            
+            Vector3 ang_vec = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+            ang_vec.setX(imuData.getAngularVelocity().getX());
+            ang_vec.setY(imuData.getAngularVelocity().getY());
+            ang_vec.setZ(imuData.getAngularVelocity().getZ());
+
+            Quaternion quat = rosNode.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
+            quat.setX(imuData.getOrientation().getX());
+            quat.setY(imuData.getOrientation().getY());
+            quat.setZ(imuData.getOrientation().getZ());
+            quat.setW(imuData.getOrientation().getW());
+            
+            Vector3 acc_vec = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+            acc_vec.setX(imuData.getLinearAcceleration().getX());
+            acc_vec.setY(imuData.getLinearAcceleration().getY());
+            acc_vec.setZ(imuData.getLinearAcceleration().getZ());
+            
+            message.setAngularVelocity(ang_vec);
+            message.setOrientation(quat);
+            message.setLinearAcceleration(acc_vec); 
             return message;
         }
 
