@@ -348,7 +348,6 @@ public class GuiState extends AbstractAppState {
                 pickRightClick();
             } else if (name.equals("context_menue_off") && !keyPressed) {
                 if(!guiControlState.isMove_auv()){//do it only if we are not moving currently a selected auv
-                    guiControlState.setSelect_auv(false);
                     pickHover();
                 }
             } else if (name.equals("depth_auv_down") && keyPressed) {
@@ -563,8 +562,6 @@ public class GuiState extends AbstractAppState {
                 if (selected_simob != null) {
                     rotateSelectedGhostSimOb(selected_simob);
                 }
-            } else if (guiControlState.isSelect_auv()) {
-
             } else {
                 pickHover();
             }
@@ -724,10 +721,7 @@ public class GuiState extends AbstractAppState {
         }*/
         AUVsNode.collideWith(ray, results);
         // Use the results -- we rotate the selected geometry.
-        if (results.size() > 0) {
-          // The closest result is the target that the player picked:
-            //Geometry target = results.getClosestCollision().getGeometry();
-            
+        if (results.size() > 0) {         
             deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
@@ -755,11 +749,8 @@ public class GuiState extends AbstractAppState {
 
         results.clear();
         SimObNode.collideWith(ray, results);
-        // Use the results -- we rotate the selected geometry.
         if (results.size() > 0) {
-          // The closest result is the target that the player picked:
-            //Geometry target = results.getClosestCollision().getGeometry();
-            
+          // The closest result is the target that the player picked:            
             deselectAll();//deselect all auvs before (....seamless tansition through two auvs)
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
@@ -793,8 +784,8 @@ public class GuiState extends AbstractAppState {
         Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, mars.getViewPort().getCamera().getHeight() - click2d.y), 1f).subtractLocal(click3d);
 
         //cleanup everything before
-        auvManager.deselectAll();
-
+        deselectAll();
+        
         // Aim the ray from the clicked spot forwards.
         Ray ray = new Ray(click3d, dir);
         // Collect intersections between ray and all nodes in results list.
@@ -803,9 +794,14 @@ public class GuiState extends AbstractAppState {
         if (results.size() > 0) {
             for (int i = 0; i < results.size(); i++) {
                 Geometry target = results.getCollision(i).getGeometry();
-                guiControlState.setAuvContactPoint(results.getClosestCollision().getContactPoint());
-                guiControlState.setAuvContactDirection(dir.normalize());
-                guiControlState.setSelect_auv(true);
+                
+                //search for a control
+                GuiControl guiControl = searchControl(target);
+                if(guiControl != null){//we found something to play with
+                    guiControl.setContactPoint(results.getClosestCollision().getContactPoint());
+                    guiControl.setContactDirection(dir.normalize());
+                }
+                
                 // Here comes the action:
                 if ((String) target.getUserData("auv_name") != null) {
                     BasicAUV auv = (BasicAUV) auvManager.getMARSObject((String) target.getUserData("auv_name"));
@@ -818,7 +814,6 @@ public class GuiState extends AbstractAppState {
                 }
             }
         } else {//nothing to pickRightClick but still normal context menu for split view
-            guiControlState.setSelect_auv(false);
             MARSTopComp.hideAllPopupWindows();
             MARSTopComp.showpopupWindowSwitcher((int) inputManager.getCursorPosition().x, (int) inputManager.getCursorPosition().y);
         }
@@ -828,12 +823,9 @@ public class GuiState extends AbstractAppState {
      *
      */
     public void pokeSelectedAUV() {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            Vector3f rel_pos = selected_auv.getMassCenterGeom().getWorldTranslation().subtract(guiControlState.getAuvContactPoint());
-            Vector3f direction = guiControlState.getAuvContactDirection().negate().normalize();
-            Vector3f mult = direction.mult(selected_auv.getAuv_param().getMass() * mars_settings.getPhysicsPoke() / ((float) mars_settings.getPhysicsFramerate()));
-            selected_auv.getPhysicsControl().applyImpulse(mult, rel_pos);
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            selectedControl.poke();
         }
     }
 
@@ -1012,9 +1004,9 @@ public class GuiState extends AbstractAppState {
      *
      */
     public void resetSelectedAUV() {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            selected_auv.reset();
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            selectedControl.reset();
         }
     }
 
@@ -1033,21 +1025,6 @@ public class GuiState extends AbstractAppState {
 
     /**
      *
-     */
-    public void deselectAllAUVs() {
-        auvManager.deselectAll();
-    }
-
-    /**
-     *
-     * @param auv
-     */
-    public void deselectAUV(AUV auv) {
-        auvManager.deselectAUV(auv);
-    }
-
-    /**
-     *
      * @param simob
      */
     public void selectSimObs(SimObject simob) {
@@ -1058,14 +1035,6 @@ public class GuiState extends AbstractAppState {
             }
         }
     }
-
-    /**
-     *
-     * @param simob
-     */
-    public void deselectSimObs(SimObject simob) {
-        simobManager.deselectAll();
-    }
     
     private GuiControl searchControl(Spatial target){
         GuiControl guiControl = target.getControl(GuiControl.class);
@@ -1075,7 +1044,7 @@ public class GuiState extends AbstractAppState {
         return guiControl;
     }
     
-    private void deselectAll(){
+    public void deselectAll(){
         List<Spatial> children = AUVsNode.getChildren();
         for (Spatial spatial : children) {
             GuiControl guiControl = spatial.getControl(GuiControl.class);
@@ -1090,5 +1059,29 @@ public class GuiState extends AbstractAppState {
                 guiControl.deselect();
             }
         }
+    }
+    
+    private GuiControl getSelectedControl(){
+        List<Spatial> children = AUVsNode.getChildren();
+        for (Spatial spatial : children) {
+            GuiControl guiControl = spatial.getControl(GuiControl.class);
+            if(guiControl != null){
+                if(guiControl.getMarsObj().isSelected()){
+                    return guiControl;
+                }
+            }
+        }
+        
+        List<Spatial> children2 = SimObNode.getChildren();
+        for (Spatial spatial : children2) {
+            GuiControl guiControl = spatial.getControl(GuiControl.class);
+            if(guiControl != null){
+                if(guiControl.getMarsObj().isSelected()){
+                    return guiControl;
+                }
+            }
+        }
+        return null;
+        
     }
 }

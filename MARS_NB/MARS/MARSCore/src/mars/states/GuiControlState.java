@@ -53,7 +53,6 @@ import mars.simobjects.SimObject;
 public class GuiControlState {
 
     private boolean move_auv = false;
-    private boolean select_auv = false;
     private boolean rotate_auv = false;
     private boolean move_simob = false;
     private boolean rotate_simob = false;
@@ -64,8 +63,6 @@ public class GuiControlState {
     private Quaternion rotation = new Quaternion();
     private int depth_iteration = 0;
     private float depth_factor = 0.25f;
-    private Vector3f contact_point = Vector3f.ZERO;
-    private Vector3f contact_direction = Vector3f.ZERO;
     private AUV latestSelectedAUV = null;
     private SimObject latestSelectedSimOb = null;
     private Arrow arrow;
@@ -212,22 +209,6 @@ public class GuiControlState {
         } else {
             setFree(true);
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isSelect_auv() {
-        return select_auv;
-    }
-
-    /**
-     *
-     * @param select_auv
-     */
-    public void setSelect_auv(boolean select_auv) {
-        this.select_auv = select_auv;
     }
 
     /**
@@ -427,37 +408,5 @@ public class GuiControlState {
      */
     public void resetDepthIteration() {
         depth_iteration = 0;
-    }
-
-    /**
-     *
-     * @param contact_point
-     */
-    public void setAuvContactPoint(Vector3f contact_point) {
-        this.contact_point = contact_point;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getAuvContactPoint() {
-        return contact_point;
-    }
-
-    /**
-     *
-     * @param contact_direction
-     */
-    public void setAuvContactDirection(Vector3f contact_direction) {
-        this.contact_direction = contact_direction;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getAuvContactDirection() {
-        return contact_direction;
     }
 }

@@ -29,9 +29,11 @@
 */
 package mars.control;
 
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
+import mars.auv.AUV;
 import mars.object.MARSObject;
 
 /**
@@ -42,6 +44,8 @@ import mars.object.MARSObject;
 public class GuiControl extends AbstractControl{
 
     private MARSObject marsObj;
+    private Vector3f contact_point = Vector3f.ZERO;
+    private Vector3f contact_direction = Vector3f.ZERO;
     
     public GuiControl(MARSObject marsObj) {
         super();
@@ -67,5 +71,54 @@ public class GuiControl extends AbstractControl{
 
     public MARSObject getMarsObj() {
         return marsObj;
+    }
+    
+    /**
+     *
+     * @param contact_point
+     */
+    public void setContactPoint(Vector3f contact_point) {
+        this.contact_point = contact_point;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Vector3f getContactPoint() {
+        return contact_point;
+    }
+
+    /**
+     *
+     * @param contact_direction
+     */
+    public void setContactDirection(Vector3f contact_direction) {
+        this.contact_direction = contact_direction;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Vector3f getContactDirection() {
+        return contact_direction;
+    }
+    
+    public void poke() {
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            Vector3f rel_pos = auv.getMassCenterGeom().getWorldTranslation().subtract(getContactPoint());
+            Vector3f direction = getContactDirection().negate().normalize();
+            Vector3f mult = direction.mult(auv.getAuv_param().getMass() * auv.getMARS_Settings().getPhysicsPoke() / ((float) auv.getMARS_Settings().getPhysicsFramerate()));
+            auv.getPhysicsControl().applyImpulse(mult, rel_pos);
+        }
+    }
+    
+    public void reset(){
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            auv.reset();
+        }
     }
 }
