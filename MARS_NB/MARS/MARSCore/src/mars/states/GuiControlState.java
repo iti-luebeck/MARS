@@ -50,19 +50,16 @@ import mars.simobjects.SimObject;
  *
  * @author Thomas Tosik
  */
+@Deprecated
 public class GuiControlState {
 
-    private boolean move_auv = false;
     private boolean rotate_auv = false;
-    private boolean move_simob = false;
     private boolean rotate_simob = false;
     private boolean auv_context = false;
     private boolean free = true;
     private Vector3f intersection = Vector3f.ZERO;
     private Spatial ghost_object;
     private Quaternion rotation = new Quaternion();
-    private int depth_iteration = 0;
-    private float depth_factor = 0.25f;
     private AUV latestSelectedAUV = null;
     private SimObject latestSelectedSimOb = null;
     private Arrow arrow;
@@ -193,28 +190,6 @@ public class GuiControlState {
      *
      * @return
      */
-    public boolean isMove_auv() {
-        return move_auv;
-    }
-
-    /**
-     *
-     * @param move_auv
-     */
-    public void setMove_auv(boolean move_auv) {
-        this.move_auv = move_auv;
-        if (move_auv == true) {
-            setFree(false);
-            setRotate_auv(false);
-        } else {
-            setFree(true);
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
     public boolean isRotate_auv() {
         return rotate_auv;
     }
@@ -227,29 +202,6 @@ public class GuiControlState {
         this.rotate_auv = rotate_auv;
         if (rotate_auv == true) {
             setFree(false);
-            setMove_auv(false);
-        } else {
-            setFree(true);
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isMove_simob() {
-        return move_simob;
-    }
-
-    /**
-     *
-     * @param move_simob
-     */
-    public void setMove_simob(boolean move_simob) {
-        this.move_simob = move_simob;
-        if (move_simob == true) {
-            setFree(false);
-            setRotate_simob(false);
         } else {
             setFree(true);
         }
@@ -271,7 +223,6 @@ public class GuiControlState {
         this.rotate_simob = rotate_simob;
         if (rotate_simob == true) {
             setFree(false);
-            setMove_simob(false);
         } else {
             setFree(true);
         }
@@ -355,58 +306,5 @@ public class GuiControlState {
      */
     public void setRotation(Quaternion rotation) {
         this.rotation = rotation;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public float getDepth_factor() {
-        return depth_factor;
-    }
-
-    /**
-     *
-     * @param depth_factor
-     */
-    public void setDepth_factor(float depth_factor) {
-        this.depth_factor = depth_factor;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getDepth_iteration() {
-        return depth_iteration;
-    }
-
-    /**
-     *
-     * @param depth_iteration
-     */
-    public void setDepth_iteration(int depth_iteration) {
-        this.depth_iteration = depth_iteration;
-    }
-
-    /**
-     *
-     */
-    public void incrementDepthIteration() {
-        depth_iteration = depth_iteration + 1;
-    }
-
-    /**
-     *
-     */
-    public void decrementDepthIteration() {
-        depth_iteration = depth_iteration - 1;
-    }
-    
-    /**
-     *
-     */
-    public void resetDepthIteration() {
-        depth_iteration = 0;
     }
 }

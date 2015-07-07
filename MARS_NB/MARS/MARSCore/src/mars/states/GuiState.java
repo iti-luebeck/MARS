@@ -309,7 +309,8 @@ public class GuiState extends AbstractAppState {
     /*
      * what actions should be done when pressing a registered button?
      */
-    private ActionListener actionListener = new ActionListener() {
+    private final ActionListener actionListener = new ActionListener() {
+        @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
             if (name.equals("start") && !keyPressed) {
                 if (mars.getStateManager().getState(SimState.class) != null) {
@@ -354,20 +355,24 @@ public class GuiState extends AbstractAppState {
                      }
                 }
             } else if (name.equals("depth_auv_down") && keyPressed) {
-                if (guiControlState.isMove_auv()) {
-                    AUV selected_auv = auvManager.getSelected();
-                    if (selected_auv != null) {
-                        guiControlState.decrementDepthIteration();
-                        moveSelectedGhostAUV(selected_auv);
-                    }
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    selectedControl.decrementDepthIteration();
+                    selectedControl.setMove(true);
+                    Vector2f click2d = inputManager.getCursorPosition();
+                    Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+                    Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+                    selectedControl.move(click3d,dir);
                 }
             } else if (name.equals("depth_auv_up") && keyPressed) {
-                if (guiControlState.isMove_auv()) {
-                    AUV selected_auv = auvManager.getSelected();
-                    if (selected_auv != null) {
-                        guiControlState.incrementDepthIteration();
-                        moveSelectedGhostAUV(selected_auv);
-                    }
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    selectedControl.incrementDepthIteration();
+                    selectedControl.setMove(true);
+                    Vector2f click2d = inputManager.getCursorPosition();
+                    Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+                    Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+                    selectedControl.move(click3d,dir);
                 }
             } else if (name.equals("moveauv") && keyPressed) {
                 mars.getFlyByCamera().setEnabled(false);
@@ -376,12 +381,6 @@ public class GuiState extends AbstractAppState {
                     System.out.println("moveauv");
                     selectedControl.setMove(true);
                 }
-                /*SimObject selected_simob = simobManager.getSelected();
-                if (selected_simob != null) {
-                    guiControlState.setMove_simob(true);
-                    guiControlState.setGhostObject(selected_simob.getGhostSpatial());
-                    selected_simob.hideGhostSpatial(false);
-                }*/
             } else if (name.equals("moveauv") && !keyPressed) {
                 GuiControl selectedControl = getSelectedControl();
                 if(selectedControl != null){
@@ -391,7 +390,6 @@ public class GuiState extends AbstractAppState {
                     selectedControl.drop();
                     selectedControl = null;
                 }
-                //moveauvOff();
             } else if (name.equals("rotateauv") && keyPressed) {
                 AUV selected_auv = auvManager.getSelected();
                 mars.getFlyByCamera().setEnabled(false);
@@ -523,16 +521,17 @@ public class GuiState extends AbstractAppState {
         @Override
         public void onMouseMotionEvent(MouseMotionEvent evt) {
             GuiControl selectedControl = getSelectedControl();
-            if(selectedControl != null){
+            if(selectedControl != null && selectedControl.getMove()){
                 System.out.println("moveing  auv");
                 Vector2f click2d = inputManager.getCursorPosition();
                 Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
                 Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
                 selectedControl.move(click3d,dir);
-                if(!selectedControl.getMove()){
+                /*if(!selectedControl.getMove()){
                     pickHover();
-                }
+                }*/
             }else{
+                System.out.println("nothing to see");
                 pickHover();
             }
             
@@ -540,11 +539,6 @@ public class GuiState extends AbstractAppState {
                 AUV selected_auv = auvManager.getSelected();
                 if (selected_auv != null) {
                     rotateSelectedGhostAUV(selected_auv);
-                }
-            } else if (guiControlState.isMove_simob()) {
-                SimObject selected_simob = simobManager.getSelected();
-                if (selected_simob != null) {
-                    moveSelectedGhostSimOb(selected_simob);
                 }
             } else if (guiControlState.isRotate_simob()) {
                 SimObject selected_simob = simobManager.getSelected();
@@ -561,13 +555,13 @@ public class GuiState extends AbstractAppState {
             if(evt.isPressed() && evt.getButtonIndex() == 0) {//clean up stuff if aborted due to mouse clicks
                 if (guiControlState.isRotate_auv()){
                     rotateauvOff();
-                }else if(guiControlState.isMove_auv()){
-                    GuiControl selectedControl = getSelectedControl();
-                    if(selectedControl != null){
-                        System.out.println("moveauv stopped");
-                        selectedControl.setMove(false);
-                        selectedControl.drop();
-                    }
+                }
+                
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    System.out.println("moveauv stopped");
+                    selectedControl.setMove(false);
+                    selectedControl.drop();
                 }
             }
         }
@@ -597,29 +591,6 @@ public class GuiState extends AbstractAppState {
         } else {
             mars.setDisplayFps(false);
             mars.setDisplayStatView(false);
-        }
-    }
-
-    private void moveSelectedGhostAUV(AUV auv) {
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
-        guiControlState.setIntersection(intersection);
-        if (guiControlState.getGhostObject() != null) {
-            guiControlState.getGhostObject().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, guiControlState.getDepth_factor() * guiControlState.getDepth_iteration(), 0f)));
-            guiControlState.getGhostObject().setLocalRotation(auv.getAUVSpatial().getLocalRotation());
-        }
-    }
-
-    private void moveSelectedGhostSimOb(SimObject simob) {
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
-        guiControlState.setIntersection(intersection);
-        if (guiControlState.getGhostObject() != null) {
-            guiControlState.getGhostObject().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection, null));
         }
     }
 
