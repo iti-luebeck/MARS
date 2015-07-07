@@ -38,6 +38,7 @@ import com.jme3.scene.control.AbstractControl;
 import mars.Helper.Helper;
 import mars.auv.AUV;
 import mars.object.MARSObject;
+import mars.simobjects.SimObject;
 
 /**
  * This control is used to steer vehicles manually.
@@ -74,6 +75,7 @@ public class GuiControl extends AbstractControl{
     
     public void deselect(){
         marsObj.setSelected(false);
+        setMove(false);
     }
 
     public MARSObject getMarsObj() {
@@ -178,6 +180,9 @@ public class GuiControl extends AbstractControl{
             } else {
                 auv.hideGhostAUV(false);
             }
+        }else if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            simob.hideGhostSpatial(false);
         }
     }
     
@@ -194,6 +199,12 @@ public class GuiControl extends AbstractControl{
                 if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
                     auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
                 }
+            }else if(marsObj instanceof SimObject){
+                SimObject simob = (SimObject)marsObj;
+                intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
+                if (simob.getGhostSpatial() != null) {
+                    simob.getGhostSpatial().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection, null));
+                }
             }
         }
     }
@@ -207,6 +218,15 @@ public class GuiControl extends AbstractControl{
                ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
             }
             auv.hideGhostAUV(true);
+            setDepth_iteration(0);
+        }else if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            simob.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
+            /*Spatial ghostObject = simob.getGhostSpatial();
+            if(ghostObject !=null){
+               ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+            }*/
+            simob.hideGhostSpatial(true);
             setDepth_iteration(0);
         }
     }
