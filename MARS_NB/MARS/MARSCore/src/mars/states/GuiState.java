@@ -49,6 +49,7 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -58,6 +59,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.debug.Arrow;
 import com.jme3.terrain.geomipmap.picking.TerrainPickData;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +96,11 @@ public class GuiState extends AbstractAppState {
     private Initializer initer;
     private SimState simState;
     private MARSTopComponent MARSTopComp;
-
-    //general gui stuff
-    private GuiControlState guiControlState;
+    private Geometry rotateArrow;
+    private Vector3f rotateArrowVectorStart = Vector3f.ZERO;
+    private Vector3f rotateArrowVectorEnd = Vector3f.UNIT_X;
+    private Arrow arrow;
+    private Node GUINode = new Node("GUI_Node");
 
     //
     private Node AUVsNode;
@@ -160,6 +164,78 @@ public class GuiState extends AbstractAppState {
         initPrivateKeys();// load custom key mappings
         setupGUI();
         initPublicKeys();
+        initArrow();
+    }
+    
+    /**
+     *
+     */
+    private void initArrow() {
+        arrow = new Arrow(getRotateArrowVectorEnd());
+        Vector3f ray_start = getRotateArrowVectorStart();
+        rotateArrow = new Geometry("RotateArrow", arrow);
+        Material mark_mat4 = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.White);
+        rotateArrow.setMaterial(mark_mat4);
+        rotateArrow.setLocalTranslation(ray_start);
+        rotateArrow.updateGeometricState();
+        setRotateArrowVisible(false);
+        GUINode.attachChild(rotateArrow);
+    }
+    
+        
+    /**
+     *
+     */
+    public void updateRotateArrow() {
+        rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
+        arrow.setArrowExtent(getRotateArrowVectorEnd().subtract(getRotateArrowVectorStart()));
+        rotateArrow.updateGeometricState();
+    }
+
+    /**
+     *
+     * @param visible
+     */
+    public void setRotateArrowVisible(boolean visible) {
+        if (visible) {
+            rotateArrow.setCullHint(Spatial.CullHint.Never);
+        } else {
+            rotateArrow.setCullHint(Spatial.CullHint.Always);
+        }
+    }
+    
+        
+        /**
+     *
+     * @return
+     */
+    public Vector3f getRotateArrowVectorEnd() {
+        return rotateArrowVectorEnd;
+    }
+
+    /**
+     *
+     * @param rotateArrowVectorEnd
+     */
+    public void setRotateArrowVectorEnd(Vector3f rotateArrowVectorEnd) {
+        this.rotateArrowVectorEnd = rotateArrowVectorEnd;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Vector3f getRotateArrowVectorStart() {
+        return rotateArrowVectorStart;
+    }
+
+    /**
+     *
+     * @param rotateArrowVectorStart
+     */
+    public void setRotateArrowVectorStart(Vector3f rotateArrowVectorStart) {
+        this.rotateArrowVectorStart = rotateArrowVectorStart;
     }
 
     /**
@@ -168,6 +244,10 @@ public class GuiState extends AbstractAppState {
      */
     public void setAuvManager(AUV_Manager auvManager) {
         this.auvManager = auvManager;
+    }
+
+    public Node getGUINode() {
+        return GUINode;
     }
 
     /**
@@ -391,39 +471,44 @@ public class GuiState extends AbstractAppState {
                     selectedControl = null;
                 }
             } else if (name.equals("rotateauv") && keyPressed) {
-                AUV selected_auv = auvManager.getSelected();
                 mars.getFlyByCamera().setEnabled(false);
-                if (selected_auv != null) {
-                    guiControlState.setGhostObject(selected_auv.getGhostAUV());
-                    selected_auv.hideGhostAUV(false);
-                    rotateSelectedGhostAUV(selected_auv);
-                    guiControlState.setRotateArrowVisible(true);
-                    guiControlState.setRotate_auv(true);
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    System.out.println("rotateauv");
+                    selectedControl.setRotate(true);
                 }
             } else if (name.equals("rotateauv") && !keyPressed) {
-                rotateauvOff();
+                //rotateauvOff();
+                GuiControl selectedControl = getSelectedControl();
+                if(selectedControl != null){
+                    System.out.println("moveauv stopped");
+                    mars.getFlyByCamera().setEnabled(true);
+                    selectedControl.setRotate(false);
+                    selectedControl.drop();
+                    selectedControl = null;
+                }
             }
         }
     };
     
     private void rotateauvOff(){
-        AUV selected_auv = auvManager.getSelected();
+        /*AUV selected_auv = auvManager.getSelected();
         mars.getFlyByCamera().setEnabled(true);
         if (selected_auv != null) {
             selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
             selected_auv.hideGhostAUV(true);
-            guiControlState.setRotateArrowVisible(false);
+            setRotateArrowVisible(false);
         }
 
         SimObject selected_simob = simobManager.getSelected();
         if (selected_simob != null) {
             selected_simob.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
             selected_simob.hideGhostSpatial(true);
-            guiControlState.setRotateArrowVisible(false);
+            setRotateArrowVisible(false);
         }
 
         guiControlState.setRotate_auv(false);
-        guiControlState.setRotate_simob(false);
+        guiControlState.setRotate_simob(false);*/
     }
 
     private void initPublicKeys() {
@@ -520,32 +605,24 @@ public class GuiState extends AbstractAppState {
                 /*if(!selectedControl.getMove()){
                     pickHover();
                 }*/
+            }else if(selectedControl != null && selectedControl.getRotate()){
+                System.out.println("rotating  auv");
+                Vector2f click2d = inputManager.getCursorPosition();
+                Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+                Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+                selectedControl.rotate(click3d,dir);
             }else{
                 System.out.println("nothing to see");
                 pickHover();
             }
-            
-            /*if (guiControlState.isRotate_auv()) {
-                AUV selected_auv = auvManager.getSelected();
-                if (selected_auv != null) {
-                    rotateSelectedGhostAUV(selected_auv);
-                }
-            } else if (guiControlState.isRotate_simob()) {
-                SimObject selected_simob = simobManager.getSelected();
-                if (selected_simob != null) {
-                    rotateSelectedGhostSimOb(selected_simob);
-                }
-            } else {
-                pickHover();
-            }*/
         }
 
         @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
             if(evt.isPressed() && evt.getButtonIndex() == 0) {//clean up stuff if aborted due to mouse clicks
-                if (guiControlState.isRotate_auv()){
+                /*if (guiControlState.isRotate_auv()){
                     rotateauvOff();
-                }
+                }*/
                 
                 GuiControl selectedControl = getSelectedControl();
                 if(selectedControl != null){
@@ -569,9 +646,7 @@ public class GuiState extends AbstractAppState {
      * 
      */
     private void setupGUI() {
-        guiControlState = new GuiControlState(assetManager);
-        guiControlState.init();
-        rootNode.attachChild(guiControlState.getGUINode());
+        rootNode.attachChild(getGUINode());
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         mars.setGuiFont(guiFont);
         mars.setStatsStateDark(false);
@@ -587,39 +662,6 @@ public class GuiState extends AbstractAppState {
     private void moveSelectedGhostAUV(AUV auv, Vector3f position) {
         auv.hideGhostAUV(false);
         auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(position, null));
-    }
-
-    private void rotateSelectedGhostAUV(AUV auv) {
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
-        Vector3f diff = intersection.subtract(auv.getAUVNode().getWorldTranslation());
-        diff.y = 0f;
-        diff.normalizeLocal();
-        float angle = 0f;
-        if (diff.z < 0f) {
-            angle = diff.angleBetween(Vector3f.UNIT_X);
-        } else {
-            angle = diff.angleBetween(Vector3f.UNIT_X) * (-1);
-        }
-
-        if (guiControlState.getGhostObject() != null) {
-            Quaternion quat = new Quaternion();
-            Quaternion gquat = new Quaternion();
-
-            Quaternion wQuat = auv.getAUVSpatial().getWorldRotation();
-            float[] ff = wQuat.toAngles(null);
-            float newAng = ff[1] - angle;
-
-            quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
-            gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
-            guiControlState.setRotation(quat);
-            guiControlState.getGhostObject().setLocalRotation(gquat);
-            guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
-            guiControlState.setRotateArrowVectorEnd(intersection);
-            guiControlState.updateRotateArrow();
-        }
     }
 
     private void pickHover() {
@@ -656,7 +698,6 @@ public class GuiState extends AbstractAppState {
                     MARSObject marsObj = guiControl.getMarsObj();
                     if(marsObj instanceof AUV){
                         AUV auv = (AUV)marsObj;
-                        guiControlState.setLatestSelectedAUV(auv);
                         this.mars.setHoverMenuForAUV(auv, (int) inputManager.getCursorPosition().x, mars.getViewPort().getCamera().getHeight() - (int) inputManager.getCursorPosition().y);
                     }
                     return;
@@ -734,7 +775,6 @@ public class GuiState extends AbstractAppState {
                     BasicAUV auv = (BasicAUV) auvManager.getMARSObject((String) target.getUserData("auv_name"));
                     if (auv != null) {
                         auv.setSelected(true);
-                        guiControlState.setLatestSelectedAUV(auv);
                         MARSTopComp.initPopUpMenuesForAUV(auv.getAuv_param());
                         MARSTopComp.showpopupAUV((int) inputManager.getCursorPosition().x, (int) inputManager.getCursorPosition().y);
                     }
@@ -762,17 +802,22 @@ public class GuiState extends AbstractAppState {
      * @param relative
      */
     public void moveSelectedAUV(Vector3f new_position, boolean relative) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            selected_auv.hideGhostAUV(true);
-            if (!relative) {
-                selected_auv.getAuv_param().setPosition(new_position);
-                selected_auv.getPhysicsControl().setPhysicsLocation(new_position);
-            } else {
-                selected_auv.getAuv_param().setPosition(new_position.add(selected_auv.getAuv_param().getPosition()));
-                selected_auv.getPhysicsControl().setPhysicsLocation(selected_auv.getPhysicsControl().getPhysicsLocation().add(new_position));
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                auv.hideGhostAUV(true);
+                if (!relative) {
+                    auv.getAuv_param().setPosition(new_position);
+                    auv.getPhysicsControl().setPhysicsLocation(new_position);
+                } else {
+                    auv.getAuv_param().setPosition(new_position.add(auv.getAuv_param().getPosition()));
+                    auv.getPhysicsControl().setPhysicsLocation(auv.getPhysicsControl().getPhysicsLocation().add(new_position));
+                }
             }
         }
+
     }
 
     /**
@@ -781,16 +826,20 @@ public class GuiState extends AbstractAppState {
      * @param relative
      */
     public void rotateSelectedAUV(Vector3f new_rotation, boolean relative) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            selected_auv.hideGhostAUV(true);
-            if (!relative) {
-                selected_auv.getAuv_param().setRotation(new_rotation);
-                Quaternion quat = new Quaternion();
-                quat.fromAngles(new_rotation.x, new_rotation.y, new_rotation.z);
-                selected_auv.getPhysicsControl().setPhysicsRotation(quat);
-            } else {
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                auv.hideGhostAUV(true);
+                if (!relative) {
+                    auv.getAuv_param().setRotation(new_rotation);
+                    Quaternion quat = new Quaternion();
+                    quat.fromAngles(new_rotation.x, new_rotation.y, new_rotation.z);
+                    auv.getPhysicsControl().setPhysicsRotation(quat);
+                } else {
 
+                }
             }
         }
     }
@@ -801,46 +850,50 @@ public class GuiState extends AbstractAppState {
      * @param selected
      */
     public void debugSelectedAUV(int debug_mode, boolean selected) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            switch (debug_mode) {
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                switch (debug_mode) {
                 case 0:
-                    selected_auv.getAuv_param().setDebugPhysicalExchanger(selected);
-                    selected_auv.setPhysicalExchangerVisible(selected);
+                    auv.getAuv_param().setDebugPhysicalExchanger(selected);
+                    auv.setPhysicalExchangerVisible(selected);
                     break;
                 case 1:
-                    selected_auv.getAuv_param().setDebugCenters(selected);
-                    selected_auv.setCentersVisible(selected);
+                    auv.getAuv_param().setDebugCenters(selected);
+                    auv.setCentersVisible(selected);
                     break;
                 case 2:
-                    selected_auv.getAuv_param().setDebugBuoycancy(selected);
-                    selected_auv.setBuoycancyVisible(selected);
+                    auv.getAuv_param().setDebugBuoycancy(selected);
+                    auv.setBuoycancyVisible(selected);
                     break;
                 case 3:
-                    selected_auv.getAuv_param().setDebugCollision(selected);
-                    selected_auv.setCollisionVisible(selected);
+                    auv.getAuv_param().setDebugCollision(selected);
+                    auv.setCollisionVisible(selected);
                     break;
                 case 4:
-                    selected_auv.getAuv_param().setDebugDrag(selected);
-                    selected_auv.setDragVisible(selected);
+                    auv.getAuv_param().setDebugDrag(selected);
+                    auv.setDragVisible(selected);
                     break;
                 case 5:
-                    selected_auv.getAuv_param().setDebugWireframe(selected);
-                    selected_auv.setWireframeVisible(selected);
+                    auv.getAuv_param().setDebugWireframe(selected);
+                    auv.setWireframeVisible(selected);
                     break;
                 case 6:
-                    selected_auv.getAuv_param().setDebugBounding(selected);
-                    selected_auv.setBoundingBoxVisible(selected);
+                    auv.getAuv_param().setDebugBounding(selected);
+                    auv.setBoundingBoxVisible(selected);
                     break;
                 case 7:
-                    selected_auv.getAuv_param().setDebugVisualizer(selected);
-                    selected_auv.setVisualizerVisible(selected);
+                    auv.getAuv_param().setDebugVisualizer(selected);
+                    auv.setVisualizerVisible(selected);
                     break;
                 case 8:
-                    selected_auv.getAuv_param().setDebugBuoycancyVolume(selected);
-                    selected_auv.setBuoyancyVolumeVisible(selected);
+                    auv.getAuv_param().setDebugBuoycancyVolume(selected);
+                    auv.setBuoyancyVolumeVisible(selected);
                     break;
                 default:;
+                }
             }
         }
     }
@@ -850,14 +903,18 @@ public class GuiState extends AbstractAppState {
      * @param enable
      */
     public void enableSelectedAUV(boolean enable) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            if (!enable) {
-                selected_auv.getAuv_param().setEnabled(false);
-                auvManager.enableMARSObject(selected_auv, false);
-            } else {
-                selected_auv.getAuv_param().setEnabled(true);
-                auvManager.enableMARSObject(selected_auv, true);
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                if (!enable) {
+                    auv.getAuv_param().setEnabled(false);
+                    auvManager.enableMARSObject(auv, false);
+                } else {
+                    auv.getAuv_param().setEnabled(true);
+                    auvManager.enableMARSObject(auv, true);
+                }
             }
         }
     }
@@ -866,12 +923,17 @@ public class GuiState extends AbstractAppState {
      *
      */
     public void chaseSelectedAUV() {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            mars.getFlyByCamera().setEnabled(false);
-            mars.getChaseCam().setSpatial(selected_auv.getAUVNode());
-            mars.getChaseCam().setEnabled(true);
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                mars.getFlyByCamera().setEnabled(false);
+                mars.getChaseCam().setSpatial(auv.getAUVNode());
+                mars.getChaseCam().setEnabled(true);
+            }
         }
+
     }
 
     /**
@@ -879,9 +941,13 @@ public class GuiState extends AbstractAppState {
      * @param new_position
      */
     public void moveSelectedGhostAUV(Vector3f new_position) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            moveSelectedGhostAUV(selected_auv, new_position);
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                moveSelectedGhostAUV(auv, new_position);
+            }
         }
     }
 
@@ -891,27 +957,31 @@ public class GuiState extends AbstractAppState {
      * @param selected
      */
     public void waypointsSelectedAUV(int debug_mode, boolean selected) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            switch (debug_mode) {
-                case 0:
-                    selected_auv.getAuv_param().setDistanceCoveredPathEnabled(selected);
-                    selected_auv.setWaypointsEnabled(selected);
-                    break;
-                case 1:
-                    selected_auv.getAuv_param().setDistanceCoveredPathVisiblity(selected);
-                    selected_auv.setWayPointsVisible(selected);
-                    break;
-                case 2:
-                    selected_auv.getDistanceCoveredPath().reset();
-                    break;
-                case 3:
-                    selected_auv.getAuv_param().setDistanceCoveredPathGradient(selected);
-                    if (!selected) {
-                        selected_auv.getDistanceCoveredPath().updateColor();
-                    }
-                    break;
-                default:;
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                switch (debug_mode) {
+                    case 0:
+                        auv.getAuv_param().setDistanceCoveredPathEnabled(selected);
+                        auv.setWaypointsEnabled(selected);
+                        break;
+                    case 1:
+                        auv.getAuv_param().setDistanceCoveredPathVisiblity(selected);
+                        auv.setWayPointsVisible(selected);
+                        break;
+                    case 2:
+                        auv.getDistanceCoveredPath().reset();
+                        break;
+                    case 3:
+                        auv.getAuv_param().setDistanceCoveredPathGradient(selected);
+                        if (!selected) {
+                            auv.getDistanceCoveredPath().updateColor();
+                        }
+                        break;
+                    default:;
+                }
             }
         }
     }
@@ -921,9 +991,13 @@ public class GuiState extends AbstractAppState {
      * @param newColor
      */
     public void waypointsColorSelectedAUV(java.awt.Color newColor) {
-        AUV selected_auv = guiControlState.getLatestSelectedAUV();
-        if (selected_auv != null) {
-            selected_auv.getAuv_param().setDistanceCoveredPathColor(new ColorRGBA(newColor.getRed() / 255f, newColor.getGreen() / 255f, newColor.getBlue() / 255f, 0f));
+        GuiControl selectedControl = getSelectedControl();
+        if(selectedControl != null){
+            MARSObject marsObj = selectedControl.getMarsObj();
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                auv.getAuv_param().setDistanceCoveredPathColor(new ColorRGBA(newColor.getRed() / 255f, newColor.getGreen() / 255f, newColor.getBlue() / 255f, 0f));
+            }
         }
     }
 
@@ -945,7 +1019,6 @@ public class GuiState extends AbstractAppState {
         if (auv != null) {
             if (auv.getAuv_param().isEnabled()) {
                 auv.setSelected(true);
-                guiControlState.setLatestSelectedAUV(auv);
             }
         }
     }

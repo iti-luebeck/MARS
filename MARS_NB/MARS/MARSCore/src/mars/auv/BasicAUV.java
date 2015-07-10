@@ -1404,7 +1404,8 @@ public class BasicAUV implements AUV, SceneProcessor{
         auv_spatial.addControl(ppcontrol);
         
         //a control for controling the auv from the gui
-        GuiControl guicontrol = new GuiControl(this);
+        GuiControl guicontrol;
+        guicontrol = new GuiControl(this,mars.getStateManager());
         selectionNode.addControl(guicontrol);
 
         WireBox wbx = new WireBox();

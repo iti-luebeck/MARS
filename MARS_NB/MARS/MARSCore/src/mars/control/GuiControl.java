@@ -29,20 +29,19 @@
 */
 package mars.control;
 
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import com.jme3.scene.debug.Arrow;
 import mars.Helper.Helper;
 import mars.auv.AUV;
 import mars.object.MARSObject;
 import mars.simobjects.SimObject;
+import mars.states.GuiState;
 
 /**
  * This control is used to steer vehicles manually.
@@ -59,15 +58,21 @@ public class GuiControl extends AbstractControl{
     private int depth_iteration = 0;
     private float depth_factor = 0.25f;
     private Vector3f intersection = Vector3f.ZERO;
-    private Geometry rotateArrow;
-    private Vector3f rotateArrowVectorStart = Vector3f.ZERO;
-    private Vector3f rotateArrowVectorEnd = Vector3f.UNIT_X;
-    private Arrow arrow;
+    private AppStateManager stm;
+    private GuiState guiState;
+    private Quaternion rotation = new Quaternion();
     
     public GuiControl(MARSObject marsObj) {
         super();
         this.marsObj = marsObj;
-        initArrow();
+    }
+    
+    public GuiControl(MARSObject marsObj, AppStateManager stm) {
+        this(marsObj);
+        this.stm = stm;
+        if (stm.getState(GuiState.class) != null) {
+            guiState = stm.getState(GuiState.class);
+        }
     }
 
     @Override
@@ -77,44 +82,6 @@ public class GuiControl extends AbstractControl{
     @Override
     protected void controlUpdate(float f) {
         
-    }
-    
-    
-    /**
-     *
-     */
-    private void initArrow() {
-        arrow = new Arrow(getRotateArrowVectorEnd());
-        Vector3f ray_start = getRotateArrowVectorStart();
-        rotateArrow = new Geometry("RotateArrow", arrow);
-        Material mark_mat4 = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat4.setColor("Color", ColorRGBA.White);
-        rotateArrow.setMaterial(mark_mat4);
-        rotateArrow.setLocalTranslation(ray_start);
-        rotateArrow.updateGeometricState();
-        setRotateArrowVisible(false);
-        GUINode.attachChild(rotateArrow);
-    }
-    
-    /**
-     *
-     */
-    public void updateRotateArrow() {
-        rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
-        arrow.setArrowExtent(getRotateArrowVectorEnd().subtract(getRotateArrowVectorStart()));
-        rotateArrow.updateGeometricState();
-    }
-
-    /**
-     *
-     * @param visible
-     */
-    public void setRotateArrowVisible(boolean visible) {
-        if (visible) {
-            rotateArrow.setCullHint(Spatial.CullHint.Never);
-        } else {
-            rotateArrow.setCullHint(Spatial.CullHint.Always);
-        }
     }
     
     public void select(){
@@ -219,32 +186,16 @@ public class GuiControl extends AbstractControl{
      *
      * @return
      */
-    public Vector3f getRotateArrowVectorEnd() {
-        return rotateArrowVectorEnd;
+    public Quaternion getRotation() {
+        return rotation;
     }
 
     /**
      *
-     * @param rotateArrowVectorEnd
+     * @param rotation
      */
-    public void setRotateArrowVectorEnd(Vector3f rotateArrowVectorEnd) {
-        this.rotateArrowVectorEnd = rotateArrowVectorEnd;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Vector3f getRotateArrowVectorStart() {
-        return rotateArrowVectorStart;
-    }
-
-    /**
-     *
-     * @param rotateArrowVectorStart
-     */
-    public void setRotateArrowVectorStart(Vector3f rotateArrowVectorStart) {
-        this.rotateArrowVectorStart = rotateArrowVectorStart;
+    public void setRotation(Quaternion rotation) {
+        this.rotation = rotation;
     }
     
     public boolean getMove(){
@@ -271,9 +222,13 @@ public class GuiControl extends AbstractControl{
     }
     
     public void setRotate(boolean rotate){
+        if (guiState == null && stm.getState(GuiState.class) != null) {
+            guiState = stm.getState(GuiState.class);
+        }
         this.rotate = rotate;
         if(marsObj instanceof AUV){
             AUV auv = (AUV)marsObj;
+            guiState.setRotateArrowVisible(rotate);
             if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
                 auv.hideGhostAUV(true);
             } else {
@@ -303,6 +258,42 @@ public class GuiControl extends AbstractControl{
                 intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
                 if (simob.getGhostSpatial() != null) {
                     simob.getGhostSpatial().setLocalTranslation(simob.getSimObNode().worldToLocal(intersection, null));
+                }
+            }
+        }
+    }
+    
+    public void rotate(Vector3f click3d, Vector3f dir) {
+        if (getRotate()) {
+            System.out.println("actual movwing");
+            if(marsObj instanceof AUV){
+                AUV auv = (AUV)marsObj;
+                intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
+                Vector3f diff = intersection.subtract(auv.getAUVNode().getWorldTranslation());
+                diff.y = 0f;
+                diff.normalizeLocal();
+                float angle = 0f;
+                if (diff.z < 0f) {
+                    angle = diff.angleBetween(Vector3f.UNIT_X);
+                } else {
+                    angle = diff.angleBetween(Vector3f.UNIT_X) * (-1);
+                }
+
+                if (auv.getGhostAUV() != null) {
+                    Quaternion quat = new Quaternion();
+                    Quaternion gquat = new Quaternion();
+
+                    Quaternion wQuat = auv.getAUVSpatial().getWorldRotation();
+                    float[] ff = wQuat.toAngles(null);
+                    float newAng = ff[1] - angle;
+
+                    quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
+                    gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
+                    setRotation(quat);
+                    auv.getGhostAUV().setLocalRotation(gquat);
+                    guiState.setRotateArrowVectorStart(auv.getGhostAUV().getWorldTranslation());
+                    guiState.setRotateArrowVectorEnd(intersection);
+                    guiState.updateRotateArrow();
                 }
             }
         }
