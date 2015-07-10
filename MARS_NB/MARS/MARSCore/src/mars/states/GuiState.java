@@ -400,16 +400,6 @@ public class GuiState extends AbstractAppState {
                     guiControlState.setRotateArrowVisible(true);
                     guiControlState.setRotate_auv(true);
                 }
-
-                SimObject selected_simob = simobManager.getSelected();
-                if (selected_simob != null) {
-                    guiControlState.setGhostObject(selected_simob.getGhostSpatial());
-                    selected_simob.hideGhostSpatial(false);
-                    rotateSelectedGhostSimOb(selected_simob);
-                    guiControlState.setRotateArrowVisible(true);
-                    guiControlState.setRotate_simob(true);
-                }
-
             } else if (name.equals("rotateauv") && !keyPressed) {
                 rotateauvOff();
             }
@@ -500,7 +490,7 @@ public class GuiState extends AbstractAppState {
         inputManager.addListener(actionListener, "speedbigm");
     }
 
-    private RawInputListener mouseMotionListener = new RawInputListener() {
+    private final RawInputListener mouseMotionListener = new RawInputListener() {
 
         @Override
         public void beginInput() {
@@ -632,39 +622,6 @@ public class GuiState extends AbstractAppState {
         }
     }
 
-    private void rotateSelectedGhostSimOb(SimObject simob) {
-        Vector2f click2d = inputManager.getCursorPosition();
-        Vector3f click3d = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = mars.getCamera().getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-        Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(simob.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
-        Vector3f diff = intersection.subtract(simob.getSpatial().getWorldTranslation());
-        diff.y = 0f;
-        diff.normalizeLocal();
-        float angle = 0f;
-        if (diff.z < 0f) {
-            angle = diff.angleBetween(Vector3f.UNIT_X);
-        } else {
-            angle = diff.angleBetween(Vector3f.UNIT_X) * (-1);
-        }
-
-        if (guiControlState.getGhostObject() != null) {
-            Quaternion quat = new Quaternion();
-            Quaternion gquat = new Quaternion();
-
-            Quaternion wQuat = simob.getSpatial().getWorldRotation();
-            float[] ff = wQuat.toAngles(null);
-            float newAng = ff[1] - angle;
-
-            quat.fromAngleNormalAxis(angle, Vector3f.UNIT_Y);
-            gquat.fromAngleNormalAxis(-newAng, Vector3f.UNIT_Y);
-            guiControlState.setRotation(quat);
-            guiControlState.getGhostObject().setLocalRotation(gquat);
-            guiControlState.setRotateArrowVectorStart(guiControlState.getGhostObject().getWorldTranslation());
-            guiControlState.setRotateArrowVectorEnd(intersection);
-            guiControlState.updateRotateArrow();
-        }
-    }
-
     private void pickHover() {
         CollisionResults results = new CollisionResults();
         //List<TerrainPickData> results2 = new ArrayList<TerrainPickData>();
@@ -731,7 +688,6 @@ public class GuiState extends AbstractAppState {
                     MARSObject marsObj = guiControl.getMarsObj();
                     if(marsObj instanceof SimObject){
                         SimObject simob = (SimObject)marsObj;
-                        guiControlState.setLatestSelectedSimOb(simob);
                     }
                     return;
                 }

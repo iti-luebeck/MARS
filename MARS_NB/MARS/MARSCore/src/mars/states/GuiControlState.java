@@ -40,7 +40,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.debug.Arrow;
 import mars.auv.AUV;
-import mars.simobjects.SimObject;
 
 /**
  * This class is used for storing in which state the gui controls are currently.
@@ -61,7 +60,6 @@ public class GuiControlState {
     private Spatial ghost_object;
     private Quaternion rotation = new Quaternion();
     private AUV latestSelectedAUV = null;
-    private SimObject latestSelectedSimOb = null;
     private Arrow arrow;
     private Geometry rotateArrow;
     private AssetManager assetManager;
@@ -168,22 +166,6 @@ public class GuiControlState {
      */
     public void setLatestSelectedAUV(AUV latestSelectedAUV) {
         this.latestSelectedAUV = latestSelectedAUV;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public SimObject getLatestSelectedSimOb() {
-        return latestSelectedSimOb;
-    }
-
-    /**
-     *
-     * @param latestSelectedSimOb
-     */
-    public void setLatestSelectedSimOb(SimObject latestSelectedSimOb) {
-        this.latestSelectedSimOb = latestSelectedSimOb;
     }
 
     /**

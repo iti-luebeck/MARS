@@ -29,12 +29,16 @@
 */
 package mars.control;
 
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import com.jme3.scene.debug.Arrow;
 import mars.Helper.Helper;
 import mars.auv.AUV;
 import mars.object.MARSObject;
@@ -51,13 +55,19 @@ public class GuiControl extends AbstractControl{
     private Vector3f contact_point = Vector3f.ZERO;
     private Vector3f contact_direction = Vector3f.ZERO;
     private boolean move = false;
+    private boolean rotate = false;
     private int depth_iteration = 0;
     private float depth_factor = 0.25f;
     private Vector3f intersection = Vector3f.ZERO;
+    private Geometry rotateArrow;
+    private Vector3f rotateArrowVectorStart = Vector3f.ZERO;
+    private Vector3f rotateArrowVectorEnd = Vector3f.UNIT_X;
+    private Arrow arrow;
     
     public GuiControl(MARSObject marsObj) {
         super();
         this.marsObj = marsObj;
+        initArrow();
     }
 
     @Override
@@ -67,6 +77,44 @@ public class GuiControl extends AbstractControl{
     @Override
     protected void controlUpdate(float f) {
         
+    }
+    
+    
+    /**
+     *
+     */
+    private void initArrow() {
+        arrow = new Arrow(getRotateArrowVectorEnd());
+        Vector3f ray_start = getRotateArrowVectorStart();
+        rotateArrow = new Geometry("RotateArrow", arrow);
+        Material mark_mat4 = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mark_mat4.setColor("Color", ColorRGBA.White);
+        rotateArrow.setMaterial(mark_mat4);
+        rotateArrow.setLocalTranslation(ray_start);
+        rotateArrow.updateGeometricState();
+        setRotateArrowVisible(false);
+        GUINode.attachChild(rotateArrow);
+    }
+    
+    /**
+     *
+     */
+    public void updateRotateArrow() {
+        rotateArrow.setLocalTranslation(getRotateArrowVectorStart());
+        arrow.setArrowExtent(getRotateArrowVectorEnd().subtract(getRotateArrowVectorStart()));
+        rotateArrow.updateGeometricState();
+    }
+
+    /**
+     *
+     * @param visible
+     */
+    public void setRotateArrowVisible(boolean visible) {
+        if (visible) {
+            rotateArrow.setCullHint(Spatial.CullHint.Never);
+        } else {
+            rotateArrow.setCullHint(Spatial.CullHint.Always);
+        }
     }
     
     public void select(){
@@ -167,12 +215,63 @@ public class GuiControl extends AbstractControl{
         this.depth_factor = depth_factor;
     }
     
+        /**
+     *
+     * @return
+     */
+    public Vector3f getRotateArrowVectorEnd() {
+        return rotateArrowVectorEnd;
+    }
+
+    /**
+     *
+     * @param rotateArrowVectorEnd
+     */
+    public void setRotateArrowVectorEnd(Vector3f rotateArrowVectorEnd) {
+        this.rotateArrowVectorEnd = rotateArrowVectorEnd;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Vector3f getRotateArrowVectorStart() {
+        return rotateArrowVectorStart;
+    }
+
+    /**
+     *
+     * @param rotateArrowVectorStart
+     */
+    public void setRotateArrowVectorStart(Vector3f rotateArrowVectorStart) {
+        this.rotateArrowVectorStart = rotateArrowVectorStart;
+    }
+    
     public boolean getMove(){
         return move;
     }
     
     public void setMove(boolean move){
         this.move = move;
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
+                auv.hideGhostAUV(true);
+            } else {
+                auv.hideGhostAUV(false);
+            }
+        }else if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            simob.hideGhostSpatial(false);
+        }
+    }
+    
+    public boolean getRotate(){
+        return rotate;
+    }
+    
+    public void setRotate(boolean rotate){
+        this.rotate = rotate;
         if(marsObj instanceof AUV){
             AUV auv = (AUV)marsObj;
             if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
