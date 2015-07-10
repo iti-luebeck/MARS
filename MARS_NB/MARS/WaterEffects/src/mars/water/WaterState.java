@@ -33,7 +33,7 @@ import org.openide.util.lookup.ServiceProvider;
  * Adds several water effects (water surface, underwater view, foam trails).
  * @author John Paul Jonte
  */
-@ServiceProvider(service=AbstractAppState.class)
+//@ServiceProvider(service=AbstractAppState.class)
 public class WaterState extends AbstractAppState implements AppStateExtension {
     /**
      * Current instance of the WaterState.
