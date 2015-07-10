@@ -150,7 +150,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     private AssetManager assetManager;
     private RenderManager renderManager;
     private Renderer renderer;
-    private WayPoints WayPoints;
+    private DistanceCoveredPath distanceCoveredPath;
     private MARS_Settings mars_settings;
     private Initializer initer;
     @XmlElement(name = "Parameters")
@@ -365,8 +365,8 @@ public class BasicAUV implements AUV, SceneProcessor {
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
         auv_node.setName(auv_param.getName() + "_physicnode");
-        if (WayPoints != null) {
-            WayPoints.setAuv_param(auv_param);
+        if (distanceCoveredPath != null) {
+            distanceCoveredPath.setAuv_param(auv_param);
         }
     }
 
@@ -743,7 +743,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
                 element.setMARS_settings(mars_settings);
-                element.setPhysical_environment(physical_environment);
+                element.setPhysicalEnvironment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
                 element.setupLogger();
@@ -787,7 +787,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             element.setAuv(this);
             if (element.isEnabled() && !element.isInitialized()) {
                 element.setSimState(simstate);
-                element.setPhysical_environment(physical_environment);
+                element.setPhysicalEnvironment(physical_environment);
                 element.setPhysicsControl(physics_control);
                 element.setMassCenterGeom(this.getMassCenterGeom());
                 element.setMARS_settings(mars_settings);
@@ -1070,7 +1070,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         resetAllSensors();
         resetAllAccumulators();
         clearForces();
-        WayPoints.reset();
+        distanceCoveredPath.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());
         rotateAUV();
         for (final Geometry geometry : listGeoms) {
@@ -1313,11 +1313,11 @@ public class BasicAUV implements AUV, SceneProcessor {
      *
      */
     private void initWaypoints() {
-        //if(auv_param.isWaypointsEnabled()){
-        WayPoints = new WayPoints("WayPoints_" + getName(), mars, auv_param, getMARS_Settings());
+        //if(auv_param.isDistanceCoveredPathEnabled()){
+        distanceCoveredPath = new DistanceCoveredPath("WayPoints_" + getName(), mars, auv_param, getMARS_Settings());
         Future<Void> fut = mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                rootNode.attachChild(WayPoints);
+                rootNode.attachChild(distanceCoveredPath);
                 return null;
             }
         });
@@ -2267,13 +2267,13 @@ public class BasicAUV implements AUV, SceneProcessor {
 
     @Override
     public void updateWaypoints(float tpf) {
-        if (auv_param.isWaypointsEnabled() && WayPoints != null) {
-            WayPoints.incTime(tpf);
-            if (WayPoints.getTime() >= auv_param.getWaypointsUpdaterate()) {
-                WayPoints.clearTime();
-                WayPoints.addWaypoint(getMassCenterGeom().getWorldTranslation().clone());
-                if (auv_param.isWaypointsGradient()) {
-                    WayPoints.updateGradient();
+        if (auv_param.isDistanceCoveredPathEnabled() && distanceCoveredPath != null) {
+            distanceCoveredPath.incTime(tpf);
+            if (distanceCoveredPath.getTime() >= auv_param.getDistanceCoveredPathUpdaterate()) {
+                distanceCoveredPath.clearTime();
+                distanceCoveredPath.addPathPoint(getMassCenterGeom().getWorldTranslation().clone());
+                if (auv_param.isDistanceCoveredPathGradient()) {
+                    distanceCoveredPath.updateGradient();
                 }
             }
         }
@@ -2629,7 +2629,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void setWayPointsVisible(boolean visible) {
-        WayPoints.setWaypointVisibility(visible);
+        distanceCoveredPath.setPathVisibility(visible);
     }
 
     /**
@@ -2645,8 +2645,8 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @return
      */
     @Override
-    public WayPoints getWaypoints() {
-        return WayPoints;
+    public DistanceCoveredPath getDistanceCoveredPath() {
+        return distanceCoveredPath;
     }
 
     private void setNodePickUserData(Spatial spatial) {

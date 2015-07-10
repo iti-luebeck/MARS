@@ -81,9 +81,9 @@ public class IMU extends Sensor {
     public IMU(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
         this.pe = pe;
-        acc.setPhysical_environment(pe);
-        gyro.setPhysical_environment(pe);
-        oro.setPhysical_environment(pe);
+        acc.setPhysicalEnvironment(pe);
+        gyro.setPhysicalEnvironment(pe);
+        oro.setPhysicalEnvironment(pe);
         acc.setSimState(simState);
         gyro.setSimState(simState);
         oro.setSimState(simState);
@@ -153,11 +153,11 @@ public class IMU extends Sensor {
     }
 
     @Override
-    public void setPhysical_environment(PhysicalEnvironment pe) {
-        super.setPhysical_environment(pe);
-        acc.setPhysical_environment(pe);
-        gyro.setPhysical_environment(pe);
-        oro.setPhysical_environment(pe);
+    public void setPhysicalEnvironment(PhysicalEnvironment pe) {
+        super.setPhysicalEnvironment(pe);
+        acc.setPhysicalEnvironment(pe);
+        gyro.setPhysicalEnvironment(pe);
+        oro.setPhysicalEnvironment(pe);
     }
 
     /**

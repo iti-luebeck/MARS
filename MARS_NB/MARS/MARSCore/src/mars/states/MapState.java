@@ -175,7 +175,7 @@ public class MapState extends MARSAppState implements AppStateExtension {
      *
      */
     public void init() {
-        HashMap<String, AUV> auvs = auv_manager.getAUVs();
+        HashMap<String, AUV> auvs = auv_manager.getMARSObjects();
         for (String elem : auvs.keySet()) {
             AUV auv = auvs.get(elem);
             addAUV(auv);
@@ -423,7 +423,7 @@ public class MapState extends MARSAppState implements AppStateExtension {
         if (auv_manager != null) {
             for (String elem : auv_nodes.keySet()) {
                 Node node = auv_nodes.get(elem);
-                AUV auv = auv_manager.getAUV(elem);
+                AUV auv = auv_manager.getMARSObject(elem);
                 if (auv != null && auv.getAuv_param().isEnabled()) {
 
                     Vector3f ter_pos = mars_settings.getTerrainPosition();

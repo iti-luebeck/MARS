@@ -343,18 +343,6 @@ public interface AUV extends MARSObject {
 
     /**
      *
-     * @param selected
-     */
-    public void setSelected(boolean selected);
-
-    /**
-     *
-     * @return
-     */
-    public boolean isSelected();
-
-    /**
-     *
      * @return
      */
     public Spatial getGhostAUV();
@@ -435,7 +423,7 @@ public interface AUV extends MARSObject {
      *
      * @return
      */
-    public WayPoints getWaypoints();
+    public DistanceCoveredPath getDistanceCoveredPath();
 
     /**
      *

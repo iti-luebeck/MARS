@@ -80,7 +80,7 @@ public class GPSReceiver extends Sensor {
     public GPSReceiver(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
         this.pe = pe;
-        pos.setPhysical_environment(pe);
+        pos.setPhysicalEnvironment(pe);
         pos.setSimState(simState);
     }
 
@@ -203,9 +203,9 @@ public class GPSReceiver extends Sensor {
     }
 
     @Override
-    public void setPhysical_environment(PhysicalEnvironment pe) {
-        super.setPhysical_environment(pe);
-        pos.setPhysical_environment(pe);
+    public void setPhysicalEnvironment(PhysicalEnvironment pe) {
+        super.setPhysicalEnvironment(pe);
+        pos.setPhysicalEnvironment(pe);
     }
 
     /**

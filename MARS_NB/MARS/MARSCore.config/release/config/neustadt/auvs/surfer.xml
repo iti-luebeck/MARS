@@ -44,7 +44,7 @@
                     </entry>
                 </value>
             </entry>
-            <entry xsi:type="myHashMapEntryTypeHashMap" key="Waypoints" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <entry xsi:type="myHashMapEntryTypeHashMap" key="DistanceCoveredPath" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value>
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
@@ -63,7 +63,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="updaterate">
                         <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="maxWaypoints">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="maxPoints">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">20</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="gradient">
@@ -142,6 +142,9 @@
             </entry>
             <entry xsi:type="myHashMapEntryTypeObject" key="enabled" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+            </entry>
+			<entry xsi:type="myHashMapEntryTypeObject" key="manualControl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
             </entry>
             <entry xsi:type="myHashMapEntryTypeObject" key="icon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">hanse.png</value>

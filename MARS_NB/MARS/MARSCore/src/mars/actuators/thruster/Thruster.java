@@ -373,7 +373,7 @@ public class Thruster extends Actuator implements Moveable, Keys{
             inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
             ActionListener actionListener = new ActionListener() {
                 public void onAction(String name, boolean keyPressed, float tpf) {
-                    if (name.equals(mapping) && !keyPressed) {
+                    if (name.equals(mapping) && !keyPressed && self.getAuv().getAuv_param().getManualControl()) {
                         try {
                             Method method = self.getClass().getMethod(action);
                             method.invoke(self);

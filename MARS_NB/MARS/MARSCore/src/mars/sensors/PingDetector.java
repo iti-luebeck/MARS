@@ -168,7 +168,7 @@ public class PingDetector extends Sensor {
      * @return
      */
     public float getNearestPingerDistance() {
-        HashMap<String, SimObject> simobs = simob_manager.getSimObjects();
+        HashMap<String, SimObject> simobs = simob_manager.getMARSObjects();
         float ret = getDetection_range();
         for (String elem : simobs.keySet()) {
             SimObject simob = simobs.get(elem);
@@ -188,7 +188,7 @@ public class PingDetector extends Sensor {
      * @return
      */
     public float getPingerDistance(String pinger) {
-        SimObject simob = simob_manager.getSimObject(pinger);
+        SimObject simob = simob_manager.getMARSObject(pinger);
         if (simob != null && simob.getPinger()) {
             float distance = Math.abs((simob.getPosition().subtract(PingStart.getWorldTranslation())).length());
             if (distance <= getDetection_range()) {
@@ -257,7 +257,7 @@ public class PingDetector extends Sensor {
      * @return angle in radiant
      */
     public float getPingerAngleRadiant(String pinger) {
-        SimObject simob = simob_manager.getSimObject(pinger);
+        SimObject simob = simob_manager.getMARSObject(pinger);
         if (simob != null && simob.getPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
             float yaw = getYawRadiant(pinger_vector);
@@ -272,7 +272,7 @@ public class PingDetector extends Sensor {
      * @return angle in degree
      */
     public float getPingerAngleDegree(String pinger) {
-        SimObject simob = simob_manager.getSimObject(pinger);
+        SimObject simob = simob_manager.getMARSObject(pinger);
         if (simob != null && simob.getPinger()) {
             Vector3f pinger_vector = (simob.getPosition().subtract(PingStart.getWorldTranslation())).normalize();
             float yaw = getYawDegree(pinger_vector);

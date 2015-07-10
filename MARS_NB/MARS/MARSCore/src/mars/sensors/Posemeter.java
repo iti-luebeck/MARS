@@ -76,8 +76,8 @@ public class Posemeter extends Sensor {
     public Posemeter(SimState simstate, PhysicalEnvironment pe) {
         super(simstate);
         this.pe = pe;
-        pos.setPhysical_environment(pe);
-        oro.setPhysical_environment(pe);
+        pos.setPhysicalEnvironment(pe);
+        oro.setPhysicalEnvironment(pe);
         pos.setSimState(simState);
         oro.setSimState(simState);
     }
@@ -141,10 +141,10 @@ public class Posemeter extends Sensor {
     }
 
     @Override
-    public void setPhysical_environment(PhysicalEnvironment pe) {
-        super.setPhysical_environment(pe);
-        pos.setPhysical_environment(pe);
-        oro.setPhysical_environment(pe);
+    public void setPhysicalEnvironment(PhysicalEnvironment pe) {
+        super.setPhysicalEnvironment(pe);
+        pos.setPhysicalEnvironment(pe);
+        oro.setPhysicalEnvironment(pe);
     }
 
     /**

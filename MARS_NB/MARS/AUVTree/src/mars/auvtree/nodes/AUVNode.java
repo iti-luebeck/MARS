@@ -1,3 +1,32 @@
+/*
+* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+* All rights reserved.
+* 
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met:
+* 
+* * Redistributions of source code must retain the above copyright notice, this
+*   list of conditions and the following disclaimer.
+* 
+* * Redistributions in binary form must reproduce the above copyright notice,
+*   this list of conditions and the following disclaimer in the documentation
+*   and/or other materials provided with the distribution.
+* 
+* * Neither the name of the copyright holder nor the names of its
+*   contributors may be used to endorse or promote products derived from
+*   this software without specific prior written permission.
+* 
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 package mars.auvtree.nodes;
 
 import java.awt.Image;
@@ -16,11 +45,9 @@ import static javax.swing.Action.NAME;
 import javax.swing.GrayFilter;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.auv.BasicAUV;
 import mars.core.CentralLookup;
 import mars.gui.dnd.TransferHandlerObject;
 import mars.gui.dnd.TransferHandlerObjectDataFlavor;
@@ -110,7 +137,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
      */
     @Override
     public Action[] getActions(boolean popup) {
-        return new Action[]{new ChaseAction(), new EnableAction(), new ResetAction(), null, new DebugAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class)};
+        return new Action[]{new ChaseAction(), new EnableAction(), new ResetAction(), new ManualAction(), null, new DebugAction(), null, SystemAction.get(CopyAction.class), SystemAction.get(DeleteAction.class), SystemAction.get(RenameAction.class)};
     }
 
     /**
@@ -207,7 +234,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
     private class EnableAction extends AbstractAction {
 
         public EnableAction() {
-            if (auv.getAuv_param().isEnabled()) {
+            if (auv.getAuv_param().getEnabled()) {
                 putValue(NAME, "Disable");
             } else {
                 putValue(NAME, "Enable");
@@ -216,17 +243,41 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            final boolean auvEnabled = auv.getAuv_param().isEnabled();
+            final boolean auvEnabled = auv.getAuv_param().getEnabled();
             auv.getAuv_param().setEnabled(!auvEnabled);
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(SimState.class) != null) {
-                        auvManager.enableAUV(auv, !auvEnabled);
+                        auvManager.enableMARSObject(auv, !auvEnabled);
                     }
                     return null;
                 }
             });
             propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
+            //JOptionPane.showMessageDialog(null, "Done!");
+        }
+
+    }
+    
+    /**
+     * Inner class for the actions on right click. Provides action to enable and
+     * disable the manuel control of an auv.
+     */
+    private class ManualAction extends AbstractAction {
+
+        public ManualAction() {
+            if (auv.getAuv_param().getManualControl()) {
+                putValue(NAME, "Disable Manual Control");
+            } else {
+                putValue(NAME, "Enable Manual Control");
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            final boolean manEnabled = auv.getAuv_param().getManualControl();
+            auv.getAuv_param().setManualControl(!manEnabled);
+            propertyChange(new PropertyChangeEvent(this, "manualControl", !manEnabled, manEnabled));
             //JOptionPane.showMessageDialog(null, "Done!");
         }
 
@@ -349,7 +400,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
 
     @Override
     public void setName(final String s) {
-        if(!s.isEmpty() && auvManager.getAUV(s) == null){//no void new name, and name is not allowed to be taken
+        if(!s.isEmpty() && auvManager.getMARSObject(s) == null){//no void new name, and name is not allowed to be taken
             final String oldName = this.name;
             this.name = s;
             mars.enqueue(new Callable<Void>() {

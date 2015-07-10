@@ -476,7 +476,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
      *
      * @return
      */
-    public PhysicalEnvironment getPhysical_environment() {
+    public PhysicalEnvironment getPhysicalEnvironment() {
         return pe;
     }
 
@@ -484,7 +484,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
      *
      * @param pe
      */
-    public void setPhysical_environment(PhysicalEnvironment pe) {
+    public void setPhysicalEnvironment(PhysicalEnvironment pe) {
         this.pe = pe;
     }
 
@@ -685,11 +685,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
             oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
-            if (listeners1.length != 0) {
+            //if(listeners1.length != 0){
                 publishData();
+            //}
             }
         }
-    }
 
     /**
      *

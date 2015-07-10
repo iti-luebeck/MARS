@@ -120,7 +120,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      */
     @SuppressWarnings("unchecked")
     public void initAfterJAXB() {
-        waypoints = (HashMap<String, Object>) params.get("Waypoints");
+        waypoints = (HashMap<String, Object>) params.get("DistanceCoveredPath");
         model = (HashMap<String, Object>) params.get("Model");
         debug = (HashMap<String, Object>) params.get("Debug");
         collision = (HashMap<String, Object>) params.get("Collision");
@@ -175,7 +175,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         setOptimizeLodTrisPerPixel(0.5f);
         setModelMapColor(ColorRGBA.Red);
         setMass(1.0f);
-        setWaypointsMaxWaypoints(25);
+        setDistanceCoveredPathMaxPoints(25);
         setModelFilepath("");
         setModelName("");
         setModelScale(0.1f);
@@ -188,12 +188,12 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         setRotationQuaternion(Quaternion.IDENTITY);
         setModelSelectionColor(ColorRGBA.Red);
         setCollisionType(1);
-        setWaypointsLineWidth(5.0f);
-        setWaypointsColor(ColorRGBA.White);
-        setWaypointsEnabled(true);
-        setWaypointsGradient(true);
-        setWaypointsUpdaterate(1.0f);
-        setWaypointsVisiblity(true);
+        setDistanceCoveredPathLineWidth(5.0f);
+        setDistanceCoveredPathColor(ColorRGBA.White);
+        setDistanceCoveredPathEnabled(true);
+        setDistanceCoveredPathGradient(true);
+        setDistanceCoveredPathUpdaterate(1.0f);
+        setDistanceCoveredPathVisiblity(true);
         setConnectionEnabled(false);
         setConnectionGlobalQueueSize(10);
         setConnectionLocalip("127.0.0.1");
@@ -249,9 +249,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
          }else if(target.equals("bounding") && hashmapname.equals("Debug")){
          auv.setBoundingBoxVisible(isDebugBounding());
          }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
-         auv.setWaypointsEnabled(isWaypointsEnabled());
+         auv.setDistanceCoveredPathEnabled(isDistanceCoveredPathEnabled());
          }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
-         auv.setWayPointsVisible(isWaypointsVisiblity());
+         auv.setWayPointsVisible(isDistanceCoveredPathVisiblity());
          }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
             
          }else if(target.equals("mass_auv") && hashmapname.equals("")){
@@ -362,6 +362,22 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setAngular_factor(Float angular_factor) {
         params.put("angular_factor", angular_factor);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Boolean getManualControl() {
+        return (Boolean) params.get("manualControl");
+    }
+
+    /**
+     *
+     * @param manualControl
+     */
+    public void setManualControl(Boolean manualControl) {
+        params.put("manualControl", manualControl);
+    }
 
     /**
      *
@@ -388,7 +404,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Float getWaypointsLineWidth() {
+    public Float getDistanceCoveredPathLineWidth() {
         return (Float) waypoints.get("lineWidth");
     }
 
@@ -396,7 +412,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param lineWidth
      */
-    public void setWaypointsLineWidth(Float lineWidth) {
+    public void setDistanceCoveredPathLineWidth(Float lineWidth) {
         waypoints.put("lineWidth", lineWidth);
     }
 
@@ -404,23 +420,22 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Integer getWaypointsMaxWaypoints() {
-        return (Integer) waypoints.get("maxWaypoints");
+    public Integer getDistanceCoveredPathMaxPoints() {
+        return (Integer) waypoints.get("maxPoints");
     }
 
     /**
      *
-     * @param maxWaypoints
      */
-    public void setWaypointsMaxWaypoints(Integer maxWaypoints) {
-        waypoints.put("maxWaypoints", maxWaypoints);
+    public void setDistanceCoveredPathMaxPoints(Integer maxPoints) {
+        waypoints.put("maxPoints", maxPoints);
     }
 
     /**
      *
      * @return
      */
-    public ColorRGBA getWaypointsColor() {
+    public ColorRGBA getDistanceCoveredPathColor() {
         return (ColorRGBA) waypoints.get("color");
     }
 
@@ -428,7 +443,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param color
      */
-    public void setWaypointsColor(ColorRGBA color) {
+    public void setDistanceCoveredPathColor(ColorRGBA color) {
         waypoints.put("color", color);
     }
 
@@ -436,7 +451,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean isWaypointsEnabled() {
+    public Boolean isDistanceCoveredPathEnabled() {
         return (Boolean) waypoints.get("enabled");
     }
 
@@ -444,7 +459,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean getWaypointsEnabled() {
+    public Boolean getDistanceCoveredPathEnabled() {
         return (Boolean) waypoints.get("enabled");
     }
 
@@ -452,7 +467,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param enabled
      */
-    public void setWaypointsEnabled(Boolean enabled) {
+    public void setDistanceCoveredPathEnabled(Boolean enabled) {
         waypoints.put("enabled", enabled);
     }
 
@@ -460,7 +475,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean isWaypointsGradient() {
+    public Boolean isDistanceCoveredPathGradient() {
         return (Boolean) waypoints.get("gradient");
     }
 
@@ -468,7 +483,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean getWaypointsGradient() {
+    public Boolean getDistanceCoveredPathGradient() {
         return (Boolean) waypoints.get("gradient");
     }
 
@@ -476,7 +491,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param gradient
      */
-    public void setWaypointsGradient(Boolean gradient) {
+    public void setDistanceCoveredPathGradient(Boolean gradient) {
         waypoints.put("gradient", gradient);
     }
 
@@ -484,7 +499,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Float getWaypointsUpdaterate() {
+    public Float getDistanceCoveredPathUpdaterate() {
         return (Float) waypoints.get("updaterate");
     }
 
@@ -492,7 +507,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param updaterate
      */
-    public void setWaypointsUpdaterate(Float updaterate) {
+    public void setDistanceCoveredPathUpdaterate(Float updaterate) {
         waypoints.put("updaterate", updaterate);
     }
 
@@ -500,7 +515,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean isWaypointsVisiblity() {
+    public Boolean isDistanceCoveredPathVisiblity() {
         return (Boolean) waypoints.get("visiblity");
     }
 
@@ -508,7 +523,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @return
      */
-    public Boolean getWaypointsVisiblity() {
+    public Boolean getDistanceCoveredPathVisiblity() {
         return (Boolean) waypoints.get("visiblity");
     }
 
@@ -516,7 +531,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      *
      * @param visiblity
      */
-    public void setWaypointsVisiblity(Boolean visiblity) {
+    public void setDistanceCoveredPathVisiblity(Boolean visiblity) {
         waypoints.put("visiblity", visiblity);
     }
 

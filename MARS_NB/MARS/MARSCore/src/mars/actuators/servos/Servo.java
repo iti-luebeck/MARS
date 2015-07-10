@@ -495,56 +495,58 @@ public class Servo extends Actuator implements Manipulating, Keys {
             String action = action_mapping.get(elem);
             final String mapping = elem;
             final Servo self = this;
-            if (action.equals("setDesiredAnglePosition3")) {
-                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
-                ActionListener actionListener = new ActionListener() {
-                    public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
-                            self.setDesiredAnglePosition(300);
+            if(self.getAuv().getAuv_param().getManualControl()){
+                if (action.equals("setDesiredAnglePosition3")) {
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if (name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(300);
+                            }
                         }
-                    }
-                };
-                inputManager.addListener(actionListener, elem);
-            } else if (action.equals("setDesiredAnglePosition2")) {
-                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
-                ActionListener actionListener = new ActionListener() {
-                    public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
-                            self.setDesiredAnglePosition(-300);
+                    };
+                    inputManager.addListener(actionListener, elem);
+                } else if (action.equals("setDesiredAnglePosition2")) {
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if (name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(-300);
+                            }
                         }
-                    }
-                };
-                inputManager.addListener(actionListener, elem);
-            } else if (action.equals("setDesiredAnglePosition")) {
-                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
-                ActionListener actionListener = new ActionListener() {
-                    public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
-                            self.setDesiredAnglePosition(1.5d);
+                    };
+                    inputManager.addListener(actionListener, elem);
+                } else if (action.equals("setDesiredAnglePosition")) {
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if (name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition(1.5d);
+                            }
                         }
-                    }
-                };
-                inputManager.addListener(actionListener, elem);
-            } else if (action.equals("increment")) {
-                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
-                ActionListener actionListener = new ActionListener() {
-                    public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
-                            self.setDesiredAnglePosition((self.getDesiredAnglePosition()) + 10);
+                    };
+                    inputManager.addListener(actionListener, elem);
+                } else if (action.equals("increment")) {
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if (name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition((self.getDesiredAnglePosition()) + 10);
+                            }
                         }
-                    }
-                };
-                inputManager.addListener(actionListener, elem);
-            } else if (action.equals("decrement")) {
-                inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
-                ActionListener actionListener = new ActionListener() {
-                    public void onAction(String name, boolean keyPressed, float tpf) {
-                        if (name.equals(mapping) && !keyPressed) {
-                            self.setDesiredAnglePosition((self.getDesiredAnglePosition()) - 10);
+                    };
+                    inputManager.addListener(actionListener, elem);
+                } else if (action.equals("decrement")) {
+                    inputManager.addMapping(mapping, new KeyTrigger(keyconfig.getKeyNumberForMapping(mapping)));
+                    ActionListener actionListener = new ActionListener() {
+                        public void onAction(String name, boolean keyPressed, float tpf) {
+                            if (name.equals(mapping) && !keyPressed) {
+                                self.setDesiredAnglePosition((self.getDesiredAnglePosition()) - 10);
+                            }
                         }
-                    }
-                };
-                inputManager.addListener(actionListener, elem);
+                    };
+                    inputManager.addListener(actionListener, elem);
+                }
             }
         }
     }
