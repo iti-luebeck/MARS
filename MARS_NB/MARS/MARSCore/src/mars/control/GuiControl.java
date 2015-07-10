@@ -321,6 +321,20 @@ public class GuiControl extends AbstractControl{
         }
     }
     
+    public void dropRotate(){
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            auv.getPhysicsControl().setPhysicsRotation(getRotation());//set end roation
+            auv.hideGhostAUV(true);
+            guiState.setRotateArrowVisible(false);
+        }else if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            simob.getPhysicsControl().setPhysicsRotation(getRotation());//set end roation
+            simob.hideGhostSpatial(true);
+            guiState.setRotateArrowVisible(false);
+        }
+    }
+    
     public void poke() {
         if(marsObj instanceof AUV){
             AUV auv = (AUV)marsObj;

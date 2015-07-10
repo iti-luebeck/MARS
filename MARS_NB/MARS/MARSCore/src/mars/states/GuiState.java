@@ -60,10 +60,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
-import com.jme3.terrain.geomipmap.picking.TerrainPickData;
-import java.util.ArrayList;
 import java.util.List;
-import mars.Helper.Helper;
 import mars.Initializer;
 import mars.MARS_Main;
 import mars.MARS_Settings;
@@ -72,7 +69,6 @@ import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
 import mars.control.GuiControl;
 import mars.core.MARSTopComponent;
-import mars.misc.PickHint;
 import mars.object.MARSObject;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
@@ -478,38 +474,17 @@ public class GuiState extends AbstractAppState {
                     selectedControl.setRotate(true);
                 }
             } else if (name.equals("rotateauv") && !keyPressed) {
-                //rotateauvOff();
                 GuiControl selectedControl = getSelectedControl();
                 if(selectedControl != null){
                     System.out.println("moveauv stopped");
                     mars.getFlyByCamera().setEnabled(true);
                     selectedControl.setRotate(false);
-                    selectedControl.drop();
+                    selectedControl.dropRotate();
                     selectedControl = null;
                 }
             }
         }
     };
-    
-    private void rotateauvOff(){
-        /*AUV selected_auv = auvManager.getSelected();
-        mars.getFlyByCamera().setEnabled(true);
-        if (selected_auv != null) {
-            selected_auv.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-            selected_auv.hideGhostAUV(true);
-            setRotateArrowVisible(false);
-        }
-
-        SimObject selected_simob = simobManager.getSelected();
-        if (selected_simob != null) {
-            selected_simob.getPhysicsControl().setPhysicsRotation(guiControlState.getRotation());//set end roation
-            selected_simob.hideGhostSpatial(true);
-            setRotateArrowVisible(false);
-        }
-
-        guiControlState.setRotate_auv(false);
-        guiControlState.setRotate_simob(false);*/
-    }
 
     private void initPublicKeys() {
 
@@ -620,15 +595,13 @@ public class GuiState extends AbstractAppState {
         @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
             if(evt.isPressed() && evt.getButtonIndex() == 0) {//clean up stuff if aborted due to mouse clicks
-                /*if (guiControlState.isRotate_auv()){
-                    rotateauvOff();
-                }*/
-                
                 GuiControl selectedControl = getSelectedControl();
                 if(selectedControl != null){
                     System.out.println("moveauv stopped");
                     selectedControl.setMove(false);
+                    selectedControl.setRotate(false);
                     selectedControl.drop();
+                    selectedControl.dropRotate();
                 }
             }
         }
