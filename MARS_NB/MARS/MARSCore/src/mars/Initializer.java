@@ -44,7 +44,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -84,7 +83,6 @@ import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
-import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
 import forester.Forester;
 import forester.grass.GrassLayer;
@@ -95,6 +93,7 @@ import forester.image.DensityMap.Channel;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -365,8 +364,9 @@ public class Initializer {
     public void setupAuvConnections() {
 
         // initialize the connection objects, but not start the real connections
-        for (String auvName : auv_manager.getAUVs().keySet()) {
-            AUV auv = auv_manager.getAUV(auvName);
+        HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
+        for (String auvName : marsObjects.keySet()) {
+            AUV auv = marsObjects.get(auvName);
             if (auv.getAuvConnection() == null) {
                 auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv)); //TODOFAB: possible problem for ros connections
             }

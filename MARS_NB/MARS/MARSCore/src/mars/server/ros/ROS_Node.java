@@ -250,13 +250,12 @@ public class ROS_Node implements Runnable {
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
         createSystemNode(own_ip_string, muri);
-        HashMap<String, AUV> auvs = auv_manager.getMARSObjects();
-        for (String elem : auvs.keySet()) {
-            AUV auv = auvs.get(elem);
-				if (auv.getAuvConnection().getConnectionType() == AUVConnectionType.ROS) {
-                	createNode(auv, own_ip_string, muri);
-				}
-				//TODOFAB: edited merge conflict here, not sure if it worked well
+
+        HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
+        for (String auvName : marsObjects.keySet()) {
+            AUV auv = marsObjects.get(auvName);
+            if (auv.getAuvConnection().getConnectionType() == AUVConnectionType.ROS) {
+                createNode(auv, own_ip_string, muri);
             }
         }
     }
