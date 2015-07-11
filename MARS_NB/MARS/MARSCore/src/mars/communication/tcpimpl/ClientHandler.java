@@ -30,90 +30,119 @@
 package mars.communication.tcpimpl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import mars.communication.AUVConnectionTcpImpl;
 
 public class ClientHandler implements Runnable {
-    
+
+    public static final boolean GZIP_COMPRESSION_ENABLED = true;
+
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
-    
+    private GZIPOutputStream zipOutputStream;
+    private GZIPInputStream zipInputStream;
+
     private Thread runningThread;
     private boolean running;
-    
+
     public ClientHandler(Socket clientSocket, AUVConnectionTcpImpl connection) {
         this.socket = clientSocket;
         this.connection = connection;
-        
+
         try {
-            writer = new PrintWriter(clientSocket.getOutputStream());
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            if (GZIP_COMPRESSION_ENABLED) {
+                zipOutputStream = new GZIPOutputStream(clientSocket.getOutputStream());
+                zipInputStream = new GZIPInputStream(clientSocket.getInputStream());
+                reader = new BufferedReader(new InputStreamReader(zipInputStream, "UTF-8"));
+            } else {
+                writer = new PrintWriter(clientSocket.getOutputStream());
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            }
+
             running = true;
-            
+
             runningThread = new Thread(this);
             runningThread.start();
-            
+
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception in client socket of " + socket.getRemoteSocketAddress().toString() + ". Disconnecting!", e);
             disconnect();
         }
-        
+
     }
-    
+
     public final void disconnect() {
-        
+
         running = false;
-        
+
         if (runningThread != null) {
             runningThread.interrupt();
         }
-        
+
         try {
             reader.close();
         } catch (Exception e) {
         }
-        
+
         try {
-            writer.close();
+            if (GZIP_COMPRESSION_ENABLED) {
+                zipOutputStream.close();
+            } else {
+                writer.close();
+            }
         } catch (Exception e) {
         }
-        
+
         try {
             socket.close();
         } catch (Exception e) {
         }
 
         connection.removeClient(this);
-        
+
     }
-    
+
     public void sendMessage(String message) {
         if (running) {
-            writer.println(message);
-            writer.flush();
+
+            if (GZIP_COMPRESSION_ENABLED) {
+                try {
+                    zipOutputStream.write(message.getBytes(), 0, message.length());
+                    zipOutputStream.flush();
+                } catch (IOException ioex) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending message to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);
+                }
+            } else {
+                writer.println(message);
+                writer.flush();
+            }
+
         }
     }
-    
+
     @Override
     public void run() {
         try {
             String message;
-            
+
             while ((message = reader.readLine()) != null && running) {
                 connection.receiveActuatorData(message);
             }
-            
+
         } catch (Exception e) {
-            
+
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception in client socket of " + socket.getRemoteSocketAddress().toString() + ". Disconnecting!", e);
             disconnect();
         }
     }
-    
+
 }
