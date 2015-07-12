@@ -29,16 +29,16 @@
  */
 package mars.communication.tcpimpl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
+import mars.communication.tcpimpl.bo.ActuatorData;
+import mars.communication.tcpimpl.bo.SensorData;
 
 public class ClientHandler implements Runnable {
 
@@ -46,8 +46,8 @@ public class ClientHandler implements Runnable {
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
-    private BufferedWriter writer;
-    private BufferedReader reader;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
     private Thread runningThread;
     private boolean running;
@@ -58,11 +58,11 @@ public class ClientHandler implements Runnable {
 
         try {
             if (ZIP_COMPRESSION_ENABLED) {
-                reader = new BufferedReader(new InputStreamReader(new InflaterInputStream(clientSocket.getInputStream()), "UTF-8"));
-                writer = new BufferedWriter(new OutputStreamWriter(new DeflaterOutputStream(clientSocket.getOutputStream())));
+                //inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream())); //TODOFAB causes problems when connecting. why?
+                outputStream = new ObjectOutputStream(new DeflaterOutputStream(clientSocket.getOutputStream()));
             } else {
-                writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //inputStream = new ObjectInputStream(clientSocket.getInputStream()); //TODOFAB causes problems when connecting. why?
+                outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             }
 
             running = true;
@@ -86,12 +86,12 @@ public class ClientHandler implements Runnable {
         }
 
         try {
-            reader.close();
+            inputStream.close();
         } catch (Exception e) {
         }
 
         try {
-            writer.close();
+            outputStream.close();
         } catch (Exception e) {
         }
 
@@ -104,27 +104,34 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void sendMessage(String message) {
-        if (running) {
+    public void sendSensorData(SensorData sensorData) {
 
-            try {
-                writer.write(message.toCharArray());
-                writer.write(0x04); //EOT
-                writer.flush();
-            } catch (IOException ioex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending message to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);
+        try {
+
+            if (sensorData != null && outputStream != null) {
+                outputStream.writeObject(sensorData);
+                outputStream.flush();
             }
 
+        } catch (SocketException se) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Apparently socket " + socket.getRemoteSocketAddress().toString() + " has disconnected: " + se.getLocalizedMessage());
+            disconnect();
+
+        } catch (IOException ioex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending object to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);
         }
     }
 
     @Override
     public void run() {
         try {
-            String message;
 
-            while ((message = reader.readLine()) != null && running) {
-                connection.receiveActuatorData(message);
+            if (inputStream != null) {
+                ActuatorData actuatorData = (ActuatorData) inputStream.readObject();
+
+                if (actuatorData != null && running) {
+                    connection.receiveActuatorData(actuatorData);
+                }
             }
 
         } catch (Exception e) {

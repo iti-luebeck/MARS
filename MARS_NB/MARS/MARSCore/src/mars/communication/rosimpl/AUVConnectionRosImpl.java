@@ -33,9 +33,7 @@ import java.util.HashMap;
 import mars.auv.AUV;
 import mars.communication.AUVConnectionAbstractImpl;
 import mars.communication.AUVConnectionType;
-import mars.communication.rosimpl.RosMessageFactory;
-import mars.communication.rosimpl.RosPublisherFactory;
-import mars.communication.rosimpl.RosSubscriberInitializer;
+import mars.communication.tcpimpl.bo.ActuatorData;
 import mars.ros.MARSNodeMain;
 import mars.ros.RosNodeEvent;
 import mars.ros.RosNodeListener;
@@ -68,7 +66,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
     }
 
     @Override
-    public void receiveActuatorData(String actuatorData) {
+    public void receiveActuatorData(ActuatorData actuatorData) {
         // nothing to do here. all actuator updates for ros are handled within the subscribers's events, declared in RosSubscriberFactory
     }
 

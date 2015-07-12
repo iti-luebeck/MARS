@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.communication.AUVConnectionAbstractImpl;
 import mars.communication.AUVConnectionType;
+import mars.communication.tcpimpl.bo.ActuatorData;
 import mars.communication.tcpimpl.bo.SensorData;
 import mars.sensors.Sensor;
 
@@ -53,6 +54,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     private Thread serverThread;
 
     private final List<ClientHandler> clients = new ArrayList<ClientHandler>();
+    private final List<ClientHandler> clientsToRemove = new ArrayList<ClientHandler>();
 
     public AUVConnectionTcpImpl(AUV auv) {
         super(auv);
@@ -67,6 +69,9 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             return;
         }
 
+        // Remove unwanted clients first.
+        clients.removeAll(clientsToRemove);
+
         if (clients.isEmpty()) {
 
             if ((messageCounter++ % 100) == 20) {
@@ -80,17 +85,16 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
         }
 
-        SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
-        String xml = new XStream(new DomDriver()).toXML(data);
+        SensorData data = new SensorData(sourceSensor.getName(), new XStream(new DomDriver()).toXML(sensorData), dataTimestamp);
 
         for (ClientHandler client : clients) {
-            client.sendMessage(xml);
+            client.sendSensorData(data);
         }
 
     }
 
     @Override
-    public void receiveActuatorData(String actuatorData) {
+    public void receiveActuatorData(ActuatorData actuatorData) {
 
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received String", actuatorData);
         //TODOFAB route the data to the correct actuator!
@@ -153,6 +157,6 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     }
 
     public void removeClient(ClientHandler client) {
-        clients.remove(client);
+        clientsToRemove.add(client);
     }
 }
