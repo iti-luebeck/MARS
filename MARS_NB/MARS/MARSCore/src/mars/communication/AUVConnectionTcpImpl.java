@@ -44,6 +44,8 @@ import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
 
+    private int messageCounter = 0;
+
     private boolean started;
     private boolean running;
     private ServerSocket serverSocket;
@@ -65,11 +67,17 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
         }
 
         if (clients.isEmpty()) {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] No clients -> nothing to publish!", "");
+
+            if ((messageCounter++ % 100) == 20) {
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] No clients -> nothing to publish!", "");
+            }
+
             return;
         }
 
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
+        if ((messageCounter++ % 100) == 20) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
+        }
 
         SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
         String xml = new XStream(new DomDriver()).toXML(data);
@@ -121,6 +129,8 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
                     ClientHandler client = new ClientHandler(clientSocket, this);
                     clients.add(client);
+                    Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client " + clientSocket.getRemoteSocketAddress().toString() + " successfully added!", "");
+
                     client.sendMessage("Connection to communication of AUV " + auv.getName() + " accepted!");
 
                 } catch (Exception e) {
