@@ -37,13 +37,13 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 import mars.communication.AUVConnectionTcpImpl;
 
 public class ClientHandler implements Runnable {
 
-    public static final boolean GZIP_COMPRESSION_ENABLED = true;
+    public static final boolean ZIP_COMPRESSION_ENABLED = true;
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
@@ -58,9 +58,9 @@ public class ClientHandler implements Runnable {
         this.connection = connection;
 
         try {
-            if (GZIP_COMPRESSION_ENABLED) {
-                reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(clientSocket.getInputStream()), "UTF-8"));
-                writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(clientSocket.getOutputStream())));
+            if (ZIP_COMPRESSION_ENABLED) {
+                reader = new BufferedReader(new InputStreamReader(new InflaterInputStream(clientSocket.getInputStream()), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(new DeflaterOutputStream(clientSocket.getOutputStream())));
             } else {
                 writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -70,8 +70,6 @@ public class ClientHandler implements Runnable {
 
             runningThread = new Thread(this);
             runningThread.start();
-
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Thread started!11");
 
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception in client socket of " + socket.getRemoteSocketAddress().toString() + ". Disconnecting!", e);
