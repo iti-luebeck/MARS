@@ -58,11 +58,17 @@ public class ClientHandler implements Runnable {
 
         try {
             if (ZIP_COMPRESSION_ENABLED) {
-                //inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream())); //TODOFAB causes problems when connecting. why?
-                outputStream = new ObjectOutputStream(new DeflaterOutputStream(clientSocket.getOutputStream()));
+                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(clientSocket.getOutputStream());
+                deflaterOutputStream.flush();
+                outputStream = new ObjectOutputStream(deflaterOutputStream);
+                outputStream.flush();
+
+                //TODOFAB causes problems when connecting. why? it is already flushed!
+                //inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream()));
             } else {
-                //inputStream = new ObjectInputStream(clientSocket.getInputStream()); //TODOFAB causes problems when connecting. why?
                 outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                outputStream.flush();
+                inputStream = new ObjectInputStream(clientSocket.getInputStream());
             }
 
             running = true;
@@ -133,6 +139,10 @@ public class ClientHandler implements Runnable {
                     connection.receiveActuatorData(actuatorData);
                 }
             }
+
+        } catch (SocketException se) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Apparently socket " + socket.getRemoteSocketAddress().toString() + " has disconnected: " + se.getLocalizedMessage());
+            disconnect();
 
         } catch (Exception e) {
 
