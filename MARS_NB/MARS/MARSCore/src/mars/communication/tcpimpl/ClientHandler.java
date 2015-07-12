@@ -37,6 +37,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 import mars.communication.tcpimpl.bo.ActuatorData;
 import mars.communication.tcpimpl.bo.SensorData;
 
@@ -58,13 +59,12 @@ public class ClientHandler implements Runnable {
 
         try {
             if (ZIP_COMPRESSION_ENABLED) {
-                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(clientSocket.getOutputStream());
+                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(clientSocket.getOutputStream(), true);
                 deflaterOutputStream.flush();
                 outputStream = new ObjectOutputStream(deflaterOutputStream);
                 outputStream.flush();
 
-                //TODOFAB causes problems when connecting. why? it is already flushed!
-                //inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream()));
+                inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream()));
             } else {
                 outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
                 outputStream.flush();
