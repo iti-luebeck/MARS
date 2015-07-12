@@ -30,9 +30,10 @@
 package mars.communication.tcpimpl;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,10 +47,8 @@ public class ClientHandler implements Runnable {
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
-    private PrintWriter writer;
+    private BufferedWriter writer;
     private BufferedReader reader;
-    private GZIPOutputStream zipOutputStream;
-    private GZIPInputStream zipInputStream;
 
     private Thread runningThread;
     private boolean running;
@@ -60,11 +59,10 @@ public class ClientHandler implements Runnable {
 
         try {
             if (GZIP_COMPRESSION_ENABLED) {
-                zipOutputStream = new GZIPOutputStream(clientSocket.getOutputStream());
-                zipInputStream = new GZIPInputStream(clientSocket.getInputStream());
-                reader = new BufferedReader(new InputStreamReader(zipInputStream, "UTF-8"));
+                reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(clientSocket.getInputStream()), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(clientSocket.getOutputStream())));
             } else {
-                writer = new PrintWriter(clientSocket.getOutputStream());
+                writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             }
 
@@ -72,6 +70,8 @@ public class ClientHandler implements Runnable {
 
             runningThread = new Thread(this);
             runningThread.start();
+
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Thread started!11");
 
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception in client socket of " + socket.getRemoteSocketAddress().toString() + ". Disconnecting!", e);
@@ -94,11 +94,7 @@ public class ClientHandler implements Runnable {
         }
 
         try {
-            if (GZIP_COMPRESSION_ENABLED) {
-                zipOutputStream.close();
-            } else {
-                writer.close();
-            }
+            writer.close();
         } catch (Exception e) {
         }
 
@@ -114,16 +110,11 @@ public class ClientHandler implements Runnable {
     public void sendMessage(String message) {
         if (running) {
 
-            if (GZIP_COMPRESSION_ENABLED) {
-                try {
-                    zipOutputStream.write(message.getBytes(), 0, message.length());
-                    zipOutputStream.flush();
-                } catch (IOException ioex) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending message to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);
-                }
-            } else {
-                writer.println(message);
+            try {
+                writer.write(message.toCharArray());
                 writer.flush();
+            } catch (IOException ioex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending message to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);
             }
 
         }
