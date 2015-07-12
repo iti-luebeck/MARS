@@ -27,10 +27,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.communication;
+package mars.communication.rosimpl;
 
 import java.util.HashMap;
 import mars.auv.AUV;
+import mars.communication.AUVConnectionAbstractImpl;
+import mars.communication.AUVConnectionType;
 import mars.communication.rosimpl.RosMessageFactory;
 import mars.communication.rosimpl.RosPublisherFactory;
 import mars.communication.rosimpl.RosSubscriberInitializer;

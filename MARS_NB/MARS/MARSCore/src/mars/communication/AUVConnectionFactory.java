@@ -29,6 +29,8 @@
  */
 package mars.communication;
 
+import mars.communication.tcpimpl.AUVConnectionTcpImpl;
+import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.auv.AUV;
 import mars.sensors.Sensor;
 

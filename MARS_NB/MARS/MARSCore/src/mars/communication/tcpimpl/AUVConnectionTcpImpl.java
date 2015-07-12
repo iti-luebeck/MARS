@@ -27,7 +27,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.communication;
+package mars.communication.tcpimpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -38,8 +38,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.auv.AUV;
-import mars.communication.tcpimpl.ClientHandler;
-import mars.communication.tcpimpl.SensorData;
+import mars.communication.AUVConnectionAbstractImpl;
+import mars.communication.AUVConnectionType;
+import mars.communication.tcpimpl.bo.SensorData;
 import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
@@ -83,7 +84,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
         String xml = new XStream(new DomDriver()).toXML(data);
 
         for (ClientHandler client : clients) {
-            client.sendMessage(xml + "\r\n");
+            client.sendMessage(xml);
         }
 
     }
@@ -131,8 +132,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
                     clients.add(client);
                     Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client " + clientSocket.getRemoteSocketAddress().toString() + " successfully added!", "");
 
-                    client.sendMessage("Connection to communication of AUV " + auv.getName() + " accepted!");
-
+                    //client.sendMessage("Connection to communication of AUV " + auv.getName() + " accepted!");
                 } catch (Exception e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
                 }

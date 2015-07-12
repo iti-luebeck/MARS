@@ -39,7 +39,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
-import mars.communication.AUVConnectionTcpImpl;
 
 public class ClientHandler implements Runnable {
 
@@ -110,6 +109,7 @@ public class ClientHandler implements Runnable {
 
             try {
                 writer.write(message.toCharArray());
+                writer.write(0x04); //EOT
                 writer.flush();
             } catch (IOException ioex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception while sending message to client socket of " + socket.getRemoteSocketAddress().toString() + ".", ioex);

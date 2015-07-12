@@ -43,7 +43,7 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.communication.AUVConnectionRosImpl;
+import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.communication.AUVConnectionType;
 import mars.ros.MARSNodeMain;
 import mars.ros.SystemTFNode;

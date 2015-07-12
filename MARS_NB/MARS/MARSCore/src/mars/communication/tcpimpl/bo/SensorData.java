@@ -27,7 +27,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.communication.tcpimpl;
+package mars.communication.tcpimpl.bo;
 
 /**
  * Container for xml representation of sensor data
@@ -44,4 +44,15 @@ public class SensorData {
         this.timestamp = timestamp;
     }
 
+    public String getSensorName() {
+        return sensorName;
+    }
+
+    public Object getSensorData() {
+        return sensorData;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
 }
