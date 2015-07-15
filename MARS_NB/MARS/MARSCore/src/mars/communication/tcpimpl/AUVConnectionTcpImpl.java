@@ -85,10 +85,13 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
         }
 
-        SensorData data = new SensorData(sourceSensor.getName(), new XStream(new DomDriver()).toXML(sensorData), dataTimestamp);
+        SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
+        XStream xStream = new XStream(new DomDriver());
+        xStream.alias("SensorData", SensorData.class);
+        String dataAsXml = xStream.toXML(data);
 
         for (ClientHandler client : clients) {
-            client.sendSensorData(data);
+            client.sendString(dataAsXml);
         }
 
     }

@@ -29,17 +29,17 @@
  */
 package mars.communication.tcpimpl;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
-import mars.communication.tcpimpl.bo.ActuatorData;
-import mars.communication.tcpimpl.bo.SensorData;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class ClientHandler implements Runnable {
 
@@ -47,8 +47,8 @@ public class ClientHandler implements Runnable {
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
-    private ObjectOutputStream outputStream;
-    private ObjectInputStream inputStream;
+    private BufferedWriter writer;
+    private BufferedReader reader;
 
     private Thread runningThread;
     private boolean running;
@@ -59,16 +59,11 @@ public class ClientHandler implements Runnable {
 
         try {
             if (ZIP_COMPRESSION_ENABLED) {
-                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(clientSocket.getOutputStream(), true);
-                deflaterOutputStream.flush();
-                outputStream = new ObjectOutputStream(deflaterOutputStream);
-                outputStream.flush();
-
-                inputStream = new ObjectInputStream(new InflaterInputStream(clientSocket.getInputStream()));
+                reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(clientSocket.getInputStream()), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(clientSocket.getOutputStream())));
             } else {
-                outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-                outputStream.flush();
-                inputStream = new ObjectInputStream(clientSocket.getInputStream());
+                writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             }
 
             running = true;
@@ -92,12 +87,12 @@ public class ClientHandler implements Runnable {
         }
 
         try {
-            inputStream.close();
+            reader.close();
         } catch (Exception e) {
         }
 
         try {
-            outputStream.close();
+            writer.close();
         } catch (Exception e) {
         }
 
@@ -110,13 +105,19 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void sendSensorData(SensorData sensorData) {
+    public void sendString(String sensorData) {
+
+        if (!running) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "ClientHandler not running, but called to send sensor data!");
+            return;
+        }
 
         try {
 
-            if (sensorData != null && outputStream != null) {
-                outputStream.writeObject(sensorData);
-                outputStream.flush();
+            if (sensorData != null && sensorData.length() > 0) {
+                writer.write(sensorData);
+                writer.write(0x04); //End of Transmission
+                writer.flush();
             }
 
         } catch (SocketException se) {
@@ -132,12 +133,13 @@ public class ClientHandler implements Runnable {
     public void run() {
         try {
 
-            if (inputStream != null) {
-                ActuatorData actuatorData = (ActuatorData) inputStream.readObject();
+            if (reader != null) {
+                //ActuatorData actuatorData = (ActuatorData) inputStream.readObject();
+                String line = reader.readLine();
 
-                if (actuatorData != null && running) {
-                    connection.receiveActuatorData(actuatorData);
-                }
+                //if (actuatorData != null && running) {
+                //    connection.receiveActuatorData(actuatorData);
+                //}
             }
 
         } catch (SocketException se) {

@@ -29,14 +29,10 @@
  */
 package mars.communication.tcpimpl.bo;
 
-import java.io.Serializable;
-
 /**
  * Container for xml representation of actuator data
  */
-public class ActuatorData implements Serializable {
-
-    private static final long serialVersionUID = -1379815044332307122L;
+public class ActuatorData {
 
     private final String actuatorName;
     private final Object actuatorData;

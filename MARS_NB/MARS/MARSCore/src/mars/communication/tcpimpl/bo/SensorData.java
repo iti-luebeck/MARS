@@ -29,35 +29,31 @@
  */
 package mars.communication.tcpimpl.bo;
 
-import java.io.Serializable;
-
 /**
  * Container for xml representation of sensor data
  */
-public class SensorData implements Serializable {
+public class SensorData {
 
-    private static final long serialVersionUID = 4419773792924077641L;
+    private final long time;
+    private final String sensor;
+    private final Object data;
 
-    private final String sensorName;
-    private final Object sensorData;
-    private final long timestamp;
-
-    public SensorData(String sensorName, Object sensorData, long timestamp) {
-        this.sensorName = sensorName;
-        this.sensorData = sensorData;
-        this.timestamp = timestamp;
+    public SensorData(String sensorName, Object data, long time) {
+        this.sensor = sensorName;
+        this.data = data;
+        this.time = time;
     }
 
     public String getSensorName() {
-        return sensorName;
+        return sensor;
     }
 
     public Object getSensorData() {
-        return sensorData;
+        return data;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return time;
     }
 
 }

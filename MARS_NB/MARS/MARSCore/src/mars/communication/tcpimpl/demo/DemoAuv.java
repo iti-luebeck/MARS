@@ -29,56 +29,63 @@
  */
 package mars.communication.tcpimpl.demo;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
-import mars.communication.tcpimpl.bo.SensorData;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
- * This is an example of a client socket implementation for a AUVs that connect via TCP. The server uses java compression while transmitting the data objects to the client. Hence it expects inflated actuator data and sends inflated sensor data.
+ * This is an example of a client socket implementation for a AUVs that connect via TCP. The server transmits gzip compressed xml strings, representing the sensor data. The server expects gzip compressed, xml formatted actuator data in the format that is given in this context.
  */
 public class DemoAuv implements Runnable {
 
     private final Thread runningThread;
-    private final ObjectOutputStream outputStream;
-    private final ObjectInputStream inputStream;
+    private final BufferedWriter writer;
+    private final BufferedReader reader;
     private boolean running;
 
     public DemoAuv(String serverAddress, int serverPort) throws UnknownHostException, IOException {
 
         Socket socket = new Socket(serverAddress, serverPort);
-        outputStream = new ObjectOutputStream(new DeflaterOutputStream(socket.getOutputStream(), true));
-        outputStream.flush();
-        inputStream = new ObjectInputStream(new InflaterInputStream(socket.getInputStream()));
+        writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(socket.getOutputStream())));
+        writer.flush();
+        reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(socket.getInputStream()), "UTF-8"));
 
         running = true;
         runningThread = new Thread(this);
         runningThread.start();
     }
 
-    public static void main(String[] args) throws Exception {
-        new DemoAuv("127.0.0.1", 8080);
-    }
-
     @Override
     public void run() {
 
         while (running) {
-            SensorData sensorData = null;
             try {
-                sensorData = (SensorData) inputStream.readObject();
-            } catch (Exception e) {
+                StringBuffer sb = new StringBuffer();
+                int readInt = -1;
+
+                while ((readInt = reader.read()) != -1) {
+
+                    if (readInt == 0x04) { // End of Transmission?
+                        String receivedData = sb.toString();
+                        // do something with receivedData!
+                        sb = new StringBuffer(); // reset the buffer
+                    } else {
+                        sb.append((char) readInt);
+                    }
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            String data = (String) sensorData.getSensorData();
-
-            System.out.println("[" + sensorData.getTimestamp() + "] " + sensorData.getSensorName() + ", data: "
-                    + (data.length() < 30 ? data : "too long to display! length=" + data.length()));
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        new DemoAuv("127.0.0.1", 8080);
     }
 }
