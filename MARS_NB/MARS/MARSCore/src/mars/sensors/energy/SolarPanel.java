@@ -30,6 +30,7 @@
 package mars.sensors.energy;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Initializer;
@@ -126,15 +127,26 @@ public class SolarPanel extends EnergyHarvester{
     }
     
     private float calculateEnergy(float tpf){
-        float angle = 1f;//the angle beetwenn the solarPanel
-        //float aH = (motorCurrent / 3600f) * tpf;
-        //dont forget to recalculate, we have mA/h but we need it for tpf
-        return FastMath.sin(angle)*getEnergyPeakHarvest();
+        if(initer.getSkyControl() != null){//check if SkyDome is active
+            Vector3f sunDirection = initer.getSkyControl().getSunAndStars().getSunDirection().normalize();
+            Vector3f upSolar = Vector3f.UNIT_Y;
+            float angle = Math.abs(upSolar.angleBetween(sunDirection)-FastMath.HALF_PI);//the angle beetwenn the solarPanel and the sun, dont forget to set the horizon a reference
+            float solarAngle = initer.getSkyControl().getSunAndStars().getSiderealAngle();
+            //only gather energy if it is day time
+            if(solarAngle >= (FastMath.PI+(FastMath.HALF_PI)) || solarAngle <= FastMath.HALF_PI){
+                //dont forget to recalculate, we have mA/h but we need it for tpf
+                return FastMath.sin(angle)*((getEnergyPeakHarvest()/ 3600f)*tpf);
+            }else{
+                return 0f;
+            }
+        }else{
+            return 0f;
+        }
     }
 
     @Override
     public void update(float tpf) {
         super.update(tpf);
-        setEnergy(calculateEnergy(tpf));
+        setEnergy(getEnergy() + calculateEnergy(tpf));
     }
 }

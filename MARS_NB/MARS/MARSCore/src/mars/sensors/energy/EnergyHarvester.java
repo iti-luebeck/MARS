@@ -55,7 +55,7 @@ import org.ros.node.topic.Publisher;
 public class EnergyHarvester extends Sensor{
 
 
-    private Geometry EnergyHarvesterStart;
+    protected Geometry EnergyHarvesterStart;
     private float energy = 0f;
 
     ///ROS stuff
