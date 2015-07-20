@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.MARS_Main;
+import mars.sensors.energy.EnergyHarvester;
 import mars.ros.ROS_Publisher;
 import mars.states.SimState;
 
@@ -51,7 +52,7 @@ import mars.states.SimState;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Accelerometer.class, Gyroscope.class, InfraRedSensor.class, PingDetector.class, PressureSensor.class, SalinitySensor.class, TemperatureSensor.class, Velocimeter.class, VideoCamera.class, IMU.class, Positionmeter.class, Orientationmeter.class, Posemeter.class, TerrainSender.class, GPSReceiver.class, AmpereMeter.class, VoltageMeter.class, FlowMeter.class, PollutionMeter.class, Transformer.class, RayBasedSensor.class, CommunicationDevice.class})
+@XmlSeeAlso({Accelerometer.class, Gyroscope.class, InfraRedSensor.class, PingDetector.class, PressureSensor.class, SalinitySensor.class, TemperatureSensor.class, Velocimeter.class, VideoCamera.class, IMU.class, Positionmeter.class, Orientationmeter.class, Posemeter.class, TerrainSender.class, GPSReceiver.class, AmpereMeter.class, VoltageMeter.class, FlowMeter.class, PollutionMeter.class, Transformer.class, RayBasedSensor.class, CommunicationDevice.class, EnergyHarvester.class})
 public abstract class Sensor extends PhysicalExchanger implements ROS_Publisher {
     /*
      * 
