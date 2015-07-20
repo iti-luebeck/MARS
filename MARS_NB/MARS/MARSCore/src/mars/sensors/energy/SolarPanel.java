@@ -134,8 +134,13 @@ public class SolarPanel extends EnergyHarvester{
             float solarAngle = initer.getSkyControl().getSunAndStars().getSiderealAngle();
             //only gather energy if it is day time
             if(solarAngle >= (FastMath.PI+(FastMath.HALF_PI)) || solarAngle <= FastMath.HALF_PI){
-                //dont forget to recalculate, we have mA/h but we need it for tpf
-                return FastMath.sin(angle)*((getEnergyPeakHarvest()/ 3600f)*tpf);
+                //check if solar panel is overwater
+                if (EnergyHarvesterStart.getWorldTranslation().y >= this.getIniter().getCurrentWaterHeight(EnergyHarvesterStart.getWorldTranslation().x, EnergyHarvesterStart.getWorldTranslation().z)) {
+                    //dont forget to recalculate, we have mA/h but we need it for tpf
+                    return FastMath.sin(angle)*((getEnergyPeakHarvest()/ 3600f)*tpf);
+                }else{
+                    return 0f;
+                }
             }else{
                 return 0f;
             }

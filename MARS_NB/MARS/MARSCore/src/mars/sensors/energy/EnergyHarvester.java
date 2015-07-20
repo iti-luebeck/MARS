@@ -116,7 +116,7 @@ public class EnergyHarvester extends Sensor{
         Sphere sphere7 = new Sphere(8, 8, 0.025f);
         EnergyHarvesterStart = new Geometry("PressureStart", sphere7);
         Material mark_mat7 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mark_mat7.setColor("Color", ColorRGBA.White);
+        mark_mat7.setColor("Color", ColorRGBA.Green);
         EnergyHarvesterStart.setMaterial(mark_mat7);
         EnergyHarvesterStart.updateGeometricState();
         PhysicalExchanger_Node.setLocalTranslation(getPosition());

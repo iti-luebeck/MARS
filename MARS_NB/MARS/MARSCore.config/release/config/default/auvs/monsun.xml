@@ -302,7 +302,7 @@
 					<entry xsi:type="myHashMapEntryTypeVector3F" key="Position">
                         <value>
                             <x>0.0</x>
-                            <y>0.0</y>
+                            <y>0.12</y>
                             <z>0.0</z>
                         </value>
                     </entry>
