@@ -601,6 +601,7 @@ public class BasicAUV implements AUV, SceneProcessor{
      * @param key Which unique registered sensor do we want?
      * @return The sensor that we asked for
      */
+    @Override
     public Sensor getSensor(String key) {
         return sensors.get(key);
     }

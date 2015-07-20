@@ -192,6 +192,13 @@ public interface AUV extends RosNodeListener, MARSObject {
      * @return All sensors registered to this AUV.
      */
     public HashMap<String, Sensor> getSensors();
+    
+    /**
+     *
+     * @param key
+     * @return A specific sensor by its unique name.
+     */
+    public Sensor getSensor(String key);
 
     /**
      *
