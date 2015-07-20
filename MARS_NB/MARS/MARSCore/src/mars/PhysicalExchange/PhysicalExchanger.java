@@ -749,14 +749,14 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();
         if (((curtime - oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
-
-        } else {
-            oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
             //if(listeners1.length != 0){
                 publishData();
             //}
+        } else {
+            oldtime = curtime;
+            
         }
     }
     
