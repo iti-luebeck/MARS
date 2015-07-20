@@ -29,19 +29,25 @@
 */
 package mars.sensors.energy;
 
+import com.jme3.math.FastMath;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import mars.Initializer;
 import mars.PhysicalEnvironment;
 import mars.states.SimState;
 
 /**
- *
+ * A simpel solar panel which is always planar. Energy harvest depends on the suns position. Does not work when it is night!
+ * "What a Horrible Night to Have a Curse"
+ * 
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class SolarPanel extends EnergyHarvester{
     
-       /**
+    Initializer initer;
+    
+    /**
      *
      */
     public SolarPanel() {
@@ -83,5 +89,52 @@ public class SolarPanel extends EnergyHarvester{
         SolarPanel sensor = new SolarPanel(this);
         sensor.initAfterJAXB();
         return sensor;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Initializer getIniter() {
+        return initer;
+    }
+
+    /**
+     *
+     * @param initer
+     */
+    public void setIniter(Initializer initer) {
+        this.initer = initer;
+    }
+    
+    /**
+     *
+     * @return The peak harveset of energy in mAmpere per hour.
+     */
+    public Float getEnergyPeakHarvest() {
+        return (Float) variables.get("EnergyPeakHarvest");
+    }
+
+    /**
+     *
+     * @param Position
+     */
+    public void setEnergyPeakHarvest(Float EnergyPeakHarvest) {
+        Float old = getEnergyPeakHarvest();
+        variables.put("EnergyPeakHarvest", EnergyPeakHarvest);
+        fire("EnergyPeakHarvest", old, EnergyPeakHarvest);
+    }
+    
+    private float calculateEnergy(float tpf){
+        float angle = 1f;//the angle beetwenn the solarPanel
+        //float aH = (motorCurrent / 3600f) * tpf;
+        //dont forget to recalculate, we have mA/h but we need it for tpf
+        return FastMath.sin(angle)*getEnergyPeakHarvest();
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+        setEnergy(calculateEnergy(tpf));
     }
 }

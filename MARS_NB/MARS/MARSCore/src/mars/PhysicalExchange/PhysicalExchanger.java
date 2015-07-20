@@ -102,7 +102,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         listeners.remove(pcl);
     }
 
-    private void fire(String propertyName, Object old, Object nue) {
+    protected void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (PropertyChangeListener pcl : pcls) {

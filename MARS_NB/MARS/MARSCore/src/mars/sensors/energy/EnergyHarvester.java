@@ -56,6 +56,7 @@ public class EnergyHarvester extends Sensor{
 
 
     private Geometry EnergyHarvesterStart;
+    private float energy = 0f;
 
     ///ROS stuff
     private Publisher<sensor_msgs.FluidPressure> publisher = null;
@@ -128,7 +129,7 @@ public class EnergyHarvester extends Sensor{
 
     @Override
     public void update(float tpf) {
-
+        
     }
 
     /**
@@ -148,11 +149,27 @@ public class EnergyHarvester extends Sensor{
     }
 
     /**
+     * 
+     * @return the gathered energy im mAmpere
+     */
+    public float getEnergy() {
+        return energy;
+    }
+
+    /**
+     * 
+     * @param energy 
+     */
+    public void setEnergy(float energy) {
+        this.energy = energy;
+    }
+
+    /**
      *
      */
     @Override
     public void reset() {
-
+        setEnergy(0f);
     }
 
     /**
