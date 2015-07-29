@@ -48,7 +48,7 @@ import mars.server.MARSClientEvent;
 import org.ros.message.Time;
 
 /**
- * Returns the temperature of the surrounding fluid. Not really functional.
+ * Returns the temperature of the surrounding fluid.
  * Should be mapping sensor (?).
  *
  * @author Thomas Tosik
