@@ -40,9 +40,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.MARS_Main;
 import mars.sensors.energy.EnergyHarvester;
-import mars.ros.ROS_Publisher;
 import mars.states.SimState;
 
 /**
