@@ -128,6 +128,8 @@ import mars.sensors.RayBasedSensor;
 import mars.sensors.Sensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
+import mars.sensors.energy.EnergyHarvester;
+import mars.sensors.energy.SolarPanel;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -600,6 +602,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      * @param key Which unique registered sensor do we want?
      * @return The sensor that we asked for
      */
+    @Override
     public Sensor getSensor(String key) {
         return sensors.get(key);
     }
@@ -771,6 +774,9 @@ public class BasicAUV implements AUV, SceneProcessor {
                 }
                 if (element instanceof PollutionMeter) {
                     ((PollutionMeter) element).setIniter(initer);//is needed for filters
+                }
+                if (element instanceof SolarPanel) {
+                    ((SolarPanel) element).setIniter(initer);//is needed for filters
                 }
                 element.init(auv_node);
                 if (element instanceof Keys) {
@@ -1166,10 +1172,16 @@ public class BasicAUV implements AUV, SceneProcessor {
             if (element.isEnabled()) {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
-                    Float currentConsumption = element.getCurrentConsumption();
-                    if (currentConsumption != null) {//suck energy
-                        float aH = (currentConsumption / 3600f) * tpf;
-                        acc.subsractActualCurrent(aH);
+                    if(element instanceof EnergyHarvester){//we have someone who gives us energy
+                        EnergyHarvester energyHarvester = (EnergyHarvester) element;
+                        acc.addActualCurrent(energyHarvester.getEnergy());
+                        energyHarvester.setEnergy(0f);// We have transfered the energy into the accumulator, clean the energyHarvester.
+                    }else{// we have someone who wants energy
+                        Float currentConsumption = element.getCurrentConsumption();
+                        if (currentConsumption != null) {//suck energy
+                            float aH = (currentConsumption / 3600f) * tpf;
+                            acc.subsractActualCurrent(aH);
+                        }
                     }
                 }
             }

@@ -274,6 +274,10 @@ public class Accumulator implements AUVObject, PropertyChangeListenerSupport {
             setActualCurrent(new Double(0f));
         }
     }
+    
+    public void addActualCurrent(float addCurrent) {
+        setActualCurrent(getActualCurrent() + addCurrent);
+    }
 
     /**
      *

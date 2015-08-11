@@ -116,7 +116,7 @@ public class SeaBotixThruster extends Thruster {
     @Override
     protected float calculateThrusterCurrent(int speed) {
         if (Math.abs(speed) > 22) {
-            return 0.01f * Math.abs(speed) - 0.22f;
+            return 0.00013053f * (float)Math.pow(Math.abs(speed),2f) - 0.00211047f * Math.abs(speed) + 0.01576037f;
         } else {
             return 0f;
         }

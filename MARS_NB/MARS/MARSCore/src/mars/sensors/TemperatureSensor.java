@@ -45,7 +45,8 @@ import mars.server.MARSClientEvent;
 import mars.states.SimState;
 
 /**
- * Returns the temperature of the surrounding fluid. Not really functional. Should be mapping sensor (?).
+ * Returns the temperature of the surrounding fluid.
+ * Should be mapping sensor (?).
  *
  * @author Thomas Tosik
  */

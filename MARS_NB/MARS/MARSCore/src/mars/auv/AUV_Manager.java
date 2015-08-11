@@ -106,6 +106,15 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
         }
         return ret;
     }
+    
+    /**
+     * 
+     * @param name
+     * @return The requested AUV or null if not existing
+     */
+    public AUV getAUV(String name){
+        return (AUV) marsObjects.get(name);
+    }
 
     /**
      *

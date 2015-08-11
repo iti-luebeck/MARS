@@ -98,7 +98,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
         listeners.remove(pcl);
     }
 
-    private void fire(String propertyName, Object old, Object nue) {
+    protected void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (PropertyChangeListener pcl : pcls) {
@@ -680,7 +680,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();
         if (((curtime - oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
-
+            
         } else {
             oldtime = curtime;
             //only publish if someone is listening
