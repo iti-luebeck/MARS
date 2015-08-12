@@ -76,12 +76,13 @@ public class ConnectionSettingsPanel extends JPanel {
 
             final JTextField hostconfig = new JTextField("127.0.0.1:8080");
             hostconfig.setSize(150, 10);
+
+            // only enable the host config textfield when TCP is selected
             if (combobox.getSelectedItem() != AUVConnectionType.TCP) {
                 hostconfig.setEnabled(false);
             }
-
             combobox.addActionListener(new ActionListener() {
-
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     hostconfig.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
                 }
