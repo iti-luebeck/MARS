@@ -43,8 +43,8 @@ import mars.MARS_Main;
 import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
-import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.communication.AUVConnectionType;
+import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.ros.MARSNodeMain;
 import mars.ros.SystemTFNode;
 import org.ros.node.DefaultNodeMainExecutor;
@@ -249,13 +249,13 @@ public class ROS_Node implements Runnable {
         }
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
-        createSystemNode(own_ip_string, muri);
+        createSystemNode();
 
         HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
         for (String auvName : marsObjects.keySet()) {
             AUV auv = marsObjects.get(auvName);
             if (auv.getAuvConnection().getConnectionType() == AUVConnectionType.ROS) {
-                createNode(auv, own_ip_string, muri);
+                createAuvNode(auv);
             }
         }
     }
@@ -263,8 +263,8 @@ public class ROS_Node implements Runnable {
     /*
      * Used for ros->jme tf (doesn't fit into auvs, doenst make sense)
      */
-    private void createSystemNode(String own_ip_string, java.net.URI muri) {
-        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
+    private void createSystemNode() {
+        NodeConfiguration nodeConf = NodeConfiguration.newPublic(getLocal_ip(), java.net.URI.create(getMaster_uri()));
         nodeConf.setNodeName("MARS_System");
         //Preconditions.checkState(systemNode == null);
         Preconditions.checkNotNull(nodeConf);
@@ -274,8 +274,8 @@ public class ROS_Node implements Runnable {
         nodeMainExecutor.execute(systemNode, nodeConf);
     }
 
-    private void createNode(AUV auv, String own_ip_string, java.net.URI muri) {
-        NodeConfiguration nodeConf = NodeConfiguration.newPublic(own_ip_string, muri);
+    public void createAuvNode(AUV auv) {
+        NodeConfiguration nodeConf = NodeConfiguration.newPublic(getLocal_ip(), java.net.URI.create(getMaster_uri()));
         nodeConf.setNodeName("MARS" + "/" + auv.getName());
         MARSNodeMain marsnode;
         Preconditions.checkNotNull(nodeConf);
