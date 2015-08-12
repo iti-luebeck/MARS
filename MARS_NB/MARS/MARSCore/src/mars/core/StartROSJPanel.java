@@ -31,17 +31,18 @@ package mars.core;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.states.SimState;
+import net.miginfocom.swing.MigLayout;
+import org.openide.DialogDescriptor;
+import org.openide.DialogDisplayer;
 
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class StartROSJPanel extends javax.swing.JPanel {
-    
+
     MARS_Main mars = null;
 
     /**
@@ -92,7 +93,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
             @Override
             public void run() {
                 if (enable) {
-                    
+
                 } else {
                     jButtonServerConnect.setEnabled(false);
                     jButtonServerDisconnect.setEnabled(false);
@@ -208,7 +209,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerConnectActionPerformed
-    
+
     private void jButtonServerDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerDisconnectActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
@@ -220,7 +221,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerDisconnectActionPerformed
-    
+
     private void jButtonServerPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPlayActionPerformed
         jButtonServerPause.setEnabled(true);
         jButtonServerPlay.setEnabled(false);
@@ -234,7 +235,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerPlayActionPerformed
-    
+
     private void jButtonServerPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPauseActionPerformed
         jButtonServerPause.setEnabled(false);
         jButtonServerPlay.setEnabled(true);
@@ -248,11 +249,13 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerPauseActionPerformed
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "action!", "");
 
-        mars.setShowSettings(true);
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ConnectionSettingsPanel connectionSettingsPanel = new ConnectionSettingsPanel(new MigLayout("fill"));
+        connectionSettingsPanel.initialize(mars);
+
+        DialogDescriptor d = new DialogDescriptor(connectionSettingsPanel, "AUV Connections");
+        DialogDisplayer.getDefault().notify(d);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
