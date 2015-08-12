@@ -19,6 +19,7 @@ import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.communication.AUVConnectionFactory;
 import mars.communication.AUVConnectionType;
+import mars.communication.tcpimpl.AUVConnectionTcpImpl;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -72,16 +73,27 @@ public class ConnectionSettingsPanel extends JPanel {
 
             JLabel name = new JLabel(auv.getName());
             final JComboBox combobox = new JComboBox(AUVConnectionType.values());
+            combobox.removeItem(AUVConnectionType.UNDEFINED);
 
-            // set the right value
-            if (auv != null && auv.getAuvConnection() != null) {
+            // preserve the combobox selection
+            if (auv.getAuvConnection() != null) {
                 combobox.setSelectedItem(auv.getAuvConnection().getConnectionType());
             }
 
             final JTextField tcpPort = new JTextField("" + (defaultPort++));
             tcpPort.setSize(30, 10);
 
-            // only enable the host config textfield when TCP is selected
+            // preserve the port information
+            if (auv.getAuvConnection() != null && auv.getAuvConnection().getConnectionType() == AUVConnectionType.TCP) {
+
+                int port = ((AUVConnectionTcpImpl) auv.getAuvConnection()).getPort();
+
+                if (port != -1) {
+                    tcpPort.setText(port + "");
+                }
+            }
+
+            // only enable the port textfield when TCP is selected
             if (combobox.getSelectedItem() != AUVConnectionType.TCP) {
                 tcpPort.setEnabled(false);
             }

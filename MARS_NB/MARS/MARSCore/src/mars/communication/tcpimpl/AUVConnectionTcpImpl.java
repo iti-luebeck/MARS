@@ -49,6 +49,8 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
     private int messageCounter = 0;
 
+    private int port = -1;
+
     private boolean started;
     private boolean running;
     private ServerSocket serverSocket;
@@ -117,6 +119,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             try {
                 serverSocket = new ServerSocket(port);
                 running = true;
+                this.port = port;
 
                 serverThread = new Thread(this);
                 serverThread.start();
@@ -182,5 +185,9 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     @Override
     public boolean isConnected() {
         return running;
+    }
+
+    public int getPort() {
+        return port;
     }
 }
