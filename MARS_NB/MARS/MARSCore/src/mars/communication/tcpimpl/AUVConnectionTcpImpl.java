@@ -66,8 +66,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
 
-        if (!running) {
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] publishing sensor data while running is false!", "");
+        if (!isConnected()) {
             return;
         }
 
@@ -146,6 +145,13 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
                     Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client " + clientSocket.getRemoteSocketAddress().toString() + " successfully added!", "");
 
                     //client.sendMessage("Connection to communication of AUV " + auv.getName() + " accepted!");
+                } catch (java.net.SocketException se) {
+                    if (se.getMessage().equals("socket closed")) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Socket closed!", "");
+                    } else {
+                        throw se;
+                    }
+
                 } catch (Exception e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
                 }
