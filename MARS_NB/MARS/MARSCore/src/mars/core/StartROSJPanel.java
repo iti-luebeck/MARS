@@ -1,36 +1,38 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.core;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.MARS_Main;
 import mars.states.SimState;
 
@@ -39,16 +41,16 @@ import mars.states.SimState;
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
 public class StartROSJPanel extends javax.swing.JPanel {
-
-    MARS_Main mars = null;
     
+    MARS_Main mars = null;
+
     /**
      * Creates new form StartSimulationJPanel
      */
     public StartROSJPanel() {
         initComponents();
     }
-    
+
     /**
      *
      * @param mars
@@ -56,55 +58,54 @@ public class StartROSJPanel extends javax.swing.JPanel {
     public void setMars(MARS_Main mars) {
         this.mars = mars;
     }
-        /**
-     * 
+
+    /**
+     *
      * @param connected
      */
-    public void allowServerInteraction(final boolean connected){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    if(connected){
-                        jButtonServerConnect.setEnabled(false);
-                        jButtonServerDisconnect.setEnabled(true);
-                        jButtonServerPlay.setEnabled(false);
-                        jButtonServerPause.setEnabled(true);
-                    }else{
-                        jButtonServerConnect.setEnabled(true);
-                        jButtonServerDisconnect.setEnabled(false);
-                        jButtonServerPlay.setEnabled(false);
-                        jButtonServerPause.setEnabled(false);
-                    }                    
+    public void allowServerInteraction(final boolean connected) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (connected) {
+                    jButtonServerConnect.setEnabled(false);
+                    jButtonServerDisconnect.setEnabled(true);
+                    jButtonServerPlay.setEnabled(false);
+                    jButtonServerPause.setEnabled(true);
+                } else {
+                    jButtonServerConnect.setEnabled(true);
+                    jButtonServerDisconnect.setEnabled(false);
+                    jButtonServerPlay.setEnabled(false);
+                    jButtonServerPause.setEnabled(false);
                 }
             }
+        }
         );
     }
-    
+
     /**
-     * 
+     *
      * @param enable
      */
-    public void enableServerInteraction(final boolean enable){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    if(enable){
-
-                    }else{
-                        jButtonServerConnect.setEnabled(false);
-                        jButtonServerDisconnect.setEnabled(false);
-                        jButtonServerPlay.setEnabled(false);
-                        jButtonServerPause.setEnabled(true);
-                    }                    
+    public void enableServerInteraction(final boolean enable) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (enable) {
+                    
+                } else {
+                    jButtonServerConnect.setEnabled(false);
+                    jButtonServerDisconnect.setEnabled(false);
+                    jButtonServerPlay.setEnabled(false);
+                    jButtonServerPause.setEnabled(true);
                 }
             }
+        }
         );
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -115,6 +116,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
         jButtonServerDisconnect = new javax.swing.JButton();
         jButtonServerPlay = new javax.swing.JButton();
         jButtonServerPause = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
@@ -172,6 +174,17 @@ public class StartROSJPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(jButtonServerPause);
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(StartROSJPanel.class, "StartROSJPanel.jButton1.text")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -185,9 +198,9 @@ public class StartROSJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonServerConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerConnectActionPerformed
-       mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.connectToServer();
                 }
@@ -195,11 +208,11 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerConnectActionPerformed
-
+    
     private void jButtonServerDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerDisconnectActionPerformed
-         mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.disconnectFromServer();
                 }
@@ -207,13 +220,13 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerDisconnectActionPerformed
-
+    
     private void jButtonServerPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPlayActionPerformed
         jButtonServerPause.setEnabled(true);
         jButtonServerPlay.setEnabled(false);
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.enablePublishing(true);
                 }
@@ -221,13 +234,13 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerPlayActionPerformed
-
+    
     private void jButtonServerPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerPauseActionPerformed
         jButtonServerPause.setEnabled(false);
         jButtonServerPlay.setEnabled(true);
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
                     simState.enablePublishing(false);
                 }
@@ -235,8 +248,15 @@ public class StartROSJPanel extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_jButtonServerPauseActionPerformed
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "action!", "");
+
+        mars.setShowSettings(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonServerConnect;
     private javax.swing.JButton jButtonServerDisconnect;
     private javax.swing.JButton jButtonServerPause;
