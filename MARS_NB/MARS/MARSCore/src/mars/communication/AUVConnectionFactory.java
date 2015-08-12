@@ -36,9 +36,7 @@ import mars.sensors.Sensor;
 
 public class AUVConnectionFactory {
 
-    private static int tcpPort = 8080; //TODOFAB -> properties
-
-    public static AUVConnection createNewConnection(AUV auv) {
+    public static AUVConnection createNewConnection(AUV auv, int tcpPort) {
 
         AUVConnection conn;
 
@@ -49,7 +47,7 @@ public class AUVConnectionFactory {
         } else if (auv.getAuv_param().getConnectionType().equals(AUVConnectionType.TCP.toString())) {
 
             conn = new AUVConnectionTcpImpl(auv);
-            ((AUVConnectionTcpImpl) conn).start(tcpPort++);
+            ((AUVConnectionTcpImpl) conn).start(tcpPort);
 
         } else {
 

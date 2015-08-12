@@ -37,7 +37,7 @@ public class ConnectionSettingsPanel extends JPanel {
 
         JLabel auvHeadline = new JLabel("<html><b>AUV</b></html>");
         JLabel connectionTypeHeadline = new JLabel("<html><b>Connector</b></html>");
-        JLabel hostconfigHeadline = new JLabel("<html><b>Host Config</b></html>");
+        JLabel hostconfigHeadline = new JLabel("<html><b>TCP Port</b></html>");
         JLabel statusHeadline = new JLabel("<html><b>Status</b></html>");
 
         JPanel settingsContainer = new JPanel();
@@ -65,6 +65,7 @@ public class ConnectionSettingsPanel extends JPanel {
         HashMap<String, AUV> marsObjects = auvManager.getMARSObjects();
 
         int row = 1;
+        int defaultPort = 8080;
 
         for (String auvName : marsObjects.keySet()) {
             final AUV auv = marsObjects.get(auvName);
@@ -77,17 +78,17 @@ public class ConnectionSettingsPanel extends JPanel {
                 combobox.setSelectedItem(auv.getAuvConnection().getConnectionType());
             }
 
-            final JTextField hostconfig = new JTextField("127.0.0.1:8080");
-            hostconfig.setSize(150, 10);
+            final JTextField tcpPort = new JTextField("" + (defaultPort++));
+            tcpPort.setSize(30, 10);
 
             // only enable the host config textfield when TCP is selected
             if (combobox.getSelectedItem() != AUVConnectionType.TCP) {
-                hostconfig.setEnabled(false);
+                tcpPort.setEnabled(false);
             }
             combobox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    hostconfig.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
+                    tcpPort.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
                 }
             });
 
@@ -95,8 +96,15 @@ public class ConnectionSettingsPanel extends JPanel {
             final JButton connectButton = new JButton();
 
             if (auv.getAuvConnection() != null && auv.getAuvConnection().isConnected()) {
+                // this auv connection is active!
+
                 status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/greendot.png")));
                 connectButton.setText("Disconnect");
+
+                // prevent modifications while connected
+                combobox.setEnabled(false);
+                tcpPort.setEnabled(false);
+
             } else {
                 status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/reddot.png")));
                 connectButton.setText("Connect");
@@ -109,7 +117,13 @@ public class ConnectionSettingsPanel extends JPanel {
                     if (connectButton.getText().equals("Connect")) {
 
                         auv.getAuv_param().setConnectionType(combobox.getSelectedItem().toString());
-                        AUVConnectionFactory.createNewConnection(auv);
+
+                        int port = -1;
+                        if (tcpPort.getText() != null) {
+                            port = Integer.parseInt(tcpPort.getText());
+                        }
+
+                        AUVConnectionFactory.createNewConnection(auv, port);
                     } else {
 
                         auv.getAuvConnection().disconnect();
@@ -125,9 +139,9 @@ public class ConnectionSettingsPanel extends JPanel {
 
             settingsContainer.add(name, "cell 0 " + row);
             settingsContainer.add(combobox, "cell 1 " + row);
-            settingsContainer.add(hostconfig, "cell 2 " + row + ", align left, growx, wmin 200");
+            settingsContainer.add(tcpPort, "cell 2 " + row + ", align left, growx, wmin 30");
             settingsContainer.add(status, "cell 3 " + row + ", align center");
-            settingsContainer.add(connectButton, "cell 4 " + row);
+            settingsContainer.add(connectButton, "cell 4 " + row + ", align center");
 
             row++;
         }

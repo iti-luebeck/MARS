@@ -51,7 +51,7 @@ public abstract class AUVConnectionAbstractImpl implements AUVConnection {
      */
     public void onNewData(AUVObjectEvent e) {
 
-        if (e != null && e.getSource() != null && e.getSource() instanceof Sensor) {
+        if (e != null && e.getSource() != null && e.getSource() instanceof Sensor && isConnected()) {
             publishSensorData((Sensor) e.getSource(), e.getMsg(), e.getTime());
         }
 

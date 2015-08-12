@@ -66,10 +66,6 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
 
-        if (!isConnected()) {
-            return;
-        }
-
         if (sourceSensor == null || sensorData == null) {
             return;
         }
@@ -161,18 +157,6 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
         }
     }
 
-    public void stop() {
-
-        running = false;
-        started = false;
-
-        if (serverThread != null) {
-            serverThread.interrupt();
-        }
-        serverThread = null;
-
-    }
-
     public void removeClient(ClientHandler client) {
         clientsToRemove.add(client);
     }
@@ -180,19 +164,19 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     @Override
     public void disconnect() {
 
-        for (ClientHandler client : clients) {
-            client.disconnect();
+        if (serverThread != null) {
+            serverThread.interrupt();
         }
+        serverThread = null;
 
-        clients.clear();
+        running = false;
+        started = false;
 
         try {
             serverSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to close tcp socket!", ex);
         }
-
-        stop();
     }
 
     @Override

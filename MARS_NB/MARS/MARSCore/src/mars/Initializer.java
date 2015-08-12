@@ -368,7 +368,7 @@ public class Initializer {
         for (String auvName : marsObjects.keySet()) {
             AUV auv = marsObjects.get(auvName);
             if (auv.getAuvConnection() == null) {
-                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv)); //TODOFAB: possible problem for ros connections
+                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv, -1)); //TODOFAB: possible problem for ros connections
             }
         }
 
