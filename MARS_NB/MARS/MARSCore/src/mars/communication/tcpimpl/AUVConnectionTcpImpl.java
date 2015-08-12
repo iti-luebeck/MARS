@@ -31,6 +31,7 @@ package mars.communication.tcpimpl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -64,6 +65,11 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
+
+        if (!running) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] publishing sensor data while running is false!", "");
+            return;
+        }
 
         if (sourceSensor == null || sensorData == null) {
             return;
@@ -150,6 +156,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     }
 
     public void stop() {
+
         running = false;
         started = false;
 
@@ -157,9 +164,33 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             serverThread.interrupt();
         }
         serverThread = null;
+
     }
 
     public void removeClient(ClientHandler client) {
         clientsToRemove.add(client);
+    }
+
+    @Override
+    public void disconnect() {
+
+        for (ClientHandler client : clients) {
+            client.disconnect();
+        }
+
+        clients.clear();
+
+        try {
+            serverSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to close tcp socket!", ex);
+        }
+
+        stop();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return running;
     }
 }

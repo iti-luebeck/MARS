@@ -252,7 +252,7 @@ public class StartROSJPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ConnectionSettingsPanel connectionSettingsPanel = new ConnectionSettingsPanel(new MigLayout("fill"));
-        connectionSettingsPanel.initialize(mars);
+        connectionSettingsPanel.refresh(mars);
 
         DialogDescriptor d = new DialogDescriptor(connectionSettingsPanel, "AUV Connections");
         DialogDisplayer.getDefault().notify(d);

@@ -44,4 +44,8 @@ public interface AUVConnection extends mars.events.AUVObjectListener {
     void receiveActuatorData(ActuatorData actuatorData);
 
     AUVConnectionType getConnectionType();
+
+    void disconnect();
+
+    boolean isConnected();
 }

@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import mars.MARS_Main;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
+import mars.communication.AUVConnectionFactory;
 import mars.communication.AUVConnectionType;
 import net.miginfocom.swing.MigLayout;
 
@@ -30,7 +31,9 @@ public class ConnectionSettingsPanel extends JPanel {
 
     }
 
-    public void initialize(MARS_Main mars) {
+    public void refresh(MARS_Main mars) {
+
+        this.removeAll();
 
         JLabel auvHeadline = new JLabel("<html><b>AUV</b></html>");
         JLabel connectionTypeHeadline = new JLabel("<html><b>Connector</b></html>");
@@ -52,7 +55,7 @@ public class ConnectionSettingsPanel extends JPanel {
         this.add(settingsContainer, "cell 0 0, grow");
     }
 
-    private void addAUVs(MARS_Main mars, JPanel settingsContainer) {
+    private void addAUVs(final MARS_Main mars, JPanel settingsContainer) {
         AUV_Manager auvManager = mars.getMapstate().getAUV_Manager();
 
         if (auvManager == null) {
@@ -64,7 +67,7 @@ public class ConnectionSettingsPanel extends JPanel {
         int row = 1;
 
         for (String auvName : marsObjects.keySet()) {
-            AUV auv = marsObjects.get(auvName);
+            final AUV auv = marsObjects.get(auvName);
 
             JLabel name = new JLabel(auv.getName());
             final JComboBox combobox = new JComboBox(AUVConnectionType.values());
@@ -89,9 +92,36 @@ public class ConnectionSettingsPanel extends JPanel {
             });
 
             JLabel status = new JLabel();
-            status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/reddot.png")));
+            final JButton connectButton = new JButton();
 
-            JButton connectButton = new JButton("Connect");
+            if (auv.getAuvConnection() != null && auv.getAuvConnection().isConnected()) {
+                status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/greendot.png")));
+                connectButton.setText("Disconnect");
+            } else {
+                status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/reddot.png")));
+                connectButton.setText("Connect");
+            }
+
+            connectButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if (connectButton.getText().equals("Connect")) {
+
+                        auv.getAuv_param().setConnectionType(combobox.getSelectedItem().toString());
+                        AUVConnectionFactory.createNewConnection(auv);
+                    } else {
+
+                        auv.getAuvConnection().disconnect();
+                    }
+
+                    ConnectionSettingsPanel panel = (ConnectionSettingsPanel) connectButton.getParent().getParent();
+
+                    //redraw the entire panel
+                    panel.refresh(mars);
+                    panel.validate();
+                }
+            });
 
             settingsContainer.add(name, "cell 0 " + row);
             settingsContainer.add(combobox, "cell 1 " + row);

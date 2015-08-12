@@ -109,4 +109,14 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
         return AUVConnectionType.ROS;
     }
 
+    @Override
+    public void disconnect() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isConnected() {
+        return false; //TODOFAB
+    }
+
 }

@@ -29,9 +29,9 @@
  */
 package mars.communication;
 
-import mars.communication.tcpimpl.AUVConnectionTcpImpl;
-import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.auv.AUV;
+import mars.communication.rosimpl.AUVConnectionRosImpl;
+import mars.communication.tcpimpl.AUVConnectionTcpImpl;
 import mars.sensors.Sensor;
 
 public class AUVConnectionFactory {
@@ -55,6 +55,8 @@ public class AUVConnectionFactory {
 
             return null;
         }
+
+        auv.setAuvConnection(conn);
 
         // Add event listeners for the AUVObjectEvent from the sensors
         // so they can publish via their new connection
