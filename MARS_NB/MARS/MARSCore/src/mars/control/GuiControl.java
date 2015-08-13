@@ -247,7 +247,9 @@ public class GuiControl extends AbstractControl{
                 AUV auv = (AUV)marsObj;
                 intersection = Helper.getIntersectionWithPlaneCorrect(auv.getAUVNode().getWorldTranslation(), Vector3f.UNIT_Y, click3d, dir);
                 if (auv.getGhostAUV() != null) {
-                    auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));
+                    Vector3f diff = auv.getAUVSpatial().getWorldTranslation().subtract(auv.getAUVNode().getWorldTranslation());//dont forget to add the difference beetwen the intersection planes
+                    auv.getGhostAUV().setLocalTranslation((auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f))).add(diff));
+                    //auv.getGhostAUV().setLocalTranslation(auv.getAUVNode().worldToLocal(intersection, null).add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));
                     auv.getGhostAUV().setLocalRotation(auv.getAUVSpatial().getLocalRotation());
                 }
                 if (auv.getMARS_Settings().getGuiMouseUpdateFollow()) {
@@ -305,7 +307,8 @@ public class GuiControl extends AbstractControl{
             auv.getPhysicsControl().setPhysicsLocation(intersection.add(new Vector3f(0f, getDepth_factor() * getDepth_iteration(), 0f)));//set end postion
             Spatial ghostObject = auv.getGhostAUV();
             if(ghostObject !=null){
-               ghostObject.setLocalTranslation(auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null));//reset ghost auv for rotation
+               Vector3f diff = auv.getAUVSpatial().getWorldTranslation().subtract(auv.getAUVNode().getWorldTranslation());//dont forget to add the difference beetwen the intersection planes
+               ghostObject.setLocalTranslation((auv.getAUVNode().worldToLocal(auv.getAUVNode().getWorldTranslation(), null)).add(diff));//reset ghost auv for rotation
             }
             auv.hideGhostAUV(true);
             setDepth_iteration(0);
