@@ -67,6 +67,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.Helper.Helper;
 import mars.MARS_Main;
 import mars.MARS_Settings;
+import mars.control.GuiControl;
 import mars.events.MARSObjectEvent;
 import mars.events.MARSObjectListener;
 import mars.misc.PickHint;
@@ -305,6 +306,11 @@ public class SimObject implements MARSObject,PropertyChangeListenerSupport{
         loadModel();
         createPhysicsNode();
         createGhostSpatial();
+        
+        //a control for controling the auv from the gui
+        GuiControl guicontrol = new GuiControl(this);
+        simObNode.addControl(guicontrol);
+        
         Helper.setNodePickUserData(debugNode, PickHint.NoPick);
         simObNode.attachChild(renderNode);
         simObNode.attachChild(debugNode);

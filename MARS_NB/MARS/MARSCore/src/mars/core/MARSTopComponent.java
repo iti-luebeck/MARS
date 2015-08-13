@@ -1799,7 +1799,9 @@ public final class MARSTopComponent extends TopComponent {
                                         mtc4.setMARS(mars);
                                         mars.setMARSLogComp(mtc4);*/
                                         
+                                        //wait for toolbar to be finished
                                         ToolbarPool.getDefault().waitFinished();
+                                        
                                          //find all toolbars that need mars and set it
                                         Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
                                         Component[] components = findToolbar.getComponents();
