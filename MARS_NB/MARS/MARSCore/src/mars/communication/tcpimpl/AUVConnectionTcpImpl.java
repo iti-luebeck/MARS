@@ -46,92 +46,92 @@ import mars.communication.tcpimpl.bo.SensorData;
 import mars.sensors.Sensor;
 
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
-    
+
     private int messageCounter = 0;
-    
+
     private int port = -1;
-    
+
     private boolean started;
     private boolean running;
     private ServerSocket serverSocket;
     private Thread serverThread;
-    
+
     private final List<ClientHandler> clients = new ArrayList<ClientHandler>();
     private final List<ClientHandler> clientsToRemove = new ArrayList<ClientHandler>();
-    
+
     public AUVConnectionTcpImpl(AUV auv) {
         super(auv);
         started = false;
         serverSocket = null;
     }
-    
+
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
-        
+
         if (sourceSensor == null || sensorData == null) {
             return;
         }
 
         // Remove unwanted clients first.
         clients.removeAll(clientsToRemove);
-        
+
         if (clients.isEmpty()) {
-            
+
             if ((messageCounter++ % 100) == 20) {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] No clients -> nothing to publish!", "");
             }
-            
+
             return;
         }
-        
+
         if ((messageCounter++ % 100) == 20) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Publishing sensor data", "");
         }
-        
+
         SensorData data = new SensorData(sourceSensor.getName(), sensorData, dataTimestamp);
         XStream xStream = new XStream(new DomDriver());
         xStream.alias("SensorData", SensorData.class);
         String dataAsXml = xStream.toXML(data);
-        
+
         for (ClientHandler client : clients) {
             client.sendString(dataAsXml);
         }
-        
+
     }
-    
+
     @Override
     public void receiveActuatorData(ActuatorData actuatorData) {
-        
+
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received String", actuatorData);
         //TODOFAB route the data to the correct actuator!
     }
-    
+
     @Override
     public AUVConnectionType getConnectionType() {
         return AUVConnectionType.TCP;
     }
-    
+
     @Override
     public void connect(String param) {
-        
+
         if (!started) {
             started = true;
-            
+
             try {
+                port = Integer.parseInt(param);
                 serverSocket = new ServerSocket(port);
                 running = true;
-                this.port = Integer.parseInt(param);
-                
+
                 serverThread = new Thread(this);
                 serverThread.start();
-                
+
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Server socket started on port " + port, "");
             } catch (Exception e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Unable to start server socket!", e);
             }
         }
     }
-    
+
     @Override
     public void run() {
         try {
@@ -139,7 +139,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
                 try {
                     Socket clientSocket = serverSocket.accept();
                     Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Incoming client socket connection from " + clientSocket.getRemoteSocketAddress().toString(), "");
-                    
+
                     ClientHandler client = new ClientHandler(clientSocket, this);
                     clients.add(client);
                     Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Client " + clientSocket.getRemoteSocketAddress().toString() + " successfully added!", "");
@@ -151,7 +151,7 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
                     } else {
                         throw se;
                     }
-                    
+
                 } catch (Exception e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
                 }
@@ -160,34 +160,34 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception!", e);
         }
     }
-    
+
     public void removeClient(ClientHandler client) {
         clientsToRemove.add(client);
     }
-    
+
     @Override
     public void disconnect() {
-        
+
         if (serverThread != null) {
             serverThread.interrupt();
         }
         serverThread = null;
-        
+
         running = false;
         started = false;
-        
+
         try {
             serverSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to close tcp socket!", ex);
         }
     }
-    
+
     @Override
     public boolean isConnected() {
         return running;
     }
-    
+
     public int getPort() {
         return port;
     }

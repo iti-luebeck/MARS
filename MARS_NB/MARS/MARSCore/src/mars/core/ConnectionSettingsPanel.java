@@ -8,8 +8,6 @@ package mars.core;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,8 +35,6 @@ public class ConnectionSettingsPanel extends JPanel {
     }
 
     public void refresh() {
-
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Refreshing panel!", "");
 
         this.removeAll();
 
@@ -97,6 +93,8 @@ public class ConnectionSettingsPanel extends JPanel {
 
                 if (port != -1) {
                     tcpPort.setText(port + "");
+                } else {
+                    tcpPort.setText((defaultPort++) + "");
                 }
             }
 
@@ -146,6 +144,12 @@ public class ConnectionSettingsPanel extends JPanel {
                     ConnectionSettingsPanel panel = (ConnectionSettingsPanel) connectButton.getParent().getParent();
 
                     //redraw the entire panel
+                    try {
+
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+
+                    }
                     panel.refresh();
                     panel.validate();
                 }
