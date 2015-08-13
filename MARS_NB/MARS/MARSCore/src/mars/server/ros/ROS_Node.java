@@ -44,7 +44,6 @@ import mars.MARS_Settings;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.communication.AUVConnectionType;
-import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.ros.MARSNodeMain;
 import mars.ros.SystemTFNode;
 import org.ros.node.DefaultNodeMainExecutor;
@@ -280,7 +279,7 @@ public class ROS_Node implements Runnable {
         MARSNodeMain marsnode;
         Preconditions.checkNotNull(nodeConf);
         marsnode = new MARSNodeMain(nodeConf);
-        marsnode.addRosNodeListener((AUVConnectionRosImpl) auv.getAuvConnection());
+        // TODOFAB marsnode.addRosNodeListener((AUVConnectionRosImpl) auv.getAuvConnection());
         nodes.put(auv.getName(), marsnode);
         nodeMainExecutor.execute(marsnode, nodeConf);
     }

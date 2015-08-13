@@ -29,6 +29,8 @@
  */
 package mars.communication;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.communication.tcpimpl.AUVConnectionTcpImpl;
@@ -36,21 +38,20 @@ import mars.sensors.Sensor;
 
 public class AUVConnectionFactory {
 
-    public static AUVConnection createNewConnection(AUV auv, int tcpPort) {
+    public static AUVConnection createNewConnection(AUV auv, String param) {
 
         AUVConnection conn;
+        String connectionType = auv.getAuv_param().getConnectionType();
 
-        if (auv.getAuv_param().getConnectionType().equals(AUVConnectionType.ROS.toString())) {
-
+        if (connectionType.equals(AUVConnectionType.ROS.toString())) {
             conn = new AUVConnectionRosImpl(auv);
-
-        } else if (auv.getAuv_param().getConnectionType().equals(AUVConnectionType.TCP.toString())) {
-
+            String masterUri = "http://" + auv.getMARS_Settings().getROSMasterip() + ":" + auv.getMARS_Settings().getROSMasterport() + "/";
+            conn.connect(masterUri);
+        } else if (connectionType.equals(AUVConnectionType.TCP.toString())) {
             conn = new AUVConnectionTcpImpl(auv);
-            ((AUVConnectionTcpImpl) conn).start(tcpPort);
-
+            conn.connect(param);
         } else {
-
+            Logger.getLogger(AUVConnectionFactory.class.getName()).log(Level.INFO, "[" + auv.getName() + "] Unsupported Connection Type: " + auv.getAuv_param().getConnectionType(), "");
             return null;
         }
 

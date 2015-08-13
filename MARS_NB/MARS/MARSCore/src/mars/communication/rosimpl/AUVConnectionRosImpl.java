@@ -30,39 +30,44 @@
 package mars.communication.rosimpl;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.communication.AUVConnectionAbstractImpl;
 import mars.communication.AUVConnectionType;
 import mars.communication.tcpimpl.bo.ActuatorData;
-import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeEvent;
-import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
 import org.ros.internal.message.Message;
+import org.ros.node.DefaultNodeMainExecutor;
+import org.ros.node.NodeConfiguration;
+import org.ros.node.NodeMainExecutor;
 import org.ros.node.topic.Publisher;
 
-public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements RosNodeListener {
+public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
 
-    private MARSNodeMain marsNodeMain = null;
+    private final NodeMainExecutor nodeMainExecutor;
+    private AUVConnectionNode node;
+    private final HashMap<String, Publisher> publishers = new HashMap<String, Publisher>();
 
     public AUVConnectionRosImpl(AUV auv) {
         super(auv);
-    }
 
-    private final HashMap<String, Publisher> publishers = new HashMap<String, Publisher>();
+        nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
+    }
 
     @Override
     public void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp) {
 
-        if (marsNodeMain != null) {
-            Message rosMessage = RosMessageFactory.createMessageForSensor(sourceSensor, marsNodeMain, sensorData);
+        if (node != null && isConnected() && !publishers.isEmpty()) {
+            Message rosMessage = RosMessageFactory.createMessageForSensor(sourceSensor, node, sensorData);
             Publisher publisher = publishers.get(sourceSensor.getName());
 
             if (publisher != null && rosMessage != null) {
                 publisher.publish(rosMessage);
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Publishing data from " + sourceSensor.getName(), "");
+
             }
         }
-
     }
 
     @Override
@@ -70,7 +75,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
         // nothing to do here. all actuator updates for ros are handled within the subscribers's events, declared in RosSubscriberFactory
     }
 
-    private void initializePublishersForSensors(MARSNodeMain marsNodeMain) {
+    private void initializePublishersForSensors() {
 
         // Clear existant publishers before creating new ones
         publishers.clear();
@@ -78,7 +83,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
         // Create a publisher for each sensor of the AUV
         for (String sensorName : auv.getSensors().keySet()) {
 
-            Publisher publisher = RosPublisherFactory.createPublisherForSensor(auv.getSensors().get(sensorName), marsNodeMain, auv.getName());
+            Publisher publisher = RosPublisherFactory.createPublisherForSensor(auv.getSensors().get(sensorName), node, auv.getName());
 
             if (publisher != null) {
                 publishers.put(sensorName, publisher);
@@ -87,21 +92,11 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
         }
     }
 
-    private void initializeSubscribersForActuators(MARSNodeMain marsNodeMain) {
+    private void initializeSubscribersForActuators() {
 
         for (String actuatorName : auv.getActuators().keySet()) {
-            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), marsNodeMain, actuatorName);
+            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, actuatorName);
         }
-    }
-
-    @Override
-    public void fireEvent(RosNodeEvent e) {
-
-        // MARSNodeMain has been started for this connection!
-        marsNodeMain = (MARSNodeMain) e.getSource();
-
-        initializePublishersForSensors(marsNodeMain);
-        initializeSubscribersForActuators(marsNodeMain);
     }
 
     @Override
@@ -111,12 +106,29 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl implements R
 
     @Override
     public void disconnect() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        nodeMainExecutor.shutdownNodeMain(node);
     }
 
     @Override
     public boolean isConnected() {
-        return false; //TODOFAB
+        return node.isStarted();
+    }
+
+    @Override
+    public void connect(String param) {
+
+        NodeConfiguration config = NodeConfiguration.newPublic("127.0.0.1",
+                java.net.URI.create(param));
+
+        config.setNodeName("MARS/" + auv.getName());
+
+        this.node = new AUVConnectionNode(this, config);
+        nodeMainExecutor.execute(this.node, config);
+    }
+
+    public void onNodeStarted() {
+        initializePublishersForSensors();
+        initializeSubscribersForActuators();
     }
 
 }

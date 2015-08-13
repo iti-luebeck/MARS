@@ -8,6 +8,8 @@ package mars.core;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -28,11 +30,15 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ConnectionSettingsPanel extends JPanel {
 
-    public ConnectionSettingsPanel(MigLayout migLayout) {
+    private final MARS_Main mars;
 
+    ConnectionSettingsPanel(MigLayout migLayout, MARS_Main mars) {
+        this.mars = mars;
     }
 
-    public void refresh(MARS_Main mars) {
+    public void refresh() {
+
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Refreshing panel!", "");
 
         this.removeAll();
 
@@ -82,6 +88,7 @@ public class ConnectionSettingsPanel extends JPanel {
 
             final JTextField tcpPort = new JTextField("" + (defaultPort++));
             tcpPort.setSize(30, 10);
+            tcpPort.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
 
             // preserve the port information
             if (auv.getAuvConnection() != null && auv.getAuvConnection().getConnectionType() == AUVConnectionType.TCP) {
@@ -101,6 +108,7 @@ public class ConnectionSettingsPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     tcpPort.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
+                    tcpPort.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
                 }
             });
 
@@ -129,22 +137,16 @@ public class ConnectionSettingsPanel extends JPanel {
                     if (connectButton.getText().equals("Connect")) {
 
                         auv.getAuv_param().setConnectionType(combobox.getSelectedItem().toString());
+                        AUVConnectionFactory.createNewConnection(auv, tcpPort.getText());
 
-                        int port = -1;
-                        if (tcpPort.getText() != null) {
-                            port = Integer.parseInt(tcpPort.getText());
-                        }
-
-                        AUVConnectionFactory.createNewConnection(auv, port);
                     } else {
-
                         auv.getAuvConnection().disconnect();
                     }
 
                     ConnectionSettingsPanel panel = (ConnectionSettingsPanel) connectButton.getParent().getParent();
 
                     //redraw the entire panel
-                    panel.refresh(mars);
+                    panel.refresh();
                     panel.validate();
                 }
             });

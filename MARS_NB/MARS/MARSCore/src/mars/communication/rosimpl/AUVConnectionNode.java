@@ -29,29 +29,60 @@
  */
 package mars.communication.rosimpl;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import mars.actuators.Actuator;
-import mars.actuators.thruster.Thruster;
-import org.ros.message.MessageListener;
+import org.ros.message.MessageFactory;
+import org.ros.namespace.GraphName;
+import org.ros.node.AbstractNodeMain;
+import org.ros.node.ConnectedNode;
+import org.ros.node.Node;
+import org.ros.node.NodeConfiguration;
+import org.ros.node.topic.Publisher;
+import org.ros.node.topic.Subscriber;
 
-public class RosSubscriberInitializer {
+public class AUVConnectionNode extends AbstractNodeMain {
 
-    public static void createSubscriberForActuator(Actuator actuator, AUVConnectionNode node, String auvName) {
+    private final AUVConnectionRosImpl connection;
+    private final NodeConfiguration nodeConfig;
+    private ConnectedNode connectedNode;
+    private boolean isStarted;
 
-        if (actuator instanceof Thruster) {
-            final Thruster thruster = (Thruster) actuator;
-            node.newSubscriber(auvName + "/" + actuator.getName(), hanse_msgs.sollSpeed._TYPE).addMessageListener(
-                    new MessageListener<hanse_msgs.sollSpeed>() {
-                        @Override
-                        public void onNewMessage(hanse_msgs.sollSpeed message) {
-                            thruster.set_thruster_speed((int) message.getData());
-                        }
-                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+    public AUVConnectionNode(AUVConnectionRosImpl connection, NodeConfiguration nodeConfig) {
+        this.connection = connection;
+        this.nodeConfig = nodeConfig;
+        isStarted = false;
+    }
 
-            return;
-        }
+    @Override
+    public GraphName getDefaultNodeName() {
+        return nodeConfig.getNodeName();
+    }
 
-        Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "Unable to map actuator " + actuator + " to subscriber!", "");
+    @Override
+    public void onStart(final ConnectedNode connectedNode) {
+        super.onStart(connectedNode);
+        this.connectedNode = connectedNode;
+        this.isStarted = true;
+        connection.onNodeStarted();
+    }
+
+    @Override
+    public void onShutdown(Node node) {
+        super.onShutdown(node);
+        this.isStarted = false;
+    }
+
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public Publisher newPublisher(String topic, String msg_type) {
+        return connectedNode.newPublisher(topic, msg_type);
+    }
+
+    public Subscriber newSubscriber(String topic, String msg_type) {
+        return connectedNode.newSubscriber(topic, msg_type);
+    }
+
+    public MessageFactory getMessageFactory() {
+        return connectedNode.getTopicMessageFactory();
     }
 }

@@ -40,7 +40,6 @@ import hanse_msgs.Ampere;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.misc.IMUData;
-import mars.ros.MARSNodeMain;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
@@ -65,7 +64,7 @@ import std_msgs.Header;
 
 public class RosMessageFactory {
 
-    public static Message createMessageForSensor(Sensor sensor, MARSNodeMain rosNode, Object sensorData) {
+    public static Message createMessageForSensor(Sensor sensor, AUVConnectionNode node, Object sensorData) {
 
         if (sensor == null) {
             throw new IllegalArgumentException("sensor == null");
@@ -78,26 +77,26 @@ public class RosMessageFactory {
                 || sensor instanceof Velocimeter
                 || sensor instanceof VoltageMeter) {
 
-            Float32 message = rosNode.getMessageFactory().newFromType(Float32._TYPE);
+            Float32 message = node.getMessageFactory().newFromType(Float32._TYPE);
             message.setData(Float.parseFloat(sensorData + ""));
             return message;
         }
 
         if (sensor instanceof AmpereMeter) {
-            Ampere message = rosNode.getMessageFactory().newFromType(hanse_msgs.Ampere._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            Ampere message = node.getMessageFactory().newFromType(hanse_msgs.Ampere._TYPE);
+            message.setHeader(createHeader(node, sensor));
             message.setAmpere(Double.parseDouble(sensorData + ""));
             return message;
         }
 
         if (sensor instanceof FlowMeter || sensor instanceof PollutionMeter) {
-            Vector3Stamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
 
             try {
                 message.setVector((Vector3) sensorData);
             } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
             }
 
@@ -105,13 +104,13 @@ public class RosMessageFactory {
         }
 
         if (sensor instanceof Orientationmeter || sensor instanceof Posemeter) {
-            PoseStamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            PoseStamped message = node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
 
             try {
                 message.setPose((Pose) sensorData);
             } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
             }
 
@@ -119,23 +118,23 @@ public class RosMessageFactory {
         }
 
         if (sensor instanceof Positionmeter) {
-            PointStamped message = rosNode.getMessageFactory().newFromType(geometry_msgs.PointStamped._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            PointStamped message = node.getMessageFactory().newFromType(geometry_msgs.PointStamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
 
             try {
                 message.setPoint((Point) sensorData);
             } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Oops, parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
             }
 
             return message;
         }
- 
+
         if (sensor instanceof InfraRedSensor) {
             InfraRedSensor infra = (InfraRedSensor) sensor;
-            sensor_msgs.Range message = rosNode.getMessageFactory().newFromType(sensor_msgs.Range._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            sensor_msgs.Range message = node.getMessageFactory().newFromType(sensor_msgs.Range._TYPE);
+            message.setHeader(createHeader(node, sensor));
             message.setMinRange(infra.getMinRange());
             message.setMaxRange(infra.getMaxRange());
             message.setRange(Float.parseFloat(sensorData + ""));
@@ -143,47 +142,47 @@ public class RosMessageFactory {
             message.setRadiationType(sensor_msgs.Range.INFRARED);
             return message;
         }
-        
+
         if (sensor instanceof PressureSensor) {
-            sensor_msgs.FluidPressure message = rosNode.getMessageFactory().newFromType(sensor_msgs.FluidPressure._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            sensor_msgs.FluidPressure message = node.getMessageFactory().newFromType(sensor_msgs.FluidPressure._TYPE);
+            message.setHeader(createHeader(node, sensor));
             message.setFluidPressure(Float.parseFloat(sensorData + "") * 1.0);
             message.setVariance(0f);
             return message;
         }
 
         if (sensor instanceof TemperatureSensor) {
-            sensor_msgs.Temperature message = rosNode.getMessageFactory().newFromType(sensor_msgs.Temperature._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            sensor_msgs.Temperature message = node.getMessageFactory().newFromType(sensor_msgs.Temperature._TYPE);
+            message.setHeader(createHeader(node, sensor));
             message.setVariance(0f);
             message.setTemperature(Float.parseFloat(sensorData + "") * 10.0); //*10 because of ros temp data format
             return message;
         }
 
         if (sensor instanceof IMU) {
-            sensor_msgs.Imu message = rosNode.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
-            message.setHeader(createHeader(rosNode, sensor));
+            sensor_msgs.Imu message = node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
+            message.setHeader(createHeader(node, sensor));
             IMUData imuData = (IMUData) sensorData;
-            
-            Vector3 ang_vec = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+
+            Vector3 ang_vec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
             ang_vec.setX(imuData.getAngularVelocity().getX());
             ang_vec.setY(imuData.getAngularVelocity().getY());
             ang_vec.setZ(imuData.getAngularVelocity().getZ());
 
-            Quaternion quat = rosNode.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
+            Quaternion quat = node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE);
             quat.setX(imuData.getOrientation().getX());
             quat.setY(imuData.getOrientation().getY());
             quat.setZ(imuData.getOrientation().getZ());
             quat.setW(imuData.getOrientation().getW());
-            
-            Vector3 acc_vec = rosNode.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
+
+            Vector3 acc_vec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
             acc_vec.setX(imuData.getLinearAcceleration().getX());
             acc_vec.setY(imuData.getLinearAcceleration().getY());
             acc_vec.setZ(imuData.getLinearAcceleration().getZ());
-            
+
             message.setAngularVelocity(ang_vec);
             message.setOrientation(quat);
-            message.setLinearAcceleration(acc_vec); 
+            message.setLinearAcceleration(acc_vec);
             return message;
         }
 
@@ -192,8 +191,8 @@ public class RosMessageFactory {
         return null;
     }
 
-    private static Header createHeader(MARSNodeMain rosNode, Sensor sensor) {
-        Header header = rosNode.getMessageFactory().newFromType(std_msgs.Header._TYPE);
+    private static Header createHeader(AUVConnectionNode node, Sensor sensor) {
+        Header header = node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         header.setSeq(sensor.getNextSequenceNumber());
         header.setFrameId(sensor.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));

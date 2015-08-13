@@ -31,7 +31,6 @@ package mars.communication.rosimpl;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.ros.MARSNodeMain;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
@@ -57,7 +56,7 @@ import org.ros.node.topic.Publisher;
 
 public class RosPublisherFactory {
 
-    public static Publisher createPublisherForSensor(Sensor sensor, MARSNodeMain marsNodeMain, String auvName) {
+    public static Publisher createPublisherForSensor(Sensor sensor, AUVConnectionNode node, String auvName) {
 
         if (sensor == null) {
             throw new IllegalArgumentException("sensor was null");
@@ -69,57 +68,57 @@ public class RosPublisherFactory {
                 || sensor instanceof SalinitySensor
                 || sensor instanceof Velocimeter
                 || sensor instanceof VoltageMeter) {
-            return (Publisher<std_msgs.Float32>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), std_msgs.Float32._TYPE);
+            return (Publisher<std_msgs.Float32>) node.newPublisher(auvName + "/" + sensor.getName(), std_msgs.Float32._TYPE);
         }
 
         if (sensor instanceof AmpereMeter) {
-            return (Publisher<hanse_msgs.Ampere>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), hanse_msgs.Ampere._TYPE);
+            return (Publisher<hanse_msgs.Ampere>) node.newPublisher(auvName + "/" + sensor.getName(), hanse_msgs.Ampere._TYPE);
         }
 
         if (sensor instanceof FlowMeter
                 || sensor instanceof PollutionMeter) {
-            return (Publisher<geometry_msgs.Vector3Stamped>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.Vector3Stamped._TYPE);
+            return (Publisher<geometry_msgs.Vector3Stamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.Vector3Stamped._TYPE);
         }
 
         if (sensor instanceof GPSReceiver) {
-            return (Publisher<sensor_msgs.NavSatFix>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.NavSatFix._TYPE);
+            return (Publisher<sensor_msgs.NavSatFix>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.NavSatFix._TYPE);
         }
 
         if (sensor instanceof Hakuyo) {
-            return (Publisher<sensor_msgs.LaserScan>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.LaserScan._TYPE);
+            return (Publisher<sensor_msgs.LaserScan>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.LaserScan._TYPE);
         }
 
         if (sensor instanceof IMU) {
-            return (Publisher<sensor_msgs.Imu>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Imu._TYPE);
+            return (Publisher<sensor_msgs.Imu>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Imu._TYPE);
         }
 
         if (sensor instanceof Orientationmeter
                 || sensor instanceof Posemeter) {
-            return (Publisher<geometry_msgs.PoseStamped>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PoseStamped._TYPE);
+            return (Publisher<geometry_msgs.PoseStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PoseStamped._TYPE);
         }
 
         if (sensor instanceof Positionmeter) {
-            return (Publisher<geometry_msgs.PointStamped>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PointStamped._TYPE);
+            return (Publisher<geometry_msgs.PointStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PointStamped._TYPE);
         }
 
         if (sensor instanceof InfraRedSensor) {
-            return (Publisher<sensor_msgs.Range>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Range._TYPE);
+            return (Publisher<sensor_msgs.Range>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Range._TYPE);
         }
-        
+
         if (sensor instanceof PressureSensor) {
-            return (Publisher<sensor_msgs.FluidPressure>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.FluidPressure._TYPE);
+            return (Publisher<sensor_msgs.FluidPressure>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.FluidPressure._TYPE);
         }
 
         if (sensor instanceof TemperatureSensor) {
-            return (Publisher<sensor_msgs.Temperature>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Temperature._TYPE);
+            return (Publisher<sensor_msgs.Temperature>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Temperature._TYPE);
         }
 
         if (sensor instanceof TerrainSender) {
-            return (Publisher<nav_msgs.OccupancyGrid>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), nav_msgs.OccupancyGrid._TYPE);
+            return (Publisher<nav_msgs.OccupancyGrid>) node.newPublisher(auvName + "/" + sensor.getName(), nav_msgs.OccupancyGrid._TYPE);
         }
 
         if (sensor instanceof VideoCamera) {
-            return (Publisher<sensor_msgs.Image>) marsNodeMain.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Image._TYPE);
+            return (Publisher<sensor_msgs.Image>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Image._TYPE);
         }
 
         Logger.getLogger(RosPublisherFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");
