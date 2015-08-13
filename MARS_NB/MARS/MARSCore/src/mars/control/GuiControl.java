@@ -91,6 +91,14 @@ public class GuiControl extends AbstractControl{
     public void deselect(){
         marsObj.setSelected(false);
         setMove(false);
+        //dont forget the ghost
+        if(marsObj instanceof AUV){
+            AUV auv = (AUV)marsObj;
+            auv.hideGhostAUV(true);
+        }else if(marsObj instanceof SimObject){
+            SimObject simob = (SimObject)marsObj;
+            simob.hideGhostSpatial(true);
+        }
     }
 
     public MARSObject getMarsObj() {
