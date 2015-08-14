@@ -37,11 +37,12 @@ import org.ros.node.topic.Publisher;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class TF_ROS_Publisher {
 
     ///ROS TF stuff
-    private Publisher<tf.tfMessage> tf_publisher = null;
-    private tf.tfMessage tf_fl = null;
+    //private Publisher<tf.tfMessage> tf_publisher = null;
+    //private tf.tfMessage tf_fl = null;
     private geometry_msgs.TransformStamped tf_tfs = null;
     private std_msgs.Header tf_header = null;
 

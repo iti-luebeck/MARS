@@ -41,11 +41,12 @@ import org.ros.node.topic.Publisher;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 public class SystemTFNode implements RosNodeListener {
 
     //ros system tf
-    private Publisher<tf.tfMessage> publisher = null;
-    private tf.tfMessage fl;
+    //private Publisher<tf.tfMessage> publisher = null;
+    //private tf.tfMessage fl;
     private geometry_msgs.TransformStamped tfs;
     private std_msgs.Header header;
     private int rosSequenceNumber = 0;
@@ -119,18 +120,18 @@ public class SystemTFNode implements RosNodeListener {
             List<geometry_msgs.TransformStamped> tfl = new ArrayList<geometry_msgs.TransformStamped>();
             tfl.add(tfs);
 
-            fl.setTransforms(tfl);
+            /*fl.setTransforms(tfl);
 
             if (publisher != null) {
                 publisher.publish(fl);
-            }
+            }*/
         }
     }
 
     @SuppressWarnings("unchecked")
     private void initSystemTF(MARSNodeMain ros_node) {
-        publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
-        fl = ros_node.getMessageFactory().newFromType(tf.tfMessage._TYPE);
+        //publisher = ros_node.newPublisher("/tf", tf.tfMessage._TYPE);
+        //fl = ros_node.getMessageFactory().newFromType(tf.tfMessage._TYPE);
         tfs = ros_node.getMessageFactory().newFromType(geometry_msgs.TransformStamped._TYPE);
         header = ros_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         init = true;

@@ -43,12 +43,13 @@ import org.ros.node.topic.Publisher;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@Deprecated
 @XmlAccessorType(XmlAccessType.NONE)
 public class Transformer extends Sensor {
 
     ///ROS stuff
-    private Publisher<tf.tfMessage> publisher = null;
-    private tf.tfMessage fl;
+    //private Publisher<tf.tfMessage> publisher = null;
+    //private tf.tfMessage fl;
     private geometry_msgs.TransformStamped tfs;
     private geometry_msgs.TransformStamped tfs2;
     private std_msgs.Header header;

@@ -55,6 +55,14 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>mars.libs.ws_commons_util</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>mars.libs.xbill</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -64,29 +72,30 @@
                 </dependency>
             </module-dependencies>
             <public-packages>
-                <package>actionlib</package>
                 <package>actionlib_msgs</package>
-                <package>actionlib_tutorials</package>
-                <package>base_local_planner</package>
-                <package>beep_msgs</package>
-                <package>bond</package>
-                <package>costmap_2d</package>
+                <package>ar_track_alvar_msgs</package>
+                <package>com.github.robotics_in_concert.rocon_rosjava_core.master_info</package>
+                <package>com.github.robotics_in_concert.rocon_rosjava_core.rocon_interactions</package>
+                <package>com.github.robotics_in_concert.rocon_rosjava_core.rosjava_utils</package>
+                <package>com.github.rosjava.rosjava_extras.hokuyo</package>
+                <package>com.github.rosjava.rosjava_extras.hokuyo.scip20</package>
+                <package>com.github.rosjava.zeroconf_jmdns_suite.jmdns</package>
+                <package>com.github.rosjava.zeroconf_jmdns_suite.jmdns.tutorials</package>
+                <package>concert_msgs</package>
+                <package>concert_service_msgs</package>
                 <package>diagnostic_msgs</package>
-                <package>driver_base</package>
-                <package>dynamic_reconfigure</package>
-                <package>gazebo</package>
-                <package>gazebo_msgs</package>
-                <package>gazebo_plugins</package>
+                <package>gateway_msgs</package>
                 <package>geometry_msgs</package>
-                <package>google_mapping_msgs</package>
                 <package>hanse_msgs</package>
-                <package>laser_assembler</package>
+                <package>javax.jmdns</package>
+                <package>javax.jmdns.impl</package>
+                <package>javax.jmdns.impl.constants</package>
+                <package>javax.jmdns.impl.tasks</package>
+                <package>javax.jmdns.impl.tasks.resolver</package>
+                <package>javax.jmdns.impl.tasks.state</package>
+                <package>map_store</package>
                 <package>move_base_msgs</package>
                 <package>nav_msgs</package>
-                <package>navfn</package>
-                <package>nodelet</package>
-                <package>org.apache.ws.commons.serialize</package>
-                <package>org.apache.ws.commons.util</package>
                 <package>org.apache.xmlrpc</package>
                 <package>org.apache.xmlrpc.client</package>
                 <package>org.apache.xmlrpc.client.util</package>
@@ -99,15 +108,10 @@
                 <package>org.apache.xmlrpc.util</package>
                 <package>org.apache.xmlrpc.webserver</package>
                 <package>org.ros</package>
-                <package>org.ros.actionlib</package>
-                <package>org.ros.actionlib.client</package>
-                <package>org.ros.actionlib.example</package>
-                <package>org.ros.actionlib.server</package>
-                <package>org.ros.actionlib.state</package>
-                <package>org.ros.actionlib.util</package>
                 <package>org.ros.address</package>
                 <package>org.ros.concurrent</package>
                 <package>org.ros.exception</package>
+                <package>org.ros.gradle_plugins</package>
                 <package>org.ros.internal.loader</package>
                 <package>org.ros.internal.message</package>
                 <package>org.ros.internal.message.context</package>
@@ -137,89 +141,238 @@
                 <package>org.ros.node.parameter</package>
                 <package>org.ros.node.service</package>
                 <package>org.ros.node.topic</package>
+                <package>org.ros.rosjava_benchmarks</package>
                 <package>org.ros.rosjava_geometry</package>
+                <package>org.ros.rosjava_tutorial_pubsub</package>
+                <package>org.ros.rosjava_tutorial_right_hand_rule</package>
+                <package>org.ros.rosjava_tutorial_services</package>
                 <package>org.ros.time</package>
-                <package>pcl</package>
-                <package>perf_roscpp</package>
-                <package>polled_camera</package>
-                <package>robot_pose_ekf</package>
+                <package>rocon_app_manager_msgs</package>
+                <package>rocon_device_msgs</package>
+                <package>rocon_interaction_msgs</package>
+                <package>rocon_service_pair_msgs</package>
+                <package>rocon_std_msgs</package>
+                <package>rocon_tutorial_msgs</package>
                 <package>roscpp</package>
-                <package>roscpp_tutorials</package>
                 <package>rosgraph_msgs</package>
-                <package>rospy_tutorials</package>
+                <package>rosjava_test_msgs</package>
+                <package>scheduler_msgs</package>
                 <package>sensor_msgs</package>
                 <package>shape_msgs</package>
-                <package>smach_msgs</package>
                 <package>smart_e_msgs</package>
                 <package>std_msgs</package>
                 <package>std_srvs</package>
                 <package>stereo_msgs</package>
-                <package>test_bond</package>
-                <package>test_crosspackage</package>
-                <package>test_ros</package>
-                <package>test_roscpp</package>
-                <package>test_roscpp_serialization</package>
-                <package>test_roscpp_serialization_perf</package>
-                <package>test_roslib_comm</package>
-                <package>test_rospy</package>
-                <package>test_rosservice</package>
-                <package>tf</package>
                 <package>tf2_msgs</package>
-                <package>theora_image_transport</package>
-                <package>topic_tools</package>
-                <package>tracking_server_msgs</package>
                 <package>trajectory_msgs</package>
-                <package>turtle_actionlib</package>
-                <package>turtlesim</package>
+                <package>uuid_msgs</package>
                 <package>visualization_msgs</package>
+                <package>world_canvas_msgs</package>
+                <package>yocs_msgs</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/org.ros.rosjava.apache-xmlrpc-3.1.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.ros.rosjava.apache-xmlrpc-3.1.3.jar</binary-origin>
+                <runtime-relative-path>ext/smart_e_msgs-0.0.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/smart_e_msgs-0.0.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.ros.rosjava.actionlib_java-0.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.ros.rosjava.actionlib_java-0.0.0.jar</binary-origin>
+                <runtime-relative-path>ext/hanse_msgs-0.0.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hanse_msgs-0.0.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/apache_xmlrpc_server-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/apache_xmlrpc_server-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/roscpp-1.11.13.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/roscpp-1.11.13.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/rosjava_bootstrap-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/rosjava_bootstrap-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/trajectory_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/trajectory_msgs-1.11.8.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.ros.rosjava.rosjava_bootstrap-0.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.ros.rosjava.rosjava_bootstrap-0.0.0.jar</binary-origin>
+                <runtime-relative-path>ext/shape_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/shape_msgs-1.11.8.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/apache_xmlrpc_common-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/apache_xmlrpc_common-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/std_msgs-0.5.9.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/std_msgs-0.5.9.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/apache_xmlrpc_client-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/apache_xmlrpc_client-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/gateway_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/gateway_msgs-0.7.12.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.ros.geometry-0.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.ros.geometry-0.0.0.jar</binary-origin>
+                <runtime-relative-path>ext/rosjava_benchmarks-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_benchmarks-0.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/rosjava_geometry-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/rosjava_geometry-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/rosjava_utils-0.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_utils-0.2.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/rosjava_messages-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/rosjava_messages-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/tf2_msgs-0.5.11.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/tf2_msgs-0.5.11.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.ros.rosjava.ws-commons-util-1.0.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.ros.rosjava.ws-commons-util-1.0.2.jar</binary-origin>
+                <runtime-relative-path>ext/gradle_plugins-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/gradle_plugins-0.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/rosjava-0.0.0-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/rosjava-0.0.0-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/jmdns-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jmdns-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/nav_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/nav_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/apache_xmlrpc_server-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/apache_xmlrpc_server-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/visualization_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/visualization_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_service_pair_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_service_pair_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/scheduler_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/scheduler_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_interactions-0.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_interactions-0.2.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/sensor_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/sensor_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/master_info-0.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/master_info-0.2.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/uuid_msgs-1.0.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/uuid_msgs-1.0.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/stereo_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/stereo_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/concert_service_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/concert_service_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_test_msgs-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_test_msgs-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jmdns_tutorials-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jmdns_tutorials-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/world_canvas_msgs-0.1.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/world_canvas_msgs-0.1.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_app_manager_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_app_manager_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/message_generation-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/message_generation-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/ar_track_alvar_msgs-0.5.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ar_track_alvar_msgs-0.5.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosgraph_msgs-1.11.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosgraph_msgs-1.11.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/hokuyo-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hokuyo-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/apache_xmlrpc_common-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/apache_xmlrpc_common-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_std_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_std_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/actionlib_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/actionlib_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_tutorial_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_tutorial_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_tutorial_services-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_tutorial_services-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_test-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_test-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_tutorial_pubsub-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_tutorial_pubsub-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/yocs_msgs-0.6.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/yocs_msgs-0.6.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_geometry-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_geometry-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/move_base_msgs-1.12.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/move_base_msgs-1.12.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/apache_xmlrpc_client-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/apache_xmlrpc_client-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_device_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_device_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rosjava_tutorial_right_hand_rule-0.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rosjava_tutorial_right_hand_rule-0.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/map_store-0.3.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/map_store-0.3.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/std_srvs-1.11.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/std_srvs-1.11.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/concert_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/concert_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/rocon_interaction_msgs-0.7.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rocon_interaction_msgs-0.7.12.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/diagnostic_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/diagnostic_msgs-1.11.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/geometry_msgs-1.11.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/geometry_msgs-1.11.8.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
