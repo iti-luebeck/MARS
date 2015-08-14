@@ -111,14 +111,18 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
         return AUVConnectionType.TCP;
     }
 
+    /**
+     * 
+     * @param params expects one parameter
+     */
     @Override
-    public void connect(String param) {
+    public void connect(String ... params) {
 
         if (!started) {
             started = true;
 
             try {
-                port = Integer.parseInt(param);
+                port = Integer.parseInt(params[0]);
                 serverSocket = new ServerSocket(port);
                 running = true;
 

@@ -46,7 +46,7 @@ public class AUVConnectionFactory {
         if (connectionType.equals(AUVConnectionType.ROS.toString())) {
             conn = new AUVConnectionRosImpl(auv);
             String masterUri = "http://" + auv.getMARS_Settings().getROSMasterip() + ":" + auv.getMARS_Settings().getROSMasterport() + "/";
-            conn.connect(masterUri);
+            conn.connect(masterUri, auv.getMARS_Settings().getROSLocalip());
         } else if (connectionType.equals(AUVConnectionType.TCP.toString())) {
             conn = new AUVConnectionTcpImpl(auv);
             conn.connect(param);

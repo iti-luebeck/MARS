@@ -114,11 +114,15 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
         return node.isStarted();
     }
 
+    /**
+     * 
+     * @param params expects two parameters
+     */
     @Override
-    public void connect(String param) {
-
-        NodeConfiguration config = NodeConfiguration.newPublic("127.0.0.1",
-                java.net.URI.create(param));
+    public void connect(String ... params) {
+        
+        NodeConfiguration config = NodeConfiguration.newPublic(params[1],
+                java.net.URI.create(params[0]));
 
         config.setNodeName("MARS/" + auv.getName());
 
