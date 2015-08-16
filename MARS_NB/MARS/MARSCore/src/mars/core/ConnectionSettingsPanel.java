@@ -56,9 +56,12 @@ public class ConnectionSettingsPanel extends JPanel {
         addAUVs(mars, settingsContainer);
 
         this.add(settingsContainer, "cell 0 0, grow");
+
+        this.validate();
     }
 
     private void addAUVs(final MARS_Main mars, JPanel settingsContainer) {
+
         AUV_Manager auvManager = mars.getMapstate().getAUV_Manager();
 
         if (auvManager == null) {
@@ -128,6 +131,8 @@ public class ConnectionSettingsPanel extends JPanel {
                 connectButton.setText("Connect");
             }
 
+            final ConnectionSettingsPanel self = this;
+
             connectButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -135,23 +140,15 @@ public class ConnectionSettingsPanel extends JPanel {
                     if (connectButton.getText().equals("Connect")) {
 
                         auv.getAuv_param().setConnectionType(combobox.getSelectedItem().toString());
-                        AUVConnectionFactory.createNewConnection(auv, tcpPort.getText());
+                        AUVConnectionFactory.createNewConnection(auv, tcpPort.getText(), self);
 
                     } else {
                         auv.getAuvConnection().disconnect();
                     }
 
-                    ConnectionSettingsPanel panel = (ConnectionSettingsPanel) connectButton.getParent().getParent();
-
-                    //redraw the entire panel
-                    try {
-
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-
+                    if (self != null) {
+                        self.refresh();
                     }
-                    panel.refresh();
-                    panel.validate();
                 }
             });
 

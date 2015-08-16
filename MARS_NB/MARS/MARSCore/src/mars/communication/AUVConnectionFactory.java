@@ -34,17 +34,18 @@ import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.communication.rosimpl.AUVConnectionRosImpl;
 import mars.communication.tcpimpl.AUVConnectionTcpImpl;
+import mars.core.ConnectionSettingsPanel;
 import mars.sensors.Sensor;
 
 public class AUVConnectionFactory {
 
-    public static AUVConnection createNewConnection(AUV auv, String param) {
+    public static AUVConnection createNewConnection(AUV auv, String param, ConnectionSettingsPanel panel) {
 
         AUVConnection conn;
         String connectionType = auv.getAuv_param().getConnectionType();
 
         if (connectionType.equals(AUVConnectionType.ROS.toString())) {
-            conn = new AUVConnectionRosImpl(auv);
+            conn = new AUVConnectionRosImpl(auv, panel);
             String masterUri = "http://" + auv.getMARS_Settings().getROSMasterip() + ":" + auv.getMARS_Settings().getROSMasterport() + "/";
             conn.connect(masterUri, auv.getMARS_Settings().getROSLocalip());
         } else if (connectionType.equals(AUVConnectionType.TCP.toString())) {

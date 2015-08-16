@@ -355,7 +355,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         super.initialize(stateManager, app);
 
         progr.finish();
-        
+
         //initCamPath();
     }
 
@@ -386,7 +386,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     public void connectToServer() {
         mars_settings.setROSEnabled(true);
-        initer.setupAuvConnections();
+        //initer.setupAuvConnections();
         if (initer.checkROSServer()) {
             MARSTopComp.allowServerInteraction(true);
         } else {
@@ -1085,17 +1085,17 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
     }
-    
-    private void initCamPath(){
+
+    private void initCamPath() {
         CameraNode camNode = new CameraNode("Motion cam", mars.getCamera());
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         camNode.setEnabled(true);
         MotionPath path = new MotionPath();
         path.setCycle(true);
         /*path.addWayPoint(new Vector3f(20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, 20));
-        path.addWayPoint(new Vector3f(-20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, -20));*/
+         path.addWayPoint(new Vector3f(0, 3, 20));
+         path.addWayPoint(new Vector3f(-20, 3, 0));
+         path.addWayPoint(new Vector3f(0, 3, -20));*/
         path.addWayPoint(new Vector3f(0, -1.5f, 0));
         path.addWayPoint(new Vector3f(0, -1.5f, 30));
         path.addWayPoint(new Vector3f(40, -1.5f, 30));
@@ -1109,7 +1109,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         path.addWayPoint(new Vector3f(-10, 2, 20));
         path.setCurveTension(0.83f);
         path.enableDebugShape(assetManager, rootNode);
-        
+
         MotionEvent cameraMotionControl = new MotionEvent(camNode, path);
         cameraMotionControl.setLoopMode(LoopMode.Loop);
         //cameraMotionControl.setLookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);

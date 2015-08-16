@@ -93,7 +93,6 @@ import forester.image.DensityMap.Channel;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -101,11 +100,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
-import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
-import mars.communication.AUVConnectionFactory;
 import mars.misc.Collider;
 import mars.misc.WireProcessor;
 import mars.server.MARSClient;
@@ -294,7 +291,7 @@ public class Initializer {
         setupPlaneWater();
         setupProjectedWavesWater();
         setupCrossHairs();
-        setupAuvConnections();
+//        setupAuvConnections();
         setupAdvServer();
         //setupGlow();
         //setupFishEye();
@@ -358,44 +355,43 @@ public class Initializer {
         hideCrossHairs(mars_settings.isCrossHairsEnabled());
     }
 
-    /**
-     * setting up the raw_server for communication with the auv
-     */
-    public void setupAuvConnections() {
-
-        // initialize the connection objects, but not start the real connections
-        HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
-        for (String auvName : marsObjects.keySet()) {
-            AUV auv = marsObjects.get(auvName);
-            if (auv.getAuvConnection() == null) {
-                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv, "")); //TODOFAB: possible problem for ros connections
-            }
-        }
-
-        if (mars_settings.getRAWEnabled()) {
-            raw_server = new MARS_Server(mars, auv_manager, com_manager);
-            raw_server.setServerPort(mars_settings.getRAWPort());
-            raw_server_thread = new Thread(raw_server);
-            raw_server_thread.start();
-        }
-
-        if (mars_settings.getROSEnabled()) {
-            ros_server = new ROS_Node(mars, auv_manager, mars_settings);
-            ros_server.setMaster_port(mars_settings.getROSMasterport());
-            ros_server.setMaster_ip(mars_settings.getROSMasterip());
-            ros_server.setLocal_ip(mars_settings.getROSLocalip());
-            ros_server.init();
-
-            ros_server_thread = new Thread(ros_server);
-            ros_server_thread.start();
-
-            com_server = new CommunicationManagerRunnable(com_manager);
-            com_server_thread = new Thread(com_server);
-            com_server_thread.start();
-        }
-
-    }
-
+//    /**
+//     * setting up the raw_server for communication with the auv
+//     */
+//    public void setupAuvConnections() {
+//
+//        // initialize the connection objects, but not start the real connections
+//        HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
+//        for (String auvName : marsObjects.keySet()) {
+//            AUV auv = marsObjects.get(auvName);
+//            if (auv.getAuvConnection() == null) {
+//                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv, "")); //TODOFAB: possible problem for ros connections
+//            }
+//        }
+//
+//        if (mars_settings.getRAWEnabled()) {
+//            raw_server = new MARS_Server(mars, auv_manager, com_manager);
+//            raw_server.setServerPort(mars_settings.getRAWPort());
+//            raw_server_thread = new Thread(raw_server);
+//            raw_server_thread.start();
+//        }
+//
+//        if (mars_settings.getROSEnabled()) {
+//            ros_server = new ROS_Node(mars, auv_manager, mars_settings);
+//            ros_server.setMaster_port(mars_settings.getROSMasterport());
+//            ros_server.setMaster_ip(mars_settings.getROSMasterip());
+//            ros_server.setLocal_ip(mars_settings.getROSLocalip());
+//            ros_server.init();
+//
+//            ros_server_thread = new Thread(ros_server);
+//            ros_server_thread.start();
+//
+//            com_server = new CommunicationManagerRunnable(com_manager);
+//            com_server_thread = new Thread(com_server);
+//            com_server_thread.start();
+//        }
+//
+//    }
     /**
      * Setup the generic publisher. Used to publish all sensor data.
      */
