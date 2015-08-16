@@ -357,37 +357,12 @@ public class Initializer {
 //     */
 //    public void setupAuvConnections() {
 //
-//        // initialize the connection objects, but not start the real connections
-//        HashMap<String, AUV> marsObjects = auv_manager.getMARSObjects();
-//        for (String auvName : marsObjects.keySet()) {
-//            AUV auv = marsObjects.get(auvName);
-//            if (auv.getAuvConnection() == null) {
-//                auv.setAuvConnection(AUVConnectionFactory.createNewConnection(auv, "")); //TODOFAB: possible problem for ros connections
-//            }
-//        }
-//
 //        if (mars_settings.getRAWEnabled()) {
 //            raw_server = new MARS_Server(mars, auv_manager, com_manager);
 //            raw_server.setServerPort(mars_settings.getRAWPort());
 //            raw_server_thread = new Thread(raw_server);
 //            raw_server_thread.start();
 //        }
-//
-//        if (mars_settings.getROSEnabled()) {
-//            ros_server = new ROS_Node(mars, auv_manager, mars_settings);
-//            ros_server.setMaster_port(mars_settings.getROSMasterport());
-//            ros_server.setMaster_ip(mars_settings.getROSMasterip());
-//            ros_server.setLocal_ip(mars_settings.getROSLocalip());
-//            ros_server.init();
-//
-//            ros_server_thread = new Thread(ros_server);
-//            ros_server_thread.start();
-//
-//            com_server = new CommunicationManagerRunnable(com_manager);
-//            com_server_thread = new Thread(com_server);
-//            com_server_thread.start();
-//        }
-//
 //    }
     /**
      * Setup the generic publisher. Used to publish all sensor data.
