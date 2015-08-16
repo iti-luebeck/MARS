@@ -32,10 +32,7 @@ package mars.actuators.thruster;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Subscriber;
 
 /**
  * Plain thrusters used by the MONSUN project.
@@ -119,16 +116,16 @@ public class BrushlessThruster extends Thruster {
      * @param ros_node
      * @param auv_name
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        final BrushlessThruster self = this;
-        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
-        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
-            @Override
-            public void onNewMessage(hanse_msgs.sollSpeed message) {
-                self.set_thruster_speed((int) message.getData());
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-    }
+//    @Deprecated
+//    @SuppressWarnings("unchecked")
+//    public void initROS(MARSNodeMain ros_node, String auv_name) {
+//        final BrushlessThruster self = this;
+//        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
+//        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
+//            @Override
+//            public void onNewMessage(hanse_msgs.sollSpeed message) {
+//                self.set_thruster_speed((int) message.getData());
+//            }
+//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+//    }
 }

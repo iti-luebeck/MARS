@@ -32,10 +32,7 @@ package mars.actuators.thruster;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Subscriber;
 
 /**
  * This class represents the SeaBotix Thrusters. A measured force fitting curve is used.
@@ -116,7 +113,7 @@ public class SeaBotixThruster extends Thruster {
     @Override
     protected float calculateThrusterCurrent(int speed) {
         if (Math.abs(speed) > 22) {
-            return 0.00013053f * (float)Math.pow(Math.abs(speed),2f) - 0.00211047f * Math.abs(speed) + 0.01576037f;
+            return 0.00013053f * (float) Math.pow(Math.abs(speed), 2f) - 0.00211047f * Math.abs(speed) + 0.01576037f;
         } else {
             return 0f;
         }
@@ -127,17 +124,17 @@ public class SeaBotixThruster extends Thruster {
      * @param ros_node
      * @param auv_name
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, final String auv_name) {
-        final SeaBotixThruster self = this;
-        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
-        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
-            @Override
-            public void onNewMessage(hanse_msgs.sollSpeed message) {
-                //System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
-                self.set_thruster_speed((int) message.getData());
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-    }
+//    @Deprecated
+//    @SuppressWarnings("unchecked")
+//    public void initROS(MARSNodeMain ros_node, final String auv_name) {
+//        final SeaBotixThruster self = this;
+//        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
+//        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
+//            @Override
+//            public void onNewMessage(hanse_msgs.sollSpeed message) {
+//                //System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
+//                self.set_thruster_speed((int) message.getData());
+//            }
+//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+//    }
 }

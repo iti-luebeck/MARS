@@ -36,18 +36,14 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
-import geometry_msgs.Vector3;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Subscriber;
 
 /**
  * A simple visualization of a point in the 3d world. Can be used for debugging purposes since it can be moved.
@@ -197,20 +193,19 @@ public class PointVisualizer extends Actuator {
      * @param ros_node
      * @param auv_name
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        final PointVisualizer self = this;
-        Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.Vector3Stamped._TYPE);
-        subscriber.addMessageListener(new MessageListener<geometry_msgs.Vector3Stamped>() {
-            @Override
-            public void onNewMessage(geometry_msgs.Vector3Stamped message) {
-                Vector3 vec = message.getVector();
-                self.updateVector(new Vector3f((float) vec.getX(), (float) vec.getZ(), (float) vec.getY()));
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-    }
-
+//    @Deprecated
+//    @SuppressWarnings("unchecked")
+//    public void initROS(MARSNodeMain ros_node, String auv_name) {
+//        final PointVisualizer self = this;
+//        Subscriber<geometry_msgs.Vector3Stamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.Vector3Stamped._TYPE);
+//        subscriber.addMessageListener(new MessageListener<geometry_msgs.Vector3Stamped>() {
+//            @Override
+//            public void onNewMessage(geometry_msgs.Vector3Stamped message) {
+//                Vector3 vec = message.getVector();
+//                self.updateVector(new Vector3f((float) vec.getX(), (float) vec.getZ(), (float) vec.getY()));
+//            }
+//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+//    }
     @Override
     public void publishData() {
         super.publishData();

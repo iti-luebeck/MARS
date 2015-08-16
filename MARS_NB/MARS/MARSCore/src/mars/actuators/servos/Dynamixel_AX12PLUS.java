@@ -32,10 +32,7 @@ package mars.actuators.servos;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Subscriber;
 
 /**
  *
@@ -98,16 +95,16 @@ public class Dynamixel_AX12PLUS extends Servo {
      * @param ros_node
      * @param auv_name
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        final Servo self = this;
-        Subscriber<std_msgs.Float64> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), std_msgs.Float64._TYPE);
-        subscriber.addMessageListener(new MessageListener<std_msgs.Float64>() {
-            @Override
-            public void onNewMessage(std_msgs.Float64 message) {
-                self.setDesiredAnglePosition(message.getData());
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-    }
+//    @Deprecated
+//    @SuppressWarnings("unchecked")
+//    public void initROS(MARSNodeMain ros_node, String auv_name) {
+//        final Servo self = this;
+//        Subscriber<std_msgs.Float64> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), std_msgs.Float64._TYPE);
+//        subscriber.addMessageListener(new MessageListener<std_msgs.Float64>() {
+//            @Override
+//            public void onNewMessage(std_msgs.Float64 message) {
+//                self.setDesiredAnglePosition(message.getData());
+//            }
+//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+//    }
 }
