@@ -38,14 +38,14 @@ import org.openide.DialogDisplayer;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class StartROSJPanel extends javax.swing.JPanel {
+public class CommunicationJPanel extends javax.swing.JPanel {
 
     MARS_Main mars = null;
 
     /**
      * Creates new form StartSimulationJPanel
      */
-    public StartROSJPanel() {
+    public CommunicationJPanel() {
         initComponents();
     }
 
@@ -65,20 +65,23 @@ public class StartROSJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jButtonServerConnect = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
 
-        jButtonServerConnect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/connect.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonServerConnect, org.openide.util.NbBundle.getMessage(StartROSJPanel.class, "StartROSJPanel.jButtonServerConnect.text")); // NOI18N
-        jButtonServerConnect.setToolTipText(org.openide.util.NbBundle.getMessage(StartROSJPanel.class, "StartROSJPanel.jButtonServerConnect.toolTipText")); // NOI18N
-        jButtonServerConnect.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/connect.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(CommunicationJPanel.class, "CommunicationJPanel.jButton1.text")); // NOI18N
+        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(CommunicationJPanel.class, "CommunicationJPanel.jButton1.toolTipText")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonServerConnectActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButtonServerConnect);
+        jToolBar1.add(jButton1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -92,16 +95,16 @@ public class StartROSJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonServerConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonServerConnectActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ConnectionSettingsPanel connectionSettingsPanel = new ConnectionSettingsPanel(new MigLayout("fill"), mars);
         connectionSettingsPanel.refresh();
 
         DialogDescriptor d = new DialogDescriptor(connectionSettingsPanel, "AUV Connections");
         DialogDisplayer.getDefault().notify(d);
-    }//GEN-LAST:event_jButtonServerConnectActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonServerConnect;
+    private javax.swing.JButton jButton1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

@@ -1808,8 +1808,8 @@ public final class MARSTopComponent extends TopComponent {
 
                         Toolbar findToolbar2 = ToolbarPool.getDefault().findToolbar("ROS");
                         Component[] components2 = findToolbar2.getComponents();
-                        if (components2[1] instanceof StartROSJPanel) {
-                            StartROSJPanel simToolBarPanel = (StartROSJPanel) components2[1];
+                        if (components2[1] instanceof CommunicationJPanel) {
+                            CommunicationJPanel simToolBarPanel = (CommunicationJPanel) components2[1];
                             simToolBarPanel.setMars(mars);
                         }
 
