@@ -95,7 +95,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     private void initializeSubscribersForActuators() {
 
         for (String actuatorName : auv.getActuators().keySet()) {
-            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, actuatorName);
+            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, auv.getName());
         }
     }
 
@@ -115,12 +115,12 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     }
 
     /**
-     * 
+     *
      * @param params expects two parameters
      */
     @Override
-    public void connect(String ... params) {
-        
+    public void connect(String... params) {
+
         NodeConfiguration config = NodeConfiguration.newPublic(params[1],
                 java.net.URI.create(params[0]));
 
