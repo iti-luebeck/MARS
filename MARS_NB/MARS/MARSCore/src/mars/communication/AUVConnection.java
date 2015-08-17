@@ -29,7 +29,6 @@
  */
 package mars.communication;
 
-import mars.communication.tcpimpl.bo.ActuatorData;
 import mars.sensors.Sensor;
 
 /**
@@ -41,11 +40,11 @@ public interface AUVConnection extends mars.events.AUVObjectListener {
 
     void publishSensorData(Sensor sourceSensor, Object sensorData, long dataTimestamp);
 
-    void receiveActuatorData(ActuatorData actuatorData);
+    void receiveActuatorData(Object actuatorData);
 
     AUVConnectionType getConnectionType();
 
-    void connect(String ... params);
+    void connect(String... params);
 
     void disconnect();
 

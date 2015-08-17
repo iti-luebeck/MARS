@@ -32,16 +32,22 @@ package mars.communication.tcpimpl;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import mars.actuators.Actuator;
+import mars.actuators.thruster.Thruster;
 import mars.auv.AUV;
 import mars.communication.AUVConnectionAbstractImpl;
 import mars.communication.AUVConnectionType;
 import mars.communication.tcpimpl.bo.ActuatorData;
+import mars.communication.tcpimpl.bo.ActuatorData.Data;
 import mars.communication.tcpimpl.bo.SensorData;
 import mars.sensors.Sensor;
 
@@ -100,10 +106,32 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     }
 
     @Override
-    public void receiveActuatorData(ActuatorData actuatorData) {
+    public void receiveActuatorData(Object actuatorData) {
 
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received String", actuatorData);
-        //TODOFAB route the data to the correct actuator!
+        try {
+            JAXBContext context = JAXBContext.newInstance(ActuatorData.class, Data.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            unmarshaller.setEventHandler(new JaxbValidationEventHandler());
+            ActuatorData incomingData = (ActuatorData) unmarshaller.unmarshal(new StringReader((String) actuatorData));
+
+            String actuatorName = incomingData.getActuatorName();
+            long time = incomingData.getTimestamp();
+            String dataType = incomingData.getDataType();
+            String value = incomingData.getData();
+
+            Actuator actuator = auv.getActuators().get(actuatorName);
+
+            if (actuator == null) {
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "[" + auv.getName() + "] Received actuator data, but I am unable to find an actuator under the name of " + actuatorName, "");
+            }
+
+            if (actuator instanceof Thruster) {
+                ((Thruster) actuator).set_thruster_speed(Integer.parseInt(value));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "[" + auv.getName() + "] Exception while receiving data!", ex);
+        }
     }
 
     @Override
@@ -112,11 +140,11 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     }
 
     /**
-     * 
+     *
      * @param params expects one parameter
      */
     @Override
-    public void connect(String ... params) {
+    public void connect(String... params) {
 
         if (!started) {
             started = true;

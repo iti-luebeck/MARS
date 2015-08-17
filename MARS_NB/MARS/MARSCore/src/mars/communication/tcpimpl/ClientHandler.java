@@ -43,7 +43,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class ClientHandler implements Runnable {
 
-    public static final boolean ZIP_COMPRESSION_ENABLED = true;
+    public static final char END_OF_TRANSMISSION = 0x04;
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
@@ -58,13 +58,12 @@ public class ClientHandler implements Runnable {
         this.connection = connection;
 
         try {
-            if (ZIP_COMPRESSION_ENABLED) {
-                reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(clientSocket.getInputStream()), "UTF-8"));
-                writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(clientSocket.getOutputStream())));
-            } else {
-                writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            }
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new GZIPOutputStream(socket.getOutputStream())));
+            writer.flush();
+
+            reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(
+                    socket.getInputStream()), "UTF-8"));
 
             running = true;
 
@@ -116,7 +115,7 @@ public class ClientHandler implements Runnable {
 
             if (sensorData != null && sensorData.length() > 0) {
                 writer.write(sensorData);
-                writer.write(0x04); //End of Transmission
+                writer.write(END_OF_TRANSMISSION);
                 writer.flush();
             }
 
@@ -132,19 +131,22 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
+            while (running) {
 
-            if (reader != null) {
-                //ActuatorData actuatorData = (ActuatorData) inputStream.readObject();
-                String line = reader.readLine();
+                StringBuffer sb = new StringBuffer();
+                int readInt = -1;
 
-                //if (actuatorData != null && running) {
-                //    connection.receiveActuatorData(actuatorData);
-                //}
+                while ((readInt = reader.read()) != -1) {
+
+                    if (readInt == END_OF_TRANSMISSION) {
+                        connection.receiveActuatorData(sb.toString());
+                        sb = new StringBuffer(); // reset the buffer
+                    } else {
+                        sb.append((char) readInt);
+                    }
+                }
+
             }
-
-        } catch (SocketException se) {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Apparently socket " + socket.getRemoteSocketAddress().toString() + " has disconnected: " + se.getLocalizedMessage());
-            disconnect();
 
         } catch (Exception e) {
 

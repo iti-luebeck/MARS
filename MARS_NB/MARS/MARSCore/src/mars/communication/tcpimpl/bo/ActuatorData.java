@@ -29,31 +29,58 @@
  */
 package mars.communication.tcpimpl.bo;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
+
 /**
  * Container for xml representation of actuator data
  */
+@XmlRootElement(name = "ActuatorData")
 public class ActuatorData {
 
-    private final String actuatorName;
-    private final Object actuatorData;
-    private final long timestamp;
+    @XmlElement(name = "actuator")
+    private String actuatorName;
 
-    public ActuatorData(String actuatorName, Object actuatorData, long timestamp) {
-        this.actuatorName = actuatorName;
-        this.actuatorData = actuatorData;
-        this.timestamp = timestamp;
-    }
+    @XmlElement(name = "data")
+    private Data data;
+
+    @XmlElement(name = "time")
+    private long timestamp;
 
     public String getActuatorName() {
         return actuatorName;
-    }
-
-    public Object getActuatorData() {
-        return actuatorData;
     }
 
     public long getTimestamp() {
         return timestamp;
     }
 
+    public String getDataType() {
+        return data.getDataType();
+    }
+
+    public String getData() {
+        return data.getValue();
+    }
+
+    @XmlType(name = "data")
+    public static class Data {
+
+        @XmlAttribute(name = "class")
+        String dataType;
+
+        @XmlValue
+        String value;
+
+        public String getDataType() {
+            return dataType;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }
