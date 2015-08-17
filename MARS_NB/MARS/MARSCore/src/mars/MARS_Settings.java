@@ -1684,37 +1684,69 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassFarViewingDistance(Float farViewingDistance) {
         Grass.put("farViewingDistance", farViewingDistance);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getGrassFarViewingDistanceImposter() {
+        return (Float) Grass.get("farViewingDistanceImposter");
+    }
+
+    /**
+     *
+     * @param farViewingDistanceImposter
+     */
+    public void setGrassFarViewingDistanceImposter(Float farViewingDistanceImposter) {
+        Grass.put("farViewingDistanceImposter", farViewingDistanceImposter);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getGrassPlantingRandomness() {
+        return (Float) Grass.get("plantingRandomness");
+    }
+
+    /**
+     *
+     * @param plantingRandomness
+     */
+    public void setGrassPlantingRandomness(Float plantingRandomness) {
+        Grass.put("plantingRandomness", plantingRandomness);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getGrassDensityMap() {
+        return (String) Grass.get("DensityMap");
+    }
+
+    /**
+     *
+     * @param DensityMap
+     */
+    public void setGrassDensityMap(String DensityMap) {
+        Grass.put("DensityMap", DensityMap);
+    }
 
     /**
      *
      * @return
      */
-    public Float getGrassFadingRange() {
-        return (Float) Grass.get("fadingRange");
+    public Integer getGrassPatchSize() {
+        return (Integer) Grass.get("patchSize");
     }
 
     /**
      *
-     * @param fadingRange
+     * @param patchSize
      */
-    public void setGrassFadingRange(Float fadingRange) {
-        Grass.put("fadingRange", fadingRange);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Integer getGrassPagesizeResolution() {
-        return (Integer) Grass.get("pagesizeResolution");
-    }
-
-    /**
-     *
-     * @param pagesizeResolution
-     */
-    public void setGrassPagesizeResolution(Integer pagesizeResolution) {
-        Grass.put("pagesizeResolution", pagesizeResolution);
+    public void setGrassPatchSize(Integer patchSize) {
+        Grass.put("patchSize", patchSize);
     }
 
     /**

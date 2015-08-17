@@ -284,15 +284,21 @@
                 <entry xsi:type="myHashMapEntryTypeHashMap" key="Grass">
                     <value>
                         <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                            <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="fadingRange">
-                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">10.0</value>
+						<entry xsi:type="myHashMapEntryTypeObject" key="DensityMap">
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">wakenitz_am.png</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="farViewingDistance">
                             <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">50.0</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="pagesizeResolution">
+						<entry xsi:type="myHashMapEntryTypeObject" key="farViewingDistanceImposter">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">70.0</value>
+                        </entry>
+						<entry xsi:type="myHashMapEntryTypeObject" key="plantingRandomness">
+                            <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">0.3</value>
+                        </entry>
+                        <entry xsi:type="myHashMapEntryTypeObject" key="patchSize">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">4</value>
                         </entry>
                     </value>
@@ -557,10 +563,10 @@
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="localip">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.158.154</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.88.159</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="masterip">
-                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.158.218</value>
+                            <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">141.83.88.209</value>
                         </entry>
                         <entry xsi:type="myHashMapEntryTypeObject" key="publish">
                             <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
