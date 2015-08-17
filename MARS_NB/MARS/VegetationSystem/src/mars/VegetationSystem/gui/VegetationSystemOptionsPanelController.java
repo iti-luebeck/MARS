@@ -38,7 +38,7 @@ import org.openide.util.Lookup;
 
 @OptionsPanelController.TopLevelRegistration(
         categoryName = "#OptionsCategory_Name_VegetationSystem",
-        iconBase = "mars/VegetationSystem/grass_icon.png",
+        iconBase = "mars/VegetationSystem/gui/grass_icon.png",
         keywords = "#OptionsCategory_Keywords_VegetationSystem",
         keywordsCategory = "VegetationSystem"
 )
