@@ -32,10 +32,7 @@ package mars.actuators.servos;
 import com.jme3.scene.Geometry;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.ros.MARSNodeMain;
 import mars.states.SimState;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Subscriber;
 
 /**
  *
@@ -98,16 +95,16 @@ public class Modelcraft_ES07 extends Servo {
      * @param ros_node
      * @param auv_name
      */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        final Servo self = this;
-        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), smart_e_msgs.servoCam._TYPE);
-        subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
-            @Override
-            public void onNewMessage(smart_e_msgs.servoCam message) {
-                self.setDesiredAnglePosition((int) message.getData());
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-    }
+//    @Deprecated
+//    @SuppressWarnings("unchecked")
+//    public void initROS(MARSNodeMain ros_node, String auv_name) {
+//        final Servo self = this;
+//        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), smart_e_msgs.servoCam._TYPE);
+//        subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
+//            @Override
+//            public void onNewMessage(smart_e_msgs.servoCam message) {
+//                self.setDesiredAnglePosition((int) message.getData());
+//            }
+//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
+//    }
 }

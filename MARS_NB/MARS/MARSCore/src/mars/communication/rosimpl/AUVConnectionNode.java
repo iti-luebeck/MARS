@@ -67,6 +67,7 @@ public class AUVConnectionNode extends AbstractNodeMain {
     @Override
     public void onShutdown(Node node) {
         super.onShutdown(node);
+        connection.onNodeShutdown();
         this.isStarted = false;
     }
 

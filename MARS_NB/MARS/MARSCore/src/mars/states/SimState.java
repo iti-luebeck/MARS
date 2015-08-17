@@ -289,12 +289,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
 
             comManager.setServer(initer.getRAW_Server());
 
-            if (mars_settings.getROSEnabled()) {
-                if (initer.checkROSServer()) {//Waiting for ROS Server to be ready
-
-                }
-            }
-
             progr.progress("Init Map");
             initMap();//for mars_settings
 
@@ -355,7 +349,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         super.initialize(stateManager, app);
 
         progr.finish();
-        
+
         //initCamPath();
     }
 
@@ -369,39 +363,13 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         MARSTopComp.initDND();
         MARSTopComp.allowSimInteraction();
         MARSMapComp.initDND();
-
-        if (mars_settings.getROSEnabled()) {
-            if (initer.checkROSServer()) {
-                MARSTopComp.allowServerInteraction(true);
-            } else {
-                MARSTopComp.allowServerInteraction(false);
-            }
-        } else {
-            MARSTopComp.allowServerInteraction(false);
-        }
-    }
-
-    /**
-     *
-     */
-    public void connectToServer() {
-        mars_settings.setROSEnabled(true);
-        initer.setupAuvConnections();
-        if (initer.checkROSServer()) {
-            MARSTopComp.allowServerInteraction(true);
-        } else {
-            MARSTopComp.allowServerInteraction(false);
-        }
     }
 
     /**
      *
      */
     public void disconnectFromServer() {
-        mars_settings.setROSEnabled(false);
-        MARSTopComp.enableServerInteraction(false);
         initer.killServer();
-        MARSTopComp.allowServerInteraction(false);
     }
 
     /**
@@ -506,9 +474,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         auvManager.setPhysical_environment(pe);
         auvManager.setMARS_settings(mars_settings);
         auvManager.setCommunicationManager(com_manager);
-        if (mars_settings.getROSEnabled()) {
-            auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
-        }
         auvManager.register(auvs);
     }
 
@@ -1085,17 +1050,17 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
     }
-    
-    private void initCamPath(){
+
+    private void initCamPath() {
         CameraNode camNode = new CameraNode("Motion cam", mars.getCamera());
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         camNode.setEnabled(true);
         MotionPath path = new MotionPath();
         path.setCycle(true);
         /*path.addWayPoint(new Vector3f(20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, 20));
-        path.addWayPoint(new Vector3f(-20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, -20));*/
+         path.addWayPoint(new Vector3f(0, 3, 20));
+         path.addWayPoint(new Vector3f(-20, 3, 0));
+         path.addWayPoint(new Vector3f(0, 3, -20));*/
         path.addWayPoint(new Vector3f(0, -1.5f, 0));
         path.addWayPoint(new Vector3f(0, -1.5f, 30));
         path.addWayPoint(new Vector3f(40, -1.5f, 30));
@@ -1109,7 +1074,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         path.addWayPoint(new Vector3f(-10, 2, 20));
         path.setCurveTension(0.83f);
         path.enableDebugShape(assetManager, rootNode);
-        
+
         MotionEvent cameraMotionControl = new MotionEvent(camNode, path);
         cameraMotionControl.setLoopMode(LoopMode.Loop);
         //cameraMotionControl.setLookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);

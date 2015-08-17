@@ -32,14 +32,12 @@ package mars.auv;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import mars.PhysicalEnvironment;
 import mars.object.MARSObjectManager;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClient;
 import mars.server.MARSClientEvent;
 import mars.states.MapState;
@@ -59,7 +57,6 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
     private Node AUVsNode;
     private PhysicalEnvironment physical_environment;
     private CommunicationManager com_manager;
-    private HashMap<String, MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
 
     /**
@@ -106,13 +103,13 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
         }
         return ret;
     }
-    
+
     /**
-     * 
+     *
      * @param name
      * @return The requested AUV or null if not existing
      */
-    public AUV getAUV(String name){
+    public AUV getAUV(String name) {
         return (AUV) marsObjects.get(name);
     }
 
@@ -183,44 +180,6 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
      */
     public void setCommunicationManager(CommunicationManager com_manager) {
         this.com_manager = com_manager;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public HashMap<String, MARSNodeMain> getMARSNodes() {
-        return mars_nodes;
-    }
-
-    /**
-     *
-     * @param auv_name
-     * @return
-     */
-    public MARSNodeMain getMARSNodeForAUV(String auv_name) {
-        return mars_nodes.get(auv_name);
-    }
-
-    /**
-     *
-     * @param mars_nodes
-     */
-    public void setMARSNodes(HashMap<String, MARSNodeMain> mars_nodes) {
-        this.mars_nodes = mars_nodes;
-    }
-
-    /**
-     *
-     */
-    public void updateMARSNode() {
-        for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV) marsObjects.get(elem);
-            if (auv.getAuv_param().isEnabled()) {
-                //auv.setROS_Node(getMARSNodeForAUV(elem)); //TODOFAB
-                // auv.initROS();
-            }
-        }
     }
 
     /**

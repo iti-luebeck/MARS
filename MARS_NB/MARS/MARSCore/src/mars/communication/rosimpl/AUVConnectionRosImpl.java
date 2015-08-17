@@ -30,12 +30,11 @@
 package mars.communication.rosimpl;
 
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mars.auv.AUV;
 import mars.communication.AUVConnectionAbstractImpl;
 import mars.communication.AUVConnectionType;
 import mars.communication.tcpimpl.bo.ActuatorData;
+import mars.core.ConnectionSettingsPanel;
 import mars.sensors.Sensor;
 import org.ros.internal.message.Message;
 import org.ros.node.DefaultNodeMainExecutor;
@@ -48,11 +47,13 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     private final NodeMainExecutor nodeMainExecutor;
     private AUVConnectionNode node;
     private final HashMap<String, Publisher> publishers = new HashMap<String, Publisher>();
+    private final ConnectionSettingsPanel panel;
 
-    public AUVConnectionRosImpl(AUV auv) {
+    public AUVConnectionRosImpl(AUV auv, ConnectionSettingsPanel panel) {
         super(auv);
 
         nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
+        this.panel = panel;
     }
 
     @Override
@@ -64,8 +65,6 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
 
             if (publisher != null && rosMessage != null) {
                 publisher.publish(rosMessage);
-                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Publishing data from " + sourceSensor.getName(), "");
-
             }
         }
     }
@@ -95,7 +94,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     private void initializeSubscribersForActuators() {
 
         for (String actuatorName : auv.getActuators().keySet()) {
-            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, actuatorName);
+            RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, auv.getName());
         }
     }
 
@@ -115,12 +114,12 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     }
 
     /**
-     * 
+     *
      * @param params expects two parameters
      */
     @Override
-    public void connect(String ... params) {
-        
+    public void connect(String... params) {
+
         NodeConfiguration config = NodeConfiguration.newPublic(params[1],
                 java.net.URI.create(params[0]));
 
@@ -133,6 +132,16 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     public void onNodeStarted() {
         initializePublishersForSensors();
         initializeSubscribersForActuators();
+
+        if (panel != null) {
+            panel.refresh();
+        }
+    }
+
+    public void onNodeShutdown() {
+        if (panel != null) {
+            panel.refresh();
+        }
     }
 
 }

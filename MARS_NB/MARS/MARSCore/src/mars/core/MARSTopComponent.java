@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.core;
 
 import com.jme3.math.ColorRGBA;
@@ -100,7 +100,7 @@ import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays the main 3d view of MARS.
- * 
+ *
  * @author Thomas Tosik
  */
 @ConvertAsProperties(
@@ -126,22 +126,22 @@ public final class MARSTopComponent extends TopComponent {
     private static AwtPanel sim_panel, map_panel;
     private static MARS_Main mars;
     private AwtPanelsContext ctx;
-    
+
     private AUV_Manager auvManager;
     private SimObjectManager simob_manager;
     private MARS_Settings mars_settings;
     private KeyConfig keyConfig;
     private PhysicalEnvironment penv;
-    private ConfigManager configManager; 
-    
+    private ConfigManager configManager;
+
     private ArrayList<String> auv_name_items = new ArrayList<String>();
     private ArrayList<String> simob_name_items = new ArrayList<String>();
-    
+
     private static int resolution_height = 480;
     private static int resolution_width = 640;
     private static int framelimit = 60;
     private static boolean headless = false;
-    
+
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("Simple task");
     private final InstanceContent content = new InstanceContent();
 
@@ -149,12 +149,12 @@ public final class MARSTopComponent extends TopComponent {
      *
      */
     public MARSTopComponent() {
-        associateLookup (new AbstractLookup (content)); 
-        
+        associateLookup(new AbstractLookup(content));
+
         //set so the popups are shown over the jme3canvas (from buttons for example). they will not get cut any longer
         ToolTipManager ttm = ToolTipManager.sharedInstance();
         ttm.setLightWeightPopupEnabled(false);
-        
+
         //the same as above, heavy/light mixin
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         initComponents();
@@ -173,9 +173,7 @@ public final class MARSTopComponent extends TopComponent {
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1139,7 +1137,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_Cancel5ActionPerformed
 
     private void jme3_view_flybycamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_view_flybycamActionPerformed
-        mars.getChaseCam().setEnabled(false);         
+        mars.getChaseCam().setEnabled(false);
         mars.getFlyByCamera().setEnabled(true);
     }//GEN-LAST:event_jme3_view_flybycamActionPerformed
 
@@ -1156,13 +1154,13 @@ public final class MARSTopComponent extends TopComponent {
     private void split_viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_split_viewActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
                     //do nothing
                 }
                 return null;
             }
-            });
+        });
     }//GEN-LAST:event_split_viewActionPerformed
 
     private void moveCameraDialog_xActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveCameraDialog_xActionPerformed
@@ -1176,9 +1174,9 @@ public final class MARSTopComponent extends TopComponent {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
-                    simState.moveCamera(new Vector3f(Float.valueOf(moveCameraDialog_x.getText()), Float.valueOf(moveCameraDialog_y.getText()), Float.valueOf(moveCameraDialog_z.getText())),moveCameraDialog_r.isSelected());
+                    simState.moveCamera(new Vector3f(Float.valueOf(moveCameraDialog_x.getText()), Float.valueOf(moveCameraDialog_y.getText()), Float.valueOf(moveCameraDialog_z.getText())), moveCameraDialog_r.isSelected());
                 }
                 return null;
             }
@@ -1193,9 +1191,9 @@ public final class MARSTopComponent extends TopComponent {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     SimState simState = mars.getStateManager().getState(SimState.class);
-                    simState.rotateCamera(new Vector3f(Float.valueOf(rotateCameraDialog_x.getText()), Float.valueOf(rotateCameraDialog_y.getText()), Float.valueOf(rotateCameraDialog_z.getText())),rotateCameraDialog_r.isSelected());
+                    simState.rotateCamera(new Vector3f(Float.valueOf(rotateCameraDialog_x.getText()), Float.valueOf(rotateCameraDialog_y.getText()), Float.valueOf(rotateCameraDialog_z.getText())), rotateCameraDialog_r.isSelected());
                 }
                 return null;
             }
@@ -1210,7 +1208,7 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_chase_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_chase_auvActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.chaseSelectedAUV();
                 }
@@ -1232,21 +1230,21 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_rotate_auvActionPerformed
 
     private void jme3_pokeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_pokeActionPerformed
-       mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.pokeSelectedAUV();
                 }
                 return null;
             }
-            });
+        });
     }//GEN-LAST:event_jme3_pokeActionPerformed
 
     private void jme3_reset_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_reset_auvActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.resetSelectedAUV();
                 }
@@ -1258,7 +1256,7 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_enable_auvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_enable_auvActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_enable_auv.isSelected();
                     guiState.enableSelectedAUV(selected);
@@ -1275,21 +1273,21 @@ public final class MARSTopComponent extends TopComponent {
 
         //Custom button text
         Object[] options = {"Yes",
-                    "No"};
+            "No"};
         int delete = JOptionPane.showOptionDialog(this.getRootPane(),
-        "Are you sure you want to delete the auv: " + auv.getName(),
-        "AUV deletion",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,
-        options,
-        options[1]);
-        if(delete == 0){
+                "Are you sure you want to delete the auv: " + auv.getName(),
+                "AUV deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+        if (delete == 0) {
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
-                        if(mars.getStateManager().getState(SimState.class) != null){
-                            auvManager.deregisterAUVNoFuture(auv);
-                        }
+                    if (mars.getStateManager().getState(SimState.class) != null) {
+                        auvManager.deregisterAUVNoFuture(auv);
+                    }
                     return null;
                 }
             });
@@ -1299,10 +1297,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_peActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_peActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_pe.isSelected();
-                    guiState.debugSelectedAUV(0,selected);
+                    guiState.debugSelectedAUV(0, selected);
                 }
                 return null;
             }
@@ -1313,10 +1311,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_visualizersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_visualizersActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_visualizers.isSelected();
-                    guiState.debugSelectedAUV(7,selected);
+                    guiState.debugSelectedAUV(7, selected);
                 }
                 return null;
             }
@@ -1327,10 +1325,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_centersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_centersActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_centers.isSelected();
-                    guiState.debugSelectedAUV(1,selected);
+                    guiState.debugSelectedAUV(1, selected);
                 }
                 return null;
             }
@@ -1341,10 +1339,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_buoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_buoyActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_buoy.isSelected();
-                    guiState.debugSelectedAUV(2,selected);
+                    guiState.debugSelectedAUV(2, selected);
                 }
                 return null;
             }
@@ -1355,10 +1353,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_collisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_collisionActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_collision.isSelected();
-                    guiState.debugSelectedAUV(3,selected);
+                    guiState.debugSelectedAUV(3, selected);
                 }
                 return null;
             }
@@ -1369,10 +1367,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_dragActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_dragActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_drag.isSelected();
-                    guiState.debugSelectedAUV(4,selected);
+                    guiState.debugSelectedAUV(4, selected);
                 }
                 return null;
             }
@@ -1383,10 +1381,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_wireframeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_wireframeActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_wireframe.isSelected();
-                    guiState.debugSelectedAUV(5,selected);
+                    guiState.debugSelectedAUV(5, selected);
                 }
                 return null;
             }
@@ -1397,10 +1395,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_boundingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_boundingActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_bounding.isSelected();
-                    guiState.debugSelectedAUV(6,selected);
+                    guiState.debugSelectedAUV(6, selected);
                 }
                 return null;
             }
@@ -1411,10 +1409,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_waypoints_auv_enableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_enableActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_enable.isSelected();
-                    guiState.waypointsSelectedAUV(0,selected);
+                    guiState.waypointsSelectedAUV(0, selected);
                 }
                 return null;
             }
@@ -1425,10 +1423,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_waypoints_auv_visibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_visibleActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_visible.isSelected();
-                    guiState.waypointsSelectedAUV(1,selected);
+                    guiState.waypointsSelectedAUV(1, selected);
                 }
                 return null;
             }
@@ -1439,10 +1437,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_waypoints_auv_gradientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_gradientActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_waypoints_auv_gradient.isSelected();
-                    guiState.waypointsSelectedAUV(3,selected);
+                    guiState.waypointsSelectedAUV(3, selected);
                 }
                 return null;
             }
@@ -1453,9 +1451,9 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_waypoints_auv_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_auv_resetActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                    guiState.waypointsSelectedAUV(2,true);
+                    guiState.waypointsSelectedAUV(2, true);
                 }
                 return null;
             }
@@ -1464,18 +1462,18 @@ public final class MARSTopComponent extends TopComponent {
 
     private void jme3_waypoints_colorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_colorActionPerformed
         final Color newColor = jColorChooser1.showDialog(
-                     this.getRootPane(),
-                     "Choose Color for Waypoints",
-                     Color.WHITE);
-        if(newColor != null){
+                this.getRootPane(),
+                "Choose Color for Waypoints",
+                Color.WHITE);
+        if (newColor != null) {
             mars.enqueue(new Callable<Void>() {
-            public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
-                    GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                    guiState.waypointsColorSelectedAUV(newColor);
+                public Void call() throws Exception {
+                    if (mars.getStateManager().getState(GuiState.class) != null) {
+                        GuiState guiState = mars.getStateManager().getState(GuiState.class);
+                        guiState.waypointsColorSelectedAUV(newColor);
+                    }
+                    return null;
                 }
-                return null;
-            }
             });
         }
     }//GEN-LAST:event_jme3_waypoints_colorActionPerformed
@@ -1488,9 +1486,9 @@ public final class MARSTopComponent extends TopComponent {
         auv_move_vector_dialog.setVisible(false);
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                    guiState.moveSelectedAUV(new Vector3f(Float.valueOf(auv_move_vector_dialog_x.getText()), Float.valueOf(auv_move_vector_dialog_y.getText()), Float.valueOf(auv_move_vector_dialog_z.getText())),auv_move_vector_dialog_r.isSelected());
+                    guiState.moveSelectedAUV(new Vector3f(Float.valueOf(auv_move_vector_dialog_x.getText()), Float.valueOf(auv_move_vector_dialog_y.getText()), Float.valueOf(auv_move_vector_dialog_z.getText())), auv_move_vector_dialog_r.isSelected());
                 }
                 return null;
             }
@@ -1509,9 +1507,9 @@ public final class MARSTopComponent extends TopComponent {
         auv_move_vector_dialog.setVisible(false);
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(SimState.class) != null){
+                if (mars.getStateManager().getState(SimState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                    guiState.rotateSelectedAUV(new Vector3f(Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_y.getText()), Float.valueOf(auv_rotate_vector_dialog_z.getText())),auv_rotate_vector_dialog_r.isSelected());
+                    guiState.rotateSelectedAUV(new Vector3f(Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_y.getText()), Float.valueOf(auv_rotate_vector_dialog_z.getText())), auv_rotate_vector_dialog_r.isSelected());
                 }
                 return null;
             }
@@ -1525,7 +1523,7 @@ public final class MARSTopComponent extends TopComponent {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.moveSelectedGhostAUV(new Vector3f(Float.valueOf(auv_move_vector_dialog_x.getText()), Float.valueOf(auv_move_vector_dialog_y.getText()), Float.valueOf(auv_move_vector_dialog_z.getText())));
                 }
@@ -1537,7 +1535,7 @@ public final class MARSTopComponent extends TopComponent {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     guiState.moveSelectedGhostAUV(new Vector3f(Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_x.getText()), Float.valueOf(auv_rotate_vector_dialog_x.getText())));
                 }
@@ -1553,14 +1551,14 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        if(auv_name_text.getInputVerifier().verify(auv_name_text)){
+        if (auv_name_text.getInputVerifier().verify(auv_name_text)) {
             auv_name.setVisible(false);
             auv_name.dispose();
         }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        if(simob_name_text.getInputVerifier().verify(simob_name_text)){
+        if (simob_name_text.getInputVerifier().verify(simob_name_text)) {
             simob_name.setVisible(false);
             simob_name.dispose();
         }
@@ -1573,20 +1571,20 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void simob_name_textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_simob_name_textKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            if(simob_name_text.getInputVerifier().verify(simob_name_text)){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (simob_name_text.getInputVerifier().verify(simob_name_text)) {
                 simob_name.setVisible(false);
-            }else{
+            } else {
                 Toolkit.getDefaultToolkit().beep();
             }
         }
     }//GEN-LAST:event_simob_name_textKeyPressed
 
     private void auv_name_textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_auv_name_textKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            if(auv_name_text.getInputVerifier().verify(auv_name_text)){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (auv_name_text.getInputVerifier().verify(auv_name_text)) {
                 auv_name.setVisible(false);
-            }else{
+            } else {
                 Toolkit.getDefaultToolkit().beep();
             }
         }
@@ -1595,10 +1593,10 @@ public final class MARSTopComponent extends TopComponent {
     private void jme3_debug_auv_bounding_volumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_debug_auv_bounding_volumeActionPerformed
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                if(mars.getStateManager().getState(GuiState.class) != null){
+                if (mars.getStateManager().getState(GuiState.class) != null) {
                     GuiState guiState = mars.getStateManager().getState(GuiState.class);
                     final boolean selected = jme3_debug_auv_bounding_volume.isSelected();
-                    guiState.debugSelectedAUV(8,selected);
+                    guiState.debugSelectedAUV(8, selected);
                 }
                 return null;
             }
@@ -1734,6 +1732,7 @@ public final class MARSTopComponent extends TopComponent {
     private javax.swing.JTextField vectorDialog_z;
     private javax.swing.JDialog vector_dialog;
     // End of variables declaration//GEN-END:variables
+
     /**
      *
      */
@@ -1745,186 +1744,184 @@ public final class MARSTopComponent extends TopComponent {
         ToolbarPool.getDefault().setConfiguration("MyToolbar");
         ToolbarPool.getDefault().setPreferredIconSize(24);
         ToolbarPool.getDefault().waitFinished();
-        
+
         //redirect sysout to output window
         redirectSystemStreams();
-        
+
         final MARSTopComponent marsTop = this;
 
         //start actual mars sim
         Thread t = new Thread(new Runnable() {
- 
+
             @Override
             public void run() {
-                        try {
-                            XML_JAXB_ConfigReaderWriter xml = new XML_JAXB_ConfigReaderWriter();
-                            MARS_Settings mars_settings = xml.loadMARS_Settings();
-                            resolution_height = mars_settings.getResolutionHeight();
-                            resolution_width = mars_settings.getResolutionWidth();
-                            framelimit = mars_settings.getFrameLimit();
-                            headless = mars_settings.getMiscHeadless();
-                        } catch (Exception ex) {
-                            Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        final AppSettings settings = new AppSettings(true);
-                        settings.setWidth(resolution_width);
-                        settings.setHeight(resolution_height);
-                        settings.setFrameRate(framelimit);
-                        /*settings.setWidth(640);
-                        settings.setHeight(480);*/
-                        /*settings.setWidth(1280);
-                        settings.setHeight(800);
-                        settings.setFrameRate(60);
-                        settings.setFullscreen(true);*/
-                        //settings.setCustomRenderer(mars);
-                        settings.setCustomRenderer(AwtPanelsContext.class);
+                try {
+                    XML_JAXB_ConfigReaderWriter xml = new XML_JAXB_ConfigReaderWriter();
+                    MARS_Settings mars_settings = xml.loadMARS_Settings();
+                    resolution_height = mars_settings.getResolutionHeight();
+                    resolution_width = mars_settings.getResolutionWidth();
+                    framelimit = mars_settings.getFrameLimit();
+                    headless = mars_settings.getMiscHeadless();
+                } catch (Exception ex) {
+                    Logger.getLogger(MARS_Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                final AppSettings settings = new AppSettings(true);
+                settings.setWidth(resolution_width);
+                settings.setHeight(resolution_height);
+                settings.setFrameRate(framelimit);
+                /*settings.setWidth(640);
+                 settings.setHeight(480);*/
+                /*settings.setWidth(1280);
+                 settings.setHeight(800);
+                 settings.setFrameRate(60);
+                 settings.setFullscreen(true);*/
+                //settings.setCustomRenderer(mars);
+                settings.setCustomRenderer(AwtPanelsContext.class);
                         //view.setCanvasPanel(settings.getWidth(),settings.getHeight());
 
-                        //JmeSystem.setLowPermissions(true);
-                        mars = new MARS_Main(); 
-                        
-                        Runnable runt = new Runnable() {
-                                    public void run() {
-                                        TopComponent tc2 = WindowManager.getDefault().findTopComponent("MARSTopComponent");
-                                        MARSTopComponent mtc2 = (MARSTopComponent) tc2;
-                                        mars.setMARSTopComp(mtc2);
-                                        
-                                        TopComponent tc3 = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
-                                        MARSMapTopComponent mtc3 = (MARSMapTopComponent) tc3;
-                                        mtc3.setMARS(mars);
-                                        mars.setMARSMapComp(mtc3);
-                                        
-                                        /*TopComponent tc4 = WindowManager.getDefault().findTopComponent("MARSLogTopComponent");
-                                        MARSLogTopComponent mtc4 = (MARSLogTopComponent) tc4;
-                                        mtc4.setMARS(mars);
-                                        mars.setMARSLogComp(mtc4);*/
-                                        
-                                        ToolbarPool.getDefault().waitFinished();
-                                         //find all toolbars that need mars and set it
-                                        Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
-                                        Component[] components = findToolbar.getComponents();
-                                        if(components[1] instanceof StartSimulationJPanel){
-                                            StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel)components[1];
-                                            simToolBarPanel.setMars(mars);
-                                        }
+                //JmeSystem.setLowPermissions(true);
+                mars = new MARS_Main();
 
-                                        Toolbar findToolbar2 = ToolbarPool.getDefault().findToolbar("ROS");
-                                        Component[] components2 = findToolbar2.getComponents();
-                                        if(components2[1] instanceof StartROSJPanel){
-                                            StartROSJPanel simToolBarPanel = (StartROSJPanel)components2[1];
-                                            simToolBarPanel.setMars(mars);
-                                        }
+                Runnable runt = new Runnable() {
+                    public void run() {
+                        TopComponent tc2 = WindowManager.getDefault().findTopComponent("MARSTopComponent");
+                        MARSTopComponent mtc2 = (MARSTopComponent) tc2;
+                        mars.setMARSTopComp(mtc2);
 
-                                        Toolbar findToolbar3 = ToolbarPool.getDefault().findToolbar("Speed");
-                                        Component[] components3 = findToolbar3.getComponents();
-                                        if(components3[1] instanceof StartSimulationSpeedJPanel){
-                                            StartSimulationSpeedJPanel simToolBarPanel = (StartSimulationSpeedJPanel)components3[1];
-                                            simToolBarPanel.setMars(mars);
-                                        }
-                                    };
-                                };
+                        TopComponent tc3 = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
+                        MARSMapTopComponent mtc3 = (MARSMapTopComponent) tc3;
+                        mtc3.setMARS(mars);
+                        mars.setMARSMapComp(mtc3);
+
+                        /*TopComponent tc4 = WindowManager.getDefault().findTopComponent("MARSLogTopComponent");
+                         MARSLogTopComponent mtc4 = (MARSLogTopComponent) tc4;
+                         mtc4.setMARS(mars);
+                         mars.setMARSLogComp(mtc4);*/
+                        ToolbarPool.getDefault().waitFinished();
+                        //find all toolbars that need mars and set it
+                        Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
+                        Component[] components = findToolbar.getComponents();
+                        if (components[1] instanceof StartSimulationJPanel) {
+                            StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel) components[1];
+                            simToolBarPanel.setMars(mars);
+                        }
+
+                        Toolbar findToolbar2 = ToolbarPool.getDefault().findToolbar("ROS");
+                        Component[] components2 = findToolbar2.getComponents();
+                        if (components2[1] instanceof CommunicationJPanel) {
+                            CommunicationJPanel simToolBarPanel = (CommunicationJPanel) components2[1];
+                            simToolBarPanel.setMars(mars);
+                        }
+
+                        Toolbar findToolbar3 = ToolbarPool.getDefault().findToolbar("Speed");
+                        Component[] components3 = findToolbar3.getComponents();
+                        if (components3[1] instanceof StartSimulationSpeedJPanel) {
+                            StartSimulationSpeedJPanel simToolBarPanel = (StartSimulationSpeedJPanel) components3[1];
+                            simToolBarPanel.setMars(mars);
+                        }
+                    }
+                ;
+                };
                         WindowManager.getDefault().invokeWhenUIReady(runt);
-                                
-                                
-                        mars.setPauseOnLostFocus(false);                  
-                        mars.setShowSettings(false);
-                        mars.setSettings(settings);
+
+                mars.setPauseOnLostFocus(false);
+                mars.setShowSettings(false);
+                mars.setSettings(settings);
                         //mars.setProgressHandle(progr);
-                        
-                        if(headless){
-                            mars.start(JmeContext.Type.Headless);
-                        }else{
-                            mars.start();
-                            SwingUtilities.invokeLater(new Runnable(){
-                                public void run(){
-                                    ctx = (AwtPanelsContext) mars.getContext();
 
-                                    sim_panel = ctx.createPanel(PaintMode.Accelerated);
-                                    sim_panel.setPreferredSize(new Dimension(640, 480));
-                                    sim_panel.setMinimumSize(new Dimension(640, 480));
+                if (headless) {
+                    mars.start(JmeContext.Type.Headless);
+                } else {
+                    mars.start();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            ctx = (AwtPanelsContext) mars.getContext();
+
+                            sim_panel = ctx.createPanel(PaintMode.Accelerated);
+                            sim_panel.setPreferredSize(new Dimension(640, 480));
+                            sim_panel.setMinimumSize(new Dimension(640, 480));
                                     //sim_panel.setPreferredSize(new Dimension(1280, 800));
-                                    //sim_panel.setMinimumSize(new Dimension(1280, 800));
-                                    sim_panel.requestFocusInWindow();
-                                    sim_panel.transferFocus();
+                            //sim_panel.setMinimumSize(new Dimension(1280, 800));
+                            sim_panel.requestFocusInWindow();
+                            sim_panel.transferFocus();
+                            ctx.setInputSource(sim_panel);
+                            sim_panel.addFocusListener(new FocusListener() {
+
+                                @Override
+                                public void focusGained(FocusEvent e) {
                                     ctx.setInputSource(sim_panel);
-                                    sim_panel.addFocusListener(new FocusListener() {
+                                }
 
-                                        @Override
-                                        public void focusGained(FocusEvent e) {
-                                            ctx.setInputSource(sim_panel);
-                                        }
+                                @Override
+                                public void focusLost(FocusEvent e) {
 
-                                        @Override
-                                        public void focusLost(FocusEvent e) {
-                                            
-                                        }
-                                    });
-
-                                    map_panel = ctx.createPanel(PaintMode.Accelerated);
-                                    map_panel.setPreferredSize(new Dimension(256, 256));
-                                    map_panel.setMinimumSize(new Dimension(256, 256));
-                                    map_panel.addFocusListener(new FocusListener() {
-
-                                        @Override
-                                        public void focusGained(FocusEvent e) {
-                                            ctx.setInputSource(map_panel);
-                                        }
-
-                                        @Override
-                                        public void focusLost(FocusEvent e) {
-                                        }
-                                    });
- 
-                                    addAWTMainPanel(sim_panel);
-                                    
-                                    /*JFrame jf = new JFrame();
-                                    jf.setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS));
-                                    jf.add(sim_panel);
-                                    jf.setExtendedState(Frame.MAXIMIZED_BOTH);  
-                                    jf.setUndecorated(true);  
-                                    jf.setSize(1280, 800);
-                                    //jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                                    jf.setVisible(true);*/
-                                    
-                                    //addAWTMapPanel(map_panel);
-                                    Runnable run = new Runnable() {
-                                        public void run() {
-                                            TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
-                                            MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
-                                            mtc.addAWTMapPanel(map_panel);
-                                        };
-                                    };
-                                    WindowManager.getDefault().invokeWhenUIReady(run);
-                                    
-                                    /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            FileUtil.getConfigObject("Actions/Window/org-netbeans-core-windows-actions-ToggleFullScreenAction.instance", Action.class).actionPerformed(null);
-                                        }
-                                    });*/
-
-                                    mars.enqueue(new Callable<Void>(){
-                                    public Void call(){
-                                            mars.getViewPort().setClearFlags(true, true, true);
-                                            //app.getGuiViewPort().setEnabled(true);
-                                            mars.getFlyByCamera().setDragToRotate(true);
-                                            sim_panel.attachTo(true, mars.getViewPort());
-                                            sim_panel.attachTo(true, mars.getGuiViewPort());
-                                            map_panel.attachTo(false, mars.getMapViewPort());
-                                            return null;
-                                        }
-                                    });
                                 }
                             });
-                        }   
-                        /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            System.out.println("test1: " + mars);
-                                            //content.set(Collections.singleton(mars), null);
-                                            CentralLookup.getDefault().add(mars);}
-                                    });*/
+
+                            map_panel = ctx.createPanel(PaintMode.Accelerated);
+                            map_panel.setPreferredSize(new Dimension(256, 256));
+                            map_panel.setMinimumSize(new Dimension(256, 256));
+                            map_panel.addFocusListener(new FocusListener() {
+
+                                @Override
+                                public void focusGained(FocusEvent e) {
+                                    ctx.setInputSource(map_panel);
+                                }
+
+                                @Override
+                                public void focusLost(FocusEvent e) {
+                                }
+                            });
+
+                            addAWTMainPanel(sim_panel);
+
+                            /*JFrame jf = new JFrame();
+                             jf.setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS));
+                             jf.add(sim_panel);
+                             jf.setExtendedState(Frame.MAXIMIZED_BOTH);  
+                             jf.setUndecorated(true);  
+                             jf.setSize(1280, 800);
+                             //jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                             jf.setVisible(true);*/
+                            //addAWTMapPanel(map_panel);
+                            Runnable run = new Runnable() {
+                                public void run() {
+                                    TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
+                                    MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
+                                    mtc.addAWTMapPanel(map_panel);
+                                }
+                            ;
+                            };
+                                    WindowManager.getDefault().invokeWhenUIReady(run);
+
+                            /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                             @Override
+                             public void run() {
+                             FileUtil.getConfigObject("Actions/Window/org-netbeans-core-windows-actions-ToggleFullScreenAction.instance", Action.class).actionPerformed(null);
+                             }
+                             });*/
+                            mars.enqueue(new Callable<Void>() {
+                                public Void call() {
+                                    mars.getViewPort().setClearFlags(true, true, true);
+                                    //app.getGuiViewPort().setEnabled(true);
+                                    mars.getFlyByCamera().setDragToRotate(true);
+                                    sim_panel.attachTo(true, mars.getViewPort());
+                                    sim_panel.attachTo(true, mars.getGuiViewPort());
+                                    map_panel.attachTo(false, mars.getMapViewPort());
+                                    return null;
+                                }
+                            });
+                        }
+                    });
                 }
+                /*WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                 @Override
+                 public void run() {
+                 System.out.println("test1: " + mars);
+                 //content.set(Collections.singleton(mars), null);
+                 CentralLookup.getDefault().add(mars);}
+                 });*/
+            }
         });
         t.start();
     }
@@ -1936,7 +1933,7 @@ public final class MARSTopComponent extends TopComponent {
     protected void componentShowing() {
         super.componentShowing();
         System.out.println(getName() + " showing");
-        if(ctx != null){
+        if (ctx != null) {
             sim_panel.requestFocusInWindow();
             sim_panel.transferFocus();
             ctx.setInputSource(sim_panel);
@@ -1950,7 +1947,7 @@ public final class MARSTopComponent extends TopComponent {
     protected void componentHidden() {
         super.componentHidden();
     }
- 
+
     /**
      *
      */
@@ -1959,12 +1956,12 @@ public final class MARSTopComponent extends TopComponent {
         // TODO add custom code on component closing
         //app.stop();
     }
-    
+
     /**
      *
      * @param sim_panel
      */
-    public void addAWTMainPanel(AwtPanel sim_panel){
+    public void addAWTMainPanel(AwtPanel sim_panel) {
         this.JMEPanel.add(sim_panel);
     }
 
@@ -1979,7 +1976,7 @@ public final class MARSTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    
+
     private void redirectSystemStreams() {
         OutputStream out = new OutputStream() {
 
@@ -2012,298 +2009,298 @@ public final class MARSTopComponent extends TopComponent {
         //logger.log(Level.SEVERE, "TESTESTTEST");
         //Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "TESTESTTEST2");
     }
-    
+
     /**
-     * 
+     *
      * @param auv_param
      */
-    public void initPopUpMenuesForAUV(final AUV_Parameters auv_param){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    //first the dbug stuff
-                    if(auv_param.isDebugPhysicalExchanger()){
-                        jme3_debug_auv_pe.setSelected(true);
-                    }else{
-                        jme3_debug_auv_pe.setSelected(false);
-                    }
-                    if(auv_param.isDebugDrag()){
-                        jme3_debug_auv_drag.setSelected(true);
-                    }else{
-                        jme3_debug_auv_drag.setSelected(false);
-                    }
-                    if(auv_param.isDebugWireframe()){
-                        jme3_debug_auv_wireframe.setSelected(true);
-                    }else{
-                        jme3_debug_auv_wireframe.setSelected(false);
-                    }
-                    if(auv_param.isDebugCenters()){
-                        jme3_debug_auv_centers.setSelected(true);
-                    }else{
-                        jme3_debug_auv_centers.setSelected(false);
-                    }
-                    if(auv_param.isDebugVisualizers()){
-                        jme3_debug_auv_visualizers.setSelected(true);
-                    }else{
-                        jme3_debug_auv_visualizers.setSelected(false);
-                    }
-                    if(auv_param.isDebugCollision()){
-                        jme3_debug_auv_collision.setSelected(true);
-                    }else{
-                        jme3_debug_auv_collision.setSelected(false);
-                    }
-                    if(auv_param.isDebugBuoycancy()){
-                        jme3_debug_auv_buoy.setSelected(true);
-                    }else{
-                        jme3_debug_auv_buoy.setSelected(false);
-                    }
-                    if(auv_param.isDebugBounding()){
-                        jme3_debug_auv_bounding.setSelected(true);
-                    }else{
-                        jme3_debug_auv_bounding.setSelected(false);
-                    }
-                    if(auv_param.isDebugBuoycancyVolume()){
-                        jme3_debug_auv_bounding_volume.setSelected(true);
-                    }else{
-                        jme3_debug_auv_bounding_volume.setSelected(false);
-                    }
-                    if(auv_param.isDistanceCoveredPathEnabled()){
-                        jme3_waypoints_auv_enable.setSelected(true);
-                    }else{
-                        jme3_waypoints_auv_enable.setSelected(false);
-                    }
-                    if(auv_param.isDistanceCoveredPathVisiblity()){
-                        jme3_waypoints_auv_visible.setSelected(true);
-                    }else{
-                        jme3_waypoints_auv_visible.setSelected(false);
-                    }
-                    if(auv_param.isDistanceCoveredPathGradient()){
-                        jme3_waypoints_auv_gradient.setSelected(true);
-                    }else{
-                        jme3_waypoints_auv_gradient.setSelected(false);
-                    }
-                    if(auv_param.isEnabled()){
-                        jme3_enable_auv.setSelected(true);
-                    }else{
-                        jme3_enable_auv.setSelected(false);
-                    }
-                    
-                    //params
-                    jme3_params_auv.removeAll();
-                    addHashMapMenue(jme3_params_auv, auv_param, auv_param.getAllVariables(),"");
-
+    public void initPopUpMenuesForAUV(final AUV_Parameters auv_param) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                //first the dbug stuff
+                if (auv_param.isDebugPhysicalExchanger()) {
+                    jme3_debug_auv_pe.setSelected(true);
+                } else {
+                    jme3_debug_auv_pe.setSelected(false);
                 }
+                if (auv_param.isDebugDrag()) {
+                    jme3_debug_auv_drag.setSelected(true);
+                } else {
+                    jme3_debug_auv_drag.setSelected(false);
+                }
+                if (auv_param.isDebugWireframe()) {
+                    jme3_debug_auv_wireframe.setSelected(true);
+                } else {
+                    jme3_debug_auv_wireframe.setSelected(false);
+                }
+                if (auv_param.isDebugCenters()) {
+                    jme3_debug_auv_centers.setSelected(true);
+                } else {
+                    jme3_debug_auv_centers.setSelected(false);
+                }
+                if (auv_param.isDebugVisualizers()) {
+                    jme3_debug_auv_visualizers.setSelected(true);
+                } else {
+                    jme3_debug_auv_visualizers.setSelected(false);
+                }
+                if (auv_param.isDebugCollision()) {
+                    jme3_debug_auv_collision.setSelected(true);
+                } else {
+                    jme3_debug_auv_collision.setSelected(false);
+                }
+                if (auv_param.isDebugBuoycancy()) {
+                    jme3_debug_auv_buoy.setSelected(true);
+                } else {
+                    jme3_debug_auv_buoy.setSelected(false);
+                }
+                if (auv_param.isDebugBounding()) {
+                    jme3_debug_auv_bounding.setSelected(true);
+                } else {
+                    jme3_debug_auv_bounding.setSelected(false);
+                }
+                if (auv_param.isDebugBuoycancyVolume()) {
+                    jme3_debug_auv_bounding_volume.setSelected(true);
+                } else {
+                    jme3_debug_auv_bounding_volume.setSelected(false);
+                }
+                if (auv_param.isDistanceCoveredPathEnabled()) {
+                    jme3_waypoints_auv_enable.setSelected(true);
+                } else {
+                    jme3_waypoints_auv_enable.setSelected(false);
+                }
+                if (auv_param.isDistanceCoveredPathVisiblity()) {
+                    jme3_waypoints_auv_visible.setSelected(true);
+                } else {
+                    jme3_waypoints_auv_visible.setSelected(false);
+                }
+                if (auv_param.isDistanceCoveredPathGradient()) {
+                    jme3_waypoints_auv_gradient.setSelected(true);
+                } else {
+                    jme3_waypoints_auv_gradient.setSelected(false);
+                }
+                if (auv_param.isEnabled()) {
+                    jme3_enable_auv.setSelected(true);
+                } else {
+                    jme3_enable_auv.setSelected(false);
+                }
+
+                //params
+                jme3_params_auv.removeAll();
+                addHashMapMenue(jme3_params_auv, auv_param, auv_param.getAllVariables(), "");
+
             }
+        }
         );
     }
-       
-    private void toggleJMenuCheckbox(JCheckBoxMenuItem jmenucheck){
-        if(jmenucheck.isSelected()){
+
+    private void toggleJMenuCheckbox(JCheckBoxMenuItem jmenucheck) {
+        if (jmenucheck.isSelected()) {
             jmenucheck.setSelected(true);
-        }else{
+        } else {
             jmenucheck.setSelected(false);
         }
     }
-    
-    private void addHashMapMenue(JMenu jm, final AUV_Parameters auv_param, final HashMap<String, Object> allVariables, final String hashmapname){
+
+    private void addHashMapMenue(JMenu jm, final AUV_Parameters auv_param, final HashMap<String, Object> allVariables, final String hashmapname) {
         ///sort the hashtable
-        SortedSet<String> sortedset= new TreeSet<String>(allVariables.keySet());
+        SortedSet<String> sortedset = new TreeSet<String>(allVariables.keySet());
         Iterator<String> it = sortedset.iterator();
 
         while (it.hasNext()) {
             final String elem = it.next();
-            
+
             Object element = allVariables.get(elem);
-                        if(element instanceof Boolean){
-                            boolean bool = (Boolean)element;
-                            final JCheckBoxMenuItem jcm = new JCheckBoxMenuItem(elem);
-                            jcm.setSelected(bool);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    final boolean selected = jcm.isSelected();
-                                    auv_param.setValue(elem, selected, hashmapname);
-                                    toggleJMenuCheckbox(jcm);
+            if (element instanceof Boolean) {
+                boolean bool = (Boolean) element;
+                final JCheckBoxMenuItem jcm = new JCheckBoxMenuItem(elem);
+                jcm.setSelected(bool);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        final boolean selected = jcm.isSelected();
+                        auv_param.setValue(elem, selected, hashmapname);
+                        toggleJMenuCheckbox(jcm);
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof Vector3f) {
+                final Vector3f vec = (Vector3f) element;
+                final JMenuItem jcm = new JMenuItem(elem);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        vector_dialog.setTitle("Change " + elem);
+                        vector_dialog.setLocationRelativeTo(JMEPanel);
+                        vectorDialog_x.setText(String.valueOf(vec.getX()));
+                        vectorDialog_y.setText(String.valueOf(vec.getY()));
+                        vectorDialog_z.setText(String.valueOf(vec.getZ()));
+                        vectorDialog_x.setInputVerifier(new MyVerifier(MyVerifierType.FLOAT));
+                        vectorDialog_y.setInputVerifier(new MyVerifier(MyVerifierType.FLOAT));
+                        vectorDialog_z.setInputVerifier(new MyVerifier(MyVerifierType.FLOAT));
+                        vectorDialog_Confirm.addActionListener(
+                                new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        auv_param.setValue(elem, new Vector3f(Float.valueOf(vectorDialog_x.getText()), Float.valueOf(vectorDialog_y.getText()), Float.valueOf(vectorDialog_z.getText())), hashmapname);
+                                        vector_dialog.setVisible(false);
+                                    }
                                 }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof Vector3f){
-                            final Vector3f vec = (Vector3f)element;
-                            final JMenuItem jcm = new JMenuItem(elem);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    vector_dialog.setTitle("Change " + elem);
-                                    vector_dialog.setLocationRelativeTo(JMEPanel);
-                                    vectorDialog_x.setText(String.valueOf(vec.getX()));
-                                    vectorDialog_y.setText(String.valueOf(vec.getY()));
-                                    vectorDialog_z.setText(String.valueOf(vec.getZ()));
-                                    vectorDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
-                                    vectorDialog_y.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
-                                    vectorDialog_z.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
-                                    vectorDialog_Confirm.addActionListener(
-                                            new java.awt.event.ActionListener() {
-                                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.setValue(elem, new Vector3f(Float.valueOf(vectorDialog_x.getText()), Float.valueOf(vectorDialog_y.getText()), Float.valueOf(vectorDialog_z.getText())), hashmapname);
-                                                    vector_dialog.setVisible(false);
-                                                }
-                                            }
-                                    );
-                                    vector_dialog.setVisible(true);
+                        );
+                        vector_dialog.setVisible(true);
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof Float) {
+                final float flo = (Float) element;
+                final JMenuItem jcm = new JMenuItem(elem);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        float_dialog.setTitle("Change " + elem);
+                        float_dialog.setLocationRelativeTo(JMEPanel);
+                        floatDialog_x.setText(String.valueOf(flo));
+                        floatDialog_x.setInputVerifier(new MyVerifier(MyVerifierType.FLOAT));
+                        floatDialog_Confirm.addActionListener(
+                                new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        auv_param.setValue(elem, Float.valueOf(floatDialog_x.getText()), hashmapname);
+                                        float_dialog.setVisible(false);
+                                    }
                                 }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof Float){
-                            final float flo = (Float)element;
-                            final JMenuItem jcm = new JMenuItem(elem);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    float_dialog.setTitle("Change " + elem);
-                                    float_dialog.setLocationRelativeTo(JMEPanel);
-                                    floatDialog_x.setText(String.valueOf(flo));
-                                    floatDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.FLOAT ));
-                                    floatDialog_Confirm.addActionListener(
-                                            new java.awt.event.ActionListener() {
-                                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.setValue(elem, Float.valueOf(floatDialog_x.getText()), hashmapname);
-                                                    float_dialog.setVisible(false);
-                                                }
-                                            }
-                                    );
-                                    float_dialog.setVisible(true);
+                        );
+                        float_dialog.setVisible(true);
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof Integer) {
+                final int integ = (Integer) element;
+                final JMenuItem jcm = new JMenuItem(elem);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        int_dialog.setTitle("Change " + elem);
+                        int_dialog.setLocationRelativeTo(JMEPanel);
+                        intDialog_x.setText(String.valueOf(integ));
+                        intDialog_x.setInputVerifier(new MyVerifier(MyVerifierType.INTEGER));
+                        intDialog_Confirm.addActionListener(
+                                new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        auv_param.setValue(elem, Integer.valueOf(intDialog_x.getText()), hashmapname);
+                                        int_dialog.setVisible(false);
+                                    }
                                 }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof Integer){
-                            final int integ = (Integer)element;
-                            final JMenuItem jcm = new JMenuItem(elem);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    int_dialog.setTitle("Change " + elem);
-                                    int_dialog.setLocationRelativeTo(JMEPanel);
-                                    intDialog_x.setText(String.valueOf(integ));
-                                    intDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.INTEGER ));
-                                    intDialog_Confirm.addActionListener(
-                                            new java.awt.event.ActionListener() {
-                                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.setValue(elem, Integer.valueOf(intDialog_x.getText()), hashmapname);
-                                                    int_dialog.setVisible(false);
-                                                }
-                                            }
-                                    );
-                                    int_dialog.setVisible(true);
+                        );
+                        int_dialog.setVisible(true);
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof String) {
+                final String st = (String) element;
+                final JMenuItem jcm = new JMenuItem(elem);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        string_dialog.setTitle("Change " + elem);
+                        string_dialog.setLocationRelativeTo(JMEPanel);
+                        stringDialog_x.setText(st);
+                        stringDialog_x.setInputVerifier(new MyVerifier(MyVerifierType.STRING));
+                        stringDialog_x.addActionListener(
+                                new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        auv_param.setValue(elem, stringDialog_x.getText(), hashmapname);
+                                        string_dialog.setVisible(false);
+                                    }
                                 }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof String){
-                            final String st = (String)element;
-                            final JMenuItem jcm = new JMenuItem(elem);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    string_dialog.setTitle("Change " + elem);
-                                    string_dialog.setLocationRelativeTo(JMEPanel);
-                                    stringDialog_x.setText(st);
-                                    stringDialog_x.setInputVerifier(new MyVerifier( MyVerifierType.STRING ));
-                                    stringDialog_x.addActionListener(
-                                            new java.awt.event.ActionListener() {
-                                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                    auv_param.setValue(elem, stringDialog_x.getText(), hashmapname);
-                                                    string_dialog.setVisible(false);
-                                                }
-                                            }
-                                    );
-                                    string_dialog.setVisible(true);
-                                }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof ColorRGBA){
-                            final ColorRGBA color = (ColorRGBA)element;
-                            final JMenuItem jcm = new JMenuItem(elem);
-                            
-                            //listener for changes
-                            jcm.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                            final Color newColor = color_dialog.showDialog(
-                                             getRootPane(),
-                                             "Choose Color for " + elem,
-                                             new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                                            if(newColor != null){
-                                                auv_param.setValue(elem, new ColorRGBA(newColor.getRed()/255f, newColor.getGreen()/255f, newColor.getBlue()/255f, 0f), hashmapname);
-                                            }
-                                }
-                            });
-                                    
-                            jm.add(jcm);
-                        }else if(element instanceof HashMap){
-                            final JMenu jmm = new JMenu(elem);
-                            jm.add(jmm);
-                            addHashMapMenue(jmm,auv_param,(HashMap<String, Object>)element,elem);
-                        }   
-            
-        }              
+                        );
+                        string_dialog.setVisible(true);
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof ColorRGBA) {
+                final ColorRGBA color = (ColorRGBA) element;
+                final JMenuItem jcm = new JMenuItem(elem);
+
+                //listener for changes
+                jcm.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        final Color newColor = color_dialog.showDialog(
+                                getRootPane(),
+                                "Choose Color for " + elem,
+                                new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                        if (newColor != null) {
+                            auv_param.setValue(elem, new ColorRGBA(newColor.getRed() / 255f, newColor.getGreen() / 255f, newColor.getBlue() / 255f, 0f), hashmapname);
+                        }
+                    }
+                });
+
+                jm.add(jcm);
+            } else if (element instanceof HashMap) {
+                final JMenu jmm = new JMenu(elem);
+                jm.add(jmm);
+                addHashMapMenue(jmm, auv_param, (HashMap<String, Object>) element, elem);
+            }
+
+        }
     }
-    
-        /**
-     * 
+
+    /**
+     *
      * @param x
      * @param y
      */
-    public void showpopupAUV(final int x, final int y){
+    public void showpopupAUV(final int x, final int y) {
         final MARSTopComponent mtc = this;
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    jme3_auv.show(mtc,x,y);
-                }
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jme3_auv.show(mtc, x, y);
             }
+        }
         );
     }
-    
-        /**
-     * 
+
+    /**
+     *
      */
-    public void hideAllPopupWindows(){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    jme3_window_switcher.setVisible(false);
-                }
+    public void hideAllPopupWindows() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jme3_window_switcher.setVisible(false);
             }
+        }
         );
     }
-    
-        /**
-     * 
+
+    /**
+     *
      * @param x
      * @param y
      */
-    public void showpopupWindowSwitcher(final int x, final int y){
+    public void showpopupWindowSwitcher(final int x, final int y) {
         final MARSTopComponent mtc = this;
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    //jme3_window_switcher.show(mtc,x,y);
-                }
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                //jme3_window_switcher.show(mtc,x,y);
             }
+        }
         );
     }
-    
-        /**
-     * 
-     * @param auv_manager 
+
+    /**
+     *
+     * @param auv_manager
      */
     public void setAuv_manager(AUV_Manager auv_manager) {
         this.auvManager = auv_manager;
@@ -2316,25 +2313,25 @@ public final class MARSTopComponent extends TopComponent {
     public void setSimob_manager(SimObjectManager simob_manager) {
         this.simob_manager = simob_manager;
     }
-    
-   /**
-     * 
+
+    /**
+     *
      * @param mars_settings
      */
-    public void setMarsSettings(MARS_Settings mars_settings){
+    public void setMarsSettings(MARS_Settings mars_settings) {
         this.mars_settings = mars_settings;
     }
-    
+
     /**
-     * 
-     * @param configManager 
+     *
+     * @param configManager
      */
-    public void setConfigManager(ConfigManager configManager){
+    public void setConfigManager(ConfigManager configManager) {
         this.configManager = configManager;
     }
 
     /**
-     * 
+     *
      * @param keyConfig
      */
     public void setKeyConfig(KeyConfig keyConfig) {
@@ -2342,162 +2339,160 @@ public final class MARSTopComponent extends TopComponent {
     }
 
     /**
-     * 
+     *
      * @param penv
      */
     public void setPenv(PhysicalEnvironment penv) {
         this.penv = penv;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void initDND(){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    JMEPanel.setTransferHandler(new SimStateTransferHandler(mars,JMEPanel));
-                    getANText().setInputVerifier(new MyVerifier( MyVerifierType.AUV,auvManager,auv_name));
-                    getSNText().setInputVerifier(new MyVerifier( MyVerifierType.SIMOB,simob_manager,simob_name));
-                }
+    public void initDND() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JMEPanel.setTransferHandler(new SimStateTransferHandler(mars, JMEPanel));
+                getANText().setInputVerifier(new MyVerifier(MyVerifierType.AUV, auvManager, auv_name));
+                getSNText().setInputVerifier(new MyVerifier(MyVerifierType.SIMOB, simob_manager, simob_name));
             }
+        }
         );
     }
-    
+
     /**
      *
      * @return
      */
-    public JDialog getAN(){
+    public JDialog getAN() {
         return auv_name;
     }
-    
+
     /**
      *
      */
-    public void updateANAutoComplete(){
+    public void updateANAutoComplete() {
         auv_name_items.clear();
         auv_name_items.addAll(auvManager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(auv_name_text, auv_name_items, false);
     }
-    
+
     /**
      *
      * @return
      */
-    public JDialog getSN(){
+    public JDialog getSN() {
         return simob_name;
     }
-    
+
     /**
      *
      */
-    public void updateSNAutoComplete(){
+    public void updateSNAutoComplete() {
         simob_name_items.clear();
         simob_name_items.addAll(simob_manager.getMARSObjects().keySet());
         AutoCompleteDecorator.decorate(simob_name_text, simob_name_items, false);
     }
-    
+
     /**
      *
      * @return
      */
-    public JTextField getANText(){
+    public JTextField getANText() {
         return auv_name_text;
     }
-    
+
     /**
      *
      * @return
      */
-    public JTextField getSNText(){
+    public JTextField getSNText() {
         return simob_name_text;
     }
-    
-        /**
-     * 
-     */
-    public void allowSimInteraction(){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
-                    Component[] components = findToolbar.getComponents();
-                    if(components[1] instanceof StartSimulationJPanel){
-                        StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel)components[1];
-                        simToolBarPanel.allowSimInteraction();
-                    }
-                    Toolbar findToolbar2 = ToolbarPool.getDefault().findToolbar("Speed");
-                    Component[] components2 = findToolbar2.getComponents();
-                    if(components2[1] instanceof StartSimulationSpeedJPanel){
-                        StartSimulationSpeedJPanel simToolBarPanel = (StartSimulationSpeedJPanel)components2[1];
-                        simToolBarPanel.allowSimInteraction();
-                    }
-                    
-                    
-                    /*FileObject menu = FileUtil.getConfigFile("Menu");
-                    DataFolder findFolder = DataFolder.findFolder(menu);
-                    MenuBar menuBar = new MenuBar(findFolder);
-                    System.out.println("test");*/
-                                            
-                    // hacky but there isnt any good way to get the menus in nbp
-                    /*JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
-                    JMenuBar menuBar = frame.getJMenuBar(); 
-                    JMenu menu = menuBar.getMenu(0);
-                    JPopupMenu popupMenu = menu.getPopupMenu();
-                    Component component = popupMenu.getComponent(0);
-                    component.setEnabled(false);
-                    component.revalidate();
 
-                    FileObject actionsFolder = FileUtil.getConfigFile("Actions");
-
-                    Component component2 = popupMenu.getComponent(1);
-                    component2.setEnabled(true);*/
-
-                    /*jButtonLogLoad.setEnabled(true);
-                    jButtonLogPause.setEnabled(true);
-                    jButtonLogPlay.setEnabled(true);
-                    jButtonLogRecord.setEnabled(true);
-                    jButtonLogSave.setEnabled(true);
-                    jSliderLogTime.setEnabled(true);
-                    jButtonLogForward.setEnabled(true);
-                    jButtonLogRewind.setEnabled(true);
-                    jButtonLogStop.setEnabled(true);*/
-                }
-            }
-        );
-    }
-    
     /**
-     * 
+     *
      */
-    public void allowStateInteraction(){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
+    public void allowSimInteraction() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
+                Component[] components = findToolbar.getComponents();
+                if (components[1] instanceof StartSimulationJPanel) {
+                    StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel) components[1];
+                    simToolBarPanel.allowSimInteraction();
+                }
+                Toolbar findToolbar2 = ToolbarPool.getDefault().findToolbar("Speed");
+                Component[] components2 = findToolbar2.getComponents();
+                if (components2[1] instanceof StartSimulationSpeedJPanel) {
+                    StartSimulationSpeedJPanel simToolBarPanel = (StartSimulationSpeedJPanel) components2[1];
+                    simToolBarPanel.allowSimInteraction();
+                }
+
+                /*FileObject menu = FileUtil.getConfigFile("Menu");
+                 DataFolder findFolder = DataFolder.findFolder(menu);
+                 MenuBar menuBar = new MenuBar(findFolder);
+                 System.out.println("test");*/
                     // hacky but there isnt any good way to get the menus in nbp
                     /*JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
-                    JMenuBar menuBar = frame.getJMenuBar(); 
-                    JMenu menu = menuBar.getMenu(0);
-                    JPopupMenu popupMenu = menu.getPopupMenu();
-                    Component component = popupMenu.getComponent(0);
-                    component.setEnabled(true);
+                 JMenuBar menuBar = frame.getJMenuBar(); 
+                 JMenu menu = menuBar.getMenu(0);
+                 JPopupMenu popupMenu = menu.getPopupMenu();
+                 Component component = popupMenu.getComponent(0);
+                 component.setEnabled(false);
+                 component.revalidate();
 
-                    Component component2 = popupMenu.getComponent(3);
-                    component2.setEnabled(true);*/
-                    
-                    //maybe with this
-                    //FileObject root = Repository.getDefault().getDefaultFileSystem().getRoot();
-                }
+                 FileObject actionsFolder = FileUtil.getConfigFile("Actions");
+
+                 Component component2 = popupMenu.getComponent(1);
+                 component2.setEnabled(true);*/
+
+                /*jButtonLogLoad.setEnabled(true);
+                 jButtonLogPause.setEnabled(true);
+                 jButtonLogPlay.setEnabled(true);
+                 jButtonLogRecord.setEnabled(true);
+                 jButtonLogSave.setEnabled(true);
+                 jSliderLogTime.setEnabled(true);
+                 jButtonLogForward.setEnabled(true);
+                 jButtonLogRewind.setEnabled(true);
+                 jButtonLogStop.setEnabled(true);*/
             }
+        }
         );
     }
-    
+
+    /**
+     *
+     */
+    public void allowStateInteraction() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                    // hacky but there isnt any good way to get the menus in nbp
+                    /*JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
+                 JMenuBar menuBar = frame.getJMenuBar(); 
+                 JMenu menu = menuBar.getMenu(0);
+                 JPopupMenu popupMenu = menu.getPopupMenu();
+                 Component component = popupMenu.getComponent(0);
+                 component.setEnabled(true);
+
+                 Component component2 = popupMenu.getComponent(3);
+                 component2.setEnabled(true);*/
+
+                    //maybe with this
+                //FileObject root = Repository.getDefault().getDefaultFileSystem().getRoot();
+            }
+        }
+        );
+    }
+
     /**
      *
      * @param f
      */
-    public void loadSimState(final File f){
+    public void loadSimState(final File f) {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 mars.setConfigName(f.getName());
@@ -2506,73 +2501,73 @@ public final class MARSTopComponent extends TopComponent {
             }
         });
     }
-    
+
     /**
      *
      */
-    public void activateFlyByCam(){
+    public void activateFlyByCam() {
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                mars.getChaseCam().setEnabled(false);         
+                mars.getChaseCam().setEnabled(false);
                 mars.getFlyByCamera().setEnabled(true);
                 return null;
             }
         });
     }
-    
+
     /**
      *
      */
-    public void saveConfig(){
+    public void saveConfig() {
         File basePath = InstalledFileLocator.getDefault().locate("config", "mars.core", false);
         File f = new File(basePath.getAbsolutePath() + "/" + configManager.getConfigName());
-        if(f != null){
+        if (f != null) {
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
-            if(failure != null){
+            if (failure != null) {
                 JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-                failure,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-            }else{
+                        failure,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-                "Could sucessfully create File. Configuration saved.",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+                        "Could sucessfully create File. Configuration saved.",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-            "Could not create File!",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+                    "Could not create File!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      *
      * @param f
      */
-    public void saveConfigTo(File f){
-        if(f != null){
+    public void saveConfigTo(File f) {
+        if (f != null) {
             String failure = XML_JAXB_ConfigReaderWriter.saveConfiguration(f, mars_settings, auvManager, simob_manager, keyConfig, penv);
-            if(failure != null){
+            if (failure != null) {
                 JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-                failure,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-            }else{
+                        failure,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-                "Could sucessfully create File. Configuration saved.",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+                        "Could sucessfully create File. Configuration saved.",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
+
     /**
      *
      */
-    public void restartSimState(){
-        if(mars != null){
+    public void restartSimState() {
+        if (mars != null) {
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     mars.restartSimState();
@@ -2581,71 +2576,33 @@ public final class MARSTopComponent extends TopComponent {
             });
         }
     }
-    
+
     /**
      *
      */
-    public void startSimState(){
-        if(mars != null){
+    public void startSimState() {
+        if (mars != null) {
             mars.startSimState();
         }
     }
-    
+
     /**
-     * 
+     *
      * @param allow
      */
-    public void allowPhysicsInteraction(final boolean allow){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
-                    Component[] components = findToolbar.getComponents();
-                    if(components[1] instanceof StartSimulationJPanel){
-                        StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel)components[1];
-                        simToolBarPanel.allowPhysicsInteraction(allow);
-                    }
+    public void allowPhysicsInteraction(final boolean allow) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("Simulation");
+                Component[] components = findToolbar.getComponents();
+                if (components[1] instanceof StartSimulationJPanel) {
+                    StartSimulationJPanel simToolBarPanel = (StartSimulationJPanel) components[1];
+                    simToolBarPanel.allowPhysicsInteraction(allow);
                 }
             }
+        }
         );
     }
-    
-    /**
-     * 
-     * @param connected
-     */
-    public void allowServerInteraction(final boolean connected){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("ROS");
-                    ToolbarPool.getDefault().waitFinished();
-                    Component[] components = findToolbar.getComponents();
-                    if(components[1] instanceof StartROSJPanel){
-                        StartROSJPanel simToolBarPanel = (StartROSJPanel)components[1];
-                        simToolBarPanel.allowServerInteraction(connected);
-                    }                  
-                }
-            }
-        );
-    }
-    
-    /**
-     * 
-     * @param enable
-     */
-    public void enableServerInteraction(final boolean enable){
-        EventQueue.invokeLater(new Runnable(){
-                @Override
-                public void run() {
-                    Toolbar findToolbar = ToolbarPool.getDefault().findToolbar("ROS");
-                    Component[] components = findToolbar.getComponents();
-                    if(components[1] instanceof StartROSJPanel){
-                        StartROSJPanel simToolBarPanel = (StartROSJPanel)components[1];
-                        simToolBarPanel.enableServerInteraction(enable);
-                    }                 
-                }
-            }
-        );
-    }
+
 }
