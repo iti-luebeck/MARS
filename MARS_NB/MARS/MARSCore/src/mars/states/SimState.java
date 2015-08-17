@@ -617,10 +617,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             initer.updateProjectedWavesWater(tpf);
         }
 
-        if (mars_settings.isGrassEnabled()) {
-            initer.updateGrass(tpf);
-        }
-
         if (initer != null && initer.getSkyControl() != null) {
             if (getMARSSettings().getSkyDomeSpeed() != 0f) {
                 if (initer.getTimeOfDay().isInitialized()) {

@@ -227,8 +227,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
             initer.updateProjectedWavesWater();
         } else if (hashmapname.equals("Terrain")) {
             //initer.updateTerrain();
-        } else if (hashmapname.equals("Grass")) {
-            initer.updateGrass();
         } else if (target.equals("enabled") && hashmapname.equals("Grid")) {
             initer.hideGrid(isGridEnabled());
         } else if (hashmapname.equals("Grid")) {
