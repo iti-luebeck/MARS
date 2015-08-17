@@ -44,48 +44,101 @@ import java.util.zip.GZIPOutputStream;
  */
 public class DemoAuv implements Runnable {
 
-    private final Thread runningThread;
-    private final BufferedWriter writer;
-    private final BufferedReader reader;
-    private boolean running;
+    public static final char END_OF_TRANSMISSION = 0x04;
 
-    public DemoAuv(String serverAddress, int serverPort) throws UnknownHostException, IOException {
+    private Thread socketThread;
+    private boolean socketThreadRunning;
+
+    private BufferedWriter writer;
+    private BufferedReader reader;
+
+    public DemoAuv(String serverAddress, int serverPort)
+            throws UnknownHostException, IOException {
 
         Socket socket = new Socket(serverAddress, serverPort);
-        writer = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(socket.getOutputStream())));
+        System.out.println("Connnected!");
+        writer = new BufferedWriter(new OutputStreamWriter(
+                new GZIPOutputStream(socket.getOutputStream())));
         writer.flush();
-        reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(socket.getInputStream()), "UTF-8"));
 
-        running = true;
-        runningThread = new Thread(this);
-        runningThread.start();
+        reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(
+                socket.getInputStream()), "UTF-8"));
+
+        socketThreadRunning = true;
+        socketThread = new Thread(this);
+        socketThread.start();
+
+        new SenderLoop(writer);
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        new DemoAuv("127.0.0.1", 8080);
     }
 
     @Override
     public void run() {
 
-        while (running) {
+        while (socketThreadRunning) {
+
             try {
                 StringBuffer sb = new StringBuffer();
                 int readInt = -1;
 
                 while ((readInt = reader.read()) != -1) {
 
-                    if (readInt == 0x04) { // End of Transmission?
+                    if (readInt == END_OF_TRANSMISSION) {
+
                         String receivedData = sb.toString();
+
                         // do something with receivedData!
+                        //
+                        // if (receivedData.length() < 150) {
+                        // System.out.println(receivedData);
+                        // }
                         sb = new StringBuffer(); // reset the buffer
                     } else {
                         sb.append((char) readInt);
                     }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        new DemoAuv("127.0.0.1", 8080);
+    private static class SenderLoop implements Runnable {
+
+        private boolean senderThreadRunning;
+        private Thread senderThread;
+        private BufferedWriter senderWriter;
+
+        public SenderLoop(BufferedWriter writer) {
+            senderWriter = writer;
+            senderThreadRunning = true;
+            senderThread = new Thread(this);
+            senderThread.start();
+        }
+
+        @Override
+        public void run() {
+
+            while (senderThreadRunning) {
+                String motorLeftControl = "<ActuatorData>" + "<time>"
+                        + System.currentTimeMillis() + "</time>"
+                        + "<actuator>motors/left</actuator>"
+                        + "<data class='byte'>0</data>" + "</ActuatorData>";
+
+                try {
+                    senderWriter.write(motorLeftControl);
+                    senderWriter.write(END_OF_TRANSMISSION);
+                    senderWriter.flush();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
