@@ -1,7 +1,31 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package mars.FishSim.gui;
 
@@ -20,7 +44,7 @@ public final class SwarmPanel extends javax.swing.JPanel {
     SwarmPanel(SwarmOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
-        while(FishSim.getInstance() == null){
+        while (FishSim.getInstance() == null) {
         }
         sim = FishSim.getInstance();
         sim.setSwarmPanel(this);
@@ -320,28 +344,28 @@ public final class SwarmPanel extends javax.swing.JPanel {
         foodSourceMap = -1;
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void updateSwarmList(ArrayList<Swarm> swarmList){
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)swarms.getModel();
+    public void updateSwarmList(ArrayList<Swarm> swarmList) {
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) swarms.getModel();
         model.clear();
-        for(int i = 1; i <= swarmList.size(); i++){
-            model.addElement("Swarm"+i);
+        for (int i = 1; i <= swarmList.size(); i++) {
+            model.addElement("Swarm" + i);
         }
         updateUI();
     }
-    
+
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    public void updateFoodSourceList(ArrayList<FoodSourceMap> maps){
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
+    public void updateFoodSourceList(ArrayList<FoodSourceMap> maps) {
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) jList1.getModel();
         model.clear();
-        for(int i = 1; i <=  maps.size(); i++){
-            model.addElement("FoodSourceMap"+i);
+        for (int i = 1; i <= maps.size(); i++) {
+            model.addElement("FoodSourceMap" + i);
         }
         updateUI();
     }
-    
+
     private void rSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSpeedActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rSpeedActionPerformed
@@ -359,7 +383,7 @@ public final class SwarmPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for(int i = 0; i < selectedSwarms.length; i++){
+        for (int i = 0; i < selectedSwarms.length; i++) {
             sim.removeSwarm(selectedSwarms[i]);
         }
         selectedSwarms = new int[0];

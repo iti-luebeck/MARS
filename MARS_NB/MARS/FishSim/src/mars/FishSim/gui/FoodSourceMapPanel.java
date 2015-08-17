@@ -1,7 +1,31 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package mars.FishSim.gui;
 
@@ -21,7 +45,7 @@ public final class FoodSourceMapPanel extends javax.swing.JPanel {
     FoodSourceMapPanel(FoodSourceMapOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
-        while(FishSim.getInstance() == null){
+        while (FishSim.getInstance() == null) {
         }
         sim = FishSim.getInstance();
         sim.setFoodSourceMapPanel(this);
@@ -143,31 +167,31 @@ public final class FoodSourceMapPanel extends javax.swing.JPanel {
         sim.addFoodSourceMap();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void updateFoodSourceMapList(ArrayList<FoodSourceMap> mapList){
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList1.getModel();
+    public void updateFoodSourceMapList(ArrayList<FoodSourceMap> mapList) {
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) jList1.getModel();
         model.clear();
-        for(int i = 1; i <=  mapList.size(); i++){
-            model.addElement("FoodSourceMap"+i);
+        for (int i = 1; i <= mapList.size(); i++) {
+            model.addElement("FoodSourceMap" + i);
         }
         updateUI();
     }
-    
+
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        selectedMaps = jList1.getSelectedIndices();    
+        selectedMaps = jList1.getSelectedIndices();
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    public void updateFoodSources(ArrayList<FoodSource> sources, ArrayList<Swarm> swarms){
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel)jList2.getModel();
+    public void updateFoodSources(ArrayList<FoodSource> sources, ArrayList<Swarm> swarms) {
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) jList2.getModel();
         model.clear();
-        for(int i = 1; i <=  sources.size(); i++){
-            model.addElement("FoodSource: "+i);
+        for (int i = 1; i <= sources.size(); i++) {
+            model.addElement("FoodSource: " + i);
         }
-        for(int i = 1; i <=  swarms.size(); i++){
-            model.addElement("Swarm: "+i);
+        for (int i = 1; i <= swarms.size(); i++) {
+            model.addElement("Swarm: " + i);
         }
         updateUI();
     }
@@ -176,11 +200,11 @@ public final class FoodSourceMapPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jList2ValueChanged
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        for(int i = 0; i < selectedMaps.length; i++){
-            for(int j = 0; j < selectedSources.length; j++){
-                if(selectedSources[j] < sim.getFoodSourcesSize()){
+        for (int i = 0; i < selectedMaps.length; i++) {
+            for (int j = 0; j < selectedSources.length; j++) {
+                if (selectedSources[j] < sim.getFoodSourcesSize()) {
                     sim.addToMap(i, 1, j);
-                }else{
+                } else {
                     sim.addToMap(i, 0, j);
                 }
             }
@@ -191,7 +215,7 @@ public final class FoodSourceMapPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for(int i = 0; i < selectedMaps.length; i++){
+        for (int i = 0; i < selectedMaps.length; i++) {
             sim.removeFoodSourceMap(selectedMaps[i]);
         }
         selectedMaps = new int[0];

@@ -1,6 +1,31 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package mars.FishSim.test;
 
@@ -33,27 +58,26 @@ import mars.FishSim.FishSim;
 /**
  *
  * @author Acer
- * @deprecated 
+ * @deprecated
  */
 //@Deprecated
 public class MARS_Main extends SimpleApplication {
-    
- private Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
- private WaterFilter water;
- TerrainQuad terrain;
- Material matRock;
+
+    private Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
+    private WaterFilter water;
+    TerrainQuad terrain;
+    Material matRock;
     /**
      *
      */
     protected RigidBodyControl land;
- BulletAppState bullet;
- private float time = 0.0f;
- private float waterHeight = 0.0f;
- private float initialWaterHeight = 120f;
-  
- private FishSim fSim;
- 
- 
+    BulletAppState bullet;
+    private float time = 0.0f;
+    private float waterHeight = 0.0f;
+    private float initialWaterHeight = 120f;
+
+    private FishSim fSim;
+
     /**
      *
      */
@@ -61,16 +85,16 @@ public class MARS_Main extends SimpleApplication {
     public void simpleInitApp() {
         fSim = new FishSim(this);
         stateManager.attach(fSim);
-        
+
         bullet = new BulletAppState();
         stateManager.attach(bullet);
         bullet.setDebugEnabled(true);
-              
+
         flyCam.setMoveSpeed(50);
-        
+
         Node mainScene = new Node("Main Scene");
         rootNode.attachChild(mainScene);
-        
+
         cam.setLocation(new Vector3f(-327.21957f, 61.6459f, 156.884346f));
 
         createTerrain(mainScene);
@@ -79,7 +103,7 @@ public class MARS_Main extends SimpleApplication {
         land.setCollisionGroup(0);
         terrain.addControl(land);
         bullet.getPhysicsSpace().add(land);
-       
+
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(1.7f));
@@ -88,7 +112,7 @@ public class MARS_Main extends SimpleApplication {
         DirectionalLight l = new DirectionalLight();
         l.setDirection(Vector3f.UNIT_Y.mult(-1));
         l.setColor(ColorRGBA.White.clone().multLocal(0.3f));
-        
+
         Spatial sky = SkyFactory.createSky(assetManager, "Scenes/FullskiesSunset0068.dds", false);
         sky.setLocalScale(350);
 
@@ -120,23 +144,23 @@ public class MARS_Main extends SimpleApplication {
         water.setRefractionStrength(0.2f);
 
         water.setWaterHeight(initialWaterHeight);
- 
-        viewPort.addProcessor(fpp);     
+
+        viewPort.addProcessor(fpp);
     }
-    
+
     /**
      *
      * @param tpf
      */
     @Override
-    public void simpleUpdate(float tpf){
+    public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
         time += tpf;
         waterHeight = (float) Math.cos(((time * 0.6f) % FastMath.TWO_PI)) * 1.5f;
         water.setWaterHeight(initialWaterHeight + waterHeight);
         stateManager.update(tpf);
     }
-    
+
     /**
      *
      * @param args
@@ -147,7 +171,7 @@ public class MARS_Main extends SimpleApplication {
         //The start() method runs simpleInitGame(),
         app.start();
     }
-    
+
     private void createTerrain(Node rootNode) {
         matRock = new Material(assetManager, "MatDefs/TerrainLighting.j3md");
         matRock.setBoolean("useTriPlanarMapping", false);
@@ -192,20 +216,20 @@ public class MARS_Main extends SimpleApplication {
         terrain.setShadowMode(RenderQueue.ShadowMode.Receive);
         rootNode.attachChild(terrain);
     }
-    
+
     /**
      *
      * @return
      */
-    public float getWaterHeight(){
+    public float getWaterHeight() {
         return initialWaterHeight;
     }
-    
+
     /**
      *
      * @return
      */
-    public BulletAppState getBulletAppState(){
+    public BulletAppState getBulletAppState() {
         return bullet;
     }
 }
