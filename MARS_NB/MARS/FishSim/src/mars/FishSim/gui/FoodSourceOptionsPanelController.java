@@ -17,10 +17,10 @@ import org.openide.util.Lookup;
  * @author Tosik
  */
 @OptionsPanelController.SubRegistration(
-        location = "SwarmSimulation",
+        location = "FishSim",
         displayName = "#AdvancedOption_DisplayName_FoodSource",
         keywords = "#AdvancedOption_Keywords_FoodSource",
-        keywordsCategory = "SwarmSimulation/FoodSource"
+        keywordsCategory = "FishSim/FoodSource"
 )
 @org.openide.util.NbBundle.Messages({"AdvancedOption_DisplayName_FoodSource=FoodSource", "AdvancedOption_Keywords_FoodSource=FoodSource"})
 public final class FoodSourceOptionsPanelController extends OptionsPanelController {

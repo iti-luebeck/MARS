@@ -5,7 +5,7 @@
  */
 @OptionsPanelController.ContainerRegistration(id = "FishSim", categoryName = "#OptionsCategory_Name_SwarmSimulation", iconBase = "mars/FishSim/Fisch.PNG", keywords = "#OptionsCategory_Keywords_SwarmSimulation", keywordsCategory = "SwarmSimulation")
 @NbBundle.Messages(value = {"OptionsCategory_Name_SwarmSimulation=SwarmSimulation", "OptionsCategory_Keywords_SwarmSimulation=Swarm"})
-package mars.FishSim;
+package mars.FishSim.gui;
 
 import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.NbBundle;

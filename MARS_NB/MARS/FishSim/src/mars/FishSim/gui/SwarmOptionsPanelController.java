@@ -13,10 +13,10 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 @OptionsPanelController.SubRegistration(
-        location = "SwarmSimulation",
+        location = "FishSim",
         displayName = "#AdvancedOption_DisplayName_Swarm",
         keywords = "#AdvancedOption_Keywords_Swarm",
-        keywordsCategory = "SwarmSimulation/Swarm"
+        keywordsCategory = "FishSim/Swarm"
 )
 @org.openide.util.NbBundle.Messages({"AdvancedOption_DisplayName_Swarm=Swarm", "AdvancedOption_Keywords_Swarm=Swarm"})
 public final class SwarmOptionsPanelController extends OptionsPanelController {
