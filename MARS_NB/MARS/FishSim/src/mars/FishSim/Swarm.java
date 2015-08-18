@@ -29,16 +29,23 @@
  */
 package mars.FishSim;
 
-import mars.FishSim.food.IFoodSource;
-import mars.FishSim.food.FoodSourceMap;
-import mars.FishSim.control.SwarmViewControl;
-import mars.FishSim.control.SwarmColControl;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import mars.FishSim.control.SwarmColControl;
+import mars.FishSim.control.SwarmViewControl;
+import mars.FishSim.food.FoodSourceMap;
+import mars.FishSim.food.IFoodSource;
 
 /**
  *
@@ -153,52 +160,48 @@ public class Swarm implements IFoodSource {
     public boolean merge = false;
     private Swarm mergeWith;
     private Vector3f searchVec = new Vector3f(0, 0, 0);
-    private int lastSize;
+    private int initSize;
     private String name;
-
+    private float deviation = 0f;
+    private boolean animation = false;
+    private String path = "";
+    
     /**
-     *
-     * @param sim Simulation
-     * @param size Size of the swarm
-     * @param scale Size of the fish
-     * @param spawn Spawnpoint of the fish
-     * @param type Type of the fish
-     * @param path Path of the model
-     * @param animation Animation of/off
+     * Creates a new default swarm.
      */
-    public Swarm(FishSim sim, int size, Vector3f scale, Vector3f spawn, int type, String path, boolean animation) {
-        colRadius = (float) (Math.sqrt((float) size) * scale.length());
+    public Swarm(){
+        swarm = new ArrayList<Fish>();
+        setInitSize(10);
+        setMoveSpeed(0.5f);
+        setRotationSpeed(1.0f);
+        setDeviation(0.1f);
+        setPath("Fishtest/Fishtest.j3o");
+        setAnimation(true);
+        setCenter(Vector3f.UNIT_X);
+        setType(0);
+        Vector3f scale = new Vector3f(0.55f, 0.55f, 0.55f);
+        setScale(scale);
+        colRadius = (float) (Math.sqrt((float) initSize) * scale.length());
         viewRadius = colRadius + 5;
         near = (float) 3 * scale.length();
-        this.sim = sim;
-        swarm = new ArrayList<Fish>();
-        center = spawn;
-        this.scale = scale;
-        this.type = type;
-        lastSize = size;
-
-        Fish fish;
-        for (int i = 0; i < size; i++) {
-            fish = new Fish(sim, scale, spawn, this, path, animation);
-            swarm.add(fish);
-            sim.getRootNode().attachChild(fish);
-        }
-        initCollidable();
+        
+        
+        //initCollidable();
     }
 
     /**
      *
      * @param sim Simulation
-     * @param size Size of the swarm
+     * @param initSize Initial size of the swarm
      * @param scale Size of the fish
-     * @param deviation Deviation of the size of the fish
+     * @param deviation Deviation of the initSize of the fish
      * @param spawn Spawnpoint of the fish
      * @param type Type of the fish
      * @param animation Animation on/off
      * @param path Path of the model
      */
-    public Swarm(FishSim sim, int size, Vector3f scale, float deviation, Vector3f spawn, int type, String path, boolean animation) {
-        colRadius = (float) (Math.sqrt((float) size) * scale.length());
+    public Swarm(FishSim sim, int initSize, Vector3f scale, float deviation, Vector3f spawn, int type, String path, boolean animation) {
+        colRadius = (float) (Math.sqrt((float) initSize) * scale.length());
         viewRadius = colRadius + 5;
         near = (float) 3 * scale.length();
         this.sim = sim;
@@ -206,17 +209,8 @@ public class Swarm implements IFoodSource {
         center = spawn;
         this.scale = scale;
         this.type = type;
-        lastSize = size;
+        this.initSize = initSize;
 
-        float rand;
-
-        for (int i = 0; i < size; i++) {
-            rand = getGaussianDistributionNoise(deviation);
-            Fish fish = new Fish(sim, scale.add(rand * scale.x, rand * scale.y, rand * scale.z), spawn, this, path, animation);
-            fish.setName("fish_" + i);
-            swarm.add(fish);
-            sim.getRootNode().attachChild(fish);
-        }
         initCollidable();
     }
 
@@ -237,12 +231,44 @@ public class Swarm implements IFoodSource {
         center = spawn;
         this.scale = scale;
         this.type = type;
-        lastSize = swarm.size();
+        initSize = swarm.size();
 
-        for (int i = 0; i < swarm.size(); i++) {
-            add(swarm.get(i));
+        for (Fish fish : swarm) {
+            add(fish);
         }
         initCollidable();
+    }
+    
+    /**
+     * 
+     */
+    public void createFish(){
+        for (int i = 0; i < getInitSize(); i++) {
+            //float rand = getGaussianDistributionNoise(getDeviation());
+            //Fish fish = new Fish(sim, scale.add(rand * scale.x, rand * scale.y, rand * scale.z), getCenter(), this, getPath(), getAnimation());
+            /*Fish fish = new Fish(sim, scale, getCenter(), this, getPath(), getAnimation());
+            fish.setName("fish_" + i);
+            fish.setVisible(true);
+            swarm.add(fish);
+            sim.getRootNode().attachChild(fish);*/
+            
+            Node auv_spatial = (Node)sim.getMain().getAssetManager().loadModel(getPath());
+            auv_spatial.setLocalScale(getScale());
+            auv_spatial.setLocalTranslation(getCenter());
+            auv_spatial.setCullHint(Spatial.CullHint.Never);
+            auv_spatial.updateModelBound();
+            auv_spatial.updateGeometricState();
+            sim.getRootNode().attachChild(auv_spatial);
+            
+            /*Sphere sphere7 = new Sphere(8, 8, getScale().x);
+            Geometry PressureSensorStart = new Geometry("PressureStart", sphere7);
+            Material mark_mat7 = new Material(sim.getMain().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+            mark_mat7.setColor("Color", ColorRGBA.Pink);
+            PressureSensorStart.setLocalTranslation(getCenter());
+            PressureSensorStart.setMaterial(mark_mat7);
+            PressureSensorStart.updateGeometricState();
+            sim.getRootNode().attachChild(PressureSensorStart);*/
+        }
     }
 
     private void initCollidable() {
@@ -269,8 +295,8 @@ public class Swarm implements IFoodSource {
     public void move(float tpf) {
         //computeRadius();
         computeCenter();
-        colCont.setPhysicsLocation(center);
-        viewCont.setPhysicsLocation(center);
+        //colCont.setPhysicsLocation(center);
+        //viewCont.setPhysicsLocation(center);
 
         if (searchTime <= 0f) {
             searchTime = (float) Math.random() * 10f;
@@ -309,15 +335,15 @@ public class Swarm implements IFoodSource {
             splitTime -= tpf;
         }
 
-        for (int i = 0; i < swarm.size(); i++) {
-            swarm.get(i).swim(tpf);
+        for (Fish fish : swarm) {
+            fish.swim(tpf);
         }
 
         if (split) {
-            split();
+            //split();
         } else {
             if (merge) {
-                merge();
+                //merge();
             }
         }
     }
@@ -352,8 +378,8 @@ public class Swarm implements IFoodSource {
      */
     public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
-        for (int i = 0; i < swarm.size(); i++) {
-            swarm.get(i).setMoveSpeed((float) (Math.random() - Math.random()) * moveSpeed / 20);
+        for (Fish fish : swarm) {
+            fish.setMoveSpeed((float) (Math.random() - Math.random()) * moveSpeed / 20);
         }
     }
 
@@ -363,8 +389,8 @@ public class Swarm implements IFoodSource {
      */
     public void setRotationSpeed(float rotationSpeed) {
         this.rotationSpeed = rotationSpeed;
-        for (int i = 0; i < swarm.size(); i++) {
-            swarm.get(i).setRotationSpeed((float) (Math.random() - Math.random()) * rotationSpeed / 20);
+        for (Fish fish : swarm) {
+            fish.setRotationSpeed((float) (Math.random() - Math.random()) * rotationSpeed / 20);
         }
     }
 
@@ -414,8 +440,8 @@ public class Swarm implements IFoodSource {
         split1.resetSplitTime();
         split2.resetSplitTime();
 
-        sim.newSwarm(split1);
-        sim.newSwarm(split2);
+        sim.addSwarm(split1);
+        sim.addSwarm(split2);
 
         clear();
         sim.removeSwarm(this);
@@ -462,7 +488,7 @@ public class Swarm implements IFoodSource {
             mergeForeignMaps.get(i).add(merged);
         }
 
-        sim.newSwarm(merged);
+        sim.addSwarm(merged);
 
         mergeWith.clear();
         clear();
@@ -507,6 +533,10 @@ public class Swarm implements IFoodSource {
      */
     public Vector3f getCenter() {
         return center;
+    }
+
+    public void setCenter(Vector3f center) {
+        this.center = center;
     }
 
     /**
@@ -571,8 +601,8 @@ public class Swarm implements IFoodSource {
     private void computeCenter() {
         lastCenter = center;
         center = new Vector3f().zero();
-        for (int i = 0; i < swarm.size(); i++) {
-            center.addLocal(swarm.get(i).getLocalTranslation());
+        for (Fish fish : swarm) {
+            center.addLocal(fish.getLocalTranslation());
         }
         center.divideLocal((float) swarm.size());
     }
@@ -686,9 +716,65 @@ public class Swarm implements IFoodSource {
         return viewLocation;
     }
 
+    public void setSim(FishSim sim) {
+        this.sim = sim;
+    }
+
+    public FishSim getSim() {
+        return sim;
+    }
+
+    public Vector3f getScale() {
+        return scale;
+    }
+
+    public void setScale(Vector3f scale) {
+        this.scale = scale;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setAnimation(boolean animation) {
+        this.animation = animation;
+    }
+    
+    public boolean getAnimation() {
+        return animation;
+    }
+
+    public float getDeviation() {
+        return deviation;
+    }
+
+    public void setDeviation(float deviation) {
+        this.deviation = deviation;
+    }
+
+    public int getInitSize() {
+        return initSize;
+    }
+
+    public void setInitSize(int initSize) {
+        this.initSize = initSize;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
+
     /**
      *
-     * @return size of the swarm
+     * @return initSize of the swarm
      */
     public int size() {
         return swarm.size();
@@ -760,8 +846,8 @@ public class Swarm implements IFoodSource {
         if (swarm.isEmpty()) {
             sim.removeSwarm(this);
         } else {
-            if ((float) lastSize / (float) swarm.size() > 1.1f) {
-                lastSize = swarm.size();
+            if ((float) initSize / (float) swarm.size() > 1.1f) {
+                initSize = swarm.size();
                 disableCol();
                 colRadius = (float) ((Math.log1p((float) swarm.size())) * scale.length());
                 viewRadius = colRadius + 5;

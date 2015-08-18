@@ -347,6 +347,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             progr.progress("Init FishSwarm State");
             Lookup lkp = Lookup.getDefault();
             AbstractAppState state = lkp.lookup(AbstractAppState.class);
+            state.setEnabled(true);
             if (state != null) {
                 stateManager.attach(state);
             }

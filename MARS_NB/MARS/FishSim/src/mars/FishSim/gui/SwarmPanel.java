@@ -158,6 +158,11 @@ public final class SwarmPanel extends javax.swing.JPanel {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jLabel6.text")); // NOI18N
 
         path.setText(org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.path.text")); // NOI18N
+        path.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pathActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jButton4.text")); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -340,7 +345,9 @@ public final class SwarmPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sim.addSwarm(size.getText() + " " + sX.getText() + " " + sY.getText() + " " + sZ.getText() + " " + deviat.getText() + " " + tX.getText() + " " + tY.getText() + " " + tZ.getText() + " " + type.getText() + " " + path.getText() + " " + new Boolean(anim.isSelected()).toString() + " " + foodSourceMap + " " + mSpeed.getText() + " " + rSpeed.getText());
+        //sim.addSwarm(size.getText() + " " + sX.getText() + " " + sY.getText() + " " + sZ.getText() + " " + deviat.getText() + " " + tX.getText() + " " + tY.getText() + " " + tZ.getText() + " " + type.getText() + " " + path.getText() + " " + new Boolean(anim.isSelected()).toString() + " " + foodSourceMap + " " + mSpeed.getText() + " " + rSpeed.getText());
+        Swarm swarm = new Swarm();
+        sim.addSwarm(swarm);
         foodSourceMap = -1;
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -392,6 +399,10 @@ public final class SwarmPanel extends javax.swing.JPanel {
     private void swarmsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_swarmsValueChanged
         selectedSwarms = swarms.getSelectedIndices();
     }//GEN-LAST:event_swarmsValueChanged
+
+    private void pathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pathActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pathActionPerformed
 
     void load() {
         // TODO read settings and initialize GUI

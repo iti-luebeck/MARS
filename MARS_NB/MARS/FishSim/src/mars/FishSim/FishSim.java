@@ -87,7 +87,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     private boolean fSMChanged = false;
 
     private final ArrayList<Swarm> removedSwarms = new ArrayList<Swarm>();
-    private final ArrayList<String> newSwarms = new ArrayList<String>();
+    private final ArrayList<Swarm> newSwarms = new ArrayList<Swarm>();
     private final ArrayList<Swarm> swarms = new ArrayList<Swarm>();
 
     private final ArrayList<FoodSource> removedSources = new ArrayList<FoodSource>();
@@ -144,6 +144,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
 
         super.initialize(stateManager, app);
         setInstance(this);
+        
+        Swarm swarm = new Swarm();
+        this.addSwarm(swarm);
     }
 
     /**
@@ -246,18 +249,16 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             return;
         }
         super.update(tpf);
-        newSwarms();
-        newFoodSources();
-
-        updatePanels();
-
-        for (int i = 0; i < swarms.size(); i++) {
-            swarms.get(i).move(tpf);
+        //newSwarms();
+        newSwarmsAdded();
+        //newFoodSources();
+        
+        for (Swarm swarm : swarms) {
+            //swarm.move(tpf);
         }
-
-        removeSwarms();
-        removeFoodSources();
-
+        
+        //removeSwarms();
+        //removeFoodSources();
         //rootNode.updateLogicalState(tpf);
         //rootNode.updateGeometricState();
     }
@@ -285,13 +286,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         return mars;
     }
 
-    /**
-     *
-     * @return
-     */
-//    public Initializer getIniter() {
-//        return initer;
-//    }
     /**
      *
      * @return
@@ -343,14 +337,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
 
     /**
      *
-     * @param values Parameters of a swarm in the form of a string
-     */
-    public void addSwarm(String values) {
-        newSwarms.add(values);
-    }
-
-    /**
-     *
      * @param values Parameters of a foodsource in the form of a string
      */
     public void addFoodSource(String values) {
@@ -365,20 +351,11 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         fSMPanel.updateFoodSourceMapList(sourceMaps);
         fSMChanged = true;
     }
-
-    private void newSwarms() {
-        for (int i = 0; i < newSwarms.size(); i++) {
-            String[] values = newSwarms.get(i).split(" ");
-            boolean anim = false;
-            if (values[10].equals("true")) {
-                anim = true;
-            }
-            Swarm swarm = new Swarm(this, Integer.parseInt(values[0]), new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3])), Float.parseFloat(values[4]), new Vector3f(Float.parseFloat(values[5]), Float.parseFloat(values[6]), Float.parseFloat(values[7])), Integer.parseInt(values[8]), values[9], anim);
-            if (Integer.parseInt(values[11]) >= 0) {
-                swarm.setFoodSourceMap(sourceMaps.get(Integer.parseInt(values[11])));
-            }
-            swarm.setMoveSpeed(Float.parseFloat(values[12]));
-            swarm.setRotationSpeed(Float.parseFloat(values[13]));
+    
+    private void newSwarmsAdded() {
+        for (Swarm swarm : newSwarms) {
+            swarm.setSim(this);
+            swarm.createFish();
             swarms.add(swarm);
             swarmsChanged = true;
         }
@@ -389,9 +366,8 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
      *
      * @param swarm Add a swarm to the simulation
      */
-    public void newSwarm(Swarm swarm) {
-        swarms.add(swarm);
-        swarmsChanged = true;
+    public void addSwarm(Swarm swarm) {
+        newSwarms.add(swarm);
     }
 
     private void newFoodSources() {

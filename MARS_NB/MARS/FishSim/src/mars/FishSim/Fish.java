@@ -114,7 +114,7 @@ public class Fish extends Node {
         }
         //optimize(model);
         attachChild(model);
-        scale(scale.x, scale.y, scale.z);
+        setLocalScale(scale);
         setLocalTranslation(localTrans);
         this.swarm = swarm;
         control = new FishControl(this);
