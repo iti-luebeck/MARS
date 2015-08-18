@@ -1172,11 +1172,11 @@ public class BasicAUV implements AUV, SceneProcessor {
             if (element.isEnabled()) {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
-                    if(element instanceof EnergyHarvester){//we have someone who gives us energy
+                    if (element instanceof EnergyHarvester) {//we have someone who gives us energy
                         EnergyHarvester energyHarvester = (EnergyHarvester) element;
                         acc.addActualCurrent(energyHarvester.getEnergy());
                         energyHarvester.setEnergy(0f);// We have transfered the energy into the accumulator, clean the energyHarvester.
-                    }else{// we have someone who wants energy
+                    } else {// we have someone who wants energy
                         Float currentConsumption = element.getCurrentConsumption();
                         if (currentConsumption != null) {//suck energy
                             float aH = (currentConsumption / 3600f) * tpf;
@@ -2299,7 +2299,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                //element.publishUpdate(); //TODOFAB what is this for?
+                //element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
@@ -2313,7 +2313,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                // element.publishUpdate(); //TODOFAB what is this for?
+                // element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
