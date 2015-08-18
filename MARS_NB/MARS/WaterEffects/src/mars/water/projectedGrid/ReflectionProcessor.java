@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.water;
+package mars.water.projectedGrid;
 
 import com.jme3.math.Plane;
 import com.jme3.post.SceneProcessor;
@@ -40,8 +40,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.texture.FrameBuffer;
 
 /**
- * Reflection Processor
- * Used to render the reflected scene in an off view port
+ * Reflection Processor Used to render the reflected scene in an off view port
  */
 public class ReflectionProcessor implements SceneProcessor {
 
@@ -53,6 +52,7 @@ public class ReflectionProcessor implements SceneProcessor {
 
     /**
      * Creates a ReflectionProcessor
+     *
      * @param reflectionCam the cam to use for reflection
      * @param reflectionBuffer the FrameBuffer to render to
      * @param reflectionClipPlane the clipping plane
@@ -133,7 +133,8 @@ public class ReflectionProcessor implements SceneProcessor {
     /**
      * Internal use only<br>
      * returns the frame buffer
-     * @return 
+     *
+     * @return
      */
     public FrameBuffer getReflectionBuffer() {
         return reflectionBuffer;
@@ -142,7 +143,8 @@ public class ReflectionProcessor implements SceneProcessor {
     /**
      * Internal use only<br>
      * sets the frame buffer
-     * @param reflectionBuffer 
+     *
+     * @param reflectionBuffer
      */
     public void setReflectionBuffer(FrameBuffer reflectionBuffer) {
         this.reflectionBuffer = reflectionBuffer;
@@ -150,7 +152,8 @@ public class ReflectionProcessor implements SceneProcessor {
 
     /**
      * returns the reflection cam
-     * @return 
+     *
+     * @return
      */
     public Camera getReflectionCam() {
         return reflectionCam;
@@ -158,7 +161,8 @@ public class ReflectionProcessor implements SceneProcessor {
 
     /**
      * sets the reflection cam
-     * @param reflectionCam 
+     *
+     * @param reflectionCam
      */
     public void setReflectionCam(Camera reflectionCam) {
         this.reflectionCam = reflectionCam;
@@ -166,7 +170,8 @@ public class ReflectionProcessor implements SceneProcessor {
 
     /**
      * returns the reflection clip plane
-     * @return 
+     *
+     * @return
      */
     public Plane getReflectionClipPlane() {
         return reflectionClipPlane;
@@ -174,7 +179,8 @@ public class ReflectionProcessor implements SceneProcessor {
 
     /**
      * Sets the reflection clip plane
-     * @param reflectionClipPlane 
+     *
+     * @param reflectionClipPlane
      */
     public void setReflectionClipPlane(Plane reflectionClipPlane) {
         this.reflectionClipPlane = reflectionClipPlane;

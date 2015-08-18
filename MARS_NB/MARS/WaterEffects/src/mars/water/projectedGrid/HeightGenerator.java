@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.water;
+package mars.water.projectedGrid;
 
 /**
  *
@@ -44,5 +44,5 @@ public interface HeightGenerator {
      * @param time
      * @return
      */
-    public float getHeight( float x, float z, float time );
+    public float getHeight(float x, float z, float time);
 }

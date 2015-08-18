@@ -53,6 +53,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -343,12 +344,14 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 }
             });
 
-            progr.progress("Init other States");
-            progr.progress("Init FishSwarm State");
+            progr.progress("Init other states");
             Lookup lkp = Lookup.getDefault();
-            AbstractAppState state = lkp.lookup(AbstractAppState.class);
-            if (state != null) {
-                stateManager.attach(state);
+            Collection<? extends AbstractAppState> lookupAll = lkp.lookupAll(AbstractAppState.class);
+            for (AbstractAppState abstractAppState : lookupAll) {
+                if (abstractAppState != null) {
+                    progr.progress("Init " + abstractAppState.getClass().getName() + " State");
+                    stateManager.attach(abstractAppState);
+                }
             }
         }
         progr.progress("Init Super");

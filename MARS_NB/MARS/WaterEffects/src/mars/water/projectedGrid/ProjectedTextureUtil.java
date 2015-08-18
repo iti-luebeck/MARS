@@ -29,11 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-
-
-
-package mars.water;
+package mars.water.projectedGrid;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
@@ -41,14 +37,13 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.Renderer;
 import com.jme3.texture.Texture;
 
-
 /**
  * <code>ProjectedTextureUtil</code>
  *
  * @author Rikard Herlitz (MrCoder)
  *
- * @author Joshua Ellen (basixs)
- * [1-16-2009] - Abstracted, removed direct calls to openGL
+ * @author Joshua Ellen (basixs) [1-16-2009] - Abstracted, removed direct calls
+ * to openGL
  * @author Matthias Schellhase portage to jme3
  */
 public class ProjectedTextureUtil {
@@ -56,89 +51,79 @@ public class ProjectedTextureUtil {
     static Camera camera = null;
     private static Matrix4f lightProjectionMatrix = new Matrix4f();
     private static Matrix4f lightViewMatrix = new Matrix4f();
-    private static Matrix4f biasMatrix = new Matrix4f( 0.5f, 0.0f, 0.0f, 0.0f,
+    private static Matrix4f biasMatrix = new Matrix4f(0.5f, 0.0f, 0.0f, 0.0f,
             0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
-            1.0f ); // bias from [-1, 1] to [0, 1]
+            1.0f); // bias from [-1, 1] to [0, 1]
 
     /**
      * Updated texture matrix on the provided texture
      *
-     * @param texture
-     *            Texture to update texturematrix on
-     * @param fov
-     *            Projector field of view, in angles
-     * @param aspect
-     *            Projector frustum aspect ratio
-     * @param near
-     *            Projector frustum near plane
-     * @param far
-     *            Projector frustum far plane
-     * @param pos
-     *            Projector position
-     * @param aim
-     *            Projector look at position
+     * @param texture Texture to update texturematrix on
+     * @param fov Projector field of view, in angles
+     * @param aspect Projector frustum aspect ratio
+     * @param near Projector frustum near plane
+     * @param far Projector frustum far plane
+     * @param pos Projector position
+     * @param aim Projector look at position
      */
-
     /**
      * Populates a <code>Matrix4f</code> with the proper look at transformations
      * from the ModelView matrix.
+     *
      * @param location the 'Where' in result matrix
      * @param at the 'At' in the result matrix
      * @param up the world up
      * @param result the altered <code>Matrix4f</code>
      */
-    public static void matrixLookAt( Vector3f location, Vector3f at,
-            Vector3f up, Matrix4f result ) {
+    public static void matrixLookAt(Vector3f location, Vector3f at,
+            Vector3f up, Matrix4f result) {
 
+        camera.setLocation(location);
+        camera.lookAt(at, up);
 
-
-        camera.setLocation( location );
-        camera.lookAt( at, up );
-
-        result.set( camera.getViewMatrix() );
+        result.set(camera.getViewMatrix());
     }
 
     /**
      * Populates a <code>Matrix4f</code> with the proper frustum transformations
      * from the ModelView matrix.
+     *
      * @param fovY the Field of View
      * @param aspect the aspect ratio
      * @param near the near plane of the frustum
      * @param far the far frame of the frustum
      * @param result the altered <code>Matrix4f</code>
      */
-    public static void matrixPerspective( float fovY, float aspect,
-            float near, float far, Matrix4f result ) {
+    public static void matrixPerspective(float fovY, float aspect,
+            float near, float far, Matrix4f result) {
 
+        camera.setFrustumPerspective(fovY, aspect, near, far);
 
-
-        camera.setFrustumPerspective( fovY, aspect, near, far );
-
-        result.set( camera.getViewMatrix() );
+        result.set(camera.getViewMatrix());
     }
 
     /**
      * Populates a <code>Matrix4f</code> with the proper frustum transformations
      * from the Projection matrix.
+     *
      * @param fovY the Field of View
      * @param aspect the aspect ratio
      * @param near the near plane of the frustum
      * @param far the far frame of the frustum
      * @param result the altered <code>Matrix4f</code>
      */
-    public static void matrixProjection( float fovY, float aspect, float near,
-            float far, Matrix4f result ) {
+    public static void matrixProjection(float fovY, float aspect, float near,
+            float far, Matrix4f result) {
 
+        camera.setFrustumPerspective(fovY, aspect, near, far);
 
-
-        camera.setFrustumPerspective( fovY, aspect, near, far );
-
-        result.set( camera.getProjectionMatrix() );
+        result.set(camera.getProjectionMatrix());
     }
 
     /**
      * Populates a <code>Matrix4f</code> with the proper frustum transformations
      * from the Projection matrix.
+     *
      * @param frustumLeft the left plane of the frustum
      * @param frustumRight the right plane of the frustum
      * @param frustumBottom the bottom plane of the frustum
@@ -147,17 +132,14 @@ public class ProjectedTextureUtil {
      * @param frustumFar the far plane of the frustum
      * @param result the altered <code>Matrix4f</code>
      */
-    public static void matrixFrustum( float frustumLeft, float frustumRight,
+    public static void matrixFrustum(float frustumLeft, float frustumRight,
             float frustumBottom, float frustumTop, float frustumNear,
-            float frustumFar, Matrix4f result ) {
+            float frustumFar, Matrix4f result) {
 
+        camera.setFrustum(frustumFar, frustumFar, frustumLeft, frustumRight,
+                frustumTop, frustumFar);
 
-
-        camera.setFrustum( frustumFar, frustumFar, frustumLeft, frustumRight,
-                frustumTop, frustumFar );
-
-        result.set( camera.getProjectionMatrix() );
+        result.set(camera.getProjectionMatrix());
     }
-
 
 }

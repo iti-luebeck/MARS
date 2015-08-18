@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.water;
+package mars.water.projectedGrid;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -46,13 +46,13 @@ import com.jme3.system.Timer;
 import com.jme3.util.BufferUtils;
 
 /**
- * <code>ProjectedGrid</code>
- * Projected grid mesh
+ * <code>ProjectedGrid</code> Projected grid mesh
  *
  * @author Rikard Herlitz (MrCoder)
  * @author Matthias Schellhase portage to jme3
  */
 public class ProjectedGrid extends Mesh {
+
     private static final long serialVersionUID = 1L;
     private int sizeX;
     private int sizeY;
@@ -138,7 +138,7 @@ public class ProjectedGrid extends Mesh {
         buildVertices();
         buildTextureCoordinates();
         buildNormals();
-        
+
         setDynamic();
     }
 
@@ -185,7 +185,7 @@ public class ProjectedGrid extends Mesh {
         ProjectedTextureUtil.camera = camera.clone();
         viewPortWidth = camera.getWidth();
         viewPortHeight = camera.getHeight();
-        
+
         modelViewMatrix.set(camera.getViewMatrix().clone());
         modelViewMatrix.transposeLocal();
 
@@ -235,7 +235,6 @@ public class ProjectedGrid extends Mesh {
         getWorldIntersection(height, source, modelViewProjectionInverse, intersectTopRight);
         source.set(1, 0);
         getWorldIntersection(height, source, modelViewProjectionInverse, intersectBottomRight);
-        
 
         vertBuf.rewind();
         float du = 1.0f / (float) (sizeX - 1);
@@ -274,7 +273,6 @@ public class ProjectedGrid extends Mesh {
         }
         texs.put(texBufArray);
         getBuffer(Type.TexCoord).updateData(texs);
-
 
         normBuf.rewind();
         oppositePoint.set(0, 0, 0);
@@ -467,16 +465,15 @@ public class ProjectedGrid extends Mesh {
         return sizeX * sizeY;
     }
 
-
     /**
-     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point
-     * on the terrain. The normal is linearly interpreted from the normals of
-     * the 4 nearest defined points. If the point provided is not within the
-     * bounds of the height map, null is returned.
+     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point on
+     * the terrain. The normal is linearly interpreted from the normals of the 4
+     * nearest defined points. If the point provided is not within the bounds of
+     * the height map, null is returned.
      *
      * @param position the vector representing the location to find a normal at.
-     * @param store	the Vector3f object to store the result in. If null, a new one
-     *                 is created.
+     * @param store	the Vector3f object to store the result in. If null, a new
+     * one is created.
      * @return the normal vector at the provided location.
      */
     public Vector3f getSurfaceNormal(Vector2f position, Vector3f store) {
@@ -484,15 +481,15 @@ public class ProjectedGrid extends Mesh {
     }
 
     /**
-     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point
-     * on the terrain. The normal is linearly interpreted from the normals of
-     * the 4 nearest defined points. If the point provided is not within the
-     * bounds of the height map, null is returned.
+     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point on
+     * the terrain. The normal is linearly interpreted from the normals of the 4
+     * nearest defined points. If the point provided is not within the bounds of
+     * the height map, null is returned.
      *
-     * @param position the vector representing the location to find a normal at. Only
-     *                 the x and z values are used.
-     * @param store	the Vector3f object to store the result in. If null, a new one
-     *                 is created.
+     * @param position the vector representing the location to find a normal at.
+     * Only the x and z values are used.
+     * @param store	the Vector3f object to store the result in. If null, a new
+     * one is created.
      * @return the normal vector at the provided location.
      */
     public Vector3f getSurfaceNormal(Vector3f position, Vector3f store) {
@@ -500,15 +497,15 @@ public class ProjectedGrid extends Mesh {
     }
 
     /**
-     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point
-     * on the terrain. The normal is linearly interpreted from the normals of
-     * the 4 nearest defined points. If the point provided is not within the
-     * bounds of the height map, null is returned.
+     * <code>getSurfaceNormal</code> returns the normal of an arbitrary point on
+     * the terrain. The normal is linearly interpreted from the normals of the 4
+     * nearest defined points. If the point provided is not within the bounds of
+     * the height map, null is returned.
      *
-     * @param x	 the x coordinate to check.
-     * @param z	 the z coordinate to check.
-     * @param store the Vector3f object to store the result in. If null, a new one
-     *              is created.
+     * @param x	the x coordinate to check.
+     * @param z	the z coordinate to check.
+     * @param store the Vector3f object to store the result in. If null, a new
+     * one is created.
      * @return the normal unit vector at the provided location.
      */
     public Vector3f getSurfaceNormal(float x, float z, Vector3f store) {
@@ -603,8 +600,6 @@ public class ProjectedGrid extends Mesh {
      */
     private void buildTextureCoordinates() {
         texs = BufferUtils.createVector2Buffer(getVertexCount());
-
-
 
         texs.clear();
 
