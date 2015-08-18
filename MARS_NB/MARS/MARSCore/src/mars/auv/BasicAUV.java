@@ -107,8 +107,8 @@ import mars.auv.example.Manta;
 import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
-import mars.control.GuiControl;
-import mars.control.LimitedRigidBodyControl;
+import mars.control.GuiControl;import mars.communication.AUVConnection;
+import mars.communication.AUVConnectionFactory;import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
@@ -209,6 +209,18 @@ public class BasicAUV implements AUV, SceneProcessor{
     private Vector3f drag_force_vec = new Vector3f(0f, 0f, 0f);
     private Node rootNode;
 
+    // ROS/TCP Connector --------
+    private AUVConnection auvConnection;
+
+    public void setAuvConnection(AUVConnection connection) {
+        auvConnection = connection;
+    }
+
+    public AUVConnection getAuvConnection() {
+        return auvConnection;
+    }
+    // --------------------------
+
     //PhysicalExchanger HashMaps to store and load sensors and actuators
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Sensors")
@@ -267,12 +279,15 @@ public class BasicAUV implements AUV, SceneProcessor{
         this.rootNode = simstate.getRootNode();
         this.initer = simstate.getIniter();
         selectionNode.attachChild(auv_node);
+
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
      *
      */
     public BasicAUV() {
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
@@ -304,6 +319,8 @@ public class BasicAUV implements AUV, SceneProcessor{
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
+
+        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**

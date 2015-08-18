@@ -59,8 +59,8 @@ public class PressureSensor extends Sensor{
     private Geometry PressureSensorStart;
 
     ///ROS stuff 
-    private Publisher<sensor_msgs.FluidPressure> publisher = null;
-    private sensor_msgs.FluidPressure fl;
+    private Publisher<hanse_msgs.pressure> publisher = null;
+    private hanse_msgs.pressure fl;
     private std_msgs.Header header;
 
     /**
@@ -229,8 +229,8 @@ public class PressureSensor extends Sensor{
     @SuppressWarnings("unchecked")
     public void initROS(MARSNodeMain ros_node, String auv_name) {
         super.initROS(ros_node, auv_name);
-        publisher = (Publisher<sensor_msgs.FluidPressure>)ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.FluidPressure._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.FluidPressure._TYPE);
+        publisher = (Publisher<hanse_msgs.pressure>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.pressure._TYPE);
+        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.pressure._TYPE);
         header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         this.rosinit = true;
     }
@@ -241,12 +241,11 @@ public class PressureSensor extends Sensor{
     @Override
     public void publish() {
         super.publish();
-        header.setSeq(rosSequenceNumber++);
+        header.setSeq(sequenceNumber++);
         header.setFrameId(this.getRos_frame_id());
         header.setStamp(Time.fromMillis(System.currentTimeMillis()));
         fl.setHeader(header);
-        fl.setFluidPressure(getPressurePascal());
-        fl.setVariance(0f);
+        fl.setData((short) (getPressureMbar()));
         if (publisher != null) {
             publisher.publish(fl);
         }

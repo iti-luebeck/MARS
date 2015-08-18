@@ -56,7 +56,6 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
-import mars.auv.AUV_Parameters;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
@@ -145,8 +144,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         }
     }
     
-    
-
     /**
      *
      * @param auv_node
@@ -221,7 +218,11 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     /**
      *
      */
-    protected int rosSequenceNumber = 0;
+    protected int sequenceNumber = 0;
+
+    public int getNextSequenceNumber() {
+        return sequenceNumber++;
+    }
 
     /*
      * 
@@ -534,8 +535,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     * The update method that will be called by the auvManager, hence by the
-     * main mars update loop. Should be node safe
+     * The update method that will be called by the auvManager, hence by the main mars update loop. Should be node safe
      *
      * @param tpf
      */
