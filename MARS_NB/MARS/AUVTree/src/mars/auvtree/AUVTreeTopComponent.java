@@ -194,7 +194,7 @@ public final class AUVTreeTopComponent extends TopComponent implements LookupLis
                     public Void call() throws Exception {
                         if(mars.getStateManager().getState(GuiState.class) != null){
                             GuiState guiState = (GuiState)mars.getStateManager().getState(GuiState.class);
-                            guiState.deselectAllAUVs();
+                            guiState.deselectAll();
                         }
                         return null;
                     }

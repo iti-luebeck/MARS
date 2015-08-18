@@ -197,7 +197,7 @@ public final class SimObTreeTopComponentTopComponent extends TopComponent implem
                     public Void call() throws Exception {
                         if(mars.getStateManager().getState(GuiState.class) != null){
                             GuiState guiState = mars.getStateManager().getState(GuiState.class);
-                            guiState.deselectAllAUVs();
+                            guiState.deselectAll();
                         }
                         return null;
                     }

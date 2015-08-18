@@ -193,7 +193,23 @@ public class VegetationSystem extends Node{
     public void setImposterBlue(Spatial imposter){
         this.imposterBlue = imposter;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public float getGenuineMView() {
+        return genuineMView;
+    }
     
+    /**
+     * 
+     * @param genuineMView 
+     */
+    public void setGenuineMView(float genuineMView) {
+        this.genuineMView = genuineMView;
+    }
+
     /**
      * Sets the minimum distance of each geometry of the same color to ona another
      * @param minDistR minimum distance for geomtries of type red

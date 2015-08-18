@@ -27,13 +27,14 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package mars.VegetationSystem;
+package mars.VegetationSystem.gui;
 
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import mars.VegetationSystem.VegetationSystem;
 
 final class VegetationSystemPanel extends javax.swing.JPanel {
 
