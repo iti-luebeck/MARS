@@ -31,6 +31,7 @@ package mars.FishSim;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -177,9 +178,9 @@ public class Swarm implements IFoodSource {
         setDeviation(0.1f);
         setPath("Fishtest/Fishtest.j3o");
         setAnimation(true);
-        setCenter(Vector3f.UNIT_X);
+        setCenter(Vector3f.ZERO);
         setType(0);
-        Vector3f scale = new Vector3f(0.55f, 0.55f, 0.55f);
+        Vector3f scale = new Vector3f(0.15f, 0.15f, 0.15f);
         setScale(scale);
         colRadius = (float) (Math.sqrt((float) initSize) * scale.length());
         viewRadius = colRadius + 5;
@@ -244,30 +245,12 @@ public class Swarm implements IFoodSource {
      */
     public void createFish(){
         for (int i = 0; i < getInitSize(); i++) {
-            //float rand = getGaussianDistributionNoise(getDeviation());
-            //Fish fish = new Fish(sim, scale.add(rand * scale.x, rand * scale.y, rand * scale.z), getCenter(), this, getPath(), getAnimation());
-            /*Fish fish = new Fish(sim, scale, getCenter(), this, getPath(), getAnimation());
+            float rand = getGaussianDistributionNoise(getDeviation());
+            Fish fish = new Fish(sim, scale.add(rand * scale.x, rand * scale.y, rand * scale.z), getCenter(), this, getPath(), getAnimation());
             fish.setName("fish_" + i);
             fish.setVisible(true);
             swarm.add(fish);
-            sim.getRootNode().attachChild(fish);*/
-            
-            Node auv_spatial = (Node)sim.getMain().getAssetManager().loadModel(getPath());
-            auv_spatial.setLocalScale(getScale());
-            auv_spatial.setLocalTranslation(getCenter());
-            auv_spatial.setCullHint(Spatial.CullHint.Never);
-            auv_spatial.updateModelBound();
-            auv_spatial.updateGeometricState();
-            sim.getRootNode().attachChild(auv_spatial);
-            
-            /*Sphere sphere7 = new Sphere(8, 8, getScale().x);
-            Geometry PressureSensorStart = new Geometry("PressureStart", sphere7);
-            Material mark_mat7 = new Material(sim.getMain().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-            mark_mat7.setColor("Color", ColorRGBA.Pink);
-            PressureSensorStart.setLocalTranslation(getCenter());
-            PressureSensorStart.setMaterial(mark_mat7);
-            PressureSensorStart.updateGeometricState();
-            sim.getRootNode().attachChild(PressureSensorStart);*/
+            sim.getRootNode().attachChild(fish);
         }
     }
 

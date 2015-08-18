@@ -40,6 +40,8 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.light.AmbientLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -125,10 +127,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         if (!super.isInitialized()) {
             if (app instanceof MARS_Main) {
                 mars = (MARS_Main) app;
-                //assetManager = mars.getAssetManager();
-                mars.getRootNode().attachChild(getRootNode());
                 if (stateManager.getState(SimState.class) != null) {
                     initer = stateManager.getState(SimState.class).getIniter();
+                    stateManager.getState(SimState.class).getSceneReflectionNode().attachChild(getRootNode());
                 } else {
                     throw new RuntimeException("SimState not found/initialized!");
                 }
@@ -249,12 +250,11 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             return;
         }
         super.update(tpf);
-        //newSwarms();
         newSwarmsAdded();
         //newFoodSources();
         
         for (Swarm swarm : swarms) {
-            //swarm.move(tpf);
+            swarm.move(tpf);
         }
         
         //removeSwarms();
