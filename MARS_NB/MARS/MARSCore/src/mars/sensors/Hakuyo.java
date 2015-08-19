@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
+import mars.misc.LaserScannerData;
 
 /**
  * A Hakuyo laser scanner. Ray based.
@@ -68,6 +69,10 @@ public class Hakuyo extends LaserScanner {
         return 7.50837174f * ((float) Math.pow(1.02266704f, Math.abs(x)));
     }
 
+    public LaserScannerData getHakuyoData(){
+        LaserScannerData hakuyoData = new LaserScannerData(getScanning_resolution(),getMaxRange(),getMinRange(),getScanningAngleMax(),getScanningAngleMin(),getInstantData());
+        return hakuyoData;
+    }
     /**
      *
      * @return
@@ -82,7 +87,7 @@ public class Hakuyo extends LaserScanner {
     @Override
     public void publishData() {
         super.publishData();
-        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getInstantData(), System.currentTimeMillis());
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getHakuyoData(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }
 }

@@ -140,9 +140,9 @@ public class RosPublisherFactory {
             return (Publisher<geometry_msgs.TransformStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.TransformStamped._TYPE);
         }*/
         
-        /*if (sensor instanceof UnderwaterModem) {
+        if (sensor instanceof UnderwaterModem) {
             return (Publisher<geometry_msgs.PointStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PointStamped._TYPE);
-        }*/
+        }
 
         if (sensor instanceof VideoCamera) {
             return (Publisher<sensor_msgs.Image>) node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Image._TYPE);

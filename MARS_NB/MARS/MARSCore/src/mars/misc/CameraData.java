@@ -29,40 +29,42 @@
 */
 package mars.misc;
 
+import org.jboss.netty.buffer.ChannelBuffer;
+
 /**
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class SonarData {
-    final private float angle;
-    final private float maxRange;
-    final private int scanningGain;
-    final private byte[] data;
-
-    public SonarData() {
-        this(0f, 0f, 0, new byte[1]);
+public class CameraData {
+    final private int width;
+    final private int height;
+    final private String format;
+    final private ChannelBuffer data;
+    
+    public CameraData() {
+        this(0,0,"",null);
     }
     
-    public SonarData(float angle, float maxRange, int scanningGain, byte[] data) {
-        this.angle = angle;
-        this.maxRange = maxRange;
-        this.scanningGain = scanningGain;
+    public CameraData(int height, int width, String format, ChannelBuffer data) {
+        this.width = width;
+        this.height = height;
+        this.format = format;
         this.data = data;
     }
 
-    public Float getAngle() {
-        return angle;
+    public int getWidth() {
+        return width;
     }
     
-    public byte[] getData() {
+    public int getHeight() {
+        return height;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public ChannelBuffer getData() {
         return data;
-    }
-
-    public Float getMaxRange() {
-        return maxRange;
-    }
-
-    public Integer getScanningGain() {
-        return scanningGain;
     }
 }

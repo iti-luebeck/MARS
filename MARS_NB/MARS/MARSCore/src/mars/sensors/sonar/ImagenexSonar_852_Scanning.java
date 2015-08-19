@@ -36,6 +36,7 @@ import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
+import mars.misc.LaserScannerData;
 import mars.misc.SonarData;
 
 /**
@@ -124,7 +125,7 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     }
 
     public SonarData getSonarData() {
-        return new SonarData(getLastHeadPosition(), getRawData());
+        return new SonarData(getLastHeadPosition(), getMaxRange(), getScanningGain(), getRawData());
     }
 
     @Override

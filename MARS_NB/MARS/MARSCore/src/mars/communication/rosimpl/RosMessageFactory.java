@@ -45,7 +45,9 @@ import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.Helper.Helper;
+import mars.misc.CameraData;
 import mars.misc.IMUData;
+import mars.misc.LaserScannerData;
 import mars.misc.SonarData;
 import mars.misc.TerrainData;
 import mars.sensors.Accelerometer;
@@ -279,16 +281,14 @@ public class RosMessageFactory {
         if (sensor instanceof ImagenexSonar_852_Scanning) {
             ScanningSonar message = node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
             message.setHeader(createHeader(node, sensor));
-            ImagenexSonar_852_Scanning scan = (ImagenexSonar_852_Scanning) sensor;
 
             try {
                 SonarData sonarData = (SonarData)sensorData;
                 byte[] sonData = sonarData.getData();
-                float lastHeadPosition = scan.getLastHeadPosition();
                 message.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
-                message.setHeadPosition(lastHeadPosition);
-                message.setStartGain((byte) scan.getScanningGain().shortValue());
-                message.setRange((byte) scan.getMaxRange().shortValue());
+                message.setHeadPosition(sonarData.getAngle());
+                message.setStartGain((byte) sonarData.getScanningGain().shortValue());
+                message.setRange((byte) sonarData.getMaxRange().shortValue());
                 
             } catch (Exception e) {
                 Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
@@ -329,15 +329,15 @@ public class RosMessageFactory {
         if (sensor instanceof VideoCamera) {
                 sensor_msgs.Image message = node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
                 message.setHeader(createHeader(node, sensor));
-                VideoCamera cam = (VideoCamera) sensor;
 
                 try {
-                    message.setHeight(cam.getCameraHeight());
-                    message.setWidth(cam.getCameraWidth());
-                    message.setEncoding(Helper.getROSEncoding(Image.Format.valueOf(cam.getFormat())));
+                    CameraData camData = (CameraData) sensorData;
+                    message.setHeight(camData.getHeight());
+                    message.setWidth(camData.getWidth());
+                    message.setEncoding(Helper.getROSEncoding(Image.Format.valueOf(camData.getFormat())));
                     //message.setEncoding("bgra8");
                     message.setIsBigendian((byte) 1);
-                    message.setStep(cam.getCameraWidth() * 4);
+                    message.setStep(camData.getWidth() * 4);
                     /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
                     for (int i = 0; i < 100000; i++) {
                     if(i%4!=0){
@@ -362,7 +362,7 @@ public class RosMessageFactory {
                     }
                     }
                     fl.data = ros_image;*/
-                    message.setData((ChannelBuffer)sensorData);    
+                    message.setData(camData.getData());    
                 } catch (Exception e) {
                     Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                     return null;
@@ -410,18 +410,18 @@ public class RosMessageFactory {
                 Hakuyo hakuyo = (Hakuyo) sensor;
                 
                 try {
-                    float[] instantData = (float[])sensorData;
-                    float lastHeadPosition = hakuyo.getLastHeadPosition();
+                    LaserScannerData scan = (LaserScannerData)sensorData;
+                    //float lastHeadPosition = hakuyo.getLastHeadPosition();
                     //this.mars.getTreeTopComp().initRayBasedData(instantData, lastHeadPosition, this);
-                    message.setAngleIncrement(hakuyo.getScanning_resolution());
-                    message.setRangeMax(hakuyo.getMaxRange());
-                    message.setRangeMin(hakuyo.getMinRange());
+                    message.setAngleIncrement(scan.getScanningResolution());
+                    message.setRangeMax(scan.getMaxRange());
+                    message.setRangeMin(scan.getMinRange());
                     message.setScanTime(hakuyo.getPublishRate() / 1000f);
                     //message.setTimeIncrement();
-                    message.setAngleMax(hakuyo.getScanningAngleMax());
-                    message.setAngleMin(hakuyo.getScanningAngleMin());
+                    message.setAngleMax(scan.getScanningAngleMax());
+                    message.setAngleMin(scan.getScanningAngleMin());
 
-                    message.setRanges(instantData);
+                    message.setRanges(scan.getData());
                 } catch (Exception e) {
                     Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                     return null;

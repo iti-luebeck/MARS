@@ -33,36 +33,48 @@ package mars.misc;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
-public class SonarData {
-    final private float angle;
+public class LaserScannerData {
+    final private float scanningResolution;
     final private float maxRange;
-    final private int scanningGain;
-    final private byte[] data;
-
-    public SonarData() {
-        this(0f, 0f, 0, new byte[1]);
+    final private float minRange;
+    final private float scanningAngleMax;
+    final private float scanningAngleMin;
+    final private float[] data;
+                    
+    public LaserScannerData() {
+        this(0f, 0f, 0f, 0f, 0f, new float[1]);
     }
-    
-    public SonarData(float angle, float maxRange, int scanningGain, byte[] data) {
-        this.angle = angle;
+
+    public LaserScannerData(float scanningResolution, float maxRange, float minRange, float scanningAngleMax, float scanningAngleMin, float[] data) {
+        this.scanningResolution = scanningResolution;
         this.maxRange = maxRange;
-        this.scanningGain = scanningGain;
+        this.minRange = minRange;
+        this.scanningAngleMax = scanningAngleMax;
+        this.scanningAngleMin = scanningAngleMin;
         this.data = data;
     }
 
-    public Float getAngle() {
-        return angle;
-    }
-    
-    public byte[] getData() {
+    public float[] getData() {
         return data;
     }
 
-    public Float getMaxRange() {
+    public float getMaxRange() {
         return maxRange;
     }
 
-    public Integer getScanningGain() {
-        return scanningGain;
+    public float getMinRange() {
+        return minRange;
+    }
+
+    public float getScanningAngleMax() {
+        return scanningAngleMax;
+    }
+
+    public float getScanningAngleMin() {
+        return scanningAngleMin;
+    }
+
+    public float getScanningResolution() {
+        return scanningResolution;
     }
 }

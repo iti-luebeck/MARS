@@ -54,6 +54,7 @@ import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
+import mars.misc.CameraData;
 import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -465,7 +466,8 @@ public class VideoCamera extends Sensor implements Moveable {
     public void publishData() {
         super.publishData();
         ChannelBuffer channelBufferImage = this.getChannelBufferImage();
-        AUVObjectEvent auvEvent = new AUVObjectEvent(this, channelBufferImage, System.currentTimeMillis());
+        CameraData camData = new CameraData(getCameraHeight(), getCameraWidth(), getFormat(), channelBufferImage);
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, camData, System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }
 
