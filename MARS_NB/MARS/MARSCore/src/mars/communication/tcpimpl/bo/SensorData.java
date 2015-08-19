@@ -31,6 +31,7 @@ package mars.communication.tcpimpl.bo;
 
 /**
  * Container for xml representation of sensor data
+ * @author Fabian Busse
  */
 public class SensorData {
 

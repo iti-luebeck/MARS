@@ -29,6 +29,10 @@
  */
 package mars.communication;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public enum AUVConnectionType {
 
     UNDEFINED("undefined"), ROS("ROS"), TCP("TCP");

@@ -37,6 +37,10 @@ import mars.communication.tcpimpl.AUVConnectionTcpImpl;
 import mars.core.ConnectionSettingsPanel;
 import mars.sensors.Sensor;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class AUVConnectionFactory {
 
     public static AUVConnection createNewConnection(AUV auv, String param, ConnectionSettingsPanel panel) {

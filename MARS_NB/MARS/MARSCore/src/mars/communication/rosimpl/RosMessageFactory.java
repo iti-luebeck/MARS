@@ -62,6 +62,10 @@ import org.ros.message.Time;
 import std_msgs.Float32;
 import std_msgs.Header;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class RosMessageFactory {
 
     public static Message createMessageForSensor(Sensor sensor, AUVConnectionNode node, Object sensorData) {

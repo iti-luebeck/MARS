@@ -35,6 +35,10 @@ import mars.actuators.Actuator;
 import mars.actuators.thruster.Thruster;
 import org.ros.message.MessageListener;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class RosSubscriberInitializer {
 
     public static void createSubscriberForActuator(Actuator actuator, AUVConnectionNode node, String auvName) {

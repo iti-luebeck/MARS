@@ -34,6 +34,10 @@ import java.util.logging.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class JaxbValidationEventHandler implements ValidationEventHandler {
 
     @Override

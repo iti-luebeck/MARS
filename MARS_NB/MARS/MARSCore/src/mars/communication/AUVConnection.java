@@ -34,7 +34,7 @@ import mars.sensors.Sensor;
 /**
  * Communication interface for the AUVs. The implementation can be ROS, TCP or anything else (that is defined).
  *
- * @author fab
+ * @author Fabian Busse
  */
 public interface AUVConnection extends mars.events.AUVObjectListener {
 

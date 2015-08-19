@@ -41,6 +41,10 @@ import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 import org.ros.node.topic.Publisher;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
 
     private final NodeMainExecutor nodeMainExecutor;

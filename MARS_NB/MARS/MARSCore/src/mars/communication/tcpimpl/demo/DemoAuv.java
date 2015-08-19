@@ -41,6 +41,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * This is an example of a client socket implementation for a AUVs that connect via TCP. The server transmits gzip compressed xml strings, representing the sensor data. The server expects gzip compressed, xml formatted actuator data in the format that is given in this context.
+ * @author Fabian Busse
  */
 public class DemoAuv implements Runnable {
 

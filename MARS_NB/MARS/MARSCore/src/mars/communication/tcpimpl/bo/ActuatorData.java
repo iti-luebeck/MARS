@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * Container for xml representation of actuator data
+ * @author Fabian Busse
  */
 @XmlRootElement(name = "ActuatorData")
 public class ActuatorData {

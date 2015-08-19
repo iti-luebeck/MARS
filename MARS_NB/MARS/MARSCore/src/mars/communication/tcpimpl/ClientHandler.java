@@ -41,6 +41,10 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class ClientHandler implements Runnable {
 
     public static final char END_OF_TRANSMISSION = 0x04;

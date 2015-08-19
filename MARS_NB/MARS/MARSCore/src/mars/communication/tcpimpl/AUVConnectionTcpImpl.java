@@ -51,6 +51,10 @@ import mars.communication.tcpimpl.bo.ActuatorData.Data;
 import mars.communication.tcpimpl.bo.SensorData;
 import mars.sensors.Sensor;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements Runnable {
 
     private int messageCounter = 0;

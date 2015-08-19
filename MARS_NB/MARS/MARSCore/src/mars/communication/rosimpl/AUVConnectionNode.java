@@ -38,6 +38,10 @@ import org.ros.node.NodeConfiguration;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class AUVConnectionNode extends AbstractNodeMain {
 
     private final AUVConnectionRosImpl connection;

@@ -54,6 +54,10 @@ import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
 import org.ros.node.topic.Publisher;
 
+/**
+ *
+ * @author Fabian Busse
+ */
 public class RosPublisherFactory {
 
     public static Publisher createPublisherForSensor(Sensor sensor, AUVConnectionNode node, String auvName) {

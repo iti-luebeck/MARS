@@ -35,7 +35,7 @@ import mars.sensors.Sensor;
 
 /**
  *
- * @author fab
+ * @author Fabian Busse
  */
 public abstract class AUVConnectionAbstractImpl implements AUVConnection {
 
@@ -45,10 +45,10 @@ public abstract class AUVConnectionAbstractImpl implements AUVConnection {
         this.auv = auv;
     }
 
-    @Override
     /**
      * Called when an AUVObjectEvent is fired. If the source is a Sensor, the new Data should be published.
      */
+    @Override
     public void onNewData(AUVObjectEvent e) {
 
         if (e != null && e.getSource() != null && e.getSource() instanceof Sensor && isConnected()) {
