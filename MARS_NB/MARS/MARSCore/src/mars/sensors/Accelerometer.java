@@ -172,6 +172,7 @@ public class Accelerometer extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
         old_velocity = new Vector3f(0f, 0f, 0f);
         new_velocity = new Vector3f(0f, 0f, 0f);

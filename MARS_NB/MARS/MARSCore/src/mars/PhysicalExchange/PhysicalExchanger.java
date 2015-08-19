@@ -386,40 +386,18 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
      *
      * @return
      */
-    public Integer getRos_publish_rate() {
-        return (Integer) variables.get("ros_publish_rate");
+    public Integer getPublishRate() {
+        return (Integer) variables.get("publishRate");
     }
 
     /**
      *
-     * @param ros_publish_rate
+     * @param publishRate
      */
-    public void setRos_publish_rate(Integer ros_publish_rate) {
-        int old = getRos_publish_rate();
-        variables.put("ros_publish_rate", ros_publish_rate);
-        fire("ros_publish_rate", old, ros_publish_rate);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Integer getTFRos_publish_rate() {
-        if ((Integer) variables.get("tf_ros_publish_rate") == null) {
-            return 1000;
-        } else {
-            return (Integer) variables.get("tf_ros_publish_rate");
-        }
-    }
-
-    /**
-     *
-     * @param tf_ros_publish_rate
-     */
-    public void setTFRos_publish_rate(Integer tf_ros_publish_rate) {
-        int old = getTFRos_publish_rate();
-        variables.put("tf_ros_publish_rate", tf_ros_publish_rate);
-        fire("tf_ros_publish_rate", old, tf_ros_publish_rate);
+    public void setPublishRate(Integer publishRate) {
+        int old = getPublishRate();
+        variables.put("publishRate", publishRate);
+        fire("publishRate", old, publishRate);
     }
 
     /**
@@ -513,7 +491,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
          variables.put("noise_value", getNoiseValue());
          variables.put("name",getName());
          variables.put("enabled", isEnabled());
-         variables.put("ros_publish_rate", getRos_publish_rate());
+         variables.put("publishRate", getPublishRate());
          variables.put("ros_frame_id", getRos_frame_id());*/
     }
 
@@ -679,7 +657,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
      */
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();
-        if (((curtime - oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
+        if (((curtime - oldtime) < getPublishRate()) || (getPublishRate() == 0)) {
             
         } else {
             oldtime = curtime;

@@ -121,7 +121,7 @@ public class Hakuyo extends LaserScanner {
         fl.setAngleIncrement(getScanning_resolution());
         fl.setRangeMax(getMaxRange());
         fl.setRangeMin(getMinRange());
-        fl.setScanTime(getRos_publish_rate() / 1000f);
+        fl.setScanTime(getPublishRate() / 1000f);
         //fl.setTimeIncrement();
         fl.setAngleMax(getScanningAngleMax());
         fl.setAngleMin(getScanningAngleMin());

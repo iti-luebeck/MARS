@@ -209,14 +209,4 @@ public abstract class Actuator extends PhysicalExchanger {
     public void setIniter(Initializer initer) {
         this.initer = initer;
     }
-
-    /**
-     *
-     *
-     * @Override public void publish() { if (tf_pub != null) { tf_pub.publishTF(); } }
-     *
-     * @Override public void publishUpdate() { if (tf_pub != null) { tf_pub.publishTFUpdate(); } long curtime = System.currentTimeMillis(); if (((curtime - time) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
-     *
-     * } else { time = curtime; if (mars_node != null && mars_node.isExisting()) { publish(); } } }
-     */
 }
