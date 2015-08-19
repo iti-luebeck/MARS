@@ -55,6 +55,16 @@ public class RosSubscriberInitializer {
 
     public static void createSubscriberForActuator(Actuator actuator, AUVConnectionNode node, String auvName) {
 
+        if (actuator == null) {
+            Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "[" + auvName + "] Refusing to create subscriber: actuator is null!", "");
+            return;
+        }
+
+        if (actuator.getSimState() == null) {
+            Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "[" + auvName + "] Refusing to create subscriber: actuator " + actuator.getName() + " is not initialized!", "");
+            return;
+        }
+
         if (actuator instanceof Thruster) {
             final Thruster thruster = (Thruster) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), hanse_msgs.sollSpeed._TYPE).addMessageListener(
@@ -67,7 +77,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof Modelcraft_ES07) {
             final Modelcraft_ES07 servo = (Modelcraft_ES07) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), smart_e_msgs.servoCam._TYPE).addMessageListener(
@@ -80,7 +90,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof Dynamixel_AX12PLUS) {
             final Dynamixel_AX12PLUS servo = (Dynamixel_AX12PLUS) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), std_msgs.Float64._TYPE).addMessageListener(
@@ -93,7 +103,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof PointVisualizer) {
             final PointVisualizer visualizer = (PointVisualizer) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.Vector3Stamped._TYPE).addMessageListener(
@@ -107,7 +117,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof VectorVisualizer) {
             final VectorVisualizer visualizer = (VectorVisualizer) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.Vector3Stamped._TYPE).addMessageListener(
@@ -121,7 +131,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof Teleporter) {
             final Teleporter teleporter = (Teleporter) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
@@ -144,7 +154,7 @@ public class RosSubscriberInitializer {
 
             return;
         }
-        
+
         if (actuator instanceof RosBagPlayer) {
             final RosBagPlayer player = (RosBagPlayer) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
@@ -180,10 +190,10 @@ public class RosSubscriberInitializer {
                             player.setDepth(dep);
                         }
                     }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
-                        
+
             return;
         }
-        
+
         if (actuator instanceof Animator) {
             final Animator animator = (Animator) actuator;
             node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
