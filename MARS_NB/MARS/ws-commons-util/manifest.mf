@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: mars.libs.ws_commons_util
+OpenIDE-Module-Localizing-Bundle: mars/libs/ws_commons_util/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0.2
+

@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -119,8 +119,6 @@ import mars.misc.DebugHint;
 import mars.misc.PickHint;
 import mars.object.BuoyancyType;
 import mars.object.CollisionType;
-import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeEvent;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
@@ -136,10 +134,7 @@ import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
 /**
- * The basic BasicAUV class. When you want to make own auv's or enchance them
- * than extend from this class and make your own implementation. Or implement
- * the AUV interface when you want to do something completly different that i
- * have done with the BasicAUV class.
+ * The basic BasicAUV class. When you want to make own auv's or enchance them than extend from this class and make your own implementation. Or implement the AUV interface when you want to do something completly different that i have done with the BasicAUV class.
  *
  * @author Thomas Tosik
  */
@@ -212,10 +207,12 @@ public class BasicAUV implements AUV, SceneProcessor{
     // ROS/TCP Connector --------
     private AUVConnection auvConnection;
 
+    @Override
     public void setAuvConnection(AUVConnection connection) {
         auvConnection = connection;
     }
 
+    @Override
     public AUVConnection getAuvConnection() {
         return auvConnection;
     }
@@ -234,7 +231,7 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     private EventListenerList listeners = new EventListenerList();
     private CommunicationManager com_manager;
-    private MARSNodeMain mars_node;
+
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
@@ -244,9 +241,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
 
     /**
-     * This is the main auv class. This is where the auv will be made vivisble.
-     * All sensors and actuators will be added to it. Also all the physics stuff
-     * happens here.
+     * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it. Also all the physics stuff happens here.
      *
      * @param simstate
      */
@@ -279,15 +274,13 @@ public class BasicAUV implements AUV, SceneProcessor{
         this.rootNode = simstate.getRootNode();
         this.initer = simstate.getIniter();
         selectionNode.attachChild(auv_node);
-
-        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
      *
      */
     public BasicAUV() {
-        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
+
     }
 
     /**
@@ -320,7 +313,6 @@ public class BasicAUV implements AUV, SceneProcessor{
             registerPhysicalExchanger(copy);
         }
 
-        auvConnection = AUVConnectionFactory.createNewConnection(this, mars_node);
     }
 
     /**
@@ -435,15 +427,6 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     /**
      *
-     * @param mars_node
-     */
-    @Override
-    public void setROS_Node(MARSNodeMain mars_node) {
-        this.mars_node = mars_node;
-    }
-
-    /**
-     *
      * @return
      */
     @Override
@@ -498,8 +481,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     }
     
     /**
-     * Init the PE in a safe way. Means that first a mars instance is available
-     * and second enqueue the register.
+     * Init the PE in a safe way. Means that first a mars instance is available and second enqueue the register.
      */
     @Override
     public void initPhysicalExchangerFuture() {
@@ -579,8 +561,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     }
 
     /**
-     * disable the visible debug spheres that indicates the sensors/actuators
-     * positions/directions
+     * disable the visible debug spheres that indicates the sensors/actuators positions/directions
      *
      * @param visible
      */
@@ -715,8 +696,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     }
 
     /**
-     * Call this method ONLY ONCE AFTER you have added ALL sensors and actuators
-     * to your auv.
+     * Call this method ONLY ONCE AFTER you have added ALL sensors and actuators to your auv.
      */
     @Override
     public void init() {
@@ -863,28 +843,6 @@ public class BasicAUV implements AUV, SceneProcessor{
             }
         }
         return null;
-    }
-
-    /*
-     * 
-     */
-    /**
-     *
-     */
-    @Override
-    public void initROS() {
-        for (String elem : sensors.keySet()) {
-            Sensor element = sensors.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
-        for (String elem : actuators.keySet()) {
-            Actuator element = actuators.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
     }
 
     private void updateActuatorForces() {
@@ -1214,11 +1172,11 @@ public class BasicAUV implements AUV, SceneProcessor{
             if (element.isEnabled()) {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
-                    if(element instanceof EnergyHarvester){//we have someone who gives us energy
+                    if (element instanceof EnergyHarvester) {//we have someone who gives us energy
                         EnergyHarvester energyHarvester = (EnergyHarvester) element;
                         acc.addActualCurrent(energyHarvester.getEnergy());
                         energyHarvester.setEnergy(0f);// We have transfered the energy into the accumulator, clean the energyHarvester.
-                    }else{// we have someone who wants energy
+                    } else {// we have someone who wants energy
                         Float currentConsumption = element.getCurrentConsumption();
                         if (currentConsumption != null) {//suck energy
                             float aH = (currentConsumption / 3600f) * tpf;
@@ -1431,7 +1389,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         ppcontrol.setStateManager(mars.getStateManager());
         ppcontrol.setAuv(this);
         auv_spatial.addControl(ppcontrol);
-        
+
         //a control for controling the auv from the gui
         GuiControl guicontrol;
         guicontrol = new GuiControl(this,mars.getStateManager());
@@ -2346,7 +2304,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
+                //element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
@@ -2360,7 +2318,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
+                // element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
@@ -2497,6 +2455,7 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     /**
      * GUI stuff.
+     *
      * @param selected
      */
     @Override
@@ -2657,11 +2616,11 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     @Override
     public void setWireframeVisible(boolean visible) {
-        List<Spatial> children = new ArrayList<Spatial>(); 
-        if(auv_spatial instanceof Node){
+        List<Spatial> children = new ArrayList<Spatial>();
+        if (auv_spatial instanceof Node) {
             Node nodes = (Node) auv_spatial;
             children.addAll(nodes.getChildren());
-        }else{//its a spatial or geometry
+        } else {//its a spatial or geometry
             children.add(auv_spatial);
         }
         if (visible) {
@@ -2717,18 +2676,6 @@ public class BasicAUV implements AUV, SceneProcessor{
             }
         } else {//its a spatial or geom, we dont care because it cant go deeper
             spatial.setUserData(PickHint.PickName, PickHint.NoPick);
-        }
-    }
-
-    /**
-     *
-     * @param e
-     */
-    @Override
-    public void fireEvent(RosNodeEvent e) {
-        if (getAuv_param().isEnabled()) {
-            setROS_Node((MARSNodeMain) e.getSource());
-            initROS();
         }
     }
 

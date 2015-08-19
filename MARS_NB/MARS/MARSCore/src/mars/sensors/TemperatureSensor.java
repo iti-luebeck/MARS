@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.sensors;
 
 import com.jme3.material.Material;
@@ -37,15 +37,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.states.SimState;
-import mars.ros.MARSNodeMain;
 import mars.server.MARSClientEvent;
-import org.ros.message.Time;
+import mars.states.SimState;
 
 /**
  * Returns the temperature of the surrounding fluid.
@@ -54,14 +51,9 @@ import org.ros.message.Time;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class TemperatureSensor extends Sensor{
+public class TemperatureSensor extends Sensor {
 
     private Geometry TemperatureSensorStart;
-
-    ///ROS stuff
-    private Publisher<hanse_msgs.temperature> publisher = null;
-    private hanse_msgs.temperature fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -148,15 +140,14 @@ public class TemperatureSensor extends Sensor{
 
     /**
      * This formula is used: http://residualanalysis.blogspot.de/2010/02/temperature-of-ocean-water-at-given.html
-     * @param noise The boundary for the random generator starting always from 0
-     * to noise value
-     * @return The Temperature of the current auv enviroment with a random noise
-     * from 0 to noise value in C°
+     *
+     * @param noise The boundary for the random generator starting always from 0 to noise value
+     * @return The Temperature of the current auv enviroment with a random noise from 0 to noise value in C°
      */
     private float getTemperatureRaw() {
         float depth = Math.abs(TemperatureSensorStart.getWorldTranslation().y + Math.abs(pe.getWater_height()));
-        float fd = 1f + (float)Math.exp(-0.016f*depth+1.244f);
-        float td = -0.338f+((pe.getFluid_temp()*fd)/((0.0001485f*pe.getFluid_temp()*depth)+fd));
+        float fd = 1f + (float) Math.exp(-0.016f * depth + 1.244f);
+        float td = -0.338f + ((pe.getFluid_temp() * fd) / ((0.0001485f * pe.getFluid_temp() * depth) + fd));
         return td;
     }
 
@@ -182,36 +173,6 @@ public class TemperatureSensor extends Sensor{
     @Override
     public void reset() {
 
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = (Publisher<hanse_msgs.temperature>)ros_node.newPublisher(auv_name + "/" + this.getName(), hanse_msgs.temperature._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(hanse_msgs.temperature._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-        fl.setData((short) (getTemperature() * 10));//*10 because of ros temp data format
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

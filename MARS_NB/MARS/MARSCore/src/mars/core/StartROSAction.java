@@ -59,7 +59,7 @@ public final class StartROSAction extends AbstractAction implements Presenter.To
      */
     @Override
     public Component getToolbarPresenter() {
-        return new StartROSJPanel();
+        return new CommunicationJPanel();
     }
     
     @Override

@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -44,13 +44,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.communication.AUVConnectionType;
 import mars.misc.PropertyChangeListenerSupport;
-import mars.server.ConnectionType;
 import mars.xml.HashMapAdapter;
 
 /**
- * Thsi class is a bucket for parameters of an AUV like mass or collision boxes.
- * Basically just HashMaps.
+ * Thsi class is a bucket for parameters of an AUV like mass or collision boxes. Basically just HashMaps.
  *
  * @author Thomas Tosik
  */
@@ -200,7 +199,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         setConnectionLocalip("127.0.0.1");
         setConnectionTargetip("127.0.0.1");
         setConnectionPort(11311);
-        setConnectionType(ConnectionType.ROS);
+        setConnectionType(AUVConnectionType.ROS.toString());
     }
 
     /**
@@ -1421,7 +1420,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         params.put("enabled", enabled);
         fire("enabled", old, enabled);
     }
-    
+
     /**
      *
      * @return
@@ -1437,7 +1436,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setConnectionEnabled(Boolean enabled) {
         connection.put("enabled", enabled);
     }
-    
+
     /**
      *
      * @return
@@ -1453,7 +1452,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setConnectionLocalip(String localip) {
         connection.put("localip", localip);
     }
-    
+
     /**
      *
      * @return
@@ -1469,7 +1468,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setConnectionTargetip(String targetip) {
         connection.put("targetip", targetip);
     }
-    
+
     /**
      *
      * @return
@@ -1485,7 +1484,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setConnectionPort(Integer port) {
         connection.put("port", port);
     }
-    
+
     /**
      *
      * @return
@@ -1501,7 +1500,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     public void setConnectionGlobalQueueSize(Integer GlobalQueueSize) {
         connection.put("GlobalQueueSize", GlobalQueueSize);
     }
-    
+
     /**
      *
      * @return
@@ -1520,7 +1519,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      * Get a value of a specific HashMap.
-     * 
+     *
      * @param value
      * @param hashmapname
      * @return
@@ -1537,7 +1536,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      * Set a value of specific HashMap.
-     * 
+     *
      * @param value
      * @param object
      * @param hashmapname

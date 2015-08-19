@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.states;
 
 import com.jme3.app.Application;
@@ -73,8 +73,7 @@ import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
- * This state is for updating the map in the gui. The position of the AUVs are
- * shown in it as small dots.
+ * This state is for updating the map in the gui. The position of the AUVs are shown in it as small dots.
  *
  * @author Thomas Tosik
  */
@@ -171,6 +170,10 @@ public class MapState extends MARSAppState implements AppStateExtension {
         //init();
     }
 
+    public AUV_Manager getAUV_Manager() {
+        return auv_manager;
+    }
+
     /**
      *
      */
@@ -181,33 +184,33 @@ public class MapState extends MARSAppState implements AppStateExtension {
             addAUV(auv);
         }
     }
-    
-       /**
+
+    /**
      * Declaring the "Shoot" action and mapping to its triggers.
      */
     private void initPrivateKeys() {
-        
+
         final MapState mapState = this;
         /*
-        * what actions should be done when pressing a registered button?
-        */
+         * what actions should be done when pressing a registered button?
+         */
         actionListener = new ActionListener() {
-           public void onAction(String name, boolean keyPressed, float tpf) {
-               if(mars.getActiveInputState() != null && mars.getActiveInputState() == mapState){
-                   if (name.equals("context_menue_map") && !keyPressed) {
-                       pickRightClick();
-                   }
-               }
-           }
+            public void onAction(String name, boolean keyPressed, float tpf) {
+                if (mars.getActiveInputState() != null && mars.getActiveInputState() == mapState) {
+                    if (name.equals("context_menue_map") && !keyPressed) {
+                        pickRightClick();
+                    }
+                }
+            }
         };
-    
+
         inputManager.addMapping("context_menue_map", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));         // trigger 2: left-button click
         inputManager.addListener(actionListener, "context_menue_map");
     }
 
     private void pickRightClick() {
         TopComponent tc = WindowManager.getDefault().findTopComponent("MARSMapTopComponent");
-        if(tc != null){
+        if (tc != null) {
             MARSMapTopComponent mtc = (MARSMapTopComponent) tc;
             mtc.showpopupAUV((int) inputManager.getCursorPosition().x, (int) inputManager.getCursorPosition().y);
         }
