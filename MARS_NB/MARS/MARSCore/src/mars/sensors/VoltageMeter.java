@@ -36,7 +36,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -184,8 +183,6 @@ public class VoltageMeter extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getVoltage(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getVoltage(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

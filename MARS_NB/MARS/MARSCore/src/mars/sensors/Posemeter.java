@@ -39,7 +39,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.Pose;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -253,8 +252,6 @@ public class Posemeter extends Sensor {
     public void publishData() {
         super.publishData();
         Pose pose = getPose();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, pose, System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, pose, System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

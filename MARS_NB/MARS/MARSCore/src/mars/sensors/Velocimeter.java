@@ -36,7 +36,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 
 /**
@@ -148,6 +147,7 @@ public class Velocimeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
 
     }
@@ -155,8 +155,6 @@ public class Velocimeter extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getLinearVelocity().length(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getLinearVelocity().length(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

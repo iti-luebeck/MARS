@@ -41,7 +41,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -199,8 +198,6 @@ public class SalinitySensor extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getSalinity(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getSalinity(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

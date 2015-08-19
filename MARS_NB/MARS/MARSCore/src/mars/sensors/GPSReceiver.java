@@ -46,7 +46,6 @@ import mars.events.AUVObjectEvent;
 import mars.geodesy.Ellipsoid;
 import mars.geodesy.GeodeticCalculator;
 import mars.geodesy.GlobalPosition;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 
 /**
@@ -286,8 +285,6 @@ public class GPSReceiver extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getGPS(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getGPS(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

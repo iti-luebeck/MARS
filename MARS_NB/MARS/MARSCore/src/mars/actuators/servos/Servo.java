@@ -59,7 +59,6 @@ import mars.PhysicalExchange.Moveable;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
 import mars.actuators.Actuator;
-import mars.server.MARSClientEvent;
 import mars.xml.HashMapAdapter;
 
 /**
@@ -554,7 +553,5 @@ public class Servo extends Actuator implements Manipulating, Keys {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, desired_angle, System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

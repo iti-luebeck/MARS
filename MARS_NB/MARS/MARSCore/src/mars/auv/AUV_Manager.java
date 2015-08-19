@@ -38,8 +38,6 @@ import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import mars.PhysicalEnvironment;
 import mars.object.MARSObjectManager;
-import mars.server.MARSClient;
-import mars.server.MARSClientEvent;
 import mars.states.MapState;
 import mars.states.SimState;
 import org.netbeans.api.progress.ProgressHandle;
@@ -520,42 +518,8 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
 
     /**
      *
-     * @param listener
-     */
-    public void addAdListener(MARSClient listener) {
-        listeners.add(MARSClient.class, listener);
-    }
-
-    /**
-     *
-     * @param listener
-     */
-    public void removeAdListener(MARSClient listener) {
-        listeners.remove(MARSClient.class, listener);
-    }
-
-    /**
-     *
      */
     public void removeAllListener() {
         //listeners.
-    }
-
-    /**
-     *
-     * @param event
-     */
-    public void notifyAdvertisement(MARSClientEvent event) {
-        for (MARSClient l : listeners.getListeners(MARSClient.class)) {
-            l.onNewData(event);
-        }
-    }
-
-    /**
-     *
-     * @param event
-     */
-    protected synchronized void notifySafeAdvertisement(MARSClientEvent event) {
-        notifyAdvertisement(event);
     }
 }

@@ -43,7 +43,6 @@ import mars.Initializer;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -224,8 +223,6 @@ public class PollutionMeter extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getPollution(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getPollution(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

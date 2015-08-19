@@ -43,7 +43,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 
 /**
@@ -200,7 +199,5 @@ public class VectorVisualizer extends Actuator {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, vector, System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

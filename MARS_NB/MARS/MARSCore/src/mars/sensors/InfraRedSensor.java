@@ -39,7 +39,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.misc.Collider;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -135,8 +134,6 @@ public class InfraRedSensor extends RayBasedSensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getDistance(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getDistance(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

@@ -663,9 +663,9 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
             oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
-            //if(listeners1.length != 0){
-                publishData();
-            //}
+                if(listeners1.length != 0){
+                    publishData();
+                }
             }
         }
     

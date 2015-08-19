@@ -39,7 +39,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.CTDData;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -252,8 +251,6 @@ public class CTDSensor extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getCTD(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getCTD(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

@@ -40,7 +40,6 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -198,6 +197,7 @@ public class AmpereMeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
 
     }
@@ -205,8 +205,6 @@ public class AmpereMeter extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getAmpere(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getAmpere(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

@@ -48,7 +48,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import mars.KeyConfig;
 import mars.Keys;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -304,7 +303,5 @@ public class BallastTank extends Actuator implements Keys {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getCurrentVolume(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

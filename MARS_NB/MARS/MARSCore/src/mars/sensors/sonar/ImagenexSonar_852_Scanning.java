@@ -38,7 +38,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.misc.SonarData;
-import mars.server.MARSClientEvent;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
@@ -192,8 +191,6 @@ public class ImagenexSonar_852_Scanning extends Sonar {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getSonarData(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getSonarData(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

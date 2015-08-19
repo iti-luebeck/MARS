@@ -102,8 +102,7 @@ import mars.auv.CommunicationManager;
 import mars.auv.CommunicationManagerRunnable;
 import mars.misc.Collider;
 import mars.misc.WireProcessor;
-import mars.server.MARSClient;
-import mars.server.PhysicalExchangerPublisher;
+import mars.PhysicalExchange.PhysicalExchangerPublisher;
 import mars.states.SimState;
 import mars.waves.MyProjectedGrid;
 import mars.waves.ProjectedWaterProcessorWithRefraction;
@@ -344,47 +343,14 @@ public class Initializer {
         hideCrossHairs(mars_settings.isCrossHairsEnabled());
     }
 
-//    /**
-//     * setting up the raw_server for communication with the auv
-//     */
-//    public void setupAuvConnections() {
-//
-//        if (mars_settings.getRAWEnabled()) {
-//            raw_server = new MARS_Server(mars, auv_manager, com_manager);
-//            raw_server.setServerPort(mars_settings.getRAWPort());
-//            raw_server_thread = new Thread(raw_server);
-//            raw_server_thread.start();
-//        }
-//    }
     /**
      * Setup the generic publisher. Used to publish all sensor data.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void setupAdvServer() {
-        //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
-        Lookup bag = Lookup.getDefault();
-        // the bag of objects
-        // A query that looks up instances extending "MyClass"...
-        Lookup.Template<MARSClient> pattern = new Lookup.Template(MARSClient.class);
-        // The result of the query
-        Lookup.Result<MARSClient> result = bag.lookup(pattern);
-        Set<Class<? extends MARSClient>> allClasses = result.allClasses();
-        //go trough all results and instance
-        for (Class<? extends MARSClient> next : allClasses) {
-            try {
-                MARSClient marsClient = next.newInstance();
-                marsClient.init();
-                marsClient.setAUVManager(auv_manager);
-                auv_manager.addAdListener(marsClient);
-                PhysicalExchangerPublisher puber = new PhysicalExchangerPublisher(mars, auv_manager, mars_settings);
-                Thread puber_thread = new Thread(puber);
-                puber_thread.start();
-            } catch (InstantiationException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalAccessException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
+        PhysicalExchangerPublisher puber = new PhysicalExchangerPublisher(mars, auv_manager, mars_settings);
+        Thread puber_thread = new Thread(puber);
+        puber_thread.start();
     }
 
     /**

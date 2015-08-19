@@ -43,7 +43,6 @@ import mars.Initializer;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 
 /**
@@ -197,8 +196,6 @@ public class FlowMeter extends Sensor {
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getFlowForce(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getFlowForce(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }
