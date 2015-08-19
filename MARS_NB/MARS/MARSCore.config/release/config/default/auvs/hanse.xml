@@ -1795,7 +1795,7 @@
             </value>
         </entry>
 		<entry xsi:type="myHashMapEntryTypeActuators" key="position/estimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value xsi:type="hanseBagPlayer">
+            <value xsi:type="rosBagPlayer">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
