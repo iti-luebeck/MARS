@@ -118,23 +118,4 @@ public class SeaBotixThruster extends Thruster {
             return 0f;
         }
     }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-//    @Deprecated
-//    @SuppressWarnings("unchecked")
-//    public void initROS(MARSNodeMain ros_node, final String auv_name) {
-//        final SeaBotixThruster self = this;
-//        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
-//        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
-//            @Override
-//            public void onNewMessage(hanse_msgs.sollSpeed message) {
-//                //System.out.println("I (" + auv_name + "/" + getName() + ") heard: \"" + message.getData() + "\"");
-//                self.set_thruster_speed((int) message.getData());
-//            }
-//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-//    }
 }

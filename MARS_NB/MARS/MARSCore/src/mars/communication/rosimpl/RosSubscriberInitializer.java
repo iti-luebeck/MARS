@@ -49,7 +49,7 @@ import org.ros.message.MessageListener;
 
 /**
  *
- * @author Fabian Busse
+ * @author Fabian Busse, Thomas Tosik
  */
 public class RosSubscriberInitializer {
 

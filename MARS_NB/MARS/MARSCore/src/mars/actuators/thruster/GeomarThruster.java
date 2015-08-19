@@ -110,22 +110,4 @@ public class GeomarThruster extends Thruster {
     protected float calculateThrusterCurrent(int speed) {
         return 0.4100154271f * (float) Math.pow(1.0338512063f, (float) Math.abs(speed));
     }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-//    @Deprecated
-//    @SuppressWarnings("unchecked")
-//    public void initROS(MARSNodeMain ros_node, String auv_name) {
-//        final GeomarThruster self = this;
-//        Subscriber<hanse_msgs.sollSpeed> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), hanse_msgs.sollSpeed._TYPE);
-//        subscriber.addMessageListener(new MessageListener<hanse_msgs.sollSpeed>() {
-//            @Override
-//            public void onNewMessage(hanse_msgs.sollSpeed message) {
-//                self.set_thruster_speed((int) message.getData());
-//            }
-//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-//    }
 }
