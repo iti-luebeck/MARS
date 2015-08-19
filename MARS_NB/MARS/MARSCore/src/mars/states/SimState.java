@@ -288,8 +288,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             setupCamPos();
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
-            comManager.setServer(initer.getRAW_Server());
-
             progr.progress("Init Map");
             initMap();//for mars_settings
 

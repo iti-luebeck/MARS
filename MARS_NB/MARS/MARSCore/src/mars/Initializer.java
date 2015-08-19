@@ -103,7 +103,6 @@ import mars.auv.CommunicationManagerRunnable;
 import mars.misc.Collider;
 import mars.misc.WireProcessor;
 import mars.server.MARSClient;
-import mars.server.MARS_Server;
 import mars.server.PhysicalExchangerPublisher;
 import mars.states.SimState;
 import mars.waves.MyProjectedGrid;
@@ -199,10 +198,7 @@ public class Initializer {
     WireProcessor wireProcessor;
 
     //Server
-    private MARS_Server raw_server;
-    private Thread raw_server_thread;
     private CommunicationManagerRunnable com_server;
-    private Thread com_server_thread;
 
     /**
      *
@@ -411,31 +407,6 @@ public class Initializer {
      */
     public CommunicationManagerRunnable getCom_server() {
         return com_server;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Thread getCom_server_thread() {
-        return com_server_thread;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public synchronized MARS_Server getRAW_Server() {
-        return raw_server;
-    }
-
-    /**
-     *
-     */
-    public synchronized void testraw() {
-        if (raw_server_thread != null) {
-            raw_server.sendStringToAllConnections("test");
-        }
     }
 
     private void setupWireFrame() {
