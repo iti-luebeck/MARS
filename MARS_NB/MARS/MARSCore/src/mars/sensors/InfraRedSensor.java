@@ -40,7 +40,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.misc.Collider;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * A simple Infrared sensor. Ray based.
@@ -51,11 +50,6 @@ import org.ros.node.topic.Publisher;
 public class InfraRedSensor extends RayBasedSensor {
 
     private Collider RayDetectable;
-
-    //ROS stuff
-    private Publisher<sensor_msgs.Range> publisher = null;
-    private sensor_msgs.Range fl;
-    private std_msgs.Header header;
 
     /**
      *

@@ -37,7 +37,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  *
@@ -47,13 +46,6 @@ import org.ros.node.topic.Publisher;
 @XmlAccessorType(XmlAccessType.NONE)
 public class Transformer extends Sensor {
 
-    ///ROS stuff
-    //private Publisher<tf.tfMessage> publisher = null;
-    //private tf.tfMessage fl;
-    private geometry_msgs.TransformStamped tfs;
-    private geometry_msgs.TransformStamped tfs2;
-    private std_msgs.Header header;
-    private std_msgs.Header header2;
 
     /**
      *
@@ -111,6 +103,7 @@ public class Transformer extends Sensor {
      *
      * @param tpf
      */
+    @Override
     public void update(float tpf) {
 
     }
@@ -119,6 +112,7 @@ public class Transformer extends Sensor {
      *
      * @return
      */
+    @Override
     public Vector3f getPosition() {
         if (getNoiseType() == NoiseType.NO_NOISE) {
             return getPositionRaw();
@@ -146,6 +140,7 @@ public class Transformer extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
     }
 

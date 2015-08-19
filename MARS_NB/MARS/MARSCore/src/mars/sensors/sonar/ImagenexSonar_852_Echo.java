@@ -29,16 +29,12 @@
  */
 package mars.sensors.sonar;
 
-import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.Helper.Helper;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * This is the Imaginex Sonar class. It is the sonar used in the AUV HANSE. Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
@@ -49,20 +45,6 @@ import org.ros.node.topic.Publisher;
 public class ImagenexSonar_852_Echo extends Sonar {
 
     private int SonarReturnDataHeaderLength = 12;
-
-    ///ROS stuff
-    /**
-     *
-     */
-    protected Publisher<hanse_msgs.EchoSounder> publisher = null;
-    /**
-     *
-     */
-    protected hanse_msgs.EchoSounder fl;
-    /**
-     *
-     */
-    protected std_msgs.Header header;
 
     /**
      *
@@ -153,27 +135,6 @@ public class ImagenexSonar_852_Echo extends Sonar {
         ImagenexSonar_852_Echo sensor = new ImagenexSonar_852_Echo(this);
         sensor.initAfterJAXB();
         return sensor;
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        byte[] sonData = getRawData();
-        //this.mars.getTreeTopComp().initRayBasedData(sonData, 0f, this);
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
-        fl.setStartGain((byte) getScanningGain().shortValue());
-        fl.setRange((byte) getMaxRange().shortValue());
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

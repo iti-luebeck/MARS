@@ -38,7 +38,6 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * Gives the exact position in world coordinates.
@@ -50,11 +49,6 @@ public class Positionmeter extends Sensor {
 
     private Vector3f old_position = new Vector3f(0f, 0f, 0f);
     private Vector3f new_position = new Vector3f(0f, 0f, 0f);
-
-    ///ROS stuff
-    private Publisher<geometry_msgs.PointStamped> publisher = null;
-    private geometry_msgs.PointStamped fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -112,6 +106,7 @@ public class Positionmeter extends Sensor {
      *
      * @param tpf
      */
+    @Override
     public void update(float tpf) {
         new_position = physics_control.getPhysicsLocation();//get the new position
         old_position = new_position.clone();
@@ -172,34 +167,16 @@ public class Positionmeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
         old_position = new Vector3f(0f, 0f, 0f);
         new_position = new Vector3f(0f, 0f, 0f);
     }
 
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<geometry_msgs.PointStamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PointStamped._TYPE); fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PointStamped._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     *
-     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
-     *
-     * geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE); point.setX(getWorldPosition().x); point.setY(getWorldPosition().z); point.setZ(getWorldPosition().y); fl.setPoint(point);
-     *
-     * if (publisher != null) { publisher.publish(fl); }
-    }
-     */
     @Override
     public void publishData() {
         super.publishData();
-        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getPosition(), System.currentTimeMillis());
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getWorldPosition(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }
 }

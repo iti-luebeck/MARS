@@ -29,21 +29,28 @@
  */
 package mars.communication.rosimpl;
 
-import geometry_msgs.Point;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import geometry_msgs.PointStamped;
-import geometry_msgs.Pose;
 import geometry_msgs.PoseStamped;
 import geometry_msgs.Quaternion;
+import geometry_msgs.QuaternionStamped;
 import geometry_msgs.Vector3;
 import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
+import hanse_msgs.EchoSounder;
+import hanse_msgs.ScanningSonar;
+import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.misc.IMUData;
+import mars.misc.SonarData;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
+import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
+import mars.sensors.Hakuyo;
 import mars.sensors.IMU;
 import mars.sensors.InfraRedSensor;
 import mars.sensors.Orientationmeter;
@@ -55,8 +62,13 @@ import mars.sensors.PressureSensor;
 import mars.sensors.SalinitySensor;
 import mars.sensors.Sensor;
 import mars.sensors.TemperatureSensor;
+import mars.sensors.TerrainSender;
 import mars.sensors.Velocimeter;
+import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
+import mars.sensors.sonar.ImagenexSonar_852_Echo;
+import mars.sensors.sonar.ImagenexSonar_852_Scanning;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.internal.message.Message;
 import org.ros.message.Time;
 import std_msgs.Float32;
@@ -93,12 +105,36 @@ public class RosMessageFactory {
             return message;
         }
 
-        if (sensor instanceof FlowMeter || sensor instanceof PollutionMeter) {
+        if (sensor instanceof FlowMeter) {
             Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
             message.setHeader(createHeader(node, sensor));
 
             try {
-                message.setVector((Vector3) sensorData);
+                Vector3f vec = (Vector3f)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(vec.x); 
+                rosvec.setY(vec.z); 
+                rosvec.setZ(vec.y);
+                message.setVector(rosvec);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+        }
+        
+        if (sensor instanceof PollutionMeter) {
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                float pol = (Float)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(0f); 
+                rosvec.setY(pol); 
+                rosvec.setZ(0f);
+                message.setVector(rosvec);
             } catch (Exception e) {
                 Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
@@ -107,12 +143,18 @@ public class RosMessageFactory {
             return message;
         }
 
-        if (sensor instanceof Orientationmeter || sensor instanceof Posemeter) {
-            PoseStamped message = node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+        if (sensor instanceof Orientationmeter) {
+            QuaternionStamped message = node.getMessageFactory().newFromType(geometry_msgs.QuaternionStamped._TYPE);
             message.setHeader(createHeader(node, sensor));
 
             try {
-                message.setPose((Pose) sensorData);
+                com.jme3.math.Quaternion quat = (com.jme3.math.Quaternion)sensorData;
+                geometry_msgs.Quaternion rosquat = node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); 
+                rosquat.setX(quat.getX());
+                rosquat.setY(quat.getY());
+                rosquat.setZ(quat.getZ());
+                rosquat.setW(quat.getW());
+                message.setQuaternion(rosquat);
             } catch (Exception e) {
                 Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
@@ -126,7 +168,50 @@ public class RosMessageFactory {
             message.setHeader(createHeader(node, sensor));
 
             try {
-                message.setPoint((Point) sensorData);
+                Vector3f pos = (Vector3f)sensorData;
+                geometry_msgs.Point point = node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE); 
+                point.setX(pos.x); 
+                point.setY(pos.z); 
+                point.setZ(pos.y);
+                message.setPoint(point);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+        }
+
+        if (sensor instanceof Posemeter) {
+            PoseStamped message = node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                mars.misc.Pose pose = (mars.misc.Pose)sensorData;
+                geometry_msgs.Point point = node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE); 
+                point.setX(pose.getPosition().x); 
+                point.setY(pose.getPosition().z);//dont forget to switch y and z!!!! point.setZ(pose.getPosition().y);
+                
+                geometry_msgs.Quaternion orientation = node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); 
+                com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion(); 
+                com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion(); 
+                ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f); 
+                ter_orientation_rueck = ter_orientation.inverse(); 
+                float[] bla = pose.getOrientation().toAngles(null); 
+                com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion(); 
+                jme3_quat.fromAngles(-bla[0], bla[1], -bla[2]); 
+                ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck)); 
+                float[] ff = ter_orientation.toAngles(null); 
+                orientation.setX((ter_orientation).getX());// switching x and z!!!! 
+                orientation.setY((ter_orientation).getY()); 
+                orientation.setZ((ter_orientation).getZ()); 
+                orientation.setW((ter_orientation).getW());
+                
+                geometry_msgs.Pose rospose = node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE); 
+                rospose.setPosition(point); 
+                rospose.setOrientation(orientation);
+
+                message.setPose(rospose);
             } catch (Exception e) {
                 Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                 return null;
@@ -162,6 +247,49 @@ public class RosMessageFactory {
             message.setTemperature(Float.parseFloat(sensorData + "") * 10.0); //*10 because of ros temp data format
             return message;
         }
+        
+        if (sensor instanceof ImagenexSonar_852_Echo) {
+            EchoSounder message = node.getMessageFactory().newFromType(hanse_msgs.EchoSounder._TYPE);
+            message.setHeader(createHeader(node, sensor));
+            ImagenexSonar_852_Echo echo = (ImagenexSonar_852_Echo) sensor;
+
+            try {
+                byte[] sonData = (byte[])sensorData;
+  
+                //this.mars.getTreeTopComp().initRayBasedData(sonData, 0f, this);
+                message.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
+                message.setStartGain((byte) echo.getScanningGain().shortValue());
+                message.setRange((byte) echo.getMaxRange().shortValue());
+  
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+        }
+        
+        if (sensor instanceof ImagenexSonar_852_Scanning) {
+            ScanningSonar message = node.getMessageFactory().newFromType(hanse_msgs.ScanningSonar._TYPE);
+            message.setHeader(createHeader(node, sensor));
+            ImagenexSonar_852_Scanning scan = (ImagenexSonar_852_Scanning) sensor;
+
+            try {
+                SonarData sonarData = (SonarData)sensorData;
+                byte[] sonData = sonarData.getData();
+                float lastHeadPosition = scan.getLastHeadPosition();
+                message.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
+                message.setHeadPosition(lastHeadPosition);
+                message.setStartGain((byte) scan.getScanningGain().shortValue());
+                message.setRange((byte) scan.getMaxRange().shortValue());
+                
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+        }
 
         if (sensor instanceof IMU) {
             sensor_msgs.Imu message = node.getMessageFactory().newFromType(sensor_msgs.Imu._TYPE);
@@ -194,6 +322,82 @@ public class RosMessageFactory {
 
         return null;
     }
+    
+    /*if (sensor instanceof VideoCamera) {
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                float pol = (Float)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(0f); 
+                rosvec.setY(pol); 
+                rosvec.setZ(0f);
+                message.setVector(rosvec);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+    }*/
+    
+    /*if (sensor instanceof GPSReceiver) {
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                float pol = (Float)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(0f); 
+                rosvec.setY(pol); 
+                rosvec.setZ(0f);
+                message.setVector(rosvec);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+    }*/
+    
+    /*if (sensor instanceof Hakuyo) {
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                float pol = (Float)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(0f); 
+                rosvec.setY(pol); 
+                rosvec.setZ(0f);
+                message.setVector(rosvec);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+    }*/
+    
+    /*if (sensor instanceof TerrainSender) {
+            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
+            message.setHeader(createHeader(node, sensor));
+
+            try {
+                float pol = (Float)sensorData;
+                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
+                rosvec.setX(0f); 
+                rosvec.setY(pol); 
+                rosvec.setZ(0f);
+                message.setVector(rosvec);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
+    }*/
 
     private static Header createHeader(AUVConnectionNode node, Sensor sensor) {
         Header header = node.getMessageFactory().newFromType(std_msgs.Header._TYPE);

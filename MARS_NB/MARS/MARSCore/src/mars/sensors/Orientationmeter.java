@@ -39,7 +39,6 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * Gives the exact orientation of the auv.
@@ -51,11 +50,6 @@ public class Orientationmeter extends Sensor {
 
     Quaternion new_orientation = new Quaternion();
     Quaternion old_orientation = new Quaternion();
-
-    ///ROS stuff
-    private Publisher<geometry_msgs.PoseStamped> publisher = null;
-    private geometry_msgs.PoseStamped fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -167,34 +161,14 @@ public class Orientationmeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
     }
 
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<geometry_msgs.PoseStamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE); fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     *
-     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
-     *
-     * geometry_msgs.Quaternion quat = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); quat.setX(getOrientation().getX()); quat.setY(getOrientation().getY()); quat.setZ(getOrientation().getZ()); quat.setW(getOrientation().getW());
-     *
-     * geometry_msgs.Pose pose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE); pose.setOrientation(quat); fl.setPose(pose);
-     *
-     * if (publisher != null) { publisher.publish(fl); } }
-     */
     @Override
     public void publishData() {
         super.publishData();
-        float[] bla = getOrientation().toAngles(null);
-        AUVObjectEvent auvEvent = new AUVObjectEvent(this, new Vector3f(bla[0], bla[1], bla[2]), System.currentTimeMillis());
+        AUVObjectEvent auvEvent = new AUVObjectEvent(this, getOrientation(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }
 }

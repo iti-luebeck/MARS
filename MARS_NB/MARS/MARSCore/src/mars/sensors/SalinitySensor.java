@@ -54,10 +54,6 @@ public class SalinitySensor extends Sensor {
 
     private Geometry SalinitySensorStart;
 
-    ///ROS stuff
-    private Publisher<std_msgs.Float32> publisher = null;
-    private std_msgs.Float32 fl;
-
     /**
      *
      */
@@ -170,29 +166,9 @@ public class SalinitySensor extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
 
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        fl.setData(getSalinity());
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

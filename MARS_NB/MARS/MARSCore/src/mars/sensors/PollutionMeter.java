@@ -58,11 +58,6 @@ public class PollutionMeter extends Sensor {
 
     private Initializer initer;
 
-    ///ROS stuff
-    private Publisher<geometry_msgs.Vector3Stamped> publisher = null;
-    private geometry_msgs.Vector3Stamped fl;
-    private std_msgs.Header header;
-
     /**
      *
      */
@@ -198,28 +193,11 @@ public class PollutionMeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
 
     }
 
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<geometry_msgs.Vector3Stamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.Vector3Stamped._TYPE); fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     *
-     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
-     *
-     * geometry_msgs.Vector3 vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); vec.setX(0f); vec.setY(getPollution()); vec.setZ(0f);
-     *
-     * fl.setVector(vec); if (publisher != null) { publisher.publish(fl); } }
-     */
     @Override
     public void publishData() {
         super.publishData();

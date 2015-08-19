@@ -47,8 +47,6 @@ import mars.events.AUVObjectEvent;
 import mars.simobjects.SimObject;
 import mars.simobjects.SimObjectManager;
 import mars.states.SimState;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * Detects a SimObject that functions also as a ping source.
@@ -65,9 +63,6 @@ public class PingDetector extends Sensor {
 
     private float detection_range = 50.0f;
 
-    private Publisher<std_msgs.Float32> publisher = null;
-    private std_msgs.Float32 fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -302,30 +297,6 @@ public class PingDetector extends Sensor {
      */
     public void setSimObjectManager(SimObjectManager simob_manager) {
         this.simob_manager = simob_manager;
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true; }
-     */
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-
-        fl.setData((getPingerAngleRadiant("pingpong")));
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

@@ -29,7 +29,6 @@
  */
 package mars.sensors.sonar;
 
-import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,9 +37,6 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.hardware.Imaginex;
 import mars.misc.SonarData;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * This is the Imaginex Sonar class. It is the sonar used in the AUV HANSE. Since the Imaginex sonars need some header information to be sent we put them in front of the basic sonar data.
@@ -52,20 +48,6 @@ import org.ros.node.topic.Publisher;
 public class ImagenexSonar_852_Scanning extends Sonar {
 
     private int SonarReturnDataHeaderLength = 12;//265
-
-    ///ROS stuff
-    /**
-     *
-     */
-    protected Publisher<hanse_msgs.ScanningSonar> publisher = null;
-    /**
-     *
-     */
-    protected hanse_msgs.ScanningSonar fl;
-    /**
-     *
-     */
-    protected std_msgs.Header header;
 
     /**
      *
@@ -164,28 +146,6 @@ public class ImagenexSonar_852_Scanning extends Sonar {
         ImagenexSonar_852_Scanning sensor = new ImagenexSonar_852_Scanning(this);
         sensor.initAfterJAXB();
         return sensor;
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        byte[] sonData = getRawData();
-        float lastHeadPosition = getLastHeadPosition();
-        fl.setEchoData(ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, sonData));
-        fl.setHeadPosition(lastHeadPosition);
-        fl.setStartGain((byte) getScanningGain().shortValue());
-        fl.setRange((byte) getMaxRange().shortValue());
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

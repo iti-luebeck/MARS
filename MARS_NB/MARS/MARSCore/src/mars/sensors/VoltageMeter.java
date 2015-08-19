@@ -37,8 +37,6 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.states.SimState;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * CAn measure the voltage of an accumulator.
@@ -47,11 +45,6 @@ import org.ros.node.topic.Publisher;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class VoltageMeter extends Sensor {
-
-    ///ROS stuff
-    private Publisher<std_msgs.Float32> publisher = null;
-    private std_msgs.Float32 fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -152,32 +145,9 @@ public class VoltageMeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
 
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<std_msgs.Float32>) ros_node.newPublisher(auv_name + "/" + this.getName(), std_msgs.Float32._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.Float32._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setData(getVoltage());
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

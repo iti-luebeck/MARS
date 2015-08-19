@@ -41,7 +41,6 @@ import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.IMUData;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * An inertial measurment unit class. Basically it consist of the Accelerometer, Gyroscope and Compass class as an Mixin class.
@@ -57,11 +56,6 @@ public class IMU extends Sensor {
     Gyroscope gyro = new Gyroscope();
     @XmlElement(name = "Orientationmeter")
     Orientationmeter oro = new Orientationmeter();
-
-    ///ROS stuff
-    private Publisher<sensor_msgs.Imu> publisher = null;
-    private sensor_msgs.Imu fl;
-    private std_msgs.Header header;
 
     Arrow arrow;
 

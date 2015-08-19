@@ -40,7 +40,6 @@ import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
 import mars.misc.Pose;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * Gives the exact Pose(Position/Orientation). Mixin class.
@@ -54,11 +53,6 @@ public class Posemeter extends Sensor {
     Positionmeter pos = new Positionmeter();
     @XmlElement(name = "Orientationmeter")
     Orientationmeter oro = new Orientationmeter();
-
-    ///ROS stuff
-    private Publisher<geometry_msgs.PoseStamped> publisher = null;
-    private geometry_msgs.PoseStamped fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -126,6 +120,7 @@ public class Posemeter extends Sensor {
      *
      * @param tpf
      */
+    @Override
     public void update(float tpf) {
         pos.update(tpf);
         oro.update(tpf);
@@ -134,6 +129,7 @@ public class Posemeter extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
         pos.reset();
         oro.reset();
@@ -221,33 +217,13 @@ public class Posemeter extends Sensor {
     }
 
     /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<geometry_msgs.PoseStamped>) ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.PoseStamped._TYPE); fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.PoseStamped._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
+     * 
+     * @return 
      */
     public Pose getPose() {
         return new Pose(pos.getWorldPosition(), oro.getOrientation());
     }
 
-    /**
-     *
-     *
-     * @Deprecated public void publish() { header.setSeq(sequenceNumber++); header.setFrameId(this.getRos_frame_id()); header.setStamp(Time.fromMillis(System.currentTimeMillis())); fl.setHeader(header);
-     *
-     * Pose pose = getPose();
-     *
-     * geometry_msgs.Point point = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE); point.setX(pose.getPosition().x); point.setY(pose.getPosition().z);//dont forget to switch y and z!!!! point.setZ(pose.getPosition().y);
-     *
-     * geometry_msgs.Quaternion orientation = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); Quaternion ter_orientation = new Quaternion(); Quaternion ter_orientation_rueck = new Quaternion(); ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f); ter_orientation_rueck = ter_orientation.inverse(); float[] bla = pose.getOrientation().toAngles(null); com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion(); jme3_quat.fromAngles(-bla[0], bla[1], -bla[2]); ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck)); float[] ff = ter_orientation.toAngles(null); orientation.setX((ter_orientation).getX());// switching x and z!!!! orientation.setY((ter_orientation).getY()); orientation.setZ((ter_orientation).getZ()); orientation.setW((ter_orientation).getW());
-     *
-     * geometry_msgs.Pose rospose = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE); rospose.setPosition(point); rospose.setOrientation(orientation); fl.setPose(rospose);
-     *
-     * if (publisher != null) { publisher.publish(fl); } }
-     */
     @Override
     public void publishData() {
         super.publishData();
