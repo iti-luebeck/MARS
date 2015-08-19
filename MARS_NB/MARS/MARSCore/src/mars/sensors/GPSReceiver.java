@@ -115,6 +115,7 @@ public class GPSReceiver extends Sensor {
     /**
      *
      */
+    @Override
     public void init(Node auv_node) {
         super.init(auv_node);
         pos.init(auv_node);
@@ -134,6 +135,7 @@ public class GPSReceiver extends Sensor {
      *
      * @param tpf
      */
+    @Override
     public void update(float tpf) {
         pos.update(tpf);
     }
@@ -141,6 +143,7 @@ public class GPSReceiver extends Sensor {
     /**
      *
      */
+    @Override
     public void reset() {
         pos.reset();
     }

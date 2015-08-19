@@ -49,7 +49,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.Helper.Helper;
 import mars.Helper.Pyramid;
 import mars.Initializer;
 import mars.PhysicalExchange.Moveable;
@@ -58,8 +57,6 @@ import mars.events.AUVObjectEvent;
 import mars.states.SimState;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * This is a common camera class for AUVs.
@@ -84,11 +81,6 @@ public class VideoCamera extends Sensor implements Moveable {
     private FrameBuffer offBuffer;
 
     private ByteBuffer cpuBuf;
-
-    ///ROS stuff
-    private Publisher<sensor_msgs.Image> publisher = null;
-    private sensor_msgs.Image fl;
-    private std_msgs.Header header;
 
     //moveable stuff
     private Vector3f local_rotation_axis = new Vector3f();
@@ -464,64 +456,9 @@ public class VideoCamera extends Sensor implements Moveable {
     /**
      *
      */
+    @Override
     public void reset() {
 
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<sensor_msgs.Image>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.Image._TYPE); fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        fl.setHeight(getCameraHeight());
-        fl.setWidth(getCameraWidth());
-        fl.setEncoding(Helper.getROSEncoding(Format.valueOf(getFormat())));
-        //fl.setEncoding("bgra8");
-        fl.setIsBigendian((byte) 1);
-        fl.setStep(getCameraWidth() * 4);
-        /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
-         for (int i = 0; i < 100000; i++) {
-         if(i%4!=0){
-         bb[i] = (byte)255;
-         }else{
-         bb[i] = (byte)(-1);
-         }
-         }
-         fl.data = bb;*/
-        /*private final VideoCamera self = this;
-         Future fut = mars.enqueue(new Callable() {
-         public void call() throws Exception {
-         return self.getImage();
-         }
-         });*/
-
-        /* byte[] ros_image = new byte[CameraHeight*CameraWidth*4]; 
-         ros_image = this.getImage();
-         for (int i = 0; i < CameraHeight*CameraWidth*4; i++) {
-         if(i%4==0 && i!=0){
-         ros_image[i-1] = (byte)(0);
-         }
-         }
-         fl.data = ros_image;*/
-        fl.setData(this.getChannelBufferImage());
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override

@@ -31,6 +31,7 @@ package mars.communication.rosimpl;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.texture.Image;
 import geometry_msgs.PointStamped;
 import geometry_msgs.PoseStamped;
 import geometry_msgs.Quaternion;
@@ -43,8 +44,10 @@ import hanse_msgs.ScanningSonar;
 import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.Helper.Helper;
 import mars.misc.IMUData;
 import mars.misc.SonarData;
+import mars.misc.TerrainData;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
 import mars.sensors.FlowMeter;
@@ -68,9 +71,13 @@ import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
 import mars.sensors.sonar.ImagenexSonar_852_Echo;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
+import nav_msgs.OccupancyGrid;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.internal.message.Message;
 import org.ros.message.Time;
+import sensor_msgs.LaserScan;
+import sensor_msgs.NavSatFix;
 import std_msgs.Float32;
 import std_msgs.Header;
 
@@ -318,87 +325,165 @@ public class RosMessageFactory {
             return message;
         }
 
+          
+        if (sensor instanceof VideoCamera) {
+                sensor_msgs.Image message = node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
+                message.setHeader(createHeader(node, sensor));
+                VideoCamera cam = (VideoCamera) sensor;
+
+                try {
+                    message.setHeight(cam.getCameraHeight());
+                    message.setWidth(cam.getCameraWidth());
+                    message.setEncoding(Helper.getROSEncoding(Image.Format.valueOf(cam.getFormat())));
+                    //message.setEncoding("bgra8");
+                    message.setIsBigendian((byte) 1);
+                    message.setStep(cam.getCameraWidth() * 4);
+                    /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
+                    for (int i = 0; i < 100000; i++) {
+                    if(i%4!=0){
+                    bb[i] = (byte)255;
+                    }else{
+                    bb[i] = (byte)(-1);
+                    }
+                    }
+                    fl.data = bb;*/
+                   /*private final VideoCamera self = this;
+                    Future fut = mars.enqueue(new Callable() {
+                    public void call() throws Exception {
+                    return self.getImage();
+                    }
+                    });*/
+
+                   /* byte[] ros_image = new byte[CameraHeight*CameraWidth*4]; 
+                    ros_image = this.getImage();
+                    for (int i = 0; i < CameraHeight*CameraWidth*4; i++) {
+                    if(i%4==0 && i!=0){
+                    ros_image[i-1] = (byte)(0);
+                    }
+                    }
+                    fl.data = ros_image;*/
+                    message.setData((ChannelBuffer)sensorData);    
+                } catch (Exception e) {
+                    Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                    return null;
+                }
+
+                return message;
+        }
+ 
+        if (sensor instanceof GPSReceiver) {
+                NavSatFix message = node.getMessageFactory().newFromType(sensor_msgs.NavSatFix._TYPE);
+                message.setHeader(createHeader(node, sensor));
+                
+                try {
+                    Vector3f gps = (Vector3f)sensorData;
+                    sensor_msgs.NavSatStatus navSatStatus = node.getMessageFactory().newFromType(sensor_msgs.NavSatStatus._TYPE); 
+                    
+                    navSatStatus.setService((short) 1);
+                    navSatStatus.setStatus((byte) 0);
+                    message.setStatus(navSatStatus);
+
+                    message.setAltitude((double) gps.getX());
+                    message.setLatitude((double) gps.getY());
+                    message.setLongitude((double) gps.getZ());
+
+                    //old style
+                    /*double longitudeFactor = (double)getLatitudeFactor() * (double)Math.cos(((double)getReferencePointGPS().y)*(Math.PI/180d));
+                     Vector3f diffPosition = pos.getPosition().subtract(getReferencePointWorld());
+                     double latitude = (diffPosition.z/getLatitudeFactor())*(180d/Math.PI);
+                     double longitude = (diffPosition.x/longitudeFactor)*(180d/Math.PI);
+
+                     fl.setAltitude((double)pos.getPositionY());
+                     fl.setLatitude(((double)getReferencePointGPS().z) - latitude);
+                     fl.setLongitude(((double)getReferencePointGPS().x) + longitude);*/
+                } catch (Exception e) {
+                    Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                    return null;
+                }
+
+                return message;
+        }
+    
+        if (sensor instanceof Hakuyo) {
+                LaserScan message = node.getMessageFactory().newFromType(sensor_msgs.LaserScan._TYPE);
+                message.setHeader(createHeader(node, sensor));
+                Hakuyo hakuyo = (Hakuyo) sensor;
+                
+                try {
+                    float[] instantData = (float[])sensorData;
+                    float lastHeadPosition = hakuyo.getLastHeadPosition();
+                    //this.mars.getTreeTopComp().initRayBasedData(instantData, lastHeadPosition, this);
+                    message.setAngleIncrement(hakuyo.getScanning_resolution());
+                    message.setRangeMax(hakuyo.getMaxRange());
+                    message.setRangeMin(hakuyo.getMinRange());
+                    message.setScanTime(hakuyo.getPublishRate() / 1000f);
+                    //message.setTimeIncrement();
+                    message.setAngleMax(hakuyo.getScanningAngleMax());
+                    message.setAngleMin(hakuyo.getScanningAngleMin());
+
+                    message.setRanges(instantData);
+                } catch (Exception e) {
+                    Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                    return null;
+                }
+
+                return message;
+        }
+
+        if (sensor instanceof TerrainSender) {
+                OccupancyGrid message = node.getMessageFactory().newFromType(nav_msgs.OccupancyGrid._TYPE);
+                message.setHeader(createHeader(node, sensor));
+
+                try {
+                    TerrainData terrain = (TerrainData)sensorData;
+                    nav_msgs.MapMetaData info = node.getMessageFactory().newFromType(nav_msgs.MapMetaData._TYPE); 
+                    info.setHeight(terrain.getHeigth()); 
+                    info.setWidth(terrain.getWidth()); 
+                    info.setResolution(terrain.getScale().getX());
+
+                    geometry_msgs.Point point = node.getMessageFactory().newFromType(geometry_msgs.Point._TYPE);
+                    float terScaleX = (terrain.getScale().x * terrain.getWidth()) / 2f; 
+                    float terScaleZ = (terrain.getScale().z * terrain.getWidth()) / 2f; 
+                    //float terScaleY = (mars_settings.getTerrainScale().y*initer.getTerrain_image_width())/2f; 
+                    point.setX(terrain.getPosition().x - terScaleX); 
+                    point.setY(terrain.getPosition().z - terScaleZ); 
+                    point.setZ(terrain.getPosition().y);
+     
+                    com.jme3.math.Quaternion ter_orientation = new com.jme3.math.Quaternion(); 
+                    com.jme3.math.Quaternion ter_orientation_rueck = new com.jme3.math.Quaternion(); 
+                    ter_orientation.fromAngles(-FastMath.HALF_PI, 0f, 0f); 
+                    ter_orientation_rueck = ter_orientation.inverse();
+
+                    com.jme3.math.Quaternion jme3_quat = new com.jme3.math.Quaternion(); 
+                    jme3_quat.fromAngles(FastMath.PI, FastMath.PI, -FastMath.PI);//we have to rotate it correctly because teramonkey is a little bit different in storing ter_orientation.multLocal(jme3_quat.multLocal(ter_orientation_rueck));
+
+                    geometry_msgs.Quaternion orientation = node.getMessageFactory().newFromType(geometry_msgs.Quaternion._TYPE); 
+                    orientation.setX(ter_orientation.getX()); 
+                    orientation.setY(ter_orientation.getY()); 
+                    orientation.setZ(ter_orientation.getZ()); 
+                    orientation.setW(ter_orientation.getW());
+     
+                    geometry_msgs.Pose pose = node.getMessageFactory().newFromType(geometry_msgs.Pose._TYPE); 
+                    pose.setPosition(point); 
+                    pose.setOrientation(orientation);
+                    
+                    info.setOrigin(pose); 
+                    info.setMapLoadTime(Time.fromMillis(System.currentTimeMillis())); 
+                    message.setInfo(info); 
+                    message.setData(terrain.getData());
+                } catch (Exception e) {
+                    Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                    return null;
+                }
+
+                return message;
+        }
+
         Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");
 
         return null;
     }
-    
-    /*if (sensor instanceof VideoCamera) {
-            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-            message.setHeader(createHeader(node, sensor));
-
-            try {
-                float pol = (Float)sensorData;
-                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
-                rosvec.setX(0f); 
-                rosvec.setY(pol); 
-                rosvec.setZ(0f);
-                message.setVector(rosvec);
-            } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
-                return null;
-            }
-
-            return message;
-    }*/
-    
-    /*if (sensor instanceof GPSReceiver) {
-            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-            message.setHeader(createHeader(node, sensor));
-
-            try {
-                float pol = (Float)sensorData;
-                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
-                rosvec.setX(0f); 
-                rosvec.setY(pol); 
-                rosvec.setZ(0f);
-                message.setVector(rosvec);
-            } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
-                return null;
-            }
-
-            return message;
-    }*/
-    
-    /*if (sensor instanceof Hakuyo) {
-            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-            message.setHeader(createHeader(node, sensor));
-
-            try {
-                float pol = (Float)sensorData;
-                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
-                rosvec.setX(0f); 
-                rosvec.setY(pol); 
-                rosvec.setZ(0f);
-                message.setVector(rosvec);
-            } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
-                return null;
-            }
-
-            return message;
-    }*/
-    
-    /*if (sensor instanceof TerrainSender) {
-            Vector3Stamped message = node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-            message.setHeader(createHeader(node, sensor));
-
-            try {
-                float pol = (Float)sensorData;
-                geometry_msgs.Vector3 rosvec = node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE); 
-                rosvec.setX(0f); 
-                rosvec.setY(pol); 
-                rosvec.setZ(0f);
-                message.setVector(rosvec);
-            } catch (Exception e) {
-                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
-                return null;
-            }
-
-            return message;
-    }*/
-
+  
     private static Header createHeader(AUVConnectionNode node, Sensor sensor) {
         Header header = node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
         header.setSeq(sensor.getNextSequenceNumber());

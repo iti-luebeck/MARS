@@ -34,8 +34,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
-import org.ros.message.Time;
-import org.ros.node.topic.Publisher;
 
 /**
  * A Hakuyo laser scanner. Ray based.
@@ -45,20 +43,6 @@ import org.ros.node.topic.Publisher;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class Hakuyo extends LaserScanner {
-
-    ///ROS stuff
-    /**
-     *
-     */
-    protected Publisher<sensor_msgs.LaserScan> publisher = null;
-    /**
-     *
-     */
-    protected sensor_msgs.LaserScan fl;
-    /**
-     *
-     */
-    protected std_msgs.Header header;
 
     /**
      *
@@ -86,15 +70,6 @@ public class Hakuyo extends LaserScanner {
 
     /**
      *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = (Publisher<sensor_msgs.LaserScan>) ros_node.newPublisher(auv_name + "/" + this.getName(), sensor_msgs.LaserScan._TYPE); fl = this.mars_node.getMessageFactory().newFromType(sensor_msgs.LaserScan._TYPE); header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE); this.rosinit = true;
-    }
-     */
-    /**
-     *
      * @return
      */
     @Override
@@ -102,34 +77,6 @@ public class Hakuyo extends LaserScanner {
         Hakuyo sensor = new Hakuyo(this);
         sensor.initAfterJAXB();
         return sensor;
-    }
-
-    /**
-     *
-     */
-    @Deprecated
-    public void publish() {
-        header.setSeq(sequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        float[] instantData = getInstantData();
-        float lastHeadPosition = getLastHeadPosition();
-        //this.mars.getTreeTopComp().initRayBasedData(instantData, lastHeadPosition, this);
-        fl.setAngleIncrement(getScanning_resolution());
-        fl.setRangeMax(getMaxRange());
-        fl.setRangeMin(getMinRange());
-        fl.setScanTime(getPublishRate() / 1000f);
-        //fl.setTimeIncrement();
-        fl.setAngleMax(getScanningAngleMax());
-        fl.setAngleMin(getScanningAngleMin());
-
-        fl.setRanges(instantData);
-
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
     }
 
     @Override
