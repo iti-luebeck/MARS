@@ -29,10 +29,22 @@
  */
 package mars.communication.rosimpl;
 
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
+import geometry_msgs.Point;
+import geometry_msgs.Quaternion;
+import geometry_msgs.Vector3;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.actuators.Actuator;
+import mars.actuators.Animator;
+import mars.actuators.RosBagPlayer;
+import mars.actuators.Teleporter;
+import mars.actuators.servos.Dynamixel_AX12PLUS;
+import mars.actuators.servos.Modelcraft_ES07;
 import mars.actuators.thruster.Thruster;
+import mars.actuators.visualizer.PointVisualizer;
+import mars.actuators.visualizer.VectorVisualizer;
 import org.ros.message.MessageListener;
 
 /**
@@ -50,6 +62,145 @@ public class RosSubscriberInitializer {
                         @Override
                         public void onNewMessage(hanse_msgs.sollSpeed message) {
                             thruster.set_thruster_speed((int) message.getData());
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof Modelcraft_ES07) {
+            final Modelcraft_ES07 servo = (Modelcraft_ES07) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), smart_e_msgs.servoCam._TYPE).addMessageListener(
+                    new MessageListener<smart_e_msgs.servoCam>() {
+                        @Override
+                        public void onNewMessage(smart_e_msgs.servoCam message) {
+                            servo.setDesiredAnglePosition((int) message.getData());
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof Dynamixel_AX12PLUS) {
+            final Dynamixel_AX12PLUS servo = (Dynamixel_AX12PLUS) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), std_msgs.Float64._TYPE).addMessageListener(
+                    new MessageListener<std_msgs.Float64>() {
+                        @Override
+                        public void onNewMessage(std_msgs.Float64 message) {
+                            servo.setDesiredAnglePosition(message.getData());
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof PointVisualizer) {
+            final PointVisualizer visualizer = (PointVisualizer) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.Vector3Stamped._TYPE).addMessageListener(
+                    new MessageListener<geometry_msgs.Vector3Stamped>() {
+                        @Override
+                        public void onNewMessage(geometry_msgs.Vector3Stamped message) {
+                            Vector3 vec = message.getVector();
+                            visualizer.updateVector(new Vector3f((float) vec.getX(), (float) vec.getZ(), (float) vec.getY()));
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof VectorVisualizer) {
+            final VectorVisualizer visualizer = (VectorVisualizer) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.Vector3Stamped._TYPE).addMessageListener(
+                    new MessageListener<geometry_msgs.Vector3Stamped>() {
+                        @Override
+                        public void onNewMessage(geometry_msgs.Vector3Stamped message) {
+                            Vector3 vec = message.getVector();
+                            visualizer.updateVector(new Vector3f((float) vec.getX(), (float) vec.getZ(), (float) vec.getY()));
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof Teleporter) {
+            final Teleporter teleporter = (Teleporter) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
+                    new MessageListener<geometry_msgs.PoseStamped>() {
+                        @Override
+                        public void onNewMessage(geometry_msgs.PoseStamped message) {
+                            Point pos = message.getPose().getPosition();
+                            Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
+
+                            //getting from ROS Co-S to MARS Co-S
+                            Quaternion ori = message.getPose().getOrientation();
+                            com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
+                            com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
+                            qrot.fromAngles(0f, FastMath.HALF_PI, 0);
+                            quat.multLocal(qrot);
+
+                            teleporter.teleport(v_pos, quat);
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            return;
+        }
+        
+        if (actuator instanceof RosBagPlayer) {
+            final RosBagPlayer player = (RosBagPlayer) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
+                    new MessageListener<geometry_msgs.PoseStamped>() {
+                        @Override
+                        public void onNewMessage(geometry_msgs.PoseStamped message) {
+                            Point pos = message.getPose().getPosition();
+                            Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
+
+                            //getting from ROS Co-S to MARS Co-S
+                            Quaternion ori = message.getPose().getOrientation();
+                            com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
+                            com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
+                            qrot.fromAngles(0f, FastMath.HALF_PI, 0f);
+                            quat.multLocal(qrot);
+
+                            v_pos.y = player.getDepth();
+
+                            player.setQuat(quat);
+                            player.setPos2d(v_pos);
+                            player.teleport(v_pos, quat);
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+
+            node.newSubscriber(auvName + "/" + "pressure/depth", hanse_msgs.pressure._TYPE).addMessageListener(
+                    new MessageListener<hanse_msgs.pressure>() {
+                        @Override
+                        public void onNewMessage(hanse_msgs.pressure message) {
+                            float dep = 0f;
+                            int pos = (int) message.getData();
+
+                            dep = (player.getPressureRelative() - pos) / (player.getPe().getFluid_density() * player.getPe().getGravitational_acceleration()) * 100f;
+                            player.setDepth(dep);
+                        }
+                    }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
+                        
+            return;
+        }
+        
+        if (actuator instanceof Animator) {
+            final Animator animator = (Animator) actuator;
+            node.newSubscriber(auvName + "/" + actuator.getName(), geometry_msgs.PoseStamped._TYPE).addMessageListener(
+                    new MessageListener<geometry_msgs.PoseStamped>() {
+                        @Override
+                        public void onNewMessage(geometry_msgs.PoseStamped message) {
+                            Point pos = message.getPose().getPosition();
+                            Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
+
+                            //getting from ROS Co-S to MARS Co-S
+                            Quaternion ori = message.getPose().getOrientation();
+                            com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
+                            com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
+                            qrot.fromAngles(0f, FastMath.HALF_PI, 0);
+                            quat.multLocal(qrot);
+
+                            //animator.teleport(v_pos, quat);
                         }
                     }, (actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? actuator.getSimState().getMARSSettings().getROSGlobalQueueSize() : actuator.getRos_queue_listener_size());
 

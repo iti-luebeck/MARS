@@ -89,22 +89,4 @@ public class Modelcraft_ES07 extends Servo {
         actuator.initAfterJAXB();
         return actuator;
     }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-//    @Deprecated
-//    @SuppressWarnings("unchecked")
-//    public void initROS(MARSNodeMain ros_node, String auv_name) {
-//        final Servo self = this;
-//        Subscriber<smart_e_msgs.servoCam> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), smart_e_msgs.servoCam._TYPE);
-//        subscriber.addMessageListener(new MessageListener<smart_e_msgs.servoCam>() {
-//            @Override
-//            public void onNewMessage(smart_e_msgs.servoCam message) {
-//                self.setDesiredAnglePosition((int) message.getData());
-//            }
-//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-//    }
 }

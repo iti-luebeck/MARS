@@ -171,33 +171,4 @@ public class Animator extends Actuator {
         variables.put("enabled", simple);
         //fire("enabled", old, simple);
     }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-//    @Deprecated
-//    @SuppressWarnings("unchecked")
-//    public void initROS(MARSNodeMain ros_node, String auv_name) {
-//        final Animator self = this;
-//        Subscriber<geometry_msgs.PoseStamped> subscriber = ros_node.newSubscriber(auv_name + "/" + getName(), geometry_msgs.PoseStamped._TYPE);
-//        subscriber.addMessageListener(new MessageListener<geometry_msgs.PoseStamped>() {
-//            @Override
-//            public void onNewMessage(geometry_msgs.PoseStamped message) {
-//
-//                Point pos = message.getPose().getPosition();
-//                Vector3f v_pos = new Vector3f((float) pos.getX(), (float) pos.getZ(), (float) pos.getY());
-//
-//                //getting from ROS Co-S to MARS Co-S
-//                Quaternion ori = message.getPose().getOrientation();
-//                com.jme3.math.Quaternion quat = new com.jme3.math.Quaternion((float) ori.getX(), (float) ori.getZ(), (float) ori.getY(), -(float) ori.getW());
-//                com.jme3.math.Quaternion qrot = new com.jme3.math.Quaternion();
-//                qrot.fromAngles(0f, FastMath.HALF_PI, 0);
-//                quat.multLocal(qrot);
-//
-//                //self.teleport(v_pos, quat);
-//            }
-//        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-//    }
 }
