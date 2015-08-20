@@ -29,6 +29,7 @@
  */
 package mars.communication.rosimpl;
 
+import org.ros.internal.message.Message;
 import org.ros.message.MessageFactory;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
@@ -79,7 +80,7 @@ public class AUVConnectionNode extends AbstractNodeMain {
         return isStarted;
     }
 
-    public Publisher newPublisher(String topic, String msg_type) {
+    public Publisher<Message> newPublisher(String topic, String msg_type) {
         return connectedNode.newPublisher(topic, msg_type);
     }
 

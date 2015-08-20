@@ -83,6 +83,7 @@ public class SettingsNode extends AbstractNode implements PropertyChangeListener
      * @param obj This can be an accumulator, actuator or a sensor
      * @param nodeName
      */
+    @SuppressWarnings("unchecked")
     public SettingsNode(Object obj, String nodeName) {
         // initially this node is asumed to be a leaf
         super(Children.LEAF, Lookups.singleton(obj));

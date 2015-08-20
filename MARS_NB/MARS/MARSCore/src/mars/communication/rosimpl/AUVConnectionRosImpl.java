@@ -49,7 +49,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
 
     private final NodeMainExecutor nodeMainExecutor;
     private AUVConnectionNode node;
-    private final HashMap<String, Publisher> publishers = new HashMap<String, Publisher>();
+    private final HashMap<String, Publisher<Message>> publishers = new HashMap<String, Publisher<Message>>();
     private final ConnectionSettingsPanel panel;
 
     public AUVConnectionRosImpl(AUV auv, ConnectionSettingsPanel panel) {
@@ -64,7 +64,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
 
         if (node != null && isConnected() && !publishers.isEmpty()) {
             Message rosMessage = RosMessageFactory.createMessageForSensor(sourceSensor, node, sensorData);
-            Publisher publisher = publishers.get(sourceSensor.getName());
+            Publisher<Message> publisher = publishers.get(sourceSensor.getName());
 
             if (publisher != null && rosMessage != null) {
                 publisher.publish(rosMessage);
@@ -85,7 +85,7 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
         // Create a publisher for each sensor of the AUV
         for (String sensorName : auv.getSensors().keySet()) {
 
-            Publisher publisher = RosPublisherFactory.createPublisherForSensor(auv.getSensors().get(sensorName), node, auv.getName());
+            Publisher<Message> publisher = RosPublisherFactory.createPublisherForSensor(auv.getSensors().get(sensorName), node, auv.getName());
 
             if (publisher != null) {
                 publishers.put(sensorName, publisher);

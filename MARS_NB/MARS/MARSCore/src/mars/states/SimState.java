@@ -283,7 +283,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             progr.progress("Creating Initializer");
             initer = new Initializer(mars, this, auvManager, comManager, physical_environment);
             initer.init();
-            //register the mars settings so we cann update through the initializer when something changes
+            //register the mars settings so we can update through the initializer when something changes
             mars_settings.addPropertyChangeListener(initer);
 
             //set camera to look to (0,0,0)
@@ -329,8 +329,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setSimState(this);
             final AppStateManager stateManagerFin = stateManager;
 
-            @SuppressWarnings("unchecked")
-            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     getMARS().getViewPort().attachScene(guiState.getRootNode());
                     stateManagerFin.attach(guiState);

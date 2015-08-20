@@ -2159,7 +2159,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             //System.out.println("chordStart: " + chordStart);
             float resolutionLengthCounter = (int) Math.rint(chord / resolution);
             for (int j = 0; j < resolutionLengthCounter; j++) {
-                Vector3f ray_start_new = new Vector3f((float) (ray_start.x + (i * resolution)), (float) (ray_start.y) - extBB.length() - 0.1f, (float) (ray_start.z + (j * resolution) - chordStart));
+                Vector3f ray_start_new = new Vector3f((ray_start.x + (i * resolution)),(ray_start.y) - extBB.length() - 0.1f,(ray_start.z + (j * resolution) - chordStart));
                 float length = 0.0f;
                 float length_air = 0.0f;
                 float volume_center_y = 0.0f;

@@ -66,7 +66,7 @@ public class EnvNode extends AbstractNode implements PropertyChangeListener {
     /**
      * Hashmap with paramaeters of object.
      */
-    private HashMap params;
+    private HashMap<String,Object> params;
             
     /**
      * Name of the image file on the harddisk.
@@ -92,7 +92,7 @@ public class EnvNode extends AbstractNode implements PropertyChangeListener {
 
         // depending on type of object cast it and get its variables
         if (obj instanceof PhysicalEnvironment) {
-            params = (HashMap)(((PhysicalEnvironment) (obj)).getAllEnvironment());
+            params = (((PhysicalEnvironment) (obj)).getAllEnvironment());
             icon = "battery_charge.png";
         }
         

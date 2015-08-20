@@ -414,7 +414,7 @@ public final class MyOBJLoader implements AssetLoader {
      * @param name
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked","rawtypes"})
     protected void loadMtlLib(String name) throws IOException {
         if (!name.toLowerCase().endsWith(".mtl")) {
             throw new IOException("Expected .mtl file! Got: " + name);

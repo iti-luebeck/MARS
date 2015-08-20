@@ -60,6 +60,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -1461,7 +1462,7 @@ public final class MARSTopComponent extends TopComponent {
     }//GEN-LAST:event_jme3_waypoints_auv_resetActionPerformed
 
     private void jme3_waypoints_colorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jme3_waypoints_colorActionPerformed
-        final Color newColor = jColorChooser1.showDialog(
+        final Color newColor = JColorChooser.showDialog(
                 this.getRootPane(),
                 "Choose Color for Waypoints",
                 Color.WHITE);
@@ -2104,6 +2105,7 @@ public final class MARSTopComponent extends TopComponent {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void addHashMapMenue(JMenu jm, final AUV_Parameters auv_param, final HashMap<String, Object> allVariables, final String hashmapname) {
         ///sort the hashtable
         SortedSet<String> sortedset = new TreeSet<String>(allVariables.keySet());
@@ -2235,7 +2237,7 @@ public final class MARSTopComponent extends TopComponent {
                 //listener for changes
                 jcm.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        final Color newColor = color_dialog.showDialog(
+                        final Color newColor = JColorChooser.showDialog(
                                 getRootPane(),
                                 "Choose Color for " + elem,
                                 new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
