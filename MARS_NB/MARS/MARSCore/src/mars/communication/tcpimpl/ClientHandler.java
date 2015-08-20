@@ -48,7 +48,6 @@ import java.util.zip.GZIPOutputStream;
 public class ClientHandler implements Runnable {
 
     public static final char END_OF_TRANSMISSION = 0x04;
-    public static final boolean USE_GZIP_COMPESSION = true;
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
@@ -63,7 +62,7 @@ public class ClientHandler implements Runnable {
         this.connection = connection;
 
         try {
-            if (USE_GZIP_COMPESSION) {
+            if (connection.isGzipCompressionEnabled()) {
                 writer = new BufferedWriter(new OutputStreamWriter(
                         new GZIPOutputStream(socket.getOutputStream())));
                 writer.flush();
