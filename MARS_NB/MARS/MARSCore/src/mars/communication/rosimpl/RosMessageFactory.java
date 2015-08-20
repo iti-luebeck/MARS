@@ -52,6 +52,7 @@ import mars.misc.SonarData;
 import mars.misc.TerrainData;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -74,7 +75,6 @@ import mars.sensors.VoltageMeter;
 import mars.sensors.sonar.ImagenexSonar_852_Echo;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import nav_msgs.OccupancyGrid;
-import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.internal.message.Message;
 import org.ros.message.Time;
@@ -477,6 +477,19 @@ public class RosMessageFactory {
                 }
 
                 return message;
+        }
+        
+        if (sensor instanceof CommunicationDevice) {
+            std_msgs.String message = node.getMessageFactory().newFromType(std_msgs.String._TYPE);
+            try {
+                //here should be check if in or out?
+                message.setData((String)sensorData);
+            } catch (Exception e) {
+                Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                return null;
+            }
+
+            return message;
         }
 
         Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");

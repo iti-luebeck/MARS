@@ -66,6 +66,8 @@ import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -141,7 +143,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor{
+public class BasicAUV implements AUV, SceneProcessor {
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -362,7 +364,8 @@ public class BasicAUV implements AUV, SceneProcessor{
     @Override
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
-        this.auv_param.setAuv(this);
+        this.auv_param.addPropertyChangeListener(this);
+        //this.auv_param.setAuv(this);
         buoyancy_updaterate = auv_param.getBuoyancyUpdaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
@@ -2720,5 +2723,15 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
         notifyAdvertisementMARSObject(event);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals("position")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                pC.setPhysicsLocation((Vector3f) evt.getNewValue());
+            }
+        }
     }
 }
