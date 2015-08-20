@@ -52,6 +52,7 @@ import mars.misc.SonarData;
 import mars.misc.TerrainData;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -68,7 +69,6 @@ import mars.sensors.SalinitySensor;
 import mars.sensors.Sensor;
 import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
-import mars.sensors.UnderwaterModem;
 import mars.sensors.Velocimeter;
 import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
@@ -479,7 +479,7 @@ public class RosMessageFactory {
                 return message;
         }
         
-        if (sensor instanceof UnderwaterModem) {
+        if (sensor instanceof CommunicationDevice) {
             std_msgs.String message = node.getMessageFactory().newFromType(std_msgs.String._TYPE);
             try {
                 //here should be check if in or out?

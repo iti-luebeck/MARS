@@ -141,6 +141,12 @@ public abstract class CommunicationDevice extends Sensor {
     public abstract Vector3f getWorldPosition();
 
     /**
+     * 
+     * @return 
+     */
+    public abstract SimState getSimState();
+    
+    /**
      *
      * @return
      */

@@ -45,6 +45,7 @@ import mars.actuators.servos.Modelcraft_ES07;
 import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import org.ros.message.MessageListener;
@@ -229,15 +230,15 @@ public class RosSubscriberInitializer {
             return;
         }
         
-        if (sensor instanceof UnderwaterModem) {
-            final UnderwaterModem modem = (UnderwaterModem) sensor;
+        if (sensor instanceof CommunicationDevice) {
+            final CommunicationDevice comDevice = (CommunicationDevice) sensor;
             node.newSubscriber(auvName + "/" + sensor.getName() + "/in", std_msgs.String._TYPE).addMessageListener(
                     new MessageListener<std_msgs.String>() {
                         @Override
                         public void onNewMessage(std_msgs.String message) {
-                            modem.sendIntoNetwork(message.getData());
+                            comDevice.sendIntoNetwork(message.getData());
                         }
-                    }, (modem.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? modem.getSimState().getMARSSettings().getROSGlobalQueueSize() : sensor.getRos_queue_listener_size());
+                    }, (comDevice.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? comDevice.getSimState().getMARSSettings().getROSGlobalQueueSize() : sensor.getRos_queue_listener_size());
 
             return;
         }

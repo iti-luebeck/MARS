@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mars.sensors.Accelerometer;
 import mars.sensors.AmpereMeter;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.GPSReceiver;
 import mars.sensors.Gyroscope;
@@ -50,7 +51,6 @@ import mars.sensors.Sensor;
 import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.Transformer;
-import mars.sensors.UnderwaterModem;
 import mars.sensors.Velocimeter;
 import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
@@ -140,7 +140,7 @@ public class RosPublisherFactory {
             return (Publisher<geometry_msgs.TransformStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.TransformStamped._TYPE);
         }*/
         
-        if (sensor instanceof UnderwaterModem) {
+        if (sensor instanceof CommunicationDevice) {
             return (Publisher<std_msgs.String>) node.newPublisher(auvName + "/" + sensor.getName() + "/out", std_msgs.String._TYPE);
         }
 

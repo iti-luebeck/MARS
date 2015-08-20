@@ -280,6 +280,7 @@ public class UnderwaterModem extends CommunicationDevice {
         }
     }
 
+    @Override
     public SimState getSimState() {
         return simState;
     }
@@ -298,13 +299,4 @@ public class UnderwaterModem extends CommunicationDevice {
         notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.IN));                  
         com_manager.putMsg(getAuv().getName(), msg, CommunicationType.UNDERWATERSOUND);
     }
-
-    /**
-     *
-     * @return
-     */
-    public String getMessage() {
-        return "This is a Message";
-    }
-
 }

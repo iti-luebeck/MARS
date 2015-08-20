@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.CommunicationDeviceEvent;
 import mars.events.CommunicationDeviceEventType;
+import mars.events.CommunicationType;
 import mars.states.SimState;
 import org.ros.node.topic.Publisher;
 
@@ -287,40 +288,21 @@ public class WiFi extends CommunicationDevice {
 
     /**
      *
-     * @param ros_node
-     * @param auv_name
-     *
-     * @Deprecated
-     * @SuppressWarnings("unchecked") public void initROS(MARSNodeMain ros_node, String auv_name) { publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE); publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal", std_msgs.Int8._TYPE); fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE); flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
-     *
-     * final String fin_auv_name = auv_name; final WiFi fin_this = this; Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE); subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
-     * @Override public void onNewMessage(std_msgs.String message) { System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\""); notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN)); com_manager.putMsg(fin_auv_name, message.getData(), CommunicationType.WIFI); } }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size()); this.rosinit = true;
-    }
-     */
-    /**
-     *
      * @param msg
      */
     @Override
     public void sendToCommDevice(String msg) {
-        fl.setData(msg);
-        if (publisher != null) {
-            //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
-            publisher.publish(fl);
-        }
+        notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
     }
 
     @Override
     public void sendIntoNetwork(String msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.IN));                  
+        com_manager.putMsg(getAuv().getName(), msg, CommunicationType.WIFI);
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getMessage() {
-        return "This is a Message";
+    @Override
+    public SimState getSimState() {
+        return simState;
     }
 }
