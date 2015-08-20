@@ -31,6 +31,8 @@ package mars.communication;
 
 import mars.auv.AUV;
 import mars.events.AUVObjectEvent;
+import mars.events.CommunicationDeviceEvent;
+import mars.events.CommunicationDeviceEventType;
 import mars.sensors.Sensor;
 
 /**
@@ -51,6 +53,13 @@ public abstract class AUVConnectionAbstractImpl implements AUVConnection {
     @Override
     public void onNewData(AUVObjectEvent e) {
 
+        if(e instanceof CommunicationDeviceEvent){//check for messages that should not be published, here a msg for the gui is incoming and we dont want to publish it
+            CommunicationDeviceEvent comE = (CommunicationDeviceEvent)e;
+            if(comE.getType() == CommunicationDeviceEventType.IN){
+                return;
+            }
+        }
+        
         if (e != null && e.getSource() != null && e.getSource() instanceof Sensor && isConnected()) {
             publishSensorData((Sensor) e.getSource(), e.getMsg(), e.getTime());
         }

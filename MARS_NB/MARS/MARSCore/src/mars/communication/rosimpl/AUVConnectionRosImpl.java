@@ -100,6 +100,12 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
             RosSubscriberInitializer.createSubscriberForActuator(auv.getActuators().get(actuatorName), node, auv.getName());
         }
     }
+    
+    private void initializeSubscribersForSensors(){
+        for (String sensorName : auv.getSensors().keySet()) {
+            RosSubscriberInitializer.createSubscriberForSensor(auv.getSensors().get(sensorName), node, auv.getName());
+        }
+    }
 
     @Override
     public AUVConnectionType getConnectionType() {
@@ -135,7 +141,8 @@ public class AUVConnectionRosImpl extends AUVConnectionAbstractImpl {
     public void onNodeStarted() {
         initializePublishersForSensors();
         initializeSubscribersForActuators();
-
+        initializeSubscribersForSensors();//used by underwater modems
+        
         if (panel != null) {
             panel.refresh();
         }

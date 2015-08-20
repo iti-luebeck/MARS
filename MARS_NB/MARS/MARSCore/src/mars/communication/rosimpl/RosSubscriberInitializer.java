@@ -45,6 +45,8 @@ import mars.actuators.servos.Modelcraft_ES07;
 import mars.actuators.thruster.Thruster;
 import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
+import mars.sensors.Sensor;
+import mars.sensors.UnderwaterModem;
 import org.ros.message.MessageListener;
 
 /**
@@ -218,5 +220,28 @@ public class RosSubscriberInitializer {
         }
 
         Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "Unable to map actuator " + actuator + " to subscriber!", "");
+    }
+    
+    public static void createSubscriberForSensor(Sensor sensor, AUVConnectionNode node, String auvName) {
+
+        if (sensor == null) {
+            Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "[" + auvName + "] Refusing to create subscriber: sensor is null!", "");
+            return;
+        }
+        
+        if (sensor instanceof UnderwaterModem) {
+            final UnderwaterModem modem = (UnderwaterModem) sensor;
+            node.newSubscriber(auvName + "/" + sensor.getName() + "/in", std_msgs.String._TYPE).addMessageListener(
+                    new MessageListener<std_msgs.String>() {
+                        @Override
+                        public void onNewMessage(std_msgs.String message) {
+                            modem.sendIntoNetwork(message.getData());
+                        }
+                    }, (modem.getSimState().getMARSSettings().getROSGlobalQueueSize() > 0) ? modem.getSimState().getMARSSettings().getROSGlobalQueueSize() : sensor.getRos_queue_listener_size());
+
+            return;
+        }
+
+        Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to subscriber!", "");
     }
 }

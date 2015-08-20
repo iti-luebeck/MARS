@@ -124,12 +124,12 @@ public class CommunicationManager {
                     if (communicationType == CommunicationType.UNDERWATERSOUND && mod instanceof UnderwaterModem) {//check the communications ways (underwater, overwater)
                         if (Math.abs(distance.length()) <= senderUW.getPropagationDistance()) {//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also underwater
-                            mod.publish(msg);
+                            mod.sendToCommDevice(msg);
                         }
                     } else if (communicationType == CommunicationType.WIFI && mod instanceof WiFi) {
                         if (Math.abs(distance.length()) <= senderUW.getPropagationDistance()) {//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also overwater
-                            mod.publish(msg);
+                            mod.sendToCommDevice(msg);
                         }
                     }
                 }

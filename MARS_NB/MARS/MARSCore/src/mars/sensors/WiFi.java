@@ -302,13 +302,18 @@ public class WiFi extends CommunicationDevice {
      * @param msg
      */
     @Override
-    public void publish(String msg) {
+    public void sendToCommDevice(String msg) {
         fl.setData(msg);
         if (publisher != null) {
             //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
             notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
             publisher.publish(fl);
         }
+    }
+
+    @Override
+    public void sendIntoNetwork(String msg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

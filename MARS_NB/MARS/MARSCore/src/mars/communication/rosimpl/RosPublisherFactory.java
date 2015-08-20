@@ -141,7 +141,7 @@ public class RosPublisherFactory {
         }*/
         
         if (sensor instanceof UnderwaterModem) {
-            return (Publisher<geometry_msgs.PointStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.PointStamped._TYPE);
+            return (Publisher<std_msgs.String>) node.newPublisher(auvName + "/" + sensor.getName() + "/out", std_msgs.String._TYPE);
         }
 
         if (sensor instanceof VideoCamera) {
