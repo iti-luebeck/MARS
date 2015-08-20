@@ -84,11 +84,12 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -110,15 +111,13 @@ import mars.waves.WaterHeightGenerator;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.openide.modules.InstalledFileLocator;
-import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 
 /**
  * With this class we initialize all the different things in the begining like "Do we want to load the terrrain?". Uses the MARS_Settings to determine what ist activated with what mars_settings.
  *
  * @author Thomas Tosik
  */
-public class Initializer {
+public class Initializer implements PropertyChangeListener{
 
     private MARS_Settings mars_settings;
     private MARS_Main mars;
@@ -311,6 +310,50 @@ public class Initializer {
         }
 
         //cleanupProjectedWavesWater();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals("test")) {
+            
+        }
+
+        /*public void updateState(String target, String hashmapname) {
+            if (target.equals("enabled") && hashmapname.equals("Axis")) {
+                initer.hideAxis(isAxisEnabled());
+            } else if (target.equals("enabled") && hashmapname.equals("FPS")) {
+                initer.hideFPS(isFPSEnabled());
+            } else if (target.equals("FrameLimit") && hashmapname.equals("Graphics")) {
+                initer.changeFrameLimit(getFrameLimit());
+            } else if (hashmapname.equals("Light")) {
+                initer.setupLight();
+            } else if (target.equals("enabled") && hashmapname.equals("CrossHairs")) {
+                initer.hideCrossHairs(isCrossHairsEnabled());
+            } else if (target.equals("enabled") && hashmapname.equals("PlaneWater")) {
+                initer.hidePlaneWater(isPlaneWaterEnabled());
+            } else if (hashmapname.equals("PlaneWater")) {
+                initer.setupPlaneWater();
+            } else if (target.equals("enabled") && hashmapname.equals("ProjectedWavesWater")) {
+                initer.hideProjectedWavesWater(isProjectedWavesWaterEnabled());
+            } else if (hashmapname.equals("ProjectedWavesWater")) {
+                initer.updateProjectedWavesWater();
+            } else if (hashmapname.equals("Terrain")) {
+                //initer.updateTerrain();
+            } else if (target.equals("enabled") && hashmapname.equals("Grid")) {
+                initer.hideGrid(isGridEnabled());
+            } else if (hashmapname.equals("Grid")) {
+                initer.setupGrid();
+            } else if (target.equals("speed") && hashmapname.equals("Physics")) {
+                initer.changeSpeed(getPhysicsSpeed());
+            } else if (target.equals("debug") && hashmapname.equals("Physics")) {
+                initer.showPhysicsDebug(getPhysicsDebug());
+            } else if (target.equals("visible") && hashmapname.equals("Pollution")) {
+                initer.hidePollution(isPollutionVisible());
+            } else if (target.equals("hour") && hashmapname.equals("SkyDome")) {
+                initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
+                initer.resetTimeOfDay(getSkyDomeHour());
+            }
+        }*/
     }
 
     /**

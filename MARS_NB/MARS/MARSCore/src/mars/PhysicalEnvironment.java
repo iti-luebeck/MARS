@@ -123,8 +123,8 @@ public class PhysicalEnvironment implements PropertyChangeListenerSupport {
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
-        for (int i = 0; i < pcls.length; i++) {
-            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
     }
 
@@ -134,13 +134,13 @@ public class PhysicalEnvironment implements PropertyChangeListenerSupport {
      * @param target
      * @param hashmapname
      */
-    public void updateState(String target, String hashmapname) {
+    /*public void updateState(String target, String hashmapname) {
         if (target.equals("collision") && hashmapname.equals("Debug")) {
 
         } else if (target.equals("gravitational_acceleration_vector") && hashmapname.equals("")) {
             bulletAppState.getPhysicsSpace().setGravity(getGravitational_acceleration_vector());
         }
-    }
+    }*/
 
     /**
      *
