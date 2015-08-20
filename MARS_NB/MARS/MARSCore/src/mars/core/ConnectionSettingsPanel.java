@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,6 +42,7 @@ public class ConnectionSettingsPanel extends JPanel {
         JLabel auvHeadline = new JLabel("<html><b>AUV</b></html>");
         JLabel connectionTypeHeadline = new JLabel("<html><b>Connector</b></html>");
         JLabel hostconfigHeadline = new JLabel("<html><b>TCP Port</b></html>");
+        JLabel gzipHeadline = new JLabel("<html><b>Gzip</b></html>");
         JLabel statusHeadline = new JLabel("<html><b>Status</b></html>");
 
         JPanel settingsContainer = new JPanel();
@@ -51,7 +53,8 @@ public class ConnectionSettingsPanel extends JPanel {
         settingsContainer.add(auvHeadline, "cell 0 0");
         settingsContainer.add(connectionTypeHeadline, "cell 1 0");
         settingsContainer.add(hostconfigHeadline, "cell 2 0");
-        settingsContainer.add(statusHeadline, "cell 3 0");
+        settingsContainer.add(gzipHeadline, "cell 3 0");
+        settingsContainer.add(statusHeadline, "cell 4 0");
 
         addAUVs(mars, settingsContainer);
 
@@ -86,8 +89,10 @@ public class ConnectionSettingsPanel extends JPanel {
             }
 
             final JTextField tcpPort = new JTextField("" + (defaultPort++));
+            final JCheckBox gzipCheckbox = new JCheckBox();
             tcpPort.setSize(30, 10);
             tcpPort.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
+            gzipCheckbox.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
 
             // preserve the port information
             if (auv.getAuvConnection() != null && auv.getAuvConnection().getConnectionType() == AUVConnectionType.TCP) {
@@ -99,17 +104,22 @@ public class ConnectionSettingsPanel extends JPanel {
                 } else {
                     tcpPort.setText((defaultPort++) + "");
                 }
+
+                gzipCheckbox.setSelected(((AUVConnectionTcpImpl) auv.getAuvConnection()).isGzipCompressionEnabled());
             }
 
-            // only enable the port textfield when TCP is selected
+            // only enable the port textfield and the gzip checkbox when TCP is selected
             if (combobox.getSelectedItem() != AUVConnectionType.TCP) {
                 tcpPort.setEnabled(false);
+                gzipCheckbox.setEnabled(false);
             }
             combobox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     tcpPort.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
                     tcpPort.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
+                    gzipCheckbox.setEnabled(combobox.getSelectedItem() == AUVConnectionType.TCP);
+                    gzipCheckbox.setVisible(combobox.getSelectedItem() == AUVConnectionType.TCP);
                 }
             });
 
@@ -125,6 +135,7 @@ public class ConnectionSettingsPanel extends JPanel {
                 // prevent modifications while connected
                 combobox.setEnabled(false);
                 tcpPort.setEnabled(false);
+                gzipCheckbox.setEnabled(false);
 
             } else {
                 status.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mars/gui/resources/icons/reddot.png")));
@@ -140,7 +151,7 @@ public class ConnectionSettingsPanel extends JPanel {
                     if (connectButton.getText().equals("Connect")) {
 
                         auv.getAuv_param().setConnectionType(combobox.getSelectedItem().toString());
-                        AUVConnectionFactory.createNewConnection(auv, tcpPort.getText(), self);
+                        AUVConnectionFactory.createNewConnection(auv, tcpPort.getText(), self, gzipCheckbox.isSelected());
 
                     } else {
                         auv.getAuvConnection().disconnect();
@@ -155,8 +166,9 @@ public class ConnectionSettingsPanel extends JPanel {
             settingsContainer.add(name, "cell 0 " + row);
             settingsContainer.add(combobox, "cell 1 " + row);
             settingsContainer.add(tcpPort, "cell 2 " + row + ", align left, growx, wmin 30");
-            settingsContainer.add(status, "cell 3 " + row + ", align center");
-            settingsContainer.add(connectButton, "cell 4 " + row + ", align center");
+            settingsContainer.add(gzipCheckbox, "cell 3 " + row + ", align center");
+            settingsContainer.add(status, "cell 4 " + row + ", align center");
+            settingsContainer.add(connectButton, "cell 5 " + row + ", align center");
 
             row++;
         }

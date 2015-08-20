@@ -43,7 +43,7 @@ import mars.sensors.Sensor;
  */
 public class AUVConnectionFactory {
 
-    public static AUVConnection createNewConnection(AUV auv, String param, ConnectionSettingsPanel panel) {
+    public static AUVConnection createNewConnection(AUV auv, String param, ConnectionSettingsPanel panel, boolean gzipCompression) {
 
         AUVConnection conn;
         String connectionType = auv.getAuv_param().getConnectionType();
@@ -53,7 +53,7 @@ public class AUVConnectionFactory {
             String masterUri = "http://" + auv.getMARS_Settings().getROSMasterip() + ":" + auv.getMARS_Settings().getROSMasterport() + "/";
             conn.connect(masterUri, auv.getMARS_Settings().getROSLocalip());
         } else if (connectionType.equals(AUVConnectionType.TCP.toString())) {
-            conn = new AUVConnectionTcpImpl(auv);
+            conn = new AUVConnectionTcpImpl(auv, gzipCompression);
             conn.connect(param);
         } else {
             Logger.getLogger(AUVConnectionFactory.class.getName()).log(Level.INFO, "[" + auv.getName() + "] Unsupported Connection Type: " + auv.getAuv_param().getConnectionType(), "");

@@ -65,14 +65,16 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
     private boolean running;
     private ServerSocket serverSocket;
     private Thread serverThread;
+    boolean gzipCompressionEnabled;
 
     private final List<ClientHandler> clients = new ArrayList<ClientHandler>();
     private final List<ClientHandler> clientsToRemove = new ArrayList<ClientHandler>();
 
-    public AUVConnectionTcpImpl(AUV auv) {
+    public AUVConnectionTcpImpl(AUV auv, boolean gzipCompressionEnabled) {
         super(auv);
         started = false;
         serverSocket = null;
+        this.gzipCompressionEnabled = gzipCompressionEnabled;
     }
 
     @Override
@@ -226,5 +228,13 @@ public class AUVConnectionTcpImpl extends AUVConnectionAbstractImpl implements R
 
     public int getPort() {
         return port;
+    }
+
+    public boolean isGzipCompressionEnabled() {
+        return gzipCompressionEnabled;
+    }
+
+    public void setGzipCompressionEnabled(boolean gzipCompressionEnabled) {
+        this.gzipCompressionEnabled = gzipCompressionEnabled;
     }
 }
