@@ -89,8 +89,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     private HashMap<String, Object> Logging;
 
     @XmlTransient
-    private Initializer initer;
-    @XmlTransient
     private final List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     private boolean setupAxis = true;
@@ -198,20 +196,6 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
         for (PropertyChangeListener pcl : pcls) {
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
-    }
-
-    /**
-     *
-     * @param init
-     */
-    public void setInit(Initializer init) {
-        Initializer old = getInit();
-        this.initer = init;
-        fire("Init", old, init);
-    }
-
-    public Initializer getInit() {
-        return initer;
     }
     
     /**

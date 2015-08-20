@@ -166,7 +166,8 @@ public class Initializer implements PropertyChangeListener{
     Geometry pollution_plane;
 
     //grass
-
+    private VegetationSystem vs;
+            
     //light
     DirectionalLight sun;
     AmbientLight ambLight = new AmbientLight();
@@ -223,7 +224,6 @@ public class Initializer implements PropertyChangeListener{
         this.com_manager = com_manager;
         this.renderManager = mars.getRenderManager();
         this.bulletAppState = mars.getStateManager().getState(BulletAppState.class);
-        this.mars_settings.setInit(this);
         sun = new DirectionalLight();
         fpp = new FilterPostProcessor(assetManager);
 
@@ -245,9 +245,9 @@ public class Initializer implements PropertyChangeListener{
         }
         if (mars_settings.isTerrainEnabled()) {
             setupTerrain();
-        }
-        if (mars_settings.isGrassEnabled()) {
-            setupGrass();
+            if (mars_settings.isGrassEnabled()) {//grass needs terrain
+                setupGrass();
+            }
         }
         if (mars_settings.isWavesWaterEnabled()) {
             setupWavesWater();
@@ -314,46 +314,44 @@ public class Initializer implements PropertyChangeListener{
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName().equals("test")) {
+        if(evt.getSource() instanceof MARS_Settings){
+            MARS_Settings settings = (MARS_Settings) evt.getSource();
+            if(evt.getPropertyName().equals("AxisEnabled")) {
+                this.hideAxis(settings.getAxisEnabled());
+            }else if(evt.getPropertyName().equals("FPSEnabled")) {
+                this.hideFPS(settings.getFPSEnabled());
+            }else if(evt.getPropertyName().equals("FrameLimit")) {
+                changeFrameLimit(settings.getFrameLimit());
+            }else if(evt.getPropertyName().equals("LightEnabled")) {
+                setupLight();
+            }else if(evt.getPropertyName().equals("CrossHairsEnabled")) {
+                hideCrossHairs(settings.getCrossHairsEnabled());
+            }else if(evt.getPropertyName().equals("PlaneWaterEnabled")) {
+                hidePlaneWater(settings.getPlaneWaterEnabled());
+                //setupPlaneWater();
+            }else if(evt.getPropertyName().equals("ProjectedWavesWaterEnabled")) {
+                hideProjectedWavesWater(settings.getProjectedWavesWaterEnabled());
+                updateProjectedWavesWater();
+            }else if(evt.getPropertyName().equals("GridEnabled")) {
+                hideGrid(settings.getGridEnabled());
+                //setupGrid();
+            }else if(evt.getPropertyName().equals("PhysicsSpeed")) {
+                changeSpeed(settings.getPhysicsSpeed());
+            }else if(evt.getPropertyName().equals("PhysicsDebug")) {
+                showPhysicsDebug(settings.getPhysicsDebug());
+            }else if(evt.getPropertyName().equals("PollutionEnabled")) {
+                hidePollution(settings.getPollutionVisible());
+            }else if(evt.getPropertyName().equals("SkyDomeHour")) {
+                getSkyControl().getSunAndStars().setHour(settings.getSkyDomeHour());
+                resetTimeOfDay(settings.getSkyDomeHour());
+            }else if(evt.getPropertyName().equals("GrassEnabled")) {
+                hideGrass(settings.getGrassEnabled());
+            }else if(evt.getPropertyName().equals("TerrainEnabled")) {
+                hideTerrain(settings.getTerrainEnabled());
+            }
+            
             
         }
-
-        /*public void updateState(String target, String hashmapname) {
-            if (target.equals("enabled") && hashmapname.equals("Axis")) {
-                initer.hideAxis(isAxisEnabled());
-            } else if (target.equals("enabled") && hashmapname.equals("FPS")) {
-                initer.hideFPS(isFPSEnabled());
-            } else if (target.equals("FrameLimit") && hashmapname.equals("Graphics")) {
-                initer.changeFrameLimit(getFrameLimit());
-            } else if (hashmapname.equals("Light")) {
-                initer.setupLight();
-            } else if (target.equals("enabled") && hashmapname.equals("CrossHairs")) {
-                initer.hideCrossHairs(isCrossHairsEnabled());
-            } else if (target.equals("enabled") && hashmapname.equals("PlaneWater")) {
-                initer.hidePlaneWater(isPlaneWaterEnabled());
-            } else if (hashmapname.equals("PlaneWater")) {
-                initer.setupPlaneWater();
-            } else if (target.equals("enabled") && hashmapname.equals("ProjectedWavesWater")) {
-                initer.hideProjectedWavesWater(isProjectedWavesWaterEnabled());
-            } else if (hashmapname.equals("ProjectedWavesWater")) {
-                initer.updateProjectedWavesWater();
-            } else if (hashmapname.equals("Terrain")) {
-                //initer.updateTerrain();
-            } else if (target.equals("enabled") && hashmapname.equals("Grid")) {
-                initer.hideGrid(isGridEnabled());
-            } else if (hashmapname.equals("Grid")) {
-                initer.setupGrid();
-            } else if (target.equals("speed") && hashmapname.equals("Physics")) {
-                initer.changeSpeed(getPhysicsSpeed());
-            } else if (target.equals("debug") && hashmapname.equals("Physics")) {
-                initer.showPhysicsDebug(getPhysicsDebug());
-            } else if (target.equals("visible") && hashmapname.equals("Pollution")) {
-                initer.hidePollution(isPollutionVisible());
-            } else if (target.equals("hour") && hashmapname.equals("SkyDome")) {
-                initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
-                initer.resetTimeOfDay(getSkyDomeHour());
-            }
-        }*/
     }
 
     /**
@@ -924,15 +922,25 @@ public class Initializer implements PropertyChangeListener{
 
     /**
      *
+     * @param hide
      */
-    public void changePlaneWater() {
-
+    public void hideGrass(boolean hide) {
+        if(vs != null){
+            if (!hide) {
+                vs.setCullHint(CullHint.Always);
+            } else {
+                vs.setCullHint(CullHint.Never);
+            }
+        }else{
+            setupGrass();
+            hideGrass(hide);
+        }
     }
-
+    
     private void setupGrass() {
         File file4 = InstalledFileLocator.getDefault().locate("Assets/Textures/Terrain/" + mars_settings.getGrassDensityMap(), "mars.core", false);
         DensityMap dm = new DensityMap(file4.getAbsolutePath());
-        VegetationSystem vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, mars_settings.getGrassPatchSize());
+        vs = new VegetationSystem(terrain, assetManager, mars.getCamera(), dm, mars_settings.getGrassPatchSize());
         Geometry createGenuineGrass = vs.createGenuineGrass("Grass/kelp_green.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         Geometry createImposterGrass = vs.createImposterGrass("Grass/kelp_green.png", 0.3f, false, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(0.1f));
         Geometry createGenuineGrass2 = vs.createGenuineGrass("Grass/stalk.png", 0.3f, true, true, true, Vector2f.UNIT_XY.mult(0.1f), 1f, 1f, 1f, Vector3f.UNIT_XYZ.multLocal(3.1f));
@@ -950,6 +958,23 @@ public class Initializer implements PropertyChangeListener{
         sceneReflectionNode.attachChild(vs);
     }
 
+    /**
+     *
+     * @param hide
+     */
+    public void hideTerrain(boolean hide) {
+        if(getTerrainNode() != null){
+            if (!hide) {
+                getTerrainNode().setCullHint(CullHint.Always);
+            } else {
+                getTerrainNode().setCullHint(CullHint.Never);
+            }
+        }else{
+            setupTerrain();
+            hideTerrain(hide);
+        }
+    }
+    
     private void setupTerrain() {
         /**
          * 1. Create terrain material and load four textures into it.

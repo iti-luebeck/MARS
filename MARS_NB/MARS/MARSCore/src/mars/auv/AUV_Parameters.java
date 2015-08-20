@@ -1049,13 +1049,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      */
     public void setPosition(Vector3f position) {
         Vector3f old = getPosition();
-        params.put("position", position);
-
-        //RigidBodyControl physics_control = auv.getPhysicsControl();
-        //if (physics_control != null) {
-        //    physics_control.setPhysicsLocation(getPosition());
-        //}
-        
+        params.put("position", position);        
         fire("position", old, position);
     }
 
