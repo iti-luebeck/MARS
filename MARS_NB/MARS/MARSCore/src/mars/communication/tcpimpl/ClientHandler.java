@@ -48,6 +48,7 @@ import java.util.zip.GZIPOutputStream;
 public class ClientHandler implements Runnable {
 
     public static final char END_OF_TRANSMISSION = 0x04;
+    public static final boolean USE_GZIP_COMPESSION = true;
 
     private final AUVConnectionTcpImpl connection;
     private Socket socket;
@@ -62,12 +63,21 @@ public class ClientHandler implements Runnable {
         this.connection = connection;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(
-                    new GZIPOutputStream(socket.getOutputStream())));
-            writer.flush();
+            if (USE_GZIP_COMPESSION) {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new GZIPOutputStream(socket.getOutputStream())));
+                writer.flush();
 
-            reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(
-                    socket.getInputStream()), "UTF-8"));
+                reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(
+                        socket.getInputStream()), "UTF-8"));
+            } else {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        socket.getOutputStream()));
+                writer.flush();
+
+                reader = new BufferedReader(new InputStreamReader(
+                        socket.getInputStream(), "UTF-8"));
+            }
 
             running = true;
 
