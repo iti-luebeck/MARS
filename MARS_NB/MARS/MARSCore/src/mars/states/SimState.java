@@ -455,7 +455,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             Iterator<AUV> iter = auvs.iterator();
             while (iter.hasNext()) {
                 AUV bas_auv = iter.next();
-                bas_auv.getAuv_param().setAuv(bas_auv);
+                bas_auv.getAuv_param().addPropertyChangeListener(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
                 bas_auv.setMARS_Settings(mars_settings);
@@ -889,7 +889,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight() - pos.y), 0f), Vector3f.UNIT_Y, click3d, dir);
             if (dropAction == TransferHandler.COPY) {
                 AUV auvCopy = new BasicAUV(auv);
-                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.getAuv_param().addPropertyChangeListener(auvCopy);
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
@@ -922,7 +922,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         if (auv != null) {
             if (dropAction == TransferHandler.COPY) {
                 AUV auvCopy = new BasicAUV(auv);
-                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.getAuv_param().addPropertyChangeListener(auvCopy);
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(pos);
                 auvCopy.setState(this);

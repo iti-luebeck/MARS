@@ -35,6 +35,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -60,7 +61,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends MARSObject {
+public interface AUV extends MARSObject, PropertyChangeListener {
 
     /**
      *

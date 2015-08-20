@@ -54,7 +54,7 @@ import mars.xml.HashMapAdapter;
 @XmlRootElement(name = "Settings")
 @XmlAccessorType(XmlAccessType.NONE)
 public class MARS_Settings implements PropertyChangeListenerSupport {
-
+    
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     private HashMap<String, Object> settings;
     private HashMap<String, Object> Graphics;
@@ -248,9 +248,15 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param init
      */
     public void setInit(Initializer init) {
+        Initializer old = getInit();
         this.initer = init;
+        fire("Init", old, init);
     }
 
+    public Initializer getInit() {
+        return initer;
+    }
+    
     /**
      *
      * @return
@@ -272,7 +278,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param height
      */
     public void setResolutionHeight(Integer height) {
+        Integer old = getResolutionHeight();
         Resolution.put("height", height);
+        fire("ResolutionHeight", old, height);
     }
 
     /**
@@ -288,7 +296,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param width
      */
     public void setResolutionWidth(Integer width) {
+        Integer old = getResolutionWidth();
         Resolution.put("width", width);
+        fire("ResolutionWidth", old, width);
     }
 
     /**
@@ -304,7 +314,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param FrameLimit
      */
     public void setFrameLimit(Integer FrameLimit) {
+        Integer old = getFrameLimit();
         Graphics.put("FrameLimit", FrameLimit);
+        fire("FrameLimit", old, FrameLimit);
     }
 
     /**
@@ -328,7 +340,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setFPSEnabled(Boolean enabled) {
+        Boolean old = getFPSEnabled();
         FPS.put("enabled", enabled);
+        fire("FPSEnabled", old, enabled);
     }
 
     /**
@@ -344,7 +358,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setPhysicsDebug(Boolean enabled) {
+        Boolean old = getPhysicsDebug();
         Physics.put("debug", enabled);
+        fire("PhysicsDebug", old, enabled);
     }
 
     /**
@@ -360,7 +376,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param framerate
      */
     public void setPhysicsFramerate(Integer framerate) {
+        Integer old = getPhysicsFramerate();
         Physics.put("framerate", framerate);
+        fire("PhysicsFramerate", old, framerate);
     }
 
     /**
@@ -376,7 +394,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param maxsubsteps
      */
     public void setPhysicsMaxsubsteps(Integer maxsubsteps) {
+        Integer old = getPhysicsMaxsubsteps();
         Physics.put("maxsubsteps", maxsubsteps);
+        fire("PhysicsMaxsubsteps", old, maxsubsteps);
     }
 
     /**
@@ -392,7 +412,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param speed
      */
     public void setPhysicsSpeed(Float speed) {
+        Float old = getPhysicsSpeed();
         Physics.put("speed", speed);
+        fire("PhysicsSpeed", old, speed);
     }
     
     /**
@@ -408,7 +430,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param poke
      */
     public void setPhysicsPoke(Float poke) {
+        Float old = getPhysicsPoke();
         Physics.put("poke", poke);
+        fire("PhysicsPoke", old, poke);
     }
 
     /**
@@ -424,7 +448,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param FlyCamMoveSpeed
      */
     public void setCameraFlyCamMoveSpeed(Integer FlyCamMoveSpeed) {
+        Integer old = getCameraFlyCamMoveSpeed();
         Camera.put("FlyCamMoveSpeed", FlyCamMoveSpeed);
+        fire("CameraFlyCamMoveSpeed", old, FlyCamMoveSpeed);
     }
 
     /**
@@ -440,7 +466,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param DefaultPosition
      */
     public void setCameraDefaultPosition(Vector3f DefaultPosition) {
+        Vector3f old = getCameraDefaultPosition();
         Camera.put("DefaultPosition", DefaultPosition);
+        fire("CameraDefaultPosition", old, DefaultPosition);
     }
 
     /**
@@ -456,7 +484,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param DefaultRotation
      */
     public void setCameraDefaultRotation(Vector3f DefaultRotation) {
+        Vector3f old = getCameraDefaultRotation();
         Camera.put("DefaultRotation", DefaultRotation);
+        fire("CameraDefaultRotation", old, DefaultRotation);
     }
 
     /**
@@ -472,7 +502,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param ChaseCamZoomSensitivity
      */
     public void setCameraChaseCamZoomSensitivity(Float ChaseCamZoomSensitivity) {
+        Float old = getCameraChaseCamZoomSensitivity();
         Camera.put("ChaseCamZoomSensitivity", ChaseCamZoomSensitivity);
+        fire("CameraChaseCamZoomSensitivity", old, ChaseCamZoomSensitivity);
     }
 
     /**
@@ -488,7 +520,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setRecordEnabled(Boolean enabled) {
+        Boolean old = getRecordEnabled();
         Record.put("enabled", enabled);
+        fire("RecordEnabled", old, enabled);
     }
     
     /**
@@ -504,7 +538,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setLoggingEnabled(Boolean enabled) {
+        Boolean old = getLoggingEnabled();
         Logging.put("enabled", enabled);
+        fire("LoggingEnabled", old, enabled);
     }
     
     /**
@@ -520,7 +556,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param fileWrite
      */
     public void setLoggingFileWrite(Boolean fileWrite) {
+        Boolean old = getLoggingFileWrite();
         Logging.put("fileWrite", fileWrite);
+        fire("LoggingFileWrite", old, fileWrite);
     }
 
     /**
@@ -536,7 +574,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param level
      */
     public void setLoggingLevel(String level) {
+        String old = getLoggingLevel();
         Logging.put("level", level);
+        fire("LoggingLevel", old, level);
     }
     
     /**
@@ -560,7 +600,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setCrossHairsEnabled(Boolean enabled) {
+        Boolean old = getCrossHairsEnabled();
         CrossHairs.put("enabled", enabled);
+        fire("CrossHairsEnabled", old, enabled);
     }
 
     /**
@@ -584,7 +626,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setLightEnabled(Boolean enabled) {
+        Boolean old = getLightEnabled();
         Light.put("enabled", enabled);
+        fire("LightEnabled", old, enabled);
     }
 
     /**
@@ -600,7 +644,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param ambient
      */
     public void setLightAmbient(Boolean ambient) {
+        Boolean old = getLightAmbient();
         Light.put("ambient", ambient);
+        fire("LightAmbient", old, ambient);
     }
 
     /**
@@ -616,7 +662,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param ambientColor
      */
     public void setLightAmbientColor(ColorRGBA ambientColor) {
+        ColorRGBA old = getLightAmbientColor();
         Light.put("ambientColor", ambientColor);
+        fire("LightAmbientColor", old, ambientColor);
     }
 
     /**
@@ -632,7 +680,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setLightColor(ColorRGBA color) {
+        ColorRGBA old = getLightColor();
         Light.put("color", color);
+        fire("LightColor", old, color);
     }
 
     /**
@@ -649,7 +699,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param physical_environment
      */
     public void setPhysical_environment(PhysicalEnvironment physical_environment) {
+        PhysicalEnvironment old = getPhysical_environment();
         this.physical_environment = physical_environment;
+        fire("Physical_environment", old, physical_environment);
     }
 
     /**
@@ -665,7 +717,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param direction
      */
     public void setLightDirection(Vector3f direction) {
+        Vector3f old = getLightDirection();
         Light.put("direction", direction);
+        fire("LightDirection", old, direction);
     }
 
     /**
@@ -689,7 +743,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setShadowEnabled(Boolean enabled) {
+        Boolean old = getShadowEnabled();
         Shadow.put("enabled", enabled);
+        fire("ShadowEnabled", old, enabled);
     }
 
     /**
@@ -713,7 +769,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setWavesWaterEnabled(Boolean enabled) {
+        Boolean old = getWavesWaterEnabled();
         WavesWater.put("enabled", enabled);
+        fire("WavesWaterEnabled", old, enabled);
     }
 
     /**
@@ -737,7 +795,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setProjectedWavesWaterEnabled(Boolean enabled) {
+        Boolean old = getProjectedWavesWaterEnabled();
         ProjectedWavesWater.put("enabled", enabled);
+        fire("ProjectedWavesWaterEnabled", old, enabled);
     }
 
     /**
@@ -753,7 +813,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Octaves
      */
     public void setProjectedWavesWaterOctaves(Integer Octaves) {
+        Integer old = getProjectedWavesWaterOctaves();
         ProjectedWavesWater.put("Octaves", Octaves);
+        fire("ProjectedWavesWaterOctaves", old, Octaves);
     }
 
     /**
@@ -769,7 +831,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Scaleybig
      */
     public void setProjectedWavesWaterScaleybig(Float Scaleybig) {
+        Float old = getProjectedWavesWaterScaleybig();
         ProjectedWavesWater.put("Scaleybig", Scaleybig);
+        fire("ProjectedWavesWaterScaleybig", old, Scaleybig);
     }
 
     /**
@@ -785,7 +849,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Scaleysmall
      */
     public void setProjectedWavesWaterScaleysmall(Float Scaleysmall) {
+        Float old = getProjectedWavesWaterScaleysmall();
         ProjectedWavesWater.put("Scaleysmall", Scaleysmall);
+        fire("ProjectedWavesWaterScaleysmall", old, Scaleysmall);
     }
 
     /**
@@ -801,7 +867,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Scalexbig
      */
     public void setProjectedWavesWaterScalexbig(Float Scalexbig) {
+        Float old = getProjectedWavesWaterScalexbig();
         ProjectedWavesWater.put("Scalexbig", Scalexbig);
+        fire("ProjectedWavesWaterScalexbig", old, Scalexbig);
     }
 
     /**
@@ -817,7 +885,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Scalexsmall
      */
     public void setProjectedWavesWaterScalexsmall(Float Scalexsmall) {
+        Float old = getProjectedWavesWaterScalexsmall();
         ProjectedWavesWater.put("Scalexsmall", Scalexsmall);
+        fire("ProjectedWavesWaterScalexsmall", old, Scalexsmall);
     }
 
     /**
@@ -833,7 +903,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Heightsmall
      */
     public void setProjectedWavesWaterHeightsmall(Float Heightsmall) {
+        Float old = getProjectedWavesWaterHeightsmall();
         ProjectedWavesWater.put("Heightsmall", Heightsmall);
+        fire("ProjectedWavesWaterHeightsmall", old, Heightsmall);
     }
 
     /**
@@ -849,7 +921,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Heightbig
      */
     public void setProjectedWavesWaterHeightbig(Float Heightbig) {
+        Float old = getProjectedWavesWaterHeightbig();
         ProjectedWavesWater.put("Heightbig", Heightbig);
+        fire("ProjectedWavesWaterHeightbig", old, Heightbig);
     }
 
     /**
@@ -865,7 +939,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Speedbig
      */
     public void setProjectedWavesWaterSpeedbig(Float Speedbig) {
+        Float old = getProjectedWavesWaterSpeedbig();
         ProjectedWavesWater.put("Speedbig", Speedbig);
+        fire("ProjectedWavesWaterSpeedbig", old, Speedbig);
     }
 
     /**
@@ -881,7 +957,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Speedsmall
      */
     public void setProjectedWavesWaterSpeedsmall(Float Speedsmall) {
+        Float old = getProjectedWavesWaterSpeedsmall();
         ProjectedWavesWater.put("Speedsmall", Speedsmall);
+        fire("ProjectedWavesWaterSpeedsmall", old, Speedsmall);
     }
 
     /**
@@ -897,7 +975,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param port
      */
     public void setRAWPort(Integer port) {
+        Integer old = getRAWPort();
         RAW.put("port", port);
+        fire("RAWPort", old, port);
     }
 
     /**
@@ -913,7 +993,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setRAWEnabled(Boolean enabled) {
+        Boolean old = getRAWEnabled();
         RAW.put("enabled", enabled);
+        fire("RAWEnabled", old, enabled);
     }
 
     /**
@@ -929,7 +1011,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param backlog
      */
     public void setRAWBacklog(Integer backlog) {
+        Integer old = getRAWBacklog();
         RAW.put("backlog", backlog);
+        fire("RAWBacklog", old, backlog);
     }
 
     /**
@@ -945,7 +1029,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param OutputStreamSize
      */
     public void setRAWOutputStreamSize(Integer OutputStreamSize) {
+        Integer old = getRAWOutputStreamSize();
         RAW.put("OutputStreamSize", OutputStreamSize);
+        fire("RAWOutputStreamSize", old, OutputStreamSize);
     }
 
     /**
@@ -961,7 +1047,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param master_port
      */
     public void setROSMasterport(Integer master_port) {
+        Integer old = getROSMasterport();
         ROS.put("masterport", master_port);
+        fire("ROSMasterport", old, master_port);
     }
 
     /**
@@ -977,7 +1065,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param master_ip
      */
     public void setROSMasterip(String master_ip) {
+        String old = getROSMasterip();
         ROS.put("masterip", master_ip);
+        fire("ROSMasterip", old, master_ip);
     }
 
     /**
@@ -993,7 +1083,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param localip
      */
     public void setROSLocalip(String localip) {
+        String old = getROSLocalip();
         ROS.put("localip", localip);
+        fire("ROSLocalip", old, localip);
     }
 
     /**
@@ -1009,7 +1101,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param GlobalQueueSize
      */
     public void setROSGlobalQueueSize(Integer GlobalQueueSize) {
+        Integer old = getROSGlobalQueueSize();
         ROS.put("GlobalQueueSize", GlobalQueueSize);
+        fire("ROSGlobalQueueSize", old, GlobalQueueSize);
     }
 
     /**
@@ -1025,7 +1119,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setROSEnabled(Boolean enabled) {
+        Boolean old = getROSEnabled();
         ROS.put("enabled", enabled);
+        fire("ROSEnabled", old, enabled);
     }
 
     /**
@@ -1041,7 +1137,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param publish
      */
     public void setROSPublish(Boolean publish) {
+        Boolean old = getROSPublish();
         ROS.put("publish", publish);
+        fire("ROSPublish", old, publish);
     }
 
     /**
@@ -1065,7 +1163,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setAxisEnabled(Boolean enabled) {
+        Boolean old = getAxisEnabled();
         Axis.put("enabled", enabled);
+        fire("AxisEnabled", old, enabled);
     }
 
     /**
@@ -1089,7 +1189,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setGridEnabled(Boolean enabled) {
+        Boolean old = getGridEnabled();
         Grid.put("enabled", enabled);
+        fire("GridEnabled", old, enabled);
     }
 
     /**
@@ -1105,7 +1207,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param LineDistance
      */
     public void setGridLineDistance(Float LineDistance) {
+        Float old = getGridLineDistance();
         Grid.put("LineDistance", LineDistance);
+        fire("GridLineDistance", old, LineDistance);
     }
 
     /**
@@ -1121,7 +1225,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param SizeX
      */
     public void setGridSizeX(Integer SizeX) {
+        Integer old = getGridSizeX();
         Grid.put("SizeX", SizeX);
+        fire("GridSizeX", old, SizeX);
     }
 
     /**
@@ -1137,7 +1243,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param SizeY
      */
     public void setGridSizeY(Integer SizeY) {
+        Integer old = getGridSizeY();
         Grid.put("SizeY", SizeY);
+        fire("GridSizeY", old, SizeY);
     }
 
     /**
@@ -1153,7 +1261,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setGridColor(ColorRGBA color) {
+        ColorRGBA old = getGridColor();
         Grid.put("color", color);
+        fire("GridColor", old, color);
     }
 
     /**
@@ -1169,7 +1279,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setGridPosition(Vector3f position) {
+        Vector3f old = getGridPosition();
         Grid.put("position", position);
+        fire("GridPosition", old, position);
     }
 
     /**
@@ -1185,7 +1297,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param rotation
      */
     public void setGridRotation(Vector3f rotation) {
+        Vector3f old = getGridRotation();
         Grid.put("rotation", rotation);
+        fire("GridRotation", old, rotation);
     }
 
     /**
@@ -1201,7 +1315,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param BlurScale
      */
     public void setDepthOfFieldBlurScale(Float BlurScale) {
+        Float old = getDepthOfFieldBlurScale();
         DepthOfField.put("BlurScale", BlurScale);
+        fire("DepthOfFieldBlurScale", old, BlurScale);
     }
 
     /**
@@ -1217,7 +1333,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param FocusDistance
      */
     public void setDepthOfFieldFocusDistance(Float FocusDistance) {
+        Float old = getDepthOfFieldFocusDistance();
         DepthOfField.put("FocusDistance", FocusDistance);
+        fire("DepthOfFieldFocusDistance", old, FocusDistance);
     }
 
     /**
@@ -1233,7 +1351,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param FocusRange
      */
     public void setDepthOfFieldFocusRange(Float FocusRange) {
+        Float old = getDepthOfFieldFocusRange();
         DepthOfField.put("FocusRange", FocusRange);
+        fire("DepthOfFieldFocusRange", old, FocusRange);
     }
 
     /**
@@ -1257,7 +1377,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setDepthOfFieldEnabled(Boolean enabled) {
+        Boolean old = getDepthOfFieldEnabled();
         DepthOfField.put("enabled", enabled);
+        fire("DepthOfFieldEnabled", old, enabled);
     }
 
     /**
@@ -1281,7 +1403,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setFogEnabled(Boolean enabled) {
+        Boolean old = getFogEnabled();
         Fog.put("enabled", enabled);
+        fire("FogEnabled", old, enabled);
     }
 
     /**
@@ -1297,8 +1421,10 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setFogColor(ColorRGBA color) {
+        ColorRGBA old = getFogColor();
         color.a = 1.0f;
         Fog.put("color", color);
+        fire("FogColor", old, color);
     }
 
     /**
@@ -1314,7 +1440,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Distance
      */
     public void setDepthOfFieldDistance(Float Distance) {
+        Float old = getDepthOfFieldDistance();
         DepthOfField.put("Distance", Distance);
+        fire("DepthOfFieldDistance", old, Distance);
     }
 
     /**
@@ -1330,7 +1458,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Density
      */
     public void setDepthOfFieldDensity(Float Density) {
+        Float old = getDepthOfFieldDensity();
         DepthOfField.put("Density", Density);
+        fire("DepthOfFieldDensity", old, Density);
     }
 
     /**
@@ -1354,7 +1484,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setPlaneWaterEnabled(Boolean enabled) {
+        Boolean old = getPlaneWaterEnabled();
         PlaneWater.put("enabled", enabled);
+        fire("PlaneWaterEnabled", old, enabled);
     }
 
     /**
@@ -1370,7 +1502,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param filepath
      */
     public void setPlanewaterFilepath(String filepath) {
+        String old = getPlanewaterFilepath();
         PlaneWater.put("filepath", filepath);
+        fire("PlanewaterFilepath", old, filepath);
     }
 
     /**
@@ -1394,7 +1528,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setSimpleSkyBoxEnabled(Boolean enabled) {
+        Boolean old = getSimpleSkyBoxEnabled();
         SimpleSkyBox.put("enabled", enabled);
+        fire("SimpleSkyBoxEnabled", old, enabled);
     }
 
     /**
@@ -1410,7 +1546,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setSimpleskyColor(ColorRGBA color) {
+        ColorRGBA old = getSimpleskyColor();
         SimpleSkyBox.put("color", color);
+        fire("SimpleskyColor", old, color);
     }
 
     /**
@@ -1434,7 +1572,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setSkyBoxEnabled(Boolean enabled) {
+        Boolean old = getSkyBoxEnabled();
         SkyBox.put("enabled", enabled);
+        fire("SkyBoxEnabled", old, enabled);
     }
 
     /**
@@ -1450,7 +1590,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param filepath
      */
     public void setSkyboxFilepath(String filepath) {
+        String old = getSkyboxFilepath();
         SkyBox.put("filepath", filepath);
+        fire("SkyboxFilepath", old, filepath);
     }
 
     /**
@@ -1474,7 +1616,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setSkyDomeEnabled(Boolean enabled) {
+        Boolean old = getSkyBoxEnabled();
         SkyDome.put("enabled", enabled);
+        fire("SkyDomeEnabled", old, enabled);
     }
 
     /**
@@ -1498,7 +1642,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param cloudModulation
      */
     public void setSkyDomeCloudModulation(Boolean cloudModulation) {
+        Boolean old = getSkyDomeCloudModulation();
         SkyDome.put("cloudModulation", cloudModulation);
+        fire("SkyDomeCloudModulation", old, cloudModulation);
     }
 
     /**
@@ -1514,7 +1660,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param speed
      */
     public void setSkyDomeSpeed(Float speed) {
+        Float old = getSkyDomeSpeed();
         SkyDome.put("speed", speed);
+        fire("SkyDomeSpeed", old, speed);
     }
 
     /**
@@ -1530,7 +1678,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param direction
      */
     public void setSkyDomeDirection(Float direction) {
+        Float old = getSkyDomeDirection();
         SkyDome.put("direction", direction);
+        fire("SkyDomeDirection", old, direction);
     }
 
     /**
@@ -1546,7 +1696,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param cloudiness
      */
     public void setSkyDomeCloudiness(Float cloudiness) {
+        Float old = getSkyDomeCloudiness();
         SkyDome.put("cloudiness", cloudiness);
+        fire("SkyDomeCloudiness", old, cloudiness);
     }
 
     /**
@@ -1562,7 +1714,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param cloudRate
      */
     public void setSkyDomeCloudRate(Float cloudRate) {
+        Float old = getSkyDomeCloudRate();
         SkyDome.put("cloudRate", cloudRate);
+        fire("SkyDomeCloudRate", old, cloudRate);
     }
 
     /**
@@ -1578,7 +1732,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param hour
      */
     public void setSkyDomeHour(Float hour) {
+        Float old = getSkyDomeHour();
         SkyDome.put("hour", hour);
+        fire("SkyDomeHour", old, hour);
     }
 
     /**
@@ -1594,7 +1750,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param observerLatitude
      */
     public void setSkyDomeObserverLatitude(Float observerLatitude) {
+        Float old = getSkyDomeObserverLatitude();
         SkyDome.put("observerLatitude", observerLatitude);
+        fire("SkyDomeObserverLatitude", old, observerLatitude);
     }
 
     /**
@@ -1610,7 +1768,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param lunarDiameter
      */
     public void setSkyDomeLunarDiameter(Float lunarDiameter) {
+        Float old = getSkyDomeLunarDiameter();
         SkyDome.put("lunarDiameter", lunarDiameter);
+        fire("SkyDomeLunarDiameter", old, lunarDiameter);
     }
 
     /**
@@ -1626,7 +1786,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param solarLongitude
      */
     public void setSkyDomeSolarLongitude(Float solarLongitude) {
+        Float old = getSkyDomeSolarLongitude();
         SkyDome.put("solarLongitude", solarLongitude);
+        fire("SkyDomeSolarLongitude", old, solarLongitude);
     }
 
     /**
@@ -1642,7 +1804,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param lunarPhase
      */
     public void setSkyDomeLunarPhase(Integer lunarPhase) {
+        Integer old = getSkyDomeLunarPhase();
         SkyDome.put("lunarPhase", lunarPhase);
+        fire("SkyDomeLunarPhase", old, lunarPhase);
     }
 
     /**
@@ -1666,7 +1830,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setGrassEnabled(Boolean enabled) {
+        Boolean old = getGrassEnabled();
         Grass.put("enabled", enabled);
+        fire("GrassEnabled", old, enabled);
     }
 
     /**
@@ -1682,7 +1848,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param farViewingDistance
      */
     public void setGrassFarViewingDistance(Float farViewingDistance) {
+        Float old = getGrassFarViewingDistance();
         Grass.put("farViewingDistance", farViewingDistance);
+        fire("farViewingDistance", old, farViewingDistance);
     }
     
     /**
@@ -1698,23 +1866,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param farViewingDistanceImposter
      */
     public void setGrassFarViewingDistanceImposter(Float farViewingDistanceImposter) {
+        Float old = getGrassFarViewingDistanceImposter();
         Grass.put("farViewingDistanceImposter", farViewingDistanceImposter);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public Float getGrassPlantingRandomness() {
-        return (Float) Grass.get("plantingRandomness");
-    }
-
-    /**
-     *
-     * @param plantingRandomness
-     */
-    public void setGrassPlantingRandomness(Float plantingRandomness) {
-        Grass.put("plantingRandomness", plantingRandomness);
+        fire("farViewingDistanceImposter", old, farViewingDistanceImposter);
     }
     
     /**
@@ -1730,7 +1884,27 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param DensityMap
      */
     public void setGrassDensityMap(String DensityMap) {
+        String old = getGrassDensityMap();
         Grass.put("DensityMap", DensityMap);
+        fire("DensityMap", old, DensityMap);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Float getGrassPlantingRandomness() {
+        return (Float) Grass.get("plantingRandomness");
+    }
+
+    /**
+     *
+     * @param plantingRandomness
+     */
+    public void setGrassPlantingRandomness(Float plantingRandomness) {
+        Float old = getGrassPlantingRandomness();
+        Grass.put("plantingRandomness", plantingRandomness);
+        fire("plantingRandomness", old, plantingRandomness);
     }
 
     /**
@@ -1746,7 +1920,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param patchSize
      */
     public void setGrassPatchSize(Integer patchSize) {
+        Integer old = getGrassPatchSize();
         Grass.put("patchSize", patchSize);
+        fire("patchSize", old, patchSize);
     }
 
     /**
@@ -1770,7 +1946,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setTerrainEnabled(Boolean enabled) {
+        Boolean old = getTerrainEnabled();
         Terrain.put("enabled", enabled);
+        fire("TerrainEnabled", old, enabled);
     }
 
     /**
@@ -1786,7 +1964,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param lod
      */
     public void setTerrainLod(Boolean lod) {
+        Boolean old = getTerrainLod();
         Terrain.put("lod", lod);
+        fire("TerrainLod", old, lod);
     }
 
     /**
@@ -1802,7 +1982,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param ColorMap
      */
     public void setTerrainColorMap(String ColorMap) {
+        String old = getTerrainColorMap();
         Terrain.put("ColorMap", ColorMap);
+        fire("TerrainColorMap", old, ColorMap);
     }
 
     /**
@@ -1818,7 +2000,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param HeightMap
      */
     public void setTerrainHeightMap(String HeightMap) {
+        String old = getTerrainHeightMap();
         Terrain.put("HeightMap", HeightMap);
+        fire("TerrainHeightMap", old, HeightMap);
     }
 
     /**
@@ -1834,7 +2018,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param AlphaMap
      */
     public void setTerrainAlphaMap(String AlphaMap) {
+        String old = getTerrainAlphaMap();
         Terrain.put("AlphaMap", AlphaMap);
+        fire("TerrainAlphaMap", old, AlphaMap);
     }
 
     /**
@@ -1850,7 +2036,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param patchSize
      */
     public void setTerrainPatchSize(Integer patchSize) {
+        Integer old = getTerrainPatchSize();
         Terrain.put("patchSize", patchSize);
+        fire("TerrainPatchSize", old, patchSize);
     }
     
     /**
@@ -1866,7 +2054,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param lod
      */
     public void setTerrainLodMultiplier(Float lod) {
+        Float old = getTerrainLodMultiplier();
         Terrain.put("LodMultiplier", lod);
+        fire("TerrainLodMultiplier", old, lod);
     }
 
     /**
@@ -1882,7 +2072,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setTerrainPosition(Vector3f position) {
+        Vector3f old = getTerrainPosition();
         Terrain.put("position", position);
+        fire("TerrainPosition", old, position);
     }
 
     /**
@@ -1898,7 +2090,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param scale
      */
     public void setTerrainScale(Vector3f scale) {
+        Vector3f old = getTerrainScale();
         Terrain.put("scale", scale);
+        fire("TerrainScale", old, scale);
     }
 
     /**
@@ -1914,7 +2108,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param rotation
      */
     public void setTerrainRotation(Vector3f rotation) {
+        Vector3f old = getTerrainRotation();
         Terrain.put("rotation", rotation);
+        fire("TerrainRotation", old, rotation);
     }
 
     /**
@@ -1930,7 +2126,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param MapX
      */
     public void setFlowMapX(String MapX) {
+        String old = getFlowMapX();
         Flow.put("MapX", MapX);
+        fire("FlowMapX", old, MapX);
     }
 
     /**
@@ -1946,7 +2144,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param MapY
      */
     public void setFlowMapY(String MapY) {
+        String old = getFlowMapY();
         Flow.put("MapY", MapY);
+        fire("FlowMapY", old, MapY);
     }
 
     /**
@@ -1962,7 +2162,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param forceScale
      */
     public void setFlowForceScale(Float forceScale) {
+        Float old = getFlowForceScale();
         Flow.put("forceScale", forceScale);
+        fire("FlowForceScale", old, forceScale);
     }
 
     /**
@@ -1986,7 +2188,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setFlowEnabled(Boolean enabled) {
+        Boolean old = getFPSEnabled();
         Flow.put("enabled", enabled);
+        fire("FlowEnabled", old, enabled);
     }
 
     /**
@@ -2002,7 +2206,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setFlowPosition(Vector3f position) {
+        Vector3f old = getFlowPosition();
         Flow.put("position", position);
+        fire("FlowPosition", old, position);
     }
 
     /**
@@ -2018,7 +2224,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param scale
      */
     public void setFlowScale(Vector3f scale) {
+        Vector3f old = getFlowScale();
         Flow.put("scale", scale);
+        fire("FlowScale", old, scale);
     }
 
     /**
@@ -2034,7 +2242,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param rotation
      */
     public void setFlowRotation(Vector3f rotation) {
+        Vector3f old = getFlowRotation();
         Flow.put("rotation", rotation);
+        fire("FlowRotation", old, rotation);
     }
 
     /**
@@ -2050,7 +2260,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param pollutionMap
      */
     public void setPollutionPollutionMap(String pollutionMap) {
+        String old = getPollutionPollutionMap();
         Pollution.put("pollutionMap", pollutionMap);
+        fire("PollutionPollutionMap", old, pollutionMap);
     }
 
     /**
@@ -2066,7 +2278,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param scaleFactor
      */
     public void setPollutionScaleFactor(Float scaleFactor) {
+        Float old = getPollutionScaleFactor();
         Pollution.put("scaleFactor", scaleFactor);
+        fire("PollutionScaleFactor", old, scaleFactor);
     }
 
     /**
@@ -2082,7 +2296,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param Alpha
      */
     public void setpollutionAlpha(Float Alpha) {
+        Float old = getPollutionAlpha();
         Pollution.put("Alpha", Alpha);
+        fire("PollutionAlpha", old, Alpha);
     }
 
     /**
@@ -2106,7 +2322,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setPollutionEnabled(Boolean enabled) {
+        Boolean old = getPollutionEnabled();
         Pollution.put("enabled", enabled);
+        fire("PollutionEnabled", old, enabled);
     }
 
     /**
@@ -2130,7 +2348,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param visible
      */
     public void setPollutionVisible(Boolean visible) {
+        Boolean old = getPollutionVisible();
         Pollution.put("visible", visible);
+        fire("PollutionVisible", old, visible);
     }
 
     /**
@@ -2154,7 +2374,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param detectable
      */
     public void setPollutionDetectable(Boolean detectable) {
+        Boolean old = getPollutionDetectable();
         Pollution.put("detectable", detectable);
+        fire("PollutionDetectable", old, detectable);
     }
 
     /**
@@ -2170,7 +2392,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setPollutionPosition(Vector3f position) {
+        Vector3f old = getPollutionPosition();
         Pollution.put("position", position);
+        fire("PollutionPosition", old, position);
     }
 
     /**
@@ -2186,7 +2410,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param scale
      */
     public void setPollutionScale(Vector3f scale) {
+        Vector3f old = getPollutionScale();
         Pollution.put("scale", scale);
+        fire("PollutionScale", old, scale);
     }
 
     /**
@@ -2202,7 +2428,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param rotation
      */
     public void setPollutionRotation(Vector3f rotation) {
+        Vector3f old = getPollutionRotation();
         Pollution.put("rotation", rotation);
+        fire("PollutionRotation", old, rotation);
     }
 
     /**
@@ -2226,7 +2454,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setWireFrameEnabled(Boolean enabled) {
+        Boolean old = getWireFrameEnabled();
         WireFrame.put("enabled", enabled);
+        fire("WireFrameEnabled", old, enabled);
     }
 
     /**
@@ -2242,7 +2472,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setWireFrameColor(ColorRGBA color) {
+        ColorRGBA old = getWireFrameColor();
         WireFrame.put("color", color);
+        fire("WireFrameColor", old, color);
     }
 
     /**
@@ -2258,7 +2490,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param selectionColor
      */
     public void setGuiSelectionColor(ColorRGBA selectionColor) {
+        ColorRGBA old = getGuiSelectionColor();
         Gui.put("selectionColor", selectionColor);
+        fire("GuiSelectionColor", old, selectionColor);
     }
 
     /**
@@ -2274,7 +2508,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param collisionColor
      */
     public void setGuiCollisionColor(ColorRGBA collisionColor) {
+        ColorRGBA old = getGuiCollisionColor();
         Gui.put("collisionColor", collisionColor);
+        fire("GuiCollisionColor", old, collisionColor);
     }
 
     /**
@@ -2290,7 +2526,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param AmbientSelection
      */
     public void setGuiAmbientSelection(Boolean AmbientSelection) {
+        Boolean old = getGuiAmbientSelection();
         Gui.put("AmbientSelection", AmbientSelection);
+        fire("GuiAmbientSelection", old, AmbientSelection);
     }
 
     /**
@@ -2306,7 +2544,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param GlowSelection
      */
     public void setGuiGlowSelection(Boolean GlowSelection) {
+        Boolean old = getGuiGlowSelection();
         Gui.put("GlowSelection", GlowSelection);
+        fire("GuiGlowSelection", old, GlowSelection);
     }
 
     /**
@@ -2322,7 +2562,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param PopUpAUVName
      */
     public void setGuiPopUpAUVName(Boolean PopUpAUVName) {
+        Boolean old = getGuiPopUpAUVName();
         Gui.put("PopUpAUVName", PopUpAUVName);
+        fire("GuiPopUpAUVName", old, PopUpAUVName);
     }
 
     /**
@@ -2338,7 +2580,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param PopUpAUVNameDistance
      */
     public void setGuiPopUpAUVNameDistance(Float PopUpAUVNameDistance) {
+        Float old = getGuiPopUpAUVNameDistance();
         Gui.put("PopUpAUVNameDistance", PopUpAUVNameDistance);
+        fire("GuiPopUpAUVNameDistance", old, PopUpAUVNameDistance);
     }
 
     /**
@@ -2346,7 +2590,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param MouseUpdateFollow
      */
     public void setGuiMouseUpdateFollow(Boolean MouseUpdateFollow) {
+        Boolean old = getGuiMouseUpdateFollow();
         Gui.put("MouseUpdateFollow", MouseUpdateFollow);
+        fire("GuiMouseUpdateFollow", old, MouseUpdateFollow);
     }
 
     /**
@@ -2370,7 +2616,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
      * @param headless
      */
     public void setMiscHeadless(Boolean headless) {
+        Boolean old = getMiscHeadless();
         Misc.put("headless", headless);
+        fire("MiscHeadless", old, headless);
     }
 
     @Override
