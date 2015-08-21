@@ -334,6 +334,7 @@ public class XML_JAXB_ConfigReaderWriter {
         return null;
     }
     
+    @SuppressWarnings({"unchecked","rawtypes"})
     private static Class[] getJAXBContextClasses(){
         //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
         Lookup bag = Lookup.getDefault();

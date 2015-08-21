@@ -1361,7 +1361,7 @@
     </Actuators>
     <Accumulators>
         <entry xsi:type="myHashMapEntryTypeAUVObject" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value>
+            <value xsi:type="accumulator">
                 <variables>
 					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
