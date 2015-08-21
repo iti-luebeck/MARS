@@ -50,7 +50,6 @@ import mars.sensors.SalinitySensor;
 import mars.sensors.Sensor;
 import mars.sensors.TemperatureSensor;
 import mars.sensors.TerrainSender;
-import mars.sensors.Transformer;
 import mars.sensors.Velocimeter;
 import mars.sensors.VideoCamera;
 import mars.sensors.VoltageMeter;
@@ -137,11 +136,7 @@ public class RosPublisherFactory {
         if (sensor instanceof TerrainSender) {
             return node.newPublisher(auvName + "/" + sensor.getName(), nav_msgs.OccupancyGrid._TYPE);
         }
-        
-        /*if (sensor instanceof Transformer) {
-            return (Publisher<geometry_msgs.TransformStamped>) node.newPublisher(auvName + "/" + sensor.getName(), geometry_msgs.TransformStamped._TYPE);
-        }*/
-        
+
         if (sensor instanceof CommunicationDevice) {
             return node.newPublisher(auvName + "/" + sensor.getName() + "/out", std_msgs.String._TYPE);
         }
