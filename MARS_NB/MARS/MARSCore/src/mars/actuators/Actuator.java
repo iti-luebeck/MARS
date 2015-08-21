@@ -54,7 +54,6 @@ import mars.states.SimState;
  *
  * @author Thomas Tosik
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Thruster.class, Servo.class, Canon.class, VectorVisualizer.class, PointVisualizer.class, BallastTank.class, Lamp.class, Teleporter.class, Animator.class, Cable.class})
 public abstract class Actuator extends PhysicalExchanger {

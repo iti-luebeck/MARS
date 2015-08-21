@@ -285,7 +285,7 @@
         </params>
     </Parameters>
     <Sensors>
-	    <entry xsi:type="myHashMapEntryTypeSensors" key="wifi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	    <entry xsi:type="myHashMapEntryTypeAUVObject" key="wifi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="wiFi">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -342,7 +342,7 @@
                 </variables>
             </value>
         </entry>
-	    <entry xsi:type="myHashMapEntryTypeSensors" key="gps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	    <entry xsi:type="myHashMapEntryTypeAUVObject" key="gps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="gpsReceiver">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -415,7 +415,7 @@
                 </Positionmeter>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeSensors" key="pollution" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<entry xsi:type="myHashMapEntryTypeAUVObject" key="pollution" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pollutionMeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -455,7 +455,7 @@
                 </variables>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeSensors" key="positionmeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<entry xsi:type="myHashMapEntryTypeAUVObject" key="positionmeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="positionmeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -481,7 +481,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="ampereMeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -512,37 +512,11 @@
                 </accumulators>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeSensors" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value xsi:type="transformer">
-                <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
-                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
-                    </entry>
-                </noise>
-                <variables>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">transformer</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
-                    </entry>
-                </variables>
-            </value>
-        </entry>
     </Sensors>
     <Actuators>
     </Actuators>
     <Accumulators>
-        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <variables>
 					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">

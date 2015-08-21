@@ -288,7 +288,7 @@
         </params>
     </Parameters>
     <Sensors>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="sonar_ground" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="sonar_ground" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imagenexSonar852Echo">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure">
@@ -415,7 +415,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="posemeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -496,7 +496,7 @@
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="camera/frontLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="camera/frontLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="videoCamera">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -551,7 +551,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="pressure/depth" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="pressure/depth" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pressureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -591,7 +591,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="camera/frontRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="camera/frontRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="videoCamera">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -646,7 +646,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="sonar/echo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="sonar/echo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imagenexSonar852Echo">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure">
@@ -766,7 +766,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="sonar/scan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="sonar/scan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imagenexSonar852Scanning">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure">
@@ -880,7 +880,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="ampereMeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -911,7 +911,7 @@
                 </accumulators>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="pressure/temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="pressure/temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="temperatureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -951,7 +951,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="transformer">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -977,7 +977,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imu">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1088,7 +1088,7 @@
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="accelerometer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="accelerometer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="accelerometer">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1116,7 +1116,7 @@
         </entry>
     </Sensors>
     <Actuators>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="motors/backUpLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/backUpLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1176,7 +1176,7 @@
                 </Actions>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeActuators" key="motors/backUpRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/backUpRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1236,7 +1236,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="motors/right" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/right" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1305,7 +1305,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="motors/frontUpLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/frontUpLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1365,7 +1365,7 @@
                 </Actions>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeActuators" key="motors/frontUpRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/frontUpRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1425,7 +1425,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="motors/left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="motors/left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="geomarThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1494,7 +1494,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="lamp/front" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="lamp/front" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="lamp">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1562,7 +1562,7 @@
         </entry>
     </Actuators>
     <Accumulators>
-        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <variables>
 					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">

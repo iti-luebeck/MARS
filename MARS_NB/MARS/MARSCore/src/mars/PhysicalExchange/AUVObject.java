@@ -29,6 +29,10 @@
 */
 package mars.PhysicalExchange;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import mars.accumulators.Accumulator;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 
@@ -37,6 +41,8 @@ import mars.events.AUVObjectListener;
  *
  * @author Thomas Tosik <tosik at iti.uni-luebeck.de>
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSeeAlso({PhysicalExchanger.class, Accumulator.class})
 public interface AUVObject {
 
     /**

@@ -85,11 +85,11 @@ public class MyHashMapType {
             } else if (e.getValue() instanceof HashMap) {
                 entry.add(new MyHashMapEntryTypeHashMap(e));
             } else if (e.getValue() instanceof Actuator) {
-                entry.add(new MyHashMapEntryTypeActuators(e));
+                entry.add(new MyHashMapEntryTypeAUVObject<Actuator>(e));
             } else if (e.getValue() instanceof Sensor) {
-                entry.add(new MyHashMapEntryTypeSensors(e));
+                entry.add(new MyHashMapEntryTypeAUVObject<Sensor>(e));
             } else if (e.getValue() instanceof Accumulator) {
-                entry.add(new MyHashMapEntryTypeAccumulators(e));
+                entry.add(new MyHashMapEntryTypeAUVObject<Accumulator>(e));
             } else if (e.getValue() instanceof List) {
                 entry.add(new MyHashMapEntryTypeArrayList(e));
             } else {

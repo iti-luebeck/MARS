@@ -285,7 +285,7 @@
         </params>
     </Parameters>
     <Sensors>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="posemeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -366,7 +366,7 @@
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="press" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="press" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pressureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -406,7 +406,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="sonar_360" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="sonar_360" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imagenexSonar852Scanning">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="failure">
@@ -520,33 +520,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value xsi:type="transformer">
-                <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
-                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
-                    </entry>
-                </noise>
-                <variables>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">transformer</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
-                    </entry>
-                </variables>
-            </value>
-        </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="temperatureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -586,7 +560,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imu">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -691,7 +665,7 @@
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="front_cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="front_cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="videoCamera">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -755,7 +729,7 @@
         </entry>
     </Sensors>
     <Actuators>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="servoFrontCam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="servoFrontCam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="modelcraftES07">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -825,7 +799,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterPrometheus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterPrometheus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -885,7 +859,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterHyperion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterHyperion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -951,7 +925,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="titan_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="titan_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1021,7 +995,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="hyperion_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="hyperion_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1091,7 +1065,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="prometheus_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="prometheus_controller/command" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="dynamixelAX12PLUS">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1157,7 +1131,7 @@
                 <Actions/>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterTitan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterTitan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="seaBotixThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1223,7 +1197,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="vec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="vec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="vectorVisualizer">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1276,7 +1250,7 @@
         </entry>
     </Actuators>
     <Accumulators>
-        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value>
                 <variables>
 					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">

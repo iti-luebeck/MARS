@@ -29,34 +29,75 @@
 */
 package mars.xml;
 
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
- * The base class for all HashMapEntrys that are in the "list" (MyHashMapType).
  *
  * @author Thomas Tosik
+ * @param <T>
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({MyHashMapEntryTypeHashMap.class, MyHashMapEntryTypeObject.class, MyHashMapEntryTypeVector3f.class, MyHashMapEntryTypeColorRGBA.class, MyHashMapEntryTypeArrayList.class, MyHashMapEntryTypeAUVObject.class})
-public abstract class MyHashMapEntryType {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder={"unit", "key", "value"})
+public class MyHashMapEntryTypeAUVObject<T> extends MyHashMapEntryType{
+    /**
+     * 
+     */
+    @XmlAttribute
+    public String key; 
+    
+    /**
+     * 
+     */
+    @XmlAttribute
+    public String unit; 
+    
+    /**
+     * 
+     */
+    @XmlElement
+    //@XmlJavaTypeAdapter(ActuatorAdapter.class)
+    public T value;
+    
+    /**
+     * 
+     */
+    public MyHashMapEntryTypeAUVObject() {}
+    
+    /**
+     * 
+     * @param e
+     */
+    @SuppressWarnings("unchecked")
+    public MyHashMapEntryTypeAUVObject(Map.Entry<String,Object> e) {
+        key = e.getKey();
+        value = (T)e.getValue();
+    }
+    
+    @Override
+    public String getKey() {
+        return key;
+    }
+    
+    @Override
+    public String getUnit() {
+        return unit;
+    }
 
     /**
-     *
+     * 
      * @return
      */
-    public abstract Object getObject();
-
-    /**
-     *
-     * @return
-     */
-    public abstract String getKey();
-
-    /**
-     *
-     * @return
-     */
-    public abstract String getUnit();
+    public T getValue() {
+        return value;
+    }
+    
+    @Override
+    public T getObject() {
+        return value;
+    }
 }
