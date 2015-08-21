@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
+import mars.energy.EnergyHarvester;
 import mars.sensors.Sensor;
 
 /**
@@ -90,6 +91,8 @@ public class MyHashMapType {
                 entry.add(new MyHashMapEntryTypeAUVObject<Sensor>(e));
             } else if (e.getValue() instanceof Accumulator) {
                 entry.add(new MyHashMapEntryTypeAUVObject<Accumulator>(e));
+            } else if (e.getValue() instanceof EnergyHarvester) {
+                entry.add(new MyHashMapEntryTypeAUVObject<EnergyHarvester>(e));
             } else if (e.getValue() instanceof List) {
                 entry.add(new MyHashMapEntryTypeArrayList(e));
             } else {

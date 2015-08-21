@@ -296,7 +296,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     if (mars.getStateManager().getState(SimState.class) != null) {
                         SimState simState = (SimState) mars.getStateManager().getState(SimState.class);
@@ -323,7 +323,7 @@ public class AUVNode extends AbstractNode implements PropertyChangeListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //propertyChange(new PropertyChangeEvent(this, "enabled", !auvEnabled, auvEnabled));
-            Future simStateFuture = mars.enqueue(new Callable() {
+            mars.enqueue(new Callable() {
                 public Void call() throws Exception {
                     auv.reset();
                     return null;
