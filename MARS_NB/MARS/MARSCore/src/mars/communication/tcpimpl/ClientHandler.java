@@ -39,7 +39,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import org.apache.coyote.http11.filters.FlushableGZIPOutputStream;
 
 /**
  *
@@ -64,7 +64,7 @@ public class ClientHandler implements Runnable {
         try {
             if (connection.isGzipCompressionEnabled()) {
                 writer = new BufferedWriter(new OutputStreamWriter(
-                        new GZIPOutputStream(socket.getOutputStream())));
+                        new FlushableGZIPOutputStream(socket.getOutputStream())));
                 writer.flush();
 
                 reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(
