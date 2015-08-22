@@ -89,9 +89,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     private HashMap<String, Object> Logging;
 
     @XmlTransient
-    private Initializer initer;
-    @XmlTransient
-    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
+    private final List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     private boolean setupAxis = true;
     private boolean setupFog = false;
@@ -195,66 +193,9 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
-        for (int i = 0; i < pcls.length; i++) {
-            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
-    }
-
-    /**
-     * Called to update world stuff when parameters changed.
-     * 
-     * @param target
-     * @param hashmapname
-     */
-    public void updateState(String target, String hashmapname) {
-        if (target.equals("enabled") && hashmapname.equals("Axis")) {
-            initer.hideAxis(isAxisEnabled());
-        } else if (target.equals("enabled") && hashmapname.equals("FPS")) {
-            initer.hideFPS(isFPSEnabled());
-        } else if (target.equals("FrameLimit") && hashmapname.equals("Graphics")) {
-            initer.changeFrameLimit(getFrameLimit());
-        } else if (hashmapname.equals("Light")) {
-            initer.setupLight();
-        } else if (target.equals("enabled") && hashmapname.equals("CrossHairs")) {
-            initer.hideCrossHairs(isCrossHairsEnabled());
-        } else if (target.equals("enabled") && hashmapname.equals("PlaneWater")) {
-            initer.hidePlaneWater(isPlaneWaterEnabled());
-        } else if (hashmapname.equals("PlaneWater")) {
-            initer.setupPlaneWater();
-        } else if (target.equals("enabled") && hashmapname.equals("ProjectedWavesWater")) {
-            initer.hideProjectedWavesWater(isProjectedWavesWaterEnabled());
-        } else if (hashmapname.equals("ProjectedWavesWater")) {
-            initer.updateProjectedWavesWater();
-        } else if (hashmapname.equals("Terrain")) {
-            //initer.updateTerrain();
-        } else if (target.equals("enabled") && hashmapname.equals("Grid")) {
-            initer.hideGrid(isGridEnabled());
-        } else if (hashmapname.equals("Grid")) {
-            initer.setupGrid();
-        } else if (target.equals("speed") && hashmapname.equals("Physics")) {
-            initer.changeSpeed(getPhysicsSpeed());
-        } else if (target.equals("debug") && hashmapname.equals("Physics")) {
-            initer.showPhysicsDebug(getPhysicsDebug());
-        } else if (target.equals("visible") && hashmapname.equals("Pollution")) {
-            initer.hidePollution(isPollutionVisible());
-        } else if (target.equals("hour") && hashmapname.equals("SkyDome")) {
-            initer.getSkyControl().getSunAndStars().setHour(getSkyDomeHour());
-            initer.resetTimeOfDay(getSkyDomeHour());
-        }
-    }
-
-    /**
-     *
-     * @param init
-     */
-    public void setInit(Initializer init) {
-        Initializer old = getInit();
-        this.initer = init;
-        fire("Init", old, init);
-    }
-
-    public Initializer getInit() {
-        return initer;
     }
     
     /**
@@ -1850,7 +1791,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassFarViewingDistance(Float farViewingDistance) {
         Float old = getGrassFarViewingDistance();
         Grass.put("farViewingDistance", farViewingDistance);
-        fire("farViewingDistance", old, farViewingDistance);
+        fire("GrassFarViewingDistance", old, farViewingDistance);
     }
     
     /**
@@ -1868,7 +1809,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassFarViewingDistanceImposter(Float farViewingDistanceImposter) {
         Float old = getGrassFarViewingDistanceImposter();
         Grass.put("farViewingDistanceImposter", farViewingDistanceImposter);
-        fire("farViewingDistanceImposter", old, farViewingDistanceImposter);
+        fire("GrassFarViewingDistanceImposter", old, farViewingDistanceImposter);
     }
     
     /**
@@ -1886,7 +1827,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassDensityMap(String DensityMap) {
         String old = getGrassDensityMap();
         Grass.put("DensityMap", DensityMap);
-        fire("DensityMap", old, DensityMap);
+        fire("GrassDensityMap", old, DensityMap);
     }
     
     /**
@@ -1904,7 +1845,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassPlantingRandomness(Float plantingRandomness) {
         Float old = getGrassPlantingRandomness();
         Grass.put("plantingRandomness", plantingRandomness);
-        fire("plantingRandomness", old, plantingRandomness);
+        fire("GrassPlantingRandomness", old, plantingRandomness);
     }
 
     /**
@@ -1922,7 +1863,7 @@ public class MARS_Settings implements PropertyChangeListenerSupport {
     public void setGrassPatchSize(Integer patchSize) {
         Integer old = getGrassPatchSize();
         Grass.put("patchSize", patchSize);
-        fire("patchSize", old, patchSize);
+        fire("GrassPatchSize", old, patchSize);
     }
 
     /**

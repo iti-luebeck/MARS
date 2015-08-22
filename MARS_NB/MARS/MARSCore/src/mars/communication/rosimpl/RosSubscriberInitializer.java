@@ -47,7 +47,6 @@ import mars.actuators.visualizer.PointVisualizer;
 import mars.actuators.visualizer.VectorVisualizer;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.Sensor;
-import mars.sensors.UnderwaterModem;
 import org.ros.message.MessageListener;
 
 /**
@@ -56,6 +55,7 @@ import org.ros.message.MessageListener;
  */
 public class RosSubscriberInitializer {
 
+    @SuppressWarnings("unchecked")
     public static void createSubscriberForActuator(Actuator actuator, AUVConnectionNode node, String auvName) {
 
         if (actuator == null) {
@@ -223,6 +223,7 @@ public class RosSubscriberInitializer {
         Logger.getLogger(RosSubscriberInitializer.class.getName()).log(Level.WARNING, "Unable to map actuator " + actuator + " to subscriber!", "");
     }
     
+    @SuppressWarnings("unchecked")
     public static void createSubscriberForSensor(Sensor sensor, AUVConnectionNode node, String auvName) {
 
         if (sensor == null) {

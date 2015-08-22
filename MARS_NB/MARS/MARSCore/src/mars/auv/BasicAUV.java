@@ -2159,7 +2159,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             //System.out.println("chordStart: " + chordStart);
             float resolutionLengthCounter = (int) Math.rint(chord / resolution);
             for (int j = 0; j < resolutionLengthCounter; j++) {
-                Vector3f ray_start_new = new Vector3f((float) (ray_start.x + (i * resolution)), (float) (ray_start.y) - extBB.length() - 0.1f, (float) (ray_start.z + (j * resolution) - chordStart));
+                Vector3f ray_start_new = new Vector3f((ray_start.x + (i * resolution)),(ray_start.y) - extBB.length() - 0.1f,(ray_start.z + (j * resolution) - chordStart));
                 float length = 0.0f;
                 float length_air = 0.0f;
                 float volume_center_y = 0.0f;
@@ -2732,6 +2732,35 @@ public class BasicAUV implements AUV, SceneProcessor {
             if(pC != null) {
                 pC.setPhysicsLocation((Vector3f) evt.getNewValue());
             }
+        }else if(evt.getPropertyName().equals("rotation")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                Vector3f vec = (Vector3f) evt.getNewValue();
+                Matrix3f m_rot = new Matrix3f();
+                Quaternion q_rot = new Quaternion();
+                q_rot.fromAngles(vec.x, vec.y, vec.z);
+                m_rot.set(q_rot);
+                pC.setPhysicsRotation(m_rot);
+            }
+        }else if(evt.getPropertyName().equals("modelScale")) {
+            getAUVSpatial().setLocalScale(getAuv_param().getModelScale());
+        }else if(evt.getPropertyName().equals("mass")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                pC.setMass(getAuv_param().getMass());
+            }
+        }else if(evt.getPropertyName().equals("physical_exchanger")){
+            setPhysicalExchangerVisible(getAuv_param().isDebugPhysicalExchanger());
+        }else if(evt.getPropertyName().equals("centers")){
+            setCentersVisible(getAuv_param().isDebugCenters());
+        }else if(evt.getPropertyName().equals("visualizer")){
+            setVisualizerVisible(getAuv_param().isDebugVisualizers());
+        }else if(evt.getPropertyName().equals("bounding")){
+            setBoundingBoxVisible(getAuv_param().isDebugBounding());
+        }else if(evt.getPropertyName().equals("distanceCoveredPathEnabled")){
+            setWaypointsEnabled(getAuv_param().isDistanceCoveredPathEnabled());
+        }else if(evt.getPropertyName().equals("distanceCoveredPathVisiblity")){
+            setWayPointsVisible(getAuv_param().isDistanceCoveredPathVisiblity());
         }
     }
 }

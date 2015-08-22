@@ -95,6 +95,7 @@ public class AdvancedStatsAppState extends StatsAppState{
         this.statsSaveStart = statsSaveStart;
     }
  
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void saveFPSToCSV(){
         int sec = 1;
         FileWriter fileWriter = null;
