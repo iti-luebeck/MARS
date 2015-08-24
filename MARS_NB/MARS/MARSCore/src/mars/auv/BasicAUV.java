@@ -2645,6 +2645,12 @@ public class BasicAUV implements AUV, SceneProcessor {
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
             }
         }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            if (element.isEnabled()) {
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+            }
+        }
     }
 
     /**
