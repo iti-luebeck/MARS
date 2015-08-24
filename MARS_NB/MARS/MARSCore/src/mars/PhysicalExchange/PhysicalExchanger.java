@@ -56,6 +56,7 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
+import mars.energy.EnergyHarvester;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
@@ -70,7 +71,7 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Actuator.class, Sensor.class})
+@XmlSeeAlso({Actuator.class, Sensor.class, EnergyHarvester.class})
 public abstract class PhysicalExchanger extends Noise implements AUVObject, PropertyChangeListenerSupport {
 
     @SuppressWarnings("FieldMayBeFinal")

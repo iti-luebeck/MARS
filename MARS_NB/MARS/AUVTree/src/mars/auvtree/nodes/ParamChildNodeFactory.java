@@ -60,6 +60,11 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
      *
      */
     public static final int SENSORS = 2;
+    
+    /**
+     *
+     */
+    public static final int ENERGY = 4;
 
     /**
      *
@@ -89,6 +94,7 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
         toPopulate.add("" + ACCUMULATORS);
         toPopulate.add("" + ACTUATORS);
         toPopulate.add("" + SENSORS);
+        toPopulate.add("" + ENERGY);
         return true;
     }
 
@@ -111,6 +117,9 @@ public class ParamChildNodeFactory extends ChildFactory<String> {
                 break;
             case SENSORS:
                 n = new ParamNode(ikey, auv.getSensors());
+                break;
+            case ENERGY:
+                n = new ParamNode(ikey, auv.getEnergyHarvesters());
                 break;
             case PARAMETER:
                 n = new PhysicalExchangerNode(auv.getAuv_param(), "Parameter");

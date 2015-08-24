@@ -27,22 +27,24 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package mars.sensors.energy;
+package mars.energy;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import com.rits.cloning.Cloner;
+import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.sensors.Sensor;
 import mars.states.SimState;
-import org.ros.node.topic.Publisher;
 
 /**
  * This is the base class for all energy harvesting devices, e.g. solar panels.
@@ -51,47 +53,71 @@ import org.ros.node.topic.Publisher;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({SolarPanel.class})
-public class EnergyHarvester extends Sensor {
+public class EnergyHarvester extends PhysicalExchanger {
 
     protected Geometry EnergyHarvesterStart;
     private float energy = 0f;
 
-    ///ROS stuff
-    private Publisher<sensor_msgs.FluidPressure> publisher = null;
-    private sensor_msgs.FluidPressure fl;
-    private std_msgs.Header header;
-
     /**
      *
      */
-    public EnergyHarvester() {
-        super();
+    protected SimState simState;
+    /**
+     *
+     */
+    protected MARS_Main mars;
+    /**
+     *
+     */
+    protected AssetManager assetManager;
+
+    public EnergyHarvester(){
+        
+    }
+    
+    /**
+     *
+     * @param simstate
+     */
+    protected EnergyHarvester(SimState simstate) {
+        setSimState(simstate);
+        variables = new HashMap<String, Object>();
     }
 
     /**
      *
-     * @param simstate
+     * @param mars
      * @param pe
      */
-    public EnergyHarvester(SimState simstate, PhysicalEnvironment pe) {
-        super(simstate);
+    protected EnergyHarvester(MARS_Main mars, PhysicalEnvironment pe) {
+        this.mars = mars;
         this.pe = pe;
+        this.assetManager = mars.getAssetManager();
+        variables = new HashMap<String, Object>();
     }
-
-    /**
-     *
-     * @param simstate
-     */
-    public EnergyHarvester(SimState simstate) {
-        super(simstate);
-    }
-
+    
     /**
      *
      * @param sensor
      */
     public EnergyHarvester(EnergyHarvester sensor) {
-        super(sensor);
+        HashMap<String, Object> variablesOriginal = sensor.getAllVariables();
+        Cloner cloner = new Cloner();
+        variables = cloner.deepClone(variablesOriginal);
+
+        HashMap<String, Object> noisevariablesOriginal = sensor.getAllNoiseVariables();
+        noises = cloner.deepClone(noisevariablesOriginal);
+    }
+
+    /**
+     *
+     * @param simState
+     */
+    @Override
+    public void setSimState(SimState simState) {
+        this.simState = simState;
+        this.mars = this.simState.getMARS();
+        this.assetManager = this.mars.getAssetManager();
     }
 
     /**

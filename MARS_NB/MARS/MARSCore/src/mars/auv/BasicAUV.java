@@ -67,7 +67,6 @@ import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import com.rits.cloning.Cloner;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -109,8 +108,7 @@ import mars.auv.example.Manta;
 import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
-import mars.control.GuiControl;import mars.communication.AUVConnection;
-import mars.communication.AUVConnectionFactory;import mars.control.LimitedRigidBodyControl;
+import mars.control.GuiControl;import mars.communication.AUVConnection;import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
@@ -130,8 +128,8 @@ import mars.sensors.RayBasedSensor;
 import mars.sensors.Sensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
-import mars.sensors.energy.EnergyHarvester;
-import mars.sensors.energy.SolarPanel;
+import mars.energy.EnergyHarvester;
+import mars.energy.SolarPanel;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -230,6 +228,9 @@ public class BasicAUV implements AUV, SceneProcessor {
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Accumulators")
     private HashMap<String, Accumulator> accumulators = new HashMap<String, Accumulator>();
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name = "EnergyHarvesters")
+    private HashMap<String, EnergyHarvester> energy = new HashMap<String, EnergyHarvester>();
 
     private EventListenerList listeners = new EventListenerList();
     private CommunicationManager com_manager;
@@ -314,6 +315,14 @@ public class BasicAUV implements AUV, SceneProcessor {
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
+        
+        HashMap<String, EnergyHarvester> energyOriginal = auv.getEnergyHarvesters();
+        for (String elem : energyOriginal.keySet()) {
+            EnergyHarvester element = energyOriginal.get(elem);
+            PhysicalExchanger copy = element.copy();
+            copy.initAfterJAXB();
+            registerPhysicalExchanger(copy);
+        }
 
     }
 
@@ -344,6 +353,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         }
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
+            element.cleanup();
+        }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             element.cleanup();
         }
     }
@@ -480,6 +493,9 @@ public class BasicAUV implements AUV, SceneProcessor {
         } else if (pex instanceof Actuator) {
             actuators.put(pex.getName(), (Actuator) pex);
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
+        } else if (pex instanceof EnergyHarvester) {
+            energy.put(pex.getName(), (EnergyHarvester) pex);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "EnergyHarvester " + pex.getName() + " added...", "");
         }
     }
     
@@ -518,6 +534,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
                 accumulators.remove(pex.getName());
+                energy.remove(pex.getName());
                 pex.cleanup();
                 return null;
             }
@@ -533,6 +550,10 @@ public class BasicAUV implements AUV, SceneProcessor {
         Actuator act = actuators.get(name);
         if (act != null) {
             deregisterPhysicalExchanger(act);
+        }
+        EnergyHarvester ener = energy.get(name);
+        if (ener != null) {
+            deregisterPhysicalExchanger(ener);
         }
     }
 
@@ -561,6 +582,12 @@ public class BasicAUV implements AUV, SceneProcessor {
             accumulators.remove(oldName);
             accumulators.put(newName, acc);
         }
+        EnergyHarvester ener = energy.get(oldName);
+        if (ener != null) {
+            ener.setName(newName);
+            energy.remove(oldName);
+            energy.put(newName, ener);
+        }
     }
 
     /**
@@ -577,6 +604,10 @@ public class BasicAUV implements AUV, SceneProcessor {
 
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
+            element.setNodeVisibility(visible);
+        }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             element.setNodeVisibility(visible);
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "All Sensors/Actuators have visibility: " + visible, "");
@@ -636,6 +667,25 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public HashMap<String, Accumulator> getAccumulators() {
         return accumulators;
+    }
+    
+    /**
+     *
+     * @param key Which unique registered actuator do we want?
+     * @return The actuator that we asked for
+     */
+    @Override
+    public EnergyHarvester getEnergyHarvester(String key) {
+        return energy.get(key);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public HashMap<String, EnergyHarvester> getEnergyHarvesters() {
+        return energy;
     }
 
     /**
@@ -778,9 +828,6 @@ public class BasicAUV implements AUV, SceneProcessor {
                 if (element instanceof PollutionMeter) {
                     ((PollutionMeter) element).setIniter(initer);//is needed for filters
                 }
-                if (element instanceof SolarPanel) {
-                    ((SolarPanel) element).setIniter(initer);//is needed for filters
-                }
                 element.init(auv_node);
                 if (element instanceof Keys) {
                     Keys elementKeys = (Keys) element;
@@ -828,6 +875,29 @@ public class BasicAUV implements AUV, SceneProcessor {
                     moves.setLocalRotationAxisPoints(mani.getWorldRotationAxisPoints());
                     mani.addSlave(moves);
                 }
+            }
+        }
+        //init EnergyHarvesters
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            element.setName(element.getName());
+            element.setAuv(this);
+            if (element.isEnabled() && !element.isInitialized()) {
+                element.setSimState(simstate);
+                element.setMARS_settings(mars_settings);
+                element.setPhysicalEnvironment(physical_environment);
+                element.setPhysicsControl(physics_control);
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                element.setupLogger();
+                if (element instanceof SolarPanel) {
+                    ((SolarPanel) element).setIniter(initer);//is needed for filters
+                }
+                element.init(auv_node);
+                if (element instanceof Keys) {
+                    Keys elementKeys = (Keys) element;
+                    elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
+                }
+                element.setInitialized(true);
             }
         }
     }
@@ -1062,6 +1132,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     /**
      *
      */
+    @Override
     public void clearForces() {
         physics_control.clearForces();
         physics_control.setAngularVelocity(Vector3f.ZERO);
@@ -1078,6 +1149,7 @@ public class BasicAUV implements AUV, SceneProcessor {
         resetAllActuators();
         resetAllSensors();
         resetAllAccumulators();
+        resetAllEnergyHarvesters();
         clearForces();
         distanceCoveredPath.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());
@@ -1152,6 +1224,20 @@ public class BasicAUV implements AUV, SceneProcessor {
             }
         }
     }
+    
+    /**
+     *
+     * @param tpf time per frame
+     */
+    @Override
+    public void updateEnergyHarvesters(float tpf) {
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            if (element.isEnabled()) {
+                element.update(tpf);
+            }
+        }
+    }
 
     /**
      *
@@ -1170,8 +1256,8 @@ public class BasicAUV implements AUV, SceneProcessor {
     @Override
     public void updateAccumulators(float tpf) {
         //update current consumption for the activated sensors
-        for (String elem : sensors.keySet()) {
-            Sensor element = sensors.get(elem);
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             if (element.isEnabled()) {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
@@ -2349,6 +2435,13 @@ public class BasicAUV implements AUV, SceneProcessor {
     private void resetAllSensors() {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
+            element.reset();
+        }
+    }
+    
+    private void resetAllEnergyHarvesters() {
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             element.reset();
         }
     }

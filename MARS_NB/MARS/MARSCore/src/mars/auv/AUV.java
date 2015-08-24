@@ -49,6 +49,7 @@ import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
 import mars.communication.AUVConnection;
 import mars.control.MyCustomGhostControl;
+import mars.energy.EnergyHarvester;
 import mars.object.MARSObject;
 import mars.sensors.Sensor;
 import mars.states.SimState;
@@ -80,6 +81,12 @@ public interface AUV extends MARSObject, PropertyChangeListener {
      * @param tpf
      */
     public void updateActuators(float tpf);
+    
+    /**
+     *
+     * @param tpf
+     */
+    public void updateEnergyHarvesters(float tpf); 
 
     /**
      *
@@ -205,6 +212,19 @@ public interface AUV extends MARSObject, PropertyChangeListener {
      * @return A specific accumulator by its unique name.
      */
     public Accumulator getAccumulator(String key);
+    
+    /**
+     *
+     * @return All sensors registered to this AUV.
+     */
+    public HashMap<String, EnergyHarvester> getEnergyHarvesters();
+    
+    /**
+     *
+     * @param key
+     * @return A specific sensor by its unique name.
+     */
+    public EnergyHarvester getEnergyHarvester(String key);
 
     /**
      *

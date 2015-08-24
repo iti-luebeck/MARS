@@ -35,12 +35,10 @@ import com.rits.cloning.Cloner;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import mars.MARS_Main;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
-import mars.sensors.energy.EnergyHarvester;
 import mars.states.SimState;
 
 /**
@@ -48,13 +46,9 @@ import mars.states.SimState;
  *
  * @author Thomas Tosik
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Accelerometer.class, Gyroscope.class, InfraRedSensor.class, PingDetector.class, PressureSensor.class, SalinitySensor.class, TemperatureSensor.class, Velocimeter.class, VideoCamera.class, IMU.class, CTDSensor.class, Positionmeter.class, Orientationmeter.class, Posemeter.class, TerrainSender.class, GPSReceiver.class, AmpereMeter.class, VoltageMeter.class, FlowMeter.class, PollutionMeter.class, RayBasedSensor.class, CommunicationDevice.class, EnergyHarvester.class})
+@XmlSeeAlso({Accelerometer.class, Gyroscope.class, InfraRedSensor.class, PingDetector.class, PressureSensor.class, SalinitySensor.class, TemperatureSensor.class, Velocimeter.class, VideoCamera.class, IMU.class, CTDSensor.class, Positionmeter.class, Orientationmeter.class, Posemeter.class, TerrainSender.class, GPSReceiver.class, AmpereMeter.class, VoltageMeter.class, FlowMeter.class, PollutionMeter.class, RayBasedSensor.class, CommunicationDevice.class})
 public abstract class Sensor extends PhysicalExchanger {
-    /*
-     * 
-     */
 
     /**
      *
@@ -72,9 +66,6 @@ public abstract class Sensor extends PhysicalExchanger {
      *
      */
     protected Node rootNode;
-    /*
-     * 
-     */
     /**
      *
      */

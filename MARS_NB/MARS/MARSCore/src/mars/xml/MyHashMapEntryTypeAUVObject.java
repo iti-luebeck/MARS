@@ -35,15 +35,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import mars.sensors.Sensor;
 
 /**
  *
  * @author Thomas Tosik
+ * @param <T>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder={"unit", "key", "value"})
-public class MyHashMapEntryTypeSensors extends MyHashMapEntryType{
+public class MyHashMapEntryTypeAUVObject<T> extends MyHashMapEntryType{
     /**
      * 
      */
@@ -61,36 +61,29 @@ public class MyHashMapEntryTypeSensors extends MyHashMapEntryType{
      */
     @XmlElement
     //@XmlJavaTypeAdapter(ActuatorAdapter.class)
-    public Sensor value;
+    public T value;
     
     /**
      * 
      */
-    public MyHashMapEntryTypeSensors() {}
+    public MyHashMapEntryTypeAUVObject() {}
     
     /**
      * 
      * @param e
      */
-    public MyHashMapEntryTypeSensors(Map.Entry<String,Object> e) {
-       key = e.getKey();
-
-       if(e.getValue() instanceof HashMapEntry){
-            if(((HashMapEntry)e.getValue()).getValue() instanceof Sensor){
-                value = (Sensor)((HashMapEntry)e.getValue()).getValue();
-            }
-            unit = ((HashMapEntry)e.getValue()).getUnit(); 
-       }else{
-            if(e.getValue() instanceof Sensor){
-                value = (Sensor)e.getValue();
-            }
-       }
+    @SuppressWarnings("unchecked")
+    public MyHashMapEntryTypeAUVObject(Map.Entry<String,Object> e) {
+        key = e.getKey();
+        value = (T)e.getValue();
     }
     
+    @Override
     public String getKey() {
         return key;
     }
     
+    @Override
     public String getUnit() {
         return unit;
     }
@@ -99,11 +92,12 @@ public class MyHashMapEntryTypeSensors extends MyHashMapEntryType{
      * 
      * @return
      */
-    public Sensor getValue() {
+    public T getValue() {
         return value;
     }
     
-    public Object getObject() {
+    @Override
+    public T getObject() {
         return value;
     }
 }

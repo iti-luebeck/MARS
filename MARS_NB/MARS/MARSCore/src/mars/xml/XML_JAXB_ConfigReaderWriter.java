@@ -51,7 +51,9 @@ import mars.Helper.Helper;
 import mars.KeyConfig;
 import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
+import mars.PhysicalExchange.AUVObject;
 import mars.PhysicalExchange.PhysicalExchanger;
+import mars.accumulators.Accumulator;
 import mars.auv.AUV;
 import mars.auv.AUV_Manager;
 import mars.auv.BasicAUV;
@@ -317,34 +319,7 @@ public class XML_JAXB_ConfigReaderWriter {
     public BasicAUV loadAUV(File file) {
         try {
             if (file.exists()) {
-
-                //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
-                Lookup bag = Lookup.getDefault();
-                // the bag of objects
-                // A query that looks up instances extending "MyClass"...
-                Lookup.Template<BasicAUV> pattern = new Lookup.Template(BasicAUV.class);
-                // The result of the query
-                Lookup.Result<BasicAUV> result = bag.lookup(pattern);
-                Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
-                Class[] toArray = allClasses.toArray(new Class[0]);
-
-                Class[] append = Helper.prepend(toArray, BasicAUV.class);
-
-                Lookup.Template<PhysicalExchanger> pattern2 = new Lookup.Template(PhysicalExchanger.class);
-                // The result of the query
-                Lookup.Result<PhysicalExchanger> result2 = bag.lookup(pattern2);
-                Set<Class<? extends PhysicalExchanger>> allClasses2 = result2.allClasses();
-                Class[] toArray2 = allClasses2.toArray(new Class[0]);
-
-                Class[] append2 = Helper.prepend(toArray2, PhysicalExchanger.class);
-
-                Class[] append3 = Helper.concatClassArrays(append, append2);
-
-                Lookup.Template<AUV_Manager> pattern3 = new Lookup.Template(AUV_Manager.class);
-                Lookup.Result<AUV_Manager> result3 = bag.lookup(pattern3);
-                Collection<? extends AUV_Manager> allInstances = result3.allInstances();
-
-                JAXBContext context = JAXBContext.newInstance(append3);
+                JAXBContext context = JAXBContext.newInstance(getJAXBContextClasses());
                 Unmarshaller u = context.createUnmarshaller();
                 UnmarshallListener ll = new UnmarshallListener();
                 u.setListener(ll);
@@ -358,6 +333,33 @@ public class XML_JAXB_ConfigReaderWriter {
         }
         return null;
     }
+    
+    @SuppressWarnings({"unchecked","rawtypes"})
+    private static Class[] getJAXBContextClasses(){
+        //we have to find new classes from modules/plugins(NBP) and add to them to the jaxbcontext so they can be marshalled
+        Lookup bag = Lookup.getDefault();
+        // the bag of objects
+        // A query that looks up instances extending "MyClass"...
+        Lookup.Template<BasicAUV> pattern = new Lookup.Template(BasicAUV.class);
+        // The result of the query
+        Lookup.Result<BasicAUV> result = bag.lookup(pattern);
+        Set<Class<? extends BasicAUV>> allClasses = result.allClasses();
+        Class[] toArray = allClasses.toArray(new Class[0]);
+
+        Class[] append = Helper.prepend(toArray, BasicAUV.class);
+
+        Lookup.Template<PhysicalExchanger> pattern2 = new Lookup.Template(PhysicalExchanger.class);
+        // The result of the query
+        Lookup.Result<PhysicalExchanger> result2 = bag.lookup(pattern2);
+        Set<Class<? extends PhysicalExchanger>> allClasses2 = result2.allClasses();
+        Class[] toArray2 = allClasses2.toArray(new Class[0]);
+
+        Class[] append2 = Helper.prepend(toArray2, PhysicalExchanger.class);
+        Class[] append4 = Helper.prepend(append2, Accumulator.class);
+
+        Class[] append3 = Helper.concatClassArrays(append, append4);
+        return append3;
+    }
 
     /**
      *
@@ -365,6 +367,7 @@ public class XML_JAXB_ConfigReaderWriter {
      * @return
      */
     @SuppressWarnings({"unchecked","rawtypes"})
+    @Deprecated
     public BasicAUV loadAUV(String name) {
         try {
             File file = InstalledFileLocator.getDefault().locate("config/" + getConfigName() + "/auvs/" + name + ".xml", "mars.core", false);
@@ -403,7 +406,7 @@ public class XML_JAXB_ConfigReaderWriter {
      */
     public static String saveAUV(BasicAUV auv, File file) {
         try {
-            JAXBContext context = JAXBContext.newInstance(BasicAUV.class);
+            JAXBContext context = JAXBContext.newInstance(getJAXBContextClasses());
             Marshaller m = context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             File auvfile = new File(file, auv.getName() + ".xml");
