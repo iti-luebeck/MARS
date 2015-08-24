@@ -105,13 +105,20 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         listeners.remove(pcl);
     }
 
+    /**
+     *
+     */
+    @Override
+    public void removeAllPropertyChangeListeners() {
+        listeners.clear();
+    }
+    
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (PropertyChangeListener pcl : pcls) {
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
-        //updateVariable(propertyName);
     }
 
     /**

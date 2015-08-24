@@ -119,6 +119,14 @@ public class PhysicalEnvironment implements PropertyChangeListenerSupport {
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
     }
+    
+    /**
+     *
+     */
+    @Override
+    public void removeAllPropertyChangeListeners() {
+        listeners.clear();
+    }
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:

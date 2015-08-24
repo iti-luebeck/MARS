@@ -293,6 +293,7 @@ public class BasicAUV implements AUV, SceneProcessor {
     public BasicAUV(AUV auv) {
         initAfterJAXB();
         AUV_Parameters auvCopy = auv.getAuv_param().copy();
+        auvCopy.removeAllPropertyChangeListeners();
         setAuv_param(auvCopy);
 
         //clone accumulators, since they are simple no big problem here
@@ -359,6 +360,7 @@ public class BasicAUV implements AUV, SceneProcessor {
             EnergyHarvester element = energy.get(elem);
             element.cleanup();
         }
+        getAuv_param().removePropertyChangeListener(this);
     }
 
     /**
@@ -2545,6 +2547,7 @@ public class BasicAUV implements AUV, SceneProcessor {
      */
     @Override
     public void cleanup() {
+        //cleanupAUV();
     }
 
     /**

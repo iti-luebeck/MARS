@@ -98,6 +98,14 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, Prop
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
     }
+    
+    /**
+     *
+     */
+    @Override
+    public void removeAllPropertyChangeListeners() {
+        listeners.clear();
+    }
 
     protected void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
