@@ -142,7 +142,12 @@ public class RosPublisherFactory {
         }
 
         if (sensor instanceof VideoCamera) {
-            return node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Image._TYPE);
+            VideoCamera vidCam = (VideoCamera)sensor;
+            if(!vidCam.getCompressed()){
+                return node.newPublisher(auvName + "/" + sensor.getName(), sensor_msgs.Image._TYPE);
+            }else{
+                return node.newPublisher(auvName + "/" + sensor.getName() + "/compressed", sensor_msgs.CompressedImage._TYPE);
+            }
         }
 
         Logger.getLogger(RosPublisherFactory.class.getName()).log(Level.WARNING, "Unable to map sensor " + sensor + " to publisher!", "");

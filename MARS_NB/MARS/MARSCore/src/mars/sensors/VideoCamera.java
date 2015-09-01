@@ -192,6 +192,22 @@ public class VideoCamera extends Sensor implements Moveable {
     public void setCameraWidth(Integer CameraWidth) {
         variables.put("CameraWidth", CameraWidth);
     }
+    
+        /**
+     *
+     * @return
+     */
+    public Boolean getCompressed() {
+        return (Boolean) variables.get("Compressed");
+    }
+
+    /**
+     *
+     * @param Compressed
+     */
+    public void setCompressed(Boolean Compressed) {
+        variables.put("Compressed", Compressed);
+    }
 
     /**
      *
@@ -407,10 +423,12 @@ public class VideoCamera extends Sensor implements Moveable {
      *
      * @return
      */
+    @Deprecated
     public ChannelBuffer getChannelBufferImage() {
         return ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, updateImageContents());
     }
 
+    @Override
     public void update(float tpf) {
         offCamera.setLocation(CameraStart.getWorldTranslation());
         offCamera.lookAt(CameraEnd.getWorldTranslation(), CameraTop.getWorldTranslation().subtract(CameraStart.getWorldTranslation()).normalize().negate());
@@ -465,8 +483,7 @@ public class VideoCamera extends Sensor implements Moveable {
     @Override
     public void publishData() {
         super.publishData();
-        ChannelBuffer channelBufferImage = this.getChannelBufferImage();
-        CameraData camData = new CameraData(getCameraHeight(), getCameraWidth(), getFormat(), channelBufferImage);
+        CameraData camData = new CameraData(getCameraHeight(), getCameraWidth(), getFormat(), getImage());
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, camData, System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

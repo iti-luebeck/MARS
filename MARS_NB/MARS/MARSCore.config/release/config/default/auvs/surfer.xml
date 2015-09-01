@@ -523,6 +523,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="Compressed">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="CameraDirection">
                         <value>
                             <x>0.0</x>
@@ -614,6 +617,9 @@
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="Compressed">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeVector3F" key="CameraDirection">

@@ -41,9 +41,22 @@ import geometry_msgs.Vector3Stamped;
 import hanse_msgs.Ampere;
 import hanse_msgs.EchoSounder;
 import hanse_msgs.ScanningSonar;
+import java.awt.Point;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import mars.Helper.Helper;
 import mars.misc.CameraData;
 import mars.misc.IMUData;
@@ -75,6 +88,7 @@ import mars.sensors.VoltageMeter;
 import mars.sensors.sonar.ImagenexSonar_852_Echo;
 import mars.sensors.sonar.ImagenexSonar_852_Scanning;
 import nav_msgs.OccupancyGrid;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.ros.internal.message.Message;
 import org.ros.message.Time;
@@ -327,9 +341,10 @@ public class RosMessageFactory {
 
           
         if (sensor instanceof VideoCamera) {
+            VideoCamera vidCam = (VideoCamera) sensor;
+            if(!vidCam.getCompressed()){
                 sensor_msgs.Image message = node.getMessageFactory().newFromType(sensor_msgs.Image._TYPE);
                 message.setHeader(createHeader(node, sensor));
-
                 try {
                     CameraData camData = (CameraData) sensorData;
                     message.setHeight(camData.getHeight());
@@ -338,37 +353,41 @@ public class RosMessageFactory {
                     //message.setEncoding("bgra8");
                     message.setIsBigendian((byte) 1);
                     message.setStep(camData.getWidth() * 4);
-                    /*byte[] bb = new byte[getCameraWidth()*getCameraHeight()*4];
-                    for (int i = 0; i < 100000; i++) {
-                    if(i%4!=0){
-                    bb[i] = (byte)255;
-                    }else{
-                    bb[i] = (byte)(-1);
-                    }
-                    }
-                    fl.data = bb;*/
-                   /*private final VideoCamera self = this;
-                    Future fut = mars.enqueue(new Callable() {
-                    public void call() throws Exception {
-                    return self.getImage();
-                    }
-                    });*/
-
-                   /* byte[] ros_image = new byte[CameraHeight*CameraWidth*4]; 
-                    ros_image = this.getImage();
-                    for (int i = 0; i < CameraHeight*CameraWidth*4; i++) {
-                    if(i%4==0 && i!=0){
-                    ros_image[i-1] = (byte)(0);
-                    }
-                    }
-                    fl.data = ros_image;*/
-                    message.setData(camData.getData());    
+                    
+                    ChannelBuffer copiedBuffer = ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, camData.getData());
+                    message.setData(copiedBuffer);    
                 } catch (Exception e) {
                     Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
                     return null;
                 }
-
                 return message;
+            }else{
+                sensor_msgs.CompressedImage message = node.getMessageFactory().newFromType(sensor_msgs.CompressedImage._TYPE);
+                message.setHeader(createHeader(node, sensor));
+                try {
+                    CameraData camData = (CameraData) sensorData;
+                    message.setFormat("png");
+
+                    DataBuffer buffer = new DataBufferByte(camData.getData(), camData.getData().length);
+
+                    WritableRaster raster = Raster.createInterleavedRaster(buffer, camData.getWidth(), camData.getHeight(), 4 * camData.getWidth(), 4, new int[] {2, 1, 0}, (Point)null);
+                    ColorModel cm = new ComponentColorModel(ColorModel.getRGBdefault().getColorSpace(), false, true, Transparency.OPAQUE, DataBuffer.TYPE_BYTE); 
+                    BufferedImage image = new BufferedImage(cm, raster, true, null);
+                    
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    ImageIO.write(image, "png", out);
+
+                    byte[] imageBytes = out.toByteArray(); 
+                    ChannelBuffer copiedBuffer = ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, imageBytes);
+                    
+                    message.setData(copiedBuffer);    
+                } catch (IOException e) {
+                    Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
+                    return null;
+                }
+                return message;
+            }
+                
         }
  
         if (sensor instanceof GPSReceiver) {

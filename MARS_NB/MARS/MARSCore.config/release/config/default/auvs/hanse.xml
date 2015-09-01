@@ -513,6 +513,9 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="Compressed">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraWidth">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">640</value>
                     </entry>
@@ -607,6 +610,9 @@
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="Compressed">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraWidth">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">640</value>

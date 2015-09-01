@@ -39,13 +39,13 @@ public class CameraData {
     final private int width;
     final private int height;
     final private String format;
-    final private ChannelBuffer data;
+    final private byte[] data;
     
     public CameraData() {
         this(0,0,"",null);
     }
     
-    public CameraData(int height, int width, String format, ChannelBuffer data) {
+    public CameraData(int height, int width, String format, byte[] data) {
         this.width = width;
         this.height = height;
         this.format = format;
@@ -64,7 +64,7 @@ public class CameraData {
         return format;
     }
 
-    public ChannelBuffer getData() {
+    public byte[] getData() {
         return data;
     }
 }
