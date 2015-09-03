@@ -179,9 +179,6 @@ public class MARS_Main extends SimpleApplication {
         if (stateManager.getState(DebugKeysAppState.class) != null) {
             stateManager.getState(DebugKeysAppState.class).setEnabled(false);
         }
-        if (stateManager.getState(ResetStatsState.class) != null) {
-            stateManager.getState(ResetStatsState.class).setEnabled(false);
-        }
         //overrirde standard flybycam/kill it completely      
         flyCam.setEnabled(false);
         flyCam.unregisterInput();
