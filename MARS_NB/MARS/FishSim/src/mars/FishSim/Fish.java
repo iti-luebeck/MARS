@@ -52,25 +52,27 @@ import mars.control.MyLodControl;
 public class Fish extends Node {
 
     /**
-     *
+     * controller of the fish
      */
-    public Swarm swarm;
     private final FishControl control;
+    
+    /**
+     * 
+     */
     private final Node model;
+    
+    /**
+     * controller for swim animation
+     */
     private AnimControl modelControl;
 
     /**
-     *
+     * channel for swim animation
      */
     public AnimChannel channel_swim;
 
     /**
-     *
-     */
-    public FishSim sim;
-
-    /**
-     *
+     * last movement vector
      */
     public Vector3f lastMove = new Vector3f().zero();
 
@@ -81,9 +83,10 @@ public class Fish extends Node {
     private final List<Geometry> listGeoms = new ArrayList<Geometry>();
 
     /**
-     *
+     * movement speed of the fish
      */
-    public float moveSpeed = 0;
+    private float moveSpeed = 0;
+
 
     /**
      *
@@ -104,31 +107,35 @@ public class Fish extends Node {
      * @param animation Animation on/off
      */
     public Fish(FishSim sim, Vector3f scale, Vector3f localTrans, Swarm swarm, String path, boolean animation) {
-        this.sim = sim;
         model = (Node) sim.getMain().getAssetManager().loadModel(path);
         if (animation) {
             modelControl = model.getChild("Cube").getControl(AnimControl.class);
             channel_swim = modelControl.createChannel();
             channel_swim.setAnim("ArmatureAction.001");
             channel_swim.setLoopMode(LoopMode.Loop);
+            channel_swim.setSpeed(1f);
         }
-        //optimize(model);
+        optimize(model, sim);
         attachChild(model);
         setLocalScale(scale);
         setLocalTranslation(localTrans);
-        this.swarm = swarm;
-        control = new FishControl(this);
+        //this.swarm = swarm;
+        control = new FishControl(this, swarm, sim);
+    }
+
+    public float getMoveSpeed() {
+        return moveSpeed;
     }
 
     /**
      *
-     * @param swarm Swarm where the fish belongs to
+     * @param swarm Swarm the fish belongs to
      */
     public void setSwarm(Swarm swarm) {
-        this.swarm = swarm;
+        control.setSwarm(swarm);
     }
 
-    private void optimize(Node node) {
+    private void optimize(Node node, FishSim sim) {
 
         //jme3tools.optimize.GeometryBatchFactory.optimize(model);
         for (Spatial spatial : node.getChildren()) {
@@ -143,7 +150,7 @@ public class Fish extends Node {
                 lodControl.setCam(sim.getMain().getCamera());
                 geo.addControl(lodControl);
             } else if (spatial instanceof Node) {
-                optimize((Node) spatial);
+                optimize((Node) spatial, sim);
             }
         }
     }
@@ -173,7 +180,7 @@ public class Fish extends Node {
      * @param speed Movement speed
      */
     public void setMoveSpeed(float speed) {
-        this.moveSpeed = speed;
+        moveSpeed = speed;
     }
 
     /**
@@ -181,7 +188,7 @@ public class Fish extends Node {
      * @param speed Rotation speed
      */
     public void setRotationSpeed(float speed) {
-        this.rotationSpeed = speed;
+        rotationSpeed = speed;
     }
 
     /**

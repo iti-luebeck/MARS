@@ -127,7 +127,7 @@ public class Swarm implements IFoodSource {
     /**
      *
      */
-    public float moveSpeed = 1f;
+    private float moveSpeed = 1f;
 
     /**
      *
@@ -145,7 +145,12 @@ public class Swarm implements IFoodSource {
     /**
      *
      */
-    public float escapeInc = 0;
+    private float escapeInc = 0;
+
+    public float getEscapeInc() {
+        return escapeInc;
+    }
+    
     private Vector3f lastCenter = Vector3f.ZERO;
     private boolean collided = false;
     private boolean viewCollided = false;
@@ -170,7 +175,8 @@ public class Swarm implements IFoodSource {
     /**
      * Creates a new default swarm.
      */
-    public Swarm(){
+    public Swarm(FishSim sim){
+        this.sim = sim;
         swarm = new ArrayList<Fish>();
         setInitSize(10);
         setMoveSpeed(0.5f);
@@ -187,7 +193,9 @@ public class Swarm implements IFoodSource {
         near = (float) 3 * scale.length();
         
         
-        //initCollidable();
+        initCollidable();
+        
+        FishSimLookup.instance().addToLookup(this);
     }
 
     /**
@@ -241,7 +249,7 @@ public class Swarm implements IFoodSource {
     }
     
     /**
-     * 
+     * Creates an amount of fishes depending on the initSize of the swarm.
      */
     public void createFish(){
         for (int i = 0; i < getInitSize(); i++) {
@@ -497,12 +505,12 @@ public class Swarm implements IFoodSource {
         ArrayList<Fish> neigh = new ArrayList<Fish>();
         float dist;
         float angle;
-        for (int i = 0; i < swarm.size(); i++) {
-            dist = fish.getLocalTranslation().distance(swarm.get(i).getLocalTranslation());
+        for (Fish swarmFish : swarm) {
+            dist = fish.getLocalTranslation().distance(swarmFish.getLocalTranslation());
             if (dist <= near) {
-                angle = (float) Math.toDegrees(fish.lastMove.normalize().angleBetween(swarm.get(i).getLocalTranslation().subtract(fish.getLocalTranslation()).normalize()));
+                angle = (float) Math.toDegrees(fish.lastMove.normalize().angleBetween(swarmFish.getLocalTranslation().subtract(fish.getLocalTranslation()).normalize()));
                 if (angle < 150f) {
-                    neigh.add(swarm.get(i));
+                    neigh.add(swarmFish);
                 }
             }
         }

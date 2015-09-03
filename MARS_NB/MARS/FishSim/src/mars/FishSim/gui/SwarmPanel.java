@@ -31,15 +31,21 @@ package mars.FishSim.gui;
 
 import mars.FishSim.food.FoodSourceMap;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import mars.FishSim.FishSim;
+import mars.FishSim.FishSimLookup;
 import mars.FishSim.Swarm;
+import org.openide.util.Lookup.Result;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
-public final class SwarmPanel extends javax.swing.JPanel {
+public final class SwarmPanel extends javax.swing.JPanel implements LookupListener {
 
     private final SwarmOptionsPanelController controller;
     private final FishSim sim;
     private int[] selectedSwarms = new int[0];
     private int foodSourceMap = -1;
+    private final Result<Swarm> lookupResult;
 
     SwarmPanel(SwarmOptionsPanelController controller) {
         this.controller = controller;
@@ -48,6 +54,11 @@ public final class SwarmPanel extends javax.swing.JPanel {
         }
         sim = FishSim.getInstance();
         sim.setSwarmPanel(this);
+        
+        lookupResult = FishSimLookup.instance().lookupResult(Swarm.class);
+        lookupResult.addLookupListener(this);
+        updateSwarmList((LinkedList<Swarm>) lookupResult.allInstances());
+        
         // TODO listen to changes in form fields and call controller.changed()
     }
 
@@ -346,12 +357,12 @@ public final class SwarmPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //sim.addSwarm(size.getText() + " " + sX.getText() + " " + sY.getText() + " " + sZ.getText() + " " + deviat.getText() + " " + tX.getText() + " " + tY.getText() + " " + tZ.getText() + " " + type.getText() + " " + path.getText() + " " + new Boolean(anim.isSelected()).toString() + " " + foodSourceMap + " " + mSpeed.getText() + " " + rSpeed.getText());
-        Swarm swarm = new Swarm();
+        Swarm swarm = new Swarm(sim);
         sim.addSwarm(swarm);
         foodSourceMap = -1;
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void updateSwarmList(ArrayList<Swarm> swarmList) {
+    public void updateSwarmList(LinkedList<Swarm> swarmList) {
         javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) swarms.getModel();
         model.clear();
         for (int i = 1; i <= swarmList.size(); i++) {
@@ -462,4 +473,9 @@ public final class SwarmPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tZ;
     private javax.swing.JTextField type;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void resultChanged(LookupEvent ev) {
+        updateSwarmList((LinkedList<Swarm>) lookupResult.allInstances());
+    }
 }

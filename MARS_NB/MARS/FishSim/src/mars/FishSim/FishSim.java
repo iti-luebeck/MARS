@@ -144,9 +144,9 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         }
 
         super.initialize(stateManager, app);
-        setInstance(this);
+        instance = this;
         
-        Swarm swarm = new Swarm();
+        Swarm swarm = new Swarm(this);
         this.addSwarm(swarm);
     }
 
@@ -317,7 +317,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         if (sPanel != null && fSPanel != null && fSMPanel != null) {
             if (swarmsChanged || fSChanged) {
                 if (swarmsChanged) {
-                    sPanel.updateSwarmList(swarms);
+                    //sPanel.updateSwarmList(swarms);
                     swarmsChanged = false;
                 }
                 if (fSChanged) {
@@ -352,6 +352,10 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         fSMChanged = true;
     }
     
+    /**
+     * Add swarms from queue to swarm list.
+     * Called in the update loop.
+     */
     private void newSwarmsAdded() {
         for (Swarm swarm : newSwarms) {
             swarm.setSim(this);
@@ -458,10 +462,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
      */
     public int getFoodSourcesSize() {
         return sources.size();
-    }
-
-    private void setInstance(FishSim sim) {
-        instance = sim;
     }
 
     /**
