@@ -396,9 +396,9 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     private void setupPhysics() {
         bulletAppState = new BulletAppState();
-        //if (mars_settings.getPhysicsDebug()) {
+        if (mars_settings.getPhysicsDebug()) {
             bulletAppState.setDebugEnabled(true);
-        //}
+        }
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
