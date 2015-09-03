@@ -115,8 +115,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     private KeyConfig keyconfig;
     private PhysicalEnvironment physical_environment;
     private Initializer initer;
-    private ArrayList<AUV> auvs = new ArrayList<AUV>();
-    private ArrayList<SimObject> simobs = new ArrayList<SimObject>();
+    private ArrayList<AUV> auvs = new ArrayList<>();
+    private ArrayList<SimObject> simobs = new ArrayList<>();
     private XML_JAXB_ConfigReaderWriter xml;
     private ConfigManager configManager;
 
@@ -129,9 +129,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     private Node SimObNodes = new Node("SimObNodes");
     //warter currents
     private Node currents = new Node("currents");
-
-    @SuppressWarnings("unchecked")
-    private Future<Void> simStateFuture = null;
 
     //map stuff
     private MapState mapState;
@@ -399,6 +396,9 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     private void setupPhysics() {
         bulletAppState = new BulletAppState();
+        //if (mars_settings.getPhysicsDebug()) {
+            bulletAppState.setDebugEnabled(true);
+        //}
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
@@ -408,10 +408,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         /*if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
          mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
          }*/ //doesnt work here because DebugAppState suuuuuucks
-        if (mars_settings.getPhysicsDebug()) {
-            bulletAppState.setDebugEnabled(true);
-        }
-
+        
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f / mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
@@ -784,7 +781,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void startSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
                 initial_ready = true;
@@ -800,7 +797,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void pauseSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.setEnabled(false);
                 bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -817,7 +814,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void restartSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();

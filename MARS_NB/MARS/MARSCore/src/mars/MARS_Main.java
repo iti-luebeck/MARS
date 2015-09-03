@@ -29,7 +29,9 @@
  */
 package mars;
 
+import com.jme3.app.DebugKeysAppState;
 import com.jme3.app.FlyCamAppState;
+import com.jme3.app.ResetStatsState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AbstractAppState;
@@ -173,6 +175,12 @@ public class MARS_Main extends SimpleApplication {
         //deactivate the state, solves maybe wasd problems
         if (stateManager.getState(FlyCamAppState.class) != null) {
             stateManager.getState(FlyCamAppState.class).setEnabled(false);
+        }
+        if (stateManager.getState(DebugKeysAppState.class) != null) {
+            stateManager.getState(DebugKeysAppState.class).setEnabled(false);
+        }
+        if (stateManager.getState(ResetStatsState.class) != null) {
+            stateManager.getState(ResetStatsState.class).setEnabled(false);
         }
         //overrirde standard flybycam/kill it completely      
         flyCam.setEnabled(false);
