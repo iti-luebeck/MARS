@@ -322,14 +322,33 @@ public class Helper {
      * @return
      */
     public static String getROSEncoding(Format key) {
-        EnumMap<Format, String> stateMap = new EnumMap<Format, String>(Format.class);
+        EnumMap<Format, String> stateMap = new EnumMap<>(Format.class);
         stateMap.put(Format.RGB8, "rgb8");
         stateMap.put(Format.RGBA8, "rgba8");
         stateMap.put(Format.RGB16, "rgb16");
         stateMap.put(Format.RGBA16, "rgba16");
-        stateMap.put(Format.BGR8, "bgra8");
+        stateMap.put(Format.BGR8, "bgr8");
         stateMap.put(Format.Luminance8, "mono8");
         stateMap.put(Format.Luminance16, "mono16");
         return stateMap.get(key);
+    }
+    
+    /**
+     * 
+     * @param data
+     * @param skip
+     * @return 
+     */
+    public static byte[] skipEveryNthByteInArray(byte[] data, int skip){
+        byte[] compressedData = new byte[data.length-data.length/4];
+        int skipped = 0;
+        for (int i = 0; i < data.length; i++) {
+            if((i+1)%4==0){
+                skipped++;
+            }else{
+                compressedData[i-skipped] = data[i];
+            }
+        }
+        return compressedData;
     }
 }

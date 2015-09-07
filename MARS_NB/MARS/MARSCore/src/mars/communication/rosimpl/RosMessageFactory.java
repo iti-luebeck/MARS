@@ -51,7 +51,6 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.logging.Level;
@@ -350,11 +349,19 @@ public class RosMessageFactory {
                     message.setHeight(camData.getHeight());
                     message.setWidth(camData.getWidth());
                     message.setEncoding(Helper.getROSEncoding(Image.Format.valueOf(camData.getFormat())));
-                    //message.setEncoding("bgra8");
-                    message.setIsBigendian((byte) 1);
-                    message.setStep(camData.getWidth() * 4);
-                    
-                    ChannelBuffer copiedBuffer = ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, camData.getData());
+                    message.setIsBigendian((byte) 0);
+                    message.setStep(camData.getWidth() * 3);
+                    //Stream<byte[]> of = Stream.of(camData.getData());
+                    /*byte[] data = camData.getData();
+                    List<byte[]> asList = Arrays.stasList(data);
+                    int skip = 4;
+                    int size = asList.size();
+                    // Limit to carefully avoid IndexOutOfBoundsException
+                    int limit = size / skip + Math.min(size % skip, 1);
+                    List<byte[]> collect = Stream.iterate(asList, l -> l.subList(skip, l.size())).limit(limit).map(l -> l.get(0)).collect(Collectors.toList());*/
+                    byte[] data = camData.getData();
+                    byte[] compressedData = Helper.skipEveryNthByteInArray(data,4);
+                    ChannelBuffer copiedBuffer = ChannelBuffers.copiedBuffer(ByteOrder.LITTLE_ENDIAN, compressedData);
                     message.setData(copiedBuffer);    
                 } catch (Exception e) {
                     Logger.getLogger(RosMessageFactory.class.getName()).log(Level.WARNING, "Parsing sensorData from " + sensor.getName() + " caused an exception: " + e.getLocalizedMessage(), "");
