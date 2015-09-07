@@ -36,6 +36,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -126,9 +128,11 @@ public class GPSReceiver extends Sensor {
         mark_mat7.setColor("Color", ColorRGBA.White);
         GPSReceiverGeom.setMaterial(mark_mat7);
         GPSReceiverGeom.updateGeometricState();
+        Vector3f worldToLocal = GPSReceiverGeom.worldToLocal(Vector3f.ZERO, null);
+        GPSReceiverGeom.setLocalTranslation(worldToLocal);
         PhysicalExchanger_Node.attachChild(GPSReceiverGeom);
         PhysicalExchanger_Node.setLocalTranslation(getReferencePointWorld());
-        rootNode.attachChild(PhysicalExchanger_Node);
+        //auv_node.attachChild(PhysicalExchanger_Node);
     }
 
     /**

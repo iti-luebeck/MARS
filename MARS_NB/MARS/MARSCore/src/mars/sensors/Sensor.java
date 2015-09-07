@@ -144,5 +144,4 @@ public abstract class Sensor extends PhysicalExchanger {
     public void cleanup() {
         super.cleanup();
     }
-
 }

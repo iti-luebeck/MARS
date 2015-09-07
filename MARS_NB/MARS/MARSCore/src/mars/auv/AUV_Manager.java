@@ -31,6 +31,8 @@ package mars.auv;
 
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -411,6 +413,8 @@ public class AUV_Manager extends MARSObjectManager<AUV> {
             addAUVToNode(auv, AUVsNode);
             addAUVToBulletAppState(auv, bulletAppState);
             addAUVtoMap(auv);
+        }else{
+            auv.setPhysicalExchangerVisible(false);
         }
     }
 

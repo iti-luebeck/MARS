@@ -1264,7 +1264,7 @@ public class BasicAUV implements AUV, SceneProcessor {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
                     if (element instanceof EnergyHarvester) {//we have someone who gives us energy
-                        EnergyHarvester energyHarvester = (EnergyHarvester) element;
+                        EnergyHarvester energyHarvester = element;
                         acc.addActualCurrent(energyHarvester.getEnergy());
                         energyHarvester.setEnergy(0f);// We have transfered the energy into the accumulator, clean the energyHarvester.
                     } else {// we have someone who wants energy
