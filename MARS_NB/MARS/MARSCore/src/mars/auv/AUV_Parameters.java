@@ -682,6 +682,24 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         buoyancy.put("updaterate", updaterate);
         fire("updaterate", old, updaterate);
     }
+    
+    /**
+     *
+     * @return
+     */
+    public String getBuoyancyFilepath() {
+        return (String) buoyancy.get("filepath");
+    }
+
+    /**
+     *
+     * @param filepath
+     */
+    public void setBuoyancyFilepath(String filepath) {
+        String old = getModelFilepath();
+        buoyancy.put("filepath", filepath);
+        fire("filepath", old, filepath);
+    }
 
     /**
      *

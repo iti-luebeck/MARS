@@ -248,8 +248,8 @@ public class MapState extends MARSAppState implements AppStateExtension {
                     auv_nodes.put(auv.getName(), auvNode);
 
                     //adding propagation distance of underwater modems
-                    ArrayList uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
-                    Iterator it = uws.iterator();
+                    ArrayList<Sensor> uws = auv.getSensorsOfClass(UnderwaterModem.class.getName());
+                    Iterator<Sensor> it = uws.iterator();
                     while (it.hasNext()) {
                         UnderwaterModem uw = (UnderwaterModem) it.next();
                         Cylinder uw_geom_sphere = new Cylinder(16, 16, uw.getPropagationDistance() * (2f / (terx_px * tile_length)), 0.1f, true);
@@ -273,7 +273,7 @@ public class MapState extends MARSAppState implements AppStateExtension {
                     }
 
                     //adding sonar cones
-                    ArrayList sons = auv.getSensorsOfClass(Sonar.class.getName());
+                    ArrayList<Sensor> sons = auv.getSensorsOfClass(Sonar.class.getName());
                     it = sons.iterator();
                     while (it.hasNext()) {
                         Sonar son = (Sonar) it.next();

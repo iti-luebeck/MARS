@@ -762,7 +762,7 @@ public class Initializer implements PropertyChangeListener{
         y_axis.updateGeometricState();
         axisNode.attachChild(y_axis);
 
-        Geometry x_axis = new Geometry("x_axis!", new Arrow(Vector3f.UNIT_X.mult(1)));
+        Geometry x_axis = new Geometry("x_axis!", new Arrow(Vector3f.UNIT_X.mult(0.66f)));
         Material x_axis_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         x_axis_mat.setColor("Color", ColorRGBA.Blue);
         x_axis.setMaterial(x_axis_mat);

@@ -56,8 +56,8 @@ import mars.MARS_Settings;
  */
 public class DistanceCoveredPath extends Node {
 
-    private ArrayList<Vector3f> path = new ArrayList<Vector3f>();
-    private ArrayList<Geometry> path_geom = new ArrayList<Geometry>();
+    private ArrayList<Vector3f> path = new ArrayList<>();
+    private ArrayList<Geometry> path_geom = new ArrayList<>();
     /**
      *
      */
@@ -136,9 +136,9 @@ public class DistanceCoveredPath extends Node {
             public Void call() throws Exception {
                 float ways = (float) path_geom.size();
                 int counter = 1;
-                Iterator iter = path_geom.iterator();
+                Iterator<Geometry> iter = path_geom.iterator();
                 while (iter.hasNext()) {
-                    Geometry waypoint_geom = (Geometry) iter.next();
+                    Geometry waypoint_geom = iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                     ColorRGBA way_color = new ColorRGBA(auv_param.getDistanceCoveredPathColor());
                     way_color.a = ((float) counter) / ways;
@@ -161,9 +161,9 @@ public class DistanceCoveredPath extends Node {
     public void updateColor() {
         Future<Void> fut = simauv.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                Iterator iter = path_geom.iterator();
+                Iterator<Geometry> iter = path_geom.iterator();
                 while (iter.hasNext()) {
-                    Geometry waypoint_geom = (Geometry) iter.next();
+                    Geometry waypoint_geom = iter.next();
                     Material auv_geom_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                     auv_geom_mat.setColor("Color", auv_param.getDistanceCoveredPathColor());
                     waypoint_geom.setMaterial(auv_geom_mat);

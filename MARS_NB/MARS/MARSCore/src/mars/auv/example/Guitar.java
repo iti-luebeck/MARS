@@ -27,45 +27,44 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package mars.object;
+package mars.auv.example;
+
+import com.jme3.math.Vector3f;
+import javax.xml.bind.annotation.XmlRootElement;
+import mars.states.SimState;
+import mars.auv.BasicAUV;
 
 /**
- * Determines which buoyancy model is used.
+ * The main class for the Guitar AUV.
+ * https://www.iti.uni-luebeck.de/forschung/mobile-robotik/guitar.html
  *
  * @author Thomas Tosik
  */
-public class BuoyancyType {
+@XmlRootElement
+public class Guitar extends BasicAUV {
+
+    /**
+     *
+     * @param simstate
+     */
+    public Guitar(SimState simstate) {
+        super(simstate);
+    }
 
     /**
      *
      */
-    public static final int BOXCOLLISIONSHAPE = 0;
-    /**
-     *
-     */
-    public static final int SPHERECOLLISIONSHAPE = 1;
-    /**
-     *
-     */
-    public static final int CONECOLLISIONSHAPE = 2;
-    /**
-     *
-     */
-    public static final int CYLINDERCOLLISIONSHAPE = 3;
-    /**
-     *
-     */
-    public static final int MESHACCURATE = 4;
-    /**
-     *
-     */
-    public static final int BOUNDINGBOX = 5;
-    /**
-     *
-     */
-    public static final int NOSHAPE = 6;
-    /**
-     *
-     */
-    public static final int MODEL = 7;
+    public Guitar() {
+        super();
+    }
+
+    @Override
+    protected Vector3f updateMyForces() {
+        return new Vector3f(0f, 0f, 0f);
+    }
+
+    @Override
+    protected Vector3f updateMyTorque() {
+        return new Vector3f(0f, 0f, 0f);
+    }
 }
