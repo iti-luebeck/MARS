@@ -9,9 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
 import mars.core.CentralLookup;
 import mars.events.CommunicationType;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
+import mars.states.SimState;
 import mars.uwCommManager.CommunicationState;
 import static mars.uwCommManager.options.CommOptionsConstants.OPTIONS_MINIMAP_SHOW_ACTIVE_LINKS_CHECKBOX;
 
@@ -34,9 +38,13 @@ final class DebuggingPanel extends javax.swing.JPanel {
         
         auvListModel = new DefaultListModel();
         jList1.setModel(auvListModel);
-        auvListModel.addElement("jasper");
-        auvListModel.addElement("laura");
+        AUV_Manager mngr = CentralLookup.getDefault().lookup(SimState.class).getAuvManager();
         
+        if(mngr != null) {
+            for(AUV auv : mngr.getAUVs().values()) {
+                if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) auvListModel.addElement(auv.getName());
+        }
+        }
         messageMap = new HashMap();
     }
 
