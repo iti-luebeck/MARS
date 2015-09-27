@@ -1,10 +1,16 @@
 
 package mars.uwCommManager.benchmarking;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import mars.auv.AUV;
+import mars.auv.AUV_Manager;
+import mars.core.CentralLookup;
 import mars.events.CommunicationType;
+import mars.sensors.CommunicationDevice;
 import mars.sensors.CommunicationMessage;
+import mars.states.SimState;
 import mars.uwCommManager.CommunicationState;
 
 /**
@@ -25,13 +31,15 @@ public class BenchmarkRunnable implements Runnable {
         this.log = log;
         this.comState = comState;
         auvList = new LinkedList();
-        auvList.add("jasper");
-        auvList.add("laura");
-        auvList.add("kat");
-        auvList.add("raphael");
-        auvList.add("monsun");
-        //auvList.add("thomas");
-        //auvList.add("ina");
+        AUV_Manager mngr = CentralLookup.getDefault().lookup(SimState.class).getAuvManager();
+        
+        if(mngr != null) {
+            for(AUV auv : mngr.getAUVs().values()) {
+                if(auv.getAuv_param().isEnabled() && auv.hasSensorsOfClass(CommunicationDevice.class.getName())) auvList.add(auv.getName());
+        }
+        }
+        
+        
         log.info(this.toString(), "Done initializing the runnable");
 
     }
