@@ -64,6 +64,8 @@ import mars.core.MARSChartTopComponent;
 import mars.core.MARSUnderwaterModemTopComponent;
 import mars.core.MARSVideoCameraTopComponent;
 import mars.core.RayBasedSensorTopComponent;
+import mars.energy.EnergyHarvester;
+import mars.energy.SolarPanel;
 import mars.gui.PropertyEditors.ColorPropertyEditor;
 import mars.gui.PropertyEditors.Vector3fPropertyEditor;
 import mars.gui.sonarview.PlanarView;
@@ -173,6 +175,10 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 slavesNames = ((Manipulating) (obj)).getSlavesNames();
             }
             icon = ((Sensor) (obj)).getIcon();
+        } else if (obj instanceof EnergyHarvester) {
+            params = ((EnergyHarvester) (obj)).getAllVariables();
+            noise = ((EnergyHarvester) (obj)).getAllNoiseVariables();
+            icon = ((EnergyHarvester) (obj)).getIcon();
         } else if (obj instanceof AUV_Parameters) {
             params = ((AUV_Parameters) (obj)).getAllVariables();
         }
@@ -221,9 +227,11 @@ public class PhysicalExchangerNode extends AbstractNode implements PropertyChang
                 icon = "transform_move.png";
             } else if (obj instanceof PollutionMeter) {
                 icon = "oil-barrel.png";
-            } else if (obj instanceof AUV_Parameters) {
+            } else if (obj instanceof SolarPanel) {
+                icon = "solar-panel.png";
+            }else if (obj instanceof AUV_Parameters) {
                 icon = "gear_in.png";
-            }else {//last resort
+            } else {//last resort
                 icon = "question-white.png";
             }
         }

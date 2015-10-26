@@ -42,7 +42,6 @@ import mars.sensors.CommunicationMessage;
 import mars.sensors.Sensor;
 import mars.sensors.UnderwaterModem;
 import mars.sensors.WiFi;
-import mars.server.MARS_Server;
 import mars.states.SimState;
 
 /**
@@ -58,7 +57,6 @@ public class CommunicationManager {
 
     private final HashMap<String, UnderwaterModem> uws = new HashMap<String, UnderwaterModem>();
 
-    private MARS_Server raw_server;
     private AUV_Manager auv_manager;
 
     /**
@@ -74,14 +72,6 @@ public class CommunicationManager {
 
     /**
      *
-     * @param raw_server
-     */
-    public void setServer(MARS_Server raw_server) {
-        this.raw_server = raw_server;
-    }
-
-    /**
-     *
      * @param tpf
      */
     public void update(float tpf) {
@@ -90,7 +80,6 @@ public class CommunicationManager {
         if (peek != null) {
             CommunicationMessage poll = msgQueue.poll();
             updateCommunication(poll.getAuvName(), poll.getMsg(), poll.getCommunicationType());
-            sendMsgs(poll.getAuvName(), poll.getMsg());
         }
         //updateComNet();
     }
@@ -135,12 +124,12 @@ public class CommunicationManager {
                     if (communicationType == CommunicationType.UNDERWATERSOUND && mod instanceof UnderwaterModem) {//check the communications ways (underwater, overwater)
                         if (Math.abs(distance.length()) <= senderUW.getPropagationDistance()) {//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also underwater
-                            mod.publish(msg);
+                            mod.sendToCommDevice(msg);
                         }
                     } else if (communicationType == CommunicationType.WIFI && mod instanceof WiFi) {
                         if (Math.abs(distance.length()) <= senderUW.getPropagationDistance()) {//check if other underwatermodem isn't too far away
                             //if()//check if the receiver is also overwater
-                            mod.publish(msg);
+                            mod.sendToCommDevice(msg);
                         }
                     }
                 }
@@ -169,14 +158,6 @@ public class CommunicationManager {
                 UnderwaterModem senderUW = (UnderwaterModem) sender_uwmo.get(0);
                 senderUW.updateComNet(uws);
             }
-        }
-    }
-
-    @Deprecated
-    private void sendMsgs(String auv_name, String msg) {
-        //System.out.println("Sending msg: " + msg);
-        if (raw_server != null) {
-            raw_server.sendStringToAllConnections(msg);
         }
     }
 

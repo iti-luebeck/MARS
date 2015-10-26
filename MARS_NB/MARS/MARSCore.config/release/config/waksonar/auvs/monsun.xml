@@ -285,7 +285,7 @@
         </params>
     </Parameters>
     <Sensors>
-	    <entry xsi:type="myHashMapEntryTypeSensors" key="gps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	    <entry xsi:type="myHashMapEntryTypeAUVObject" key="gps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="gpsReceiver">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -319,7 +319,7 @@
                             <z>10.703268</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="LatitudeFactor">
@@ -351,14 +351,14 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="name">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">gps_positionmeter</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
                         </entry>
                     </variables>
                 </Positionmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="modem" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="modem" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="underwaterModem">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -403,7 +403,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -415,7 +415,7 @@
                 </variables>
             </value>
         </entry>
-		<entry xsi:type="myHashMapEntryTypeSensors" key="pollution" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<entry xsi:type="myHashMapEntryTypeAUVObject" key="pollution" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pollutionMeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -449,13 +449,13 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="press" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="press" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="pressureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -489,13 +489,13 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
                     </entry>
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="posemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="posemeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -515,7 +515,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">posemeter</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">100</value>
                     </entry>
                 </variables>
@@ -538,7 +538,7 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="name">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">posemeter_positionmeter</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                         </entry>
                     </variables>
@@ -569,14 +569,14 @@
                                 <z>0.0</z>
                             </value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                         </entry>
                     </variables>
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="infraLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="infraLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="infraRedSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -622,7 +622,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="angular_factor">
@@ -634,7 +634,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="amperemeter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="ampereMeter">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -654,7 +654,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">amperemeter</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                 </variables>
@@ -665,33 +665,7 @@
                 </accumulators>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="transformer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value xsi:type="transformer">
-                <noise>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">0</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="NoiseValue">
-                        <value xsi:type="xs:float" xmlns:xs="http://www.w3.org/2001/XMLSchema">1.0</value>
-                    </entry>
-                </noise>
-                <variables>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_frame_id">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
-                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="name">
-                        <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">transformer</value>
-                    </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
-                        <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
-                    </entry>
-                </variables>
-            </value>
-        </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="gyroscope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="gyroscope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="gyroscope">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -711,13 +685,13 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">gyroscope</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="temp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="temperatureSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -751,13 +725,13 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="infraRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="infraRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="infraRedSensor">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -803,7 +777,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="angular_factor">
@@ -815,7 +789,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="imu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="imu">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -835,7 +809,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">imu</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="accumulator">
@@ -864,7 +838,7 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="name">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">imu_accelerometer</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                         </entry>
                     </variables>
@@ -888,7 +862,7 @@
                         <entry xsi:type="myHashMapEntryTypeObject" key="name">
                             <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">imu_gyroscope</value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                         </entry>
                     </variables>
@@ -919,14 +893,14 @@
                                 <z>0.0</z>
                             </value>
                         </entry>
-                        <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                        <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                             <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                         </entry>
                     </variables>
                 </Orientationmeter>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="front_cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="front_cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="videoCamera">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -941,6 +915,9 @@
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">/map</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="enabled">
+                        <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
+                    </entry>
+					<entry xsi:type="myHashMapEntryTypeObject" key="Compressed">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">false</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraWidth">
@@ -969,7 +946,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">2000</value>
                     </entry>
                     <entry xsi:type="myHashMapEntryTypeObject" key="CameraHeight">
@@ -981,7 +958,7 @@
                 </variables>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeSensors" key="accelerometer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="accelerometer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="accelerometer">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1001,7 +978,7 @@
                     <entry xsi:type="myHashMapEntryTypeObject" key="name">
                         <value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">accelerometer</value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
                 </variables>
@@ -1009,7 +986,7 @@
         </entry>
     </Sensors>
     <Actuators>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterFrontRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1043,7 +1020,7 @@
                             <z>1.5707964</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1078,7 +1055,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterBackLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterBackLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1112,7 +1089,7 @@
                             <z>1.5707964</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1138,7 +1115,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterFrontLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterFrontLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1172,7 +1149,7 @@
                             <z>1.5707964</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1207,7 +1184,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterBackRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterBackRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1241,7 +1218,7 @@
                             <z>1.5707964</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1267,7 +1244,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterLeft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1301,7 +1278,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1327,7 +1304,7 @@
                 </Actions>
             </value>
         </entry>
-        <entry xsi:type="myHashMapEntryTypeActuators" key="thrusterRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="thrusterRight" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <value xsi:type="brushlessThruster">
                 <noise>
                     <entry xsi:type="myHashMapEntryTypeObject" key="NoiseType">
@@ -1361,7 +1338,7 @@
                             <z>0.0</z>
                         </value>
                     </entry>
-                    <entry xsi:type="myHashMapEntryTypeObject" key="ros_publish_rate">
+                    <entry xsi:type="myHashMapEntryTypeObject" key="publishRate">
                         <value xsi:type="xs:int" xmlns:xs="http://www.w3.org/2001/XMLSchema">1000</value>
                     </entry>
 					<entry xsi:type="myHashMapEntryTypeObject" key="ros_queue_listener_size">
@@ -1389,8 +1366,8 @@
         </entry>
     </Actuators>
     <Accumulators>
-        <entry xsi:type="myHashMapEntryTypeAccumulators" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <value>
+        <entry xsi:type="myHashMapEntryTypeAUVObject" key="main" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <value xsi:type="accumulator">
                 <variables>
 					<entry xsi:type="myHashMapEntryTypeObject" key="enabled">
                         <value xsi:type="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">true</value>

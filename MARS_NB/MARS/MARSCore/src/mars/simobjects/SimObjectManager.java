@@ -122,7 +122,7 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
     @Override
     protected void addToScene(SimObject marsObj) {
         if(marsObj instanceof SimObject){
-            SimObject simob = (SimObject)marsObj;
+            SimObject simob = marsObj;
             if (simob.isEnabled()) {
                 init(simob);
                 addSimObjectToNode(simob, SimObNode);
@@ -139,7 +139,7 @@ public class SimObjectManager extends MARSObjectManager<SimObject>{
     @Override
     protected void removeFromScene(SimObject marsObj) {
         if(marsObj instanceof SimObject){
-            SimObject simob = (SimObject)marsObj;
+            SimObject simob = marsObj;
             bulletAppState.getPhysicsSpace().remove(simob.getSpatial());
             RayDetectable.detachChild(simob.getSpatial());
             simob.getSimObNode().removeFromParent();

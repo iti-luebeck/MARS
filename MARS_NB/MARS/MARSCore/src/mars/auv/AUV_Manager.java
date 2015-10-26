@@ -1,47 +1,45 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import mars.PhysicalEnvironment;
 import mars.object.MARSObjectManager;
-import mars.ros.MARSNodeMain;
-import mars.server.MARSClient;
-import mars.server.MARSClientEvent;
 import mars.states.MapState;
 import mars.states.SimState;
 import org.netbeans.api.progress.ProgressHandle;
@@ -49,19 +47,16 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Creates an AUV_Manger. You register your auv's here. The complete life cycle
- * of an AUV is managed here.
+ * Creates an AUV_Manger. You register your auv's here. The complete life cycle of an AUV is managed here.
  *
  * @author Thomas Tosik
  */
 @ServiceProvider(service = AUV_Manager.class)
-public class AUV_Manager extends MARSObjectManager<AUV>{
+public class AUV_Manager extends MARSObjectManager<AUV> {
 
-    
     private Node AUVsNode;
     private PhysicalEnvironment physical_environment;
     private CommunicationManager com_manager;
-    private HashMap<String, MARSNodeMain> mars_nodes = new HashMap<String, MARSNodeMain>();
     private EventListenerList listeners = new EventListenerList();
 
     /**
@@ -87,7 +82,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      * @param newName
      */
     public void updateAUVName(String oldName, String newName) {
-        AUV auv = (AUV)marsObjects.get(oldName);
+        AUV auv = marsObjects.get(oldName);
         auv.setName(newName);
         marsObjects.remove(oldName);
         marsObjects.put(newName, auv);
@@ -100,7 +95,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     public ArrayList<Class<? extends AUV>> getAUVClasses() {
         ArrayList<Class<? extends AUV>> ret = new ArrayList<Class<? extends AUV>>();
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             Class<? extends AUV> aClass = auv.getClass();
             if (!ret.contains(aClass)) {
                 ret.add(aClass);
@@ -108,14 +103,14 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
         }
         return ret;
     }
-    
+
     /**
-     * 
+     *
      * @param name
      * @return The requested AUV or null if not existing
      */
-    public AUV getAUV(String name){
-        return (AUV) marsObjects.get(name);
+    public AUV getAUV(String name) {
+        return marsObjects.get(name);
     }
 
     /**
@@ -126,7 +121,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     public ArrayList<AUV> getAUVsOfClass(String classNameString) {
         ArrayList<AUV> ret = new ArrayList<AUV>();
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             try {
                 if (Class.forName(classNameString).isInstance(auv)) {
                     ret.add(auv);
@@ -145,7 +140,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     public boolean hasAUVsOfClass(String classNameString) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             try {
                 return (Class.forName(classNameString).isInstance(auv));
             } catch (ClassNotFoundException ex) {
@@ -188,44 +183,6 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /**
-     *
-     * @return
-     */
-    public HashMap<String, MARSNodeMain> getMARSNodes() {
-        return mars_nodes;
-    }
-
-    /**
-     *
-     * @param auv_name
-     * @return
-     */
-    public MARSNodeMain getMARSNodeForAUV(String auv_name) {
-        return mars_nodes.get(auv_name);
-    }
-
-    /**
-     *
-     * @param mars_nodes
-     */
-    public void setMARSNodes(HashMap<String, MARSNodeMain> mars_nodes) {
-        this.mars_nodes = mars_nodes;
-    }
-
-    /**
-     *
-     */
-    public void updateMARSNode() {
-        for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
-            if (auv.getAuv_param().isEnabled()) {
-                auv.setROS_Node(getMARSNodeForAUV(elem));
-                auv.initROS();
-            }
-        }
-    }
-
-    /**
      * Updates all AUVs.
      *
      * @param tpf
@@ -244,7 +201,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     public void publishSensorsOfAUVs() {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.publishSensorsOfAUV();
             }
@@ -256,7 +213,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     public void publishActuatorsOfAUVs() {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.publishActuatorsOfAUV();
             }
@@ -269,7 +226,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     private void updateWaypointsOfAUVs(float tpf) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateWaypoints(tpf);
             }
@@ -277,14 +234,13 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /**
-     * The camera view direction/location will be updated here. Normaly in a
-     * SimpleUpdate method in the Main_Loop.
+     * The camera view direction/location will be updated here. Normaly in a SimpleUpdate method in the Main_Loop.
      *
      * @param tpf
      */
     private void updateSensorsOfAUVs(float tpf) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateSensors(tpf);
             }
@@ -296,7 +252,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     private void updateActuatorsOfAUVs(float tpf) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateActuators(tpf);
             }
@@ -304,15 +260,14 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /**
-     * In this method the communication between the auv's through underwater
-     * modems should be done
+     * In this method the communication between the auv's through underwater modems should be done
      *
      * @param tpf
      */
     @Deprecated
     private void updateCommunicationOfAUVs(float tpf) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 //auv.updateSensors(tpf);
             }
@@ -320,14 +275,13 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /**
-     * The forces of the auv's will be updated here. Normaly in a SimpleUpdate
-     * method in the Main_Loop.
+     * The forces of the auv's will be updated here. Normaly in a SimpleUpdate method in the Main_Loop.
      *
      * @param tpf
      */
     private void updateForcesOfAUVs(final float tpf) {
         for (String elem : marsObjects.keySet()) {
-            final AUV auv = (AUV)marsObjects.get(elem);
+            final AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 /*  Future fut = mars.enqueue(new Callable() {
                  public Void call() throws Exception {
@@ -342,7 +296,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
 
     private void updateAccumulatorsOfAUVs(float tpf) {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.updateAccumulators(tpf);
             }
@@ -354,7 +308,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     public void clearForcesOfAUVs() {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.clearForces();
             }
@@ -366,7 +320,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     public void resetAllAUVs() {
         for (String elem : marsObjects.keySet()) {
-            AUV auv = (AUV)marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             if (auv.getAuv_param().isEnabled()) {
                 auv.reset();
             }
@@ -421,15 +375,15 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
      */
     @Override
     public void deregister(AUV auv) {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
-            final AUV fin_auv = auv;
-            mars.enqueue(new Callable<Void>() {
-                public Void call() throws Exception {
-                    removeFromScene(fin_auv);
-                    marsObjects.remove(fin_auv.getName());
-                    return null;
-                }
-            });
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "AUV " + auv.getName() + " deleted...", "");
+        final AUV fin_auv = auv;
+        mars.enqueue(new Callable<Void>() {
+            public Void call() throws Exception {
+                removeFromScene(fin_auv);
+                marsObjects.remove(fin_auv.getName());
+                return null;
+            }
+        });
     }
 
     /**
@@ -452,7 +406,6 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
         auv.setMARS_Settings(getMARS_settings());
         auv.setPhysical_environment(physical_environment);
         auv.setCommunicationManager(com_manager);
-        auv.setROS_Node(getMARSNodeForAUV(auv.getName()));
         init(auv);
         if (auv.getAuv_param().isEnabled()) {
             //initAUV(auv);
@@ -460,12 +413,14 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
             addAUVToNode(auv, AUVsNode);
             addAUVToBulletAppState(auv, bulletAppState);
             addAUVtoMap(auv);
+        }else{
+            auv.setPhysicalExchangerVisible(false);
         }
     }
 
     /*
-    * Adds the AUV node to the scengraph(rootNode).
-    */
+     * Adds the AUV node to the scengraph(rootNode).
+     */
     @Override
     protected void addToScene(AUV auv) {
         auv.addDragOffscreenView();
@@ -474,8 +429,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /*
-    * Removes the AUV node from the scengraph(rootNode).
-    */
+     * Removes the AUV node from the scengraph(rootNode).
+     */
     @Override
     protected void removeFromScene(AUV auv) {
         bulletAppState.getPhysicsSpace().remove(auv.getAUVNode());
@@ -525,13 +480,14 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     public void addAUVsToBulletAppState(BulletAppState bulletAppState) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding AUV's to BulletAppState...", "");
         for (String elem : marsObjects.keySet()) {
-            AUV auv =(AUV) marsObjects.get(elem);
+            AUV auv = marsObjects.get(elem);
             bulletAppState.getPhysicsSpace().add(auv.getAUVNode());
         }
     }
 
     /**
      * Add the AUV to the mini-map state.
+     *
      * @param auv
      */
     public void addAUVtoMap(AUV auv) {
@@ -542,8 +498,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
     }
 
     /*
-    * Call the init method of all AUVs.
-    */
+     * Call the init method of all AUVs.
+     */
     @Override
     protected void init(AUV auv) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Initialising AUV " + auv.getName() + "...", "");
@@ -552,7 +508,7 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
 
     /**
      * GUI stuff.
-     * 
+     *
      * @param auv
      */
     public void deselectAUV(AUV auv) {
@@ -566,42 +522,8 @@ public class AUV_Manager extends MARSObjectManager<AUV>{
 
     /**
      *
-     * @param listener
-     */
-    public void addAdListener(MARSClient listener) {
-        listeners.add(MARSClient.class, listener);
-    }
-
-    /**
-     *
-     * @param listener
-     */
-    public void removeAdListener(MARSClient listener) {
-        listeners.remove(MARSClient.class, listener);
-    }
-
-    /**
-     *
      */
     public void removeAllListener() {
         //listeners.
-    }
-
-    /**
-     *
-     * @param event
-     */
-    public void notifyAdvertisement(MARSClientEvent event) {
-        for (MARSClient l : listeners.getListeners(MARSClient.class)) {
-            l.onNewData(event);
-        }
-    }
-
-    /**
-     *
-     * @param event
-     */
-    protected synchronized void notifySafeAdvertisement(MARSClientEvent event) {
-        notifyAdvertisement(event);
     }
 }

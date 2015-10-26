@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.sensors;
 
 import com.jme3.material.Material;
@@ -38,16 +38,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import mars.Initializer;
-import org.ros.node.topic.Publisher;
 import mars.Helper.NoiseType;
+import mars.Initializer;
 import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.events.AUVObjectEvent;
 import mars.states.SimState;
-import mars.ros.MARSNodeMain;
-import mars.server.MARSClientEvent;
-import org.ros.message.Time;
 
 /**
  * Returns the force of the water current.
@@ -55,16 +51,11 @@ import org.ros.message.Time;
  * @author Thomas Tosik
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class FlowMeter extends Sensor{
+public class FlowMeter extends Sensor {
 
     private Geometry FlowMeterStart;
 
     private Initializer initer;
-
-    ///ROS stuff
-    private Publisher<geometry_msgs.Vector3Stamped> publisher = null;
-    private geometry_msgs.Vector3Stamped fl;
-    private std_msgs.Header header;
 
     /**
      *
@@ -130,6 +121,7 @@ public class FlowMeter extends Sensor{
         auv_node.attachChild(PhysicalExchanger_Node);
     }
 
+    @Override
     public void update(float tpf) {
 
     }
@@ -202,47 +194,9 @@ public class FlowMeter extends Sensor{
 
     }
 
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = (Publisher<geometry_msgs.Vector3Stamped>)ros_node.newPublisher(auv_name + "/" + this.getName(), geometry_msgs.Vector3Stamped._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3Stamped._TYPE);
-        header = this.mars_node.getMessageFactory().newFromType(std_msgs.Header._TYPE);
-        this.rosinit = true;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void publish() {
-        header.setSeq(rosSequenceNumber++);
-        header.setFrameId(this.getRos_frame_id());
-        header.setStamp(Time.fromMillis(System.currentTimeMillis()));
-        fl.setHeader(header);
-
-        geometry_msgs.Vector3 vec = this.mars_node.getMessageFactory().newFromType(geometry_msgs.Vector3._TYPE);
-        vec.setX(getFlowForce().x);
-        vec.setY(getFlowForce().z);
-        vec.setZ(getFlowForce().y);
-
-        fl.setVector(vec);
-        if (publisher != null) {
-            publisher.publish(fl);
-        }
-    }
-
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, getFlowForce(), System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
         AUVObjectEvent auvEvent = new AUVObjectEvent(this, getFlowForce(), System.currentTimeMillis());
         notifyAdvertisementAUVObject(auvEvent);
     }

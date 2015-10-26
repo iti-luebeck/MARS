@@ -7,6 +7,22 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
+                    <code-name-base>MiGLayout</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>XStream</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>mars.VegetationSystem</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -133,14 +149,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>mars.libs.jMonkeyEngine</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.1</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>mars.libs.jMonkeyEngineCore</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -182,6 +190,14 @@
                 </dependency>
                 <dependency>
                     <code-name-base>mars.libs.xbill</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.apache.coyote</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
@@ -351,8 +367,14 @@
                 <package>mars.annotations</package>
                 <package>mars.auv</package>
                 <package>mars.auv.example</package>
+                <package>mars.communication</package>
+                <package>mars.communication.rosimpl</package>
+                <package>mars.communication.tcpimpl</package>
+                <package>mars.communication.tcpimpl.bo</package>
+                <package>mars.communication.tcpimpl.demo</package>
                 <package>mars.control</package>
                 <package>mars.core</package>
+                <package>mars.energy</package>
                 <package>mars.events</package>
                 <package>mars.filter</package>
                 <package>mars.geodesy</package>
@@ -364,11 +386,8 @@
                 <package>mars.hardware</package>
                 <package>mars.misc</package>
                 <package>mars.object</package>
-                <package>mars.ros</package>
                 <package>mars.sensors</package>
                 <package>mars.sensors.sonar</package>
-                <package>mars.server</package>
-                <package>mars.server.ros</package>
                 <package>mars.simobjects</package>
                 <package>mars.states</package>
                 <package>mars.waves</package>

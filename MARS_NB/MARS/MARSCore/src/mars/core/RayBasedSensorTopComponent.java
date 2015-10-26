@@ -30,6 +30,7 @@
 package mars.core;
 
 import java.awt.Color;
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import mars.gui.sonarview.RayBasedSensorView;
 import org.openide.windows.TopComponent;
@@ -86,7 +87,6 @@ public class RayBasedSensorTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        colorDialog = new javax.swing.JColorChooser();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -176,7 +176,7 @@ public class RayBasedSensorTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        final Color newColor = colorDialog.showDialog(
+        final Color newColor = JColorChooser.showDialog(
                                              getRootPane(),
                                              "Choose Background Color",null);
                 if(newColor != null && imgP != null){
@@ -186,7 +186,7 @@ public class RayBasedSensorTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        final Color newColor = colorDialog.showDialog(
+        final Color newColor = JColorChooser.showDialog(
                                              getRootPane(),
                                              "Choose Hit Color",null);
                 if(newColor != null && imgP != null){
@@ -196,7 +196,7 @@ public class RayBasedSensorTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        final Color newColor = colorDialog.showDialog(
+        final Color newColor = JColorChooser.showDialog(
                                              getRootPane(),
                                              "Choose Radar Line Color",null);
                 if(newColor != null && imgP != null){
@@ -206,7 +206,6 @@ public class RayBasedSensorTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JColorChooser colorDialog;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

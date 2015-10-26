@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.states;
 
 import com.jme3.animation.LoopMode;
@@ -53,6 +53,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -88,7 +89,7 @@ import org.openide.util.Lookup;
  *
  * @author Thomas Tosik
  */
-public class SimState extends MARSAppState implements PhysicsTickListener, AppStateExtension{
+public class SimState extends MARSAppState implements PhysicsTickListener, AppStateExtension {
 
     private Node rootNode = new Node("SimState Root Node");
     private AssetManager assetManager;
@@ -114,8 +115,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     private KeyConfig keyconfig;
     private PhysicalEnvironment physical_environment;
     private Initializer initer;
-    private ArrayList<AUV> auvs = new ArrayList<AUV>();
-    private ArrayList<SimObject> simobs = new ArrayList<SimObject>();
+    private ArrayList<AUV> auvs = new ArrayList<>();
+    private ArrayList<SimObject> simobs = new ArrayList<>();
     private XML_JAXB_ConfigReaderWriter xml;
     private ConfigManager configManager;
 
@@ -128,9 +129,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     private Node SimObNodes = new Node("SimObNodes");
     //warter currents
     private Node currents = new Node("currents");
-
-    @SuppressWarnings("unchecked")
-    private Future<Void> simStateFuture = null;
 
     //map stuff
     private MapState mapState;
@@ -158,19 +156,19 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         this.MARSMapComp = MARSMapComp;
         this.configManager = configManager;
     }
-    
-    private void setupLogger(){
+
+    private void setupLogger() {
         //setup logging
         Handler[] handlers = Logger.getLogger(this.getClass().getName()).getHandlers();
         for (Handler handler : handlers) {
             handler.setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
             Logger.getLogger(this.getClass().getName()).setLevel(Level.parse(getMARSSettings().getLoggingLevel()));
 
-            if(!getMARSSettings().getLoggingFileWrite()){
+            if (!getMARSSettings().getLoggingFileWrite()) {
                 handler.setLevel(Level.OFF);
             }
         }
-        if(!getMARSSettings().getLoggingEnabled()){
+        if (!getMARSSettings().getLoggingEnabled()) {
             Logger.getLogger(this.getClass().getName()).setLevel(Level.OFF);
         }
     }
@@ -215,23 +213,23 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         //deattach the state root node from the main 
         getRootNode().removeFromParent();
         getRootNode().detachAllChildren();
-        
+
         //clear cntralLookup
         CentralLookup.getDefault().remove(auvManager);
         CentralLookup.getDefault().remove(physical_environment);
         CentralLookup.getDefault().remove(simobManager);
-        
+
         //cleanup other related states
         //bulletAppState.setEnabled(false);
         //mars.getStateManager().detach(bulletAppState);
         //bulletAppState = null;
 
         /*if (mars.getStateManager().getState(GuiState.class) != null) {
-            GuiState guistate = mars.getStateManager().getState(GuiState.class);
-            guistate.setEnabled(false);
-            mars.getStateManager().detach(guistate);
-            guistate = null;
-        }*/
+         GuiState guistate = mars.getStateManager().getState(GuiState.class);
+         guistate.setEnabled(false);
+         mars.getStateManager().detach(guistate);
+         guistate = null;
+         }*/
     }
 
     /**
@@ -282,25 +280,19 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             progr.progress("Creating Initializer");
             initer = new Initializer(mars, this, auvManager, comManager, physical_environment);
             initer.init();
+            //register the mars settings so we can update through the initializer when something changes
+            mars_settings.addPropertyChangeListener(initer);
 
             //set camera to look to (0,0,0)
             setupCamPos();
             mars.getCamera().lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
-
-            comManager.setServer(initer.getRAW_Server());
-
-            if (mars_settings.getROSEnabled()) {
-                if (initer.checkROSServer()) {//Waiting for ROS Server to be ready
-
-                }
-            }
 
             progr.progress("Init Map");
             initMap();//for mars_settings
 
             progr.progress("Populate AUVManager");
             populateAUV_Manager(auvs, physical_environment, mars_settings, comManager, initer);
-            
+
             mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     CentralLookup.getDefault().add(auvManager);
@@ -322,7 +314,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             initView();
 
             init = true;
-            
+
             progr.progress("Init GuiState");
             final GuiState guiState = new GuiState();
             guiState.setAuvManager(auvManager);
@@ -333,9 +325,8 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             guiState.setMars_settings(mars_settings);
             guiState.setSimState(this);
             final AppStateManager stateManagerFin = stateManager;
-            
-            @SuppressWarnings("unchecked")
-            Future<Void> fut2 = mars.enqueue(new Callable<Void>() {
+
+            mars.enqueue(new Callable<Void>() {
                 public Void call() throws Exception {
                     getMARS().getViewPort().attachScene(guiState.getRootNode());
                     stateManagerFin.attach(guiState);
@@ -343,20 +334,21 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
                 }
             });
 
-            progr.progress("Init other States");
-            progr.progress("Init FishSwarm State");
+            progr.progress("Init other states");
             Lookup lkp = Lookup.getDefault();
-            AbstractAppState state = lkp.lookup(AbstractAppState.class);
-            state.setEnabled(true);
-            if (state != null) {
-                stateManager.attach(state);
+            Collection<? extends AbstractAppState> lookupAll = lkp.lookupAll(AbstractAppState.class);
+            for (AbstractAppState abstractAppState : lookupAll) {
+                if (abstractAppState != null) {
+                    progr.progress("Init " + abstractAppState.getClass().getName() + " State");
+                    stateManager.attach(abstractAppState);
+                }
             }
         }
         progr.progress("Init Super");
         super.initialize(stateManager, app);
 
         progr.finish();
-        
+
         //initCamPath();
     }
 
@@ -370,39 +362,13 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         MARSTopComp.initDND();
         MARSTopComp.allowSimInteraction();
         MARSMapComp.initDND();
-
-        if (mars_settings.getROSEnabled()) {
-            if (initer.checkROSServer()) {
-                MARSTopComp.allowServerInteraction(true);
-            } else {
-                MARSTopComp.allowServerInteraction(false);
-            }
-        } else {
-            MARSTopComp.allowServerInteraction(false);
-        }
-    }
-
-    /**
-     *
-     */
-    public void connectToServer() {
-        mars_settings.setROSEnabled(true);
-        initer.setupServer();
-        if (initer.checkROSServer()) {
-            MARSTopComp.allowServerInteraction(true);
-        } else {
-            MARSTopComp.allowServerInteraction(false);
-        }
     }
 
     /**
      *
      */
     public void disconnectFromServer() {
-        mars_settings.setROSEnabled(false);
-        MARSTopComp.enableServerInteraction(false);
         initer.killServer();
-        MARSTopComp.allowServerInteraction(false);
     }
 
     /**
@@ -430,6 +396,9 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      */
     private void setupPhysics() {
         bulletAppState = new BulletAppState();
+        if (mars_settings.getPhysicsDebug()) {
+            bulletAppState.setDebugEnabled(true);
+        }
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         mars.getStateManager().attach(bulletAppState);
         //set the physis world parameters
@@ -439,10 +408,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         /*if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
          mars.getStateManager().getState(BulletDebugAppState.class).setFilter(new MyDebugAppStateFilter()); 
          }*/ //doesnt work here because DebugAppState suuuuuucks
-        if (mars_settings.getPhysicsDebug()) {
-            bulletAppState.setDebugEnabled(true);
-        }
-
+        
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
         bulletAppState.getPhysicsSpace().setAccuracy(1f / mars_settings.getPhysicsFramerate());
         bulletAppState.getPhysicsSpace().addTickListener(this);
@@ -487,7 +453,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             Iterator<AUV> iter = auvs.iterator();
             while (iter.hasNext()) {
                 AUV bas_auv = iter.next();
-                bas_auv.getAuv_param().setAuv(bas_auv);
+                bas_auv.getAuv_param().addPropertyChangeListener(bas_auv);
                 bas_auv.setName(bas_auv.getAuv_param().getName());
                 bas_auv.setState(this);
                 bas_auv.setMARS_Settings(mars_settings);
@@ -507,9 +473,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         auvManager.setPhysical_environment(pe);
         auvManager.setMARS_settings(mars_settings);
         auvManager.setCommunicationManager(com_manager);
-        if (mars_settings.getROSEnabled()) {
-            auvManager.setMARSNodes(initer.getROS_Server().getMarsNodes());
-        }
         auvManager.register(auvs);
     }
 
@@ -771,7 +734,6 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
          System.out.println("ghostControl.getOverlappingCount(): " + ghostControl.getOverlappingCount());
          }
          }*/
-
         //setting Filter in the DebugState so we can show specific collision boxes
         if (mars.getStateManager().getState(BulletDebugAppState.class) != null) {
             if (!debugFilter && init) {
@@ -819,7 +781,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void startSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.getPhysicsSpace().setGravity(physical_environment.getGravitational_acceleration_vector());
                 initial_ready = true;
@@ -835,7 +797,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void pauseSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 bulletAppState.setEnabled(false);
                 bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -852,7 +814,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
      *
      */
     public void restartSimulation() {
-        simStateFuture = mars.enqueue(new Callable<Void>() {
+        mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
                 System.out.println("Simulation reseted...");
                 auvManager.resetAllAUVs();
@@ -910,8 +872,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change. The position is computed from he screen position.
+     * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      *
      * @param auvName
      * @param pos
@@ -926,7 +887,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
             Vector3f intersection = Helper.getIntersectionWithPlaneCorrect(new Vector3f(0f, initer.getCurrentWaterHeight(pos.x, mars.getCamera().getHeight() - pos.y), 0f), Vector3f.UNIT_Y, click3d, dir);
             if (dropAction == TransferHandler.COPY) {
                 AUV auvCopy = new BasicAUV(auv);
-                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.getAuv_param().addPropertyChangeListener(auvCopy);
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(intersection);
                 auvCopy.setState(this);
@@ -946,8 +907,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change.
+     * Enables an AUV and sets it to the position. If already enabled then position change.
      *
      * @param auvName
      * @param pos
@@ -960,7 +920,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         if (auv != null) {
             if (dropAction == TransferHandler.COPY) {
                 AUV auvCopy = new BasicAUV(auv);
-                auvCopy.getAuv_param().setAuv(auvCopy);
+                auvCopy.getAuv_param().addPropertyChangeListener(auvCopy);
                 auvCopy.setName(name);
                 auvCopy.getAuv_param().setPosition(pos);
                 auvCopy.setState(this);
@@ -989,8 +949,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an SimObject and sets it to the position. If already enabled then
-     * position change.
+     * Enables an SimObject and sets it to the position. If already enabled then position change.
      *
      * @param simobName
      * @param pos
@@ -1021,8 +980,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     }
 
     /**
-     * Enables an AUV and sets it to the position. If already enabled then
-     * position change. The position is computed from he screen position.
+     * Enables an AUV and sets it to the position. If already enabled then position change. The position is computed from he screen position.
      *
      * @param simobName
      * @param pos
@@ -1087,17 +1045,17 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
     public void setMARSTopComp(MARSTopComponent MARSTopComp) {
         this.MARSTopComp = MARSTopComp;
     }
-    
-    private void initCamPath(){
+
+    private void initCamPath() {
         CameraNode camNode = new CameraNode("Motion cam", mars.getCamera());
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         camNode.setEnabled(true);
         MotionPath path = new MotionPath();
         path.setCycle(true);
         /*path.addWayPoint(new Vector3f(20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, 20));
-        path.addWayPoint(new Vector3f(-20, 3, 0));
-        path.addWayPoint(new Vector3f(0, 3, -20));*/
+         path.addWayPoint(new Vector3f(0, 3, 20));
+         path.addWayPoint(new Vector3f(-20, 3, 0));
+         path.addWayPoint(new Vector3f(0, 3, -20));*/
         path.addWayPoint(new Vector3f(0, -1.5f, 0));
         path.addWayPoint(new Vector3f(0, -1.5f, 30));
         path.addWayPoint(new Vector3f(40, -1.5f, 30));
@@ -1111,7 +1069,7 @@ public class SimState extends MARSAppState implements PhysicsTickListener, AppSt
         path.addWayPoint(new Vector3f(-10, 2, 20));
         path.setCurveTension(0.83f);
         path.enableDebugShape(assetManager, rootNode);
-        
+
         MotionEvent cameraMotionControl = new MotionEvent(camNode, path);
         cameraMotionControl.setLoopMode(LoopMode.Loop);
         //cameraMotionControl.setLookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);

@@ -259,7 +259,7 @@ public abstract class MARSObjectManager<T extends MARSObject> implements Lookup.
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "MarsObject " + name + " deleted...", "");
         mars.enqueue(new Callable<Void>() {
             public Void call() throws Exception {
-                T ret = (T)marsObjects.remove(fin_name);
+                T ret = marsObjects.remove(fin_name);
                 removeFromScene(ret);
                 return null;
             }

@@ -50,4 +50,6 @@ public interface PropertyChangeListenerSupport {
      * @param pcl
      */
     public void removePropertyChangeListener(PropertyChangeListener pcl);
+    
+    public void removeAllPropertyChangeListeners();
 }

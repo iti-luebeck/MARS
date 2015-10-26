@@ -85,6 +85,7 @@ public class MyHashMapEntryTypeObject extends MyHashMapEntryType{
      * 
      * @return
      */
+    @Override
     public String getKey() {
         return key;
     }
@@ -93,6 +94,7 @@ public class MyHashMapEntryTypeObject extends MyHashMapEntryType{
      * 
      * @return
      */
+    @Override
     public String getUnit() {
         return unit;
     }
@@ -109,6 +111,7 @@ public class MyHashMapEntryTypeObject extends MyHashMapEntryType{
      * 
      * @return
      */
+    @Override
     public Object getObject() {
         return value;
     }   

@@ -1,5 +1,37 @@
+/*
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.water;
 
+import mars.water.projectedGrid.WaterGridFilter;
+import mars.water.projectedGrid.WaterHeightGenerator;
+import mars.water.projectedGrid.ProjectedGrid;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -31,10 +63,12 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Adds several water effects (water surface, underwater view, foam trails).
+ *
  * @author John Paul Jonte
  */
-//@ServiceProvider(service=AbstractAppState.class)
+@ServiceProvider(service = AbstractAppState.class)
 public class WaterState extends AbstractAppState implements AppStateExtension {
+
     /**
      * Current instance of the WaterState.
      */
@@ -104,7 +138,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
      */
     private Node reflection;
     private SedimentEmitter emitter;
-    
+
     /**
      * Creates a new WaterState.
      */
@@ -113,7 +147,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         heightGenerator = new WaterHeightGenerator();
         tracking = new ArrayList<Spatial>();
     }
-    
+
     /**
      *
      * @param reflection
@@ -122,7 +156,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         this();
         this.reflection = reflection;
     }
-    
+
     /**
      *
      * @param stateManager
@@ -131,12 +165,12 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.app          = (SimpleApplication) app;
+        this.app = (SimpleApplication) app;
         this.assetManager = app.getAssetManager();
         this.inputManager = app.getInputManager();
-        this.viewPort     = app.getViewPort();
-        this.cam          = app.getCamera();
-        
+        this.viewPort = app.getViewPort();
+        this.cam = app.getCamera();
+
         // Projected Grid
         grid = new ProjectedGrid(this.app.getTimer(), cam, 100, 70, 0.02f, heightGenerator);
         Material heightMat = new Material(assetManager, "MatDefs/Water/WaterLevel.j3md");
@@ -144,53 +178,52 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         projectedGridGeometry.setMaterial(heightMat);
         projectedGridGeometry.setLocalTranslation(0, 0, 0);
         rootNode.attachChild(projectedGridGeometry);
-        
+
         // Particle Emitter
         Material particle = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         particle.setTexture("Texture", assetManager.loadTexture("Textures/mud.png"));
         particle.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
-        
-        emitter = new SedimentEmitter();
-        emitter.setParticleMaterial(particle);
-        
-        rootNode.attachChild(emitter.getRootNode());
-        
+
+        //emitter = new SedimentEmitter();
+        //emitter.setParticleMaterial(particle);
+        //rootNode.attachChild(emitter.getRootNode());
         CentralLookup cl = CentralLookup.getDefault();
         SimState sim = cl.lookup(SimState.class);
-        
+
         if (sim != null) {
             reflection = sim.getSceneReflectionNode();
         }
-        
+
         // Filters
         filterProcessor = new FilterPostProcessor(assetManager);
-        
+
         // Water Filter
         water = new WaterGridFilter(reflection, lightDir, this.app.getTimer(), heightGenerator);
-        
+        water.setEnabled(false);
         water.setWaveScale(0.003f);
         water.setMaxAmplitude(1f);
         water.setFoamExistence(new Vector3f(1f, 2.5f, 0.5f));
         water.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
         water.setRefractionStrength(.3f);
         water.setTrailLength(200);
-        
+
         filterProcessor.addFilter(water);
-        
+
         // JME water filter
         waterJME = new WaterFilter(reflection, lightDir);
-        
+        waterJME.setEnabled(false);
         waterJME.setWaveScale(0.003f);
         waterJME.setMaxAmplitude(1f);
         waterJME.setFoamExistence(new Vector3f(1f, 2.5f, 0.5f));
         waterJME.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam.jpg"));
         waterJME.setRefractionStrength(.3f);
         waterJME.setEnabled(false);
-        
+
         filterProcessor.addFilter(waterJME);
-        
+
         // Water Particle Filter
         particles = new WaterParticleFilter();
+        particles.setEnabled(false);
         particles.setParticleColor(new ColorRGBA(.3f, .34f, .21f, 1));
         particles.setCoordinateScale(new Vector3f(.1f, .1f, .1f));
         particles.setMaximumIntensity(1f);
@@ -199,11 +232,11 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         particles.setOctaves(3);
         particles.setOctaveOffset(3);
         particles.setPersistence(.9f);
-        
+
         filterProcessor.addFilter(particles);
-        
+
         viewPort.addProcessor(filterProcessor);
-        
+
         // add input listeners
         inputManager.addMapping("setDebug0", new KeyTrigger(KeyInput.KEY_0));
         inputManager.addMapping("setDebug1", new KeyTrigger(KeyInput.KEY_1));
@@ -216,7 +249,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         inputManager.addMapping("setDebug8", new KeyTrigger(KeyInput.KEY_8));
         inputManager.addMapping("setDebug9", new KeyTrigger(KeyInput.KEY_9));
         inputManager.addMapping("toggleFilter", new KeyTrigger(KeyInput.KEY_SPACE));
-        
+
         ActionListener debugListener = new ActionListener() {
             @Override
             public void onAction(String name, boolean isPressed, float tpf) {
@@ -225,7 +258,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
                 }
             }
         };
-        
+
         inputManager.addListener(new ActionListener() {
 
             @Override
@@ -236,7 +269,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
                 }
             }
         }, "toggleFilter");
-        
+
         inputManager.addListener(debugListener, "setDebug0");
         inputManager.addListener(debugListener, "setDebug1");
         inputManager.addListener(debugListener, "setDebug2");
@@ -247,12 +280,12 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         inputManager.addListener(debugListener, "setDebug7");
         inputManager.addListener(debugListener, "setDebug8");
         inputManager.addListener(debugListener, "setDebug9");
-        
+
         this.app.getRootNode().attachChild(getRootNode());
-        
+
         setInstance(this);
     }
-    
+
     /**
      *
      * @param tpf
@@ -264,12 +297,14 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
             water.track(iterator.next());
             iterator.remove();
         }
-        
-        if (water.isEnabled()) particles.setUnderwater(water.isUnderWater());
+
+        if (water.isEnabled()) {
+            particles.setUnderwater(water.isUnderWater());
+        }
         grid.update(cam.getViewMatrix().clone());
-        emitter.update(app.getRootNode());
+        //emitter.update(app.getRootNode());
     }
-    
+
     /**
      *
      */
@@ -279,7 +314,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
         viewPort.removeProcessor(filterProcessor);
         rootNode.removeFromParent();
     }
-    
+
     /**
      *
      * @param enabled
@@ -287,19 +322,19 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        
+
         if (enabled) {
             viewPort.addProcessor(filterProcessor);
             app.getRootNode().attachChild(rootNode);
-        }
-        else {
+        } else {
             viewPort.removeProcessor(filterProcessor);
             rootNode.removeFromParent();
         }
     }
-    
+
     /**
      * Get the current instance.
+     *
      * @return current instance
      */
     public static WaterState getInstance() {
@@ -308,28 +343,31 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
 
     /**
      * Set the current instance.
+     *
      * @param instance New instance
      */
     public static void setInstance(WaterState instance) {
         WaterState.instance = instance;
     }
-    
+
     /**
      * Gets the {@link HeightGenerator} used in this instance.
+     *
      * @return HeightGenerator
      */
     public WaterHeightGenerator getHeightGenerator() {
         return heightGenerator;
     }
-    
+
     /**
      * Gets the {@link WaterGridFilter} being used.
+     *
      * @return water filter
      */
     public WaterGridFilter getWaterFilter() {
         return water;
     }
-    
+
     /**
      *
      * @return
@@ -337,17 +375,19 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
     public WaterFilter getJMEWaterFilter() {
         return waterJME;
     }
-    
+
     /**
      * Gets the {@link WaterParticleFilter} being used.
+     *
      * @return water particle filter
      */
     public WaterParticleFilter getParticleFilter() {
         return particles;
     }
-    
+
     /**
      * Adds a vehicle to the tracking list for foam trails.
+     *
      * @param object Vehicle Spatial to be tracked
      */
     public void track(Spatial object) {
@@ -369,7 +409,7 @@ public class WaterState extends AbstractAppState implements AppStateExtension {
     public void setLightDir(Vector3f lightDir) {
         this.lightDir = lightDir;
     }
-    
+
     /**
      *
      * @return

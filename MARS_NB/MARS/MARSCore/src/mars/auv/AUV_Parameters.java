@@ -1,35 +1,34 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -44,13 +43,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import mars.communication.AUVConnectionType;
 import mars.misc.PropertyChangeListenerSupport;
-import mars.server.ConnectionType;
 import mars.xml.HashMapAdapter;
 
 /**
- * Thsi class is a bucket for parameters of an AUV like mass or collision boxes.
- * Basically just HashMaps.
+ * Thsi class is a bucket for parameters of an AUV like mass or collision boxes. Basically just HashMaps.
  *
  * @author Thomas Tosik
  */
@@ -59,7 +57,7 @@ import mars.xml.HashMapAdapter;
 public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     @XmlJavaTypeAdapter(HashMapAdapter.class)
-    private HashMap<String, Object> params = new HashMap<String, Object>();
+    private final HashMap<String, Object> params = new HashMap<String, Object>();
     private HashMap<String, Object> waypoints;
     private HashMap<String, Object> model;
     private HashMap<String, Object> debug;
@@ -69,7 +67,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     private HashMap<String, Object> connection;
     private AUV auv;
 
-    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
+    private final List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
 
     /**
      *
@@ -107,13 +105,20 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         listeners.remove(pcl);
     }
 
+    /**
+     *
+     */
+    @Override
+    public void removeAllPropertyChangeListeners() {
+        listeners.clear();
+    }
+    
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
         PropertyChangeListener[] pcls = listeners.toArray(new PropertyChangeListener[0]);
         for (PropertyChangeListener pcl : pcls) {
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
-        updateVariable(propertyName);
     }
 
     /**
@@ -200,80 +205,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         setConnectionLocalip("127.0.0.1");
         setConnectionTargetip("127.0.0.1");
         setConnectionPort(11311);
-        setConnectionType(ConnectionType.ROS);
-    }
-
-    /**
-     *
-     * @param target
-     */
-    public void updateVariable(String target) {
-        RigidBodyControl physics_control = auv.getPhysicsControl();
-        if (target.equals("position")) {
-            if (physics_control != null) {
-                physics_control.setPhysicsLocation(getPosition());
-            }
-        }/*else if(target.equals("collision") && hashmapname.equals("Debug")){
-         auv.setCollisionVisible(isDebugCollision());
-         }else if(target.equals("rotation") && hashmapname.equals("")){
-         if(physics_control != null ){
-         Matrix3f m_rot = new Matrix3f();
-         Quaternion q_rot = new Quaternion();
-         q_rot.fromAngles(getRotation().x, getRotation().y, getRotation().z);
-         m_rot.set(q_rot);
-         physics_control.setPhysicsRotation(m_rot);
-         }
-         }else if(target.equals("scale") && hashmapname.equals("Model")){
-         auv.getAUVSpatial().setLocalScale(getModelScale());
-         }else if(target.equals("collisionbox")){*/
-        /*if(physics_control != null ){
-         CompoundCollisionShape compoundCollisionShape1 = new CompoundCollisionShape();
-         BoxCollisionShape boxCollisionShape = new BoxCollisionShape(getCollisionDimensions());
-         compoundCollisionShape1.addChildShape(boxCollisionShape, getCentroid_center_distance());
-         RigidBodyControl new_physics_control = new RigidBodyControl(compoundCollisionShape1, getMass());
-         if(isDebugCollision()){
-         Material debug_mat = new Material(auv.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
-         debug_mat.setColor("Color", ColorRGBA.Red);
-         physics_control.attachDebugShape(debug_mat);
-         }
-         new_physics_control.setCollisionGroup(1);
-         new_physics_control.setCollideWithGroups(1);
-         new_physics_control.setDamping(getDamping_linear(), getDamping_angular());
-         auv.setPhysicsControl(new_physics_control);
-         }*/
-        /*}else if(target.equals("physical_exchanger") && hashmapname.equals("Debug")){
-         auv.setPhysicalExchangerVisible(isDebugPhysicalExchanger());
-         }else if(target.equals("centers") && hashmapname.equals("Debug")){
-         auv.setCentersVisible(isDebugCenters());
-         }else if(target.equals("visualizer") && hashmapname.equals("Debug")){
-         auv.setVisualizerVisible(isDebugVisualizers());
-         }else if(target.equals("bounding") && hashmapname.equals("Debug")){
-         auv.setBoundingBoxVisible(isDebugBounding());
-         }else if(target.equals("enable") && hashmapname.equals("Waypoints")){
-         auv.setDistanceCoveredPathEnabled(isDistanceCoveredPathEnabled());
-         }else if(target.equals("visiblity") && hashmapname.equals("Waypoints")){
-         auv.setWayPointsVisible(isDistanceCoveredPathVisiblity());
-         }else if(target.equals("centroid_center_distance") && hashmapname.equals("")){
-            
-         }else if(target.equals("mass_auv") && hashmapname.equals("")){
-         if(physics_control != null ){
-         physics_control.setMass(getMass());
-         }
-         }else if(target.equals("enabled") && hashmapname.equals("")){
-         if(!isEnabled()){
-         //check if it exist before removing
-
-         }
-         }     */
-
-    }
-
-    /**
-     *
-     * @param auv
-     */
-    public void setAuv(AUV auv) {
-        this.auv = auv;
+        setConnectionType(AUVConnectionType.ROS.toString());
     }
 
     /**
@@ -297,7 +229,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param name
      */
     public void setName(String name) {
+        String old = getName();
         params.put("name", name);
+        fire("name", old, name);
     }
 
     /**
@@ -313,7 +247,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param icon
      */
     public void setIcon(String icon) {
+        String old = getIcon();
         params.put("icon", icon);
+        fire("icon", old, icon);
     }
 
     /**
@@ -329,7 +265,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param dndIcon
      */
     public void setDndIcon(String dndIcon) {
+        String old = getDndIcon();
         params.put("dndIcon", dndIcon);
+        fire("dndIcon", old, dndIcon);
     }
 
     /**
@@ -345,7 +283,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param linear_factor
      */
     public void setLinear_factor(Vector3f linear_factor) {
+        Vector3f old = getLinear_factor();
         params.put("linear_factor", linear_factor);
+        fire("linear_factor", old, linear_factor);
     }
 
     /**
@@ -361,9 +301,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param angular_factor
      */
     public void setAngular_factor(Float angular_factor) {
+        Float old = getAngular_factor();
         params.put("angular_factor", angular_factor);
+        fire("angular_factor", old, angular_factor);
     }
-    
+
     /**
      *
      * @return
@@ -377,7 +319,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param manualControl
      */
     public void setManualControl(Boolean manualControl) {
+        Boolean old = getManualControl();
         params.put("manualControl", manualControl);
+        fire("manualControl", old, manualControl);
     }
 
     /**
@@ -398,7 +342,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param ThreatLevel
      */
     public void setThreatLevel(Float ThreatLevel) {
+        Float old = getThreatLevel();
         params.put("ThreatLevel", ThreatLevel);
+        fire("ThreatLevel", old, ThreatLevel);
     }
 
     /**
@@ -414,7 +360,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param lineWidth
      */
     public void setDistanceCoveredPathLineWidth(Float lineWidth) {
+        Float old = getDistanceCoveredPathLineWidth();
         waypoints.put("lineWidth", lineWidth);
+        fire("lineWidth", old, lineWidth);
     }
 
     /**
@@ -426,10 +374,13 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
-     *
+     * 
+     * @param maxPoints 
      */
     public void setDistanceCoveredPathMaxPoints(Integer maxPoints) {
+        Integer old = getDistanceCoveredPathMaxPoints();
         waypoints.put("maxPoints", maxPoints);
+        fire("maxPoints", old, maxPoints);
     }
 
     /**
@@ -445,7 +396,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param color
      */
     public void setDistanceCoveredPathColor(ColorRGBA color) {
+        ColorRGBA old = getDistanceCoveredPathColor();
         waypoints.put("color", color);
+        fire("color", old, color);
     }
 
     /**
@@ -469,7 +422,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setDistanceCoveredPathEnabled(Boolean enabled) {
+        Boolean old = getDistanceCoveredPathEnabled();
         waypoints.put("enabled", enabled);
+        fire("distanceCoveredPathEnabled", old, enabled);
     }
 
     /**
@@ -493,7 +448,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param gradient
      */
     public void setDistanceCoveredPathGradient(Boolean gradient) {
+        Boolean old = getDistanceCoveredPathGradient();
         waypoints.put("gradient", gradient);
+        fire("gradient", old, gradient);
     }
 
     /**
@@ -509,7 +466,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param updaterate
      */
     public void setDistanceCoveredPathUpdaterate(Float updaterate) {
+        Float old = getDistanceCoveredPathUpdaterate();
         waypoints.put("updaterate", updaterate);
+        fire("updaterate", old, updaterate);
     }
 
     /**
@@ -533,7 +492,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param visiblity
      */
     public void setDistanceCoveredPathVisiblity(Boolean visiblity) {
+        Boolean old = getDistanceCoveredPathVisiblity();
         waypoints.put("visiblity", visiblity);
+        fire("distanceCoveredPathVisiblity", old, visiblity);
     }
 
     /**
@@ -557,7 +518,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param rayDetectable
      */
     public void setRayDetectable(Boolean rayDetectable) {
+        Boolean old = getRayDetectable();
         params.put("rayDetectable", rayDetectable);
+        fire("rayDetectable", old, rayDetectable);
     }
 
     /**
@@ -565,7 +528,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param physicalvalues_updaterate
      */
     public void setPhysicalvalues_updaterate(Float physicalvalues_updaterate) {
+        Float old = getPhysicalvalues_updaterate();
         params.put("physicalvalues_updaterate", physicalvalues_updaterate);
+        fire("physicalvalues_updaterate", old, physicalvalues_updaterate);
     }
 
     /**
@@ -597,7 +562,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param batched
      */
     public void setOptimizeBatched(Boolean batched) {
+        boolean old = getOptimizeBatched();
         optimize.put("batched", batched);
+        fire("batched", old, batched);
     }
 
     /**
@@ -621,7 +588,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param lod
      */
     public void setOptimizeLod(Boolean lod) {
+        boolean old = getOptimizeLod();
         optimize.put("lod", lod);
+        fire("lod", old, lod);
     }
 
     /**
@@ -637,7 +606,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param LodTrisPerPixel
      */
     public void setOptimizeLodTrisPerPixel(Float LodTrisPerPixel) {
+        Float old = getOptimizeLodTrisPerPixel();
         optimize.put("LodTrisPerPixel", LodTrisPerPixel);
+        fire("LodTrisPerPixel", old, LodTrisPerPixel);
     }
 
     /**
@@ -653,7 +624,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param LodDistTolerance
      */
     public void setOptimizeLodDistTolerance(Float LodDistTolerance) {
+        Float old = getOptimizeLodDistTolerance();
         optimize.put("LodDistTolerance", LodDistTolerance);
+        fire("LodDistTolerance", old, LodDistTolerance);
     }
 
     /**
@@ -669,7 +642,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param LodReduction1
      */
     public void setOptimizeLodReduction1(Float LodReduction1) {
+        Float old = getOptimizeLodReduction1();
         optimize.put("LodReduction1", LodReduction1);
+        fire("LodReduction1", old, LodReduction1);
     }
 
     /**
@@ -685,7 +660,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param LodReduction2
      */
     public void setOptimizeLodReduction2(Float LodReduction2) {
+        Float old = getOptimizeLodReduction2();
         optimize.put("LodReduction2", LodReduction2);
+        fire("LodReduction2", old, LodReduction2);
     }
 
     /**
@@ -701,7 +678,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param updaterate
      */
     public void setBuoyancyUpdaterate(Integer updaterate) {
+        Integer old = getBuoyancyUpdaterate();
         buoyancy.put("updaterate", updaterate);
+        fire("updaterate", old, updaterate);
     }
 
     /**
@@ -717,7 +696,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param distance
      */
     public void setBuoyancyDistance(Float distance) {
+        Float old = getBuoyancyDistance();
         buoyancy.put("distance", distance);
+        fire("distance", old, distance);
     }
 
     /**
@@ -733,7 +714,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param factor
      */
     public void setBuoyancyFactor(Float factor) {
+        Float old = getBuoyancyFactor();
         buoyancy.put("factor", factor);
+        fire("factor", old, factor);
     }
 
     /**
@@ -747,10 +730,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param resolution
-     * @param buoyancy_resolution
      */
     public void setBuoyancyResolution(Float resolution) {
+        Float old = getBuoyancyResolution();
         buoyancy.put("resolution", resolution);
+        fire("resolution", old, resolution);
     }
 
     /**
@@ -764,10 +748,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param dimensions
-     * @param buoyancy_dimensions
      */
     public void setBuoyancyDimensions(Vector3f dimensions) {
+        Vector3f old = getBuoyancyDimensions();
         buoyancy.put("dimensions", dimensions);
+        fire("buoyancyDimensions", old, dimensions);
     }
 
     /**
@@ -783,7 +768,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setBuoyancyPosition(Vector3f position) {
+        Vector3f old = getBuoyancyPosition();
         buoyancy.put("position", position);
+        fire("buoyancyPosition", old, position);
     }
 
     /**
@@ -799,7 +786,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param scale
      */
     public void setBuoyancyScale(Vector3f scale) {
+        Vector3f old = getBuoyancyScale();
         buoyancy.put("scale", scale);
+        fire("buoyancyScale", old, scale);
     }
 
     /**
@@ -815,7 +804,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param type
      */
     public void setBuoyancyType(Integer type) {
+        Integer old = getBuoyancyType();
         buoyancy.put("type", type);
+        fire("buoyancyType", old, type);
     }
 
     /**
@@ -831,7 +822,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param drag_updaterate
      */
     public void setDrag_updaterate(Integer drag_updaterate) {
+        Integer old = getDrag_updaterate();
         params.put("drag_updaterate", drag_updaterate);
+        fire("drag_updaterate", old, drag_updaterate);
     }
 
     /**
@@ -847,7 +840,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param flow_updaterate
      */
     public void setFlow_updaterate(Integer flow_updaterate) {
+        Integer old = getFlow_updaterate();
         params.put("flow_updaterate", flow_updaterate);
+        fire("flow_updaterate", old, flow_updaterate);
     }
 
     /**
@@ -859,12 +854,12 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
-     *
      * @param selectionColor
-     * @param color
      */
     public void setModelSelectionColor(ColorRGBA selectionColor) {
+        ColorRGBA old = getModelSelectionColor();
         model.put("selectionColor", selectionColor);
+        fire("selectionColor", old, selectionColor);
     }
 
     /**
@@ -880,7 +875,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param mapColor
      */
     public void setModelMapColor(ColorRGBA mapColor) {
+        ColorRGBA old = getModelMapColor();
         model.put("mapColor", mapColor);
+        fire("mapColor", old, mapColor);
     }
 
     /**
@@ -896,7 +893,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param alphaDepthScale
      */
     public void setModelAlphaDepthScale(Float alphaDepthScale) {
+        Float old = getModelAlphaDepthScale();
         model.put("alphaDepthScale", alphaDepthScale);
+        fire("alphaDepthScale", old, alphaDepthScale);
     }
 
     /**
@@ -912,7 +911,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param name
      */
     public void setModelName(String name) {
+        String old = getModelName();
         model.put("name", name);
+        fire("modelName", old, name);
     }
 
     /**
@@ -928,7 +929,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param scale
      */
     public void setModelScale(Float scale) {
+        Float old = getModelScale();
         model.put("scale", scale);
+        fire("modelScale", old, scale);
     }
 
     /**
@@ -944,7 +947,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param filepath
      */
     public void setModelFilepath(String filepath) {
+        String old = getModelFilepath();
         model.put("filepath", filepath);
+        fire("filepath", old, filepath);
     }
 
     /**
@@ -960,7 +965,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param drag_coefficient_angular
      */
     public void setDrag_coefficient_angular(Float drag_coefficient_angular) {
+        Float old = getDrag_coefficient_angular();
         params.put("drag_coefficient_angular", drag_coefficient_angular);
+        fire("drag_coefficient_angular", old, drag_coefficient_angular);
     }
 
     /**
@@ -976,7 +983,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param drag_coefficient_linear
      */
     public void setDrag_coefficient_linear(Float drag_coefficient_linear) {
+        Float old = getDrag_coefficient_linear();
         params.put("drag_coefficient_linear", drag_coefficient_linear);
+        fire("drag_coefficient_linear", old, drag_coefficient_linear);
     }
 
     /**
@@ -992,7 +1001,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param centroid_center_distance
      */
     public void setCentroid_center_distance(Vector3f centroid_center_distance) {
+        Vector3f old = getCentroid_center_distance();
         params.put("centroid_center_distance", centroid_center_distance);
+        fire("centroid_center_distance", old, centroid_center_distance);
     }
 
     /**
@@ -1008,7 +1019,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param damping_angular
      */
     public void setDamping_angular(Float damping_angular) {
+        Float old = getDamping_angular();
         params.put("damping_angular", damping_angular);
+        fire("damping_angular", old, damping_angular);
     }
 
     /**
@@ -1024,7 +1037,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param damping_linear
      */
     public void setDamping_linear(Float damping_linear) {
+        Float old = getDamping_linear();
         params.put("damping_linear", damping_linear);
+        fire("damping_linear", old, damping_linear);
     }
 
     /**
@@ -1041,8 +1056,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      */
     public void setPosition(Vector3f position) {
         Vector3f old = getPosition();
-        //PhysicalExchangerName = name;
-        params.put("position", position);
+        params.put("position", position);        
         fire("position", old, position);
     }
 
@@ -1059,7 +1073,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param rotation
      */
     public void setRotation(Vector3f rotation) {
+        Vector3f old = getRotation();
         params.put("rotation", rotation);
+        fire("rotation", old, rotation);
     }
 
     /**
@@ -1074,6 +1090,8 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     }
 
     /**
+     * Set the rotation by quaternion. Transform passed quaternion to angle axes
+     * and calls setRotation.
      *
      * @param quaternion
      */
@@ -1096,7 +1114,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param dimensions
      */
     public void setCollisionDimensions(Vector3f dimensions) {
+        Vector3f old = getCollisionDimensions();
         collision.put("dimensions", dimensions);
+        fire("collisionDimensions", old, dimensions);
     }
 
     /**
@@ -1112,7 +1132,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param position
      */
     public void setCollisionPosition(Vector3f position) {
+        Vector3f old = getCollisionPosition();
         collision.put("position", position);
+        fire("collisionPosition", old, position);
     }
 
     /**
@@ -1128,7 +1150,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param type
      */
     public void setCollisionType(Integer type) {
+        Integer old = getCollisionType();
         collision.put("type", type);
+        fire("collisionType", old, type);
     }
 
     /**
@@ -1142,10 +1166,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
     /**
      *
      * @param mass
-     * @param mass_auv
      */
     public void setMass(Float mass) {
+        Float old = getMass();
         params.put("mass", mass);
+        fire("mass", old, mass);
     }
 
     /**
@@ -1161,7 +1186,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param offCamera_height
      */
     public void setOffCamera_height(Integer offCamera_height) {
+        Integer old = getOffCamera_height();
         params.put("offCamera_height", offCamera_height);
+        fire("offCamera_height", old, offCamera_height);
     }
 
     /**
@@ -1177,7 +1204,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param offCamera_width
      */
     public void setOffCamera_width(Integer offCamera_width) {
+        Integer old = getOffCamera_width();
         params.put("offCamera_width", offCamera_width);
+        fire("offCamera_width", old, offCamera_width);
     }
 
     /**
@@ -1201,7 +1230,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param drag
      */
     public void setDebugDrag(Boolean drag) {
+        Boolean old = getDebugDrag();
         debug.put("drag", drag);
+        fire("drag", old, drag);
     }
 
     /**
@@ -1225,7 +1256,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param bounding
      */
     public void setDebugBounding(Boolean bounding) {
+        Boolean old = getDebugBounding();
         debug.put("bounding", bounding);
+        fire("bounding", old, bounding);
     }
 
     /**
@@ -1249,7 +1282,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param wireframe
      */
     public void setDebugWireframe(Boolean wireframe) {
+        Boolean old = getDebugWireframe();
         debug.put("wireframe", wireframe);
+        fire("wireframe", old, wireframe);
     }
 
     /**
@@ -1273,7 +1308,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param buoycancy
      */
     public void setDebugBuoycancy(Boolean buoycancy) {
+        Boolean old = getDebugBuoycancy();
         debug.put("buoycancy", buoycancy);
+        fire("buoycancy", old, buoycancy);
     }
 
     /**
@@ -1297,7 +1334,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param buoycancyVolume
      */
     public void setDebugBuoycancyVolume(Boolean buoycancyVolume) {
+        Boolean old = getDebugBuoycancyVolume();
         debug.put("buoycancyVolume", buoycancyVolume);
+        fire("buoycancyVolume", old, buoycancyVolume);
     }
 
     /**
@@ -1318,10 +1357,12 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      *
-     * @param physical_exchanger
+     * @param physicalExchanger
      */
     public void setDebugPhysicalExchanger(Boolean physicalExchanger) {
+        Boolean old = getDebugPhysicalExchanger();
         debug.put("physicalExchanger", physicalExchanger);
+        fire("physicalExchanger", old, physicalExchanger);
     }
 
     /**
@@ -1345,7 +1386,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param centers
      */
     public void setDebugCenters(Boolean centers) {
+        Boolean old = getDebugCenters();
         debug.put("centers", centers);
+        fire("centers", old, centers);
     }
 
     /**
@@ -1369,7 +1412,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param visualizer
      */
     public void setDebugVisualizer(Boolean visualizer) {
+        Boolean old = getDebugVisualizer();
         debug.put("visualizer", visualizer);
+        fire("visualizer", old, visualizer);
     }
 
     /**
@@ -1393,7 +1438,9 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param collision
      */
     public void setDebugCollision(Boolean collision) {
+        Boolean old = getDebugCollision();
         debug.put("collision", collision);
+        fire("collision", old, collision);
     }
 
     /**
@@ -1421,7 +1468,7 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
         params.put("enabled", enabled);
         fire("enabled", old, enabled);
     }
-    
+
     /**
      *
      * @return
@@ -1435,9 +1482,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param enabled
      */
     public void setConnectionEnabled(Boolean enabled) {
+        Boolean old = getConnectionEnabled();
         connection.put("enabled", enabled);
+        fire("connectionEnabled", old, enabled);
     }
-    
+
     /**
      *
      * @return
@@ -1451,9 +1500,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param localip
      */
     public void setConnectionLocalip(String localip) {
+        String old = getConnectionLocalip();
         connection.put("localip", localip);
+        fire("localip", old, localip);
     }
-    
+
     /**
      *
      * @return
@@ -1467,9 +1518,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param targetip
      */
     public void setConnectionTargetip(String targetip) {
+        String old = getConnectionTargetip();
         connection.put("targetip", targetip);
+        fire("targetip", old, targetip);
     }
-    
+
     /**
      *
      * @return
@@ -1483,9 +1536,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param port
      */
     public void setConnectionPort(Integer port) {
+        Integer old = getConnectionPort();
         connection.put("port", port);
+        fire("port", old, port);
     }
-    
+
     /**
      *
      * @return
@@ -1499,9 +1554,11 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param GlobalQueueSize
      */
     public void setConnectionGlobalQueueSize(Integer GlobalQueueSize) {
+        Integer old = getConnectionGlobalQueueSize();
         connection.put("GlobalQueueSize", GlobalQueueSize);
+        fire("GlobalQueueSize", old, GlobalQueueSize);
     }
-    
+
     /**
      *
      * @return
@@ -1515,19 +1572,21 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
      * @param type
      */
     public void setConnectionType(String type) {
+        String old = getConnectionType();
         connection.put("type", type);
+        fire("connectionType", old, type);
     }
 
     /**
      * Get a value of a specific HashMap.
-     * 
+     *
      * @param value
      * @param hashmapname
      * @return
      */
     @SuppressWarnings("unchecked")
     public Object getValue(String value, String hashmapname) {
-        if (hashmapname.equals("") || hashmapname == null) {
+        if (hashmapname == null || hashmapname.equals("")) {
             return params.get(value);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) params.get(hashmapname);
@@ -1537,14 +1596,14 @@ public class AUV_Parameters implements PropertyChangeListenerSupport {
 
     /**
      * Set a value of specific HashMap.
-     * 
+     *
      * @param value
      * @param object
      * @param hashmapname
      */
     @SuppressWarnings("unchecked")
     public void setValue(String value, Object object, String hashmapname) {
-        if (hashmapname.equals("") || hashmapname == null) {
+        if (hashmapname == null || hashmapname.equals("")) {
             params.put(value, object);
         } else {
             HashMap<String, Object> hashmap = (HashMap<String, Object>) params.get(hashmapname);

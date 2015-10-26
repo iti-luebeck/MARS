@@ -42,6 +42,7 @@ import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
 import mars.auvtree.TreeUtil;
+import mars.energy.EnergyHarvester;
 import mars.sensors.Sensor;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.AbstractNode;
@@ -126,6 +127,10 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
                 nodeName = "Sensors";
                 icon = "eye.png";
                 break;
+            case ParamChildNodeFactory.ENERGY:
+                nodeName = "Energy";
+                icon = "battery_plug.png";
+                break;
             default:
                 nodeName = "";
         }
@@ -201,7 +206,7 @@ public class ParamNode extends AbstractNode implements PropertyChangeListener {
         final Transferable tt = t;
         if(t.isDataFlavorSupported(PhysicalExchangerFlavor.CUSTOMER_FLAVOR)){
             try {
-                if((nodeName.equals("Sensors") && (t.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) instanceof Sensor)) || nodeName.equals("Actuators") && (t.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) instanceof Actuator)){
+                if((nodeName.equals("Sensors") && (t.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) instanceof Sensor)) || nodeName.equals("Actuators") && (t.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) instanceof Actuator) || nodeName.equals("Energy") && (t.getTransferData(PhysicalExchangerFlavor.CUSTOMER_FLAVOR) instanceof EnergyHarvester)){
                     final Node[] ns = NodeTransfer.nodes (t, NodeTransfer.COPY);
                     if (ns != null) {
                       ls.add (new PasteType () {

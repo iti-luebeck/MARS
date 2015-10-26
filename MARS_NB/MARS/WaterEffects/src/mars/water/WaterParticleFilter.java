@@ -1,3 +1,32 @@
+/*
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.water;
 
 import com.jme3.asset.AssetManager;
@@ -11,10 +40,13 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.texture.Texture2D;
 
 /**
- * Overlays noise onto the scene in order to imitate particles floating in water.
+ * Overlays noise onto the scene in order to imitate particles floating in
+ * water.
+ *
  * @author John Paul Jonte
  */
 public class WaterParticleFilter extends Filter {
+
     /**
      * Number of octaves the noise should be calculated for.
      */
@@ -24,23 +56,28 @@ public class WaterParticleFilter extends Filter {
      */
     private int octaveOffset;
     /**
-     * Defines the relationship between amplitude and frequency. Lower persistence results in smoother noise.
+     * Defines the relationship between amplitude and frequency. Lower
+     * persistence results in smoother noise.
      */
     private float persistence;
     /**
-     * Value to scale the time parameter. A lower scale means a lower impact of time on the noise.
+     * Value to scale the time parameter. A lower scale means a lower impact of
+     * time on the noise.
      */
     private float timeScale;
     /**
-     * Value at which the noise is cut off. Prevents the noise from completely blocking the view.
+     * Value at which the noise is cut off. Prevents the noise from completely
+     * blocking the view.
      */
     private float maxIntensity;
     /**
-     * Exponent which the noise value is raised by. A high value leads to point-like noise.
+     * Exponent which the noise value is raised by. A high value leads to
+     * point-like noise.
      */
     private float falloff;
     /**
-     * Value to scale the coordinates. A lower scale means a lower impact of the coordinates on the noise.
+     * Value to scale the coordinates. A lower scale means a lower impact of the
+     * coordinates on the noise.
      */
     private Vector3f coordinateScale;
     /**
@@ -56,7 +93,7 @@ public class WaterParticleFilter extends Filter {
      */
     private Texture2D particleTexture = null;
     private boolean underwater;
-    
+
     /**
      * Creates a new WaterParticleFilter with default values.
      */
@@ -70,7 +107,7 @@ public class WaterParticleFilter extends Filter {
         coordinateScale = new Vector3f(0.2f, 0.2f, 0.2f);
         particleColor = new ColorRGBA(.3f, .3f, .18f, 1);
     }
-    
+
     /**
      *
      * @param manager
@@ -84,7 +121,7 @@ public class WaterParticleFilter extends Filter {
         if (particleTexture == null) {
             particleTexture = (Texture2D) manager.loadTexture("Textures/Terrain/splat/dirt.jpg");
         }
-        
+
         material = new Material(manager, "MatDefs/WaterParticles/WaterParticles.j3md");
         material.setInt("Octaves", octaves);
         material.setInt("OctaveOffset", octaveOffset);
@@ -95,7 +132,7 @@ public class WaterParticleFilter extends Filter {
         material.setVector3("CoordinateScale", coordinateScale);
         material.setColor("ParticleColor", particleColor);
         material.setTexture("ParticleTexture", particleTexture);
-        
+
         viewPort = vp;
     }
 
@@ -107,7 +144,7 @@ public class WaterParticleFilter extends Filter {
     protected Material getMaterial() {
         return material;
     }
-    
+
     /**
      *
      * @param tpf
@@ -115,13 +152,14 @@ public class WaterParticleFilter extends Filter {
     @Override
     public void preFrame(float tpf) {
         Camera cam = viewPort.getCamera();
-        
+
         material.setMatrix4("WorldViewProjectionInverse", cam.getViewProjectionMatrix().invert());
         material.setVector3("CameraPosition", cam.getLocation());
     }
-    
+
     /**
      * Get the filter's time scale.
+     *
      * @return time scale
      */
     public float getTimeScale() {
@@ -130,18 +168,22 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the filter's time scale.
+     *
      * @param timeScale New time scale
      */
     public void setTimeScale(float timeScale) {
         this.timeScale = timeScale;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setFloat("TimeScale", timeScale);
     }
 
     /**
      * Get the filter's coordinate scale.
+     *
      * @return coordinate scale
      */
     public Vector3f getCoordinateScale() {
@@ -150,18 +192,22 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the filter's coordinate scale.
+     *
      * @param coordinateScale New coordinate scale
      */
     public void setCoordinateScale(Vector3f coordinateScale) {
         this.coordinateScale = coordinateScale;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setVector3("CoordinateScale", coordinateScale);
     }
 
     /**
      * Get the filer's particle color.
+     *
      * @return particle color
      */
     public ColorRGBA getParticleColor() {
@@ -170,18 +216,22 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the filter's particle color.
+     *
      * @param particleColor New particle color.
      */
     public void setParticleColor(ColorRGBA particleColor) {
         this.particleColor = particleColor;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setColor("ParticleColor", particleColor);
     }
-    
+
     /**
      * Get the filter's maximum intensity.
+     *
      * @return Maximum intensity
      */
     public float getMaximumIntensity() {
@@ -190,18 +240,22 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the filter's maximum intensity.
+     *
      * @param maxIntensity New maximum intensity
      */
     public void setMaximumIntensity(float maxIntensity) {
         this.maxIntensity = maxIntensity;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setFloat("MaxIntensity", maxIntensity);
     }
 
     /**
      * Get the filter's falloff.
+     *
      * @return Falloff
      */
     public float getFalloff() {
@@ -210,58 +264,70 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the filter's falloff.
+     *
      * @param falloff New falloff
      */
     public void setFalloff(float falloff) {
         this.falloff = falloff;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setFloat("Falloff", falloff);
     }
-    
+
     /**
      * Get the number of octaves to calculate.
+     *
      * @return Number of octaves
      */
     public int getOctaves() {
         return octaves;
     }
-    
+
     /**
      * Set the numbr of octaves to calculate.
+     *
      * @param octaves New number of octaves.
      */
     public void setOctaves(int octaves) {
         this.octaves = octaves;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setInt("Octaves", octaves);
     }
-    
+
     /**
      * Get the first octave.
+     *
      * @return First octave
      */
     public int getOctaveOffset() {
         return octaveOffset;
     }
-    
+
     /**
      * Set the first octave.
+     *
      * @param octaveOffset New first octave
      */
     public void setOctaveOffset(int octaveOffset) {
         this.octaveOffset = octaveOffset;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setInt("OctaveOffset", octaveOffset);
     }
-    
+
     /**
      * Get the relationship between amplitude and frequency.
+     *
      * @return persistence
      */
     public float getPersistence() {
@@ -270,25 +336,30 @@ public class WaterParticleFilter extends Filter {
 
     /**
      * Set the relationship between amplitude and frequency.
+     *
      * @param persistence New persistence
      */
     public void setPersistence(float persistence) {
         this.persistence = persistence;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setFloat("Persistence", persistence);
     }
-    
+
     /**
      *
      * @param underwater
      */
     public void setUnderwater(boolean underwater) {
         this.underwater = underwater;
-        
-        if (material == null) return;
-        
+
+        if (material == null) {
+            return;
+        }
+
         material.setBoolean("Underwater", underwater);
     }
 }

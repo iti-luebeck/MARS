@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -66,6 +66,7 @@ import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import com.rits.cloning.Cloner;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -107,8 +108,7 @@ import mars.auv.example.Manta;
 import mars.auv.example.Monsun2;
 import mars.auv.example.ROMP;
 import mars.auv.example.SMARTE;
-import mars.control.GuiControl;
-import mars.control.LimitedRigidBodyControl;
+import mars.control.GuiControl;import mars.communication.AUVConnection;import mars.control.LimitedRigidBodyControl;
 import mars.control.MyCustomGhostControl;
 import mars.control.MyLodControl;
 import mars.control.PopupControl;
@@ -119,8 +119,6 @@ import mars.misc.DebugHint;
 import mars.misc.PickHint;
 import mars.object.BuoyancyType;
 import mars.object.CollisionType;
-import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeEvent;
 import mars.sensors.CommunicationDevice;
 import mars.sensors.FlowMeter;
 import mars.sensors.InfraRedSensor;
@@ -130,23 +128,20 @@ import mars.sensors.RayBasedSensor;
 import mars.sensors.Sensor;
 import mars.sensors.TerrainSender;
 import mars.sensors.VideoCamera;
-import mars.sensors.energy.EnergyHarvester;
-import mars.sensors.energy.SolarPanel;
+import mars.energy.EnergyHarvester;
+import mars.energy.SolarPanel;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
 /**
- * The basic BasicAUV class. When you want to make own auv's or enchance them
- * than extend from this class and make your own implementation. Or implement
- * the AUV interface when you want to do something completly different that i
- * have done with the BasicAUV class.
+ * The basic BasicAUV class. When you want to make own auv's or enchance them than extend from this class and make your own implementation. Or implement the AUV interface when you want to do something completly different that i have done with the BasicAUV class.
  *
  * @author Thomas Tosik
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({Hanse.class, Monsun2.class, ASV.class, SMARTE.class, Buoy.class, ROMP.class, Manta.class})
-public class BasicAUV implements AUV, SceneProcessor{
+public class BasicAUV implements AUV, SceneProcessor {
 
     private Geometry MassCenterGeom;
     private Geometry VolumeCenterGeom;
@@ -209,6 +204,20 @@ public class BasicAUV implements AUV, SceneProcessor{
     private Vector3f drag_force_vec = new Vector3f(0f, 0f, 0f);
     private Node rootNode;
 
+    // ROS/TCP Connector --------
+    private AUVConnection auvConnection;
+
+    @Override
+    public void setAuvConnection(AUVConnection connection) {
+        auvConnection = connection;
+    }
+
+    @Override
+    public AUVConnection getAuvConnection() {
+        return auvConnection;
+    }
+    // --------------------------
+
     //PhysicalExchanger HashMaps to store and load sensors and actuators
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Sensors")
@@ -219,10 +228,13 @@ public class BasicAUV implements AUV, SceneProcessor{
     @XmlJavaTypeAdapter(HashMapAdapter.class)
     @XmlElement(name = "Accumulators")
     private HashMap<String, Accumulator> accumulators = new HashMap<String, Accumulator>();
+    @XmlJavaTypeAdapter(HashMapAdapter.class)
+    @XmlElement(name = "EnergyHarvesters")
+    private HashMap<String, EnergyHarvester> energy = new HashMap<String, EnergyHarvester>();
 
     private EventListenerList listeners = new EventListenerList();
     private CommunicationManager com_manager;
-    private MARSNodeMain mars_node;
+
     //selection stuff aka highlightening
     private boolean selected = false;
     AmbientLight ambient_light = new AmbientLight();
@@ -232,9 +244,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     private List<Geometry> listGeoms = new ArrayList<Geometry>();
 
     /**
-     * This is the main auv class. This is where the auv will be made vivisble.
-     * All sensors and actuators will be added to it. Also all the physics stuff
-     * happens here.
+     * This is the main auv class. This is where the auv will be made vivisble. All sensors and actuators will be added to it. Also all the physics stuff happens here.
      *
      * @param simstate
      */
@@ -273,6 +283,7 @@ public class BasicAUV implements AUV, SceneProcessor{
      *
      */
     public BasicAUV() {
+
     }
 
     /**
@@ -282,6 +293,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     public BasicAUV(AUV auv) {
         initAfterJAXB();
         AUV_Parameters auvCopy = auv.getAuv_param().copy();
+        auvCopy.removeAllPropertyChangeListeners();
         setAuv_param(auvCopy);
 
         //clone accumulators, since they are simple no big problem here
@@ -304,6 +316,15 @@ public class BasicAUV implements AUV, SceneProcessor{
             copy.initAfterJAXB();
             registerPhysicalExchanger(copy);
         }
+        
+        HashMap<String, EnergyHarvester> energyOriginal = auv.getEnergyHarvesters();
+        for (String elem : energyOriginal.keySet()) {
+            EnergyHarvester element = energyOriginal.get(elem);
+            PhysicalExchanger copy = element.copy();
+            copy.initAfterJAXB();
+            registerPhysicalExchanger(copy);
+        }
+
     }
 
     /**
@@ -335,6 +356,11 @@ public class BasicAUV implements AUV, SceneProcessor{
             Actuator element = actuators.get(elem);
             element.cleanup();
         }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            element.cleanup();
+        }
+        getAuv_param().removePropertyChangeListener(this);
     }
 
     /**
@@ -353,7 +379,8 @@ public class BasicAUV implements AUV, SceneProcessor{
     @Override
     public void setAuv_param(AUV_Parameters auv_param) {
         this.auv_param = auv_param;
-        this.auv_param.setAuv(this);
+        this.auv_param.addPropertyChangeListener(this);
+        //this.auv_param.setAuv(this);
         buoyancy_updaterate = auv_param.getBuoyancyUpdaterate();
         drag_updaterate = auv_param.getDrag_updaterate();
         flow_updaterate = auv_param.getFlow_updaterate();
@@ -418,15 +445,6 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     /**
      *
-     * @param mars_node
-     */
-    @Override
-    public void setROS_Node(MARSNodeMain mars_node) {
-        this.mars_node = mars_node;
-    }
-
-    /**
-     *
      * @return
      */
     @Override
@@ -477,12 +495,14 @@ public class BasicAUV implements AUV, SceneProcessor{
         } else if (pex instanceof Actuator) {
             actuators.put(pex.getName(), (Actuator) pex);
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Actuator " + pex.getName() + " added...", "");
+        } else if (pex instanceof EnergyHarvester) {
+            energy.put(pex.getName(), (EnergyHarvester) pex);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "EnergyHarvester " + pex.getName() + " added...", "");
         }
     }
     
     /**
-     * Init the PE in a safe way. Means that first a mars instance is available
-     * and second enqueue the register.
+     * Init the PE in a safe way. Means that first a mars instance is available and second enqueue the register.
      */
     @Override
     public void initPhysicalExchangerFuture() {
@@ -516,6 +536,7 @@ public class BasicAUV implements AUV, SceneProcessor{
                 sensors.remove(pex.getName());
                 actuators.remove(pex.getName());
                 accumulators.remove(pex.getName());
+                energy.remove(pex.getName());
                 pex.cleanup();
                 return null;
             }
@@ -531,6 +552,10 @@ public class BasicAUV implements AUV, SceneProcessor{
         Actuator act = actuators.get(name);
         if (act != null) {
             deregisterPhysicalExchanger(act);
+        }
+        EnergyHarvester ener = energy.get(name);
+        if (ener != null) {
+            deregisterPhysicalExchanger(ener);
         }
     }
 
@@ -559,11 +584,16 @@ public class BasicAUV implements AUV, SceneProcessor{
             accumulators.remove(oldName);
             accumulators.put(newName, acc);
         }
+        EnergyHarvester ener = energy.get(oldName);
+        if (ener != null) {
+            ener.setName(newName);
+            energy.remove(oldName);
+            energy.put(newName, ener);
+        }
     }
 
     /**
-     * disable the visible debug spheres that indicates the sensors/actuators
-     * positions/directions
+     * disable the visible debug spheres that indicates the sensors/actuators positions/directions
      *
      * @param visible
      */
@@ -576,6 +606,10 @@ public class BasicAUV implements AUV, SceneProcessor{
 
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
+            element.setNodeVisibility(visible);
+        }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             element.setNodeVisibility(visible);
         }
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "All Sensors/Actuators have visibility: " + visible, "");
@@ -635,6 +669,25 @@ public class BasicAUV implements AUV, SceneProcessor{
     @Override
     public HashMap<String, Accumulator> getAccumulators() {
         return accumulators;
+    }
+    
+    /**
+     *
+     * @param key Which unique registered actuator do we want?
+     * @return The actuator that we asked for
+     */
+    @Override
+    public EnergyHarvester getEnergyHarvester(String key) {
+        return energy.get(key);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public HashMap<String, EnergyHarvester> getEnergyHarvesters() {
+        return energy;
     }
 
     /**
@@ -698,8 +751,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     }
 
     /**
-     * Call this method ONLY ONCE AFTER you have added ALL sensors and actuators
-     * to your auv.
+     * Call this method ONLY ONCE AFTER you have added ALL sensors and actuators to your auv.
      */
     @Override
     public void init() {
@@ -778,9 +830,6 @@ public class BasicAUV implements AUV, SceneProcessor{
                 if (element instanceof PollutionMeter) {
                     ((PollutionMeter) element).setIniter(initer);//is needed for filters
                 }
-                if (element instanceof SolarPanel) {
-                    ((SolarPanel) element).setIniter(initer);//is needed for filters
-                }
                 element.init(auv_node);
                 if (element instanceof Keys) {
                     Keys elementKeys = (Keys) element;
@@ -830,6 +879,29 @@ public class BasicAUV implements AUV, SceneProcessor{
                 }
             }
         }
+        //init EnergyHarvesters
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            element.setName(element.getName());
+            element.setAuv(this);
+            if (element.isEnabled() && !element.isInitialized()) {
+                element.setSimState(simstate);
+                element.setMARS_settings(mars_settings);
+                element.setPhysicalEnvironment(physical_environment);
+                element.setPhysicsControl(physics_control);
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+                element.setupLogger();
+                if (element instanceof SolarPanel) {
+                    ((SolarPanel) element).setIniter(initer);//is needed for filters
+                }
+                element.init(auv_node);
+                if (element instanceof Keys) {
+                    Keys elementKeys = (Keys) element;
+                    elementKeys.addKeys(mars.getInputManager(), simstate.getKeyconfig());
+                }
+                element.setInitialized(true);
+            }
+        }
     }
 
     private Moveable getMoveable(String name) {
@@ -846,28 +918,6 @@ public class BasicAUV implements AUV, SceneProcessor{
             }
         }
         return null;
-    }
-
-    /*
-     * 
-     */
-    /**
-     *
-     */
-    @Override
-    public void initROS() {
-        for (String elem : sensors.keySet()) {
-            Sensor element = sensors.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
-        for (String elem : actuators.keySet()) {
-            Actuator element = actuators.get(elem);
-            if (element.isEnabled()) {
-                element.initROS(mars_node, auv_param.getName());
-            }
-        }
     }
 
     private void updateActuatorForces() {
@@ -1084,6 +1134,7 @@ public class BasicAUV implements AUV, SceneProcessor{
     /**
      *
      */
+    @Override
     public void clearForces() {
         physics_control.clearForces();
         physics_control.setAngularVelocity(Vector3f.ZERO);
@@ -1100,6 +1151,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         resetAllActuators();
         resetAllSensors();
         resetAllAccumulators();
+        resetAllEnergyHarvesters();
         clearForces();
         distanceCoveredPath.reset();
         physics_control.setPhysicsLocation(auv_param.getPosition());
@@ -1174,6 +1226,20 @@ public class BasicAUV implements AUV, SceneProcessor{
             }
         }
     }
+    
+    /**
+     *
+     * @param tpf time per frame
+     */
+    @Override
+    public void updateEnergyHarvesters(float tpf) {
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            if (element.isEnabled()) {
+                element.update(tpf);
+            }
+        }
+    }
 
     /**
      *
@@ -1192,16 +1258,16 @@ public class BasicAUV implements AUV, SceneProcessor{
     @Override
     public void updateAccumulators(float tpf) {
         //update current consumption for the activated sensors
-        for (String elem : sensors.keySet()) {
-            Sensor element = sensors.get(elem);
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             if (element.isEnabled()) {
                 Accumulator acc = accumulators.get(element.getAccumulator());
                 if (acc != null) { //accu exists from where we can suck energy
-                    if(element instanceof EnergyHarvester){//we have someone who gives us energy
-                        EnergyHarvester energyHarvester = (EnergyHarvester) element;
+                    if (element instanceof EnergyHarvester) {//we have someone who gives us energy
+                        EnergyHarvester energyHarvester = element;
                         acc.addActualCurrent(energyHarvester.getEnergy());
                         energyHarvester.setEnergy(0f);// We have transfered the energy into the accumulator, clean the energyHarvester.
-                    }else{// we have someone who wants energy
+                    } else {// we have someone who wants energy
                         Float currentConsumption = element.getCurrentConsumption();
                         if (currentConsumption != null) {//suck energy
                             float aH = (currentConsumption / 3600f) * tpf;
@@ -1414,7 +1480,7 @@ public class BasicAUV implements AUV, SceneProcessor{
         ppcontrol.setStateManager(mars.getStateManager());
         ppcontrol.setAuv(this);
         auv_spatial.addControl(ppcontrol);
-        
+
         //a control for controling the auv from the gui
         GuiControl guicontrol;
         guicontrol = new GuiControl(this,mars.getStateManager());
@@ -2181,7 +2247,7 @@ public class BasicAUV implements AUV, SceneProcessor{
             //System.out.println("chordStart: " + chordStart);
             float resolutionLengthCounter = (int) Math.rint(chord / resolution);
             for (int j = 0; j < resolutionLengthCounter; j++) {
-                Vector3f ray_start_new = new Vector3f((float) (ray_start.x + (i * resolution)), (float) (ray_start.y) - extBB.length() - 0.1f, (float) (ray_start.z + (j * resolution) - chordStart));
+                Vector3f ray_start_new = new Vector3f((ray_start.x + (i * resolution)),(ray_start.y) - extBB.length() - 0.1f,(ray_start.z + (j * resolution) - chordStart));
                 float length = 0.0f;
                 float length_air = 0.0f;
                 float volume_center_y = 0.0f;
@@ -2329,7 +2395,6 @@ public class BasicAUV implements AUV, SceneProcessor{
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
@@ -2343,7 +2408,6 @@ public class BasicAUV implements AUV, SceneProcessor{
         for (String elem : actuators.keySet()) {
             Actuator element = actuators.get(elem);
             if (element.isEnabled() && element.isInitialized()) {
-                element.publishUpdate();
                 element.publishDataUpdate();
             }
         }
@@ -2373,6 +2437,13 @@ public class BasicAUV implements AUV, SceneProcessor{
     private void resetAllSensors() {
         for (String elem : sensors.keySet()) {
             Sensor element = sensors.get(elem);
+            element.reset();
+        }
+    }
+    
+    private void resetAllEnergyHarvesters() {
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
             element.reset();
         }
     }
@@ -2476,10 +2547,12 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     @Override
     public void cleanup() {
+        //cleanupAUV();
     }
 
     /**
      * GUI stuff.
+     *
      * @param selected
      */
     @Override
@@ -2572,6 +2645,12 @@ public class BasicAUV implements AUV, SceneProcessor{
                 element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
             }
         }
+        for (String elem : energy.keySet()) {
+            EnergyHarvester element = energy.get(elem);
+            if (element.isEnabled()) {
+                element.setNodeVisibility(auv_param.isDebugPhysicalExchanger());
+            }
+        }
     }
 
     /**
@@ -2640,11 +2719,11 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     @Override
     public void setWireframeVisible(boolean visible) {
-        List<Spatial> children = new ArrayList<Spatial>(); 
-        if(auv_spatial instanceof Node){
+        List<Spatial> children = new ArrayList<Spatial>();
+        if (auv_spatial instanceof Node) {
             Node nodes = (Node) auv_spatial;
             children.addAll(nodes.getChildren());
-        }else{//its a spatial or geometry
+        } else {//its a spatial or geometry
             children.add(auv_spatial);
         }
         if (visible) {
@@ -2705,18 +2784,6 @@ public class BasicAUV implements AUV, SceneProcessor{
 
     /**
      *
-     * @param e
-     */
-    @Override
-    public void fireEvent(RosNodeEvent e) {
-        if (getAuv_param().isEnabled()) {
-            setROS_Node((MARSNodeMain) e.getSource());
-            initROS();
-        }
-    }
-
-    /**
-     *
      * @param listener
      */
     @Override
@@ -2758,5 +2825,44 @@ public class BasicAUV implements AUV, SceneProcessor{
      */
     protected synchronized void notifySafeAdvertisementMARSObject(MARSObjectEvent event) {
         notifyAdvertisementMARSObject(event);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals("position")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                pC.setPhysicsLocation((Vector3f) evt.getNewValue());
+            }
+        }else if(evt.getPropertyName().equals("rotation")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                Vector3f vec = (Vector3f) evt.getNewValue();
+                Matrix3f m_rot = new Matrix3f();
+                Quaternion q_rot = new Quaternion();
+                q_rot.fromAngles(vec.x, vec.y, vec.z);
+                m_rot.set(q_rot);
+                pC.setPhysicsRotation(m_rot);
+            }
+        }else if(evt.getPropertyName().equals("modelScale")) {
+            getAUVSpatial().setLocalScale(getAuv_param().getModelScale());
+        }else if(evt.getPropertyName().equals("mass")) {
+            RigidBodyControl pC = getPhysicsControl();
+            if(pC != null) {
+                pC.setMass(getAuv_param().getMass());
+            }
+        }else if(evt.getPropertyName().equals("physical_exchanger")){
+            setPhysicalExchangerVisible(getAuv_param().isDebugPhysicalExchanger());
+        }else if(evt.getPropertyName().equals("centers")){
+            setCentersVisible(getAuv_param().isDebugCenters());
+        }else if(evt.getPropertyName().equals("visualizer")){
+            setVisualizerVisible(getAuv_param().isDebugVisualizers());
+        }else if(evt.getPropertyName().equals("bounding")){
+            setBoundingBoxVisible(getAuv_param().isDebugBounding());
+        }else if(evt.getPropertyName().equals("distanceCoveredPathEnabled")){
+            setWaypointsEnabled(getAuv_param().isDistanceCoveredPathEnabled());
+        }else if(evt.getPropertyName().equals("distanceCoveredPathVisiblity")){
+            setWayPointsVisible(getAuv_param().isDistanceCoveredPathVisiblity());
+        }
     }
 }

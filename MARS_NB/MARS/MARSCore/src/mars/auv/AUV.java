@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.auv;
 
 import com.jme3.asset.AssetManager;
@@ -35,6 +35,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -46,10 +47,10 @@ import mars.PhysicalEnvironment;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.accumulators.Accumulator;
 import mars.actuators.Actuator;
+import mars.communication.AUVConnection;
 import mars.control.MyCustomGhostControl;
+import mars.energy.EnergyHarvester;
 import mars.object.MARSObject;
-import mars.ros.MARSNodeMain;
-import mars.ros.RosNodeListener;
 import mars.sensors.Sensor;
 import mars.states.SimState;
 
@@ -61,7 +62,7 @@ import mars.states.SimState;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlSeeAlso({BasicAUV.class})
-public interface AUV extends RosNodeListener, MARSObject {
+public interface AUV extends MARSObject, PropertyChangeListener {
 
     /**
      *
@@ -80,6 +81,12 @@ public interface AUV extends RosNodeListener, MARSObject {
      * @param tpf
      */
     public void updateActuators(float tpf);
+    
+    /**
+     *
+     * @param tpf
+     */
+    public void updateEnergyHarvesters(float tpf); 
 
     /**
      *
@@ -156,23 +163,16 @@ public interface AUV extends RosNodeListener, MARSObject {
      * Initialize method called after AUV creation or if enabled.
      */
     public void init();
-    
+
     /**
-    *
-    */
+     *
+     */
     public void setupLogger();
-            
+
     /**
      *
      */
     public void createDefault();
-
-    /**
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void initROS();
 
     /**
      *
@@ -212,6 +212,19 @@ public interface AUV extends RosNodeListener, MARSObject {
      * @return A specific accumulator by its unique name.
      */
     public Accumulator getAccumulator(String key);
+    
+    /**
+     *
+     * @return All sensors registered to this AUV.
+     */
+    public HashMap<String, EnergyHarvester> getEnergyHarvesters();
+    
+    /**
+     *
+     * @param key
+     * @return A specific sensor by its unique name.
+     */
+    public EnergyHarvester getEnergyHarvester(String key);
 
     /**
      *
@@ -358,13 +371,6 @@ public interface AUV extends RosNodeListener, MARSObject {
 
     /**
      *
-     * @param mars_node
-     */
-    @Deprecated
-    public void setROS_Node(MARSNodeMain mars_node);
-
-    /**
-     *
      * @return
      */
     public Spatial getGhostAUV();
@@ -459,7 +465,7 @@ public interface AUV extends RosNodeListener, MARSObject {
      * @param pex
      */
     public void registerPhysicalExchanger(final PhysicalExchanger pex);
-    
+
     /**
      *
      */
@@ -489,4 +495,8 @@ public interface AUV extends RosNodeListener, MARSObject {
      * @param newName
      */
     public void updatePhysicalExchangerName(String oldName, String newName);
+
+    void setAuvConnection(AUVConnection auvConnection);
+
+    AUVConnection getAuvConnection();
 }

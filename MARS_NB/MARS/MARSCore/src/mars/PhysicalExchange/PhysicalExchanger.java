@@ -56,13 +56,10 @@ import mars.MARS_Settings;
 import mars.PhysicalEnvironment;
 import mars.actuators.Actuator;
 import mars.auv.AUV;
-import mars.auv.AUV_Parameters;
+import mars.energy.EnergyHarvester;
 import mars.events.AUVObjectEvent;
 import mars.events.AUVObjectListener;
 import mars.misc.PropertyChangeListenerSupport;
-import mars.ros.MARSNodeMain;
-import mars.ros.ROS;
-import mars.ros.TF_ROS_Publisher;
 import mars.sensors.Sensor;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
@@ -74,8 +71,8 @@ import mars.xml.HashMapAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Actuator.class, Sensor.class})
-public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS, PropertyChangeListenerSupport {
+@XmlSeeAlso({Actuator.class, Sensor.class, EnergyHarvester.class})
+public abstract class PhysicalExchanger extends Noise implements AUVObject, PropertyChangeListenerSupport {
 
     @SuppressWarnings("FieldMayBeFinal")
     private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList<PropertyChangeListener>());
@@ -100,6 +97,14 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     @Override
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         listeners.remove(pcl);
+    }
+    
+    /**
+     *
+     */
+    @Override
+    public void removeAllPropertyChangeListeners() {
+        listeners.clear();
     }
 
     protected void fire(String propertyName, Object old, Object nue) {
@@ -145,8 +150,6 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
         }
     }
     
-    
-
     /**
      *
      * @param auv_node
@@ -213,23 +216,16 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     /*
      * 
      */
-    /**
-     *
-     */
-    protected MARSNodeMain mars_node = null;
 
     /**
      *
      */
-    protected int rosSequenceNumber = 0;
+    protected int sequenceNumber = 0;
 
-    /*
-     * 
-     */
-    /**
-     *
-     */
-    public TF_ROS_Publisher tf_pub = null;
+    public int getNextSequenceNumber() {
+        return sequenceNumber++;
+    }
+
     /**
      *
      */
@@ -399,95 +395,18 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      * @return
      */
-    @Override
-    public String getROS_MSG_Type() {
-        return ros_msg_type;
+    public Integer getPublishRate() {
+        return (Integer) variables.get("publishRate");
     }
 
     /**
      *
+     * @param publishRate
      */
-    @Override
-    public void initROS() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        setROS_Node(ros_node);
-        tf_pub.initROS(ros_node, auv_name);
-    }
-
-    /**
-     *
-     * @param ros_msg_type
-     */
-    @Override
-    public void setROS_MSG_Type(String ros_msg_type) {
-        this.ros_msg_type = ros_msg_type;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public MARSNodeMain getMARS_Node() {
-        return mars_node;
-    }
-
-    /**
-     *
-     * @param ros_node
-     */
-    @Override
-    public void setROS_Node(MARSNodeMain ros_node) {
-        this.mars_node = ros_node;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Integer getRos_publish_rate() {
-        return (Integer) variables.get("ros_publish_rate");
-    }
-
-    /**
-     *
-     * @param ros_publish_rate
-     */
-    public void setRos_publish_rate(Integer ros_publish_rate) {
-        int old = getRos_publish_rate();
-        variables.put("ros_publish_rate", ros_publish_rate);
-        fire("ros_publish_rate", old, ros_publish_rate);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Integer getTFRos_publish_rate() {
-        if ((Integer) variables.get("tf_ros_publish_rate") == null) {
-            return 1000;
-        } else {
-            return (Integer) variables.get("tf_ros_publish_rate");
-        }
-    }
-
-    /**
-     *
-     * @param tf_ros_publish_rate
-     */
-    public void setTFRos_publish_rate(Integer tf_ros_publish_rate) {
-        int old = getTFRos_publish_rate();
-        variables.put("tf_ros_publish_rate", tf_ros_publish_rate);
-        fire("tf_ros_publish_rate", old, tf_ros_publish_rate);
+    public void setPublishRate(Integer publishRate) {
+        int old = getPublishRate();
+        variables.put("publishRate", publishRate);
+        fire("publishRate", old, publishRate);
     }
 
     /**
@@ -534,8 +453,7 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
     }
 
     /**
-     * The update method that will be called by the auvManager, hence by the
-     * main mars update loop. Should be node safe
+     * The update method that will be called by the auvManager, hence by the main mars update loop. Should be node safe
      *
      * @param tpf
      */
@@ -577,12 +495,12 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      *
      */
     public void initAfterJAXB() {
-        tf_pub = new TF_ROS_Publisher(this);
+        //tf_pub = new TF_ROS_Publisher(this);
         /* variables.put("noise_type", getNoiseType());
          variables.put("noise_value", getNoiseValue());
          variables.put("name",getName());
          variables.put("enabled", isEnabled());
-         variables.put("ros_publish_rate", getRos_publish_rate());
+         variables.put("publishRate", getPublishRate());
          variables.put("ros_frame_id", getRos_frame_id());*/
     }
 
@@ -748,17 +666,17 @@ public abstract class PhysicalExchanger extends Noise implements AUVObject, ROS,
      */
     public void publishDataUpdate() {
         long curtime = System.currentTimeMillis();
-        if (((curtime - oldtime) < getRos_publish_rate()) || (getRos_publish_rate() == 0)) {
+        if (((curtime - oldtime) < getPublishRate()) || (getPublishRate() == 0)) {
             
         } else {
             oldtime = curtime;
             //only publish if someone is listening
             AUVObjectListener[] listeners1 = evtlisteners.getListeners(AUVObjectListener.class);
-            //if(listeners1.length != 0){
-                publishData();
-            //}
+                if(listeners1.length != 0){
+                    publishData();
+                }
+            }
         }
-    }
     
     /**
      *

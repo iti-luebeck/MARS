@@ -35,22 +35,34 @@ package mars.misc;
  */
 public class SonarData {
     final private float angle;
+    final private float maxRange;
+    final private int scanningGain;
     final private byte[] data;
 
     public SonarData() {
-        this(0f, new byte[1]);
+        this(0f, 0f, 0, new byte[1]);
     }
     
-    public SonarData(float angle, byte[] data) {
+    public SonarData(float angle, float maxRange, int scanningGain, byte[] data) {
         this.angle = angle;
+        this.maxRange = maxRange;
+        this.scanningGain = scanningGain;
         this.data = data;
     }
 
-    public float getAngle() {
+    public Float getAngle() {
         return angle;
     }
     
     public byte[] getData() {
         return data;
+    }
+
+    public Float getMaxRange() {
+        return maxRange;
+    }
+
+    public Integer getScanningGain() {
+        return scanningGain;
     }
 }

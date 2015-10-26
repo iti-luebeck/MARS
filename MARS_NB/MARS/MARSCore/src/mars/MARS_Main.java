@@ -1,35 +1,37 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars;
 
+import com.jme3.app.DebugKeysAppState;
 import com.jme3.app.FlyCamAppState;
+import com.jme3.app.ResetStatsState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AbstractAppState;
@@ -73,8 +75,7 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.modules.InstalledFileLocator;
 
 /**
- * This is the starting point of MARS. Its basically and extendend
- * SimpleApplication. The real MARS magic is happening in the SimState class.
+ * This is the starting point of MARS. Its basically and extendend SimpleApplication. The real MARS magic is happening in the SimState class.
  *
  * @author Thomas Tosik
  */
@@ -97,7 +98,7 @@ public class MARS_Main extends SimpleApplication {
     ConfigManager configManager;
 
     AdvancedFlyByCamera advFlyCam;
-    
+
     MARSAppState activeInputState = null;
 
     //nifty(gui) stuff
@@ -110,7 +111,7 @@ public class MARS_Main extends SimpleApplication {
 
     //progress bar (nbp)
     private final ProgressHandle progr = ProgressHandleFactory.createHandle("MARS_Main");
-    
+
     //for the AdvancedStatsAppState
     private AdvancedStatsAppStateActionListener actionListenerAdvancedStatsAppState = new AdvancedStatsAppStateActionListener();
 
@@ -175,32 +176,34 @@ public class MARS_Main extends SimpleApplication {
         if (stateManager.getState(FlyCamAppState.class) != null) {
             stateManager.getState(FlyCamAppState.class).setEnabled(false);
         }
+        if (stateManager.getState(DebugKeysAppState.class) != null) {
+            stateManager.getState(DebugKeysAppState.class).setEnabled(false);
+        }
         //overrirde standard flybycam/kill it completely      
         flyCam.setEnabled(false);
         flyCam.unregisterInput();
         flyCam = null;
-        
+
         advFlyCam = new AdvancedFlyByCamera(cam);
         advFlyCam.setDragToRotate(true);
         advFlyCam.setEnabled(false);
         advFlyCam.setZoomSpeed(2f);
         advFlyCam.registerWithInput(inputManager);
-        
+
         //override jme statsappstate with own implemneation
         if (stateManager.getState(StatsAppState.class) != null) {
             StatsAppState state = stateManager.getState(StatsAppState.class);
             stateManager.detach(state);
-            
+
             AdvancedStatsAppState advnState = new AdvancedStatsAppState();
             stateManager.attach(advnState);
             //stateManager.getState(StatsAppState.class).setFont(guiFont);
             //fpsText = stateManager.getState(StatsAppState.class).getFpsText();
             inputManager.addMapping("statsMeasureSave", new KeyTrigger(KeyInput.KEY_F11));
-            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureSave");  
+            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureSave");
             inputManager.addMapping("statsMeasureStart", new KeyTrigger(KeyInput.KEY_F9));
-            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureStart"); 
+            inputManager.addListener(actionListenerAdvancedStatsAppState, "statsMeasureStart");
         }
-        
 
         if (configManager.isAutoEnabled()) {
             //SimState simstate = new SimState(view,configManager);
@@ -225,7 +228,7 @@ public class MARS_Main extends SimpleApplication {
             }
         });
     }
-    
+
     private class AdvancedStatsAppStateActionListener implements ActionListener {
 
         @Override
@@ -234,11 +237,11 @@ public class MARS_Main extends SimpleApplication {
                 return;
             }
 
-            if (name.equals("statsMeasureSave")){
+            if (name.equals("statsMeasureSave")) {
                 if (stateManager.getState(AdvancedStatsAppState.class) != null) {
                     stateManager.getState(AdvancedStatsAppState.class).saveFPSToCSV();
                 }
-            }else if (name.equals("statsMeasureStart")){
+            } else if (name.equals("statsMeasureStart")) {
                 if (stateManager.getState(AdvancedStatsAppState.class) != null) {
                     stateManager.getState(AdvancedStatsAppState.class).setstatsSaveStart(true);
                 }
@@ -390,27 +393,6 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
-     *
-     */
-    @Override
-    public void stop() {
-        //make sure to release ros connection
-        this.enqueue(new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                if (stateManager.getState(SimState.class) != null) {
-                    SimState simState = stateManager.getState(SimState.class);
-                    simState.disconnectFromServer();
-                    while (simState.getIniter().ServerRunning()) {
-
-                    }
-                }
-                return true;
-            }
-        });
-        super.stop();
-    }
-
-    /**
      * Create and add a SimState to MARS.
      */
     public void startSimState() {
@@ -520,7 +502,7 @@ public class MARS_Main extends SimpleApplication {
 
     /**
      * Make the speed-up symbol appear if simulation is speeded up.
-     * 
+     *
      * @param visible
      */
     public void setSpeedMenu(final boolean visible) {
@@ -689,8 +671,8 @@ public class MARS_Main extends SimpleApplication {
     }
 
     /**
-     * Returns which state is the active one in terms of inputmanager. Since the
-     * inputmanager exists only once. Needed for mutiple window/input check.
+     * Returns which state is the active one in terms of inputmanager. Since the inputmanager exists only once. Needed for mutiple window/input check.
+     *
      * @return
      */
     public MARSAppState getActiveInputState() {
@@ -707,7 +689,7 @@ public class MARS_Main extends SimpleApplication {
 
     /**
      * Disable the statistics state properly so it is not shown anymore.
-     * 
+     *
      * @param darken
      */
     public void setStatsStateDark(boolean darken) {
@@ -745,11 +727,11 @@ public class MARS_Main extends SimpleApplication {
                     simState = null;
                 }
                 /*if (stateManager.getState(GuiState.class) != null) {
-                    GuiState guistate = stateManager.getState(GuiState.class);
-                    guistate.setEnabled(false);
-                    //stateManager.detach(guistate);
-                    //guistate = null;
-                }*/
+                 GuiState guistate = stateManager.getState(GuiState.class);
+                 guistate.setEnabled(false);
+                 //stateManager.detach(guistate);
+                 //guistate = null;
+                 }*/
                 return null;
             }
         });

@@ -890,7 +890,7 @@ public class RayBasedSensor extends Sensor {
      *
      * @return
      */
-    protected float getLastHeadPosition() {
+    public float getLastHeadPosition() {
         return last_head_position;
     }
 

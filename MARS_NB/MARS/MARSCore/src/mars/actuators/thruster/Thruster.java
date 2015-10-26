@@ -59,7 +59,6 @@ import mars.Helper.NoiseType;
 import mars.PhysicalExchange.PhysicalExchanger;
 import mars.actuators.Actuator;
 import mars.annotations.MARSPublicKeyBindingMethod;
-import mars.server.MARSClientEvent;
 import mars.states.SimState;
 import mars.xml.HashMapAdapter;
 
@@ -396,7 +395,5 @@ public class Thruster extends Actuator implements Moveable, Keys{
     @Override
     public void publishData() {
         super.publishData();
-        MARSClientEvent clEvent = new MARSClientEvent(getAuv(), this, motor_speed, System.currentTimeMillis());
-        simState.getAuvManager().notifyAdvertisement(clEvent);
     }
 }

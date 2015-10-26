@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>org.apache.coyote</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>org.apache.coyote</package>
+                <package>org.apache.coyote.ajp</package>
+                <package>org.apache.coyote.http11</package>
+                <package>org.apache.coyote.http11.filters</package>
+                <package>org.apache.coyote.memory</package>
+                <package>org.apache.jk.apr</package>
+                <package>org.apache.jk.common</package>
+                <package>org.apache.jk.config</package>
+                <package>org.apache.jk.core</package>
+                <package>org.apache.jk.server</package>
+                <package>org.apache.tomcat.jni</package>
+                <package>org.apache.tomcat.util</package>
+                <package>org.apache.tomcat.util.buf</package>
+                <package>org.apache.tomcat.util.collections</package>
+                <package>org.apache.tomcat.util.digester</package>
+                <package>org.apache.tomcat.util.http</package>
+                <package>org.apache.tomcat.util.http.fileupload</package>
+                <package>org.apache.tomcat.util.http.mapper</package>
+                <package>org.apache.tomcat.util.log</package>
+                <package>org.apache.tomcat.util.modeler</package>
+                <package>org.apache.tomcat.util.modeler.modules</package>
+                <package>org.apache.tomcat.util.net</package>
+                <package>org.apache.tomcat.util.net.jsse</package>
+                <package>org.apache.tomcat.util.res</package>
+                <package>org.apache.tomcat.util.threads</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/coyote-6.0.37.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/coyote-6.0.37.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

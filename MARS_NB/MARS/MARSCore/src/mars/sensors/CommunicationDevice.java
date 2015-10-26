@@ -141,6 +141,12 @@ public abstract class CommunicationDevice extends Sensor {
     public abstract Vector3f getWorldPosition();
 
     /**
+     * 
+     * @return 
+     */
+    public abstract SimState getSimState();
+    
+    /**
      *
      * @return
      */
@@ -150,5 +156,11 @@ public abstract class CommunicationDevice extends Sensor {
      *
      * @param msg
      */
-    public abstract void publish(String msg);
+    public abstract void sendToCommDevice(String msg);
+    
+    /**
+     * 
+     * @param msg 
+     */
+    public abstract void sendIntoNetwork(String msg);
 }

@@ -1,32 +1,32 @@
 /*
-* Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* 
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-* 
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-* 
-* * Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2015, Institute of Computer Engineering, University of Lübeck
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * 
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * 
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package mars.sensors;
 
 import com.jme3.material.Material;
@@ -45,14 +45,11 @@ import java.util.concurrent.Future;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import mars.PhysicalExchange.PhysicalExchanger;
-import org.ros.message.MessageListener;
-import org.ros.node.topic.Publisher;
-import mars.states.SimState;
 import mars.events.CommunicationDeviceEvent;
 import mars.events.CommunicationDeviceEventType;
 import mars.events.CommunicationType;
-import mars.ros.MARSNodeMain;
-import org.ros.node.topic.Subscriber;
+import mars.states.SimState;
+import org.ros.node.topic.Publisher;
 
 /**
  * Basically an underwater modem class but only for the surface.
@@ -291,59 +288,21 @@ public class WiFi extends CommunicationDevice {
 
     /**
      *
-     * @param ros_node
-     * @param auv_name
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initROS(MARSNodeMain ros_node, String auv_name) {
-        super.initROS(ros_node, auv_name);
-        publisher = ros_node.newPublisher(auv_name + "/" + this.getName() + "/out", std_msgs.String._TYPE);
-        publisherSig = ros_node.newPublisher(auv_name + "/" + this.getName() + "/signal", std_msgs.Int8._TYPE);
-        fl = this.mars_node.getMessageFactory().newFromType(std_msgs.String._TYPE);
-        flSig = this.mars_node.getMessageFactory().newFromType(std_msgs.Int8._TYPE);
-
-        final String fin_auv_name = auv_name;
-        final WiFi fin_this = this;
-        Subscriber<std_msgs.String> subscriber = ros_node.newSubscriber(auv_name + "/" + getName() + "/in", std_msgs.String._TYPE);
-        subscriber.addMessageListener(new MessageListener<std_msgs.String>() {
-            @Override
-            public void onNewMessage(std_msgs.String message) {
-                System.out.println(fin_auv_name + " sends: \"" + message.getData() + "\"");
-                notifyAdvertisementAUVObject(new CommunicationDeviceEvent(fin_this, message.getData(), System.currentTimeMillis(), CommunicationDeviceEventType.IN));
-                com_manager.putMsg(fin_auv_name, message.getData(), CommunicationType.WIFI);
-            }
-        }, (simState.getMARSSettings().getROSGlobalQueueSize() > 0) ? simState.getMARSSettings().getROSGlobalQueueSize() : getRos_queue_listener_size());
-        this.rosinit = true;
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void publish() {
-
-    }
-
-    /**
-     *
      * @param msg
      */
     @Override
-    public void publish(String msg) {
-        fl.setData(msg);
-        if (publisher != null) {
-            //System.out.println(getAuv().getName() + " received: \"" + msg + "\"");
-            notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
-            publisher.publish(fl);
-        }
+    public void sendToCommDevice(String msg) {
+        notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.OUT));
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getMessage() {
-        return "This is a Message";
+    @Override
+    public void sendIntoNetwork(String msg) {
+        notifyAdvertisementAUVObject(new CommunicationDeviceEvent(this, msg, System.currentTimeMillis(), CommunicationDeviceEventType.IN));                  
+        com_manager.putMsg(getAuv().getName(), msg, CommunicationType.WIFI);
+    }
+
+    @Override
+    public SimState getSimState() {
+        return simState;
     }
 }
