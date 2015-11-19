@@ -83,8 +83,7 @@ public class AdditiveGaussianWhiteNoise extends ANoiseByDistanceGenerator{
         AttenuationHelper attHelper = new AttenuationHelper(((SimState)CentralLookup.getDefault().lookup(SimState.class)).getMARSSettings().getPhysical_environment());
         float attenuation = attHelper.carculateAttenuationInDB(distance, frequence, AttenuationHelper.SPHERICAL_SPREADING, waterDepth);
         float ambientNoise = AmbientNoiseHelper.calculateAmbientNoise(frequence, shippingFactor, windspeed);
-        float currentSignalStrength =  (float) (10f * Math.log10( Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)) );
-       //System.out.println("Stärke: "+Math.pow(10,signalStrength/10)+ " schwäche: "+ Math.pow(10,attenuation/10) + " diff: " + (Math.pow(10,signalStrength/10) - Math.pow(10,attenuation/10)));
+        float currentSignalStrength =  (float) signalStrength - attenuation;
         float SNR = (float) (10f *( Math.log10(Math.pow(10,currentSignalStrength/10) / Math.pow(10,ambientNoise/10))));
        //System.out.println("Signal Strength: " + signalStrength + " Attenunation: " +attenuation + " Ambient noise: "+ ambientNoise +" currentSignalStrength "+ currentSignalStrength +" SNR: " + SNR);
         standardDeviation = (float) (1.7f - Math.log10(SNR));
