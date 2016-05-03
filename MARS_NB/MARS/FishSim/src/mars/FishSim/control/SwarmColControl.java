@@ -43,9 +43,9 @@ import mars.FishSim.Swarm;
  */
 public class SwarmColControl extends RigidBodyControl implements PhysicsCollisionListener {
 
-    private Swarm swarm;
-    private int terrainCG = 1;
-    private int obstacleCG = 6;
+    private final Swarm swarm;
+    private final int terrainCG = 1;
+    private final int obstacleCG = 6;
 
     /**
      *
@@ -177,7 +177,7 @@ public class SwarmColControl extends RigidBodyControl implements PhysicsCollisio
      * @return Swarm
      */
     public Swarm getSwarm() {
-        return this.swarm;
+        return swarm;
     }
 
     private void colType1(Vector3f location) {

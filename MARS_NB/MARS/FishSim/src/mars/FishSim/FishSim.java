@@ -361,6 +361,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             swarm.setSim(this);
             swarm.createFish();
             swarms.add(swarm);
+            getRootNode().attachChild(swarm);
             swarmsChanged = true;
         }
         newSwarms.clear();

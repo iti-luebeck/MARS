@@ -53,7 +53,7 @@ import mars.FishSim.food.IFoodSource;
  * @author Mandy Feldvoß
  * @author Thomas Tosik
  */
-public class Swarm implements IFoodSource {
+public class Swarm extends Node implements IFoodSource {
 
     /**
      *
@@ -258,7 +258,8 @@ public class Swarm implements IFoodSource {
             fish.setName("fish_" + i);
             fish.setVisible(true);
             swarm.add(fish);
-            sim.getRootNode().attachChild(fish);
+            attachChild(fish);
+            //sim.getRootNode().attachChild(fish);
         }
     }
 
@@ -286,8 +287,8 @@ public class Swarm implements IFoodSource {
     public void move(float tpf) {
         //computeRadius();
         computeCenter();
-        //colCont.setPhysicsLocation(center);
-        //viewCont.setPhysicsLocation(center);
+        colCont.setPhysicsLocation(center);
+        viewCont.setPhysicsLocation(center);
 
         if (searchTime <= 0f) {
             searchTime = (float) Math.random() * 10f;
