@@ -177,6 +177,7 @@ public class Swarm extends Node implements IFoodSource {
      */
     public Swarm(FishSim sim){
         this.sim = sim;
+        setName("Sample Swarm");
         swarm = new ArrayList<Fish>();
         setInitSize(10);
         setMoveSpeed(0.5f);
@@ -191,7 +192,6 @@ public class Swarm extends Node implements IFoodSource {
         colRadius = (float) (Math.sqrt((float) initSize) * scale.length());
         viewRadius = colRadius + 5;
         near = (float) 3 * scale.length();
-        
         
         initCollidable();
         
@@ -209,18 +209,26 @@ public class Swarm extends Node implements IFoodSource {
      * @param animation Animation on/off
      * @param path Path of the model
      */
-    public Swarm(FishSim sim, int initSize, Vector3f scale, float deviation, Vector3f spawn, int type, String path, boolean animation) {
+    public Swarm(FishSim sim, String name, int initSize, Vector3f scale, float deviation, Vector3f spawn, int type, String path, boolean animation) {
+        this.sim = sim;
+        setName(name);
+        swarm = new ArrayList<Fish>();
+        setInitSize(initSize);
+        setMoveSpeed(0.5f);
+        setRotationSpeed(1.0f);
+        setDeviation(deviation);
+        setPath(path);
+        setAnimation(animation);
+        setCenter(spawn);
+        setType(type);
+        setScale(scale);
         colRadius = (float) (Math.sqrt((float) initSize) * scale.length());
         viewRadius = colRadius + 5;
         near = (float) 3 * scale.length();
-        this.sim = sim;
-        swarm = new ArrayList<Fish>();
-        center = spawn;
-        this.scale = scale;
-        this.type = type;
-        this.initSize = initSize;
 
         initCollidable();
+        
+        FishSimLookup.instance().addToLookup(this);
     }
 
     /**

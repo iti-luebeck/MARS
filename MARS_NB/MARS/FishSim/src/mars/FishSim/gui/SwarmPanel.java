@@ -29,8 +29,10 @@
  */
 package mars.FishSim.gui;
 
+import com.jme3.math.Vector3f;
 import mars.FishSim.food.FoodSourceMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import mars.FishSim.FishSim;
 import mars.FishSim.FishSimLookup;
@@ -54,11 +56,11 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
         }
         sim = FishSim.getInstance();
         sim.setSwarmPanel(this);
-        
+
         lookupResult = FishSimLookup.instance().lookupResult(Swarm.class);
         lookupResult.addLookupListener(this);
         updateSwarmList((LinkedList<Swarm>) lookupResult.allInstances());
-        
+
         // TODO listen to changes in form fields and call controller.changed()
     }
 
@@ -97,10 +99,12 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
         rSpeed = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        labelName = new javax.swing.JLabel();
+        textFieldSwarmName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         swarms = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        addSwarmBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.DefaultListModel());
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -200,6 +204,10 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jLabel8.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(labelName, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.labelName.text")); // NOI18N
+
+        textFieldSwarmName.setText(org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.textFieldSwarmName.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -207,32 +215,14 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                            .addComponent(tX)
-                            .addComponent(size, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(sX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(type, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(anim)
-                            .addComponent(jButton4))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -247,14 +237,39 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(sY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sZ, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tZ, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(sZ, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(textFieldSwarmName, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tZ, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                            .addComponent(tX)
+                            .addComponent(size, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(anim)
+                            .addComponent(jButton4))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textFieldSwarmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -308,17 +323,17 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
         });
         jScrollPane1.setViewportView(swarms);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(addSwarmBtn, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.addSwarmBtn.text")); // NOI18N
+        addSwarmBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addSwarmBtnActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(deleteBtn, org.openide.util.NbBundle.getMessage(SwarmPanel.class, "SwarmPanel.deleteBtn.text")); // NOI18N
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                deleteBtnActionPerformed(evt);
             }
         });
 
@@ -330,43 +345,59 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(deleteBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))))
+                        .addComponent(addSwarmBtn))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addComponent(addSwarmBtn)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(deleteBtn)
                         .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addSwarmBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSwarmBtnActionPerformed
         //sim.addSwarm(size.getText() + " " + sX.getText() + " " + sY.getText() + " " + sZ.getText() + " " + deviat.getText() + " " + tX.getText() + " " + tY.getText() + " " + tZ.getText() + " " + type.getText() + " " + path.getText() + " " + new Boolean(anim.isSelected()).toString() + " " + foodSourceMap + " " + mSpeed.getText() + " " + rSpeed.getText());
-        Swarm swarm = new Swarm(sim);
+        //Swarm swarm = new Swarm(sim);
+        //swarm.setName(textFieldSwarmName.getText());
+        
+        int numOfFishes = Integer.parseInt(size.getText());
+        float scaleX = Float.parseFloat(sX.getText());
+        float scaleY = Float.parseFloat(sY.getText());
+        float scaleZ = Float.parseFloat(sZ.getText());
+        Vector3f fishScale = new Vector3f(scaleX, scaleY, scaleZ);
+        float deviation = Float.parseFloat(deviat.getText());
+        float spawnX = Float.parseFloat(tX.getText());
+        float spawnY = Float.parseFloat(tY.getText());
+        float spawnZ = Float.parseFloat(tZ.getText());
+        Vector3f fishSpawn = new Vector3f(spawnX, spawnY, spawnZ);
+        int fishType = Integer.parseInt(type.getText());
+        Swarm swarm = new Swarm(sim, textFieldSwarmName.getText(), numOfFishes, fishScale, deviation, fishSpawn, fishType, "Fishtest/Fishtest.j3o", true);
+        swarm.setName(textFieldSwarmName.getText());
         sim.addSwarm(swarm);
         foodSourceMap = -1;
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_addSwarmBtnActionPerformed
 
     public void updateSwarmList(LinkedList<Swarm> swarmList) {
         javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) swarms.getModel();
         model.clear();
-        for (int i = 1; i <= swarmList.size(); i++) {
-            model.addElement("Swarm" + i);
+        for (Swarm swarm : swarmList) {
+            model.addElement(swarm.getName());
         }
         updateUI();
     }
@@ -376,7 +407,7 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
     }//GEN-LAST:event_jButton4ActionPerformed
 
     public void updateFoodSourceList(ArrayList<FoodSourceMap> maps) {
-        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) jList1.getModel();
+        javax.swing.DefaultListModel model = (javax.swing.DefaultListModel) swarms.getModel();
         model.clear();
         for (int i = 1; i <= maps.size(); i++) {
             model.addElement("FoodSourceMap" + i);
@@ -400,12 +431,19 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for (int i = 0; i < selectedSwarms.length; i++) {
-            sim.removeSwarm(selectedSwarms[i]);
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        Collection<? extends Swarm> lookupSwarms = FishSimLookup.instance().lookupAll(Swarm.class);
+        for (Object swarm : swarms.getSelectedValuesList()) {
+            String swarmName = (String) swarm;
+            for(Swarm lookupSwarm:lookupSwarms) {
+                if(lookupSwarm.getName().equals(swarmName)) {
+                    FishSimLookup.instance().removeFromLookup(lookupSwarm);
+                    sim.removeSwarm(lookupSwarm);
+                }
+            }
         }
-        selectedSwarms = new int[0];
-    }//GEN-LAST:event_jButton2ActionPerformed
+        //selectedSwarms = new int[0];
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void swarmsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_swarmsValueChanged
         selectedSwarms = swarms.getSelectedIndices();
@@ -441,10 +479,10 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addSwarmBtn;
     private javax.swing.JCheckBox anim;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JTextField deviat;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton6;
     private javax.swing.JDialog jDialog1;
@@ -460,6 +498,7 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelName;
     private javax.swing.JTextField mSpeed;
     private javax.swing.JTextField path;
     private javax.swing.JTextField rSpeed;
@@ -471,6 +510,7 @@ public final class SwarmPanel extends javax.swing.JPanel implements LookupListen
     private javax.swing.JTextField tX;
     private javax.swing.JTextField tY;
     private javax.swing.JTextField tZ;
+    private javax.swing.JTextField textFieldSwarmName;
     private javax.swing.JTextField type;
     // End of variables declaration//GEN-END:variables
 

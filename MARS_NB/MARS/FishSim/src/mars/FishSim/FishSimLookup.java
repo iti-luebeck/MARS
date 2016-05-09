@@ -8,7 +8,6 @@ package mars.FishSim;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
 /**
@@ -28,11 +27,10 @@ public class FishSimLookup extends Lookup {
         return unique;
     }
 
-
     LinkedList<Swarm> swarms;
     LinkedList<LookupListener> swarmsListeners;
 
-    private  void init() {
+    private void init() {
         swarms = new LinkedList<Swarm>();
         swarmsListeners = new LinkedList<LookupListener>();
     }
@@ -47,12 +45,25 @@ public class FishSimLookup extends Lookup {
         return null;
     }
 
-    public  void addToLookup(Object o) {
+    
+    
+    public void addToLookup(Object o) {
         if (o instanceof Swarm) {
             swarms.addLast((Swarm) o);
-            for (LookupListener l : swarmsListeners) {
-                l.resultChanged(new LookupEvent(null));
-            }
+            notifyAllLookupListeners();
+        }
+    }
+
+    public void removeFromLookup(Object o) {
+        if (o instanceof Swarm) {
+            swarms.remove(o);
+            notifyAllLookupListeners();
+        }
+    }
+
+    private void notifyAllLookupListeners() {
+        for (LookupListener l : swarmsListeners) {
+            l.resultChanged(null);
         }
     }
 

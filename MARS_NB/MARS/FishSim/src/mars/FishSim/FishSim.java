@@ -147,6 +147,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         instance = this;
         
         Swarm swarm = new Swarm(this);
+        //swarm.setName("Sample Swarm");
         this.addSwarm(swarm);
     }
 
@@ -253,12 +254,13 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         newSwarmsAdded();
         //newFoodSources();
         
+        removeSwarms();
+        //removeFoodSources();
+        
         for (Swarm swarm : swarms) {
             swarm.move(tpf);
         }
         
-        //removeSwarms();
-        //removeFoodSources();
         //rootNode.updateLogicalState(tpf);
         //rootNode.updateGeometricState();
     }
@@ -403,6 +405,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     /**
      *
      * @param i Index of the arraylist of the foodsources
+     * @deprecated 
      */
     public void removeFoodSource(int i) {
         removedSources.add(sources.get(i));
@@ -426,9 +429,13 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
     }
 
     private void removeSwarms() {
-        for (int i = 0; i < removedSwarms.size(); i++) {
+        /*for (int i = 0; i < removedSwarms.size(); i++) {
             removedSwarms.get(i).delete();
             swarms.remove(removedSwarms.get(i));
+            swarmsChanged = true;
+        }*/
+        for(Swarm swarm2Remove:removedSwarms) {
+            swarms.remove(swarm2Remove);
             swarmsChanged = true;
         }
         removedSwarms.clear();
