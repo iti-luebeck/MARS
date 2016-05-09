@@ -797,9 +797,8 @@ public class Swarm extends Node implements IFoodSource {
      */
     public void delete() {
         disableCol();
-        for (int i = 0; i < swarm.size(); i++) {
-            sim.getRootNode().detachChild(swarm.get(i));
-        }
+        sim.getRootNode().detachChild(this);
+       
         for (int i = 0; i < foreignMaps.size(); i++) {
             foreignMaps.get(i).remove(this);
         }

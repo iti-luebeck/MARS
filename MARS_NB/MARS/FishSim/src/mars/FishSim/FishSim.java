@@ -147,7 +147,6 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
         instance = this;
         
         Swarm swarm = new Swarm(this);
-        //swarm.setName("Sample Swarm");
         this.addSwarm(swarm);
     }
 
@@ -435,6 +434,7 @@ public class FishSim extends AbstractAppState implements AppStateExtension {
             swarmsChanged = true;
         }*/
         for(Swarm swarm2Remove:removedSwarms) {
+            swarm2Remove.delete();
             swarms.remove(swarm2Remove);
             swarmsChanged = true;
         }
